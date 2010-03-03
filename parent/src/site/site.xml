@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+-->
+
+<project name="Apache MyFaces Extensions Validator">
+  <bannerLeft>
+    <name>Apache MyFaces ExtVal</name>
+    <src>images/extval_logo.png</src>
+    <href>http://myfaces.apache.org/extensions/validator/index.html</href>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Apache MyFaces</name>
+    <src>img/banners/MyFaces_logo.jpg</src>
+    <href>http://myfaces.apache.org/index.html</href>
+  </bannerRight>
+
+  <publishDate format="dd MMM yyyy"/>
+
+  <skin>
+    <groupId>org.apache.myfaces.maven</groupId>
+    <artifactId>myfaces-site-skin</artifactId>
+    <version>1-SNAPSHOT</version>
+  </skin>
+
+  <body>
+    <links>
+      <item name="Apache" href="http://www.apache.org"/>
+      <item name="MyFaces" href="http://myfaces.apache.org/index.html"/>
+      <item name="Download Myfaces ExtVal" href="http://myfaces.apache.org/extensions/validator/download.html"/>
+    </links>
+
+    <menu name="Apache MyFaces" inherit="top">
+      <item name="Overview"       href="http://myfaces.apache.org/index.html"/>
+      <item name="Download"       href="http://myfaces.apache.org/download.html"/>
+    </menu>
+
+    <menu name="Contents" inherit="top">
+        <item name="Main Site"         href="http://myfaces.apache.org/extensions/validator/index.html"/>
+        <item name="ExtVal for JSF 1.1"       href="http://myfaces.apache.org/extensions/validator11/index.html" collapse="true">
+            <item name="dummy"        href="dummy"/>
+        </item>
+        <item name="ExtVal for JSF 1.2"   href="http://myfaces.apache.org/extensions/validator12/index.html">
+              <item name="Core Module"           href="http://myfaces.apache.org/extensions/validator12/myfaces-extval-core/index.html"/>
+              <item name="Property Validation"   href="http://myfaces.apache.org/extensions/validator12/validation-modules-project/myfaces-extval-property-validation/index.html"/>
+              <item name="Trinidad Support"      href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-trinidad-support/index.html"/>
+              <item name="Generic Support"       href="http://myfaces.apache.org/extensions/validator12/component-support-modules-project/myfaces-extval-generic-support/index.html"/>
+        </item>
+    </menu>
+	
+    <menu name="Documentation">
+      <item name="Wiki"         href="http://wiki.apache.org/myfaces/Extensions/Validator/"/>
+      <item name="Javadoc"      href="http://myfaces.apache.org/extensions/validator12/javadoc.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+
+    <menu name="Foundation" inherit="bottom">
+      <item name="ASF"            href="http://www.apache.org/" />
+      <item name="Sponsorship"    href="http://www.apache.org/foundation/sponsorship.html" />
+      <item name="Thanks"         href="http://www.apache.org/foundation/thanks.html" />
+    </menu>
+  </body>
+</project>
