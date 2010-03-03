@@ -67,4 +67,10 @@ public class JsfProjectStageBuilder implements JsfProjectStage
     {
         return this.projectStage.is(JsfProjectStageEnum.Production.getProjectStageName());
     }
+
+    @Override
+    public String toString()
+    {
+        return this.projectStage.toString();
+    }
 }

@@ -68,7 +68,7 @@
         <module>core</module>
         <module>jee-modules</module>
         <!--module>test-modules</module-->
-        <!--module>examples</module-->
+        <module>examples</module>
         <!--module>documentation</module-->
     </modules>
 

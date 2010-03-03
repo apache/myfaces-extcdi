@@ -52,4 +52,10 @@ public class ProjectStage implements Serializable
     {
         return this.value.equals(projectStage);
     }
+
+    @Override
+    public String toString()
+    {
+        return this.value;
+    }
 }
