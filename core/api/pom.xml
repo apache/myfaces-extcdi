@@ -42,6 +42,13 @@
             <version>1</version>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+            <version>1.0.0-beta</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <resources>

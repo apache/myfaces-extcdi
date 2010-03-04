@@ -25,11 +25,16 @@
         <f:view>
             <h:form id="mainForm">
                 <h:panelGrid columns="2">
-                    <h:outputLabel value="Bean-value:"/>
-                    <h:outputText value="#{helloCodiBean.text}"/>
+                    <h:outputLabel for="txtInfo" value="Bean-value:"/>
+                    <h:outputText id="txtInfo" value="#{helloCodiBean.text}"/>
 
-                    <h:outputLabel value="Project stage:"/>
-                    <h:outputText value="#{helloCodiBean.projectStageName}"/>
+                    <h:outputLabel for="txtProjctStage" value="Project stage:"/>
+                    <h:outputText id="txtProjctStage" value="#{helloCodiBean.projectStageName}"/>
+
+                    <h:outputLabel for="txtInvokedListenerMethods" value="Invoked:"/>
+                    <h:outputText id="txtInvokedListenerMethods" value="#{helloCodiBean.invokedListenerMethods}"/>
+
+                    <h:commandButton value="send"/>
                 </h:panelGrid>
             </h:form>
         </f:view>

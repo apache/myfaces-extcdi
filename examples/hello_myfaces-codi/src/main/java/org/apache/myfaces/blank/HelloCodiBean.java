@@ -18,9 +18,15 @@
  */
 package org.apache.myfaces.blank;
 
+import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.View;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProjectStage;
 
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Model;
+import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
 
 @Model
@@ -29,13 +35,50 @@ public class HelloCodiBean
     @Inject
     private JsfProjectStage jsfProjectStage;
 
+    private String text;
+    private StringBuffer invokedListenerMethods = new StringBuffer();
+
+    public void preRenderView1(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
+    {
+        this.invokedListenerMethods.append("preRenderView1 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append(" | ");
+
+        this.text = "Hello MyFaces CODI";
+    }
+
+    @View("/helloMyFacesCodi.jsp")
+    public void preRenderView2(@Observes @BeforePhase(PhaseId.INVOKE_APPLICATION) PhaseEvent event)
+    {
+        this.invokedListenerMethods.append("preRenderView2 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append(" | ");
+    }
+
+    @View("/invalidPage.jsp")
+    public void preRenderView3(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
+    {
+        this.invokedListenerMethods.append("preRenderView3 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append(" | ");
+    }
+
+    @View({"/invalidPage.jsp", "/helloMyFacesCodi.jsp"})
+    public void preRenderView4(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
+    {
+        this.invokedListenerMethods.append("preRenderView4 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append(" | ");
+    }
+
     public String getText()
     {
-        return "Hello MyFaces CODI";
+        return this.text;
     }
 
     public String getProjectStageName()
     {
         return this.jsfProjectStage.toString();
+    }
+
+    public String getInvokedListenerMethods()
+    {
+        return invokedListenerMethods.toString();
     }
 }

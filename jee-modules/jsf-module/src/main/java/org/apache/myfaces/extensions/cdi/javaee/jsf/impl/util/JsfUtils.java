@@ -21,7 +21,17 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.WebXmlParameterNames;
 
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.LifecycleFactory;
+import javax.faces.lifecycle.Lifecycle;
+import javax.faces.FactoryFinder;
+import java.util.Iterator;
 
+/**
+ * keep in sync with extval!
+ *
+ * @author Gerhard Petracek
+ */
 public class JsfUtils
 {
     public static String getProjectStageName()
@@ -35,6 +45,21 @@ public class JsfUtils
         catch (Throwable t)
         {
             return null;
+        }
+    }
+
+    public static void registerPhaseListener(PhaseListener phaseListener)
+    {
+        LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(FactoryFinder.LIFECYCLE_FACTORY);
+
+        String currentId;
+        Lifecycle currentLifecycle;
+        Iterator lifecycleIds = lifecycleFactory.getLifecycleIds();
+        while (lifecycleIds.hasNext())
+        {
+            currentId = (String) lifecycleIds.next();
+            currentLifecycle = lifecycleFactory.getLifecycle(currentId);
+            currentLifecycle.addPhaseListener(phaseListener);
         }
     }
 }
