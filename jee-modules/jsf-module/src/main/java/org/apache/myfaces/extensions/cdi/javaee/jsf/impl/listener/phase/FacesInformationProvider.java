@@ -16,24 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
+import javax.faces.context.FacesContext;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.FIELD;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-
-@Target({PARAMETER, FIELD})
-@Retention(RUNTIME)
-@Documented
-
-@Qualifier
-public @interface BeforePhase
+@RequestScoped
+public class FacesInformationProvider
 {
-    PhaseId value();
+    @Produces
+    @RequestScoped
+    protected FacesContext currentFacesContext()
+    {
+        return FacesContext.getCurrentInstance();
+    }
 }

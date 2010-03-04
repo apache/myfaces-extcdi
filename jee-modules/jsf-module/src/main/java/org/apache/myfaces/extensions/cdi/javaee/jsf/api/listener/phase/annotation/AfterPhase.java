@@ -23,11 +23,12 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
-@Target(PARAMETER)
+@Target({PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
 

@@ -31,11 +31,9 @@
                     <h:outputLabel for="txtProjctStage" value="Project stage:"/>
                     <h:outputText id="txtProjctStage" value="#{helloCodiBean.projectStageName}"/>
 
-                    <h:outputLabel for="txtInvokedListenerMethods" value="Invoked:"/>
-                    <h:outputText id="txtInvokedListenerMethods" value="#{helloCodiBean.invokedListenerMethods}"/>
-
                     <h:commandButton value="send"/>
                 </h:panelGrid>
+                <h:messages globalOnly="true"/>
             </h:form>
         </f:view>
     </body>

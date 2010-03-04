@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProject
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Model;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
 
@@ -35,13 +37,15 @@ public class HelloCodiBean
     @Inject
     private JsfProjectStage jsfProjectStage;
 
-    private String text;
-    private StringBuffer invokedListenerMethods = new StringBuffer();
+    @Inject
+    private FacesContext facesContext;
 
+    private String text;
+
+    //no restriction via @View -> invoked before rendering any view
     public void preRenderView(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preRenderView in phase:").append(event.getPhaseId());
-        this.invokedListenerMethods.append(" | ");
+        addGlobalMessage("preRenderView in phase:" + event.getPhaseId());
 
         this.text = "Hello MyFaces CODI";
     }
@@ -49,22 +53,34 @@ public class HelloCodiBean
     @View("/helloMyFacesCodi.jsp")
     public void preInvokeApplication(@Observes @BeforePhase(PhaseId.INVOKE_APPLICATION) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preInvokeApplication in phase:").append(event.getPhaseId());
-        this.invokedListenerMethods.append(" | ");
+        addGlobalMessage("preInvokeApplication in phase:" + event.getPhaseId());
     }
 
     @View("/invalidPage.jsp")
     public void postRestoreViewInvalid(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("postRestoreViewInvalid in phase:").append(event.getPhaseId());
-        this.invokedListenerMethods.append(" | ");
+        addGlobalMessage("postRestoreViewInvalid in phase:" + event.getPhaseId());
     }
 
     @View({"/invalidPage.jsp", "/helloMyFacesCodi.jsp"})
     public void postRestoreView(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("postRestoreView in phase:").append(event.getPhaseId());
-        this.invokedListenerMethods.append(" | ");
+        addGlobalMessage("postRestoreView in phase:" + event.getPhaseId());
+    }
+
+    //no restriction via @View -> invoked for any view
+    public void preAny(@Observes @BeforePhase(PhaseId.ANY_PHASE) PhaseEvent event)
+    {
+        addGlobalMessage("preAny in phase:" + event.getPhaseId());
+    }
+
+    public void preAnyFiltered(@Observes @BeforePhase(PhaseId.ANY_PHASE) PhaseEvent event)
+    {
+        if (event.getPhaseId().equals(javax.faces.event.PhaseId.APPLY_REQUEST_VALUES) ||
+                event.getPhaseId().equals(javax.faces.event.PhaseId.UPDATE_MODEL_VALUES))
+        {
+            addGlobalMessage("preAnyFiltered in phase:" + event.getPhaseId());
+        }
     }
 
     public String getText()
@@ -77,8 +93,8 @@ public class HelloCodiBean
         return this.jsfProjectStage.toString();
     }
 
-    public String getInvokedListenerMethods()
+    private void addGlobalMessage(String messageText)
     {
-        return invokedListenerMethods.toString();
+        this.facesContext.addMessage(null, new FacesMessage(messageText));
     }
 }

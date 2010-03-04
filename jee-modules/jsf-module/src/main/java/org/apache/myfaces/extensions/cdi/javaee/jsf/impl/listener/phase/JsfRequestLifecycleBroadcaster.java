@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
@@ -36,19 +38,29 @@ public class JsfRequestLifecycleBroadcaster
     @Inject
     private Event<PhaseEvent> phaseEvent;
 
+    @Inject
+    @BeforePhase(PhaseId.ANY_PHASE)
+    private Event<PhaseEvent> beforeAnyPhaseEvent;
+
+    @Inject
+    @AfterPhase(PhaseId.ANY_PHASE)
+    private Event<PhaseEvent> afterAnyPhaseEvent;
+
     void broadcastBeforeEvent(PhaseEvent phaseEvent)
     {
         this.phaseEvent.select(createAnnotationLiteral(phaseEvent.getPhaseId(), true)).fire(phaseEvent);
+        this.beforeAnyPhaseEvent.fire(phaseEvent);
     }
 
     void broadcastAfterEvent(PhaseEvent phaseEvent)
     {
         this.phaseEvent.select(createAnnotationLiteral(phaseEvent.getPhaseId(), false)).fire(phaseEvent);
+        this.afterAnyPhaseEvent.fire(phaseEvent);
     }
 
     private Annotation createAnnotationLiteral(javax.faces.event.PhaseId phaseId, boolean isBeforeEvent)
     {
-        if(isBeforeEvent)
+        if (isBeforeEvent)
         {
             return createBeforeLiteral(phaseId);
         }
@@ -57,24 +69,26 @@ public class JsfRequestLifecycleBroadcaster
 
     private Annotation createBeforeLiteral(final javax.faces.event.PhaseId phaseId)
     {
-        return new BeforePhaseBinding() {
+        return new BeforePhaseBinding()
+        {
             private static final long serialVersionUID = 849645435335842723L;
 
             public PhaseId value()
             {
-                return PhaseId.convert(phaseId);
+                return PhaseId.convertFromFacesClass(phaseId);
             }
         };
     }
 
     private Annotation createAfterLiteral(final javax.faces.event.PhaseId phaseId)
     {
-        return new AfterPhaseBinding() {
+        return new AfterPhaseBinding()
+        {
             private static final long serialVersionUID = 490037768660184656L;
 
             public PhaseId value()
             {
-                return PhaseId.convert(phaseId);
+                return PhaseId.convertFromFacesClass(phaseId);
             }
         };
     }

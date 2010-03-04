@@ -25,7 +25,8 @@ public enum PhaseId
     PROCESS_VALIDATIONS(javax.faces.event.PhaseId.PROCESS_VALIDATIONS),
     UPDATE_MODEL_VALUES(javax.faces.event.PhaseId.UPDATE_MODEL_VALUES),
     INVOKE_APPLICATION(javax.faces.event.PhaseId.INVOKE_APPLICATION),
-    RENDER_RESPONSE(javax.faces.event.PhaseId.RENDER_RESPONSE);
+    RENDER_RESPONSE(javax.faces.event.PhaseId.RENDER_RESPONSE),
+    ANY_PHASE(javax.faces.event.PhaseId.ANY_PHASE);
 
     javax.faces.event.PhaseId phaseId;
 
@@ -34,7 +35,12 @@ public enum PhaseId
         this.phaseId = phaseId;
     }
 
-    public static PhaseId convert(javax.faces.event.PhaseId phaseId)
+    public static javax.faces.event.PhaseId convertToFacesClass(PhaseId phaseId)
+    {
+        return phaseId.getPhaseId();
+    }
+
+    public static PhaseId convertFromFacesClass(javax.faces.event.PhaseId phaseId)
     {
         if(RESTORE_VIEW.getPhaseId().equals(phaseId))
         {
