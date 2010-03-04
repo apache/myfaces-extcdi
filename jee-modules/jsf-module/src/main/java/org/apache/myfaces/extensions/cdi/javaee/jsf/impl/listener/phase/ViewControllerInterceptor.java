@@ -19,11 +19,14 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.View;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
 
 import javax.interceptor.Interceptor;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.faces.context.FacesContext;
+import java.lang.annotation.Annotation;
 
 @View
 @Interceptor
@@ -50,7 +53,7 @@ public class ViewControllerInterceptor
 
     private boolean invokeListenerMethod(InvocationContext invocationContext)
     {
-        if(!invocationContext.getMethod().isAnnotationPresent(View.class))
+        if(!isObserverMethod(invocationContext) || !isViewAnnotationPresent(invocationContext))
         {
             return true;
         }
@@ -64,6 +67,28 @@ public class ViewControllerInterceptor
 
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
         return isMethodBoundToView(view.value(), viewId);
+    }
+
+    private boolean isObserverMethod(InvocationContext invocationContext)
+    {
+        for(Annotation[] annotations : invocationContext.getMethod().getParameterAnnotations())
+        {
+            for(Annotation annotation : annotations)
+            {
+                if(BeforePhase.class.isAssignableFrom(annotation.annotationType()) ||
+                        AfterPhase.class.isAssignableFrom(annotation.annotationType()))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isViewAnnotationPresent(InvocationContext invocationContext)
+    {
+        return invocationContext.getMethod().isAnnotationPresent(View.class) ||
+             invocationContext.getMethod().getDeclaringClass().isAnnotationPresent(View.class);
     }
 
     private View getViewAnnotation(InvocationContext invocationContext)
