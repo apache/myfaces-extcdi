@@ -38,32 +38,32 @@ public class HelloCodiBean
     private String text;
     private StringBuffer invokedListenerMethods = new StringBuffer();
 
-    public void preRenderView1(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
+    public void preRenderView(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preRenderView1 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append("preRenderView in phase:").append(event.getPhaseId());
         this.invokedListenerMethods.append(" | ");
 
         this.text = "Hello MyFaces CODI";
     }
 
     @View("/helloMyFacesCodi.jsp")
-    public void preRenderView2(@Observes @BeforePhase(PhaseId.INVOKE_APPLICATION) PhaseEvent event)
+    public void preInvokeApplication(@Observes @BeforePhase(PhaseId.INVOKE_APPLICATION) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preRenderView2 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append("preInvokeApplication in phase:").append(event.getPhaseId());
         this.invokedListenerMethods.append(" | ");
     }
 
     @View("/invalidPage.jsp")
-    public void preRenderView3(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
+    public void postRestoreViewInvalid(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preRenderView3 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append("postRestoreViewInvalid in phase:").append(event.getPhaseId());
         this.invokedListenerMethods.append(" | ");
     }
 
     @View({"/invalidPage.jsp", "/helloMyFacesCodi.jsp"})
-    public void preRenderView4(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
+    public void postRestoreView(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
-        this.invokedListenerMethods.append("preRenderView4 in phase:").append(event.getPhaseId());
+        this.invokedListenerMethods.append("postRestoreView in phase:").append(event.getPhaseId());
         this.invokedListenerMethods.append(" | ");
     }
 
