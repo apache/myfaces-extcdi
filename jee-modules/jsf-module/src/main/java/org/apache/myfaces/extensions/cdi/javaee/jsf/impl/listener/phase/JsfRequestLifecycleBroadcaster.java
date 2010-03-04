@@ -19,21 +19,24 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.lang.annotation.Annotation;
 
-@ApplicationScoped
+@RequestScoped
 @Named
-public class JsfRequestLifecycleBroadcaster
+public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformation
 {
     static final String BEAN_NAME = "jsfRequestLifecycleBroadcaster";
+
+    private javax.faces.event.PhaseId facesPhaseId;
 
     @Inject
     private Event<PhaseEvent> phaseEvent;
@@ -48,6 +51,8 @@ public class JsfRequestLifecycleBroadcaster
 
     void broadcastBeforeEvent(PhaseEvent phaseEvent)
     {
+        this.facesPhaseId = phaseEvent.getPhaseId();
+
         this.phaseEvent.select(createAnnotationLiteral(phaseEvent.getPhaseId(), true)).fire(phaseEvent);
         this.beforeAnyPhaseEvent.fire(phaseEvent);
     }
@@ -91,5 +96,38 @@ public class JsfRequestLifecycleBroadcaster
                 return PhaseId.convertFromFacesClass(phaseId);
             }
         };
+    }
+
+    /*
+     * implementation of JsfLifecyclePhaseInformation methods
+     */
+    public boolean isRestoreViewPhase()
+    {
+        return javax.faces.event.PhaseId.RESTORE_VIEW.equals(this.facesPhaseId);
+    }
+
+    public boolean isApplyRequestValuesPhase()
+    {
+        return javax.faces.event.PhaseId.APPLY_REQUEST_VALUES.equals(this.facesPhaseId);
+    }
+
+    public boolean isProcessValidationsPhase()
+    {
+        return javax.faces.event.PhaseId.PROCESS_VALIDATIONS.equals(this.facesPhaseId);
+    }
+
+    public boolean isUpdateModelValuesPhase()
+    {
+        return javax.faces.event.PhaseId.UPDATE_MODEL_VALUES.equals(this.facesPhaseId);
+    }
+
+    public boolean isInvokeApplicationPhase()
+    {
+        return javax.faces.event.PhaseId.INVOKE_APPLICATION.equals(this.facesPhaseId);
+    }
+
+    public boolean isRenderResponsePhase()
+    {
+        return javax.faces.event.PhaseId.RENDER_RESPONSE.equals(this.facesPhaseId);
     }
 }

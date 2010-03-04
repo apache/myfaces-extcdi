@@ -20,6 +20,7 @@ package org.apache.myfaces.blank;
 
 import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.View;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProjectStage;
@@ -39,6 +40,9 @@ public class HelloCodiBean
 
     @Inject
     private FacesContext facesContext;
+
+    @Inject
+    private JsfLifecyclePhaseInformation phaseInformation;
 
     private String text;
 
@@ -74,12 +78,20 @@ public class HelloCodiBean
         addGlobalMessage("preAny in phase:" + event.getPhaseId());
     }
 
-    public void preAnyFiltered(@Observes @BeforePhase(PhaseId.ANY_PHASE) PhaseEvent event)
+    public void preAnyFiltered1(@Observes @BeforePhase(PhaseId.ANY_PHASE) PhaseEvent event)
     {
         if (event.getPhaseId().equals(javax.faces.event.PhaseId.APPLY_REQUEST_VALUES) ||
                 event.getPhaseId().equals(javax.faces.event.PhaseId.UPDATE_MODEL_VALUES))
         {
-            addGlobalMessage("preAnyFiltered in phase:" + event.getPhaseId());
+            addGlobalMessage("preAnyFiltered1 in phase:" + event.getPhaseId());
+        }
+    }
+
+    public void preAnyFiltered2(@Observes @AfterPhase(PhaseId.ANY_PHASE) PhaseEvent event)
+    {
+        if (this.phaseInformation.isProcessValidationsPhase() || this.phaseInformation.isUpdateModelValuesPhase())
+        {
+            addGlobalMessage("preAnyFiltered2 in phase:" + event.getPhaseId());
         }
     }
 
