@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.project.config.InitParameter;
 import org.apache.myfaces.extensions.cdi.core.api.project.config.InitParameterNames;
 import org.apache.myfaces.extensions.cdi.core.api.project.stage.ProjectStageResolver;
 import org.apache.myfaces.extensions.cdi.core.api.project.stage.ProjectStage;
+import static org.apache.myfaces.extensions.cdi.core.api.util.StringUtils.*;
 
 import javax.inject.Inject;
 
@@ -45,7 +46,7 @@ public class ApplicationProjectStageResolver implements ProjectStageResolver
     {
         String result = this.configManager.getValue(InitParameterNames.APPLICATION_PROJECT_STAGE);
 
-        if (result == null || "".equals(result))
+        if (isEmpty(result))
         {
             return ProjectStage.DEFAULT_STAGE;
         }

@@ -26,10 +26,13 @@
             <h:form id="mainForm">
                 <h:panelGrid columns="2">
                     <h:outputLabel for="txtInfo" value="Bean-value:"/>
-                    <h:outputText id="txtInfo" value="#{helloCodiBean.text}"/>
+                    <h:outputText id="txtInfo" value="#{facesDemoBean.text}"/>
 
-                    <h:outputLabel for="txtProjctStage" value="Project stage:"/>
-                    <h:outputText id="txtProjctStage" value="#{helloCodiBean.projectStageName}"/>
+                    <h:outputLabel for="txtAppProjctStage" value="App-Project stage:"/>
+                    <h:outputText id="txtAppProjctStage" value="#{applicationProjectStageDemoBean.projectStageName}"/>
+
+                    <h:outputLabel for="txtJsfProjctStage" value="Jsf-Project stage:"/>
+                    <h:outputText id="txtJsfProjctStage" value="#{jsfProjectStageDemoBean.projectStageName}"/>
 
                     <h:commandButton value="send"/>
                 </h:panelGrid>

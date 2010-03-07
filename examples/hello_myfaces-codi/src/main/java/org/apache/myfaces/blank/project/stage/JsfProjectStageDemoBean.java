@@ -16,20 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.common.qualifier;
+package org.apache.myfaces.blank.project.stage;
 
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.*;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProjectStage;
 
-@Qualifier
+import javax.enterprise.inject.Model;
+import javax.inject.Inject;
 
-@Target({TYPE, METHOD, FIELD, PARAMETER})
-@Retention(RUNTIME)
-@Documented
-public @interface Current
+@Model
+public class JsfProjectStageDemoBean
 {
+    @Inject
+    private JsfProjectStage jsfProjectStage;
+
+    public String getProjectStageName()
+    {
+        return this.jsfProjectStage.toString();
+    }
 }

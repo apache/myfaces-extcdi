@@ -16,14 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.blank;
+package org.apache.myfaces.blank.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.View;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProjectStage;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Model;
@@ -33,11 +32,8 @@ import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
 
 @Model
-public class HelloCodiBean
+public class FacesDemoBean
 {
-    @Inject
-    private JsfProjectStage jsfProjectStage;
-
     @Inject
     private FacesContext facesContext;
 
@@ -98,11 +94,6 @@ public class HelloCodiBean
     public String getText()
     {
         return this.text;
-    }
-
-    public String getProjectStageName()
-    {
-        return this.jsfProjectStage.toString();
     }
 
     private void addGlobalMessage(String messageText)

@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.project.stage;
 
-import org.apache.myfaces.extensions.cdi.core.api.common.qualifier.Current;
 import org.apache.myfaces.extensions.cdi.core.api.project.stage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.project.stage.JsfProjectStage;
 
@@ -43,7 +42,7 @@ public class JsfProjectStageBuilder implements JsfProjectStage
     }
 
     @Produces
-    public JsfProjectStage createJsfProjectStage(@Current ProjectStage projectStage)
+    public JsfProjectStage createJsfProjectStage(ProjectStage projectStage)
     {
         return new JsfProjectStageBuilder(projectStage);
     }

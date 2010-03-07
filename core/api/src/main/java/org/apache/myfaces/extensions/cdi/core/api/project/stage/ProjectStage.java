@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.project.stage;
 
-import org.apache.myfaces.extensions.cdi.core.api.common.qualifier.Current;
-
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 
+@Typed()
 public class ProjectStage implements Serializable
 {
     private static final long serialVersionUID = 8372440985154139133L;
@@ -42,7 +42,6 @@ public class ProjectStage implements Serializable
     }
 
     @Produces
-    @Current
     public ProjectStage createProjectStage(ProjectStageResolver projectStageResolver)
     {
         return new ProjectStage(projectStageResolver.getCurrentProjectStageName());
