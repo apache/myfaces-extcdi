@@ -1,0 +1,160 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>myfaces-extcdi-assembly12</artifactId>
+    <packaging>pom</packaging>
+    <name>Apache MyFaces Extensions CDI Assembly</name>
+    <description>MyFaces Extensions CDI Assembly is used to generate 
+    .zip and .tar.gz distributions </description>
+
+    <parent>
+        <groupId>org.apache.myfaces.extensions.cdi</groupId>
+        <artifactId>myfaces-extcdi-parent</artifactId>
+        <version>1.2.1-SNAPSHOT</version>
+    </parent>
+
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_2_1_rc/assembly</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_2_1_rc/assembly</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_2_1_rc/assembly</url>
+    </scm>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>dependency-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-javadoc</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi</groupId>
+                                    <artifactId>myfaces-extcdi-core-api</artifactId>
+                                    <version>${core.version}</version>
+                                    <classifier>javadoc</classifier>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi</groupId>
+                                    <artifactId>myfaces-extcdi-core-impl</artifactId>
+                                    <version>${core.version}</version>
+                                    <classifier>javadoc</classifier>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi.ui-modules</groupId>
+                                    <artifactId>myfaces-extcdi-jsf-module</artifactId>
+                                    <version>${property-validation.version}</version>
+                                    <classifier>javadoc</classifier>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-source</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi</groupId>
+                                    <artifactId>myfaces-extcdi-core-api</artifactId>
+                                    <version>${core.version}</version>
+                                    <classifier>sources</classifier>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi</groupId>
+                                    <artifactId>myfaces-extcdi-core-impl</artifactId>
+                                    <version>${core.version}</version>
+                                    <classifier>sources</classifier>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.apache.myfaces.extensions.cdi.ui-modules</groupId>
+                                    <artifactId>myfaces-extcdi-jsf-module</artifactId>
+                                    <version>${property-validation.version}</version>
+                                    <classifier>sources</classifier>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.build.directory}/src</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- EXECUTE mvn package to generate assembly files -->
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>make_assembly_src</id>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/assembly/coresrc.xml</descriptor>
+                            </descriptors>
+                            <finalName>myfaces-extcdi12-${version}-src</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <outputDirectory>target/assembly/out</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>make_assembly_bin</id>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${basedir}/src/main/assembly/corebin.xml</descriptor>
+                            </descriptors>
+                            <finalName>myfaces-extcdi12-${version}-bin</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <outputDirectory>target/assembly/out</outputDirectory>
+                            <workDirectory>target/assembly/work</workDirectory>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi</groupId>
+            <artifactId>myfaces-extcdi-core-api</artifactId>
+            <version>${core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi</groupId>
+            <artifactId>myfaces-extcdi-core-impl</artifactId>
+            <version>${core.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.ui-modules</groupId>
+            <artifactId>myfaces-extcdi-jsf-module</artifactId>
+            <version>${ui-module.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- Since extcdi could be async released, an generated assembly could contain different
+         artifact versions -->
+    <properties>
+        <core.version>1.2.3-SNAPSHOT</core.version>
+        <ui-module.version>1.2.1-SNAPSHOT</ui-module.version>
+    </properties>
+</project>
