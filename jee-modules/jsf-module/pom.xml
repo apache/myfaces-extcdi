@@ -28,12 +28,12 @@
     <artifactId>jsf-module-project</artifactId>
 
     <name>MyFaces Extensions-CDI JSF Module</name>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
         <artifactId>jee-modules-project</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modules>

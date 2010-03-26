@@ -27,25 +27,25 @@
     <artifactId>myfaces-extcdi-jsf-module-impl</artifactId>
 
     <name>MyFaces Extensions-CDI JSF Module Impl</name>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
         <artifactId>jsf-module-project</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
             <artifactId>myfaces-extcdi-jsf-module-api</artifactId>
-            <version>1.2.1-SNAPSHOT</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>

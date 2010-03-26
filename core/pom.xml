@@ -28,18 +28,18 @@
     <artifactId>core-project</artifactId>
 
     <name>MyFaces Extensions-CDI Core</name>
-    <version>1.2.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>myfaces-extcdi-parent</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_2_1_rc/core</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_2_1_rc/core</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_2_1_rc/core</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/core</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/core</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_0_0_rc/core</url>
     </scm>
 
     <modules>
