@@ -4,8 +4,7 @@
     <artifactId>myfaces-extcdi-assembly12</artifactId>
     <packaging>pom</packaging>
     <name>Apache MyFaces Extensions CDI Assembly</name>
-    <description>MyFaces Extensions CDI Assembly is used to generate 
-    .zip and .tar.gz distributions </description>
+    <description>MyFaces Extensions CDI Assembly is used to generate .zip and .tar.gz distributions </description>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
@@ -14,12 +13,12 @@
     </parent>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/assembly</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/assembly</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_0_0_rc/assembly</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/rc/1_0_0/assembly</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/rc/1_0_0/assembly</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/rc/1_0_0/assembly</url>
     </scm>
     
-    <build>
+    <!--build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -89,7 +88,6 @@
             </plugin>
 
             <plugin>
-                <!-- EXECUTE mvn package to generate assembly files -->
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -127,34 +125,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi</groupId>
-            <artifactId>myfaces-extcdi-core-api</artifactId>
-            <version>${core.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi</groupId>
-            <artifactId>myfaces-extcdi-core-impl</artifactId>
-            <version>${core.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.ui-modules</groupId>
-            <artifactId>myfaces-extcdi-jsf-module</artifactId>
-            <version>${ui-module.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
-
-    <!-- Since extcdi could be async released, an generated assembly could contain different
-         artifact versions -->
-    <properties>
-        <core.version>1.2.3-SNAPSHOT</core.version>
-        <ui-module.version>1.0.0-SNAPSHOT</ui-module.version>
-    </properties>
+    </build-->
 </project>

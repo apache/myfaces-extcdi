@@ -24,14 +24,14 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
-    <artifactId>myfaces-extcdi-jsf-module-api</artifactId>
+    <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
 
-    <name>MyFaces Extensions-CDI JSF Module API</name>
+    <name>MyFaces Extensions-CDI JSF 1.2 Module API</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
-        <artifactId>jsf-module-project</artifactId>
+        <artifactId>jsf12-module-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 

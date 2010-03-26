@@ -44,6 +44,7 @@
 
     <modules>
         <module>jsf-module</module>
+        <module>jsf20-module</module>
     </modules>
 
     <repositories>
@@ -61,9 +62,5 @@
             <version>1.0-beta</version>
         </dependency>
     </dependencies>
-
-    <properties>
-        <jsf.version>1.2.8</jsf.version>
-    </properties>
 
 </project>
