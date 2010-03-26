@@ -25,14 +25,14 @@
     <packaging>pom</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>examples-project</artifactId>
+    <artifactId>jsf-examples-project</artifactId>
 
-    <name>MyFaces Extensions-CDI Examples Project</name>
+    <name>MyFaces Extensions-CDI JSF-Examples Project</name>
     <version>1.2.1-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>myfaces-extcdi-parent</artifactId>
+        <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
+        <artifactId>examples-project</artifactId>
         <version>1.2.1-SNAPSHOT</version>
     </parent>
 
@@ -43,7 +43,7 @@
     </scm>
     
     <modules>
-        <module>jsf-examples</module>
+        <module>hello_myfaces-codi_jsf12</module>
     </modules>
 
     <profiles>
