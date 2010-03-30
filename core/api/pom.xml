@@ -89,6 +89,19 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <!--
+                       We need to exclude a few classes which do trickier stuff,
+                       e.g. use implicit java5 VM guarantees.
+                    -->
+                    <excludes>
+                        **/ProjectStage.java,
+                        **/DefaultAnnotation.java
+                    </excludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
