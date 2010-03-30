@@ -63,6 +63,15 @@
     module and then on each module listed below. 
      -->
 
+    <properties>
+        <owb.version>1.0.0-SNAPSHOT</owb.version>
+        <myfaces.version>2.0.0-SNAPSHOT</myfaces.version>
+    </properties>
+
+    <dependencyManagement>
+        
+    </dependencyManagement>
+
     <modules>
         <module>parent</module>
         <module>core</module>
