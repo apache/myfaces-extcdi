@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.ApplicationPhaseListener;
+import org.apache.myfaces.extensions.cdi.core.api.listener.phase.ApplicationPhaseListener;
 
 import javax.enterprise.inject.Stereotype;
 import java.lang.annotation.Documented;

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.JsfPhaseListener;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfPhaseListener;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;

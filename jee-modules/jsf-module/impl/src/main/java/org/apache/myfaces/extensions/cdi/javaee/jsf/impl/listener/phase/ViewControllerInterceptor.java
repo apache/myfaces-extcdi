@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation.View;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
+import org.apache.myfaces.extensions.cdi.core.api.listener.phase.View;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 
 import javax.interceptor.Interceptor;
 import javax.interceptor.AroundInvoke;

@@ -16,11 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase;
 
-import javax.enterprise.inject.Stereotype;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+
+import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
@@ -29,11 +32,12 @@ import java.lang.annotation.Target;
  * @author Gerhard Petracek
  */
 
-@Stereotype
-
-@Target(TYPE)
+@Target({PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
-public @interface ApplicationPhaseListener
+
+@Qualifier
+public @interface BeforePhase
 {
+    PhaseId value();
 }

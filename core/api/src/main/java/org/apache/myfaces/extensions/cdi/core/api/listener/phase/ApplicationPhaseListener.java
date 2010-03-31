@@ -16,12 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.listener.phase.annotation;
+package org.apache.myfaces.extensions.cdi.core.api.listener.phase;
 
-import javax.interceptor.InterceptorBinding;
-import javax.enterprise.util.Nonbinding;
+import javax.enterprise.inject.Stereotype;
 import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -31,12 +29,11 @@ import java.lang.annotation.Target;
  * @author Gerhard Petracek
  */
 
-@InterceptorBinding
-@Target({TYPE, METHOD})
+@Stereotype
+
+@Target(TYPE)
 @Retention(RUNTIME)
 @Documented
-public @interface View
+public @interface ApplicationPhaseListener
 {
-    @Nonbinding
-    String[] value() default "*";
 }

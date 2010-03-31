@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
 @Documented
 
 @Qualifier
-public @interface BeforePhase
+public @interface AfterPhase
 {
     PhaseId value();
 }

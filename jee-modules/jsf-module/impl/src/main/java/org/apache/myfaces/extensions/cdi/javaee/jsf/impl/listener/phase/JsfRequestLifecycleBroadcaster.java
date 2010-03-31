@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.BeforePhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;

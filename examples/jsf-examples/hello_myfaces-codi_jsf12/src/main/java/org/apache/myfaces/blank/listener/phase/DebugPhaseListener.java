@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.blank.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.JsfPhaseListener;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.annotation.AfterPhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 
 import javax.enterprise.util.AnnotationLiteral;
 
