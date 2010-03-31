@@ -60,6 +60,125 @@
     
     <inceptionYear>2008</inceptionYear>
 
+    <properties>
+        <owb.version>1.0.0-SNAPSHOT</owb.version>
+        <myfaces.version>2.0.0-SNAPSHOT</myfaces.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- OWB specific dependencies-->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                <version>1.0-beta</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+                <version>1.0.0-beta</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-impl</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-spi</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-web</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-jsf</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans.test</groupId>
+                <artifactId>cditest</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans.test</groupId>
+                <artifactId>cditest-owb</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+
+
+
+            <!-- the JSF independent core -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+                <artifactId>myfaces-extcdi-core-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+                <artifactId>myfaces-extcdi-core-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- the JSF-1.2 specific library -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- the JSF-2.0 specific library, which includes the JSF-1.2 parts -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+
+    </dependencyManagement>
+
+    <!-- These dependencies are needed for each and every module in this project -->
+    <dependencies>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+            <version>1.0-beta</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+            <version>1.0.0-beta</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    
+
     <build>
         <resources>
             <resource>

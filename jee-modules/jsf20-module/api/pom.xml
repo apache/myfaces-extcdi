@@ -27,7 +27,6 @@
     <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
 
     <name>MyFaces Extensions-CDI JSF 2.0 Module API</name>
-    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>

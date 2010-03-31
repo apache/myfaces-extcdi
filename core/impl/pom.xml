@@ -27,7 +27,6 @@
     <artifactId>myfaces-extcdi-core-impl</artifactId>
 
     <name>MyFaces Extensions-CDI Core-Impl</name>
-    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
@@ -40,7 +39,6 @@
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 

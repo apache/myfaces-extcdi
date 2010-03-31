@@ -26,9 +26,9 @@
 
     <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
     <artifactId>core-project</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Core</name>
-    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
@@ -56,11 +56,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jcdi_1.0_spec</artifactId>
-            <version>1.0-beta</version>
-        </dependency>
     </dependencies>
 
 </project>
