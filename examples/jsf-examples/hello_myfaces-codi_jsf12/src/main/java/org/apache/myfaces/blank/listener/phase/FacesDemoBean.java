@@ -20,7 +20,8 @@ package org.apache.myfaces.blank.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.listener.phase.View;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.*;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 
 import javax.enterprise.event.Observes;

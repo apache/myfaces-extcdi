@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
-
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.PARAMETER;
