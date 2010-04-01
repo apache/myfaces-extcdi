@@ -157,6 +157,8 @@
 
     <!-- These dependencies are needed for each and every module in this project -->
     <dependencies>
+
+        <!-- atinject and cdi specs for OWB-->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
@@ -170,12 +172,23 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- the interceptors spec from EE6 -->
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-interceptor_1.1_spec</artifactId>
             <version>1.0.0-beta</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- we use testng for testing -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <classifier>jdk15</classifier>
+            <version>5.1</version>
+            <scope>test</scope>
+        </dependency>
+        
     </dependencies>
     
 
