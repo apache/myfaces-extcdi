@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.api.tools.annotate;
+package org.apache.myfaces.extensions.cdi.core.api.tools.annotate;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
@@ -26,47 +26,80 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * <p>A small helper class to create a Annotation instance of the given annotation class
+ * <p>A small helper class to create an Annotation instance of the given annotation class
  * via {@link java.lang.reflect.Proxy}. The annotation literal gets filled with the default values.</p>
- *
+ * <p/>
  * <p>usage:</p>
  * <pre>
  * Class<? extends annotation> annotationClass = ...;
  * Annotation a = DefaultAnnotation.of(annotationClass)
  * </pre>
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
-*/
+ *
+ * @author Mark Struberg
+ * @author Gerhard Petracek
+ */
 public class DefaultAnnotation implements InvocationHandler
 {
-    
-    static volatile Map<Class<? extends Annotation>, Annotation> annotationCache 
-                        = new ConcurrentHashMap<Class<? extends Annotation>, Annotation>();
-    
-    public static Annotation of(Class<? extends Annotation> annotationClass) 
+    private Class<? extends Annotation> annotationClass;
+
+    /**
+     * Required to use the result of the factory instead of a default implementation
+     * of {@link javax.enterprise.util.AnnotationLiteral}.
+     *
+     * @param annotationClass class of the target annotation
+     */
+    private DefaultAnnotation(Class<? extends Annotation> annotationClass)
     {
-        Annotation annon = annotationCache.get(annotationClass);
-        
-        if (annon == null)
+        this.annotationClass = annotationClass;
+    }
+
+    static volatile Map<Class<? extends Annotation>, Annotation> annotationCache
+            = new ConcurrentHashMap<Class<? extends Annotation>, Annotation>();
+
+    public static Annotation of(Class<? extends Annotation> annotationClass)
+    {
+        Annotation annotation = annotationCache.get(annotationClass);
+
+        if (annotation == null)
         {
             // switch into paranoia mode
-            synchronized (annotationCache) 
+            synchronized (annotationCache)
             {
-                annon = annotationCache.get(annotationClass);
-                if (annon == null)
+                annotation = annotationCache.get(annotationClass);
+                if (annotation == null)
                 {
-                    annon = (Annotation) Proxy.newProxyInstance(annotationClass.getClassLoader(), 
-                            new Class[] {annotationClass}, 
-                            new DefaultAnnotation());
-                    annotationCache.put(annotationClass, annon);
+                    annotation = (Annotation) Proxy.newProxyInstance(
+                            annotationClass.getClassLoader(),
+                            new Class[]{annotationClass},
+                            new DefaultAnnotation(annotationClass));
+                    
+                    annotationCache.put(annotationClass, annotation);
                 }
             }
         }
-        
-        return annon;
+
+        return annotation;
     }
-    
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable 
+
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
     {
+        if ("hashCode".equals(method.getName()))
+        {
+            return hashCode();
+        }
+        else if ("equals".equals(method.getName()))
+        {
+            return equals(args[0]);
+        }
+        else if ("annotationType".equals(method.getName()))
+        {
+            return this.annotationClass;
+        }
+        else if ("toString".equals(method.getName()))
+        {
+            return "Proxy for " + this.annotationClass.getName() + " (" + getClass().getName() + ")";
+        }
+
         return method.getDefaultValue();
     }
 }
