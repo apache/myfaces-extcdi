@@ -55,28 +55,33 @@ import java.util.logging.Logger;
  * </p>
  *
  * <p>Adding a new ProjectStage is done via the
- * {@link java.util.ServiceLoader} mechanism.</p>
+ * {@link java.util.ServiceLoader} mechanism. A class deriving from {@link ProjectStage}
+ * must be provided and used for creating a single static instance of it. The name of 
+ * the class should be the name of the ProjectStage prefixed with 'C', 
+ * e.g. &quot;CUnitTest&quot;</p>
  *
  * <p>Custom ProjectStages can be implemented by writing anonymous ProjectStage
  * members into a registered {@link ProjectStageHolder} as shown in the following
  * sample:</p>
  * <pre>
  * package org.apache.myfaces.extensions.cdi.test.api.projectstage;
- * public class MyProjectStages implements ProjectStageHolder
- * {
- *    public static final ProjectStage MyOwnProjectStage = new ProjectStage("MyOwnProjectStage") {};
- *    public static final ProjectStage MyOtherProjectStage = new ProjectStage("MyOtherProjectStage") {};
-  * }
+ * public class MyProjectStages implements ProjectStageHolder {
+ *     public static final class CMyOwnProjectStage extends ProjectStage {};
+ *     public static final CMyOwnProjectStage MyOwnProjectStage = new CMyOwnProjectStage();
+ *    
+ *     public static final class CMyOtherProjectStage extends ProjectStage {};
+ *     public static final CMyOtherProjectStage MyOtherProjectStage = new CMyOtherProjectStage();
+ * }
  * </pre>
  * <p>For activating those projectstages, you have to register this ProjectStageHolder class
  * to get picked up via the java.util.ServiceLoader mechanism. Simply create a file
  * <pre>
- * META-INF/services/org.apache.myfaces.extensions.cdi.api.projectstage.ProjectStageHolder
+ * META-INF/services/org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageHolder
  * </pre>
  * which contains the fully qualified class name of custom ProjectStageHolder implementation:
  * <pre>
  * # this class now get's picked up by java.util.ServiceLoader
- * org.apache.myfaces.extensions.cdi.test.api.projectstage.MyProjectStages
+ * org.apache.myfaces.extensions.cdi.core.test.api.projectstage.MyProjectStages
  * </pre>
  * </p>
  * <p>You can use your own ProjectStages exactly the same way as all the ones provided
@@ -137,16 +142,15 @@ public abstract class ProjectStage implements Serializable
     /**
      * The protected constructor will register the given ProjectStage via its name.
      * The name is returned by the {@link #toString()} method of the ProjectStage.
-     *
-     * @param psNameIn the name of the ProjectStage which should get registered.
      */
-    protected ProjectStage(String psNameIn)
+    protected ProjectStage()
     {
-        this.psName = psNameIn;
+        String psNameIn = this.getClass().getSimpleName(); 
+        psName = psNameIn.substring(1);
 
         if (!projectStages.containsKey(psNameIn))
         {
-            projectStages.put(psNameIn, this);
+            projectStages.put(psName, this);
         }
         else
         {
@@ -178,27 +182,34 @@ public abstract class ProjectStage implements Serializable
     }
 
 
-    public static final ProjectStage UnitTest = new ProjectStage("UnitTest")
+    public static final class CUnitTest extends ProjectStage
     {
     };
+    public static final CUnitTest UnitTest = new CUnitTest();
 
-    public static final ProjectStage Development = new ProjectStage("Development")
-    {
-    };
 
-    public static final ProjectStage SystemTest = new ProjectStage("SystemTest")
+    public static final class CDevelopment extends ProjectStage
     {
     };
+    public static final CDevelopment Development = new CDevelopment();
 
-    public static final ProjectStage IntegrationTest = new ProjectStage("IntegrationTest")
+    public static final class CSystemTest extends ProjectStage
     {
     };
+    public static final CSystemTest SystemTest = new CSystemTest();
 
-    public static final ProjectStage Staging = new ProjectStage("Staging")
+    public static final class CIntegrationTest extends ProjectStage
     {
     };
+    public static final CIntegrationTest IntegrationTest = new CIntegrationTest();
 
-    public static final ProjectStage Production = new ProjectStage("Production")
+    public static final class CStaging extends ProjectStage
     {
     };
+    public static final CStaging Staging = new CStaging();
+
+    public static final class CProduction extends ProjectStage
+    {
+    };
+    public static final CProduction Production = new CProduction();
 }

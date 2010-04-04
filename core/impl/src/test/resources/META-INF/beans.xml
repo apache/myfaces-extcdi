@@ -17,4 +17,8 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<beans/>
+<beans>
+    <alternatives>
+        <class>org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans.MyMailServiceMockImpl</class>
+    </alternatives>
+</beans>

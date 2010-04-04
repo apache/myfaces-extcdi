@@ -75,6 +75,14 @@ public class ProjectStageProducer
     private final static Logger log = Logger.getLogger(ProjectStageProducer.class.getName());
 
     /**
+     * ProjectStageProducers must only be created by subclassing producers
+     */
+    protected ProjectStageProducer()
+    {
+
+    }
+
+    /**
      * The detected ProjectStage
      */
     private static ProjectStage projectStage;
@@ -151,6 +159,8 @@ public class ProjectStageProducer
     /**
      * Read the configuration from the stated places.
      * This can be overloaded to implement own lookup mechanisms.
+     *
+     * This will only determine the ProjectStage if it is not yet set.
      */
     @Inject
     public void determineProjectStage()
