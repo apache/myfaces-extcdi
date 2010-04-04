@@ -23,15 +23,31 @@
     </head>
     <body>
         <f:view>
-            <h:form id="mainForm">
+            <h1>JSF-Demo</h1>
+            <h:form id="jsfMainForm">
                 <h:panelGrid columns="2">
                     <h:outputLabel for="txtInfo" value="Bean-value:"/>
                     <h:outputText id="txtInfo" value="#{facesDemoBean.text}"/>
 
                     <h:commandButton value="send"/>
+                    <h:panelGroup/>
                 </h:panelGrid>
-                <h:messages globalOnly="true"/>
             </h:form>
+
+            <h1>BV-Demo</h1>
+            <h:form id="bvMainForm">
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="txtInfo" value="Bean-value:"/>
+                    <h:inputText id="txtInfo" value="#{beanValidationDemoBean.text}" label="Bean-value"/>
+                    <h:message for="txtInfo" showSummary="false" showDetail="true"/>
+
+                    <h:commandButton value="send" action="#{beanValidationDemoBean.send}"/>
+                    <h:panelGroup/>
+                    <h:panelGroup/>
+                </h:panelGrid>
+            </h:form>
+
+            <h:messages globalOnly="true" infoStyle="color: blue;" warnStyle="color: orange;" errorStyle="color: red;" fatalStyle="color:darkred;"/>
         </f:view>
     </body>
 </html>

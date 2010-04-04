@@ -57,7 +57,7 @@
             </notifier>
         </notifiers>
     </ciManagement>
-    
+
     <inceptionYear>2008</inceptionYear>
 
     <properties>
@@ -115,7 +115,6 @@
             </dependency>
 
 
-
             <!-- the JSF independent core -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
@@ -152,6 +151,18 @@
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
+            <!-- the BV-1.0 specific library -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
             <!--
                 We currently need this for the CDI test container to emulate the @SessionScoped.
                 TODO: Finally this should not be necessary anymore.
@@ -165,17 +176,30 @@
             </dependency>
 
             <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-el_2.2_spec</artifactId>
-                    <version>1.0-beta</version>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-el_2.2_spec</artifactId>
+                <version>1.0-beta</version>
             </dependency>
 
             <dependency>
-                    <groupId>org.apache.geronimo.specs</groupId>
-                    <artifactId>geronimo-validation_1.0_spec</artifactId>
-                    <version>1.0</version>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-validation_1.0_spec</artifactId>
+                <version>1.0</version>
             </dependency>
-            
+
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-validation_1.0_spec</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <!-- TODO -->
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>1.0.0.GA</version>
+            </dependency>
+
         </dependencies>
 
     </dependencyManagement>
@@ -213,9 +237,9 @@
             <version>5.1</version>
             <scope>test</scope>
         </dependency>
-        
+
     </dependencies>
-    
+
 
     <build>
         <resources>
@@ -267,8 +291,8 @@
                             <tasks>
                                 <copy todir="${project.build.directory}/apidocs/META-INF">
                                     <fileset dir="${basedir}">
-                                        <include name="LICENSE.txt" />
-                                        <include name="NOTICE.txt" />
+                                        <include name="LICENSE.txt"/>
+                                        <include name="NOTICE.txt"/>
                                     </fileset>
                                 </copy>
                             </tasks>
@@ -283,8 +307,9 @@
                         <configuration>
                             <tasks>
                                 <!-- Copy javadoc to another directory, to keep javadoc of previous versions on site -->
-                                <copy todir="${project.build.directory}/site/apidocs-${project.version}" failonerror="false">
-                                  <fileset dir="${project.build.directory}/site/apidocs"/>
+                                <copy todir="${project.build.directory}/site/apidocs-${project.version}"
+                                      failonerror="false">
+                                    <fileset dir="${project.build.directory}/site/apidocs"/>
                                 </copy>
                             </tasks>
                         </configuration>
@@ -298,7 +323,7 @@
                 - projects may redeclare this plugin and provide different configuration settings
                 - to use different checks (more or less strict than the default).
             -->
-            
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -317,7 +342,7 @@
                     <headerLocation>default/myfaces-header.txt</headerLocation>
                 </configuration>
             </plugin>
-            
+
 
             <plugin>
                 <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
@@ -328,7 +353,7 @@
                     <target>1.5</target>
                     <optimize>false</optimize>
                 </configuration>
-            </plugin>            
+            </plugin>
         </plugins>
     </build>
 
@@ -386,7 +411,8 @@
 
     <scm>
         <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/parent</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/parent</developerConnection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/parent
+        </developerConnection>
         <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_0_0_rc/parent</url>
     </scm>
 

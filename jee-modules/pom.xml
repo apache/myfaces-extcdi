@@ -45,6 +45,7 @@
     <modules>
         <module>jsf-module</module>
         <module>jsf20-module</module>
+        <module>bv-module</module>
     </modules>
 
     <repositories>

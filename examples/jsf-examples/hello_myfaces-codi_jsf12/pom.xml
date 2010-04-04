@@ -69,6 +69,35 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- optional -->
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator</groupId>
+            <artifactId>myfaces-extval-core</artifactId>
+            <version>1.2.3</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.validator.validation-modules</groupId>
+            <artifactId>myfaces-extval-bean-validation</artifactId>
+            <version>1.2.3</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- TODO -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
@@ -153,6 +182,26 @@
             <artifactId>openwebbeans-web</artifactId>
             <version>${owb.version}</version>
         </dependency>
+
+        <!-- Bean-Validation - TODO -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.0.0.GA</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.4.2</version>
+        </dependency>
+        
     </dependencies>
 
     <build>

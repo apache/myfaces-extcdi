@@ -17,20 +17,8 @@
 # under the License.
 #####################################################################################
 
-#####################################################################################
-# This service configuration contains all available CODI extensions but in a
-#
-#                              DISABLED (commented-out)
-#
-# status.
-# Please copy over this file to your own project and enable the extensions as needed.
-#
-# We choose to do it that way since there is no option to later disable Services with
-# the underlying java.util.ServiceLoader mechanism.
-#####################################################################################
-
 # support for @ProjectStageActivated
-#org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageActivationExtension
+org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageActivationExtension
 
 # myfaces-codi BeanManager provider
-#org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider
+org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider
