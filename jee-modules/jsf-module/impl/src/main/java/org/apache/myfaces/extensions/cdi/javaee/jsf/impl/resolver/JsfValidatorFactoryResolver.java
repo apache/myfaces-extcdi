@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.resolver;
 
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ValidatorFactoryResolver;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.BeanValidation;
 
 import javax.faces.context.FacesContext;
 import javax.validation.Validation;
@@ -28,11 +29,12 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class JsfValidatorFactoryResolver implements ValidatorFactoryResolver
+@BeanValidation
+public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFactory>
 {
     private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
 
-    public ValidatorFactory getValidatorFactory()
+    public ValidatorFactory resolve()
     {
         Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
         ValidatorFactory validatorFactory = null;
