@@ -39,7 +39,7 @@
                 <h:panelGrid columns="3">
                     <h:outputLabel for="txtInfo" value="Bean-value:"/>
                     <h:inputText id="txtInfo" value="#{beanValidationDemoBean.text}" label="Bean-value"/>
-                    <h:message for="txtInfo" showSummary="false" showDetail="true"/>
+                    <h:message for="txtInfo" showSummary="false" showDetail="true" errorStyle="color: red;"/>
 
                     <h:commandButton value="send" action="#{beanValidationDemoBean.send}"/>
                     <h:panelGroup/>

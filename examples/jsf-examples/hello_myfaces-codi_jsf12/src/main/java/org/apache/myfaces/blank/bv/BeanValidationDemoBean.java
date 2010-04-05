@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
-import javax.validation.ValidatorFactory;
+import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
@@ -42,7 +42,7 @@ public class BeanValidationDemoBean
     private String forcedViolation;
 
     @Inject @Advanced
-    private ValidatorFactory validatorFactory;
+    private Validator validator;
 
     @Inject
     private FacesContext facesContext;
@@ -53,8 +53,7 @@ public class BeanValidationDemoBean
      */
     public void send()
     {
-        Set<ConstraintViolation<BeanValidationDemoBean>> violations =
-                this.validatorFactory.getValidator().validate(this);
+        Set<ConstraintViolation<BeanValidationDemoBean>> violations = this.validator.validate(this);
 
         if(!violations.isEmpty()) {
             ConstraintViolation violation = violations.iterator().next();

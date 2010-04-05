@@ -23,8 +23,11 @@ import org.apache.myfaces.extensions.cdi.core.api.resolver.ValidatorFactoryResol
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
+import javax.validation.ConstraintValidatorFactory;
 import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
+import javax.validation.MessageInterpolator;
 
 /**
  * @author Gerhard Petracek
@@ -54,5 +57,35 @@ public class CdiAwareValidatorFactoryProducer
         }
 
         return new CdiAwareValidatorFactory(validatorFactory);
+    }
+
+    @Produces
+    @Dependent
+    @Advanced
+    public Validator createValidatorForDependencyInjectionAwareConstraintValidators(
+            ValidatorFactoryResolver validatorFactoryResolver)
+    {
+        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
+                validatorFactoryResolver).getValidator();
+    }
+
+    @Produces
+    @Dependent
+    @Advanced
+    public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators(
+            ValidatorFactoryResolver validatorFactoryResolver)
+    {
+        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
+                validatorFactoryResolver).getConstraintValidatorFactory();
+    }
+
+    @Produces
+    @Dependent
+    @Advanced
+    public MessageInterpolator createMessageInterpolator(
+            ValidatorFactoryResolver validatorFactoryResolver)
+    {
+        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
+                validatorFactoryResolver).getMessageInterpolator();
     }
 }
