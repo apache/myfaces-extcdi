@@ -21,12 +21,12 @@ package org.apache.myfaces.blank.bv;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.enterprise.inject.Model;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
-import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
 import java.util.Set;
 
 /**
@@ -35,17 +35,26 @@ import java.util.Set;
 @Model
 public class BeanValidationDemoBean
 {
+    @NotNull(groups = TestGroup.class)
+    private String welcomeText = "Hello MyFaces CODI!";
+
     @NotNull
     private String text;
 
     @NotNull
     private String forcedViolation;
 
-    @Inject @Advanced
     private Validator validator;
 
-    @Inject
     private FacesContext facesContext;
+
+    @Inject
+    public BeanValidationDemoBean(@Advanced Validator validator, FacesContext facesContext)
+    {
+        this.validator = validator;
+        this.facesContext = facesContext;
+        performManualValidation(TestGroup.class);
+    }
 
     /**
      * MyFaces ExtVal is used to autom. validate properties bound to the UI
@@ -53,12 +62,18 @@ public class BeanValidationDemoBean
      */
     public void send()
     {
-        Set<ConstraintViolation<BeanValidationDemoBean>> violations = this.validator.validate(this);
+        performManualValidation();
+    }
 
-        if(!violations.isEmpty()) {
+    private void performManualValidation(Class... groups)
+    {
+        Set<ConstraintViolation<BeanValidationDemoBean>> violations = this.validator.validate(this, groups);
+
+        if (!violations.isEmpty())
+        {
             ConstraintViolation violation = violations.iterator().next();
             String message = "property: " + violation.getPropertyPath().toString()
-                    + " - message: " +  violation.getMessage();
+                    + " - message: " + violation.getMessage();
             this.facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message));
         }
     }
@@ -66,6 +81,10 @@ public class BeanValidationDemoBean
     /*
      * generated
      */
+    protected BeanValidationDemoBean()
+    {
+    }
+
     public String getText()
     {
         return text;

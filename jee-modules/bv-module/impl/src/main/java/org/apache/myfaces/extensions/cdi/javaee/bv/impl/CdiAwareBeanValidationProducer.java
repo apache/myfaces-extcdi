@@ -32,11 +32,11 @@ import javax.validation.MessageInterpolator;
 /**
  * @author Gerhard Petracek
  */
-public class CdiAwareValidatorFactoryProducer
+public class CdiAwareBeanValidationProducer
 {
     private static ValidatorFactory defaultValidatorFactory;
 
-    protected CdiAwareValidatorFactoryProducer()
+    protected CdiAwareBeanValidationProducer()
     {
     }
 
