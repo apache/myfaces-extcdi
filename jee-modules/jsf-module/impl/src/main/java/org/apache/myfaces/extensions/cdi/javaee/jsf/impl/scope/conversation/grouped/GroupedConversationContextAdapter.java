@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.named;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi.ConversationManager;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.AbstractNamedConversationContextAdapter;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.AbstractGroupedConversationContextAdapter;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 
 import javax.enterprise.inject.spi.Bean;
@@ -31,9 +31,9 @@ import java.util.Set;
 /**
  * @author Gerhard Petracek
  */
-public class NamedConversationContextAdapter extends AbstractNamedConversationContextAdapter
+public class GroupedConversationContextAdapter extends AbstractGroupedConversationContextAdapter
 {
-    public NamedConversationContextAdapter(BeanManager beanManager)
+    public GroupedConversationContextAdapter(BeanManager beanManager)
     {
         super(beanManager);
     }
@@ -44,7 +44,7 @@ public class NamedConversationContextAdapter extends AbstractNamedConversationCo
      */
     public boolean isActive()
     {
-        return FacesContext.getCurrentInstance() != null;
+        return FacesContext.getCurrentInstance().getExternalContext().getSession(false) != null;
     }
 
     /**

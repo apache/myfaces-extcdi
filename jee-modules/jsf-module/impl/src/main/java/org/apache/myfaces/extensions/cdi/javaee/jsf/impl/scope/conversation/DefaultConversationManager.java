@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi.ConversationManager;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
 
 /**

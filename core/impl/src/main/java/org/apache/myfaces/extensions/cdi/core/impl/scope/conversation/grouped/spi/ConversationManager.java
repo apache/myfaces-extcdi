@@ -16,23 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.named;
+package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi;
 
-import javax.enterprise.context.NormalScope;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
 
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD,TYPE,FIELD})
-@Retention(RUNTIME)
-@NormalScope
-@Inherited
-public @interface ConversationScoped
+public interface ConversationManager
 {
+    String CONVERSATION_CONTEXT_ID_PARAMETER_KEY = "codiConversationContext";
+
+    ConversationContext getCurrentConversationContext();
+
+    void activateConversationContext(ConversationContext conversationContext);
+
+    void resetCurrentConversationContext();
+
+    void removeCurrentConversationContext(ConversationContext conversationContext);
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.named;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped;
 
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
@@ -26,9 +26,9 @@ import javax.enterprise.event.Observes;
 /**
  * @author Gerhard Petracek
  */
-public class NamedConversationContextExtension implements Extension
+public class GroupedConversationContextExtension implements Extension
 {
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery event, BeanManager manager) {
-        event.addContext(new NamedConversationContextAdapter(manager));
+        event.addContext(new GroupedConversationContextAdapter(manager));
     }
 }

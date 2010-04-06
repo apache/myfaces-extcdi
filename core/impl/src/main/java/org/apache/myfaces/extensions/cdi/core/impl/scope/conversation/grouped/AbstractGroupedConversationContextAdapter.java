@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named;
+package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.named.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi.ConversationManager;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
@@ -32,11 +32,11 @@ import java.util.Set;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractNamedConversationContextAdapter implements Context
+public abstract class AbstractGroupedConversationContextAdapter implements Context
 {
     protected BeanManager beanManager;
 
-    public AbstractNamedConversationContextAdapter(BeanManager beanManager)
+    public AbstractGroupedConversationContextAdapter(BeanManager beanManager)
     {
         this.beanManager = beanManager;
     }
