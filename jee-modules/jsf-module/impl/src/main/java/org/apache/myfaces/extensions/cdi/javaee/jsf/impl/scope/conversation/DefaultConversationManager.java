@@ -18,15 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 
 /**
  * TODO
  * @author Gerhard Petracek
  */
-@Jsf
 public class DefaultConversationManager implements ConversationManager
 {
     public ConversationContext getCurrentConversationContext()

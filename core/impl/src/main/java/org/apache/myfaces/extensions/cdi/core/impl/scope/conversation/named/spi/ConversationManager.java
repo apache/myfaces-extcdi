@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi;
+
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
 
 /**
  * @author Gerhard Petracek
@@ -26,8 +28,6 @@ public interface ConversationManager
     String CONVERSATION_CONTEXT_ID_PARAMETER_KEY = "codiConversationContext";
 
     ConversationContext getCurrentConversationContext();
-
-    ConversationContext getConversationContext(Long id);
 
     void activateConversationContext(ConversationContext conversationContext);
 

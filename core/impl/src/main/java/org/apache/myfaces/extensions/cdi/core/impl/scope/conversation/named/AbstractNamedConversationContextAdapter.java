@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.named.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;

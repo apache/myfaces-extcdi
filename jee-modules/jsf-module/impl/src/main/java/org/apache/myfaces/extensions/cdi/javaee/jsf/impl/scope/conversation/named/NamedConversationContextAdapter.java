@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.named;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.spi.ConversationManager;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.named.AbstractNamedConversationContextAdapter;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
