@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationContext
+public interface ConversationContext extends Serializable
 {
     /**
      * @return the id of the conversation (unique for each window/tab)
