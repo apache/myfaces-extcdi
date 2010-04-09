@@ -39,7 +39,8 @@ import static java.lang.annotation.ElementType.TYPE;
 @Qualifier
 public @interface BeanValidation
 {
-    public enum ArtifactType {
+    public enum ArtifactType
+    {
         ValidatorFactory, Validator, ConstraintValidatorFactory, MessageInterpolator, TraversableResolver
     }
 
