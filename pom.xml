@@ -68,6 +68,7 @@
         <module>parent</module>
         <module>core</module>
         <module>jee-modules</module>
+        <module>jse-modules</module>
         <!--module>test-modules</module-->
         <module>examples</module>
     </modules>
