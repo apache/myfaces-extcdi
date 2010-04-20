@@ -87,20 +87,57 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
             {
                 argument = "null";
             }
-            else if(argument instanceof Localizable && this.getMessageContextConfig() != null)
+
+            if(isHiddenArgument(argument))
             {
-                argument = ((Localizable)argument).toString(this.getMessageContextConfig().use().create());
-            }
-            
-            checkArgument(argument);
-            if (argument instanceof NamedArgument)
-            {
-                addNamedArgument((NamedArgument) argument);
+                addHiddenArgument(argument);
             }
             else
             {
-                addNumberedArgument(argument);
+                addArgumentToMessage(argument);
             }
+        }
+    }
+
+    private void addArgumentToMessage(Object argument)
+    {
+        //TODO
+        if(argument instanceof Localizable && this.getMessageContextConfig() != null)
+        {
+            argument = ((Localizable)argument).toString(this.getMessageContextConfig().use().create());
+        }
+
+        Serializable result;
+
+        if(argument instanceof Serializable)
+        {
+            result = (Serializable)argument;
+        }
+        else
+        {
+            result = argument != null ? argument.toString() : "null";
+        }
+        checkArgument(result);
+        if (argument instanceof NamedArgument)
+        {
+            addNamedArgument((NamedArgument) argument);
+        }
+        else
+        {
+            addNumberedArgument(result);
+        }
+    }
+
+    private boolean isHiddenArgument(Serializable argument)
+    {
+        return argument != null && argument.getClass().isArray();
+    }
+
+    private void addHiddenArgument(Serializable argument)
+    {
+        for(Object current : ((Object[])argument))
+        {
+            addArgumentToMessage(current);
         }
     }
 
