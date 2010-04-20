@@ -212,7 +212,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
         MessageInterpolator messageInterpolator = this.messageContext.config().getMessageInterpolator();
 
-        if (messageInterpolator != null)
+        if (messageInterpolator != null && message != null)
         {
             synchronized (this)
             {
