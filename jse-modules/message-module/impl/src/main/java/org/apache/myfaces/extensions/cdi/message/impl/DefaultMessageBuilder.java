@@ -24,9 +24,9 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfigAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
-import org.apache.myfaces.extensions.cdi.message.api.Formatter;
-import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
+import org.apache.myfaces.extensions.cdi.message.api.Localizable;
+import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayloadKey;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
@@ -227,16 +227,22 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private String checkedResult(String result, Message baseMessage)
     {
-        if (result == null || isKey(baseMessage.getTemplate()) || (!result.contains(" ") && result.endsWith(baseMessage.getTemplate())))
+        if (result == null || isKey(baseMessage.getTemplate()) || isKeyWithoutMarkers(result, baseMessage))
         {
             String oldTemplate = extractTemplate(baseMessage.getTemplate()); //minor performance tweak for inline-msg
 
             if (result == null || result.equals(oldTemplate))
             {
-                return MessageResolver.MISSING_RESOURCE_MARKER + oldTemplate + MessageResolver.MISSING_RESOURCE_MARKER + getArguments(baseMessage);
+                return MessageResolver.MISSING_RESOURCE_MARKER + oldTemplate +
+                       MessageResolver.MISSING_RESOURCE_MARKER + getArguments(baseMessage);
             }
         }
         return result;
+    }
+
+    private boolean isKeyWithoutMarkers(String result, Message baseMessage)
+    {
+        return (!result.contains(" ") && result.endsWith(baseMessage.getTemplate()));
     }
 
     private String getArguments(Message message)
