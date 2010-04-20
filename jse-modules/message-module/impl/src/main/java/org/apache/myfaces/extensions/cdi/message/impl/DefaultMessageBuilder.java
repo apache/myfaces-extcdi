@@ -266,7 +266,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
             argument = arguments[i];
             formatter = this.messageContext.config().getFormatterFactory().findFormatter(argument.getClass());
 
-            if (formatter != null)
+            if (formatter != null && !formatter.isDefault())
             {
                 //noinspection unchecked
                 result.append(formatter.format(this.messageContext, argument));
@@ -277,7 +277,16 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
             }
             else
             {
-                result.append(argument.toString());
+                //use default formatter (if available)
+                if(formatter != null)
+                {
+                    //noinspection unchecked
+                    result.append(formatter.format(this.messageContext, argument));
+                }
+                else
+                {
+                    result.append(argument.toString());
+                }
             }
         }
         result.append(')');

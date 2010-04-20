@@ -26,4 +26,7 @@ public interface Formatter<T>
     boolean isResponsibleFor(Class<?> type);
 
     String format(MessageContext messageContext, T valueToFormat);
+
+    //TODO
+    boolean isDefault();
 }

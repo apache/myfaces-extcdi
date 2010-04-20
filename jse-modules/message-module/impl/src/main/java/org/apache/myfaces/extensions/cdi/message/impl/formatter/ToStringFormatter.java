@@ -46,4 +46,9 @@ class ToStringFormatter implements Formatter<Object>, Serializable
     {
         return valueToFormat != null ? valueToFormat.toString() : "";
     }
+
+    public boolean isDefault()
+    {
+        return true;
+    }
 }

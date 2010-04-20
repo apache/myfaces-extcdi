@@ -74,6 +74,11 @@ class DefaultNumberFormatter implements Formatter<Number>
         }
     }
 
+    public boolean isDefault()
+    {
+        return false;
+    }
+
     private void resetConfig()
     {
         this.groupingSeparator = null;
