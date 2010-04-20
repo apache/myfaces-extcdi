@@ -21,8 +21,11 @@ package org.apache.myfaces.extensions.cdi.message.impl;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfigAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
+import org.apache.myfaces.extensions.cdi.message.api.Formatter;
+import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayloadKey;
@@ -118,6 +121,12 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         Class<? extends MessagePayload> severity = getMessageSeverity();
 
         Message result = new DefaultMessage(this.messageTemplate, severity);
+
+        if(result instanceof MessageContextConfigAware)
+        {
+            ((MessageContextConfigAware)result).setMessageContextConfig(this.messageContext.config());
+        }
+
         addArguments(result);
         addPayload(result);
 
@@ -218,16 +227,62 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private String checkedResult(String result, Message baseMessage)
     {
-        if (result == null || isKey(baseMessage.getTemplate()))
+        if (result == null || isKey(baseMessage.getTemplate()) || (!result.contains(" ") && result.endsWith(baseMessage.getTemplate())))
         {
             String oldTemplate = extractTemplate(baseMessage.getTemplate()); //minor performance tweak for inline-msg
 
             if (result == null || result.equals(oldTemplate))
             {
-                return MessageResolver.MISSING_RESOURCE_MARKER + oldTemplate + MessageResolver.MISSING_RESOURCE_MARKER;
+                return MessageResolver.MISSING_RESOURCE_MARKER + oldTemplate + MessageResolver.MISSING_RESOURCE_MARKER + getArguments(baseMessage);
             }
         }
         return result;
+    }
+
+    private String getArguments(Message message)
+    {
+        StringBuffer result = new StringBuffer();
+
+        Serializable argument;
+        Serializable[] arguments = message.getArguments();
+        Formatter formatter;
+
+        if(arguments == null || arguments.length == 0)
+        {
+            return "";
+        }
+
+        for(int i = 0; i < arguments.length; i++)
+        {
+            if(i == 0)
+            {
+                result.append(" (");
+            }
+            else
+            {
+                result.append(",");
+            }
+
+            argument = arguments[i];
+            formatter = this.messageContext.config().getFormatterFactory().findFormatter(argument.getClass());
+
+            if (formatter != null)
+            {
+                //noinspection unchecked
+                result.append(formatter.format(this.messageContext, argument));
+            }
+            else if(argument instanceof Localizable)
+            {
+                result.append(((Localizable)argument).toString(this.messageContext));
+            }
+            else
+            {
+                result.append(argument.toString());
+            }
+        }
+        result.append(')');
+
+        return result.toString();
     }
 
     private String extractTemplate(String template)

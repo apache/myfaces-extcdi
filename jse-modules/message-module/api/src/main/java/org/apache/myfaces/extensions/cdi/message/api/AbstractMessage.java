@@ -83,6 +83,15 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     {
         for (Serializable argument : arguments)
         {
+            if(argument == null)
+            {
+                argument = "null";
+            }
+            else if(argument instanceof Localizable && this.getMessageContextConfig() != null)
+            {
+                argument = ((Localizable)argument).toString(this.getMessageContextConfig().use().create());
+            }
+            
             checkArgument(argument);
             if (argument instanceof NamedArgument)
             {

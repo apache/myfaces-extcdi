@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.test;
 
 import org.apache.myfaces.extensions.cdi.message.api.Message;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfigAware;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessage;
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.NamedArguments;
@@ -48,6 +49,7 @@ public class HelperTest extends AbstractTest
                 .namedArgument("arg1", arg1).namedArgument("arg2", arg2).create();
 
         Message message2 = new DefaultMessage(text, NamedArguments.add("arg1", arg1).add("arg2", arg2).create());
+        ((MessageContextConfigAware)message2).setMessageContextConfig(this.messageContext.config());
 
         assertEquals(message1, message2);
         assertEquals(message1.toString(), message2.toString());
@@ -69,6 +71,7 @@ public class HelperTest extends AbstractTest
         arguments.put("arg1", arg1);
         arguments.put("arg2", arg2);
         Message message2 = new DefaultMessage(text, NamedArguments.convert(arguments));
+        ((MessageContextConfigAware)message2).setMessageContextConfig(this.messageContext.config());
 
         assertEquals(message1, message2);
         assertEquals(message1.toString(), message2.toString());
