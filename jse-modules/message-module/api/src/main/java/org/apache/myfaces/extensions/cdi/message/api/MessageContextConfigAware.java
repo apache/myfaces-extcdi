@@ -19,14 +19,20 @@
 package org.apache.myfaces.extensions.cdi.message.api;
 
 /**
- * TODO
  * allows to store e.g. messages with the original config (if it is serializable)
  *
  * @author Gerhard Petracek
  */
-public interface MessageContextConfigAware
+public interface MessageContextConfigAware<T>
 {
-    Message setMessageContextConfig(MessageContextConfig messageContextConfig);
+    /**
+     * @param messageContextConfig config of the current message context
+     * @return the current instance
+     */
+    T setMessageContextConfig(MessageContextConfig messageContextConfig);
 
+    /**
+     * @return the stored config - null otherwise
+     */
     MessageContextConfig getMessageContextConfig();
 }

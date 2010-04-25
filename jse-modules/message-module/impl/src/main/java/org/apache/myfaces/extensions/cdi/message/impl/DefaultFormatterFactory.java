@@ -90,18 +90,20 @@ public class DefaultFormatterFactory implements FormatterFactory
         }
     }
 
-    public void addFormatterConfig(Class<?> type, GenericConfig formatterConfig)
+    public FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig)
     {
         addFormatterConfig(type, formatterConfig, Locale.getDefault());
+        return this;
     }
 
-    public void addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale)
+    public FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale)
     {
         if (formatterConfig.containsProperty(Locale.class.getName()))
         {
             locale = formatterConfig.getProperty(Locale.class.getName(), Locale.class);
         }
         this.formatterConfigs.put(createKey(type, locale), formatterConfig);
+        return this;
     }
 
     public GenericConfig findFormatterConfig(Class<?> type, Locale locale)

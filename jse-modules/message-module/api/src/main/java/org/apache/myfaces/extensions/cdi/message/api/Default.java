@@ -18,15 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.message.api;
 
-import java.util.Locale;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * marker for default implementations (e.g. formatters) to allow a different handling (if needed)
+ *
  * @author Gerhard Petracek
  */
-public interface LocaleResolver
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface Default
 {
-    /**
-     * @return the current locale
-     */
-    Locale getLocale();
 }

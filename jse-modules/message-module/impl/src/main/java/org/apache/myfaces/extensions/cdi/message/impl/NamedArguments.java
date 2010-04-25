@@ -28,6 +28,10 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+
+/**
+ * @author Gerhard Petracek
+ */
 public class NamedArguments
 {
     private NamedArgumentBuilder namedArgumentBuilder = new NamedArgumentBuilder();

@@ -23,5 +23,9 @@ package org.apache.myfaces.extensions.cdi.message.api;
  */
 public interface Localizable
 {
+    /**
+     * @param messageContext the current context
+     * @return the text which represents the current instance for the given message context
+     */
     String toString(MessageContext messageContext);
 }

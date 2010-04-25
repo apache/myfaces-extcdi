@@ -27,53 +27,109 @@ import java.util.Locale;
 public interface MessageContextConfig extends Serializable
 {
     /**
-     * create a new context based on the default context - default context won't get modified
+     * create a new context based on the default context - the default context won't get modified
      *
-     * @return
+     * @return a message context builder based on the current config
      */
     MessageContextBuilder use();
 
     /**
      * change the default context
      *
-     * @return
+     * @return a message context builder to change the current config
      */
     MessageContextBuilder change();
 
+    /**
+     * @return the current message interpolator
+     */
     MessageInterpolator getMessageInterpolator();
 
+    /**
+     * @return the current message resolver
+     */
     MessageResolver getMessageResolver();
 
+    /**
+     * @return the current locale resolver
+     */
     LocaleResolver getLocaleResolver();
 
-    //TODO
+    /**
+     * @return the current message handler
+     */
     MessageHandler getMessageHandler();
 
+    /**
+     * @return the current formatter factory
+     */
     FormatterFactory getFormatterFactory();
 
     interface MessageContextBuilder
     {
+        /**
+         * @param messageInterpolator a new message interpolator
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder messageInterpolator(MessageInterpolator messageInterpolator);
 
+        /**
+         * @param messageResolver a new message resolver
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder messageResolver(MessageResolver messageResolver);
 
+        /**
+         * @param formatter an additional argument formatter
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder addFormatter(Formatter formatter);
 
-        MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config);
+        /**
+         * @param type the type the config belongs to
+         * @param formatterConfig config for the formatter of the given type
+         * @return the instance of the current message context builder
+         */
+        MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig formatterConfig);
 
-        MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config, Locale locale);
+        /**
+         * @param type the type the config belongs to
+         * @param formatterConfig config for the formatter of the given type
+         * @param locale the locale the config belongs to
+         * @return the instance of the current message context builder
+         */
+        MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale);
 
+        /**
+         * @param formatterFactory a new argument formatter factory
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder formatterFactory(FormatterFactory formatterFactory);
 
+        /**
+         * @param messageHandler an additional message handler
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder addMessageHandler(MessageHandler messageHandler);
 
+        /**
+         * @param localeResolver a new locale resolver
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder localeResolver(LocaleResolver localeResolver);
 
+        /**
+         * resets the current builder to the initial state
+         * @return the instance of the current message context builder
+         */
         MessageContextBuilder reset();
 
-        @Deprecated
+        @Deprecated //currently not implemented
         MessageContextBuilder clear();
 
+        /**
+         * @return a new message context based on the current config
+         */
         MessageContext create();
     }
 }

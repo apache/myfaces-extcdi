@@ -24,17 +24,34 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * @author Manfred Geiler
  * @author Gerhard Petracek
  */
 public interface Message extends Localizable, Serializable
 {
+    /**
+     * @return the message template (or inline-text) of the current message
+     */
     String getTemplate();
 
+    /**
+     * @return all named and numbered arguments
+     */
     Serializable[] getArguments();
 
+    /**
+     * @param arguments 1-n new arguments for the current message
+     */
     void addArgument(Serializable... arguments);
 
+    /**
+     * @return the payload of the message
+     */
     Map<Class, Class<? extends MessagePayload>> getPayload();
 
+    /**
+     * @param key of the payload
+     * @param payload value of the payload
+     */
     void addPayload(Class key, Class<? extends MessagePayload> payload);
 }

@@ -26,5 +26,12 @@ import java.io.Serializable;
  */
 public interface MessageInterpolator
 {
+    /**
+     * replaces the arguments of the given message with the given arguments
+     *
+     * @param messageTemplate the message template or text which has to be interpolated
+     * @param arguments a list of numbered and/or named arguments for the current message
+     * @return the final message text if an interpolation was possible - the unmodified messageTemplate otherwise
+     */
     String interpolate(String messageTemplate, Serializable... arguments);
 }

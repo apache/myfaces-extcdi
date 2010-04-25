@@ -24,6 +24,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
+ * optional marker to group payload implementations
+ *
  * @author Gerhard Petracek
  */
 @Target({TYPE})

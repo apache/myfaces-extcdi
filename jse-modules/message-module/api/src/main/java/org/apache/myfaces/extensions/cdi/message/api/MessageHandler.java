@@ -28,21 +28,40 @@ import java.util.Set;
  */
 public interface MessageHandler
 {
+    /**
+     * called to add a message to a special target (known by the implementations)
+     *
+     * @param messageContext current message context
+     * @param message the new message to add
+     */
     void addMessage(MessageContext messageContext, Message message);
 
+    /**
+     * @param messageFilters message filters which should be added to the current message handler
+     */
     void addMessageFilter(MessageFilter... messageFilters);
 
+    /**
+     * @return the registered message filter(s)
+     */
     Set<MessageFilter> getMessageFilters();
 
     //TODO move to a separated interface?
-
+    /**
+     * removes an added message (if possible)
+     * @param message to be removed
+     */
     void removeMessage(Message message);
 
     //TODO move to a separated interface?
-
+    /**
+     * removes all added messages (if possible)
+     */
     void removeAllMessages();
 
     //TODO move to a separated interface?
-
+    /**
+     * @return all added messages (if they are available)
+     */
     List<Message> getMessages();
 }

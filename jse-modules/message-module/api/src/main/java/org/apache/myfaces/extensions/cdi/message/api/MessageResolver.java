@@ -31,8 +31,9 @@ public interface MessageResolver
     static final String MISSING_RESOURCE_MARKER = "???";
 
     /**
-     * @param key    unique key
-     * @param locale
+     * @param key the message template (or in-lined text) of the current message
+     * @param locale the current locale
+     * @param payload the payload of the message e.g. to use different message sources
      * @return the final but not interpolated message text
      */
     String getMessage(String key, Locale locale, Map<Class, Class<? extends MessagePayload>> payload);

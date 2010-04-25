@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.message.impl.formatter;
 
+import org.apache.myfaces.extensions.cdi.message.api.Default;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 
@@ -26,6 +27,7 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
+@Default
 class ToStringFormatter implements Formatter<Object>, Serializable
 {
     private static final long serialVersionUID = 3529715901768617301L;
@@ -45,10 +47,5 @@ class ToStringFormatter implements Formatter<Object>, Serializable
     public String format(MessageContext i18nContext, Object valueToFormat)
     {
         return valueToFormat != null ? valueToFormat.toString() : "";
-    }
-
-    public boolean isDefault()
-    {
-        return true;
     }
 }

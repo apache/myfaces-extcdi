@@ -25,6 +25,9 @@ package org.apache.myfaces.extensions.cdi.message.api;
  */
 public interface MessageContextAware
 {
+    /**
+     * @param messageContext instance of the current message-context
+     */
     void setMessageContext(MessageContext messageContext);
 
     MessageContext getMessageContext();

@@ -224,7 +224,7 @@ class DefaultMessageContextConfig implements MessageContextConfig
         this.messageInterpolator = new DefaultMessageInterpolator();
         this.messageResolver = null;
         this.messageHandlers = new HashSet<MessageHandler>();
-        this.localeResolver = new org.apache.myfaces.extensions.cdi.message.impl.DefaultLocaleResolver();
+        this.localeResolver = new DefaultLocaleResolver();
         this.formatterFactory = new DefaultFormatterFactory();
     }
 

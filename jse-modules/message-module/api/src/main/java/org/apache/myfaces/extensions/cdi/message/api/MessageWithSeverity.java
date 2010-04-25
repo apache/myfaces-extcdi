@@ -21,9 +21,14 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**
+ * convenience interface
+ * 
  * @author Gerhard Petracek
  */
 public interface MessageWithSeverity extends Message
 {
+    /**
+     * @return the severity of the message based on the message payload
+     */
     Class<? extends MessagePayload> getSeverity();
 }

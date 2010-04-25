@@ -33,7 +33,7 @@ import java.util.Collections;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractMessage implements Message, MessageContextConfigAware
+public abstract class AbstractMessage implements Message, MessageContextConfigAware<Message>
 {
     protected String messageTemplate;
     protected Set<NamedArgument> namedArguments = new HashSet<NamedArgument>();

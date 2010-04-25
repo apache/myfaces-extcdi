@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
 import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
+import org.apache.myfaces.extensions.cdi.message.api.Default;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayloadKey;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
@@ -272,7 +273,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
             argument = arguments[i];
             formatter = this.messageContext.config().getFormatterFactory().findFormatter(argument.getClass());
 
-            if (formatter != null && !formatter.isDefault())
+            if (formatter != null && !isDefaultFormatter(formatter.getClass()))
             {
                 //noinspection unchecked
                 result.append(formatter.format(this.messageContext, argument));
@@ -298,6 +299,11 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         result.append(')');
 
         return result.toString();
+    }
+
+    private boolean isDefaultFormatter(Class<? extends Formatter> formatterClass)
+    {
+        return formatterClass.isAnnotationPresent(Default.class);
     }
 
     private String extractTemplate(String template)

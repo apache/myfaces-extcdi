@@ -94,7 +94,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
 
             ValueExpression valueExpression =
                     factory.createValueExpression(elContext, "${" + expression + "}", Object.class);
-            
+
             Object value = valueExpression.getValue(elContext);
 
             if (value != null && !isUnresolvedArgument(expression, value))

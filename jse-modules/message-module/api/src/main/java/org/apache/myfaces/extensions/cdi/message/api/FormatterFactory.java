@@ -22,17 +22,40 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
+ * creates and initialize a formatter for a given type
+ *
  * @author Gerhard Petracek
  */
 public interface FormatterFactory extends ConfigRegistry<Formatter, FormatterFactory>, Serializable
 {
+    /**
+     * @param type the type of the instance which has to be formatted
+     * @return an initialized formatter which is able to format instances of the given type (or a default formatter)
+     */
     Formatter findFormatter(Class<?> type);
 
-    void addFormatterConfig(Class<?> type, GenericConfig formatterConfig);
-
-    void addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale);
+    /**
+     * allows to add a config for formatting the given type
+     *
+     * @param type the type the config belongs to
+     * @param formatterConfig config for the formatter of the given type
+     * @return the instance of the factory to allow a fluent api
+     */
+    FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig);
 
     /**
+     * allows to add a config for formatting the given type
+     *
+     * @param type the type the config belongs to
+     * @param formatterConfig config for the formatter of the given type
+     * @param locale the locale the config belongs to
+     * @return the instance of the factory to allow a fluent api
+     */
+    FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale);
+
+    /**
+     * @param type the type which has to be formatted and maybe need a config for it
+     * @param locale the current locale
      * @return the config for a given type and locale - null otherwise
      */
     GenericConfig findFormatterConfig(Class<?> type, Locale locale);

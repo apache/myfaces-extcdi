@@ -21,13 +21,21 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import java.util.List;
 
 /**
- * TODO
+ * generic interface to add configs (for all artifacts which are configureable)
  *
  * @author Gerhard Petracek
  */
 public interface ConfigRegistry<T, B>
 {
-    B add(T t);
+    /**
+     * @param config typed config
+     * @return the current instance for using fluent configuration
+     */
+    B add(T config);
 
+    /**
+     * resets the existing configuration
+     * @return the config which was removed
+     */
     List<T> reset();
 }

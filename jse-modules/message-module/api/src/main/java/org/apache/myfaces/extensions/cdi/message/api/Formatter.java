@@ -19,14 +19,27 @@
 package org.apache.myfaces.extensions.cdi.message.api;
 
 /**
+ * usually a formatter is responsible for one type and allows to format
+ * this type as string
+ *
  * @author Gerhard Petracek
+ * @author Manfred Geiler
  */
 public interface Formatter<T>
 {
+    /**
+     * answers the question if the instance is able to format an object of the given type
+     * @param type the type of the instance which has to be formatted
+     * @return true to signal that the formatter is responsible for formatting the given type
+     */
     boolean isResponsibleFor(Class<?> type);
 
+    /**
+     * formats the given instance as string
+     *
+     * @param messageContext current message context
+     * @param valueToFormat an instance which should be formatted
+     * @return the formatted result as string
+     */
     String format(MessageContext messageContext, T valueToFormat);
-
-    //TODO
-    boolean isDefault();
 }

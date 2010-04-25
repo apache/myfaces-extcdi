@@ -21,15 +21,37 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import java.io.Serializable;
 
 /**
+ * a key/value based config
+ *
  * @author Gerhard Petracek
  */
 public interface GenericConfig extends Serializable
 {
+    /**
+     * to add a key/value pair to the config
+     *
+     * @param key key for the current value
+     * @param value value for the current key
+     * @return the instance of the config to allow a fluent api
+     */
     GenericConfig addProperty(String key, Serializable value);
 
+    /**
+     * @param key the key of the value in question
+     * @return the value for the given key - null otherwise
+     */
     Serializable getProperty(String key);
 
+    /**
+     * @param key the key of the value in question
+     * @param targetType type of the expected value
+     * @return the value for the given key - null otherwise
+     */
     <T extends Serializable> T getProperty(String key, Class<T> targetType);
 
+    /**
+     * @param key the key of the value in question
+     * @return true if a value for the given key is available - false otherwise
+     */
     boolean containsProperty(String key);
 }
