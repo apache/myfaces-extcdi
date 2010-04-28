@@ -20,8 +20,11 @@ package org.apache.myfaces.extensions.cdi.message.test;
 
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.payload.InternalMessage;
+import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultInternalMessage;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 
 /**
@@ -55,5 +58,32 @@ public class PayloadTest extends AbstractTest
         assertEquals(1, this.messageContext.getMessages().size());
         assertEquals(this.messageContext.message().text("test msg 1").create(),
                 this.messageContext.getMessages().iterator().next());
+    }
+
+    @Test
+    public void forwardedPayloadTest1()
+    {
+        TestPayloadAwareMessageResolver testResolver = new TestPayloadAwareMessageResolver();
+        this.messageContext.config().change().messageResolver(testResolver);
+
+        assertFalse(testResolver.isPayloadAvailable());
+
+        this.messageContext.message().text("test msg").payload(MessageSeverity.Warn.class).toText();
+
+        assertTrue(testResolver.isPayloadAvailable());
+    }
+
+    @Test
+    public void forwardedPayloadTest2()
+    {
+        TestPayloadAwareMessageResolver testResolver = new TestPayloadAwareMessageResolver();
+        this.messageContext.config().change().messageResolver(testResolver);
+
+        assertFalse(testResolver.isPayloadAvailable());
+
+        Message message = this.messageContext.message().text("test msg").payload(MessageSeverity.Warn.class).create();
+        this.messageContext.getMessageText(message);
+
+        assertTrue(testResolver.isPayloadAvailable());
     }
 }
