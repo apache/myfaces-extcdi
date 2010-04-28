@@ -76,6 +76,20 @@ public class DefaultMessage extends AbstractMessageWithSeverity
 
     public String toString(MessageContext messageContext)
     {
-        return messageContext.message().text(getTemplate()).argument(getArguments()).toText();
+        return messageContext.message().text(getTemplate()).argument(getArguments()).payload(getMessagePayload()).toText();
+    }
+
+    private Class<? extends MessagePayload>[] getMessagePayload()
+    {
+        Class[] result = new Class[getPayload().size()];
+
+        int i = 0;
+        for(Class<? extends MessagePayload> payload : getPayload().values())
+        {
+            result[i] = payload;
+            i++;
+        }
+        //noinspection unchecked
+        return result;
     }
 }

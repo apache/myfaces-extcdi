@@ -51,7 +51,7 @@ class DefaultNumberFormatter implements Formatter<Number>
     public String format(MessageContext messageContext, Number valueToFormat)
     {
         GenericConfig formatterConfig = messageContext.config().getFormatterFactory()
-                .findFormatterConfig(Number.class, messageContext.config().getLocaleResolver().getLocale());
+                .findFormatterConfig(Number.class, messageContext.getLocale());
 
         if (formatterConfig != null)
         {
