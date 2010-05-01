@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
+import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
@@ -45,9 +46,17 @@ public class ExtensibilityTest extends AbstractTest
     }
 
     @Test
-    public void newMessageFactoryTest()
+    public void newMessageFactoryTestViaMessageContext()
     {
         Message message = new DefaultMessageContext(new TestMessageFactory()).message().text("{hello}").create();
+
+        assertEquals(TestMessage.class, message.getClass());
+    }
+
+    @Test
+    public void newMessageFactoryTestViaMessageBuilder()
+    {
+        Message message = SimpleMessageBuilder.message(new TestMessageFactory()).text("{hello}").create();
 
         assertEquals(TestMessage.class, message.getClass());
     }

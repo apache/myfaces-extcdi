@@ -410,4 +410,9 @@ class DefaultMessageBuilder implements MessageBuilder
     {
         return this.messageContext;
     }
+
+    protected void setMessageFactory(MessageFactory messageFactory)
+    {
+        this.messageFactory = messageFactory;
+    }
 }

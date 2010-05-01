@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
+import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 /**
  * just for manual usages (see the test-case)
@@ -51,13 +53,31 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
         return new SimpleMessageBuilder(messageContext);
     }
 
+    public static MessageBuilder message(MessageFactory messageFactory)
+    {
+        SimpleMessageBuilder messageBuilder = new SimpleMessageBuilder();
+        messageBuilder.setMessageFactory(messageFactory);
+        return messageBuilder;
+    }
+
+    @Override
+    public Message add()
+    {
+        if (getMessageContext() == null)
+        {
+            throw new IllegalStateException(getClass().getName() + ".toText called outside a message context " +
+                    "please use SimpleMessageBuilder.message(messageContext).text(...).add();");
+        }
+        return super.add();
+    }
+
     @Override
     public String toText()
     {
         if (getMessageContext() == null)
         {
             throw new IllegalStateException(getClass().getName() + ".toText called outside a message context " +
-                    "please use SimpleMessageBuilder.message(messageContext).text(...).toText()");
+                    "please use SimpleMessageBuilder.message(messageContext).text(...).toText();");
         }
         return super.toText();
     }
