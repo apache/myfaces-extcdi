@@ -16,21 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.impl;
+package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
-
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 
 /**
  * @author Gerhard Petracek
  */
-class DefaultMessageInterpolator implements MessageInterpolator, Serializable
+class TestMessageBuilder extends SimpleMessageBuilder
 {
-    private static final long serialVersionUID = -8854087197813424812L;
+    private static final long serialVersionUID = -92376642213127412L;
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public TestMessageBuilder()
     {
-        return messageDescriptor;
     }
 }

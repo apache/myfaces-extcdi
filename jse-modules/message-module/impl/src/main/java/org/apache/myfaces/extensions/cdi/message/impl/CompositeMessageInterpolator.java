@@ -38,9 +38,9 @@ public class CompositeMessageInterpolator implements MessageInterpolator, Messag
         this.messageInterpolators = messageInterpolators;
     }
 
-    public String interpolate(String messageTemplate, Serializable... arguments)
+    public String interpolate(String messageDescriptor, Serializable... arguments)
     {
-        String result = messageTemplate;
+        String result = messageDescriptor;
         for (MessageInterpolator messageInterpolator : this.messageInterpolators)
         {
             if (messageInterpolator instanceof MessageContextAware)

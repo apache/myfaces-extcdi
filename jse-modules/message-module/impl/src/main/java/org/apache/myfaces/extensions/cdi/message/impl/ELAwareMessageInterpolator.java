@@ -47,15 +47,15 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
         this.elProvider = elProvider;
     }
 
-    public String interpolate(String messageTemplate, Serializable... arguments)
+    public String interpolate(String messageDescriptor, Serializable... arguments)
     {
         List<NamedArgument> namedArguments = addNamedArguments(arguments);
 
         if (namedArguments.size() > 0)
         {
-            return interpolateNamedArguments(messageTemplate, namedArguments);
+            return interpolateNamedArguments(messageDescriptor, namedArguments);
         }
-        return messageTemplate;
+        return messageDescriptor;
     }
 
     private List<NamedArgument> addNamedArguments(Serializable[] arguments)
@@ -74,7 +74,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
     }
 
     //TODO add warning for unused arguments,...
-    private String interpolateNamedArguments(String messageTemplate, List<NamedArgument> namedArguments)
+    private String interpolateNamedArguments(String messageDescriptor, List<NamedArgument> namedArguments)
     {
         ExpressionFactory factory = this.elProvider.createExpressionFactory();
         SimpleELContext elContext = this.elProvider.createELContext(this.elProvider.createELResolver());
@@ -85,7 +85,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
             elContext.setVariable(argument.getName(), factory.createValueExpression(value, value.getClass()));
         }
 
-        Matcher matcher = MESSAGE_ARGS_PATTERN.matcher(messageTemplate);
+        Matcher matcher = MESSAGE_ARGS_PATTERN.matcher(messageDescriptor);
         StringBuffer buffer = new StringBuffer();
         while (matcher.find())
         {

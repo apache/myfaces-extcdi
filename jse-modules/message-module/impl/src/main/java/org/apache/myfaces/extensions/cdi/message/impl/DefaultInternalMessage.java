@@ -33,31 +33,31 @@ public class DefaultInternalMessage extends DefaultMessage
 {
     private static final long serialVersionUID = 7940762016110497679L;
 
-    public DefaultInternalMessage(String messageTemplate, Serializable... arguments)
+    public DefaultInternalMessage(String messageDescriptor, Serializable... arguments)
     {
-        super(messageTemplate, MessageSeverity.Info.class, arguments);
+        super(messageDescriptor, MessageSeverity.Info.class, arguments);
         addPayload(InternalMessage.class);
     }
 
-    public DefaultInternalMessage(String messageTemplate, Set<NamedArgument> namedArguments)
+    public DefaultInternalMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
     {
-        super(messageTemplate, MessageSeverity.Info.class, namedArguments);
+        super(messageDescriptor, MessageSeverity.Info.class, namedArguments);
         addPayload(InternalMessage.class);
     }
 
-    public DefaultInternalMessage(String messageTemplate,
+    public DefaultInternalMessage(String messageDescriptor,
                                   Class<? extends MessagePayload> severity,
                                   Serializable... arguments)
     {
-        super(messageTemplate, severity, arguments);
+        super(messageDescriptor, severity, arguments);
         addPayload(InternalMessage.class);
     }
 
-    public DefaultInternalMessage(String messageTemplate,
+    public DefaultInternalMessage(String messageDescriptor,
                                   Class<? extends MessagePayload> severity,
                                   Set<NamedArgument> namedArguments)
     {
-        super(messageTemplate, severity, namedArguments);
+        super(messageDescriptor, severity, namedArguments);
         addPayload(InternalMessage.class);
     }
 }

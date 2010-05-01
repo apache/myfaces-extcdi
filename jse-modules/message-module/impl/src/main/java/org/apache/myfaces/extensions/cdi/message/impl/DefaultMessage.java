@@ -40,28 +40,28 @@ public class DefaultMessage extends AbstractMessageWithSeverity
         super(message);
     }
 
-    public DefaultMessage(String messageTemplate, Serializable... arguments)
+    public DefaultMessage(String messageDescriptor, Serializable... arguments)
     {
-        super(messageTemplate, MessageSeverity.Info.class, arguments);
+        super(messageDescriptor, MessageSeverity.Info.class, arguments);
     }
 
-    public DefaultMessage(String messageTemplate, Set<NamedArgument> namedArguments)
+    public DefaultMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
     {
-        super(messageTemplate, MessageSeverity.Info.class, namedArguments);
+        super(messageDescriptor, MessageSeverity.Info.class, namedArguments);
     }
 
-    public DefaultMessage(String messageTemplate,
+    public DefaultMessage(String messageDescriptor,
                           Class<? extends MessagePayload> severity,
                           Serializable... arguments)
     {
-        super(messageTemplate, severity, arguments);
+        super(messageDescriptor, severity, arguments);
     }
 
-    public DefaultMessage(String messageTemplate,
+    public DefaultMessage(String messageDescriptor,
                           Class<? extends MessagePayload> severity,
                           Set<NamedArgument> namedArguments)
     {
-        super(messageTemplate, severity, namedArguments);
+        super(messageDescriptor, severity, namedArguments);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class DefaultMessage extends AbstractMessageWithSeverity
     public String toString(MessageContext messageContext)
     {
         return messageContext.message()
-                .text(getTemplate())
+                .text(getDescriptor())
                 .argument(getArguments())
                 .payload(getMessagePayload())
                 .toText();

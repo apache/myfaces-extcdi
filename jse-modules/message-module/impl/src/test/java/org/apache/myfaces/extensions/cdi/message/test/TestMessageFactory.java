@@ -18,39 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
-import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
-import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessage;
 
-import java.util.Set;
-
-class TestMessage extends DefaultMessage
+/**
+ * @author Gerhard Petracek
+ */
+class TestMessageFactory implements MessageFactory
 {
-    private static final long serialVersionUID = 4209087914276552447L;
+    private static final long serialVersionUID = -2561554895243475186L;
 
-    public TestMessage(Message message)
+    public Message create(String messageDescriptor, Class<? extends MessagePayload> messagePayload)
     {
-        super(message);
-    }
-
-    public TestMessage(String messageDescriptor, Object... arguments)
-    {
-        super(messageDescriptor, arguments);
-    }
-
-    public TestMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
-    {
-        super(messageDescriptor, namedArguments);
-    }
-
-    public TestMessage(String messageDescriptor, Class<? extends MessagePayload> severity, Object... arguments)
-    {
-        super(messageDescriptor, severity, arguments);
-    }
-
-    public TestMessage(String messageDescriptor, Class<? extends MessagePayload> severity, Set<NamedArgument> namedArguments)
-    {
-        super(messageDescriptor, severity, namedArguments);
+        return new TestMessage(messageDescriptor, messagePayload);
     }
 }

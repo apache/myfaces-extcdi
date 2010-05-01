@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.message.api;
 
-import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
-
 import java.io.Serializable;
 
 /**
@@ -62,58 +60,4 @@ public interface MessageContext extends LocaleResolver, MessageHandler, Serializ
      * @param message a message which should be added to the current context (message handlers)
      */
     void addMessage(Message message);
-
-    interface MessageBuilder
-    {
-        /**
-         * @param messagePayload payload for the current message
-         * @return the current instance of the message builder to allow a fluent api
-         */
-        MessageBuilder payload(Class<? extends MessagePayload>... messagePayload);
-
-        /**
-         * @param messageTemplate message template (or inline-text) for the current message
-         * @return the current instance of the message builder to allow a fluent api
-         */
-        MessageBuilder text(String messageTemplate);
-
-        /**
-         * @param arguments numbered and/or named argument(s) for the current message
-         * @return the current instance of the message builder to allow a fluent api
-         */
-        MessageBuilder argument(Serializable... arguments);
-
-        /**
-         * helper method to add named arguments easily
-         * @param name the name/key of the named argument
-         * @param value the value of the named argument
-         * @return the current instance of the message builder to allow a fluent api
-         */
-        MessageBuilder namedArgument(String name, Serializable value);
-
-        //see MessageContext for add(Message)
-
-        /**
-         * adds the message which was built via the fluent api
-         * @return the message which was built via the fluent api
-         */
-        Message add();
-
-        /**
-         * @return the message which was built via the fluent api
-         */
-        Message create();
-
-        /**
-         * @return the text of the message which was built via the fluent api
-         */
-        String toText();
-
-        /**
-         * converts a given message to the text via the current context
-         * @param message the message which should be converted
-         * @return the converted text of the given message
-         */
-        String toText(Message message);
-    }
 }

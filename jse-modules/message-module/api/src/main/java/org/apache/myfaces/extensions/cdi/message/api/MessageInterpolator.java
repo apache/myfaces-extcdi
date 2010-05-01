@@ -29,9 +29,11 @@ public interface MessageInterpolator
     /**
      * replaces the arguments of the given message with the given arguments
      *
-     * @param messageTemplate the message template or text which has to be interpolated
+     * @param messageText the message text which has to be interpolated
      * @param arguments a list of numbered and/or named arguments for the current message
-     * @return the final message text if an interpolation was possible - the unmodified messageTemplate otherwise
+     * @return the final (interpolated) message text
+     *         if it was possible to replace the parameters with the given attributes
+     *         the unmodified messageText otherwise
      */
-    String interpolate(String messageTemplate, Serializable... arguments);
+    String interpolate(String messageText, Serializable... arguments);
 }

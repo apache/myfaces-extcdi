@@ -26,6 +26,8 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
 import org.apache.myfaces.extensions.cdi.message.api.Localizable;
+import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 import org.apache.myfaces.extensions.cdi.message.api.Default;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
@@ -43,7 +45,7 @@ import java.util.HashMap;
 /**
  * @author Gerhard Petracek
  */
-class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializable
+class DefaultMessageBuilder implements MessageBuilder
 {
     private static final long serialVersionUID = 892218539314030675L;
 
@@ -52,15 +54,30 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
     private Set<NamedArgument> namedArguments;
     private MessageContext messageContext;
     private Map<Class, Class<? extends MessagePayload>> messagePayload;
-    private String messageTemplate;
+    private String messageDescriptor;
 
-    public DefaultMessageBuilder(MessageContext messageContext)
+    private MessageFactory messageFactory;
+
+    protected DefaultMessageBuilder()
+    {
+    }
+
+    public DefaultMessageBuilder(MessageContext messageContext, MessageFactory messageFactory)
     {
         reset();
         this.messageContext = new UnmodifiableMessageContext(messageContext.cloneContext());
+
+        if(messageFactory != null)
+        {
+            this.messageFactory = messageFactory;
+        }
+        else
+        {
+            this.messageFactory = new DefaultMessageFactory();
+        }
     }
 
-    public MessageContext.MessageBuilder payload(Class<? extends MessagePayload>... messagePayload)
+    public MessageBuilder payload(Class<? extends MessagePayload>... messagePayload)
     {
         Class key;
 
@@ -76,13 +93,13 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         return this;
     }
 
-    public MessageContext.MessageBuilder text(String messageTemplate)
+    public MessageBuilder text(String messageDescriptor)
     {
-        this.messageTemplate = messageTemplate;
+        this.messageDescriptor = messageDescriptor;
         return this;
     }
 
-    public MessageContext.MessageBuilder argument(Serializable... arguments)
+    public MessageBuilder argument(Serializable... arguments)
     {
         for (Serializable argument : arguments)
         {
@@ -99,7 +116,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         return this;
     }
 
-    public MessageContext.MessageBuilder namedArgument(String name, Serializable value)
+    public MessageBuilder namedArgument(String name, Serializable value)
     {
         this.namedArguments.add(new DefaultNamedArgument(name, value));
         return this;
@@ -114,16 +131,14 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private Message buildMessage()
     {
-        if (this.messageTemplate == null)
+        if (this.messageDescriptor == null)
         {
-            throw new IllegalStateException("messageTemplate is missing");
+            throw new IllegalStateException("messageDescriptor is missing");
         }
 
-        Class<? extends MessagePayload> severity = getMessageSeverity();
+        Message result = createNewMessage();
 
-        Message result = new DefaultMessage(this.messageTemplate, severity);
-
-        if(result instanceof MessageContextConfigAware)
+        if(result instanceof MessageContextConfigAware && this.messageContext != null)
         {
             ((MessageContextConfigAware)result).setMessageContextConfig(this.messageContext.config());
         }
@@ -132,6 +147,15 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         addPayload(result);
 
         return result;
+    }
+
+    private Message createNewMessage()
+    {
+        if(this.messageFactory != null)
+        {
+            return this.messageFactory.create(this.messageDescriptor, getMessageSeverity());
+        }
+        return new DefaultMessage(this.messageDescriptor, getMessageSeverity());
     }
 
     private Class<? extends MessagePayload> getMessageSeverity()
@@ -169,9 +193,9 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         }
     }
 
-    private void reset()
+    protected void reset()
     {
-        this.messageTemplate = null;
+        this.messageDescriptor = null;
         this.messagePayload = new HashMap<Class, Class<? extends MessagePayload>>();
         this.argumentList = new ArrayList<Serializable>();
         this.namedArguments = new HashSet<NamedArgument>();
@@ -200,7 +224,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private String getMessageText(Message baseMessage)
     {
-        String message = baseMessage.getTemplate();
+        String message = baseMessage.getDescriptor();
 
         MessageResolver messageResolver = this.messageContext.config().getMessageResolver();
         if (messageResolver != null)
@@ -228,9 +252,9 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private String checkedResult(String result, Message baseMessage)
     {
-        if (result == null || isKey(baseMessage.getTemplate()) || isKeyWithoutMarkers(result, baseMessage))
+        if (result == null || isKey(baseMessage.getDescriptor()) || isKeyWithoutMarkers(result, baseMessage))
         {
-            String oldTemplate = extractTemplate(baseMessage.getTemplate()); //minor performance tweak for inline-msg
+            String oldTemplate = extractTemplate(baseMessage.getDescriptor()); //minor performance tweak for inline-msg
 
             if (result == null || result.equals(oldTemplate))
             {
@@ -243,7 +267,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
     private boolean isKeyWithoutMarkers(String result, Message baseMessage)
     {
-        return (!result.contains(" ") && result.endsWith(baseMessage.getTemplate()));
+        return (!result.contains(" ") && result.endsWith(baseMessage.getDescriptor()));
     }
 
     private String getArguments(Message message)
@@ -338,7 +362,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         try
         {
             return messageResolver
-                    .getMessage(baseMessage.getTemplate(), this.messageContext.getLocale(), baseMessage.getPayload());
+                    .getMessage(baseMessage.getDescriptor(), this.messageContext.getLocale(), baseMessage.getPayload());
         }
         finally
         {
@@ -347,7 +371,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
     }
 
     private String interpolateMessage(MessageInterpolator messageInterpolator,
-                                      String messageTemplate, Serializable... arguments)
+                                      String messageDescriptor, Serializable... arguments)
     {
         if (messageInterpolator instanceof MessageContextAware)
         {
@@ -356,7 +380,7 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
 
         try
         {
-            return messageInterpolator.interpolate(getEscapedTemplate(messageTemplate), arguments);
+            return messageInterpolator.interpolate(getEscapedTemplate(messageDescriptor), arguments);
         }
         finally
         {
@@ -364,14 +388,14 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         }
     }
 
-    private String getEscapedTemplate(String messageTemplate)
+    private String getEscapedTemplate(String messageDescriptor)
     {
         //TODO
-        if (messageTemplate.startsWith("\\{"))
+        if (messageDescriptor.startsWith("\\{"))
         {
-            return messageTemplate.substring(1);
+            return messageDescriptor.substring(1);
         }
-        return messageTemplate;
+        return messageDescriptor;
     }
 
     private void cleanupMessageContext(Object object)
@@ -380,5 +404,10 @@ class DefaultMessageBuilder implements MessageContext.MessageBuilder, Serializab
         {
             ((MessageContextAware) object).setMessageContext(null);
         }
+    }
+
+    protected MessageContext getMessageContext()
+    {
+        return this.messageContext;
     }
 }

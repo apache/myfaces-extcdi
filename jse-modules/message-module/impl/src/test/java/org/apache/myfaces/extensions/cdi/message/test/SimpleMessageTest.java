@@ -21,7 +21,9 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessage;
+import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import java.util.Locale;
@@ -32,9 +34,25 @@ import java.util.Locale;
 public class SimpleMessageTest extends AbstractTest
 {
     @Test
-    public void resolveInlineMessageTest()
+    public void createInlineMessageTest()
     {
         Message message = this.messageContext.message().text("hello open message").create();
+
+        assertEquals("hello open message", message.toString(this.messageContext));
+    }
+
+    @Test
+    public void createInlineMessageViaMessageBuilderTest()
+    {
+        Message message = SimpleMessageBuilder.message().text("hello open message").create();
+
+        assertEquals("hello open message", message.toString(this.messageContext));
+    }
+
+    @Test
+    public void createInlineMessageViaCustomMessageBuilderTest()
+    {
+        Message message = new TestMessageBuilder().text("hello open message").create();
 
         assertEquals("hello open message", message.toString(this.messageContext));
     }
@@ -52,6 +70,7 @@ public class SimpleMessageTest extends AbstractTest
     {
         Message message = this.messageContext.message().text("{hello}").create();
 
+        @SuppressWarnings({"deprecation"})
         String messageText = this.messageContext.message().toText(message); //TODO use a different config
 
         checkDefaultHelloMessage(messageText);
@@ -134,6 +153,28 @@ public class SimpleMessageTest extends AbstractTest
         String messageText = this.messageContext.getMessageText(message);
 
         checkDefaultHelloMessage(messageText);
+    }
+
+    @Test
+    public void resolveInlineMessageWithMessageBuilderWithoutAContextTest()
+    {
+        try
+        {
+            SimpleMessageBuilder.message().text("hello open message").toText();
+        }
+        catch(IllegalStateException e)
+        {
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void resolveInlineMessageWithMessageBuilderWithContextTest()
+    {
+        String message = SimpleMessageBuilder.message(this.messageContext).text("hello open message").toText();
+
+        assertEquals("hello open message", message);
     }
 
     private LocaleResolver createGermanLocaleResolver()

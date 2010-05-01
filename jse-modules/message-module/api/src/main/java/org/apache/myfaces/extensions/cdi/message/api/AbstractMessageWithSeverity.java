@@ -34,19 +34,19 @@ public abstract class AbstractMessageWithSeverity extends AbstractMessage implem
         super(message);
     }
 
-    public AbstractMessageWithSeverity(String messageTemplate,
+    public AbstractMessageWithSeverity(String messageDescriptor,
                                        Class<? extends MessagePayload> severity,
                                        Serializable... arguments)
     {
-        super(messageTemplate, arguments);
+        super(messageDescriptor, arguments);
         addPayload(severity);
     }
 
-    public AbstractMessageWithSeverity(String messageTemplate,
+    public AbstractMessageWithSeverity(String messageDescriptor,
                                        Class<? extends MessagePayload> severity,
                                        Set<NamedArgument> namedArguments)
     {
-        super(messageTemplate, namedArguments);
+        super(messageDescriptor, namedArguments);
         addPayload(severity);
     }
 

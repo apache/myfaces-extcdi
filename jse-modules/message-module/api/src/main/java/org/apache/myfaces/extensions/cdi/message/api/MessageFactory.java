@@ -16,21 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.impl;
+package org.apache.myfaces.extensions.cdi.message.api;
 
-import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
+import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 import java.io.Serializable;
 
 /**
+ * allows to customize the creation of a message.
+ * only use it if you would like to create a different type of message via the fluent api
+ * ({@link org.apache.myfaces.extensions.cdi.message.api.MessageBuilder})
+ * in all other cases you can also use {@link org.apache.myfaces.extensions.cdi.message.api.MessageResolver}
+ * e.g. to customize messages e.g. based on payload
+ *
  * @author Gerhard Petracek
  */
-class DefaultMessageInterpolator implements MessageInterpolator, Serializable
+public interface MessageFactory extends Serializable
 {
-    private static final long serialVersionUID = -8854087197813424812L;
-
-    public String interpolate(String messageDescriptor, Serializable... arguments)
-    {
-        return messageDescriptor;
-    }
+    /**
+     * @param messageDescriptor the message key (or inline-message) for the message
+     * @param messagePayload the initial payload of the message
+     * @return a new message instance
+     */
+    Message create(String messageDescriptor,  Class<? extends MessagePayload> messagePayload);
 }

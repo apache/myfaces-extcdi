@@ -32,16 +32,16 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
 {
     private static final long serialVersionUID = 8699632465559596371L;
 
-    public String interpolate(String messageTemplate, Serializable... arguments)
+    public String interpolate(String messageDescriptor, Serializable... arguments)
     {
         Serializable[] numberedArguments = addNumberedArguments(arguments);
 
         if (numberedArguments.length > 0)
         {
-            return formatMessage(messageTemplate, numberedArguments);
+            return formatMessage(messageDescriptor, numberedArguments);
         }
 
-        return messageTemplate;
+        return messageDescriptor;
     }
 
     private Serializable[] addNumberedArguments(Serializable[] arguments)
@@ -60,7 +60,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
     }
 
     //TODO add warning for unused arguments,...
-    private String formatMessage(String messageTemplate, Serializable[] arguments)
+    private String formatMessage(String messageDescriptor, Serializable[] arguments)
     {
         Object[] localizedArguments = null;
         Object argument;
@@ -83,7 +83,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
         }
 
         MessageFormat messageFormat = new MessageFormat(
-                messageTemplate, this.messageContext.getLocale());
+                messageDescriptor, this.messageContext.getLocale());
 
         if (localizedArguments == null)
         {

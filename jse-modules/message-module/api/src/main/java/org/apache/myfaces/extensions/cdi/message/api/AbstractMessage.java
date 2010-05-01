@@ -35,7 +35,7 @@ import java.util.Collections;
  */
 public abstract class AbstractMessage implements Message, MessageContextConfigAware<Message>
 {
-    protected String messageTemplate;
+    protected String messageDescriptor;
     protected Set<NamedArgument> namedArguments = new HashSet<NamedArgument>();
     protected List<Serializable> arguments = new ArrayList<Serializable>();
     protected Map<Class, Class<? extends MessagePayload>> messagePayload =
@@ -48,13 +48,13 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
 
     public AbstractMessage(Message message)
     {
-        this(message.getTemplate(), message.getArguments());
+        this(message.getDescriptor(), message.getArguments());
         this.messagePayload = message.getPayload();
     }
 
-    public AbstractMessage(String messageTemplate, Serializable... arguments)
+    public AbstractMessage(String messageDescriptor, Serializable... arguments)
     {
-        this.messageTemplate = messageTemplate;
+        this.messageDescriptor = messageDescriptor;
 
         for (Serializable argument : arguments)
         {
@@ -72,9 +72,9 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         cleanup();
     }
 
-    public AbstractMessage(String messageTemplate, Set<NamedArgument> namedArguments)
+    public AbstractMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
     {
-        this.messageTemplate = messageTemplate;
+        this.messageDescriptor = messageDescriptor;
         this.namedArguments = namedArguments;
         this.arguments = null;
     }
@@ -181,9 +181,9 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         this.arguments.add(argument);
     }
 
-    public String getTemplate()
+    public String getDescriptor()
     {
-        return this.messageTemplate;
+        return this.messageDescriptor;
     }
 
     public Serializable[] getArguments()
@@ -281,7 +281,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         {
             return false;
         }
-        if (!messageTemplate.equals(that.messageTemplate))
+        if (!messageDescriptor.equals(that.messageDescriptor))
         {
             return false;
         }
@@ -301,7 +301,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     @Override
     public int hashCode()
     {
-        int result = messageTemplate.hashCode();
+        int result = messageDescriptor.hashCode();
         result = 31 * result + (namedArguments != null ? namedArguments.hashCode() : 0);
         result = 31 * result + (arguments != null ? arguments.hashCode() : 0);
         result = 31 * result + (messagePayload != null ? messagePayload.hashCode() : 0);

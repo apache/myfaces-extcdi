@@ -18,19 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.message.impl;
 
-import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
-
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
+import org.apache.myfaces.extensions.cdi.message.api.Message;
+import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**
  * @author Gerhard Petracek
  */
-class DefaultMessageInterpolator implements MessageInterpolator, Serializable
+class DefaultMessageFactory implements MessageFactory
 {
-    private static final long serialVersionUID = -8854087197813424812L;
+    private static final long serialVersionUID = 721557343207858857L;
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public Message create(String messageDescriptor, Class<? extends MessagePayload> messagePayload)
     {
-        return messageDescriptor;
+        return new DefaultMessage(messageDescriptor, messagePayload);
     }
 }

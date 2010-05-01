@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfig;
 import org.apache.myfaces.extensions.cdi.message.api.MessageFilter;
+import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
 
 import java.util.List;
 import java.util.Locale;

@@ -30,9 +30,9 @@ import java.util.Map;
 public interface Message extends Localizable, Serializable
 {
     /**
-     * @return the message template (or inline-text) of the current message
+     * @return the message key (or inline-text) of the current message
      */
-    String getTemplate();
+    String getDescriptor();
 
     /**
      * @return all named and numbered arguments

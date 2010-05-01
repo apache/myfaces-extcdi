@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfig;
 import org.apache.myfaces.extensions.cdi.message.api.MessageFilter;
+import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 
 import java.util.List;
 import java.util.Locale;
@@ -38,9 +40,15 @@ public class DefaultMessageContext implements MessageContext
     private static final long serialVersionUID = -110779217295211303L;
 
     private MessageContextConfig config = new DefaultMessageContextConfig();
+    private MessageFactory messageFactory;
 
     public DefaultMessageContext()
     {
+    }
+
+    public DefaultMessageContext(MessageFactory messageFactory)
+    {
+        this.messageFactory = messageFactory;
     }
 
     DefaultMessageContext(MessageContextConfig config)
@@ -48,9 +56,15 @@ public class DefaultMessageContext implements MessageContext
         this.config = config;
     }
 
+    DefaultMessageContext(MessageContextConfig config, MessageFactory messageFactory)
+    {
+        this.config = config;
+        this.messageFactory = messageFactory;
+    }
+
     public MessageBuilder message()
     {
-        return new DefaultMessageBuilder(this);
+        return new DefaultMessageBuilder(this, this.messageFactory);
     }
 
     public MessageContextConfig config()
@@ -60,6 +74,7 @@ public class DefaultMessageContext implements MessageContext
 
     public <T extends MessageContext> T typed(Class<T> contextType)
     {
+        //noinspection unchecked
         return (T) this;
     }
 
@@ -131,6 +146,7 @@ public class DefaultMessageContext implements MessageContext
 
         DefaultMessageContext that = (DefaultMessageContext) o;
 
+        //noinspection RedundantIfStatement
         if (!config.equals(that.config))
         {
             return false;
