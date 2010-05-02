@@ -85,11 +85,6 @@ class UnmodifiableMessageContext implements MessageContext
         return messageContext.cloneContext();
     }
 
-    public String getMessageText(Message message)
-    {
-        return messageContext.getMessageText(message);
-    }
-
     public void addMessage(Message message)
     {
         messageContext.addMessage(messageContext, message);

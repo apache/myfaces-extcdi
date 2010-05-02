@@ -215,13 +215,6 @@ class DefaultMessageBuilder implements MessageBuilder
         return getMessageText(baseMessage);
     }
 
-    public String toText(Message message)
-    {
-        //it isn't required to try to restore the message-context of the message
-        //to use the original context (config) just call message.toString(); instead of this method
-        return getMessageText(message);
-    }
-
     private String getMessageText(Message baseMessage)
     {
         String message = baseMessage.getDescriptor();

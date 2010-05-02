@@ -71,7 +71,7 @@ public class SimpleMessageTest extends AbstractTest
         Message message = this.messageContext.message().text("{hello}").create();
 
         @SuppressWarnings({"deprecation"})
-        String messageText = this.messageContext.message().toText(message); //TODO use a different config
+        String messageText = message.toString(this.messageContext);
 
         checkDefaultHelloMessage(messageText);
     }
@@ -150,7 +150,7 @@ public class SimpleMessageTest extends AbstractTest
     public void directTextResolvingTest()
     {
         Message message = this.messageContext.message().text("{hello}").create();
-        String messageText = this.messageContext.getMessageText(message);
+        String messageText = message.toString(this.messageContext);
 
         checkDefaultHelloMessage(messageText);
     }

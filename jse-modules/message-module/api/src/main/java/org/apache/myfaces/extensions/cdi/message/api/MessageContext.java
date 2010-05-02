@@ -51,12 +51,6 @@ public interface MessageContext extends LocaleResolver, MessageHandler, Serializ
     MessageContext cloneContext();
 
     /**
-     * @param message the message which should be converted to the final text
-     * @return the final text generated via the current message context
-     */
-    String getMessageText(Message message);
-
-    /**
      * @param message a message which should be added to the current context (message handlers)
      */
     void addMessage(Message message);

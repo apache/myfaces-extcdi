@@ -68,11 +68,4 @@ public interface MessageBuilder extends Serializable
      * @return the text of the message which was built via the fluent api
      */
     String toText();
-
-    /**
-     * converts a given message to the text via the current context
-     * @param message the message which should be converted
-     * @return the converted text of the given message
-     */
-    String toText(Message message);
 }

@@ -82,7 +82,7 @@ public class PayloadTest extends AbstractTest
         assertFalse(testResolver.isPayloadAvailable());
 
         Message message = this.messageContext.message().text("test msg").payload(MessageSeverity.Warn.class).create();
-        this.messageContext.getMessageText(message);
+        message.toString(this.messageContext);
 
         assertTrue(testResolver.isPayloadAvailable());
     }

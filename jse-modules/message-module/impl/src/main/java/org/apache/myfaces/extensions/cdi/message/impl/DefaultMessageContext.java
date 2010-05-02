@@ -83,11 +83,6 @@ public class DefaultMessageContext implements MessageContext
         return config().use().create();
     }
 
-    public String getMessageText(Message message)
-    {
-        return message().toText(message);
-    }
-
     public void addMessage(Message message)
     {
         addMessage(this, message);
