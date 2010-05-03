@@ -32,6 +32,8 @@ import java.util.ResourceBundle;
 class TestMessageResolver implements MessageResolver
 {
     private static final String TEST_MESSAGES = "org.apache.myfaces.extensions.cdi.message.test.messages";
+    private static final String TEST_TECHNICAL_MESSAGES = "org.apache.myfaces.extensions.cdi.message.test.t_messages";
+    private static final String TEST_LABELS = "org.apache.myfaces.extensions.cdi.message.test.labels";
 
     public String getMessage(String key, Locale locale, Map<Class, Class<? extends MessagePayload>> messagePayload)
     {
@@ -43,6 +45,15 @@ class TestMessageResolver implements MessageResolver
         try
         {
             key = extractKey(key);
+
+            if(messagePayload.containsKey(Label.class))
+            {
+                return ResourceBundle.getBundle(TEST_LABELS, locale, getClassLoader()).getString(key);
+            }
+            else if(messagePayload.containsKey(TechnicalMessage.class))
+            {
+                return ResourceBundle.getBundle(TEST_TECHNICAL_MESSAGES, locale, getClassLoader()).getString(key);
+            }
             return ResourceBundle.getBundle(TEST_MESSAGES, locale, getClassLoader()).getString(key);
         }
         catch (MissingResourceException e)

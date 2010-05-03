@@ -46,6 +46,30 @@ public class ExtensibilityTest extends AbstractTest
     }
 
     @Test
+    public void customMessageTypeViaCustomMessageBuilder1Test()
+    {
+        Message message = TestMessageBuilder.label().text("{hello}").create();
+
+        assertEquals("test label", message.toString(this.messageContext));
+    }
+
+    @Test
+    public void customMessageTypeViaCustomMessageBuilder2Test()
+    {
+        Message message = TestMessageBuilder.technicalMessage().text("{hello}").create();
+
+        assertEquals("hello codi", message.toString(this.messageContext));
+    }
+
+    @Test
+    public void customMessageTypeTest()
+    {
+        String messageText = this.messageContext.message().text("{hello}").payload(Label.class).toText();
+
+        assertEquals("test label", messageText);
+    }
+
+    @Test
     public void newMessageFactoryTestViaMessageContext()
     {
         Message message = new DefaultMessageContext(new TestMessageFactory()).message().text("{hello}").create();

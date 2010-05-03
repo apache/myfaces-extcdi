@@ -18,32 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
-import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**
  * @author Gerhard Petracek
  */
-class TestMessageBuilder extends SimpleMessageBuilder
+interface TechnicalMessage extends MessagePayload
 {
-    private static final long serialVersionUID = -92376642213127412L;
-
-    public TestMessageBuilder()
-    {
-    }
-
-    public static MessageBuilder message()
-    {
-        return new TestMessageBuilder();
-    }
-
-    public static MessageBuilder technicalMessage()
-    {
-        return new TestMessageBuilder().payload(TechnicalMessage.class);
-    }
-
-    public static MessageBuilder label()
-    {
-        return new TestMessageBuilder().payload(Label.class);
-    }
 }

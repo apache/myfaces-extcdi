@@ -32,7 +32,6 @@ class DefaultLocaleResolver implements LocaleResolver, Serializable
 
     public Locale getLocale()
     {
-        return Locale.ENGLISH;
-        //return Locale.getDefault();
+        return Locale.getDefault();
     }
 }

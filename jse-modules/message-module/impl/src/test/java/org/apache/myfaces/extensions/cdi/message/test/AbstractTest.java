@@ -19,8 +19,11 @@
 package org.apache.myfaces.extensions.cdi.message.test;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
 import org.junit.Before;
+
+import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
@@ -34,6 +37,13 @@ public abstract class AbstractTest
     {
         this.messageContext = new DefaultMessageContext().config().use()
                 .messageResolver(new TestMessageResolver())
+                .localeResolver(new LocaleResolver()
+                {
+                    public Locale getLocale()
+                    {
+                        return Locale.ENGLISH;
+                    }
+                })
                 .create();
     }
 }
