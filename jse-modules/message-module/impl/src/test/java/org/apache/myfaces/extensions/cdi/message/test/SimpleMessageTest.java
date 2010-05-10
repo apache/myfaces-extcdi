@@ -52,7 +52,7 @@ public class SimpleMessageTest extends AbstractTest
     @Test
     public void createInlineMessageViaCustomMessageBuilderTest()
     {
-        Message message = new TestMessageBuilder().text("hello open message").create();
+        Message message = TestMessageBuilder.message().text("hello open message").create();
 
         assertEquals("hello open message", message.toString(this.messageContext));
     }

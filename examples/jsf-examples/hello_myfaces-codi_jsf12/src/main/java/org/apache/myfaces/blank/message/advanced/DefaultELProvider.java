@@ -16,34 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.test;
+package org.apache.myfaces.blank.message.advanced;
 
-import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
-import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
+import org.apache.myfaces.extensions.cdi.message.impl.spi.SimpleELContext;
+import de.odysseus.el.ExpressionFactoryImpl;
+import de.odysseus.el.util.SimpleResolver;
+
+import javax.el.ELResolver;
+import javax.el.ExpressionFactory;
 
 /**
+ * Provides the implementations which allow to use el-expressions in messages
+ *
  * @author Gerhard Petracek
  */
-class TestMessageBuilder extends SimpleMessageBuilder
+public class DefaultELProvider implements ELProvider
 {
-    private static final long serialVersionUID = -92376642213127412L;
-
-    private TestMessageBuilder()
+    public ExpressionFactory createExpressionFactory()
     {
+        return new ExpressionFactoryImpl();
     }
 
-    public static MessageBuilder message()
+    public SimpleELContext createELContext(ELResolver elResolver)
     {
-        return new TestMessageBuilder();
+        return new DefaultELContext(elResolver);
     }
 
-    public static MessageBuilder technicalMessage()
+    public ELResolver createELResolver()
     {
-        return new TestMessageBuilder().payload(TechnicalMessage.class);
-    }
-
-    public static MessageBuilder label()
-    {
-        return new TestMessageBuilder().payload(Label.class);
+        return new SimpleResolver(true);
     }
 }

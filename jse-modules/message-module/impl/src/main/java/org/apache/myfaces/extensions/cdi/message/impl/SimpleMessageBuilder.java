@@ -65,8 +65,9 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
     {
         if (getMessageContext() == null)
         {
-            throw new IllegalStateException(getClass().getName() + ".toText called outside a message context " +
-                    "please use SimpleMessageBuilder.message(messageContext).text(...).add();");
+            throw new UnsupportedOperationException(getClass().getName() + ".add called outside a message context. " +
+                    "please use SimpleMessageBuilder.message(messageContext).text(...).add();" +
+                    " or messageContext.message().text(...).add();");
         }
         return super.add();
     }
@@ -76,8 +77,9 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
     {
         if (getMessageContext() == null)
         {
-            throw new IllegalStateException(getClass().getName() + ".toText called outside a message context " +
-                    "please use SimpleMessageBuilder.message(messageContext).text(...).toText();");
+            throw new UnsupportedOperationException(getClass().getName() + ".toText called outside a message context." +
+                    " please use SimpleMessageBuilder.message(messageContext).text(...).toText();" +
+                    " or messageContext.message().text(...).toText();");
         }
         return super.toText();
     }

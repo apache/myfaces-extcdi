@@ -16,34 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.test;
+package org.apache.myfaces.blank.message.simple;
 
-import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
-import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
+
+import javax.inject.Named;
+import javax.inject.Inject;
+import javax.enterprise.context.RequestScoped;
 
 /**
  * @author Gerhard Petracek
  */
-class TestMessageBuilder extends SimpleMessageBuilder
+@Named
+@RequestScoped
+public class HelloMessageBean
 {
-    private static final long serialVersionUID = -92376642213127412L;
+    @Inject @Jsf
+    private MessageContext messageContext;
 
-    private TestMessageBuilder()
+    public void createMessage()
     {
-    }
-
-    public static MessageBuilder message()
-    {
-        return new TestMessageBuilder();
-    }
-
-    public static MessageBuilder technicalMessage()
-    {
-        return new TestMessageBuilder().payload(TechnicalMessage.class);
-    }
-
-    public static MessageBuilder label()
-    {
-        return new TestMessageBuilder().payload(Label.class);
+        this.messageContext.message().text("Hello MyFaces CODI").add();
+        this.messageContext.message().text("{hello}").argument("MyFaces CODI").add();
+        this.messageContext.message().text("A demo warn message").payload(MessageSeverity.Warn.class).add();
     }
 }

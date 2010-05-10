@@ -50,6 +50,10 @@
             <artifactId>myfaces-extcdi-core-impl</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-message-module-impl</artifactId>
+        </dependency>
 
         <dependency>
            <groupId>javax.el</groupId>

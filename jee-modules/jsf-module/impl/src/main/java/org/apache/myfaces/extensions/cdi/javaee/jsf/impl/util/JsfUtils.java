@@ -19,10 +19,14 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import javax.faces.FactoryFinder;
+import javax.faces.context.FacesContext;
+import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
 import java.util.Iterator;
+import java.util.ResourceBundle;
+import java.util.Locale;
 
 /**
  * keep in sync with extval!
@@ -45,5 +49,23 @@ public class JsfUtils
             currentLifecycle = lifecycleFactory.getLifecycle(currentId);
             currentLifecycle.addPhaseListener(phaseListener);
         }
+    }
+
+    public static ResourceBundle getDefaultFacesMessageBundle(Locale locale)
+    {
+        return ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, locale);
+    }
+
+    public static ResourceBundle getCustomFacesMessageBundle(Locale locale)
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String bundleName = facesContext.getApplication().getMessageBundle();
+
+        if (bundleName == null)
+        {
+            return null;
+        }
+
+        return ResourceBundle.getBundle(bundleName, locale);
     }
 }

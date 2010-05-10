@@ -16,34 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.test;
+package org.apache.myfaces.blank.message.advanced;
 
-import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
-import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-class TestMessageBuilder extends SimpleMessageBuilder
+public class TestBean implements Serializable
 {
-    private static final long serialVersionUID = -92376642213127412L;
+    private static final long serialVersionUID = 4286446259906940686L;
 
-    private TestMessageBuilder()
+    public String getText()
     {
-    }
-
-    public static MessageBuilder message()
-    {
-        return new TestMessageBuilder();
-    }
-
-    public static MessageBuilder technicalMessage()
-    {
-        return new TestMessageBuilder().payload(TechnicalMessage.class);
-    }
-
-    public static MessageBuilder label()
-    {
-        return new TestMessageBuilder().payload(Label.class);
+        return "el support";
     }
 }
