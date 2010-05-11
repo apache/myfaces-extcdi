@@ -162,7 +162,7 @@ public class SimpleMessageTest extends AbstractTest
         {
             SimpleMessageBuilder.message().text("hello open message").toText();
         }
-        catch(IllegalStateException e)
+        catch(UnsupportedOperationException e)
         {
             return;
         }

@@ -42,11 +42,26 @@ public class DefaultMessageContext implements MessageContext
     private MessageContextConfig config = new DefaultMessageContextConfig();
     private MessageFactory messageFactory;
 
-    public DefaultMessageContext()
+    protected DefaultMessageContext()
     {
     }
 
-    public DefaultMessageContext(MessageFactory messageFactory)
+    public static MessageContext create(MessageContextConfig config)
+    {
+        return new DefaultMessageContext(config);
+    }
+
+    public static MessageContext create(MessageFactory messageFactory)
+    {
+        return new DefaultMessageContext(messageFactory);
+    }
+
+    public static MessageContext create(MessageContextConfig config, MessageFactory messageFactory)
+    {
+        return new DefaultMessageContext(config, messageFactory);
+    }
+
+    DefaultMessageContext(MessageFactory messageFactory)
     {
         this.messageFactory = messageFactory;
     }

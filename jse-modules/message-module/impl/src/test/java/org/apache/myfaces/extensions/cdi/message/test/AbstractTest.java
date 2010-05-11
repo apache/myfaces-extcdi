@@ -32,10 +32,11 @@ public abstract class AbstractTest
 {
     protected MessageContext messageContext;
 
+    @SuppressWarnings({"serial"})
     @Before
     public void setupFactory()
     {
-        this.messageContext = new DefaultMessageContext().config().use()
+        this.messageContext = new DefaultMessageContext(){}.config().use()
                 .messageResolver(new TestMessageResolver())
                 .localeResolver(new LocaleResolver()
                 {

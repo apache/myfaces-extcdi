@@ -72,7 +72,7 @@ public class ExtensibilityTest extends AbstractTest
     @Test
     public void newMessageFactoryTestViaMessageContext()
     {
-        Message message = new DefaultMessageContext(new TestMessageFactory()).message().text("{hello}").create();
+        Message message = DefaultMessageContext.create(new TestMessageFactory()).message().text("{hello}").create();
 
         assertEquals(TestMessage.class, message.getClass());
     }
