@@ -27,7 +27,7 @@ import javax.enterprise.inject.Alternative;
  * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @Alternative
-@ProjectStageActivated({ProjectStage.CUnitTest.class})
+@ProjectStageActivated({ProjectStage.CUnitTest.class, ProjectStage.CDevelopment.class})
 public class MyMailServiceMockImpl implements MyMailService
 {
 

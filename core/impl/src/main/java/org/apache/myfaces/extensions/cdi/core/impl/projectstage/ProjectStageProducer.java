@@ -29,10 +29,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,7 +78,6 @@ public class ProjectStageProducer
      */
     protected ProjectStageProducer()
     {
-
     }
 
     /**
@@ -119,20 +117,12 @@ public class ProjectStageProducer
     {
         if (psp == null)
         {
-            //X TODO I'm sure there is a common way to get the current classloader in MyFaces...
-            ClassLoader cl = Thread.currentThread().getContextClassLoader();
 
-            InputStream is = cl.getResourceAsStream("/META-INF/extcdi/extcdi.properties");
-            if (is != null)
+            String pspClassName = CodiUtils.getCodiProperty(PROJECTSTAGE_PRODUCER_PROPERTY_KEY);
+            if (pspClassName != null && pspClassName.length() > 0)
             {
-                Properties props = new Properties();
-                props.load(is);
-                String pspClassName = props.getProperty(PROJECTSTAGE_PRODUCER_PROPERTY_KEY);
-                if (pspClassName != null && pspClassName.length() > 0)
-                {
-                    Class<ProjectStageProducer> pspClass = (Class<ProjectStageProducer>) Class.forName(pspClassName);
-                    psp = pspClass.newInstance();
-                }
+                Class<ProjectStageProducer> pspClass = (Class<ProjectStageProducer>) Class.forName(pspClassName);
+                psp = pspClass.newInstance();
             }
 
             if (psp == null)
