@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
