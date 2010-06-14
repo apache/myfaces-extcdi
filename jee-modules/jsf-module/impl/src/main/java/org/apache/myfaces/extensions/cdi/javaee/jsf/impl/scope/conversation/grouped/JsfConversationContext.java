@@ -73,4 +73,24 @@ public class JsfConversationContext implements ConversationContext
     {
         return this.config;
     }
+
+    public boolean setAttribute(String name, Object value)
+    {
+        throw new IllegalStateException("not implemented");
+    }
+
+    public boolean setAttribute(String name, Object value, boolean forceOverride)
+    {
+        throw new IllegalStateException("not implemented");
+    }
+
+    public boolean containsAttribute(String name)
+    {
+        throw new IllegalStateException("not implemented");
+    }
+
+    public <T> T getAttribute(String name, Class<T> targetType)
+    {
+        throw new IllegalStateException("not implemented");
+    }
 }

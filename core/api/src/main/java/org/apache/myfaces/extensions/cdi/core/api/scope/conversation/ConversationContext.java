@@ -18,13 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware;
+
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationContext extends Serializable
+public interface ConversationContext extends AttributeAware, Serializable
 {
     /**
      * @return the id of the conversation (unique for each window/tab)

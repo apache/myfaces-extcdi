@@ -30,6 +30,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
+import javax.annotation.PostConstruct;
 
 @Model
 public class FacesDemoBean
@@ -40,7 +41,16 @@ public class FacesDemoBean
     @Inject
     private JsfLifecyclePhaseInformation phaseInformation;
 
+    @Inject
+    private ConfigDemoBean configDemoBean;
+
     private String text;
+
+    @PostConstruct
+    public void triggerInternalDemos()
+    {
+        this.configDemoBean.isTransactionTokenEnabled();
+    }
 
     //no restriction via @View -> invoked before rendering any view
     public void preRenderView(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
