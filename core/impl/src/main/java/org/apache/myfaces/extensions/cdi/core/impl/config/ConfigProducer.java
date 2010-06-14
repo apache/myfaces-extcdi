@@ -94,6 +94,24 @@ public class ConfigProducer
         };
     }
 
+    private void createConfigFilter(BeanManager beanManager)
+    {
+        Set<? extends Bean> deactivatedConfigBeans = beanManager.getBeans(DeactivatedCodiConfig.class);
+
+        configFilter = new HashSet<Class<? extends CodiConfig>>(deactivatedConfigBeans.size());
+
+        CreationalContext<DeactivatedCodiConfig> creationalContext;
+        Class<? extends CodiConfig>[] filteredCodiConfigClasses;
+        for(Bean<DeactivatedCodiConfig> deactivatedConfigBean : deactivatedConfigBeans)
+        {
+            creationalContext = beanManager.createCreationalContext(deactivatedConfigBean);
+
+            filteredCodiConfigClasses = deactivatedConfigBean.create(creationalContext).getDeactivatedConfigs();
+
+            configFilter.addAll(Arrays.asList(filteredCodiConfigClasses));
+        }
+    }
+
     private void createConfig(BeanManager beanManager)
     {
         Set<? extends Bean> configBeans = beanManager.getBeans(CodiConfig.class);
@@ -112,24 +130,6 @@ public class ConfigProducer
             {
                 configSet.add(currentCodiConfig);
             }
-        }
-    }
-
-    private void createConfigFilter(BeanManager beanManager)
-    {
-        Set<? extends Bean> deactivatedConfigBeans = beanManager.getBeans(DeactivatedCodiConfig.class);
-
-        configFilter = new HashSet<Class<? extends CodiConfig>>(deactivatedConfigBeans.size());
-
-        CreationalContext<DeactivatedCodiConfig> creationalContext;
-        Class<? extends CodiConfig>[] filteredCodiConfigClasses;
-        for(Bean<DeactivatedCodiConfig> deactivatedConfigBean : deactivatedConfigBeans)
-        {
-            creationalContext = beanManager.createCreationalContext(deactivatedConfigBean);
-
-            filteredCodiConfigClasses = deactivatedConfigBean.create(creationalContext).getDeactivatedConfigs();
-
-            configFilter.addAll(Arrays.asList(filteredCodiConfigClasses));
         }
     }
 }

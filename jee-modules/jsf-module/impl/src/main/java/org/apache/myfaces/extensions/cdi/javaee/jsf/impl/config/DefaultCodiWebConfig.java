@@ -19,13 +19,13 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.CodiWebConfig12;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.WebXmlParameter.TRANSACTION_TOKEN_ENABLED;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.TRANSACTION_TOKEN_ENABLED;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.TRANSACTION_TOKEN_ENABLED_DEFAULT;
 import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.faces.context.FacesContext;
 
@@ -35,27 +35,7 @@ import javax.faces.context.FacesContext;
 @Singleton
 public class DefaultCodiWebConfig extends CodiWebConfig12
 {
-    protected DefaultCodiWebConfig()
-    {
-    }
-
-    @Inject
-    public DefaultCodiWebConfig(FacesContext facesContext)
-    {
-        initTransactionTokenEnabled(facesContext);
-    }
-
-    private void initTransactionTokenEnabled(FacesContext facesContext)
-    {
-        boolean transactionTokenEnabled = false;
-
-        if("true".equalsIgnoreCase(facesContext.getExternalContext().getInitParameter(TRANSACTION_TOKEN_ENABLED)))
-        {
-            transactionTokenEnabled = true;
-        }
-
-        setAttribute(TRANSACTION_TOKEN_ENABLED, transactionTokenEnabled);
-    }
+    private Boolean configInitialized;
 
     @Produces
     @Named
@@ -68,6 +48,39 @@ public class DefaultCodiWebConfig extends CodiWebConfig12
 
     public boolean isTransactionTokenEnabled()
     {
+        lazyInit();
         return getAttribute(TRANSACTION_TOKEN_ENABLED, Boolean.class);
+    }
+
+    private void lazyInit()
+    {
+        if(configInitialized == null)
+        {
+            init(FacesContext.getCurrentInstance());
+        }
+    }
+
+    private synchronized void init(FacesContext facesContext)
+    {
+        if(configInitialized != null || facesContext == null)
+        {
+            return;
+        }
+
+        configInitialized = true;
+
+        initTransactionTokenEnabled(facesContext);
+    }
+
+    private void initTransactionTokenEnabled(FacesContext facesContext)
+    {
+        boolean transactionTokenEnabled = TRANSACTION_TOKEN_ENABLED_DEFAULT;
+
+        if("true".equalsIgnoreCase(facesContext.getExternalContext().getInitParameter(TRANSACTION_TOKEN_ENABLED)))
+        {
+            transactionTokenEnabled = true;
+        }
+
+        setAttribute(TRANSACTION_TOKEN_ENABLED, transactionTokenEnabled);
     }
 }

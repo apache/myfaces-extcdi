@@ -23,7 +23,9 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CoreCodiConfigParameter
 /**
  * @author Gerhard Petracek
  */
-public interface WebXmlParameter
+public interface ConfigParameter
 {
     static final String TRANSACTION_TOKEN_ENABLED = CoreCodiConfigParameter.BASE_NAME + "TRANSACTION_TOKEN_ENABLED";
+
+    static final Boolean TRANSACTION_TOKEN_ENABLED_DEFAULT = Boolean.FALSE;
 }
