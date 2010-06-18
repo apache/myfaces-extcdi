@@ -78,6 +78,8 @@ public class JsfAwareMessageContextProducer
     {
         return new LocaleResolver()
         {
+            private static final long serialVersionUID = 5945811297524654438L;
+
             public Locale getLocale()
             {
                 Locale locale = null;

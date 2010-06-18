@@ -18,18 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.GenericConfig;
-import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.impl.NumberedArgumentAwareMessageInterpolator;
-import org.apache.myfaces.extensions.cdi.message.impl.formatter.NumberFormatterConfigKeys;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -40,8 +34,8 @@ public class FormattedMessageArgumentTest extends AbstractTest
     public void createFormattedMessageGermanTest()
     {
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator())
-                .localeResolver(getGermanLocaleResolver())
-                .addFormatterConfig(Number.class, getGermanNumberConfig()).create()
+                .localeResolver(new TestGermanLocaleResolver())
+                .addFormatterConfig(Number.class, new TestGermanNumberConfig()).create()
                 .message().text("{formatted_number}").argument(new BigDecimal("7654.3210")).toText();
 
         assertEquals("value: 7.654,321", messageText);
@@ -51,110 +45,12 @@ public class FormattedMessageArgumentTest extends AbstractTest
     public void createFormattedMessageEnglishTest()
     {
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator())
-                .localeResolver(getEnglishLocaleResolver())
-                .addFormatterConfig(Number.class, getGermanNumberConfig(), Locale.GERMAN)
-                .addFormatterConfig(Number.class, getEnglishNumberConfig(), Locale.ENGLISH)
+                .localeResolver(new TestEnglishLocaleResolver())
+                .addFormatterConfig(Number.class, new TestGermanNumberConfig(), Locale.GERMAN)
+                .addFormatterConfig(Number.class, new TestEnglishNumberConfig(), Locale.ENGLISH)
                 .create()
                 .message().text("{formatted_number}").argument(new BigDecimal("7654.3210")).toText();
 
         assertEquals("value: 7,654.321", messageText);
-    }
-
-    private LocaleResolver getGermanLocaleResolver()
-    {
-        return new LocaleResolver()
-        {
-            public Locale getLocale()
-            {
-                return Locale.GERMAN;
-            }
-        };
-    }
-
-    private GenericConfig getGermanNumberConfig()
-    {
-        return new GenericConfig()
-        {
-            private Map<String, Serializable> properties = new HashMap<String, Serializable>();
-            private static final long serialVersionUID = 1581606533032801390L;
-
-            {
-                this.properties.put(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, ".");
-                this.properties.put(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY, ",");
-                this.properties.put(NumberFormatterConfigKeys.MINIMUM_FRACTION_DIGITS_KEY, 2);
-                this.properties.put(NumberFormatterConfigKeys.MINIMUM_INTEGER_DIGITS_KEY, 1);
-            }
-
-            public GenericConfig addProperty(String key, Serializable value)
-            {
-                this.properties.put(key, value);
-                return this;
-            }
-
-            public Serializable getProperty(String key)
-            {
-                return this.properties.get(key);
-            }
-
-            public <T extends Serializable> T getProperty(String key, Class<T> targetType)
-            {
-                //noinspection unchecked
-                return (T) getProperty(key);
-            }
-
-            public boolean containsProperty(String key)
-            {
-                return this.properties.containsKey(key);
-            }
-        };
-    }
-
-    private LocaleResolver getEnglishLocaleResolver()
-    {
-        return new LocaleResolver()
-        {
-            public Locale getLocale()
-            {
-                return Locale.ENGLISH;
-            }
-        };
-    }
-
-    private GenericConfig getEnglishNumberConfig()
-    {
-        return new GenericConfig()
-        {
-            private Map<String, Serializable> properties = new HashMap<String, Serializable>();
-            private static final long serialVersionUID = 547837293567706390L;
-
-            {
-                this.properties.put(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, ",");
-                this.properties.put(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY, ".");
-                this.properties.put(NumberFormatterConfigKeys.MINIMUM_FRACTION_DIGITS_KEY, 2);
-                this.properties.put(NumberFormatterConfigKeys.MINIMUM_INTEGER_DIGITS_KEY, 1);
-            }
-
-            public GenericConfig addProperty(String key, Serializable value)
-            {
-                this.properties.put(key, value);
-                return this;
-            }
-
-            public Serializable getProperty(String key)
-            {
-                return this.properties.get(key);
-            }
-
-            public <T extends Serializable> T getProperty(String key, Class<T> targetType)
-            {
-                //noinspection unchecked
-                return (T) getProperty(key);
-            }
-
-            public boolean containsProperty(String key)
-            {
-                return this.properties.containsKey(key);
-            }
-        };
     }
 }

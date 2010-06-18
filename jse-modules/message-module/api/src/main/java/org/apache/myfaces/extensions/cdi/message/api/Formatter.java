@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.message.api;
 
+import java.io.Serializable;
+
 /**
  * usually a formatter is responsible for one type and allows to format
  * this type as string
@@ -25,7 +27,7 @@ package org.apache.myfaces.extensions.cdi.message.api;
  * @author Gerhard Petracek
  * @author Manfred Geiler
  */
-public interface Formatter<T>
+public interface Formatter<T> extends Serializable
 {
     /**
      * answers the question if the instance is able to format an object of the given type

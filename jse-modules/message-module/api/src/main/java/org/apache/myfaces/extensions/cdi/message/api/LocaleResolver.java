@@ -19,11 +19,12 @@
 package org.apache.myfaces.extensions.cdi.message.api;
 
 import java.util.Locale;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface LocaleResolver
+public interface LocaleResolver extends Serializable
 {
     /**
      * @return the current locale

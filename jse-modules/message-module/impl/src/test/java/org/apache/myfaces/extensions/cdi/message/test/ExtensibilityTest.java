@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 import static org.junit.Assert.*;
@@ -90,8 +89,8 @@ public class ExtensibilityTest extends AbstractTest
     {
         MessageContext newMessageContext = this.messageContext.cloneContext();
 
-        this.messageContext.config().change().localeResolver(createLocalResolver1());
-        newMessageContext.config().change().localeResolver(createLocalResolver2());
+        this.messageContext.config().change().localeResolver(new TestGermanLocaleResolver());
+        newMessageContext.config().change().localeResolver(new TestEnglishLocaleResolver());
 
         if (newMessageContext.equals(this.messageContext))
         {
@@ -102,36 +101,10 @@ public class ExtensibilityTest extends AbstractTest
         assertEquals(Locale.ENGLISH, newMessageContext.config().getLocaleResolver().getLocale());
     }
 
-    private LocaleResolver createLocalResolver1()
-    {
-        return new LocaleResolver()
-        {
-            Locale locale = Locale.GERMAN;
-
-            public Locale getLocale()
-            {
-                return locale;
-            }
-        };
-    }
-
-    private LocaleResolver createLocalResolver2()
-    {
-        return new LocaleResolver()
-        {
-            Locale locale = Locale.ENGLISH;
-
-            public Locale getLocale()
-            {
-                return locale;
-            }
-        };
-    }
-
     @Test
     public void usedMessageResolverTest()
     {
-        MessageContext newMessageContext = this.messageContext.config().use().localeResolver(createGermanLocaleResolver()).create();
+        MessageContext newMessageContext = this.messageContext.config().use().localeResolver(new TestGermanLocaleResolver()).create();
 
         if (newMessageContext.equals(this.messageContext))
         {
@@ -142,7 +115,7 @@ public class ExtensibilityTest extends AbstractTest
     @Test
     public void changedMessageResolverTest()
     {
-        MessageContext messageContext = this.messageContext.config().change().localeResolver(createGermanLocaleResolver()).create();
+        MessageContext messageContext = this.messageContext.config().change().localeResolver(new TestGermanLocaleResolver()).create();
 
         assertEquals(this.messageContext, messageContext);
     }
@@ -164,16 +137,5 @@ public class ExtensibilityTest extends AbstractTest
         MessageContext messageContext = new TestCustomMessageContext();
 
         assertTrue(messageContext.typed(TestCustomMessageContext.class).isReachable());
-    }
-
-    private LocaleResolver createGermanLocaleResolver()
-    {
-        return new LocaleResolver()
-        {
-            public Locale getLocale()
-            {
-                return Locale.GERMAN;
-            }
-        };
     }
 }

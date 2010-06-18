@@ -16,27 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.api;
+package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
+import org.apache.myfaces.extensions.cdi.message.api.Formatter;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 
-import java.util.Map;
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface MessageResolver extends Serializable
+public class TestFormatter implements Formatter<Object>, Serializable
 {
-    static final String MISSING_RESOURCE_MARKER = "???";
+    private static final long serialVersionUID = 3529715901768617301L;
 
-    /**
-     * @param messageContext the current {@link org.apache.myfaces.extensions.cdi.message.api.MessageContext}
-     * @param messageDescriptor the message key (or in-lined text) of the current message
-     * @param payload the payload of the message e.g. to use different message sources
-     * @return the final but not interpolated message text
-     */
-    String getMessage(MessageContext messageContext,
-                      String messageDescriptor,
-                      Map<Class, Class<? extends MessagePayload>> payload);
+    private Class responsibleFor;
+
+    TestFormatter(Class type)
+    {
+        this.responsibleFor = type;
+    }
+
+    public boolean isResponsibleFor(Class<?> type)
+    {
+        return type.isAssignableFrom(this.responsibleFor);
+    }
+
+    public String format(MessageContext i18nContext, Object valueToFormat)
+    {
+        return valueToFormat != null ? valueToFormat.toString() : "";
+    }
 }

@@ -34,7 +34,8 @@ import org.junit.runners.Suite;
         PayloadTest.class,
         ExtensibilityTest.class,
         MessageFilterTest.class,
-        HelperTest.class})
+        HelperTest.class,
+        SerializationTest.class})
 public class AllTests extends TestCase
 {
 }

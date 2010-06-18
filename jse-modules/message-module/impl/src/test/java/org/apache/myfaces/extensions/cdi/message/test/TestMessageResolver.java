@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 import java.util.Map;
@@ -31,6 +31,8 @@ import java.util.ResourceBundle;
  */
 class TestMessageResolver implements MessageResolver
 {
+    private static final long serialVersionUID = -2511565654167302283L;
+
     private static final String TEST_MESSAGES = "org.apache.myfaces.extensions.cdi.message.test.messages";
     private static final String TEST_TECHNICAL_MESSAGES = "org.apache.myfaces.extensions.cdi.message.test.t_messages";
     private static final String TEST_LABELS = "org.apache.myfaces.extensions.cdi.message.test.labels";

@@ -23,13 +23,10 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 
-import java.io.Serializable;
-
 /**
  * @author Gerhard Petracek
  */
-abstract class AbstractFormatterAwareMessageInterpolator
-        implements MessageInterpolator, Serializable
+abstract class AbstractFormatterAwareMessageInterpolator implements MessageInterpolator
 {
     @SuppressWarnings({"unchecked"})
     protected Object formatAsString(MessageContext messageContext, Object value)

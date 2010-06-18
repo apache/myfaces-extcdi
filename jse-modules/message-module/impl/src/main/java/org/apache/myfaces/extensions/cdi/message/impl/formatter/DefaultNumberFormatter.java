@@ -34,6 +34,8 @@ import java.util.Locale;
  */
 class DefaultNumberFormatter implements Formatter<Number>
 {
+    private static final long serialVersionUID = 1639250543559140704L;
+
     private Character groupingSeparator;
     private Character decimalSeparator;
     private Integer minimumFractionDigits;

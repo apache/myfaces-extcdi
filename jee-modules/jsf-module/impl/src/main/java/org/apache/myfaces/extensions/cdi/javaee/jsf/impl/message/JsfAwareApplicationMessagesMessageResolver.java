@@ -32,6 +32,8 @@ import java.util.MissingResourceException;
  */
 class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
 {
+    private static final long serialVersionUID = 4646223879356055470L;
+
     public String getMessage(MessageContext messageContext,
                              String messageDescriptor,
                              Map<Class, Class<? extends MessagePayload>> messagePayload)

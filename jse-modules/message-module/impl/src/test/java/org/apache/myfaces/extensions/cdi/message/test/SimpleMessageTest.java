@@ -18,15 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessage;
 import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import org.junit.Test;
-
-import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
@@ -80,7 +77,7 @@ public class SimpleMessageTest extends AbstractTest
     public void resolveGermanMessageTextTest()
     {
         String messageText = this.messageContext.config()
-                .use().localeResolver(createGermanLocaleResolver())
+                .use().localeResolver(new TestGermanLocaleResolver())
                 .create().message().text("{hello}").toText();
 
         checkGermanHelloMessage(messageText);
@@ -175,17 +172,6 @@ public class SimpleMessageTest extends AbstractTest
         String message = SimpleMessageBuilder.message(this.messageContext).text("hello open message").toText();
 
         assertEquals("hello open message", message);
-    }
-
-    private LocaleResolver createGermanLocaleResolver()
-    {
-        return new LocaleResolver()
-        {
-            public Locale getLocale()
-            {
-                return Locale.GERMAN;
-            }
-        };
     }
 
     private void checkDefaultHelloMessage(String messageText)

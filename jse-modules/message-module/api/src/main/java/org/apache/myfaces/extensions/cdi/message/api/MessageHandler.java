@@ -20,13 +20,14 @@ package org.apache.myfaces.extensions.cdi.message.api;
 
 import java.util.List;
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * an implementation is allowed to store messages directly or to forward messages
  *
  * @author Gerhard Petracek
  */
-public interface MessageHandler
+public interface MessageHandler extends Serializable
 {
     /**
      * called to add a message to a special target (known by the implementations)

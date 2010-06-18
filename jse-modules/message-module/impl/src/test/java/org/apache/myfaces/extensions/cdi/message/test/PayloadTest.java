@@ -22,9 +22,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.payload.InternalMessage;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultInternalMessage;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**

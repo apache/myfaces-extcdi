@@ -42,12 +42,20 @@ public class DefaultFormatterFactory implements FormatterFactory
 {
     private static final long serialVersionUID = -7462205386564870045L;
 
-    protected final Logger logger = Logger.getLogger(getClass().getName());
-
+    transient protected Logger logger = getLogger();
 
     private List<Formatter> formatters = new ArrayList<Formatter>();
     private Map<Class<?>, Formatter> formatterCache = null;
     private Map<FormatterConfigKey, GenericConfig> formatterConfigs = new HashMap<FormatterConfigKey, GenericConfig>();
+
+    private Logger getLogger()
+    {
+        if(this.logger == null)
+        {
+            this.logger = Logger.getLogger(getClass().getName());
+        }
+        return this.logger;
+    }
 
     public FormatterFactory add(Formatter formatter)
     {
@@ -81,7 +89,7 @@ public class DefaultFormatterFactory implements FormatterFactory
 
             if (found == null)
             {
-                this.logger.info("default formatter used for: " + type.getName());
+                getLogger().info("default formatter used for: " + type.getName());
                 found = FormatterBuilder.createFormatter(type);
             }
 

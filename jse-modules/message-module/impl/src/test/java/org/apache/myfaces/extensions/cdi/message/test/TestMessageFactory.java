@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
+import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**

@@ -24,7 +24,7 @@ import java.io.Serializable;
  * @author Manfred Geiler
  * @author Gerhard Petracek
  */
-public interface MessageInterpolator
+public interface MessageInterpolator extends Serializable
 {
     /**
      * replaces the arguments of the given message with the given arguments
