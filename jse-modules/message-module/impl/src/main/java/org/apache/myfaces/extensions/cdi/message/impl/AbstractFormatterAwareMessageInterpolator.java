@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
@@ -30,12 +29,10 @@ import java.io.Serializable;
  * @author Gerhard Petracek
  */
 abstract class AbstractFormatterAwareMessageInterpolator
-        implements MessageInterpolator, MessageContextAware, Serializable
+        implements MessageInterpolator, Serializable
 {
-    protected MessageContext messageContext;
-
     @SuppressWarnings({"unchecked"})
-    protected Object formatAsString(Object value)
+    protected Object formatAsString(MessageContext messageContext, Object value)
     {
         if (value == null)
         {
@@ -47,30 +44,20 @@ abstract class AbstractFormatterAwareMessageInterpolator
             return value;
         }
 
-        if (this.messageContext.config().getFormatterFactory() != null)
+        if (messageContext.config().getFormatterFactory() != null)
         {
-            Formatter formatter = this.messageContext.config().getFormatterFactory().findFormatter(value.getClass());
+            Formatter formatter = messageContext.config().getFormatterFactory().findFormatter(value.getClass());
             if (formatter != null)
             {
-                return formatter.format(this.messageContext, value);
+                return formatter.format(messageContext, value);
             }
         }
 
         if (value instanceof Localizable)
         {
-            return ((Localizable) value).toString(this.messageContext);
+            return ((Localizable) value).toString(messageContext);
         }
 
         return value;
-    }
-
-    public void setMessageContext(MessageContext messageContext)
-    {
-        this.messageContext = messageContext;
-    }
-
-    public MessageContext getMessageContext()
-    {
-        throw new UnsupportedOperationException();
     }
 }

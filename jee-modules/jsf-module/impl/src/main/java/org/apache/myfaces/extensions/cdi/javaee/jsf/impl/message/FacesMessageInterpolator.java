@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.message;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.CompositeMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
@@ -31,7 +30,7 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-class FacesMessageInterpolator implements MessageInterpolator, MessageContextAware
+class FacesMessageInterpolator implements MessageInterpolator
 {
     private MessageInterpolator messageInterpolator;
 
@@ -49,25 +48,8 @@ class FacesMessageInterpolator implements MessageInterpolator, MessageContextAwa
         }
     }
 
-    public String interpolate(String messageText, Serializable... arguments)
+    public String interpolate(MessageContext messageContext, String messageText, Serializable... arguments)
     {
-        return this.messageInterpolator.interpolate(messageText, arguments);
-    }
-
-    public void setMessageContext(MessageContext messageContext)
-    {
-        if(this.messageInterpolator instanceof MessageContextAware)
-        {
-            ((MessageContextAware)this.messageInterpolator).setMessageContext(messageContext);
-        }
-    }
-
-    public MessageContext getMessageContext()
-    {
-        if(this.messageInterpolator instanceof MessageContextAware)
-        {
-            return ((MessageContextAware)this.messageInterpolator).getMessageContext();
-        }
-        return null;
+        return this.messageInterpolator.interpolate(messageContext, messageText, arguments);
     }
 }

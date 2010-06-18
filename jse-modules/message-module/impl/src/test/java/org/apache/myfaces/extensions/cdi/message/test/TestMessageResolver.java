@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.cdi.message.test;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
-import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -35,7 +35,9 @@ class TestMessageResolver implements MessageResolver
     private static final String TEST_TECHNICAL_MESSAGES = "org.apache.myfaces.extensions.cdi.message.test.t_messages";
     private static final String TEST_LABELS = "org.apache.myfaces.extensions.cdi.message.test.labels";
 
-    public String getMessage(String key, Locale locale, Map<Class, Class<? extends MessagePayload>> messagePayload)
+    public String getMessage(MessageContext messageContext,
+                             String key,
+                             Map<Class, Class<? extends MessagePayload>> messagePayload)
     {
         if (!isKey(key))
         {
@@ -48,13 +50,16 @@ class TestMessageResolver implements MessageResolver
 
             if(messagePayload.containsKey(Label.class))
             {
-                return ResourceBundle.getBundle(TEST_LABELS, locale, getClassLoader()).getString(key);
+                return ResourceBundle.getBundle(
+                        TEST_LABELS, messageContext.getLocale(), getClassLoader()).getString(key);
             }
             else if(messagePayload.containsKey(TechnicalMessage.class))
             {
-                return ResourceBundle.getBundle(TEST_TECHNICAL_MESSAGES, locale, getClassLoader()).getString(key);
+                return ResourceBundle.getBundle(
+                        TEST_TECHNICAL_MESSAGES, messageContext.getLocale(), getClassLoader()).getString(key);
             }
-            return ResourceBundle.getBundle(TEST_MESSAGES, locale, getClassLoader()).getString(key);
+            return ResourceBundle.getBundle(
+                    TEST_MESSAGES, messageContext.getLocale(), getClassLoader()).getString(key);
         }
         catch (MissingResourceException e)
         {

@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.SimpleELContext;
 
@@ -47,13 +48,13 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
         this.elProvider = elProvider;
     }
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         List<NamedArgument> namedArguments = addNamedArguments(arguments);
 
         if (namedArguments.size() > 0)
         {
-            return interpolateNamedArguments(messageDescriptor, namedArguments);
+            return interpolateNamedArguments(messageContext, messageDescriptor, namedArguments);
         }
         return messageDescriptor;
     }
@@ -74,7 +75,9 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
     }
 
     //TODO add warning for unused arguments,...
-    private String interpolateNamedArguments(String messageDescriptor, List<NamedArgument> namedArguments)
+    private String interpolateNamedArguments(MessageContext messageContext,
+                                             String messageDescriptor,
+                                             List<NamedArgument> namedArguments)
     {
         ExpressionFactory factory = this.elProvider.createExpressionFactory();
         SimpleELContext elContext = this.elProvider.createELContext(this.elProvider.createELResolver());
@@ -82,7 +85,8 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
         for (NamedArgument argument : namedArguments)
         {
             Serializable value = argument.getValue();
-            elContext.setVariable(argument.getName(), factory.createValueExpression(value, value.getClass()));
+            Class valueType = value != null ? value.getClass() : Object.class;
+            elContext.setVariable(argument.getName(), factory.createValueExpression(value, valueType));
         }
 
         Matcher matcher = MESSAGE_ARGS_PATTERN.matcher(messageDescriptor);
@@ -99,7 +103,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
 
             if (value != null && !isUnresolvedArgument(expression, value))
             {
-                resolvedArgumentValue = formatAsString(value).toString();
+                resolvedArgumentValue = formatAsString(messageContext, value).toString();
             }
             else
             {

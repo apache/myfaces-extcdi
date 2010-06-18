@@ -29,11 +29,13 @@ public interface MessageInterpolator
     /**
      * replaces the arguments of the given message with the given arguments
      *
+     * @param messageContext the current {@link org.apache.myfaces.extensions.cdi.message.api.MessageContext}
+     * instead of a MessageContextAware interface. we need it to avoid expensive operations like locking or deep cloning
      * @param messageText the message text which has to be interpolated
      * @param arguments a list of numbered and/or named arguments for the current message
      * @return the final (interpolated) message text
      *         if it was possible to replace the parameters with the given attributes
      *         the unmodified messageText otherwise
      */
-    String interpolate(String messageText, Serializable... arguments);
+    String interpolate(MessageContext messageContext, String messageText, Serializable... arguments);
 }

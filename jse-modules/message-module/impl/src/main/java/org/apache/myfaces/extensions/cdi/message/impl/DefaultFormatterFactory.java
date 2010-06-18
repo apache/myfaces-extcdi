@@ -81,7 +81,7 @@ public class DefaultFormatterFactory implements FormatterFactory
 
             if (found == null)
             {
-                this.logger.warning("default formatter used for: " + type.getName());
+                this.logger.info("default formatter used for: " + type.getName());
                 found = FormatterBuilder.createFormatter(type);
             }
 

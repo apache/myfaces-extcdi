@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 
 import java.io.Serializable;
 
@@ -29,7 +30,7 @@ class DefaultMessageInterpolator implements MessageInterpolator, Serializable
 {
     private static final long serialVersionUID = -8854087197813424812L;
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         return messageDescriptor;
     }

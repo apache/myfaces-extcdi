@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
@@ -52,8 +51,8 @@ public class ClientAwareMessageResolverProducer
     {
         return new MessageResolver()
         {
-            public String getMessage(String messageDescriptor,
-                                     Locale locale,
+            public String getMessage(MessageContext messageContext,
+                                     String messageDescriptor,
                                      Map<Class, Class<? extends MessagePayload>> messagePayload)
             {
                 FacesContext facesContext = FacesContext.getCurrentInstance();

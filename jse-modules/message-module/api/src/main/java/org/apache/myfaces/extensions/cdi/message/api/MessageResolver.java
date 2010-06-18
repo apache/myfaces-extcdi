@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.message.api;
 
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -31,10 +30,12 @@ public interface MessageResolver
     static final String MISSING_RESOURCE_MARKER = "???";
 
     /**
+     * @param messageContext the current {@link org.apache.myfaces.extensions.cdi.message.api.MessageContext}
      * @param messageDescriptor the message key (or in-lined text) of the current message
-     * @param locale the current locale
      * @param payload the payload of the message e.g. to use different message sources
      * @return the final but not interpolated message text
      */
-    String getMessage(String messageDescriptor, Locale locale, Map<Class, Class<? extends MessagePayload>> payload);
+    String getMessage(MessageContext messageContext,
+                      String messageDescriptor,
+                      Map<Class, Class<? extends MessagePayload>> payload);
 }

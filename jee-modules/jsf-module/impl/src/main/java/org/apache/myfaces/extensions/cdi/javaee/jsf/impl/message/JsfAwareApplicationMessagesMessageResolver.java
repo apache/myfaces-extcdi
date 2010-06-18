@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.message;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 
@@ -31,8 +32,8 @@ import java.util.MissingResourceException;
  */
 class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
 {
-    public String getMessage(String messageDescriptor,
-                             Locale locale,
+    public String getMessage(MessageContext messageContext,
+                             String messageDescriptor,
                              Map<Class, Class<? extends MessagePayload>> messagePayload)
     {
         if (!isKey(messageDescriptor))
@@ -44,11 +45,11 @@ class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
         {
             messageDescriptor = extractKey(messageDescriptor);
 
-            return JsfUtils.getCustomFacesMessageBundle(locale).getString(messageDescriptor);
+            return JsfUtils.getCustomFacesMessageBundle(messageContext.getLocale()).getString(messageDescriptor);
         }
         catch (MissingResourceException e)
         {
-            return defaultFacesMessage(messageDescriptor, locale);
+            return defaultFacesMessage(messageDescriptor, messageContext.getLocale());
         }
     }
 

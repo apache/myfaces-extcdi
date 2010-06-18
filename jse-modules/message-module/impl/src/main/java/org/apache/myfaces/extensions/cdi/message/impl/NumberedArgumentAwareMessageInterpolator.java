@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 
 import java.io.Serializable;
 import java.text.MessageFormat;
@@ -32,13 +33,13 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
 {
     private static final long serialVersionUID = 8699632465559596371L;
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         Serializable[] numberedArguments = addNumberedArguments(arguments);
 
         if (numberedArguments.length > 0)
         {
-            return formatMessage(messageDescriptor, numberedArguments);
+            return formatMessage(messageContext, messageDescriptor, numberedArguments);
         }
 
         return messageDescriptor;
@@ -60,7 +61,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
     }
 
     //TODO add warning for unused arguments,...
-    private String formatMessage(String messageDescriptor, Serializable[] arguments)
+    private String formatMessage(MessageContext messageContext, String messageDescriptor, Serializable[] arguments)
     {
         Object[] localizedArguments = null;
         Object argument;
@@ -69,7 +70,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
         for (int i = 0; i < arguments.length; i++)
         {
             argument = arguments[i];
-            localizedArgument = formatAsString(argument);
+            localizedArgument = formatAsString(messageContext, argument);
 
             if (localizedArgument != argument)
             {
@@ -82,8 +83,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
             }
         }
 
-        MessageFormat messageFormat = new MessageFormat(
-                messageDescriptor, this.messageContext.getLocale());
+        MessageFormat messageFormat = new MessageFormat(messageDescriptor, messageContext.getLocale());
 
         if (localizedArguments == null)
         {

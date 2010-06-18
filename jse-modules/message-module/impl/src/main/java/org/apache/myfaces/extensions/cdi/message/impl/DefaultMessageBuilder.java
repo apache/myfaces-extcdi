@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfigAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
@@ -347,38 +346,13 @@ class DefaultMessageBuilder implements MessageBuilder
 
     private String resolveMessage(MessageResolver messageResolver, Message baseMessage)
     {
-        if (messageResolver instanceof MessageContextAware)
-        {
-            ((MessageContextAware) messageResolver).setMessageContext(this.messageContext);
-        }
-
-        try
-        {
-            return messageResolver
-                    .getMessage(baseMessage.getDescriptor(), this.messageContext.getLocale(), baseMessage.getPayload());
-        }
-        finally
-        {
-            cleanupMessageContext(messageResolver);
-        }
+        return messageResolver.getMessage(this.messageContext, baseMessage.getDescriptor(), baseMessage.getPayload());
     }
 
     private String interpolateMessage(MessageInterpolator messageInterpolator,
                                       String messageDescriptor, Serializable... arguments)
     {
-        if (messageInterpolator instanceof MessageContextAware)
-        {
-            ((MessageContextAware) messageInterpolator).setMessageContext(this.messageContext);
-        }
-
-        try
-        {
-            return messageInterpolator.interpolate(getEscapedTemplate(messageDescriptor), arguments);
-        }
-        finally
-        {
-            cleanupMessageContext(messageInterpolator);
-        }
+        return messageInterpolator.interpolate(this.messageContext, getEscapedTemplate(messageDescriptor), arguments);
     }
 
     private String getEscapedTemplate(String messageDescriptor)
@@ -389,14 +363,6 @@ class DefaultMessageBuilder implements MessageBuilder
             return messageDescriptor.substring(1);
         }
         return messageDescriptor;
-    }
-
-    private void cleanupMessageContext(Object object)
-    {
-        if (object instanceof MessageContextAware)
-        {
-            ((MessageContextAware) object).setMessageContext(null);
-        }
     }
 
     protected MessageContext getMessageContext()

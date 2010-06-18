@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.message.impl;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContextAware;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 
 import java.io.Serializable;
@@ -27,39 +26,24 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public class CompositeMessageInterpolator implements MessageInterpolator, MessageContextAware, Serializable
+public class CompositeMessageInterpolator implements MessageInterpolator, Serializable
 {
     private static final long serialVersionUID = 7138747032627702804L;
     private MessageInterpolator[] messageInterpolators;
-    private MessageContext messageContext;
 
     public CompositeMessageInterpolator(MessageInterpolator... messageInterpolators)
     {
         this.messageInterpolators = messageInterpolators;
     }
 
-    public String interpolate(String messageDescriptor, Serializable... arguments)
+    public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         String result = messageDescriptor;
         for (MessageInterpolator messageInterpolator : this.messageInterpolators)
         {
-            if (messageInterpolator instanceof MessageContextAware)
-            {
-                ((MessageContextAware) messageInterpolator).setMessageContext(this.messageContext);
-            }
-            result = messageInterpolator.interpolate(result, arguments);
+            result = messageInterpolator.interpolate(messageContext, result, arguments);
         }
 
         return result;
-    }
-
-    public void setMessageContext(MessageContext messageContext)
-    {
-        this.messageContext = messageContext;
-    }
-
-    public MessageContext getMessageContext()
-    {
-        throw new UnsupportedOperationException();
     }
 }

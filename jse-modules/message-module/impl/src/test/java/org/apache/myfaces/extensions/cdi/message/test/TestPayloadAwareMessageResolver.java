@@ -19,10 +19,10 @@
 package org.apache.myfaces.extensions.cdi.message.test;
 
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -32,7 +32,9 @@ class TestPayloadAwareMessageResolver implements MessageResolver
 {
     private boolean isPayloadAvailable = false; 
 
-    public String getMessage(String key, Locale locale, Map<Class, Class<? extends MessagePayload>> payload)
+    public String getMessage(MessageContext messageContext,
+                             String key,
+                             Map<Class, Class<? extends MessagePayload>> payload)
     {
         if(MessageSeverity.Warn.class.equals(payload.get(MessageSeverity.class)))
         {
