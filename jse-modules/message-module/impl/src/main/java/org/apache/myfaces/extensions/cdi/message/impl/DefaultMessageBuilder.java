@@ -221,22 +221,16 @@ class DefaultMessageBuilder implements MessageBuilder
         MessageResolver messageResolver = this.messageContext.config().getMessageResolver();
         if (messageResolver != null)
         {
-            synchronized (this)
-            {
-                message = resolveMessage(messageResolver, baseMessage);
-            }
+            message = resolveMessage(messageResolver, baseMessage);
         }
 
         MessageInterpolator messageInterpolator = this.messageContext.config().getMessageInterpolator();
 
         if (messageInterpolator != null && message != null)
         {
-            synchronized (this)
-            {
-                return checkedResult(
-                        interpolateMessage(messageInterpolator, message, baseMessage.getArguments()),
-                        baseMessage);
-            }
+            return checkedResult(
+                    interpolateMessage(messageInterpolator, message, baseMessage.getArguments()),
+                    baseMessage);
         }
 
         return checkedResult(message, baseMessage);
