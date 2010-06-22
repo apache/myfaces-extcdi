@@ -40,15 +40,15 @@ public class NamedArguments
     {
     }
 
-    public static Serializable[] convert(Map<String, Serializable> attributes)
+    public static Serializable[] convert(Map<String, Serializable> arguments)
     {
-        if (attributes == null || attributes.size() == 0)
+        if (arguments == null || arguments.size() == 0)
         {
             return new Serializable[]{};
         }
 
         NamedArguments.NamedArgumentBuilder namedArgumentBuilder = new NamedArguments().getNamedArgumentBuilder();
-        for (Map.Entry<String, Serializable> entry : attributes.entrySet())
+        for (Map.Entry<String, Serializable> entry : arguments.entrySet())
         {
             namedArgumentBuilder = namedArgumentBuilder.add(entry.getKey(), entry.getValue());
         }

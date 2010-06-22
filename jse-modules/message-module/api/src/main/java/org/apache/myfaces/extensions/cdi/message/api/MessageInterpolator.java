@@ -34,7 +34,7 @@ public interface MessageInterpolator extends Serializable
      * @param messageText the message text which has to be interpolated
      * @param arguments a list of numbered and/or named arguments for the current message
      * @return the final (interpolated) message text
-     *         if it was possible to replace the parameters with the given attributes
+     *         if it was possible to replace the parameters with the given arguments
      *         the unmodified messageText otherwise
      */
     String interpolate(MessageContext messageContext, String messageText, Serializable... arguments);

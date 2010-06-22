@@ -232,7 +232,7 @@ class DefaultMessageBuilder implements MessageBuilder
             return checkedResult(
                     interpolateMessage(messageInterpolator,
                                        message,
-                                       tryToRestoreLazyArguments(baseMessage, this.messageContext)),
+                                       restoreArguments(baseMessage, this.messageContext)),
                     baseMessage);
         }
 
@@ -315,13 +315,13 @@ class DefaultMessageBuilder implements MessageBuilder
     }
 
     //see javadoc of {@link ArgumentDescriptor} for more details
-    private Serializable[] tryToRestoreLazyArguments(Message baseMessage, MessageContext messageContext)
+    private Serializable[] restoreArguments(Message baseMessage, MessageContext messageContext)
     {
-        if (messageContext == null)
+        if (messageContext == null || baseMessage.getArguments() == null)
         {
             return baseMessage.getArguments();
         }
-        List<Serializable> result = new ArrayList<Serializable>();
+        List<Serializable> result = new ArrayList<Serializable>(baseMessage.getArguments().length);
 
         for (Serializable argument : baseMessage.getArguments())
         {

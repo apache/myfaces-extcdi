@@ -29,7 +29,7 @@ import java.io.Serializable;
 class TestArgument implements Localizable, Serializable
 {
     private static final long serialVersionUID = -4503818588255027507L;
-    private String key;
+    protected String key;
 
     TestArgument(String key)
     {

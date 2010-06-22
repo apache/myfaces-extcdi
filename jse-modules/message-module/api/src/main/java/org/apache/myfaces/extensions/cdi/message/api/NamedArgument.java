@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import java.io.Serializable;
 
 /**
- * to allow a simpler interface for adding attributes.
+ * to allow a simpler interface for adding arguments.
  * furthermore, it allows message with mixed (numbered and named) arguments
  * 
  * @author Gerhard Petracek

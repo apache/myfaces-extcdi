@@ -29,11 +29,11 @@ import org.junit.Test;
 public class ArgumentDescriptorTest extends AbstractTest
 {
     @Test
-    public void lazyNumberedAttributeTest()
+    public void lazyNumberedArgumentsTest()
     {
-        TestArgument dynArgument = new TestArgument("brand");
+        TestArgument dynArgument = new TestArgument("brand_key");
 
-        assertEquals("{brand}", dynArgument.getKey());
+        assertEquals("{brand_key}", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator()).create()
                 .message().text("{info}").argument(dynArgument.getKey()).toText();
@@ -43,16 +43,58 @@ public class ArgumentDescriptorTest extends AbstractTest
     }
 
     @Test
-    public void lazyNamedAttributeTest()
+    public void lazyNamedArgumentsTest()
     {
-        TestArgument dynArgument = new TestArgument("brand");
+        TestArgument dynArgument = new TestArgument("brand_key");
 
-        assertEquals("{brand}", dynArgument.getKey());
+        assertEquals("{brand_key}", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider())).create()
                 .message().text("{brand_info}").namedArgument("brand", dynArgument.getKey()).toText();
 
         assertEquals("jCar", dynArgument.toString(this.messageContext));
         assertEquals("value: jCar", messageText);
+    }
+
+    @Test
+    public void normalTextAsNumberedArgumentsTest()
+    {
+        TestArgument dynArgument = new TestArgument("brand-value") {
+            private static final long serialVersionUID = -5398006578422304127L;
+
+            @Override
+            public String getKey()
+            {
+                return this.key;
+            }
+        };
+
+        assertEquals("brand-value", dynArgument.getKey());
+
+        String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator()).create()
+                .message().text("{info}").argument(dynArgument.getKey()).toText();
+
+        assertEquals("value: brand-value", messageText);
+    }
+
+    @Test
+    public void normalTextAsNamedArgumentsTest()
+    {
+        TestArgument dynArgument = new TestArgument("brand-value") {
+            private static final long serialVersionUID = -5398006578422304127L;
+
+            @Override
+            public String getKey()
+            {
+                return this.key;
+            }
+        };
+
+        assertEquals("brand-value", dynArgument.getKey());
+
+        String messageText = this.messageContext.config().use().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider())).create()
+                .message().text("{brand_info}").namedArgument("brand", dynArgument.getKey()).toText();
+
+        assertEquals("value: brand-value", messageText);
     }
 }
