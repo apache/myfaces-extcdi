@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Default;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayloadKey;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
+import org.apache.myfaces.extensions.cdi.message.api.payload.ArgumentDescriptor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -229,7 +230,9 @@ class DefaultMessageBuilder implements MessageBuilder
         if (messageInterpolator != null && message != null)
         {
             return checkedResult(
-                    interpolateMessage(messageInterpolator, message, baseMessage.getArguments()),
+                    interpolateMessage(messageInterpolator,
+                                       message,
+                                       tryToRestoreLazyArguments(baseMessage, this.messageContext)),
                     baseMessage);
         }
 
@@ -309,6 +312,70 @@ class DefaultMessageBuilder implements MessageBuilder
         result.append(')');
 
         return result.toString();
+    }
+
+    //see javadoc of {@link ArgumentDescriptor} for more details
+    private Serializable[] tryToRestoreLazyArguments(Message baseMessage, MessageContext messageContext)
+    {
+        if (messageContext == null)
+        {
+            return baseMessage.getArguments();
+        }
+        List<Serializable> result = new ArrayList<Serializable>();
+
+        for (Serializable argument : baseMessage.getArguments())
+        {
+            if (isNumberedArgumentValueALazyArgument(argument))
+            {
+                resolveAndProcessLazyNumberedArgument(messageContext, result, (String)argument);
+            }
+            else if (argument instanceof NamedArgument && isNamedArgumentValueALazyArgument(((NamedArgument) argument)))
+            {
+                resolveAndProcessLazyNamedArgument(messageContext, result, (NamedArgument) argument);
+            }
+            else
+            {
+                result.add(argument);
+            }
+        }
+        return result.toArray(new Serializable[result.size()]);
+    }
+
+    private boolean isNumberedArgumentValueALazyArgument(Serializable argument)
+    {
+        return argument instanceof String && isKey((String) argument);
+    }
+
+    private boolean isNamedArgumentValueALazyArgument(NamedArgument namedArgument)
+    {
+        return namedArgument.getValue() instanceof String && isKey((String) namedArgument.getValue());
+    }
+
+    private void resolveAndProcessLazyNumberedArgument(
+            MessageContext messageContext, List<Serializable> result, String argument)
+    {
+        String resolvedArgumentValue = resolveValueOfArgumentDescriptor(messageContext, argument);
+
+        result.add(resolvedArgumentValue);
+    }
+
+    private void resolveAndProcessLazyNamedArgument(
+            MessageContext messageContext, List<Serializable> result, NamedArgument argument)
+    {
+        String namedArgumentValue = (String) argument.getValue();
+
+        String resolvedNamedArgumentValue = resolveValueOfArgumentDescriptor(messageContext, namedArgumentValue);
+
+
+        result.add(new DefaultNamedArgument(argument.getName(), resolvedNamedArgumentValue));
+    }
+
+    private String resolveValueOfArgumentDescriptor(MessageContext messageContext, String argumentAsKey)
+    {
+        return messageContext.message()
+                .text(argumentAsKey)
+                .payload(ArgumentDescriptor.class)
+                .toText();
     }
 
     private boolean isDefaultFormatter(Class<? extends Formatter> formatterClass)

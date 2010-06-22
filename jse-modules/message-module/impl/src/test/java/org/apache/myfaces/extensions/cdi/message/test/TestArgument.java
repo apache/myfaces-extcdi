@@ -18,26 +18,37 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import junit.framework.TestCase;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.apache.myfaces.extensions.cdi.message.api.Localizable;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        SimpleMessageTest.class,
-        MessageSeverityTest.class,
-        ParametrizedMessageInterpolationTest.class,
-        FormattedMessageArgumentTest.class,
-        PayloadTest.class,
-        ExtensibilityTest.class,
-        MessageFilterTest.class,
-        HelperTest.class,
-        SerializationTest.class,
-        LocalizableMessageArgumentTest.class,
-        ArgumentDescriptorTest.class})
-public class AllTests extends TestCase
+class TestArgument implements Localizable, Serializable
 {
+    private static final long serialVersionUID = -4503818588255027507L;
+    private String key;
+
+    TestArgument(String key)
+    {
+        this.key = key;
+    }
+
+    public String getKey()
+    {
+        return "{" + key + "}";
+    }
+
+    public String toString(MessageContext messageContext)
+    {
+        return messageContext.message().text(getKey()).toText();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "???" + key + "???";
+    }
 }
