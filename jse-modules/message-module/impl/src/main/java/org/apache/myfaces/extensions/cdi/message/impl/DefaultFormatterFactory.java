@@ -27,7 +27,6 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,16 +49,7 @@ public class DefaultFormatterFactory implements FormatterFactory
     private Map<FormatterConfigKey, GenericConfig> formatterConfigs =
             new ConcurrentHashMap<FormatterConfigKey, GenericConfig>();
 
-    private Logger getLogger()
-    {
-        if(this.logger == null)
-        {
-            this.logger = Logger.getLogger(getClass().getName());
-        }
-        return this.logger;
-    }
-
-    public FormatterFactory add(Formatter formatter)
+    public synchronized FormatterFactory add(Formatter formatter)
     {
         this.formatters.add(formatter);
         formatterCache = null;
@@ -84,7 +74,7 @@ public class DefaultFormatterFactory implements FormatterFactory
         {
             if (this.formatterCache == null)
             {
-                this.formatterCache = new HashMap<Class<?>, Formatter>();
+                this.formatterCache = new ConcurrentHashMap<Class<?>, Formatter>();
             }
 
             Formatter found = findFormatterFor(type, this.formatters);
@@ -136,6 +126,15 @@ public class DefaultFormatterFactory implements FormatterFactory
     private FormatterConfigKey createKey(Class<?> type, Locale locale)
     {
         return new FormatterConfigKey(type, locale);
+    }
+
+    private Logger getLogger()
+    {
+        if(this.logger == null)
+        {
+            this.logger = Logger.getLogger(getClass().getName());
+        }
+        return this.logger;
     }
 
     class FormatterConfigKey implements Serializable
