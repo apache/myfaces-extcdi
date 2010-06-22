@@ -101,12 +101,6 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
 
     private void addArgumentToMessage(Object argument)
     {
-        //TODO
-        if(argument instanceof Localizable && this.getMessageContextConfig() != null)
-        {
-            argument = ((Localizable)argument).toString(this.getMessageContextConfig().use().create());
-        }
-
         Serializable result;
 
         if(argument instanceof Serializable)
@@ -115,7 +109,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         }
         else
         {
-            result = argument != null ? argument.toString() : "null";
+            result = processNoneSerializableArgument(argument);
         }
         checkArgument(result);
         if (argument instanceof NamedArgument)
@@ -125,6 +119,26 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         else
         {
             addNumberedArgument(result);
+        }
+    }
+
+    /**
+     * if the argument isn't serializable we aren't allowed to store the instance itself
+     * -> we have to store the string instead
+     * (if we are aware of the context and the parameter implements {@link Localizable} we use the localized value)
+     *
+     * @param argument current argument
+     * @return the string value of the argument
+     */
+    private String processNoneSerializableArgument(Object argument)
+    {
+        if(argument instanceof Localizable && this.getMessageContextConfig() != null)
+        {
+            return ((Localizable)argument).toString(this.getMessageContextConfig().use().create());
+        }
+        else
+        {
+            return argument != null ? argument.toString() : "null";
         }
     }
 

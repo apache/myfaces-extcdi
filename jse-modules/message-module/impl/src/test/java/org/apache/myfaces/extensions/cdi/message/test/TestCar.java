@@ -16,41 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.impl.formatter;
+package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.Default;
-import org.apache.myfaces.extensions.cdi.message.api.Formatter;
-import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.Localizable;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-@Default
-class ToStringFormatter implements Formatter<Object>, Serializable
+class TestCar implements Localizable, Serializable
 {
-    private static final long serialVersionUID = 3529715901768617301L;
+    private static final long serialVersionUID = -6656106590590481348L;
 
-    private Class responsibleFor;
-
-    ToStringFormatter(Class type)
+    public String toString(MessageContext messageContext)
     {
-        this.responsibleFor = type;
-    }
-
-    public boolean isResponsibleFor(Class<?> type)
-    {
-        return type.isAssignableFrom(this.responsibleFor);
-    }
-
-    public String format(MessageContext messageContext, Object valueToFormat)
-    {
-        if(valueToFormat instanceof Localizable)
-        {
-            return ((Localizable)valueToFormat).toString(messageContext);
-        }
-        return valueToFormat != null ? valueToFormat.toString() : "";
+        return messageContext.message().text("{brand}").toText();
     }
 }

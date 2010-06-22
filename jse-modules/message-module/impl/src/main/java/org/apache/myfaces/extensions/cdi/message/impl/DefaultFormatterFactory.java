@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 /**
@@ -46,7 +47,8 @@ public class DefaultFormatterFactory implements FormatterFactory
 
     private List<Formatter> formatters = new ArrayList<Formatter>();
     private Map<Class<?>, Formatter> formatterCache = null;
-    private Map<FormatterConfigKey, GenericConfig> formatterConfigs = new HashMap<FormatterConfigKey, GenericConfig>();
+    private Map<FormatterConfigKey, GenericConfig> formatterConfigs =
+            new ConcurrentHashMap<FormatterConfigKey, GenericConfig>();
 
     private Logger getLogger()
     {

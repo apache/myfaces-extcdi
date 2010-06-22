@@ -35,7 +35,8 @@ import org.junit.runners.Suite;
         ExtensibilityTest.class,
         MessageFilterTest.class,
         HelperTest.class,
-        SerializationTest.class})
+        SerializationTest.class,
+        LocalizableMessageArgumentTest.class})
 public class AllTests extends TestCase
 {
 }
