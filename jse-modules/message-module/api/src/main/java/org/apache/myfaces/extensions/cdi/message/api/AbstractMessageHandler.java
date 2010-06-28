@@ -20,15 +20,15 @@ package org.apache.myfaces.extensions.cdi.message.api;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * @author Gerhard Petracek
  */
 public abstract class AbstractMessageHandler implements MessageHandler
 {
-    private Set<MessageFilter> messageFilters = new HashSet<MessageFilter>();
+    private Set<MessageFilter> messageFilters = new CopyOnWriteArraySet<MessageFilter>();
 
     public void addMessage(MessageContext messageContext, Message message)
     {
@@ -44,17 +44,17 @@ public abstract class AbstractMessageHandler implements MessageHandler
     {
         if (this.messageFilters == null)
         {
-            this.messageFilters = new HashSet<MessageFilter>();
+            this.messageFilters = new CopyOnWriteArraySet<MessageFilter>();
         }
         this.messageFilters.addAll(Arrays.asList(messageFilters));
     }
 
-    public synchronized Set<MessageFilter> getMessageFilters()
+    public Set<MessageFilter> getMessageFilters()
     {
         return Collections.unmodifiableSet(this.messageFilters);
     }
 
-    private synchronized boolean isMessageAllowed(MessageContext messageContext, Message message)
+    private boolean isMessageAllowed(MessageContext messageContext, Message message)
     {
         for (MessageFilter messageFilter : this.messageFilters)
         {

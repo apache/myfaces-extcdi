@@ -25,11 +25,11 @@ import org.apache.myfaces.extensions.cdi.message.impl.formatter.FormatterBuilder
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
 
 /**
@@ -44,7 +44,7 @@ public class DefaultFormatterFactory implements FormatterFactory
 
     transient protected Logger logger = getLogger();
 
-    private List<Formatter> formatters = new ArrayList<Formatter>();
+    private List<Formatter> formatters = new CopyOnWriteArrayList<Formatter>();
     private Map<Class<?>, Formatter> formatterCache = null;
     private Map<FormatterConfigKey, GenericConfig> formatterConfigs =
             new ConcurrentHashMap<FormatterConfigKey, GenericConfig>();
@@ -111,7 +111,7 @@ public class DefaultFormatterFactory implements FormatterFactory
         return this.formatterConfigs.get(createKey(type, locale));
     }
 
-    private synchronized Formatter findFormatterFor(Class<?> type)
+    private Formatter findFormatterFor(Class<?> type)
     {
         for (Formatter formatter : this.formatters)
         {
