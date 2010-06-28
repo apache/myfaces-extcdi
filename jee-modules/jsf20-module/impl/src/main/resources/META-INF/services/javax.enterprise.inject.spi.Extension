@@ -16,3 +16,6 @@
 # specific language governing permissions and limitations
 # under the License.
 #####################################################################################
+
+# myfaces-codi support for @ViewScoped
+#org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.view.ViewScopedExtension
