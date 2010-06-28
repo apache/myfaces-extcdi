@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.projectstage;
 
+import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -91,8 +92,8 @@ import java.util.logging.Logger;
    if (myOwnPs.equals(MyOwnProjectStage.MyOwnProjectStage)) ... 
  * </pre>
  *
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
+@Typed()
 public abstract class ProjectStage implements Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -182,32 +183,38 @@ public abstract class ProjectStage implements Serializable
     }
 
 
+    @Typed()
     public static final class CUnitTest extends ProjectStage
     {
     };
     public static final CUnitTest UnitTest = new CUnitTest();
 
 
+    @Typed()
     public static final class CDevelopment extends ProjectStage
     {
     };
     public static final CDevelopment Development = new CDevelopment();
 
+    @Typed()
     public static final class CSystemTest extends ProjectStage
     {
     };
     public static final CSystemTest SystemTest = new CSystemTest();
 
+    @Typed()
     public static final class CIntegrationTest extends ProjectStage
     {
     };
     public static final CIntegrationTest IntegrationTest = new CIntegrationTest();
 
+    @Typed()
     public static final class CStaging extends ProjectStage
     {
     };
     public static final CStaging Staging = new CStaging();
 
+    @Typed()
     public static final class CProduction extends ProjectStage
     {
     };

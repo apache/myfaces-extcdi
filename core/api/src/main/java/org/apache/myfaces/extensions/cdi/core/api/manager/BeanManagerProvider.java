@@ -34,8 +34,6 @@ import javax.enterprise.inject.spi.Extension;
  * <pre>
  * BeanManager bm = BeanManagerProvider.getInstance().getBeanManager();
  * </pre>
- *
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class BeanManagerProvider implements Extension
 {
