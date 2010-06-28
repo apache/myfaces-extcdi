@@ -28,7 +28,6 @@ import org.apache.myfaces.extensions.cdi.message.api.CompositeMessageHandler;
 import org.apache.myfaces.extensions.cdi.message.api.FormatterFactory;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 import org.apache.myfaces.extensions.cdi.message.api.GenericConfig;
-import org.apache.myfaces.extensions.cdi.message.impl.formatter.FormatterBuilder;
 
 import java.util.Locale;
 import java.util.Set;
@@ -50,7 +49,6 @@ class DefaultMessageContextConfig implements MessageContextConfig
     DefaultMessageContextConfig()
     {
         resetMessageContextConfig();
-        addNewFormatter(FormatterBuilder.createFormatter(Number.class));
     }
 
     private DefaultMessageContextConfig(MessageContextConfig messageContextConfigTemplate)
