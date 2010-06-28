@@ -51,8 +51,11 @@ public class DefaultFormatterFactory implements FormatterFactory
 
     public synchronized FormatterFactory add(Formatter formatter)
     {
-        this.formatters.add(formatter);
-        formatterCache = null;
+        if(!this.formatters.contains(formatter))
+        {
+            this.formatters.add(formatter);
+            formatterCache = null;
+        }
         return this;
     }
 
