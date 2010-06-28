@@ -247,7 +247,7 @@ class DefaultMessageContextConfig implements MessageContextConfig
         return this.localeResolver;
     }
 
-    public MessageHandler getMessageHandler()
+    public synchronized MessageHandler getMessageHandler()
     {
         return new DefaultCompositeMessageHandler(this.messageHandlers);
     }

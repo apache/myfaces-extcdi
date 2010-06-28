@@ -56,7 +56,7 @@ public class DefaultFormatterFactory implements FormatterFactory
         return this;
     }
 
-    public List<Formatter> reset()
+    public synchronized List<Formatter> reset()
     {
         List<Formatter> oldFormatters = Collections.unmodifiableList(this.formatters);
         this.formatters.clear();
@@ -77,7 +77,7 @@ public class DefaultFormatterFactory implements FormatterFactory
                 this.formatterCache = new ConcurrentHashMap<Class<?>, Formatter>();
             }
 
-            Formatter found = findFormatterFor(type, this.formatters);
+            Formatter found = findFormatterFor(type);
 
             if (found == null)
             {
@@ -111,9 +111,9 @@ public class DefaultFormatterFactory implements FormatterFactory
         return this.formatterConfigs.get(createKey(type, locale));
     }
 
-    private Formatter findFormatterFor(Class<?> type, Iterable<Formatter> formatters)
+    private synchronized Formatter findFormatterFor(Class<?> type)
     {
-        for (Formatter formatter : formatters)
+        for (Formatter formatter : this.formatters)
         {
             if (formatter.isResponsibleFor(type))
             {

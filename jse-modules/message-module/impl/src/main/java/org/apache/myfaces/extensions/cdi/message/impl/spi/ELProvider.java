@@ -20,11 +20,12 @@ package org.apache.myfaces.extensions.cdi.message.impl.spi;
 
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ELProvider
+public interface ELProvider extends Serializable
 {
     ExpressionFactory createExpressionFactory();
 

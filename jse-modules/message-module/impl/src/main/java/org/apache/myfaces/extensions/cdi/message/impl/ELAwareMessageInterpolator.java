@@ -75,7 +75,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
     }
 
     //TODO add warning for unused arguments,...
-    private String interpolateNamedArguments(MessageContext messageContext,
+    private synchronized String interpolateNamedArguments(MessageContext messageContext,
                                              String messageDescriptor,
                                              List<NamedArgument> namedArguments)
     {
@@ -108,6 +108,7 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
             else
             {
                 resolvedArgumentValue = '{' + expression + '}';
+                //resolvedArgumentValue = ""; //TODO can we use it as alternative?
             }
 
             matcher.appendReplacement(buffer, resolvedArgumentValue);

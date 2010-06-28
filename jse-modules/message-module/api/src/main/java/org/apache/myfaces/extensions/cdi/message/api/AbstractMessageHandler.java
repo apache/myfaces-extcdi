@@ -40,7 +40,7 @@ public abstract class AbstractMessageHandler implements MessageHandler
 
     protected abstract void processMessage(MessageContext messageContext, Message message);
 
-    public void addMessageFilter(MessageFilter... messageFilters)
+    public synchronized void addMessageFilter(MessageFilter... messageFilters)
     {
         if (this.messageFilters == null)
         {
@@ -49,12 +49,12 @@ public abstract class AbstractMessageHandler implements MessageHandler
         this.messageFilters.addAll(Arrays.asList(messageFilters));
     }
 
-    public Set<MessageFilter> getMessageFilters()
+    public synchronized Set<MessageFilter> getMessageFilters()
     {
         return Collections.unmodifiableSet(this.messageFilters);
     }
 
-    private boolean isMessageAllowed(MessageContext messageContext, Message message)
+    private synchronized boolean isMessageAllowed(MessageContext messageContext, Message message)
     {
         for (MessageFilter messageFilter : this.messageFilters)
         {
