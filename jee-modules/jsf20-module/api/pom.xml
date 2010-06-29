@@ -38,8 +38,17 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-message-module-impl</artifactId>
+        </dependency>
+        
 
         <dependency>
            <groupId>javax.el</groupId>

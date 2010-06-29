@@ -25,7 +25,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>6</version>
+        <version>8</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
@@ -42,11 +42,6 @@
     </scm>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>apache.snapshots</id>
-            <name>Apache Maven Snapshot Repository</name>
-            <url>scpexe://people.apache.org/www/people.apache.org/repo/m2-snapshot-repository</url>
-        </snapshotRepository>
         <site>
             <id>apache-site</id>
             <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/cdi</url>
