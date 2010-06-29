@@ -36,6 +36,10 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <myfaces2.version>2.0.0</myfaces2.version>
+    </properties>
+
     <modules>
         <module>api</module>
         <module>impl</module>
@@ -45,7 +49,7 @@
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
-            <version>${jsf.version}</version>
+            <version>${myfaces2.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -57,7 +61,4 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <jsf.version>2.0.0-beta-2</jsf.version>
-    </properties>
 </project>
