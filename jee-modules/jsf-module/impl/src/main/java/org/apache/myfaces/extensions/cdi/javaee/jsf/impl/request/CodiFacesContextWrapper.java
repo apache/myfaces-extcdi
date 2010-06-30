@@ -44,16 +44,26 @@ class CodiFacesContextWrapper extends FacesContext
 
     private BeanManager beanManager;
 
+    /** don't use it directly, use lazy initialising {@link #getBroadcaster()} instead */
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
-        this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
+    }
 
-        initBroadcaster();
 
-        broadcastBeforeFacesRequestEvent();
+    private BeforeAfterFacesRequestBroadcaster getBroadcaster()
+    {
+        if (beforeAfterFacesRequestBroadcaster == null)
+        {
+            this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+            initBroadcaster();
+
+            broadcastBeforeFacesRequestEvent();
+        }
+        return beforeAfterFacesRequestBroadcaster;
     }
 
     private void broadcastBeforeFacesRequestEvent()
@@ -63,7 +73,7 @@ class CodiFacesContextWrapper extends FacesContext
 
     private void broadcastAfterFacesRequestEvent()
     {
-        this.beforeAfterFacesRequestBroadcaster.broadcastAfterFacesRequestEvent(this);
+        getBroadcaster().broadcastAfterFacesRequestEvent(this);
     }
 
     public ELContext getELContext()
