@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.view;
 
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;

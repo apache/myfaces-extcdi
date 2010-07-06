@@ -38,12 +38,12 @@ public class BeforeAfterFacesRequestBroadcaster
     @AfterFacesRequest
     private Event<FacesContext> afterFacesRequestEvent;
 
-    void broadcastBeforeFacesRequestEvent(FacesContext facesContext)
+    public void broadcastBeforeFacesRequestEvent(FacesContext facesContext)
     {
         this.beforeFacesRequestEvent.fire(facesContext);
     }
 
-    void broadcastAfterFacesRequestEvent(FacesContext facesContext)
+    public void broadcastAfterFacesRequestEvent(FacesContext facesContext)
     {
         this.afterFacesRequestEvent.fire(facesContext);
     }

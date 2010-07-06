@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
@@ -26,15 +26,15 @@ import javax.faces.FacesException;
 /**
  * @author Gerhard Petracek
  */
-public class CodiFacesContextFactory extends FacesContextFactory
+public class CodiFacesContextFactory extends
+         org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory
 {
-    protected FacesContextFactory wrappedFacesContextFactory;
-
     public CodiFacesContextFactory(FacesContextFactory wrappedFacesContextFactory)
     {
-        this.wrappedFacesContextFactory = wrappedFacesContextFactory;
+        super(wrappedFacesContextFactory);
     }
 
+    @Override
     public FacesContext getFacesContext(Object context,
                                         Object request,
                                         Object response,

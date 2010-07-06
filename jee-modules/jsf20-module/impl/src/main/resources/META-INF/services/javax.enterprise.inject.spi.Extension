@@ -18,4 +18,4 @@
 #####################################################################################
 
 # myfaces-codi support for @ViewScoped
-#org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.view.ViewScopedExtension
+#org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.view.ViewScopedExtension

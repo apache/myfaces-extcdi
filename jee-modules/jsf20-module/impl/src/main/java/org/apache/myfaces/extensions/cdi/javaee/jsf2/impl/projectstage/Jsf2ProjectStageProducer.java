@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.projectstage;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
@@ -27,14 +27,13 @@ import javax.faces.context.FacesContext;
  * This is a JSF-2 specific version of the {@link ProjectStageProducer}.
  * In addition to it's parent class, it will first try to pickup the
  * JSF ProjectStage from the Application. If this returns the JSF
- * {@link javax.faces.application.ProjectStage.Production}, we'll go on
+ * {@link javax.faces.application.ProjectStage#Production}, we'll go on
  * and try to figure out our own EXTCDI 
  * {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}s
  * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class Jsf2ProjectStageProducer extends ProjectStageProducer
 {
-
     @Override
     protected ProjectStage determineCustomProjectStage()
     {
