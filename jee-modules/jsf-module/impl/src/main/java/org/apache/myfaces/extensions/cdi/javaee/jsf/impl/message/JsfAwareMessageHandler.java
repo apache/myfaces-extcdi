@@ -34,10 +34,12 @@ import java.util.List;
  */
 class JsfAwareMessageHandler extends AbstractMessageHandler
 {
+    private static final long serialVersionUID = -7193428173462936712L;
+
     @Override
     protected void processMessage(MessageContext messageContext, Message message)
     {
-        Class<? extends MessagePayload> severity = MessageSeverity.Info.class;
+        MessagePayload severity = MessageSeverity.INFO;
 
         if (message instanceof MessageWithSeverity)
         {
@@ -50,25 +52,25 @@ class JsfAwareMessageHandler extends AbstractMessageHandler
                         message.toString(messageContext)));
     }
 
-    private FacesMessage.Severity convertSeverity(Class<? extends MessagePayload> payload)
+    private FacesMessage.Severity convertSeverity(MessagePayload payload)
     {
-        if (MessageSeverity.Info.class.isAssignableFrom(payload))
+        if (MessageSeverity.INFO.equals(payload))
         {
             return FacesMessage.SEVERITY_INFO;
         }
-        if (MessageSeverity.Warn.class.isAssignableFrom(payload))
+        if (MessageSeverity.WARN.equals(payload))
         {
             return FacesMessage.SEVERITY_WARN;
         }
-        if (MessageSeverity.Error.class.isAssignableFrom(payload))
+        if (MessageSeverity.ERROR.equals(payload))
         {
             return FacesMessage.SEVERITY_ERROR;
         }
-        if (MessageSeverity.Fatal.class.isAssignableFrom(payload))
+        if (MessageSeverity.FATAL.equals(payload))
         {
             return FacesMessage.SEVERITY_FATAL;
         }
-        throw new IllegalArgumentException(payload.getName());
+        throw new IllegalArgumentException(payload.getClass().getName());
     }
 
     public void removeMessage(Message message)

@@ -31,7 +31,7 @@ public interface MessageBuilder extends Serializable
      * @param messagePayload payload for the current message
      * @return the current instance of the message builder to allow a fluent api
      */
-    MessageBuilder payload(Class<? extends MessagePayload>... messagePayload);
+    MessageBuilder payload(MessagePayload... messagePayload);
 
     /**
      * @param messageDescriptor message key (or inline-text) for the current message

@@ -44,12 +44,12 @@ class TestMessage extends DefaultMessage
         super(messageDescriptor, namedArguments);
     }
 
-    public TestMessage(String messageDescriptor, Class<? extends MessagePayload> severity, Object... arguments)
+    public TestMessage(String messageDescriptor, MessagePayload severity, Object... arguments)
     {
         super(messageDescriptor, severity, arguments);
     }
 
-    public TestMessage(String messageDescriptor, Class<? extends MessagePayload> severity, Set<NamedArgument> namedArguments)
+    public TestMessage(String messageDescriptor, MessagePayload severity, Set<NamedArgument> namedArguments)
     {
         super(messageDescriptor, severity, namedArguments);
     }

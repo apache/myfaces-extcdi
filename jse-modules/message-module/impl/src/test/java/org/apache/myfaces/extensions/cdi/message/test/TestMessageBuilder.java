@@ -39,11 +39,11 @@ class TestMessageBuilder extends SimpleMessageBuilder
 
     public static MessageBuilder technicalMessage()
     {
-        return new TestMessageBuilder().payload(TechnicalMessage.class);
+        return new TestMessageBuilder().payload(TechnicalMessage.PAYLOAD);
     }
 
     public static MessageBuilder label()
     {
-        return new TestMessageBuilder().payload(Label.class);
+        return new TestMessageBuilder().payload(Label.PAYLOAD);
     }
 }

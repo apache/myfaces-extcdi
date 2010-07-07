@@ -44,7 +44,7 @@ public class HelloAdvancedMessageBean
         this.messageContext.message()
                 .text("Hello {bean.text}!")
                 .namedArgument("bean", this.testBean)
-                .payload(MessageSeverity.Warn.class)
+                .payload(MessageSeverity.WARN)
                 .add();
     }
 }

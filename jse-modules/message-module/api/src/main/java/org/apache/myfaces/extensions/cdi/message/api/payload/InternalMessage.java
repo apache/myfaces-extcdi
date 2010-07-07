@@ -23,6 +23,13 @@ package org.apache.myfaces.extensions.cdi.message.api.payload;
  *
  * @author Gerhard Petracek
  */
-public interface InternalMessage extends MessagePayload
+public class InternalMessage extends AbstractMessagePayload
 {
+    private static final long serialVersionUID = -1336393216007593320L;
+
+    public static final InternalMessage PAYLOAD = new InternalMessage();
+    
+    private InternalMessage()
+    {
+    }
 }

@@ -45,6 +45,11 @@ class ToStringFormatter implements Formatter<Object>, Serializable
         return type.isAssignableFrom(this.responsibleFor);
     }
 
+    public boolean isStateless()
+    {
+        return true;
+    }
+
     public String format(MessageContext messageContext, Object valueToFormat)
     {
         if(valueToFormat instanceof Localizable)
@@ -52,5 +57,17 @@ class ToStringFormatter implements Formatter<Object>, Serializable
             return ((Localizable)valueToFormat).toString(messageContext);
         }
         return valueToFormat != null ? valueToFormat.toString() : "";
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return getClass().getName().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        return target instanceof ToStringFormatter;
     }
 }

@@ -29,7 +29,7 @@ class TestMessageFactory implements MessageFactory
 {
     private static final long serialVersionUID = -2561554895243475186L;
 
-    public Message create(String messageDescriptor, Class<? extends MessagePayload> messagePayload)
+    public Message create(String messageDescriptor, MessagePayload messagePayload)
     {
         return new TestMessage(messageDescriptor, messagePayload);
     }

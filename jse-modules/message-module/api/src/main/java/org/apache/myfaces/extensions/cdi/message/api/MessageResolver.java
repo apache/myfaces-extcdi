@@ -38,5 +38,5 @@ public interface MessageResolver extends Serializable
      */
     String getMessage(MessageContext messageContext,
                       String messageDescriptor,
-                      Map<Class, Class<? extends MessagePayload>> payload);
+                      Map<Class, MessagePayload> payload);
 }

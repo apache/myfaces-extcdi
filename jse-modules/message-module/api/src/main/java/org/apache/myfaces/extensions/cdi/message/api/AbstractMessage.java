@@ -38,8 +38,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     protected String messageDescriptor;
     protected Set<NamedArgument> namedArguments = new HashSet<NamedArgument>();
     protected List<Serializable> arguments = new ArrayList<Serializable>();
-    protected Map<Class, Class<? extends MessagePayload>> messagePayload =
-            new HashMap<Class, Class<? extends MessagePayload>>();
+    protected Map<Class, MessagePayload> messagePayload = new HashMap<Class, MessagePayload>();
 
     //optional
     @Deprecated
@@ -58,11 +57,11 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
 
         for (Serializable argument : arguments)
         {
-            if (argument instanceof Class && MessagePayload.class.isAssignableFrom((Class) argument))
+            if (argument instanceof MessagePayload)
             {
                 //TODO log warning
                 //noinspection unchecked
-                addPayload((Class) argument);
+                addPayload((MessagePayload) argument);
             }
             else
             {
@@ -224,23 +223,23 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         return mergedArguments.toArray(new Serializable[mergedArguments.size()]);
     }
 
-    public void addPayload(Class<? extends MessagePayload> payload)
+    public void addPayload(MessagePayload payload)
     {
-        Class key = payload;
+        Class key = payload.getClass();
 
-        if (payload.isAnnotationPresent(MessagePayloadKey.class))
+        if (payload.getClass().isAnnotationPresent(MessagePayloadKey.class))
         {
-            key = payload.getAnnotation(MessagePayloadKey.class).value();
+            key = payload.getClass().getAnnotation(MessagePayloadKey.class).value();
         }
         addPayload(key, payload);
     }
 
-    public Map<Class, Class<? extends MessagePayload>> getPayload()
+    public Map<Class, MessagePayload> getPayload()
     {
         return Collections.unmodifiableMap(this.messagePayload);
     }
 
-    public void addPayload(Class key, Class<? extends MessagePayload> payload)
+    public void addPayload(Class key, MessagePayload payload)
     {
         if (this.messagePayload.containsKey(key))
         {

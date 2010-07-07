@@ -42,23 +42,23 @@ public class DefaultMessage extends AbstractMessageWithSeverity
 
     public DefaultMessage(String messageDescriptor, Serializable... arguments)
     {
-        super(messageDescriptor, MessageSeverity.Info.class, arguments);
+        super(messageDescriptor, MessageSeverity.INFO, arguments);
     }
 
     public DefaultMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
     {
-        super(messageDescriptor, MessageSeverity.Info.class, namedArguments);
+        super(messageDescriptor, MessageSeverity.INFO, namedArguments);
     }
 
     public DefaultMessage(String messageDescriptor,
-                          Class<? extends MessagePayload> severity,
+                          MessagePayload severity,
                           Serializable... arguments)
     {
         super(messageDescriptor, severity, arguments);
     }
 
     public DefaultMessage(String messageDescriptor,
-                          Class<? extends MessagePayload> severity,
+                          MessagePayload severity,
                           Set<NamedArgument> namedArguments)
     {
         super(messageDescriptor, severity, namedArguments);
@@ -83,12 +83,12 @@ public class DefaultMessage extends AbstractMessageWithSeverity
                 .toText();
     }
 
-    private Class<? extends MessagePayload>[] getMessagePayload()
+    private MessagePayload[] getMessagePayload()
     {
-        Class[] result = new Class[getPayload().size()];
+        MessagePayload[] result = new MessagePayload[getPayload().size()];
 
         int i = 0;
-        for(Class<? extends MessagePayload> payload : getPayload().values())
+        for(MessagePayload payload : getPayload().values())
         {
             result[i] = payload;
             i++;

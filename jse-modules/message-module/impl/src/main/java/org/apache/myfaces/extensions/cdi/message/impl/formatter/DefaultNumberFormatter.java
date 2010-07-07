@@ -50,6 +50,11 @@ class DefaultNumberFormatter implements Formatter<Number>
         return Number.class.isAssignableFrom(type);
     }
 
+    public boolean isStateless()
+    {
+        return false;
+    }
+
     public String format(MessageContext messageContext, Number valueToFormat)
     {
         GenericConfig formatterConfig = messageContext.config().getFormatterFactory()
@@ -150,5 +155,53 @@ class DefaultNumberFormatter implements Formatter<Number>
             format.setMinimumIntegerDigits(this.minimumIntegerDigits);//for 0.**
         }
         return format;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof DefaultNumberFormatter))
+        {
+            return false;
+        }
+
+        DefaultNumberFormatter that = (DefaultNumberFormatter) o;
+
+        if (decimalSeparator != null ? !decimalSeparator.equals(that.decimalSeparator) : that.decimalSeparator
+                != null)
+        {
+            return false;
+        }
+        if (groupingSeparator != null ? !groupingSeparator.equals(that.groupingSeparator) : that.groupingSeparator
+                != null)
+        {
+            return false;
+        }
+        if (minimumFractionDigits != null ?
+                !minimumFractionDigits.equals(that.minimumFractionDigits) : that.minimumFractionDigits != null)
+        {
+            return false;
+        }
+        if (minimumIntegerDigits != null ?
+                !minimumIntegerDigits.equals(that.minimumIntegerDigits) : that.minimumIntegerDigits != null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = groupingSeparator != null ? groupingSeparator.hashCode() : 0;
+        result = 31 * result + (decimalSeparator != null ? decimalSeparator.hashCode() : 0);
+        result = 31 * result + (minimumFractionDigits != null ? minimumFractionDigits.hashCode() : 0);
+        result = 31 * result + (minimumIntegerDigits != null ? minimumIntegerDigits.hashCode() : 0);
+        return result;
     }
 }

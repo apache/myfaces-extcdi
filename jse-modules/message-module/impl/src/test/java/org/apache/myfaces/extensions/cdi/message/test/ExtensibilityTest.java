@@ -63,7 +63,7 @@ public class ExtensibilityTest extends AbstractTest
     @Test
     public void customMessageTypeTest()
     {
-        String messageText = this.messageContext.message().text("{hello}").payload(Label.class).toText();
+        String messageText = this.messageContext.message().text("{hello}").payload(Label.PAYLOAD).toText();
 
         assertEquals("test label", messageText);
     }

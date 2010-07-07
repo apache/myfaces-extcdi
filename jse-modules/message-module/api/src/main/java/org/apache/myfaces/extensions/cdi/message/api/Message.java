@@ -47,11 +47,11 @@ public interface Message extends Localizable, Serializable
     /**
      * @return the payload of the message
      */
-    Map<Class, Class<? extends MessagePayload>> getPayload();
+    Map<Class, MessagePayload> getPayload();
 
     /**
      * @param key of the payload
      * @param payload value of the payload
      */
-    void addPayload(Class key, Class<? extends MessagePayload> payload);
+    void addPayload(Class key, MessagePayload payload);
 }

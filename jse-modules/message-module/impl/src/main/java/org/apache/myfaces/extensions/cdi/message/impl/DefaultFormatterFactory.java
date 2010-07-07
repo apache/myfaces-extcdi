@@ -54,7 +54,10 @@ public class DefaultFormatterFactory implements FormatterFactory
         if(!this.formatters.contains(formatter))
         {
             this.formatters.add(formatter);
-            formatterCache = null;
+            if(this.formatterCache != null)
+            {
+                this.formatterCache.clear();
+            }
         }
         return this;
     }
@@ -88,7 +91,10 @@ public class DefaultFormatterFactory implements FormatterFactory
                 found = FormatterBuilder.createFormatter(type);
             }
 
-            this.formatterCache.put(type, found);
+            if(found.isStateless())
+            {
+                this.formatterCache.put(type, found);
+            }
             return found;
         }
     }

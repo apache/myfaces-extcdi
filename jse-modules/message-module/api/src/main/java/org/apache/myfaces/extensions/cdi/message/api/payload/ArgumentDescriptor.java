@@ -44,6 +44,13 @@ package org.apache.myfaces.extensions.cdi.message.api.payload;
  *
  * @author Gerhard Petracek
  */
-public interface ArgumentDescriptor extends MessagePayload
+public final class ArgumentDescriptor extends AbstractMessagePayload
 {
+    private static final long serialVersionUID = -8923485139364779354L;
+
+    public static final ArgumentDescriptor PAYLOAD = new ArgumentDescriptor();
+
+    private ArgumentDescriptor()
+    {
+    }
 }

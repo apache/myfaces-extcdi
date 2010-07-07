@@ -16,21 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.message.impl;
-
-import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
-import org.apache.myfaces.extensions.cdi.message.api.Message;
-import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
+package org.apache.myfaces.extensions.cdi.message.api.payload;
 
 /**
  * @author Gerhard Petracek
  */
-class DefaultMessageFactory implements MessageFactory
+public abstract class AbstractMessagePayload implements MessagePayload
 {
-    private static final long serialVersionUID = 721557343207858857L;
-
-    public Message create(String messageDescriptor, MessagePayload messagePayload)
+    @Override
+    public int hashCode()
     {
-        return new DefaultMessage(messageDescriptor, messagePayload);
+        return getClass().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object target)
+    {
+        return getClass().equals(target.getClass());
     }
 }

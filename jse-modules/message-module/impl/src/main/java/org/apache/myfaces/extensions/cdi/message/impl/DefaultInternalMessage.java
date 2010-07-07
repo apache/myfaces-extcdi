@@ -35,29 +35,29 @@ public class DefaultInternalMessage extends DefaultMessage
 
     public DefaultInternalMessage(String messageDescriptor, Serializable... arguments)
     {
-        super(messageDescriptor, MessageSeverity.Info.class, arguments);
-        addPayload(InternalMessage.class);
+        super(messageDescriptor, MessageSeverity.INFO, arguments);
+        addPayload(InternalMessage.PAYLOAD);
     }
 
     public DefaultInternalMessage(String messageDescriptor, Set<NamedArgument> namedArguments)
     {
-        super(messageDescriptor, MessageSeverity.Info.class, namedArguments);
-        addPayload(InternalMessage.class);
+        super(messageDescriptor, MessageSeverity.INFO, namedArguments);
+        addPayload(InternalMessage.PAYLOAD);
     }
 
     public DefaultInternalMessage(String messageDescriptor,
-                                  Class<? extends MessagePayload> severity,
+                                  MessagePayload severity,
                                   Serializable... arguments)
     {
         super(messageDescriptor, severity, arguments);
-        addPayload(InternalMessage.class);
+        addPayload(InternalMessage.PAYLOAD);
     }
 
     public DefaultInternalMessage(String messageDescriptor,
-                                  Class<? extends MessagePayload> severity,
+                                  MessagePayload severity,
                                   Set<NamedArgument> namedArguments)
     {
         super(messageDescriptor, severity, namedArguments);
-        addPayload(InternalMessage.class);
+        addPayload(InternalMessage.PAYLOAD);
     }
 }

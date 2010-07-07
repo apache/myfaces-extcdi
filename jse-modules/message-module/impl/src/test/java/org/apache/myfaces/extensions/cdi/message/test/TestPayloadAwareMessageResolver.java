@@ -30,13 +30,14 @@ import java.util.Map;
  */
 class TestPayloadAwareMessageResolver implements MessageResolver
 {
-    private boolean isPayloadAvailable = false; 
+    private static final long serialVersionUID = -8103367805263154062L;
+    private boolean isPayloadAvailable = false;
 
     public String getMessage(MessageContext messageContext,
                              String key,
-                             Map<Class, Class<? extends MessagePayload>> payload)
+                             Map<Class, MessagePayload> payload)
     {
-        if(MessageSeverity.Warn.class.equals(payload.get(MessageSeverity.class)))
+        if(MessageSeverity.WARN.equals(payload.get(MessageSeverity.class)))
         {
             isPayloadAvailable = true;
         }

@@ -36,7 +36,7 @@ public class PayloadTest extends AbstractTest
         this.messageContext.config().change().addMessageHandler(new TestInternalMessageAwareMessageHandler());
 
         this.messageContext.message().text("test msg 1").add();
-        this.messageContext.message().text("test msg 2").payload(InternalMessage.class).add();
+        this.messageContext.message().text("test msg 2").payload(InternalMessage.PAYLOAD).add();
 
         assertEquals(1, this.messageContext.getMessages().size());
         assertEquals(this.messageContext.message().text("test msg 1").create(),
@@ -66,7 +66,7 @@ public class PayloadTest extends AbstractTest
 
         assertFalse(testResolver.isPayloadAvailable());
 
-        this.messageContext.message().text("test msg").payload(MessageSeverity.Warn.class).toText();
+        this.messageContext.message().text("test msg").payload(MessageSeverity.WARN).toText();
 
         assertTrue(testResolver.isPayloadAvailable());
     }
@@ -79,7 +79,7 @@ public class PayloadTest extends AbstractTest
 
         assertFalse(testResolver.isPayloadAvailable());
 
-        Message message = this.messageContext.message().text("test msg").payload(MessageSeverity.Warn.class).create();
+        Message message = this.messageContext.message().text("test msg").payload(MessageSeverity.WARN).create();
         message.toString(this.messageContext);
 
         assertTrue(testResolver.isPayloadAvailable());

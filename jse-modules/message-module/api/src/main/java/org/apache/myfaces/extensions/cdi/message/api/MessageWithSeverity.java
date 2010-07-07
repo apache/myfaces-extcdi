@@ -30,5 +30,5 @@ public interface MessageWithSeverity extends Message
     /**
      * @return the severity of the message based on the message payload
      */
-    Class<? extends MessagePayload> getSeverity();
+    MessagePayload getSeverity();
 }

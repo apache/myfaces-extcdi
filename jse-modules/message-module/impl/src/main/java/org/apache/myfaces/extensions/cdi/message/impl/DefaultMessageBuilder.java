@@ -53,7 +53,7 @@ class DefaultMessageBuilder implements MessageBuilder
 
     private Set<NamedArgument> namedArguments;
     private MessageContext messageContext;
-    private Map<Class, Class<? extends MessagePayload>> messagePayload;
+    private Map<Class, MessagePayload> messagePayload;
     private String messageDescriptor;
 
     private MessageFactory messageFactory;
@@ -77,16 +77,16 @@ class DefaultMessageBuilder implements MessageBuilder
         }
     }
 
-    public MessageBuilder payload(Class<? extends MessagePayload>... messagePayload)
+    public MessageBuilder payload(MessagePayload... messagePayload)
     {
         Class key;
 
-        for (Class<? extends MessagePayload> payload : messagePayload)
+        for (MessagePayload payload : messagePayload)
         {
-            key = payload;
-            if (payload.isAnnotationPresent(MessagePayloadKey.class))
+            key = payload.getClass();
+            if (payload.getClass().isAnnotationPresent(MessagePayloadKey.class))
             {
-                key = payload.getAnnotation(MessagePayloadKey.class).value();
+                key = payload.getClass().getAnnotation(MessagePayloadKey.class).value();
             }
             this.messagePayload.put(key, payload);
         }
@@ -158,13 +158,13 @@ class DefaultMessageBuilder implements MessageBuilder
         return new DefaultMessage(this.messageDescriptor, getMessageSeverity());
     }
 
-    private Class<? extends MessagePayload> getMessageSeverity()
+    private MessagePayload getMessageSeverity()
     {
-        Class<? extends MessagePayload> severity = this.messagePayload.get(MessageSeverity.class);
+        MessagePayload severity = this.messagePayload.get(MessageSeverity.class);
 
         if (severity == null)
         {
-            severity = MessageSeverity.Info.class;
+            severity = MessageSeverity.INFO;
         }
         return severity;
     }
@@ -184,7 +184,7 @@ class DefaultMessageBuilder implements MessageBuilder
 
     private void addPayload(Message result)
     {
-        for (Map.Entry<Class, Class<? extends MessagePayload>> entry : this.messagePayload.entrySet())
+        for (Map.Entry<Class, MessagePayload> entry : this.messagePayload.entrySet())
         {
             if (!MessageSeverity.class.equals(entry.getKey()))
             {
@@ -196,7 +196,7 @@ class DefaultMessageBuilder implements MessageBuilder
     protected void reset()
     {
         this.messageDescriptor = null;
-        this.messagePayload = new HashMap<Class, Class<? extends MessagePayload>>();
+        this.messagePayload = new HashMap<Class, MessagePayload>();
         this.argumentList = new ArrayList<Serializable>();
         this.namedArguments = new HashSet<NamedArgument>();
     }
@@ -374,7 +374,7 @@ class DefaultMessageBuilder implements MessageBuilder
     {
         return messageContext.message()
                 .text(argumentAsKey)
-                .payload(ArgumentDescriptor.class)
+                .payload(ArgumentDescriptor.PAYLOAD)
                 .toText();
     }
 

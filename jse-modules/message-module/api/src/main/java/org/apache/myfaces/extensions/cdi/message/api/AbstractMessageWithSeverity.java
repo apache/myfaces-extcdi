@@ -35,7 +35,7 @@ public abstract class AbstractMessageWithSeverity extends AbstractMessage implem
     }
 
     public AbstractMessageWithSeverity(String messageDescriptor,
-                                       Class<? extends MessagePayload> severity,
+                                       MessagePayload severity,
                                        Serializable... arguments)
     {
         super(messageDescriptor, arguments);
@@ -43,14 +43,14 @@ public abstract class AbstractMessageWithSeverity extends AbstractMessage implem
     }
 
     public AbstractMessageWithSeverity(String messageDescriptor,
-                                       Class<? extends MessagePayload> severity,
+                                       MessagePayload severity,
                                        Set<NamedArgument> namedArguments)
     {
         super(messageDescriptor, namedArguments);
         addPayload(severity);
     }
 
-    public Class<? extends MessagePayload> getSeverity()
+    public MessagePayload getSeverity()
     {
         return getPayload().get(MessageSeverity.class);
     }

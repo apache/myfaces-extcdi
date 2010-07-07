@@ -40,6 +40,6 @@ public class HelloMessageBean
     {
         this.messageContext.message().text("Hello MyFaces CODI").add();
         this.messageContext.message().text("{hello}").argument("MyFaces CODI").add();
-        this.messageContext.message().text("A demo warn message").payload(MessageSeverity.Warn.class).add();
+        this.messageContext.message().text("A demo warn message").payload(MessageSeverity.WARN).add();
     }
 }

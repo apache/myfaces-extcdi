@@ -36,7 +36,7 @@ class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
 
     public String getMessage(MessageContext messageContext,
                              String messageDescriptor,
-                             Map<Class, Class<? extends MessagePayload>> messagePayload)
+                             Map<Class, MessagePayload> messagePayload)
     {
         if (!isKey(messageDescriptor))
         {

@@ -18,11 +18,18 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
+import org.apache.myfaces.extensions.cdi.message.api.payload.AbstractMessagePayload;
 
 /**
  * @author Gerhard Petracek
  */
-interface Label extends MessagePayload
+class Label extends AbstractMessagePayload
 {
+    private static final long serialVersionUID = -6358900342832276274L;
+
+    static final Label PAYLOAD = new Label();
+    
+    private Label()
+    {
+    }
 }

@@ -51,9 +51,11 @@ public class ClientAwareMessageResolverProducer
     {
         return new MessageResolver()
         {
+            private static final long serialVersionUID = -4009930342736825281L;
+
             public String getMessage(MessageContext messageContext,
                                      String messageDescriptor,
-                                     Map<Class, Class<? extends MessagePayload>> messagePayload)
+                                     Map<Class, MessagePayload> messagePayload)
             {
                 FacesContext facesContext = FacesContext.getCurrentInstance();
 

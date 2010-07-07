@@ -18,11 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.message.api.payload;
 
+import java.io.Serializable;
+
 /**
  * hint: enums,... have major issues with serialization (to different machines) and aren't extensible
  *
  * @author Gerhard Petracek
  */
-public interface MessagePayload
+public interface MessagePayload extends Serializable
 {
 }

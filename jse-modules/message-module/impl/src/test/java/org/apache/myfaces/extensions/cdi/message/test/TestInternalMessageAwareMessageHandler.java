@@ -27,6 +27,8 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.InternalMessage;
  */
 class TestInternalMessageAwareMessageHandler extends TestInMemoryMessageHandler
 {
+    private static final long serialVersionUID = -918869036542859199L;
+
     public void addMessage(MessageContext messageContext, Message message)
     {
         if (!message.getPayload().containsKey(InternalMessage.class))

@@ -18,11 +18,18 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
+import org.apache.myfaces.extensions.cdi.message.api.payload.AbstractMessagePayload;
 
 /**
  * @author Gerhard Petracek
  */
-interface TechnicalMessage extends MessagePayload
+class TechnicalMessage extends AbstractMessagePayload
 {
+    private static final long serialVersionUID = 4487372349337877496L;
+
+    static final TechnicalMessage PAYLOAD = new TechnicalMessage();
+
+    private TechnicalMessage()
+    {
+    }
 }

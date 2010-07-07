@@ -38,5 +38,5 @@ public interface MessageFactory extends Serializable
      * @param messagePayload the initial payload of the message
      * @return a new message instance
      */
-    Message create(String messageDescriptor,  Class<? extends MessagePayload> messagePayload);
+    Message create(String messageDescriptor,  MessagePayload messagePayload);
 }

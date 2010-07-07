@@ -37,6 +37,11 @@ public interface Formatter<T> extends Serializable
     boolean isResponsibleFor(Class<?> type);
 
     /**
+     * @return true if it is allowed to cache the instance of the formatter
+     */
+    boolean isStateless();
+
+    /**
      * formats the given instance as string
      *
      * @param messageContext current message context

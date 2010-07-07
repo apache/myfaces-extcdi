@@ -36,22 +36,22 @@ public class MessageSeverityTest extends AbstractTest
 
         assertNotNull(message);
         assertTrue(message.getPayload().containsKey(MessageSeverity.class));
-        assertTrue(message.getPayload().containsValue(MessageSeverity.Info.class));
+        assertTrue(message.getPayload().containsValue(MessageSeverity.INFO));
 
         assertTrue(message instanceof MessageWithSeverity);
-        assertEquals(MessageSeverity.Info.class, ((MessageWithSeverity) message).getSeverity());
+        assertTrue(MessageSeverity.INFO.equals(((MessageWithSeverity) message).getSeverity()));
     }
 
     @Test
     public void createMessageWithSeverityWarnTest()
     {
-        Message message = this.messageContext.message().text("hello open message").payload(MessageSeverity.Warn.class).create();
+        Message message = this.messageContext.message().text("hello open message").payload(MessageSeverity.WARN).create();
 
         assertNotNull(message);
         assertTrue(message.getPayload().containsKey(MessageSeverity.class));
-        assertTrue(message.getPayload().containsValue(MessageSeverity.Warn.class));
+        assertTrue(message.getPayload().containsValue(MessageSeverity.WARN));
 
         assertTrue(message instanceof MessageWithSeverity);
-        assertEquals(MessageSeverity.Warn.class, ((MessageWithSeverity) message).getSeverity());
+        assertTrue(MessageSeverity.WARN.equals(((MessageWithSeverity) message).getSeverity()));
     }
 }

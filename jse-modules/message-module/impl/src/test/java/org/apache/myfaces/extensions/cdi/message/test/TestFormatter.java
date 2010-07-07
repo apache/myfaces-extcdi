@@ -42,6 +42,11 @@ public class TestFormatter implements Formatter<Object>, Serializable
         return type.isAssignableFrom(this.responsibleFor);
     }
 
+    public boolean isStateless()
+    {
+        return true;
+    }
+
     public String format(MessageContext messageContext, Object valueToFormat)
     {
         return valueToFormat != null ? valueToFormat.toString() : "";
