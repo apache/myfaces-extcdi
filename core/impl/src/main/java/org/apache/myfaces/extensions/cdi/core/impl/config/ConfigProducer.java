@@ -27,6 +27,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Singleton;
 import java.util.Set;
 import java.util.HashSet;
@@ -72,7 +73,7 @@ public class ConfigProducer
     }
 
     @Produces
-    @Singleton
+    @ApplicationScoped
     public ConfigResolver createSpecializedCodiConfig()
     {
         return new ConfigResolver()
