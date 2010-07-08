@@ -18,10 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.manager;
 
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>This class provides access to the BeanManager
@@ -40,7 +44,7 @@ public class BeanManagerProvider implements Extension
 
     private static BeanManagerProvider bmp = null;
 
-    private volatile BeanManager bm = null;
+    private volatile Map<ClassLoader, BeanManager> bms = new ConcurrentHashMap<ClassLoader, BeanManager>();
 
 
     /**
@@ -58,7 +62,9 @@ public class BeanManagerProvider implements Extension
      */
     public BeanManager getBeanManager()
     {
-        return bm;
+        ClassLoader cl = ClassUtils.getClassLoader(null);
+
+        return bms.get(cl);
     }
 
     /**
@@ -69,16 +75,24 @@ public class BeanManagerProvider implements Extension
      */
     public void setBeanManager(@Observes AfterBeanDiscovery abd, BeanManager beanManager)
     {
-        bm = beanManager;
-        setBeanManagerProvider(this);
+        BeanManagerProvider bmpFirst = setBeanManagerProvider(this);
+
+        ClassLoader cl = ClassUtils.getClassLoader(null);
+        bmpFirst.bms.put(cl, beanManager);
     }
 
     /**
      * This function exists to prevent findbugs to complain about
      * setting a static member from a non-static function.
+     * @return the first BeanManagerProvider 
      */
-    private static void setBeanManagerProvider(BeanManagerProvider bmpIn)
+    private static BeanManagerProvider setBeanManagerProvider(BeanManagerProvider bmpIn)
     {
-        bmp = bmpIn;
+        if (bmp == null)
+        {
+            bmp = bmpIn;
+        }
+
+        return bmp;
     }
 }

@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.util;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.jar.Manifest;
 import java.util.jar.Attributes;
 import java.net.URL;
@@ -27,6 +29,49 @@ import java.net.URL;
  */
 public class ClassUtils
 {
+        /**
+     * Detect the right ClassLoader.
+     * The lookup order is determined by:
+     * <ol>
+     *  <li>ContextClassLoader of the current Thread</li>
+     *  <li>ClassLoader of the given Object 'o'</li>
+     *  <li>ClassLoader of this very CodiUtils class</li>
+     * </ol>
+     *
+     * @param o if not <code>null</code> it may get used to detect the classloader.
+     * @return The {@link ClassLoader} which should get used to create new instances
+     */
+    public static ClassLoader getClassLoader(Object o)
+    {
+        ClassLoader loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
+            {
+                public ClassLoader run()
+                {
+                    try
+                    {
+                        return Thread.currentThread().getContextClassLoader();
+                    }
+                    catch (Exception e)
+                    {
+                        return null;
+                    }
+                }
+            }
+        );
+
+        if (loader == null && o != null)
+        {
+            loader = o.getClass().getClassLoader();
+        }
+
+        if (loader == null)
+        {
+            loader = ClassUtils.class.getClassLoader();
+        }
+
+        return loader;
+    }
+
     public static Class tryToLoadClassForName(String name)
     {
         try
@@ -46,7 +91,7 @@ public class ClassUtils
         {
             // Try WebApp ClassLoader first
             return Class.forName(name, false, // do not initialize for faster startup
-                Thread.currentThread().getContextClassLoader());
+               getClassLoader(null));
         }
         catch (ClassNotFoundException ignore)
         {

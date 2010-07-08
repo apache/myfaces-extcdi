@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Properties;
 
 /**
@@ -35,49 +35,6 @@ public class CodiUtils
     public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
 
     /**
-     * Detect the right ClassLoader.
-     * The lookup order is determined by:
-     * <ol>
-     *  <li>ContextClassLoader of the current Thread</li>
-     *  <li>ClassLoader of the given Object 'o'</li>
-     *  <li>ClassLoader of this very CodiUtils class</li>
-     * </ol>
-     *
-     * @param o if not <code>null</code> it may get used to detect the classloader.
-     * @return The {@link ClassLoader} which should get used to create new instances
-     */
-    public static ClassLoader getClassLoader(Object o)
-    {
-        ClassLoader loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
-            {
-                public ClassLoader run()
-                {
-                    try
-                    {
-                        return Thread.currentThread().getContextClassLoader();
-                    }
-                    catch (Exception e)
-                    {
-                        return null;
-                    }
-                }
-            }
-        );
-
-        if (loader == null && o != null)
-        {
-            loader = o.getClass().getClassLoader();
-        }
-
-        if (loader == null)
-        {
-            loader = CodiUtils.class.getClassLoader();
-        }
-
-        return loader;
-    }
-
-    /**
      * Load Properties from a configuration file with the given resourceName.
      *
      * @param resourceName
@@ -87,7 +44,7 @@ public class CodiUtils
     public static Properties getProperties(String resourceName) throws IOException
     {
         Properties props = null;
-        ClassLoader cl = getClassLoader(resourceName);
+        ClassLoader cl = ClassUtils.getClassLoader(resourceName);
         InputStream is = cl.getResourceAsStream(resourceName);
         if (is != null)
         {
