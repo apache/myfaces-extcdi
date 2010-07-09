@@ -42,20 +42,19 @@
     </modules>
 
     <dependencies>
-        <!--dependency>
+        <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-validation_1.0_spec</artifactId>
-            <version>${bv.version}</version>
             <scope>provided</scope>
-        </dependency-->
+        </dependency>
+<!-- TODO switch via profile
         <dependency>
             <groupId>javax.validation</groupId>
             <artifactId>validation-api</artifactId>
+            <scope>provided</scope>
         </dependency>
+-->
 
     </dependencies>
 
-    <properties>
-        <bv.version>1.0</bv.version>
-    </properties>
 </project>
