@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 import javax.enterprise.context.NormalScope;
 import java.lang.annotation.Inherited;

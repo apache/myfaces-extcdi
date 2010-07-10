@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ViewAccess;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.Window;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccess;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Window;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 

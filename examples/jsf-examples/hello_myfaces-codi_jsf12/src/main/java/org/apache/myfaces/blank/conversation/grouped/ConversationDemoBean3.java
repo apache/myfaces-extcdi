@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.blank.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.Window;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Window;
 
 import javax.inject.Named;
 import javax.annotation.PostConstruct;

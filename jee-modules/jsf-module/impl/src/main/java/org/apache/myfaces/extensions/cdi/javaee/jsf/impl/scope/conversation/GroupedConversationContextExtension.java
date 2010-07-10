@@ -16,22 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.event.Observes;
 
 /**
- * TODO refactor it
+ * extension for registering the adapter for grouped conversations
  *
  * @author Gerhard Petracek
  */
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface ConversationGroup
+public class GroupedConversationContextExtension implements Extension
 {
-    Class value();
+    public void afterBeanDiscovery(@Observes AfterBeanDiscovery event, BeanManager manager)
+    {
+        event.addContext(new GroupedConversationContextAdapter(manager));
+    }
 }

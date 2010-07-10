@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped.JsfWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 
