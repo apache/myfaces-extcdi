@@ -18,12 +18,17 @@
 -->
 
 <faces-config version="1.2"
-    xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+              xmlns="http://java.sun.com/xml/ns/javaee"
+              xmlns:xi="http://www.w3.org/2001/XInclude"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+    <application>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
+    </application>
 
     <factory>
         <faces-context-factory>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory</faces-context-factory>
+        <render-kit-factory>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.CodiRenderKitFactory</render-kit-factory>
     </factory>
 </faces-config>

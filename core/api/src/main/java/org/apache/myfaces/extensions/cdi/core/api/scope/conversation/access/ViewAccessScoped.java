@@ -31,10 +31,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * @author Gerhard Petracek
  */
-@Target({METHOD,TYPE,FIELD})
+@Target({METHOD, TYPE, FIELD})
 @Retention(RUNTIME)
 @NormalScope
 @Inherited
-public @interface AccessScoped
+@Deprecated
+public @interface ViewAccessScoped
 {
 }

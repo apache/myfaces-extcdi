@@ -17,6 +17,6 @@
 # under the License.
 #####################################################################################
 
-#org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase.PhaseListenerExtension
+org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase.PhaseListenerExtension
 
-#org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped.GroupedConversationContextExtension
+org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped.GroupedConversationContextExtension

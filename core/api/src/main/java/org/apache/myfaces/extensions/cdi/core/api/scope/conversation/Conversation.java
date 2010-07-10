@@ -22,13 +22,23 @@ import java.io.Serializable;
 
 /**
  * A conversation is started automatically with the first access
- * 
+ *
  * @author Gerhard Petracek
  */
 public interface Conversation extends Serializable
 {
+    //TODO move down
+    boolean isActive();
+
+    //TODO move down
+    void deactivate();
+
     void end();
 
     void restart();
+
+    //Map<Class, Serializable> getBeans();
+
+    <T> T getBean(Class<T> key);
 }
 

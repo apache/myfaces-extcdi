@@ -25,7 +25,23 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CoreCodiConfigParameter
  */
 public interface ConfigParameter
 {
-    static final String TRANSACTION_TOKEN_ENABLED = CoreCodiConfigParameter.BASE_NAME + "TRANSACTION_TOKEN_ENABLED";
+    static final String TRANSACTION_TOKEN_ENABLED =
+            CoreCodiConfigParameter.BASE_NAME + "TRANSACTION_TOKEN_ENABLED";
 
     static final Boolean TRANSACTION_TOKEN_ENABLED_DEFAULT = Boolean.FALSE;
+
+    static final String GET_REQUEST_PARAMETER_ENABLED =
+            CoreCodiConfigParameter.BASE_NAME + "GET_REQUEST_PARAMETER_ENABLED";
+
+    static final boolean GET_REQUEST_PARAMETER_ENABLED_DEFAULT = true;
+
+    static final String GROUPED_CONVERSATION_TIMEOUT =
+            CoreCodiConfigParameter.BASE_NAME + "GROUPED_CONVERSATION_TIMEOUT";
+
+    static final int GROUPED_CONVERSATION_TIMEOUT_DEFAULT = 2;
+
+    static final String WINDOW_CONTEXT_TIMEOUT =
+            CoreCodiConfigParameter.BASE_NAME + "WINDOW_CONTEXT_TIMEOUT";
+
+    static final int WINDOW_CONTEXT_TIMEOUT_DEFAULT = 2;
 }

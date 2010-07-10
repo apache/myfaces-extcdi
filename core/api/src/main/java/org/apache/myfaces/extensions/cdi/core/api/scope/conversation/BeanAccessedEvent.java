@@ -16,20 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface AttributeAware extends Serializable
+public final class BeanAccessedEvent extends ConversationEvent
 {
-    boolean setAttribute(String name, Object value);
-
-    boolean setAttribute(String name, Object value, boolean forceOverride);
-
-    boolean containsAttribute(String name);
-
-    <T> T getAttribute(String name, Class<T> targetType);
+    public BeanAccessedEvent(Serializable bean)
+    {
+        super(bean);
+    }
 }

@@ -20,19 +20,18 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
+ * TODO refactor it
+ *
  * @author Gerhard Petracek
  */
-@Target({PARAMETER,TYPE,FIELD,METHOD})
+@Target({TYPE})
 @Retention(RUNTIME)
 public @interface ConversationGroup
 {
-    Class value() default DefaultGroup.class;
+    Class value();
 }

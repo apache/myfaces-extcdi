@@ -16,20 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
-
-import java.io.Serializable;
+package org.apache.myfaces.blank.conversation.grouped;
 
 /**
  * @author Gerhard Petracek
  */
-public interface AttributeAware extends Serializable
+interface ConversationGroup1
 {
-    boolean setAttribute(String name, Object value);
-
-    boolean setAttribute(String name, Object value, boolean forceOverride);
-
-    boolean containsAttribute(String name);
-
-    <T> T getAttribute(String name, Class<T> targetType);
 }

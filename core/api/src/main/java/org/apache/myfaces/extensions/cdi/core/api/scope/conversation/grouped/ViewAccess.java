@@ -16,20 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped;
 
-import java.io.Serializable;
+import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+
 
 /**
  * @author Gerhard Petracek
  */
-public interface AttributeAware extends Serializable
+@Target({TYPE})
+@Retention(RUNTIME)
+public @interface ViewAccess
 {
-    boolean setAttribute(String name, Object value);
-
-    boolean setAttribute(String name, Object value, boolean forceOverride);
-
-    boolean containsAttribute(String name);
-
-    <T> T getAttribute(String name, Class<T> targetType);
 }

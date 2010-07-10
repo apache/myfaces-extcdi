@@ -16,20 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.blank.conversation.grouped;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ViewAccess;
+
+import javax.inject.Named;
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
-public interface AttributeAware extends Serializable
+@Named
+@ViewAccess
+@ConversationScoped
+public class ConversationDemoBean4 implements Serializable
 {
-    boolean setAttribute(String name, Object value);
+    private String value = "Hello view access scoped! ";
+    private Date createdAt;
+    private static final long serialVersionUID = -4238520498463300564L;
 
-    boolean setAttribute(String name, Object value, boolean forceOverride);
+    @PostConstruct
+    public void init()
+    {
+        this.createdAt = new Date();
+    }
 
-    boolean containsAttribute(String name);
-
-    <T> T getAttribute(String name, Class<T> targetType);
+    public String getValue()
+    {
+        return value + createdAt.toLocaleString();
+    }
 }

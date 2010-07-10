@@ -19,26 +19,29 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
-import javax.faces.context.FacesContext;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.ResponseStream;
-import javax.faces.context.ResponseWriter;
-import javax.faces.application.Application;
-import javax.faces.application.FacesMessage;
-import javax.faces.render.RenderKit;
-import javax.faces.component.UIViewRoot;
 import javax.el.ELContext;
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.context.spi.CreationalContext;
+import javax.faces.application.Application;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseStream;
+import javax.faces.context.ResponseWriter;
+import javax.faces.render.RenderKit;
 import java.util.Iterator;
 import java.util.Set;
 
 /**
+ * TODO move to a shared package
+ *
  * @author Gerhard Petracek
  */
-class CodiFacesContextWrapper extends FacesContext
+public class CodiFacesContextWrapper extends FacesContext
 {
     private FacesContext wrappedFacesContext;
 
@@ -46,7 +49,7 @@ class CodiFacesContextWrapper extends FacesContext
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
-    CodiFacesContextWrapper(FacesContext wrappedFacesContext)
+    public CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
         //(currently) causes issue in combination with geronimo 3.0-m1
@@ -89,7 +92,7 @@ class CodiFacesContextWrapper extends FacesContext
 
     public ExternalContext getExternalContext()
     {
-        return wrappedFacesContext.getExternalContext();
+        return new RedirectedConversationAwareExternalContext(wrappedFacesContext.getExternalContext());
     }
 
     public FacesMessage.Severity getMaximumSeverity()
@@ -178,7 +181,7 @@ class CodiFacesContextWrapper extends FacesContext
     {
         Set<? extends Bean> broadcasterBeans = this.beanManager.getBeans(BeforeAfterFacesRequestBroadcaster.class);
 
-        if(broadcasterBeans.size() != 1)
+        if (broadcasterBeans.size() != 1)
         {
             //TODO add an exception to the exception context
             return;
@@ -186,7 +189,7 @@ class CodiFacesContextWrapper extends FacesContext
 
         CreationalContext<BeforeAfterFacesRequestBroadcaster> creationalContext;
 
-        for(Bean<BeforeAfterFacesRequestBroadcaster> requestHandlerBean : broadcasterBeans)
+        for (Bean<BeforeAfterFacesRequestBroadcaster> requestHandlerBean : broadcasterBeans)
         {
             creationalContext = beanManager.createCreationalContext(requestHandlerBean);
 

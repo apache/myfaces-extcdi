@@ -26,29 +26,38 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationContext extends AttributeAware, Serializable
+public interface WindowContext extends AttributeAware, Serializable
 {
+    String CURRENT_WINDOW_CONTEXT_BEAN_NAME = "currentWindowContext";
+
     /**
      * @return the id of the conversation (unique for each window/tab)
      */
     Long getId();
 
     /**
-     * invalidate conversations immediately
+     * TODO add: endContext to reset the window scope
+     * invalidate all conversations immediately
      */
-    void invalidate();
-
-    /**
-     * @param conversationGroup group of the conversation in question
-     * @return an existing conversation - null otherwise
-     */
-    Conversation getConversation(Class conversationGroup);
+    void endConversations();
 
     /**
      * @param conversationGroup group of the conversation in question
      * @return a new conversation for the given group
      */
     Conversation createConversation(Class conversationGroup);
+
+    /**
+     * @param conversationGroup group of the conversation in question
+     * @return a new conversation for the given group
+     */
+    Conversation getConversation(Class conversationGroup);
+
+    /**
+     * @param conversationGroup group of the conversation in question
+     * @return the removed conversation - null otherwise
+     */
+    Conversation endConversation(Class conversationGroup);
 
     /**
      * @return all active conversations of the current context
@@ -58,5 +67,8 @@ public interface ConversationContext extends AttributeAware, Serializable
     /**
      * @return configuration of the current context
      */
-    ConversationContextConfig getConfig();
+    WindowContextConfig getConfig();
+
+    //TODO move down
+    void cleanup();
 }

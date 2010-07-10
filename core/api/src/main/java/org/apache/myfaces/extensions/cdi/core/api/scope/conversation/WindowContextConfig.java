@@ -18,10 +18,20 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.AbstractCodiConfig;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationContextConfig
+public abstract class WindowContextConfig extends AbstractCodiConfig
 {
-    Long getTimeout();
+    //TODO
+
+    //deactivate it for higher security
+
+    public abstract boolean isGetRequestParameterSupported();
+
+    public abstract int getWindowContextTimeoutInMinutes();
+
+    public abstract int getConversationTimeoutInMinutes();
 }

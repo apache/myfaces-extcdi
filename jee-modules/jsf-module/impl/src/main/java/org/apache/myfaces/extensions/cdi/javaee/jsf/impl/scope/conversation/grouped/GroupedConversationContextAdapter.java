@@ -18,22 +18,25 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi.ConversationManager;
-import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.AbstractGroupedConversationContextAdapter;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.ConversationGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.grouped.Window;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
-import java.util.Set;
 
 /**
  * jsf specific parts for managing grouped conversations
  *
  * @author Gerhard Petracek
  */
-public class GroupedConversationContextAdapter extends AbstractGroupedConversationContextAdapter
+public class GroupedConversationContextAdapter extends AbstractConversationContextAdapter
 {
     public GroupedConversationContextAdapter(BeanManager beanManager)
     {
@@ -42,8 +45,8 @@ public class GroupedConversationContextAdapter extends AbstractGroupedConversati
 
     /**
      * @return true as soon as JSF is active
-     * the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext}
-     * will be created automatically
+     *         the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     *         will be created automatically
      */
     public boolean isActive()
     {
@@ -51,24 +54,61 @@ public class GroupedConversationContextAdapter extends AbstractGroupedConversati
     }
 
     /**
-     * @return the descriptor of a custom {@link ConversationManager} with the qualifier {@link Jsf} or
-     * the descriptor of the default implementation provided by this module
+     * @return the descriptor of a custom
+     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
+     * with the qualifier {@link org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf} or
+     *         the descriptor of the default implementation provided by this module
      */
-    protected Bean<ConversationManager> resolveConversationManagerBean()
+    protected Bean<WindowContextManager> resolveConversationManagerBean()
     {
-        Set<?> conversationManagerBeans = this.beanManager.getBeans(
-                ConversationManager.class, DefaultAnnotation.of(Jsf.class));
+        return ConversationUtils.resolveConversationManagerBean();
+    }
 
-        if(conversationManagerBeans.isEmpty())
-        {
-            conversationManagerBeans = getDefaultConversationManager();
-        }
+    /**
+     * @param conversationManager the current
+     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
+     * @param beanDescriptor      descriptor of the requested bean
+     * @return the instance of the requested bean if it exists in the current
+     *         {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     *         null otherwise
+     */
+    protected <T> T resolveBeanInstance(WindowContextManager conversationManager, Bean<T> beanDescriptor)
+    {
+        Class<?> beanClass = beanDescriptor.getBeanClass();
+        Conversation foundConversation = getConversation(conversationManager, beanClass);
 
-        if(conversationManagerBeans.size() != 1)
-        {
-            throw new IllegalStateException(conversationManagerBeans.size() + " conversation-managers were found");
-        }
         //noinspection unchecked
-        return (Bean<ConversationManager>)conversationManagerBeans.iterator().next();
+        return (T) foundConversation.getBean(beanClass);
+    }
+
+    protected <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry)
+    {
+        Class<?> beanClass = beanEntry.getBean().getBeanClass();
+        Conversation foundConversation = getConversation(conversationManager, beanClass);
+
+        ((EditableConversation) foundConversation).addBean(beanClass, beanEntry);
+    }
+
+    private Conversation getConversation(WindowContextManager conversationManager, Class<?> beanClass)
+    {
+        Class conversationGroup = getConversationGroup(beanClass);
+
+        return conversationManager.getCurrentWindowContext().getConversation(conversationGroup);
+    }
+
+    private Class getConversationGroup(Class<?> beanClass)
+    {
+        ConversationGroup conversationGroupAnnotation = beanClass.getAnnotation(ConversationGroup.class);
+
+        if (conversationGroupAnnotation != null)
+        {
+            return conversationGroupAnnotation.value();
+        }
+
+        if (beanClass.isAnnotationPresent(Window.class))
+        {
+            return Window.class;
+        }
+        return beanClass;
     }
 }

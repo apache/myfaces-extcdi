@@ -16,26 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
+import javax.enterprise.inject.spi.Bean;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationManager
+@Deprecated
+public class BeanNotFoundException extends IllegalStateException
 {
-    String CONVERSATION_CONTEXT_ID_PARAMETER_KEY = "codiConversationContext";
+    private static final long serialVersionUID = -3071556589834210682L;
 
-    ConversationContext getCurrentConversationContext();
-
-    void activateConversationContext(ConversationContext conversationContext);
-
-    void resetCurrentConversationContext();
-
-    void resetConversationContext(ConversationContext conversationContext);
-
-    void removeCurrentConversationContext();
-
-    void removeConversationContext(ConversationContext conversationContext);
+    public <T> BeanNotFoundException(Bean<T> foundBean)
+    {
+        super("No bean found for class " + foundBean.getBeanClass());
+    }
 }

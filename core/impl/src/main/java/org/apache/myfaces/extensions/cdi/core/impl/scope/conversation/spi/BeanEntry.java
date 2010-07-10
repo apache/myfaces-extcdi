@@ -16,18 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.grouped.spi;
+package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContext;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationContextConfig;
+import javax.enterprise.inject.spi.Bean;
+import java.io.Serializable;
 
 /**
- * TODO
  * @author Gerhard Petracek
  */
-public interface ConversationContextFactory
+public interface BeanEntry<T> extends Serializable
 {
-    ConversationContext createConversationContext(long id);
-    
-    ConversationContext createConversationContext(long id, ConversationContextConfig config);
+    Bean getBean();
+
+    T getBeanInstance();
+
+    /**
+     * @return the old instance
+     */
+    T resetBeanInstance();
 }

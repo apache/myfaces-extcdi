@@ -16,20 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 /**
+ * TODO
+ *
  * @author Gerhard Petracek
  */
-public interface AttributeAware extends Serializable
+@Deprecated
+public interface ConversationFactory
 {
-    boolean setAttribute(String name, Object value);
-
-    boolean setAttribute(String name, Object value, boolean forceOverride);
-
-    boolean containsAttribute(String name);
-
-    <T> T getAttribute(String name, Class<T> targetType);
+    Conversation createConversation(WindowContext context, Class conversationGroup);
 }

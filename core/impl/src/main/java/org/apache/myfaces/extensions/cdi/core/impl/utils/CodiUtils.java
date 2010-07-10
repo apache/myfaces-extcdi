@@ -18,21 +18,58 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
+import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
+import javax.enterprise.context.spi.Context;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 /**
  * This is a collection of a few useful static helper functions.
- *
+ * <p/>
  * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class CodiUtils
 {
-
     public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
+
+    public static <T> T createNewInstanceOfBean(Bean<T> bean)
+    {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+        CreationalContext<T> creationalContext = getCreationalContextFor(beanManager, bean);
+
+        return createNewInstanceOfBean(bean, creationalContext);
+    }
+
+    public static <T> T createNewInstanceOfBean(Bean<T> bean, CreationalContext<T> creationalContext)
+    {
+        return bean.create(creationalContext);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBean(Bean<T> bean)
+    {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        Context context = beanManager.getContext(bean.getScope());
+
+        T result = context.get(bean);
+
+        if (result == null)
+        {
+            result = context.get(bean, getCreationalContextFor(beanManager, bean));
+        }
+        return result;
+    }
+
+    private static <T> CreationalContext<T> getCreationalContextFor(BeanManager beanManager, Bean<T> bean)
+    {
+        return beanManager.createCreationalContext(bean);
+    }
 
     /**
      * Load Properties from a configuration file with the given resourceName.
@@ -57,6 +94,7 @@ public class CodiUtils
 
     /**
      * Lookup the given property from the default CODI properties file.
+     *
      * @param propertyName
      * @return the value of the property or <code>null</code> it it doesn't exist.
      * @throws IOException
