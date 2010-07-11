@@ -50,4 +50,13 @@ public class CodiFacesContextFactory extends FacesContextFactory
 
         return new CodiFacesContextWrapper(facesContext);
     }
+
+    public static FacesContext wrapFacesContext(FacesContext facesContext)
+    {
+        if(facesContext instanceof CodiFacesContextWrapper)
+        {
+            return facesContext;
+        }
+        return new CodiFacesContextWrapper(facesContext);
+    }
 }

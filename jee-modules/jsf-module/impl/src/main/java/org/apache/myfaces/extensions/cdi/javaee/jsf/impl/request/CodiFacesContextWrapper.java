@@ -41,7 +41,7 @@ import java.util.Set;
  *
  * @author Gerhard Petracek
  */
-public class CodiFacesContextWrapper extends FacesContext
+class CodiFacesContextWrapper extends FacesContext
 {
     private FacesContext wrappedFacesContext;
 
@@ -49,7 +49,7 @@ public class CodiFacesContextWrapper extends FacesContext
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
-    public CodiFacesContextWrapper(FacesContext wrappedFacesContext)
+    CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
         //(currently) causes issue in combination with geronimo 3.0-m1

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextWrapper;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory.wrapFacesContext;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
@@ -41,7 +41,8 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
 
     public void handleNavigation(FacesContext facesContext, String s, String s1)
     {
-        facesContext = getWrappedFacesContext(facesContext);
+        //TODO check myfaces core - issue? facesContext is not wrapped here
+        facesContext = wrapFacesContext(facesContext);
         String oldViewId = facesContext.getViewRoot().getViewId();
 
         Map requestMap = facesContext.getExternalContext().getRequestMap();
@@ -53,15 +54,5 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
 
 
         requestMap.put(NEW_VIEW_ID_KEY, newViewId);
-    }
-
-    //TODO check myfaces core - issue? facesContext is not wrapped here
-    private FacesContext getWrappedFacesContext(FacesContext facesContext)
-    {
-        if(facesContext instanceof CodiFacesContextWrapper)
-        {
-            return facesContext;
-        }
-        return new CodiFacesContextWrapper(facesContext);
     }
 }
