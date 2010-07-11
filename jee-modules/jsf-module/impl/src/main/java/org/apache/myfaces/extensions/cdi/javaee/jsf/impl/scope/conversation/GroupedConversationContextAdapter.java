@@ -23,6 +23,9 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.DefaultGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
@@ -90,7 +93,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         Bean<?> bean = beanEntry.getBean();
         Conversation foundConversation = getConversation(conversationManager, bean);
 
-        ((EditableConversation) foundConversation).addBean(bean.getBeanClass(), beanEntry);
+        ((EditableConversation) foundConversation).addBean(beanEntry);
     }
 
     private Conversation getConversation(WindowContextManager conversationManager, Bean<?> bean)
@@ -98,6 +101,17 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         Class conversationGroup = getConversationGroup(bean);
 
         Set<Annotation> qualifiers = bean.getQualifiers();
+
+        //workaround to keep the existing api
+        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
+        {
+            if(bean.getStereotypes().contains(ViewAccessScoped.class))
+            {
+                //TODO maybe we have to add a real qualifier instead
+                qualifiers.add(DefaultAnnotation.of(ViewAccessScoped.class));
+                conversationGroup = bean.getBeanClass();
+            }
+        }
         return conversationManager.getCurrentWindowContext()
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
@@ -106,13 +120,22 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
     {
         ConversationScoped conversationAnnotation = bean.getBeanClass().getAnnotation(ConversationScoped.class);
 
+        if(bean.getStereotypes().contains(WindowScoped.class))
+        {
+            return WindowGroup.class;
+        }
+
         if(conversationAnnotation == null)
         {
             //in this case we have e.g. a producer method -> there is no official api to get the method
             //-> it isn't possible to extract the group
             //TODO if we keep the group approach we should perform a check via reflection here and throw an exception
             //(if the user used a group) or we use a workaround (via reflection)
-            return DefaultGroup.class;
+
+            //due to the target api we can't forward the stereotypes - we just have 2 supported stereotypes
+            //here we know that we have the 2nd supported stereotype
+            // (the rest is analyzed later on - see DefaultConversation)
+            return ViewAccessScoped.class;
         }
 
         Class groupClass = conversationAnnotation.value();

@@ -18,60 +18,54 @@
  */
 package org.apache.myfaces.blank.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
 
-import javax.inject.Named;
-import javax.inject.Inject;
-import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
-@Named
-@ConversationScoped(ViewAccessGroup.class)
-public class ConversationDemoBean4 implements Serializable
+public class MixedConversationDemoBean implements Serializable
 {
-    private String value = "Hello view access scoped! ";
-    private Date createdAt;
     private static final long serialVersionUID = -4238520498463300564L;
 
-    @Inject
-    @Qualifier1
-    private ConversationDemoBeanWithQualifier bean1;
+    private String value;
 
-    @Inject
-    @Qualifier2
-    private ConversationDemoBeanWithQualifier bean2;
+    private Date createdAt;
 
-    @Inject
-    @Qualifier1
-    private MixedConversationDemoBean mixedBean1;
-
-    @Inject
-    @Qualifier2
-    private MixedConversationDemoBean mixedBean2;
-
-    @PostConstruct
-    public void init()
+    protected MixedConversationDemoBean()
     {
+    }
+
+    private MixedConversationDemoBean(String value)
+    {
+        this.value = value;
         this.createdAt = new Date();
-        this.bean1.getValue();
-        this.bean2.getValue();
+    }
+
+    @Produces
+    @Qualifier1
+    @WindowScoped
+    public MixedConversationDemoBean createWindowScopedBean()
+    {
+        return new MixedConversationDemoBean("Q1@WindowScoped ");
+    }
+
+    @Produces
+    @Qualifier2
+    @ViewAccessScoped
+    public MixedConversationDemoBean createViewAccessScopedBean()
+    {
+        return new MixedConversationDemoBean("Q2@ViewAccessScoped ");
     }
 
     public String getValue()
     {
-        return value +
-                createdAt.toLocaleString() +
-                " injected beans: " +
-                this.bean1.getValue() + " " +
-                this.bean2.getValue() + " " +
-                this.mixedBean1.getValue() + " " +
-                this.mixedBean2.getValue();
+        return value + createdAt.toLocaleString();
     }
 }

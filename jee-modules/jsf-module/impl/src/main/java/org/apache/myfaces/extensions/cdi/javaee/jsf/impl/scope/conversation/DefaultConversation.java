@@ -46,7 +46,7 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     private String lastViewId; //for access scope
 
-    private final BeanStorage beanStorage;
+    private final BeanStorage beanStorage = new BeanStorage();
 
     private final long conversationTimeoutInMs;
 
@@ -59,9 +59,8 @@ public class DefaultConversation implements Conversation, EditableConversation
         this.conversationKey = conversationKey;
         this.windowScoped = WindowGroup.class.isAssignableFrom(conversationKey.getConversationGroup());
 
-        tryToProcessViewAccessScope(conversationKey.getConversationGroup());
+        tryToProcessViewAccessScope();
 
-        this.beanStorage = new BeanStorage();
         this.conversationTimeoutInMs = conversationTimeoutInMinutes * 60000;
     }
 
@@ -110,16 +109,16 @@ public class DefaultConversation implements Conversation, EditableConversation
         return (T) scopedBean.getBeanInstance();
     }
 
-    public <T> void addBean(Class<?> beanClass, BeanEntry<T> beanEntry)
+    public <T> void addBean(BeanEntry<T> beanEntry)
     {
-        tryToProcessViewAccessScope(beanClass);
+        tryToProcessViewAccessScope();
 
         //TODO check if conversation is active
         touchConversation(false);
 
         //TODO
         //noinspection unchecked
-        this.beanStorage.addBean(beanClass, (BeanEntry<Serializable>) beanEntry);
+        this.beanStorage.addBean((BeanEntry<Serializable>) beanEntry);
     }
 
     /*
@@ -169,10 +168,17 @@ public class DefaultConversation implements Conversation, EditableConversation
         return FacesContext.getCurrentInstance().getViewRoot().getViewId();
     }
 
-    private void tryToProcessViewAccessScope(Class<?> groupKey)
+    private void tryToProcessViewAccessScope()
     {
+        Class<?> groupKey = this.conversationKey.getConversationGroup();
         ConversationScoped conversationScoped = groupKey.getAnnotation(ConversationScoped.class);
         if (conversationScoped != null && ViewAccessGroup.class.isAssignableFrom(conversationScoped.value()))
+        {
+            this.lastViewId = getCurrentViewId();
+        }
+        //workaround
+        else if(conversationScoped == null && this.conversationKey instanceof DefaultConversationKey &&
+                 ((DefaultConversationKey)this.conversationKey).isViewAccessScopedAnnotationPresent())
         {
             this.lastViewId = getCurrentViewId();
         }

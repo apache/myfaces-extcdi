@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 import javax.enterprise.inject.Default;
 import java.lang.annotation.Annotation;
@@ -46,11 +47,23 @@ class DefaultConversationKey implements ConversationKey
     private final Class<?> groupKey;
     private final Set<Annotation> qualifiers = new HashSet<Annotation>();
 
+    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
+
+    //workaround
+    private boolean viewAccessScopedAnnotationPresent;
+
     DefaultConversationKey(Class<?> groupKey, Annotation... qualifiers)
     {
         this.groupKey = groupKey;
 
         this.qualifiers.addAll(Arrays.asList(qualifiers));
+
+        //TODO maybe we have to add a real qualifier instead
+        if(this.qualifiers.contains(VIEW_ACCESS_SCOPED))
+        {
+            this.qualifiers.remove(VIEW_ACCESS_SCOPED);
+            this.viewAccessScopedAnnotationPresent = true;
+        }
 
         //for easier manual usage of the WindowContextManager
         if(this.qualifiers.isEmpty())
@@ -74,6 +87,11 @@ class DefaultConversationKey implements ConversationKey
         {
             throw new IllegalStateException(this.groupKey.getName() + INVALID_VIEW_ACCESS_SCOPE_DEFINITION);
         }
+    }
+
+    boolean isViewAccessScopedAnnotationPresent()
+    {
+        return viewAccessScopedAnnotationPresent;
     }
 
     private boolean isWindowScope()

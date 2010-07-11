@@ -56,7 +56,7 @@ public class DefaultAnnotation implements InvocationHandler
     static volatile Map<Class<? extends Annotation>, Annotation> annotationCache
             = new ConcurrentHashMap<Class<? extends Annotation>, Annotation>();
 
-    public static Annotation of(Class<? extends Annotation> annotationClass)
+    public static <T extends Annotation> T of(Class<T> annotationClass)
     {
         Annotation annotation = annotationCache.get(annotationClass);
 
@@ -78,7 +78,7 @@ public class DefaultAnnotation implements InvocationHandler
             }
         }
 
-        return annotation;
+        return (T)annotation;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
@@ -101,5 +101,33 @@ public class DefaultAnnotation implements InvocationHandler
         }
 
         return method.getDefaultValue();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (!(o instanceof DefaultAnnotation))
+        {
+            return false;
+        }
+
+        DefaultAnnotation that = (DefaultAnnotation) o;
+
+        if (!annotationClass.equals(that.annotationClass))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return annotationClass.hashCode();
     }
 }

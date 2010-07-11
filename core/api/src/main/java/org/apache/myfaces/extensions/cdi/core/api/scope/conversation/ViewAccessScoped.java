@@ -16,16 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+
+import javax.enterprise.inject.Stereotype;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * @author Gerhard Petracek
  */
-public interface EditableConversation
+@Stereotype
+
+@Target({TYPE, METHOD, FIELD})
+@Retention(RUNTIME)
+@Documented
+
+@ConversationScoped(ViewAccessGroup.class)
+public @interface ViewAccessScoped
 {
-    boolean isActive();
-
-    void deactivate();
-
-    <T> void addBean(BeanEntry<T> beanInstance);
 }

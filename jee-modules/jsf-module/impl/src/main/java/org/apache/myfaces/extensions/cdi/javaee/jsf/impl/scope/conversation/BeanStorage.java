@@ -52,22 +52,22 @@ class BeanStorage implements Serializable
             }
 
             //don't use something like Bean#touch here to ensure that the correct ViewId is used as well
-            return addBean(beanClass, this.beanMap, beanEntry);
+            return addBean(this.beanMap, beanEntry);
         }
     }
 
-    public BeanEntry addBean(Class beanClass, BeanEntry<Serializable> beanHolder)
+    public BeanEntry addBean(BeanEntry<Serializable> beanEntry)
     {
         synchronized (this)
         {
-            return addBean(beanClass, this.beanMap, beanHolder);
+            return addBean(this.beanMap, beanEntry);
         }
     }
 
-    private BeanEntry addBean(
-            Class beanClass, Map<Class, BeanEntry<Serializable>> beanMap, BeanEntry<Serializable> beanEntry)
+    private BeanEntry addBean(Map<Class, BeanEntry<Serializable>> beanMap, BeanEntry<Serializable> beanEntry)
     {
         //BeanEntryHolder newBean = new BeanEntryHolder(beanHolder);
+        Class beanClass = beanEntry.getBean().getBeanClass();
         beanMap.remove(beanClass);
         beanMap.put(beanClass, beanEntry);
         //this.beanAccessedEventEvent.fire(new BeanAccessedEvent(bean.getBeanInstance()));
