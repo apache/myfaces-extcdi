@@ -21,8 +21,10 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.UnscopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.destroyBean;
 
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Bean;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,14 +81,16 @@ class BeanStorage implements Serializable
         for (BeanEntry<Serializable> beanHolder : this.beanMap.values())
         {
             oldBeanInstance = beanHolder.resetBeanInstance();
-            fireUnscopeBeanEvent(oldBeanInstance);
+            fireUnscopeBeanEvent(oldBeanInstance, beanHolder.getBean());
         }
     }
 
     //TODO PreDestroy
-    private void fireUnscopeBeanEvent(Serializable instance)
+    private <T extends Serializable> void fireUnscopeBeanEvent(T instance, Bean<T> bean)
     {
         getOrCreateBeanManager().fireEvent(new UnscopeBeanEvent(instance));
+
+        destroyBean(bean, instance);
     }
 
     private BeanManager getOrCreateBeanManager()

@@ -85,7 +85,7 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     public void restart()
     {
-        touchConversation();
+        touchConversation(true);
         this.beanStorage.resetStorage();
     }
 
@@ -97,7 +97,7 @@ public class DefaultConversation implements Conversation, EditableConversation
             return null;
         }
 
-        touchConversation();
+        touchConversation(true);
 
         BeanEntry scopedBean = this.beanStorage.getBean(key);
 
@@ -114,7 +114,7 @@ public class DefaultConversation implements Conversation, EditableConversation
         tryToProcessAccessViewScope(beanClass);
 
         //TODO check if conversation is active
-        touchConversation();
+        touchConversation(false);
 
         //TODO
         //noinspection unchecked
@@ -151,12 +151,13 @@ public class DefaultConversation implements Conversation, EditableConversation
                 (this.lastAccess.getTime() + this.conversationTimeoutInMs) < System.currentTimeMillis();
     }
 
-    private void touchConversation()
+    private void touchConversation(boolean updateViewId)
     {
         this.active = true;
         this.lastAccess = new Date();
 
-        if (this.lastViewId != null)
+        //just update it if it is a view-access scope (= there is already a value)
+        if (updateViewId && this.lastViewId != null)
         {
             this.lastViewId = getCurrentViewId();
         }

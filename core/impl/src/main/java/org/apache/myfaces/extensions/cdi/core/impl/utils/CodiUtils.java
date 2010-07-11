@@ -66,6 +66,15 @@ public class CodiUtils
         return result;
     }
 
+    public static <T> void destroyBean(Bean<T> bean, T beanInstance)
+    {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+        CreationalContext<T> creationalContext = getCreationalContextFor(beanManager, bean);
+
+        bean.destroy(beanInstance, creationalContext);
+    }
+
     private static <T> CreationalContext<T> getCreationalContextFor(BeanManager beanManager, Bean<T> bean)
     {
         return beanManager.createCreationalContext(bean);
