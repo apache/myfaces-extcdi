@@ -19,8 +19,10 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Window;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.DefaultGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
@@ -75,7 +77,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
     protected <T> T resolveBeanInstance(WindowContextManager conversationManager, Bean<T> beanDescriptor)
     {
         Class<?> beanClass = beanDescriptor.getBeanClass();
-        Conversation foundConversation = getConversation(conversationManager, beanClass);
+        Conversation foundConversation = getConversation(conversationManager, beanDescriptor);
 
         //noinspection unchecked
         return (T) foundConversation.getBean(beanClass);
@@ -83,32 +85,33 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
 
     protected <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry)
     {
-        Class<?> beanClass = beanEntry.getBean().getBeanClass();
-        Conversation foundConversation = getConversation(conversationManager, beanClass);
+        Bean<?> bean = beanEntry.getBean();
+        Conversation foundConversation = getConversation(conversationManager, bean);
 
-        ((EditableConversation) foundConversation).addBean(beanClass, beanEntry);
+        ((EditableConversation) foundConversation).addBean(bean.getBeanClass(), beanEntry);
     }
 
-    private Conversation getConversation(WindowContextManager conversationManager, Class<?> beanClass)
+    private Conversation getConversation(WindowContextManager conversationManager, Bean<?> beanClass)
     {
         Class conversationGroup = getConversationGroup(beanClass);
 
         return conversationManager.getCurrentWindowContext().getConversation(conversationGroup);
     }
 
-    private Class getConversationGroup(Class<?> beanClass)
+    private Class getConversationGroup(Bean<?> bean)
     {
-        ConversationGroup conversationGroupAnnotation = beanClass.getAnnotation(ConversationGroup.class);
+        Class groupClass = bean.getBeanClass().getAnnotation(ConversationScoped.class).value();
 
-        if (conversationGroupAnnotation != null)
+        if(DefaultGroup.class.isAssignableFrom(groupClass) || ViewAccessGroup.class.isAssignableFrom(groupClass))
         {
-            return conversationGroupAnnotation.value();
+            return bean.getBeanClass();
         }
 
-        if (beanClass.isAnnotationPresent(Window.class))
+        if(WindowGroup.class.isAssignableFrom(groupClass))
         {
-            return Window.class;
+            return WindowGroup.class;
         }
-        return beanClass;
+
+        return groupClass;
     }
 }

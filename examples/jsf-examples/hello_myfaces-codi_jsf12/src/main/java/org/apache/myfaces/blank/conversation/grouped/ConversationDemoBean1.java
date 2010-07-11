@@ -19,7 +19,6 @@
 package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 
 import javax.inject.Named;
 import javax.annotation.PostConstruct;
@@ -30,8 +29,7 @@ import java.util.Date;
  * @author Gerhard Petracek
  */
 @Named
-@ConversationScoped
-@ConversationGroup(ConversationGroup1.class)
+@ConversationScoped(ConversationGroup1.class)
 public class ConversationDemoBean1 implements Serializable
 {
     private String value = "Hello grouped conversation1! ";

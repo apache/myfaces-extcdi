@@ -18,9 +18,11 @@
  */
 package org.apache.myfaces.blank.conversation.grouped;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
+
 /**
  * @author Gerhard Petracek
  */
-interface ConversationGroup1
+interface ConversationGroup1 extends ConversationGroup
 {
 }

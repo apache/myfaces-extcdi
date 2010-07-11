@@ -37,4 +37,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 public @interface ConversationScoped
 {
+    Class<? extends ConversationGroup> value() default DefaultGroup.class;
 }                 

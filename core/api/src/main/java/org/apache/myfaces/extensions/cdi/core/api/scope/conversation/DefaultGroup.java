@@ -18,17 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-
-
 /**
+ * TODO refactor it
+ *
  * @author Gerhard Petracek
  */
-@Target({TYPE})
-@Retention(RUNTIME)
-public @interface ViewAccess
+public interface DefaultGroup extends ConversationGroup
 {
 }

@@ -16,35 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.blank.conversation.grouped;
-
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
-
-import javax.inject.Named;
-import javax.annotation.PostConstruct;
-import java.io.Serializable;
-import java.util.Date;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 /**
  * @author Gerhard Petracek
  */
-@Named
-@ConversationScoped(ViewAccessGroup.class)
-public class ConversationDemoBean4 implements Serializable
+public interface WindowGroup extends ConversationGroup
 {
-    private String value = "Hello view access scoped! ";
-    private Date createdAt;
-    private static final long serialVersionUID = -4238520498463300564L;
-
-    @PostConstruct
-    public void init()
-    {
-        this.createdAt = new Date();
-    }
-
-    public String getValue()
-    {
-        return value + createdAt.toLocaleString();
-    }
 }

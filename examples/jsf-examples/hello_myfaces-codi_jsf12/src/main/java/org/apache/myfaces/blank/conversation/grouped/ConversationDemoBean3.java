@@ -19,7 +19,7 @@
 package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Window;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
 
 import javax.inject.Named;
 import javax.annotation.PostConstruct;
@@ -30,8 +30,7 @@ import java.util.Date;
  * @author Gerhard Petracek
  */
 @Named
-@Window
-@ConversationScoped
+@ConversationScoped(WindowGroup.class)
 public class ConversationDemoBean3 implements Serializable
 {
     private String value = "Hello window conversation! ";
