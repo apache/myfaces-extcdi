@@ -63,10 +63,10 @@ class InterceptedResponseWriter extends ResponseWriter
     private void addWindowContextIdHolderComponent()
     {
         FacesContext.getCurrentInstance().getViewRoot().getChildren()
-                .add(createComponentWithCurrentConversationContextId());
+                .add(createComponentWithCurrentWindowContextId());
     }
 
-    private WindowContextIdHolderComponent createComponentWithCurrentConversationContextId()
+    private WindowContextIdHolderComponent createComponentWithCurrentWindowContextId()
     {
         Bean<WindowContextManager> conversationManagerBean = ConversationUtils.resolveConversationManagerBean();
 

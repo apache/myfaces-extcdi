@@ -23,5 +23,9 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
  */
 public interface EditableConversation
 {
+    boolean isActive();
+
+    void deactivate();
+
     <T> void addBean(Class<?> beanClass, BeanEntry<T> beanInstance);
 }

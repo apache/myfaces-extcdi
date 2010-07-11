@@ -27,17 +27,9 @@ import java.io.Serializable;
  */
 public interface Conversation extends Serializable
 {
-    //TODO move down
-    boolean isActive();
-
-    //TODO move down
-    void deactivate();
-
     void end();
 
     void restart();
-
-    //Map<Class, Serializable> getBeans();
 
     <T> T getBean(Class<T> key);
 }

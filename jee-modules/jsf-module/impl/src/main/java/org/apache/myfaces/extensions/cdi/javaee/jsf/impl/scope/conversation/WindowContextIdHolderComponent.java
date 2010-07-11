@@ -69,8 +69,8 @@ public class WindowContextIdHolderComponent extends UIOutput
         return windowContextId;
     }
 
-    void changeWindowContextId(long conversationContextId)
+    void changeWindowContextId(long windowContextId)
     {
-        this.windowContextId = conversationContextId;
+        this.windowContextId = windowContextId;
     }
 }

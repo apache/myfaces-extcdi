@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.InactiveConversationsAwareWindowContext;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -32,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Gerhard Petracek
  */
-public class JsfWindowContext implements WindowContext
+public class JsfWindowContext implements WindowContext, InactiveConversationsAwareWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
@@ -42,9 +44,9 @@ public class JsfWindowContext implements WindowContext
 
     private final Map<Class, Conversation> groupedConversations = new ConcurrentHashMap<Class, Conversation>();
 
-    public JsfWindowContext(Long conversationContextId, WindowContextConfig config)
+    public JsfWindowContext(Long windowContextId, WindowContextConfig config)
     {
-        this.id = conversationContextId;
+        this.id = windowContextId;
         this.config = config;
     }
 
@@ -65,7 +67,8 @@ public class JsfWindowContext implements WindowContext
     {
         Conversation conversation = this.groupedConversations.get(conversationGroupKey);
 
-        if (conversation != null && !conversation.isActive())
+        //TODO
+        if (conversation != null && !((EditableConversation)conversation).isActive())
         {
             endAndRemoveConversation(conversationGroupKey, conversation);
             conversation = null;
@@ -87,7 +90,8 @@ public class JsfWindowContext implements WindowContext
 
     public Conversation endAndRemoveConversation(Class conversationGroupKey, Conversation conversation)
     {
-        if (conversation.isActive())
+        //TODO
+        if (((EditableConversation)conversation).isActive())
         {
             conversation.end();
         }
@@ -110,7 +114,7 @@ public class JsfWindowContext implements WindowContext
         return this.config;
     }
 
-    public void cleanup()
+    public void removeInactiveConversations()
     {
         Iterator<Conversation> conversations = this.groupedConversations.values().iterator();
 
@@ -119,7 +123,8 @@ public class JsfWindowContext implements WindowContext
         {
             conversation = conversations.next();
 
-            if (!conversation.isActive())
+            //TODO
+            if (!((EditableConversation)conversation).isActive())
             {
                 conversations.remove();
             }

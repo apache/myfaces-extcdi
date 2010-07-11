@@ -68,7 +68,4 @@ public interface WindowContext extends AttributeAware, Serializable
      * @return configuration of the current context
      */
     WindowContextConfig getConfig();
-
-    //TODO move down
-    void cleanup();
 }
