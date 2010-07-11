@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
@@ -39,7 +40,7 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     //for easier debugging
     @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
-    private final Class groupKey;
+    private final ConversationKey conversationKey;
 
     private final boolean windowScoped;
 
@@ -53,12 +54,12 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     private Date lastAccess;
 
-    public DefaultConversation(Class<?> groupKey, int conversationTimeoutInMinutes)
+    public DefaultConversation(ConversationKey conversationKey, int conversationTimeoutInMinutes)
     {
-        this.groupKey = groupKey;
-        this.windowScoped = WindowGroup.class.isAssignableFrom(groupKey);
+        this.conversationKey = conversationKey;
+        this.windowScoped = WindowGroup.class.isAssignableFrom(conversationKey.getConversationGroup());
 
-        tryToProcessAccessViewScope(groupKey);
+        tryToProcessViewAccessScope(conversationKey.getConversationGroup());
 
         this.beanStorage = new BeanStorage();
         this.conversationTimeoutInMs = conversationTimeoutInMinutes * 60000;
@@ -111,7 +112,7 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     public <T> void addBean(Class<?> beanClass, BeanEntry<T> beanEntry)
     {
-        tryToProcessAccessViewScope(beanClass);
+        tryToProcessViewAccessScope(beanClass);
 
         //TODO check if conversation is active
         touchConversation(false);
@@ -168,7 +169,7 @@ public class DefaultConversation implements Conversation, EditableConversation
         return FacesContext.getCurrentInstance().getViewRoot().getViewId();
     }
 
-    private void tryToProcessAccessViewScope(Class<?> groupKey)
+    private void tryToProcessViewAccessScope(Class<?> groupKey)
     {
         ConversationScoped conversationScoped = groupKey.getAnnotation(ConversationScoped.class);
         if (conversationScoped != null && ViewAccessGroup.class.isAssignableFrom(conversationScoped.value()))

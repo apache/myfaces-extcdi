@@ -22,19 +22,21 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.InactiveConversationsAwareWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.DeactivationAwareWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.lang.annotation.Annotation;
 
 /**
  * TODO
  *
  * @author Gerhard Petracek
  */
-public class JsfWindowContext implements WindowContext, InactiveConversationsAwareWindowContext
+public class JsfWindowContext implements WindowContext, DeactivationAwareWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
@@ -42,7 +44,8 @@ public class JsfWindowContext implements WindowContext, InactiveConversationsAwa
 
     private final WindowContextConfig config;
 
-    private final Map<Class, Conversation> groupedConversations = new ConcurrentHashMap<Class, Conversation>();
+    private final Map<ConversationKey, Conversation> groupedConversations
+            = new ConcurrentHashMap<ConversationKey, Conversation>();
 
     public JsfWindowContext(Long windowContextId, WindowContextConfig config)
     {
@@ -57,38 +60,42 @@ public class JsfWindowContext implements WindowContext, InactiveConversationsAwa
 
     public synchronized void endConversations()
     {
-        for (Map.Entry<Class, Conversation> conversationEntry : this.groupedConversations.entrySet())
+        for (Map.Entry<ConversationKey, Conversation> conversationEntry : this.groupedConversations.entrySet())
         {
             endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue());
         }
     }
 
-    public Conversation getConversation(Class conversationGroupKey)
+    public Conversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        Conversation conversation = this.groupedConversations.get(conversationGroupKey);
+        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+
+        Conversation conversation = this.groupedConversations.get(conversationKey);
 
         //TODO
         if (conversation != null && !((EditableConversation)conversation).isActive())
         {
-            endAndRemoveConversation(conversationGroupKey, conversation);
+            endAndRemoveConversation(conversationKey, conversation);
             conversation = null;
         }
 
         if (conversation == null)
         {
-            conversation = createConversation(conversationGroupKey);
-            this.groupedConversations.put(conversationGroupKey, conversation);
+            conversation = createConversation(conversationGroupKey, qualifiers);
+            this.groupedConversations.put(conversationKey, conversation);
         }
         return conversation;
     }
 
-    public Conversation endConversation(Class conversationGroupKey)
+    public Conversation endConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        Conversation conversation = this.groupedConversations.get(conversationGroupKey);
-        return endAndRemoveConversation(conversationGroupKey, conversation);
+        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+
+        Conversation conversation = this.groupedConversations.get(conversationKey);
+        return endAndRemoveConversation(conversationKey, conversation);
     }
 
-    public Conversation endAndRemoveConversation(Class conversationGroupKey, Conversation conversation)
+    private Conversation endAndRemoveConversation(ConversationKey conversationKey, Conversation conversation)
     {
         //TODO
         if (((EditableConversation)conversation).isActive())
@@ -96,15 +103,17 @@ public class JsfWindowContext implements WindowContext, InactiveConversationsAwa
             conversation.end();
         }
 
-        return this.groupedConversations.remove(conversationGroupKey);
+        return this.groupedConversations.remove(conversationKey);
     }
 
-    public Conversation createConversation(Class conversationGroup)
+    public Conversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        return new DefaultConversation(conversationGroup, this.config.getConversationTimeoutInMinutes());
+        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+
+        return new DefaultConversation(conversationKey, this.config.getConversationTimeoutInMinutes());
     }
 
-    public Map<Class /*conversation group*/, Conversation> getConversations()
+    public Map<ConversationKey /*conversation group*/, Conversation> getConversations()
     {
         return Collections.unmodifiableMap(this.groupedConversations);
     }

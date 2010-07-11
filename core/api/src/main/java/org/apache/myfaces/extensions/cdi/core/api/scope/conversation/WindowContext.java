@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware;
 
 import java.io.Serializable;
-import java.util.Map;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -43,26 +43,24 @@ public interface WindowContext extends AttributeAware, Serializable
 
     /**
      * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
      * @return a new conversation for the given group
      */
-    Conversation createConversation(Class conversationGroup);
+    Conversation createConversation(Class conversationGroup, Annotation... qualifiers);
 
     /**
      * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
      * @return a new conversation for the given group
      */
-    Conversation getConversation(Class conversationGroup);
+    Conversation getConversation(Class conversationGroup, Annotation... qualifiers);
 
     /**
      * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
      * @return the removed conversation - null otherwise
      */
-    Conversation endConversation(Class conversationGroup);
-
-    /**
-     * @return all active conversations of the current context
-     */
-    Map<Class /*conversation group*/, Conversation> getConversations();
+    Conversation endConversation(Class conversationGroup, Annotation... qualifiers);
 
     /**
      * @return configuration of the current context

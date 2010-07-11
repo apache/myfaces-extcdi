@@ -16,12 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.blank.conversation.grouped;
+
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.BeanAccessedEvent;
+
+import javax.enterprise.event.Observes;
 
 /**
  * @author Gerhard Petracek
  */
-public interface InactiveConversationsAwareWindowContext
+public class BeanAccessedListener
 {
-    void removeInactiveConversations();
+    public void accessed(@Observes BeanAccessedEvent beanAccessedEvent)
+    {
+        System.out.println("");
+    }
 }

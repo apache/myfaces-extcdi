@@ -31,7 +31,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 {
     private static final long serialVersionUID = -4756851133555458294L;
 
-    private Bean<T> bean;
+    private final Bean<T> bean;
 
     private T currentBeanInstance;
 

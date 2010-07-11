@@ -29,6 +29,7 @@ import javax.inject.Named;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -46,7 +47,8 @@ public class ClientManager implements Serializable
 
     private List<SelectItem> clients = new ArrayList<SelectItem>();
 
-    protected ClientManager()
+    @PostConstruct
+    protected void init()
     {
         for (ClientId value : ClientId.values())
         {

@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * jsf specific parts for managing grouped conversations
@@ -91,16 +93,29 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         ((EditableConversation) foundConversation).addBean(bean.getBeanClass(), beanEntry);
     }
 
-    private Conversation getConversation(WindowContextManager conversationManager, Bean<?> beanClass)
+    private Conversation getConversation(WindowContextManager conversationManager, Bean<?> bean)
     {
-        Class conversationGroup = getConversationGroup(beanClass);
+        Class conversationGroup = getConversationGroup(bean);
 
-        return conversationManager.getCurrentWindowContext().getConversation(conversationGroup);
+        Set<Annotation> qualifiers = bean.getQualifiers();
+        return conversationManager.getCurrentWindowContext()
+                .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
 
     private Class getConversationGroup(Bean<?> bean)
     {
-        Class groupClass = bean.getBeanClass().getAnnotation(ConversationScoped.class).value();
+        ConversationScoped conversationAnnotation = bean.getBeanClass().getAnnotation(ConversationScoped.class);
+
+        if(conversationAnnotation == null)
+        {
+            //in this case we have e.g. a producer method -> there is no official api to get the method
+            //-> it isn't possible to extract the group
+            //TODO if we keep the group approach we should perform a check via reflection here and throw an exception
+            //(if the user used a group) or we use a workaround (via reflection)
+            return DefaultGroup.class;
+        }
+
+        Class groupClass = conversationAnnotation.value();
 
         if(DefaultGroup.class.isAssignableFrom(groupClass) || ViewAccessGroup.class.isAssignableFrom(groupClass))
         {

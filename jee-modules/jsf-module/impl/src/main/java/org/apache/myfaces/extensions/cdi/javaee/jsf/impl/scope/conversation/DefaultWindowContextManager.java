@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.InactiveConversationsAwareWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.DeactivationAwareWindowContext;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -105,7 +105,8 @@ public class DefaultWindowContextManager implements WindowContextManager
 
         for (WindowContext windowContext : this.windowContextMap.values())
         {
-            for (Conversation conversation : windowContext.getConversations().values())
+            for (Conversation conversation :
+                    ((DeactivationAwareWindowContext)windowContext).getConversations().values())
             {
                 //TODO
                 if (!((EditableConversation)conversation).isActive())
@@ -115,7 +116,7 @@ public class DefaultWindowContextManager implements WindowContextManager
             }
 
             //TODO
-            ((InactiveConversationsAwareWindowContext)windowContext).removeInactiveConversations();
+            ((DeactivationAwareWindowContext)windowContext).removeInactiveConversations();
         }
     }
 
@@ -189,7 +190,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetWindowContext(WindowContext windowContext)
     {
-        for (Conversation conversation : windowContext.getConversations().values())
+        for (Conversation conversation : ((DeactivationAwareWindowContext)windowContext).getConversations().values())
         {
             conversation.restart();
         }
@@ -207,7 +208,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetConversations(WindowContext windowContext)
     {
-        for (Conversation conversation : windowContext.getConversations().values())
+        for (Conversation conversation : ((DeactivationAwareWindowContext)windowContext).getConversations().values())
         {
             //TODO
             ((EditableConversation)conversation).deactivate();

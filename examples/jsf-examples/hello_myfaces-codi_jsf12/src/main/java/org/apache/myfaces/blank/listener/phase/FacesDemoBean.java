@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhas
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Model;
@@ -43,6 +44,9 @@ public class FacesDemoBean
 
     @Inject
     private ConfigDemoBean configDemoBean;
+
+    @Inject
+    private RequestTypeResolver requestTypeResolver;
 
     private String text;
 

@@ -19,46 +19,47 @@
 package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
 
-import javax.inject.Named;
-import javax.inject.Inject;
-import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
-@Named
-@ConversationScoped(ViewAccessGroup.class)
-public class ConversationDemoBean4 implements Serializable
+public class ConversationDemoBeanWithQualifier implements Serializable
 {
-    private String value = "Hello view access scoped! ";
-    private Date createdAt;
+    private String value = "";
     private static final long serialVersionUID = -4238520498463300564L;
 
-    @Inject
-    @Qualifier1
-    private ConversationDemoBeanWithQualifier bean1;
-
-    @Inject
-    @Qualifier2
-    private ConversationDemoBeanWithQualifier bean2;
-
-    @PostConstruct
-    public void init()
+    protected ConversationDemoBeanWithQualifier()
     {
-        this.createdAt = new Date();
-        this.bean1.getValue();
-        this.bean2.getValue();
+    }
+
+    private ConversationDemoBeanWithQualifier(String value)
+    {
+        this.value = value;
+    }
+
+    @Produces
+    @Qualifier1
+    @ConversationScoped
+    public ConversationDemoBeanWithQualifier createConversationDemoBean1WithQ1()
+    {
+        return new ConversationDemoBeanWithQualifier("Q1");
+    }
+
+    @Produces
+    @Qualifier2
+    @ConversationScoped
+    public ConversationDemoBeanWithQualifier createConversationDemoBean1WithQ2()
+    {
+        return new ConversationDemoBeanWithQualifier("Q2");
     }
 
     public String getValue()
     {
-        return value + " bean1: " + this.bean1.getValue() + " bean2: " + this.bean2.getValue() + " "
-                + createdAt.toLocaleString();
+        return value;
     }
 }
