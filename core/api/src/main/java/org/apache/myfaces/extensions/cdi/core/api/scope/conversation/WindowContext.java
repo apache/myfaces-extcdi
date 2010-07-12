@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -64,6 +65,13 @@ public interface WindowContext extends AttributeAware, Serializable
      * @return the removed conversation - null otherwise
      */
     Conversation endConversation(Class conversationGroup, Annotation... qualifiers);
+
+    /**
+     * destroys all conversation of a group independent of the qualifiers
+     * @param conversationGroup group of the conversation in question
+     * @return the removed conversation - null otherwise
+     */
+    Set<Conversation> endConversations(Class conversationGroup);
 
     /**
      * @return configuration of the current context

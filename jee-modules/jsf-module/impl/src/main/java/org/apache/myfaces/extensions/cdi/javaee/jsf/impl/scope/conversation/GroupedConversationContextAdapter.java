@@ -42,6 +42,8 @@ import java.util.Set;
  */
 public class GroupedConversationContextAdapter extends AbstractConversationContextAdapter
 {
+    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
+
     public GroupedConversationContextAdapter(BeanManager beanManager)
     {
         super(beanManager);
@@ -111,7 +113,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
         {
             //TODO maybe we have to add a real qualifier instead
-            qualifiers.add(DefaultAnnotation.of(ViewAccessScoped.class));
+            qualifiers.add(VIEW_ACCESS_SCOPED);
             conversationGroup = bean.getBeanClass();
         }
         return conversationGroup;

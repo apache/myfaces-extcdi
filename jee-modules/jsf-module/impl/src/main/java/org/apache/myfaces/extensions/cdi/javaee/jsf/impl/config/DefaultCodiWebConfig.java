@@ -35,6 +35,8 @@ import javax.faces.context.FacesContext;
 @Singleton
 public class DefaultCodiWebConfig extends CodiWebConfig12
 {
+    private static final long serialVersionUID = 2195635039365964148L;
+
     private Boolean configInitialized;
 
     @Produces

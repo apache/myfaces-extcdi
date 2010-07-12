@@ -48,7 +48,10 @@
             </h:form>
 
             <h:form id="conversationForm">
-                <h:commandLink value="next" action="next"/>
+                <h:panelGrid>
+                    <h:commandLink value="next" action="next"/>
+                    <h:commandLink value="end conversation group 1" action="#{conversationDemoBean1.endGroup1}"/>
+                </h:panelGrid>
             </h:form>
             
             <h:panelGrid>

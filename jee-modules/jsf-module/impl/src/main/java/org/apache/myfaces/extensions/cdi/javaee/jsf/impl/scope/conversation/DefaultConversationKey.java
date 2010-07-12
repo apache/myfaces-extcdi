@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessS
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 
 import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Any;
+import javax.inject.Named;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.HashSet;
@@ -52,6 +54,7 @@ class DefaultConversationKey implements ConversationKey
     //old version
     //workaround
     //private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
+    private static final Default DEFAULT_QUALIFIER = DefaultAnnotation.of(Default.class);
 
     //workaround
     private boolean viewAccessScopedAnnotationPresent;
@@ -81,7 +84,24 @@ class DefaultConversationKey implements ConversationKey
                 //TODO test with injection into other beans
                 qualifierIterator.remove();
             }
-
+            else if(Any.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                //TODO test with injection into other beans
+                qualifierIterator.remove();
+            }
+            else if(Default.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                //TODO test with injection into other beans
+                qualifierIterator.remove();
+            }
+            else if(Named.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                if("".equals(((Named)qualifier).value()))
+                {
+                    //TODO test with injection into other beans
+                    qualifierIterator.remove();
+                }
+            }
         }
 
         /*
@@ -97,7 +117,7 @@ class DefaultConversationKey implements ConversationKey
         //for easier manual usage of the WindowContextManager
         if(this.qualifiers.isEmpty())
         {
-            this.qualifiers.add(DefaultAnnotation.of(Default.class));
+            this.qualifiers.add(DEFAULT_QUALIFIER);
         }
 
         validate();

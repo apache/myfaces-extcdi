@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
@@ -93,6 +95,20 @@ public class JsfWindowContext implements WindowContext, DeactivationAwareWindowC
 
         Conversation conversation = this.groupedConversations.get(conversationKey);
         return endAndRemoveConversation(conversationKey, conversation);
+    }
+
+    public Set<Conversation> endConversations(Class conversationGroupKey)
+    {
+        Set<Conversation> removedConversations = new HashSet<Conversation>();
+        for(Map.Entry<ConversationKey, Conversation> conversationEntry : this.groupedConversations.entrySet())
+        {
+            if(conversationGroupKey.isAssignableFrom(conversationEntry.getKey().getConversationGroup()))
+            {
+                removedConversations.add(
+                        endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue()));
+            }
+        }
+        return removedConversations;
     }
 
     private Conversation endAndRemoveConversation(ConversationKey conversationKey, Conversation conversation)

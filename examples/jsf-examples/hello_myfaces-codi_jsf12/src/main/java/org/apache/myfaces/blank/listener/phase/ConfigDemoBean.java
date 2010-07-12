@@ -33,6 +33,8 @@ import java.util.Set;
 @Typed(ConfigDemoBean.class)
 public class ConfigDemoBean extends CodiWebConfig12
 {
+    private static final long serialVersionUID = -6915243682321970384L;
+
     @Inject
     private Set<CodiConfig> codiConfig;
 

@@ -37,6 +37,8 @@ import java.util.Set;
  */
 public class ConversationUtils
 {
+    private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
+
     /**
      * @return the descriptor of a custom
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
@@ -47,8 +49,7 @@ public class ConversationUtils
     {
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
-        Set<?> conversationManagerBeans = beanManager.getBeans(
-                WindowContextManager.class, DefaultAnnotation.of(Jsf.class));
+        Set<?> conversationManagerBeans = beanManager.getBeans(WindowContextManager.class, JSF_QUALIFIER);
 
         if (conversationManagerBeans.isEmpty())
         {

@@ -20,8 +20,10 @@ package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 import javax.inject.Named;
+import javax.inject.Inject;
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.Date;
@@ -38,10 +40,18 @@ public class ConversationDemoBean1 implements Serializable
     private Date createdAt;
     private static final long serialVersionUID = -4238520498463300564L;
 
+    @Inject
+    private WindowContext windowContext;
+
     @PostConstruct
     public void init()
     {
         this.createdAt = new Date();
+    }
+
+    public void endGroup1()
+    {
+        this.windowContext.endConversations(ConversationGroup1.class);
     }
 
     public String getValue()
