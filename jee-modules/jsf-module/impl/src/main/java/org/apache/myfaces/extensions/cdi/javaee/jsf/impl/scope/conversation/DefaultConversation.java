@@ -79,8 +79,11 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     public void end()
     {
-        this.active = false;
-        this.beanStorage.resetStorage();
+        if(this.active)
+        {
+            this.active = false;
+            this.beanStorage.resetStorage();
+        }
     }
 
     public void restart()
