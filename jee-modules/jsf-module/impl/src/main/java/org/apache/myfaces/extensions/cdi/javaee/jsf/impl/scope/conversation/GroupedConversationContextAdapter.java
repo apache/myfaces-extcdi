@@ -19,10 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.GroupedConversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.DefaultGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
@@ -102,54 +100,74 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
 
         Set<Annotation> qualifiers = bean.getQualifiers();
 
-        //workaround to keep the existing api
-        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
-        {
-            if(bean.getStereotypes().contains(ViewAccessScoped.class))
-            {
-                //TODO maybe we have to add a real qualifier instead
-                qualifiers.add(DefaultAnnotation.of(ViewAccessScoped.class));
-                conversationGroup = bean.getBeanClass();
-            }
-        }
+        conversationGroup = tryToConvertViewAccessScope(bean, conversationGroup, qualifiers);
+
         return conversationManager.getCurrentWindowContext()
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
 
+    private Class tryToConvertViewAccessScope(Bean<?> bean, Class conversationGroup, Set<Annotation> qualifiers)
+    {
+        //workaround to keep the existing api
+        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
+        {
+            //TODO maybe we have to add a real qualifier instead
+            qualifiers.add(DefaultAnnotation.of(ViewAccessScoped.class));
+            conversationGroup = bean.getBeanClass();
+        }
+        return conversationGroup;
+    }
+
     private Class getConversationGroup(Bean<?> bean)
     {
-        ConversationScoped conversationAnnotation = bean.getBeanClass().getAnnotation(ConversationScoped.class);
-
         if(bean.getStereotypes().contains(WindowScoped.class))
         {
-            return WindowGroup.class;
+            return WindowScoped.class;
         }
 
-        if(conversationAnnotation == null)
+        if(bean.getStereotypes().contains(ViewAccessScoped.class))
         {
-            //in this case we have e.g. a producer method -> there is no official api to get the method
-            //-> it isn't possible to extract the group
-            //TODO if we keep the group approach we should perform a check via reflection here and throw an exception
-            //(if the user used a group) or we use a workaround (via reflection)
-
-            //due to the target api we can't forward the stereotypes - we just have 2 supported stereotypes
-            //here we know that we have the 2nd supported stereotype
-            // (the rest is analyzed later on - see DefaultConversation)
             return ViewAccessScoped.class;
         }
 
-        Class groupClass = conversationAnnotation.value();
+        GroupedConversation groupedConversationAnnotation = findGroupedConversationAnnotation(bean);
 
-        if(DefaultGroup.class.isAssignableFrom(groupClass) || ViewAccessGroup.class.isAssignableFrom(groupClass))
+        if(groupedConversationAnnotation == null)
         {
             return bean.getBeanClass();
         }
 
-        if(WindowGroup.class.isAssignableFrom(groupClass))
+        Class groupClass = groupedConversationAnnotation.value();
+
+        if(DefaultGroup.class.isAssignableFrom(groupClass))
         {
-            return WindowGroup.class;
+            return bean.getBeanClass();
+        }
+
+        if(WindowScoped.class.isAssignableFrom(groupClass))
+        {
+            return WindowScoped.class;
+        }
+
+        if(ViewAccessScoped.class.isAssignableFrom(groupClass))
+        {
+            return ViewAccessScoped.class;
         }
 
         return groupClass;
+    }
+
+    private GroupedConversation findGroupedConversationAnnotation(Bean<?> bean)
+    {
+        Set<Annotation> qualifiers = bean.getQualifiers();
+
+        for(Annotation qualifier : qualifiers)
+        {
+            if(GroupedConversation.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                return (GroupedConversation)qualifier;
+            }
+        }
+        return null;
     }
 }

@@ -20,8 +20,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 import javax.enterprise.inject.Default;
@@ -39,14 +38,15 @@ class DefaultConversationKey implements ConversationKey
     private static final long serialVersionUID = 3577945095460042939L;
 
     private static final String INVALID_WINDOW_SCOPE_DEFINITION =
-            ": It isn't allowed to use qualifiers in combination with " + WindowGroup.class.getName();
+            ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
 
     private static final String INVALID_VIEW_ACCESS_SCOPE_DEFINITION =
-            ": It isn't allowed to use qualifiers in combination with " + WindowGroup.class.getName();
+            ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
 
     private final Class<?> groupKey;
     private final Set<Annotation> qualifiers = new HashSet<Annotation>();
 
+    //workaround
     private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
 
     //workaround
@@ -96,12 +96,13 @@ class DefaultConversationKey implements ConversationKey
 
     private boolean isWindowScope()
     {
-        return WindowGroup.class.isAssignableFrom(this.groupKey.getClass());
+        return WindowScoped.class.isAssignableFrom(this.groupKey.getClass());
     }
 
+    @Deprecated
     private boolean isViewAccessScope()
     {
-        return ViewAccessGroup.class.isAssignableFrom(this.groupKey.getClass());
+        return ViewAccessScoped.class.isAssignableFrom(this.groupKey.getClass());
     }
 
     private boolean isDefaultQualifier()

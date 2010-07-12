@@ -23,6 +23,6 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
  *
  * @author Gerhard Petracek
  */
-public interface DefaultGroup extends ConversationGroup
+public interface DefaultGroup
 {
 }

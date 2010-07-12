@@ -19,9 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
@@ -57,7 +55,7 @@ public class DefaultConversation implements Conversation, EditableConversation
     public DefaultConversation(ConversationKey conversationKey, int conversationTimeoutInMinutes)
     {
         this.conversationKey = conversationKey;
-        this.windowScoped = WindowGroup.class.isAssignableFrom(conversationKey.getConversationGroup());
+        this.windowScoped = WindowScoped.class.isAssignableFrom(conversationKey.getConversationGroup());
 
         tryToProcessViewAccessScope();
 
@@ -173,14 +171,8 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     private void tryToProcessViewAccessScope()
     {
-        Class<?> groupKey = this.conversationKey.getConversationGroup();
-        ConversationScoped conversationScoped = groupKey.getAnnotation(ConversationScoped.class);
-        if (conversationScoped != null && ViewAccessGroup.class.isAssignableFrom(conversationScoped.value()))
-        {
-            this.lastViewId = getCurrentViewId();
-        }
         //workaround
-        else if(conversationScoped == null && this.conversationKey instanceof DefaultConversationKey &&
+        if(this.conversationKey instanceof DefaultConversationKey &&
                  ((DefaultConversationKey)this.conversationKey).isViewAccessScopedAnnotationPresent())
         {
             this.lastViewId = getCurrentViewId();

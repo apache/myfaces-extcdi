@@ -23,6 +23,7 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
  *
  * @author Gerhard Petracek
  */
+@Deprecated
 public interface ConversationGroup
 {
 }

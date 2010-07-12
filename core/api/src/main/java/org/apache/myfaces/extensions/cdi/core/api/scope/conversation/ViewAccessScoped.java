@@ -36,7 +36,7 @@ import static java.lang.annotation.ElementType.FIELD;
 @Retention(RUNTIME)
 @Documented
 
-@ConversationScoped(ViewAccessGroup.class)
+@ConversationScoped
 public @interface ViewAccessScoped
 {
 }

@@ -18,9 +18,26 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
+import javax.inject.Qualifier;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.CONSTRUCTOR;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ViewAccessGroup extends ConversationGroup
+@Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
+@Retention(RUNTIME)
+@Documented
+
+@Qualifier
+public @interface GroupedConversation
 {
+    Class<?> value() default DefaultGroup.class;
 }
