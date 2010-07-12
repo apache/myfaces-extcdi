@@ -27,10 +27,31 @@ import java.io.Serializable;
  */
 public interface Conversation extends Serializable
 {
+    /**
+     * Deactivates the conversation and un-scopes all bean instances immediately.<br/>
+     * At the next cleanup the whole conversation will be destroyed.
+     * (If an inactive {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation}
+     * gets resolved before the cleanup, the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} has to destroy it.
+     * -> A new conversation will be created immediately.
+     */
     void end();
 
+    /**
+     * Un-scopes all bean instances immediately.
+     * Instead of destroying the whole conversation the conversation stays active.
+     * (The conversation will be marked as used.)<br/>
+     * As soon as an instance of a bean is requested,
+     * the instance will be created based on the original bean descriptor.
+     * This approach allows a better performance, if the conversation is needed immediately.
+     */
     void restart();
 
+    /**
+     * @param key class of the requested bean
+     * @param <T> type of the requested bean
+     * @return an instance of the requested bean if the conversation is active - null otherwise
+     */
     <T> T getBean(Class<T> key);
 }
 
