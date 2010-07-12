@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.DefaultGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
@@ -138,11 +137,6 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         }
 
         Class groupClass = conversationGroupAnnotation.value();
-
-        if(DefaultGroup.class.isAssignableFrom(groupClass))
-        {
-            return bean.getBeanClass();
-        }
 
         if(WindowScoped.class.isAssignableFrom(groupClass))
         {

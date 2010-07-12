@@ -39,5 +39,5 @@ import static java.lang.annotation.ElementType.CONSTRUCTOR;
 @Qualifier
 public @interface ConversationGroup
 {
-    Class<?> value() default DefaultGroup.class;
+    Class<?> value();
 }
