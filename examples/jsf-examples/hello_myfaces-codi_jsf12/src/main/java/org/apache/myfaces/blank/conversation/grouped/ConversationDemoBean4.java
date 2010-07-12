@@ -19,7 +19,7 @@
 package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.GroupedConversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
@@ -35,7 +35,7 @@ import java.util.Date;
  */
 @Named
 @ConversationScoped
-@GroupedConversation(ViewAccessScoped.class)
+@ConversationGroup(ViewAccessScoped.class)
 public class ConversationDemoBean4 implements Serializable
 {
     private String value = "Hello view access scoped! ";

@@ -37,7 +37,7 @@ import static java.lang.annotation.ElementType.CONSTRUCTOR;
 @Documented
 
 @Qualifier
-public @interface GroupedConversation
+public @interface ConversationGroup
 {
     Class<?> value() default DefaultGroup.class;
 }

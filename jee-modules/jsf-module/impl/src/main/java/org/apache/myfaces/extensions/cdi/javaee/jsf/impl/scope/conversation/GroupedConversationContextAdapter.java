@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.GroupedConversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.DefaultGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
@@ -130,14 +130,14 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
             return ViewAccessScoped.class;
         }
 
-        GroupedConversation groupedConversationAnnotation = findGroupedConversationAnnotation(bean);
+        ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
 
-        if(groupedConversationAnnotation == null)
+        if(conversationGroupAnnotation == null)
         {
             return bean.getBeanClass();
         }
 
-        Class groupClass = groupedConversationAnnotation.value();
+        Class groupClass = conversationGroupAnnotation.value();
 
         if(DefaultGroup.class.isAssignableFrom(groupClass))
         {
@@ -157,15 +157,15 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         return groupClass;
     }
 
-    private GroupedConversation findGroupedConversationAnnotation(Bean<?> bean)
+    private ConversationGroup findConversationGroupAnnotation(Bean<?> bean)
     {
         Set<Annotation> qualifiers = bean.getQualifiers();
 
         for(Annotation qualifier : qualifiers)
         {
-            if(GroupedConversation.class.isAssignableFrom(qualifier.annotationType()))
+            if(ConversationGroup.class.isAssignableFrom(qualifier.annotationType()))
             {
-                return (GroupedConversation)qualifier;
+                return (ConversationGroup)qualifier;
             }
         }
         return null;
