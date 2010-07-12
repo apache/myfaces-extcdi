@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.blank.conversation.grouped;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
+import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier3;
 
 import javax.inject.Named;
 import javax.inject.Inject;
@@ -34,8 +34,7 @@ import java.util.Date;
  * @author Gerhard Petracek
  */
 @Named
-@ConversationScoped
-@ConversationGroup(ViewAccessScoped.class)
+@ViewAccessScoped
 public class ConversationDemoBean4 implements Serializable
 {
     private String value = "Hello view access scoped! ";
@@ -44,11 +43,18 @@ public class ConversationDemoBean4 implements Serializable
 
     @Inject
     @Qualifier1
+    @ConversationGroup(ConversationGroup1.class)
     private ConversationDemoBeanWithQualifier bean1;
 
     @Inject
-    @Qualifier2
+    @Qualifier3
+    @ConversationGroup(ConversationGroup1.class)
     private ConversationDemoBeanWithQualifier bean2;
+
+    @Inject
+    @Qualifier3
+    @ConversationGroup(ConversationGroup1.class)
+    private MixedConversationDemoBean bean3;
 
     @Inject
     @Qualifier1
@@ -73,6 +79,7 @@ public class ConversationDemoBean4 implements Serializable
                 " injected beans: " +
                 this.bean1.getValue() + " " +
                 this.bean2.getValue() + " " +
+                this.bean3.getValue() + " " +
                 this.mixedBean1.getValue() + " " +
                 this.mixedBean2.getValue();
     }

@@ -19,8 +19,9 @@
 package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
-import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
+import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier3;
 
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
@@ -45,14 +46,16 @@ public class ConversationDemoBeanWithQualifier implements Serializable
     @Produces
     @Qualifier1
     @ConversationScoped
+    @ConversationGroup(ConversationGroup1.class)
     public ConversationDemoBeanWithQualifier createConversationDemoBean1WithQ1()
     {
         return new ConversationDemoBeanWithQualifier("Q1");
     }
 
     @Produces
-    @Qualifier2
+    @Qualifier3
     @ConversationScoped
+    @ConversationGroup(ConversationGroup1.class)
     public ConversationDemoBeanWithQualifier createConversationDemoBean1WithQ2()
     {
         return new ConversationDemoBeanWithQualifier("Q2");

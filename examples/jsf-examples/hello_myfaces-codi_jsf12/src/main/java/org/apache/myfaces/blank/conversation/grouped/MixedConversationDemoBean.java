@@ -20,8 +20,11 @@ package org.apache.myfaces.blank.conversation.grouped;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier2;
+import org.apache.myfaces.blank.conversation.grouped.qualifier.Qualifier3;
 
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
@@ -62,6 +65,15 @@ public class MixedConversationDemoBean implements Serializable
     public MixedConversationDemoBean createViewAccessScopedBean()
     {
         return new MixedConversationDemoBean("Q2@ViewAccessScoped ");
+    }
+
+    @Produces
+    @Qualifier3
+    @ConversationScoped
+    @ConversationGroup(ConversationGroup1.class)
+    public MixedConversationDemoBean createGroupedConversationScopedBean()
+    {
+        return new MixedConversationDemoBean("Q2@ConversationScoped/@ConversationGroup ");
     }
 
     public String getValue()
