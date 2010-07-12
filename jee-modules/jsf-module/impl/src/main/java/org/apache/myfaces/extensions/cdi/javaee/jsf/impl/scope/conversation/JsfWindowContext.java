@@ -97,7 +97,7 @@ public class JsfWindowContext implements WindowContext, DeactivationAwareWindowC
         return endAndRemoveConversation(conversationKey, conversation);
     }
 
-    public Set<Conversation> endConversations(Class conversationGroupKey)
+    public Set<Conversation> endConversationGroup(Class conversationGroupKey)
     {
         Set<Conversation> removedConversations = new HashSet<Conversation>();
         for(Map.Entry<ConversationKey, Conversation> conversationEntry : this.groupedConversations.entrySet())

@@ -37,15 +37,6 @@ public interface WindowContext extends AttributeAware, Serializable
     Long getId();
 
     /**
-     * TODO add: endContext to reset the window scope
-     * invalidate all conversations immediately
-     * attention: window scoped beans won't get destroyed.
-     * currently there is no api for it.
-     * (if it is needed you have to call {@link #endConversation} in combination with the {@link WindowScoped})
-     */
-    void endConversations();
-
-    /**
      * @param conversationGroup group of the conversation in question
      * @param qualifiers optional qualifiers for the conversation
      * @return a new conversation for the given group
@@ -71,7 +62,16 @@ public interface WindowContext extends AttributeAware, Serializable
      * @param conversationGroup group of the conversation in question
      * @return the removed conversation - null otherwise
      */
-    Set<Conversation> endConversations(Class conversationGroup);
+    Set<Conversation> endConversationGroup(Class conversationGroup);
+
+    /**
+     * TODO add: endContext to reset the window scope
+     * invalidate all conversations immediately
+     * attention: window scoped beans won't get destroyed.
+     * currently there is no api for it.
+     * (if it is needed you have to call {@link #endConversation} in combination with the {@link WindowScoped})
+     */
+    void endConversations();
 
     /**
      * @return configuration of the current context

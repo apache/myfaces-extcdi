@@ -51,7 +51,7 @@ public class ConversationDemoBean1 implements Serializable
 
     public void endGroup1()
     {
-        this.windowContext.endConversations(ConversationGroup1.class);
+        this.windowContext.endConversationGroup(ConversationGroup1.class);
     }
 
     public String getValue()
