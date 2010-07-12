@@ -51,6 +51,7 @@
                 <h:panelGrid>
                     <h:commandLink value="next" action="next"/>
                     <h:commandLink value="end conversation group 1" action="#{conversationDemoBean1.endGroup1}"/>
+                    <h:commandLink value="end conversation of bean" action="#{conversationDemoBean1.endConversation}"/>
                 </h:panelGrid>
             </h:form>
             

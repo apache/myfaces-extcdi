@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationAware;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
@@ -84,7 +85,13 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         Conversation foundConversation = getConversation(conversationManager, beanDescriptor);
 
         //noinspection unchecked
-        return (T) foundConversation.getBean(beanClass);
+        T conversationScopedBean = (T)foundConversation.getBean(beanClass);
+
+        if(conversationScopedBean instanceof ConversationAware)
+        {
+            ((ConversationAware)conversationScopedBean).setConversation(foundConversation);
+        }
+        return conversationScopedBean;
     }
 
     protected <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry)
