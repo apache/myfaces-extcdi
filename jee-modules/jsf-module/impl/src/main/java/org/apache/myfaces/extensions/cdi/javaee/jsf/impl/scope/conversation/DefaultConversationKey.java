@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 
 import javax.enterprise.inject.Default;
 import java.lang.annotation.Annotation;
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
@@ -46,8 +48,10 @@ class DefaultConversationKey implements ConversationKey
     private final Class<?> groupKey;
     private final Set<Annotation> qualifiers = new HashSet<Annotation>();
 
+    //TODO remove as soon as the new version is tested
+    //old version
     //workaround
-    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
+    //private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
 
     //workaround
     private boolean viewAccessScopedAnnotationPresent;
@@ -58,12 +62,37 @@ class DefaultConversationKey implements ConversationKey
 
         this.qualifiers.addAll(Arrays.asList(qualifiers));
 
+        Iterator<Annotation> qualifierIterator = this.qualifiers.iterator();
+
+        Annotation qualifier;
+
         //TODO maybe we have to add a real qualifier instead
+        while(qualifierIterator.hasNext())
+        {
+            qualifier = qualifierIterator.next();
+
+            if(ViewAccessScoped.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                qualifierIterator.remove();
+                this.viewAccessScopedAnnotationPresent = true;
+            }
+            else if(ConversationGroup.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                //TODO test with injection into other beans
+                qualifierIterator.remove();
+            }
+
+        }
+
+        /*
+        //TODO remove as soon as the new version is tested
+        //old version
         if(this.qualifiers.contains(VIEW_ACCESS_SCOPED))
         {
             this.qualifiers.remove(VIEW_ACCESS_SCOPED);
             this.viewAccessScopedAnnotationPresent = true;
         }
+        */
 
         //for easier manual usage of the WindowContextManager
         if(this.qualifiers.isEmpty())

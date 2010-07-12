@@ -40,8 +40,7 @@ public interface WindowContext extends AttributeAware, Serializable
      * invalidate all conversations immediately
      * attention: window scoped beans won't get destroyed.
      * currently there is no api for it.
-     * (if it is needed you have to call {@link #endConversation} in combination with the
-     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowGroup})
+     * (if it is needed you have to call {@link #endConversation} in combination with the {@link WindowScoped})
      */
     void endConversations();
 

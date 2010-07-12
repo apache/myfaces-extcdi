@@ -62,7 +62,7 @@ public abstract class AbstractConversationContextAdapter implements Context
     {
         if (component instanceof Bean)
         {
-            WindowContextManager conversationManager = resolveConversationManager();
+            WindowContextManager conversationManager = resolveWindowContextManager();
 
             Bean<T> bean = ((Bean<T>) component);
 
@@ -88,9 +88,9 @@ public abstract class AbstractConversationContextAdapter implements Context
         if (component instanceof Bean)
         {
             Bean<T> bean = ((Bean<T>) component);
-            WindowContextManager conversationManager = resolveConversationManager();
+            WindowContextManager windowContextManager = resolveWindowContextManager();
 
-            T foundBeanInstance = resolveBeanInstance(conversationManager, bean);
+            T foundBeanInstance = resolveBeanInstance(windowContextManager, bean);
 
             if (foundBeanInstance != null)
             {
@@ -107,18 +107,18 @@ public abstract class AbstractConversationContextAdapter implements Context
      * @return an instance of a custom (the default)
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
      */
-    private WindowContextManager resolveConversationManager()
+    private WindowContextManager resolveWindowContextManager()
     {
-        Bean<WindowContextManager> conversationManagerBean = resolveConversationManagerBean();
-        return CodiUtils.getOrCreateScopedInstanceOfBean(conversationManagerBean);
+        Bean<WindowContextManager> windowContextManagerBean = resolveWindowContextManagerBean();
+        return CodiUtils.getOrCreateScopedInstanceOfBean(windowContextManagerBean);
 
         //TODO cleanup:
-        //return (ConversationManager)this.beanManager.getReference(
-        //conversationManagerBean, ConversationManager.class,
-        //getConversationManagerCreationalContextFor(conversationManagerBean));
+        //return (WindowContextManager)this.beanManager.getReference(
+        //windowContextManagerBean, ConversationManager.class,
+        //getConversationManagerCreationalContextFor(windowContextManagerBean));
     }
 
-    protected abstract Bean<WindowContextManager> resolveConversationManagerBean();
+    protected abstract Bean<WindowContextManager> resolveWindowContextManagerBean();
 
     /**
      * @param conversationManager the current

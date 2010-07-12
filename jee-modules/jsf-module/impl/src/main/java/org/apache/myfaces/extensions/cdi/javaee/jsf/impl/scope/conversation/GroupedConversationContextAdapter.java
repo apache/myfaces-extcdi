@@ -64,7 +64,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
      * with the qualifier {@link org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf} or
      *         the descriptor of the default implementation provided by this module
      */
-    protected Bean<WindowContextManager> resolveConversationManagerBean()
+    protected Bean<WindowContextManager> resolveWindowContextManagerBean()
     {
         return ConversationUtils.resolveConversationManagerBean();
     }
