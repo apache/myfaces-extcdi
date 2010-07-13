@@ -32,7 +32,7 @@ public abstract class ConversationEvent
         this.bean = bean;
     }
 
-    public final Serializable getBean()
+    public final Serializable getBeanInstance()
     {
         return bean;
     }

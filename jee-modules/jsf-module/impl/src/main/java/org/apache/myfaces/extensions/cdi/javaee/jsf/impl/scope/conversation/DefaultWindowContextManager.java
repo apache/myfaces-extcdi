@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationAware;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.UnscopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -45,6 +47,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import java.io.Serializable;
 
 /**
  * TODO don't cleanup in case of partial requests (via RequestTypeResolver)
@@ -126,6 +129,15 @@ public class DefaultWindowContextManager implements WindowContextManager
     protected WindowContext currentWindowContext()
     {
         return getCurrentWindowContext();
+    }
+
+    protected void cleanup(@Observes UnscopeBeanEvent unscopeBeanEvent)
+    {
+        Serializable beanInstance = unscopeBeanEvent.getBeanInstance();
+        if(beanInstance instanceof ConversationAware)
+        {
+            ((ConversationAware)beanInstance).setConversation(null);
+        }
     }
 
     //TODO improve performance
