@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.UuidEntry;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -34,16 +35,24 @@ import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
 /**
+ * internal! utils
  * @author Gerhard Petracek
  */
 public class ConversationUtils
 {
+    public static final String UUID_ID_KEY = "uuid";
+
     private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
 
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
+
+    private static final String OLD_VIEW_ID_KEY = "oldViewId";
+    private static final String NEW_VIEW_ID_KEY = "newViewId";
 
     /**
      * @return the descriptor of a custom
@@ -140,18 +149,33 @@ public class ConversationUtils
         return beanManager.getBeans(WindowContextManager.class);
     }
 
+    //TODO
     public static Long resolveWindowContextId(boolean requestParameterSupported)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        Map requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
+        Map<String, String> requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
+        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
 
+        String uuidKey = requestParameterMap.get(UUID_ID_KEY);
+
+        //try to restore {@link UuidEntry}
+        if(uuidKey != null)
+        {
+            UuidEntry uuidEntry = getUuidEntryMap(facesContext.getExternalContext().getSessionMap()).remove(uuidKey);
+
+            if (uuidEntry != null)
+            {
+                restoreInformationFromUuidEntry(requestMap, uuidEntry);
+            }
+        }
+
+        //try to restore get-request parameter
         String idViaGetRequest = null;
 
         if (requestParameterSupported)
         {
-            idViaGetRequest = (String) requestParameterMap
-                    .get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+            idViaGetRequest = requestParameterMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
         }
 
         Long id = null;
@@ -167,11 +191,11 @@ public class ConversationUtils
             }
         }
 
+        //TODO test if we can move it to the beginning
+        //try to find id in request map
         if (id == null)
         {
-            Map requestMap = facesContext.getExternalContext().getRequestMap();
-
-            id = (Long) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+            id = tryToFindWindowIdInRequestMap(requestMap);
         }
 
         if (id != null)
@@ -179,6 +203,7 @@ public class ConversationUtils
             return id;
         }
 
+        //try to restore id from component
         WindowContextIdHolderComponent windowContextIdHolder = getWindowContextIdHolderComponent(facesContext);
 
         if (windowContextIdHolder != null)
@@ -187,6 +212,95 @@ public class ConversationUtils
         }
 
         return null;
+    }
+
+    private static void restoreInformationFromUuidEntry(Map<String, Object> requestMap, UuidEntry uuidEntry)
+    {
+        requestMap.put(OLD_VIEW_ID_KEY, uuidEntry.getViewId());
+
+        requestMap.put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, uuidEntry.getWindowContextId());
+    }
+
+    private static Long tryToFindWindowIdInRequestMap(Map<String, Object> requestMap)
+    {
+        return (Long) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+    }
+
+    public static UuidEntry storeUuidEntry(Map<String, Object> sessionMap, Long windowContextId, String oldViewId)
+    {
+        UuidEntry uuidEntry = new UuidEntry(windowContextId, oldViewId);
+        getUuidEntryMap(sessionMap).put(uuidEntry.getUuid(), uuidEntry);
+        return uuidEntry;
+    }
+
+    private static Map<String, UuidEntry> getUuidEntryMap(Map<String, Object> sessionMap)
+    {
+        String key = ConversationUtils.class.getName() + ":uuid:map";
+        if(!sessionMap.containsKey(key))
+        {
+            sessionMap.put(key, new ConcurrentHashMap<String, UuidEntry>());
+        }
+
+        //noinspection unchecked
+        return (Map<String, UuidEntry>)sessionMap.get(key);
+    }
+
+    //TODO
+    public static void restoreInformationOfRequest(FacesContext facesContext)
+    {
+        Map<String, String> requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
+        Map<String, Object> requstMap = facesContext.getExternalContext().getRequestMap();
+        Map<String, Object> sessionMap = facesContext.getExternalContext().getSessionMap();
+
+        requstMap.put(NEW_VIEW_ID_KEY, facesContext.getViewRoot().getViewId());
+
+        String uuidKey = requestParameterMap.get(UUID_ID_KEY);
+
+        if(uuidKey != null)
+        {
+            UuidEntry uuidEntry = getUuidEntryMap(sessionMap).remove(uuidKey);
+
+            if (uuidEntry != null)
+            {
+                requstMap.put(OLD_VIEW_ID_KEY, uuidEntry.getViewId());
+
+                requstMap.put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, uuidEntry.getWindowContextId());
+            }
+        }
+
+        String oldViewId = requestParameterMap.get(OLD_VIEW_ID_KEY);
+
+        if (oldViewId != null)
+        {
+            requstMap.put(OLD_VIEW_ID_KEY, oldViewId);
+        }
+    }
+
+    public static void storeCurrentViewIdAsOldViewId(FacesContext facesContext)
+    {
+        String oldViewId = facesContext.getViewRoot().getViewId();
+        facesContext.getExternalContext().getRequestMap().put(OLD_VIEW_ID_KEY, oldViewId);
+    }
+
+    public static void storeCurrentViewIdAsNewViewId(FacesContext facesContext)
+    {
+        String newViewId = facesContext.getViewRoot().getViewId();
+        facesContext.getExternalContext().getRequestMap().put(NEW_VIEW_ID_KEY, newViewId);
+    }
+
+    public static String getOldViewIdFromRequest(FacesContext facesContext)
+    {
+        return getOldViewIdFromRequest(facesContext.getExternalContext().getRequestMap());
+    }
+
+    public static String getOldViewIdFromRequest(Map<String, Object> requstMap)
+    {
+        return (String)requstMap.get(OLD_VIEW_ID_KEY);
+    }
+
+    public static String getNewViewIdFromRequest(FacesContext facesContext)
+    {
+        return (String)facesContext.getExternalContext().getRequestMap().get(NEW_VIEW_ID_KEY);
     }
 
     public static WindowContextIdHolderComponent getWindowContextIdHolderComponent(FacesContext facesContext)

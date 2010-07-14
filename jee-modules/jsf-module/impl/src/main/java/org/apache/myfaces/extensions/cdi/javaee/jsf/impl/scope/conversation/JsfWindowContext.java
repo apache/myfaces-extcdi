@@ -46,7 +46,7 @@ public class JsfWindowContext implements WindowContext, DeactivationAwareWindowC
 
     private final WindowContextConfig config;
 
-    private final Map<ConversationKey, Conversation> groupedConversations
+    private Map<ConversationKey, Conversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, Conversation>();
 
     public JsfWindowContext(Long windowContextId, WindowContextConfig config)

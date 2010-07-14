@@ -23,11 +23,12 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScope
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getOldViewIdFromRequest;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getNewViewIdFromRequest;
 
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -138,18 +139,23 @@ public class DefaultConversation implements Conversation, EditableConversation
 
         if (this.lastViewId != null)
         {
-            Map requestMap = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-            String fromViewId = (String) requestMap.get(AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY);
-
-            if (fromViewId != null && fromViewId.endsWith(this.lastViewId))
-            {
-                this.lastViewId = (String) requestMap.get(AccessScopeAwareNavigationHandler.NEW_VIEW_ID_KEY);
-            }
-            return !this.lastViewId.equals(getCurrentViewId());
+            return isInvalidConversationForCurrentView();
         }
 
         return this.lastAccess == null ||
                 (this.lastAccess.getTime() + this.conversationTimeoutInMs) < System.currentTimeMillis();
+    }
+
+    private boolean isInvalidConversationForCurrentView()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        String fromViewId = getOldViewIdFromRequest(facesContext);
+
+        if (fromViewId != null && fromViewId.endsWith(this.lastViewId))
+        {
+            this.lastViewId = getNewViewIdFromRequest(facesContext);
+        }
+        return !this.lastViewId.equals(getCurrentViewId());
     }
 
     private void touchConversation(boolean updateViewId)

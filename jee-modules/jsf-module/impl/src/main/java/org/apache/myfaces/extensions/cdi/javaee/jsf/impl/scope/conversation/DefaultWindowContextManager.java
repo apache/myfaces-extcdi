@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.restoreInformationOfRequest;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.DeactivationAwareWindowContext;
 
 import javax.annotation.PostConstruct;
@@ -102,18 +103,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         //restore view-id in case of a get request - we need it esp. for redirects
         if (!requestTypeResolver.isPostRequest())
         {
-            phaseEvent.getFacesContext().getExternalContext().getRequestMap()
-                    .put(AccessScopeAwareNavigationHandler.NEW_VIEW_ID_KEY,
-                            phaseEvent.getFacesContext().getViewRoot().getViewId());
-
-            String oldViewId = phaseEvent.getFacesContext().getExternalContext().getRequestParameterMap()
-                    .get(AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY);
-
-            if (oldViewId != null)
-            {
-                phaseEvent.getFacesContext().getExternalContext().getRequestMap()
-                        .put(AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY, oldViewId);
-            }
+            restoreInformationOfRequest(phaseEvent.getFacesContext());
         }
     }
 

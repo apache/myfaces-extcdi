@@ -19,19 +19,17 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory.wrapFacesContext;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
 public class AccessScopeAwareNavigationHandler extends NavigationHandler
 {
-    public static final String OLD_VIEW_ID_KEY = "oldViewId";
-    public static final String NEW_VIEW_ID_KEY = "newViewId";
-
     private NavigationHandler navigationHandler;
 
     public AccessScopeAwareNavigationHandler(NavigationHandler navigationHandler)
@@ -43,16 +41,11 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
     {
         //TODO check myfaces core - issue? facesContext is not wrapped here
         facesContext = wrapFacesContext(facesContext);
-        String oldViewId = facesContext.getViewRoot().getViewId();
 
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
-        requestMap.put(OLD_VIEW_ID_KEY, oldViewId); //don't change the order
+        storeCurrentViewIdAsOldViewId(facesContext); //don't change the order
 
         this.navigationHandler.handleNavigation(facesContext, s, s1);
 
-        String newViewId = facesContext.getViewRoot().getViewId();
-
-
-        requestMap.put(NEW_VIEW_ID_KEY, newViewId);
+        storeCurrentViewIdAsNewViewId(facesContext);
     }
 }

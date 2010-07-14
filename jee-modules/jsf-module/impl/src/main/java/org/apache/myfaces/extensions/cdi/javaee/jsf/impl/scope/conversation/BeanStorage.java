@@ -37,7 +37,7 @@ class BeanStorage implements Serializable
 
     private transient BeanManager beanManager;
 
-    private final Map<Class, BeanEntry<Serializable>> beanMap = new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
+    private Map<Class, BeanEntry<Serializable>> beanMap = new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
 
     public BeanEntry getBean(Class beanClass)
     {

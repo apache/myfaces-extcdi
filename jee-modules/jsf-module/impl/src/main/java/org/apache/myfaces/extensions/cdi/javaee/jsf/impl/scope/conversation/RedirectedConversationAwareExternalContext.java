@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeUuidEntry;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getOldViewIdFromRequest;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.UUID_ID_KEY;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -266,9 +268,10 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 
         if (windowContextId != null)
         {
-            url = url + "?" + WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY + "=" + windowContextId
-                    + "&" + AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY + "=" +
-                    getRequestMap().get(AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY);
+            UuidEntry uuidEntry = storeUuidEntry(
+                    getSessionMap(), windowContextId, getOldViewIdFromRequest(getRequestMap()));
+
+            url = url + "?" + UUID_ID_KEY + "=" + uuidEntry.getUuid();
             url = this.wrapped.encodeActionURL(url);
         }
 
