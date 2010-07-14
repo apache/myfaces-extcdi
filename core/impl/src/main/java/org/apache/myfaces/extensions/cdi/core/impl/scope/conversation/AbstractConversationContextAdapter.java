@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.BeanAccessedEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -30,7 +28,6 @@ import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 
 /**
@@ -91,12 +88,6 @@ public abstract class AbstractConversationContextAdapter implements Context
             WindowContextManager windowContextManager = resolveWindowContextManager();
 
             T foundBeanInstance = resolveBeanInstance(windowContextManager, bean);
-
-            if (foundBeanInstance != null)
-            {
-                BeanManagerProvider.getInstance().getBeanManager()
-                        .fireEvent(new BeanAccessedEvent((Serializable) foundBeanInstance));
-            }
 
             return foundBeanInstance;
         }

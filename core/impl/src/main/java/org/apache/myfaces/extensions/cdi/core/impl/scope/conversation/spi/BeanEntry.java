@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.context.spi.CreationalContext;
 import java.io.Serializable;
 
 /**
@@ -26,7 +27,9 @@ import java.io.Serializable;
  */
 public interface BeanEntry<T> extends Serializable
 {
-    Bean getBean();
+    Bean<T> getBean();
+
+    CreationalContext<T> getCreationalContext();
 
     T getBeanInstance();
 

@@ -38,12 +38,8 @@ public class CodiUtils
 {
     public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
 
-    public static <T> T createNewInstanceOfBean(Bean<T> bean)
+    public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
     {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        CreationalContext<T> creationalContext = getCreationalContextFor(beanManager, bean);
-
         return createNewInstanceOfBean(bean, creationalContext);
     }
 
@@ -66,12 +62,8 @@ public class CodiUtils
         return result;
     }
 
-    public static <T> void destroyBean(Bean<T> bean, T beanInstance)
+    public static <T> void destroyBean(CreationalContext<T> creationalContext, Bean<T> bean, T beanInstance)
     {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        CreationalContext<T> creationalContext = getCreationalContextFor(beanManager, bean);
-
         bean.destroy(beanInstance, creationalContext);
     }
 

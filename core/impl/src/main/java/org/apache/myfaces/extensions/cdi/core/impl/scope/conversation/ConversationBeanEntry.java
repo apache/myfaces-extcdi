@@ -35,9 +35,12 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 
     private T currentBeanInstance;
 
+    private CreationalContext<T> creationalContext;
+
     ConversationBeanEntry(CreationalContext<T> creationalContext, Bean<T> bean)
     {
         this.bean = bean;
+        this.creationalContext = creationalContext;
         this.currentBeanInstance = createNewInstanceOfBean(bean, creationalContext);
     }
 
@@ -46,11 +49,16 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         return this.bean;
     }
 
+    public CreationalContext<T> getCreationalContext()
+    {
+        return creationalContext;
+    }
+
     public T getBeanInstance()
     {
         if (this.currentBeanInstance == null)
         {
-            this.currentBeanInstance = createNewInstanceOfBean(this.bean);
+            this.currentBeanInstance = createNewInstanceOfBean(this.creationalContext, this.bean);
         }
         return this.currentBeanInstance;
     }
