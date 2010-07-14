@@ -94,7 +94,8 @@ public class DefaultWindowContextManager implements WindowContextManager
         cleanupInactiveConversations();
     }
 
-    private void processConversationAwareRedirectsAndForwards(PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver)
+    private void processConversationAwareRedirectsAndForwards(
+            PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver)
     {
         //restore view-id in case of a get request - we need it esp. for redirects
         if (!requestTypeResolver.isPostRequest())
