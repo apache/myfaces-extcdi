@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
@@ -31,12 +34,15 @@ import javax.faces.context.FacesContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
 public class ConversationUtils
 {
+    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
+
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
 
     /**
@@ -62,6 +68,66 @@ public class ConversationUtils
         }
         //noinspection unchecked
         return (Bean<WindowContextManager>) conversationManagerBeans.iterator().next();
+    }
+
+    public static Class convertViewAccessScope(Bean<?> bean, Class conversationGroup, Set<Annotation> qualifiers)
+    {
+        //workaround to keep the existing api
+        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
+        {
+            //TODO maybe we have to add a real qualifier instead
+            qualifiers.add(VIEW_ACCESS_SCOPED);
+            conversationGroup = bean.getBeanClass();
+        }
+        return conversationGroup;
+    }
+
+    public static Class getConversationGroup(Bean<?> bean)
+    {
+        if(bean.getStereotypes().contains(WindowScoped.class))
+        {
+            return WindowScoped.class;
+        }
+
+        if(bean.getStereotypes().contains(ViewAccessScoped.class))
+        {
+            return ViewAccessScoped.class;
+        }
+
+        ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
+
+        if(conversationGroupAnnotation == null)
+        {
+            return bean.getBeanClass();
+        }
+
+        Class groupClass = conversationGroupAnnotation.value();
+
+        if(WindowScoped.class.isAssignableFrom(groupClass))
+        {
+            return WindowScoped.class;
+        }
+
+        if(ViewAccessScoped.class.isAssignableFrom(groupClass))
+        {
+            return ViewAccessScoped.class;
+        }
+
+        return groupClass;
+    }
+
+    private static ConversationGroup findConversationGroupAnnotation(Bean<?> bean)
+    {
+        Set<Annotation> qualifiers = bean.getQualifiers();
+
+        for(Annotation qualifier : qualifiers)
+        {
+            if(ConversationGroup.class.isAssignableFrom(qualifier.annotationType()))
+            {
+                return (ConversationGroup)qualifier;
+            }
+        }
+        return null;
     }
 
     /**

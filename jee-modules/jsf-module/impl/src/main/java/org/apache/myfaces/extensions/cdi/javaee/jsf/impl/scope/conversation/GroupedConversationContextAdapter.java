@@ -19,9 +19,6 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationAware;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
@@ -85,13 +82,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         Conversation foundConversation = getConversation(conversationManager, beanDescriptor);
 
         //noinspection unchecked
-        T conversationScopedBean = (T)((EditableConversation)foundConversation).getBean(beanClass);
-
-        if(conversationScopedBean instanceof ConversationAware)
-        {
-            ((ConversationAware)conversationScopedBean).setConversation(foundConversation);
-        }
-        return conversationScopedBean;
+        return (T)((EditableConversation)foundConversation).getBean(beanClass);
     }
 
     protected <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry)
@@ -102,75 +93,15 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         ((EditableConversation) foundConversation).addBean(beanEntry);
     }
 
-    private Conversation getConversation(WindowContextManager conversationManager, Bean<?> bean)
+    private Conversation getConversation(WindowContextManager windowContextManager, Bean<?> bean)
     {
-        Class conversationGroup = getConversationGroup(bean);
+        Class conversationGroup = ConversationUtils.getConversationGroup(bean);
 
         Set<Annotation> qualifiers = bean.getQualifiers();
 
-        conversationGroup = tryToConvertViewAccessScope(bean, conversationGroup, qualifiers);
+        conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
 
-        return conversationManager.getCurrentWindowContext()
+        return windowContextManager.getCurrentWindowContext()
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
-    }
-
-    private Class tryToConvertViewAccessScope(Bean<?> bean, Class conversationGroup, Set<Annotation> qualifiers)
-    {
-        //workaround to keep the existing api
-        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
-        {
-            //TODO maybe we have to add a real qualifier instead
-            qualifiers.add(VIEW_ACCESS_SCOPED);
-            conversationGroup = bean.getBeanClass();
-        }
-        return conversationGroup;
-    }
-
-    private Class getConversationGroup(Bean<?> bean)
-    {
-        if(bean.getStereotypes().contains(WindowScoped.class))
-        {
-            return WindowScoped.class;
-        }
-
-        if(bean.getStereotypes().contains(ViewAccessScoped.class))
-        {
-            return ViewAccessScoped.class;
-        }
-
-        ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
-
-        if(conversationGroupAnnotation == null)
-        {
-            return bean.getBeanClass();
-        }
-
-        Class groupClass = conversationGroupAnnotation.value();
-
-        if(WindowScoped.class.isAssignableFrom(groupClass))
-        {
-            return WindowScoped.class;
-        }
-
-        if(ViewAccessScoped.class.isAssignableFrom(groupClass))
-        {
-            return ViewAccessScoped.class;
-        }
-
-        return groupClass;
-    }
-
-    private ConversationGroup findConversationGroupAnnotation(Bean<?> bean)
-    {
-        Set<Annotation> qualifiers = bean.getQualifiers();
-
-        for(Annotation qualifier : qualifiers)
-        {
-            if(ConversationGroup.class.isAssignableFrom(qualifier.annotationType()))
-            {
-                return (ConversationGroup)qualifier;
-            }
-        }
-        return null;
     }
 }

@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationAware;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.UnscopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -36,8 +34,11 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.InjectionPoint;
+import javax.enterprise.inject.spi.Bean;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -45,9 +46,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.io.Serializable;
+import java.lang.annotation.Annotation;
 
 /**
  * TODO don't cleanup in case of partial requests (via RequestTypeResolver)
@@ -147,13 +149,39 @@ public class DefaultWindowContextManager implements WindowContextManager
         return getCurrentWindowContext();
     }
 
-    protected void cleanup(@Observes UnscopeBeanEvent unscopeBeanEvent)
+    @Produces
+    @Dependent
+    protected Conversation currentConversation(final InjectionPoint injectionPoint,
+                                               final WindowContextManager windowContextManager)
     {
-        Serializable beanInstance = unscopeBeanEvent.getBeanInstance();
-        if(beanInstance instanceof ConversationAware)
+        //for @Inject Conversation conversation;
+        return new Conversation()
         {
-            ((ConversationAware)beanInstance).setConversation(null);
-        }
+            private static final long serialVersionUID = 7754789230388003028L;
+
+            public void end()
+            {
+                findConversaiton().end();
+            }
+
+            public void restart()
+            {
+                findConversaiton().restart();
+            }
+
+            private Conversation findConversaiton()
+            {
+                Bean<?> bean = injectionPoint.getBean();
+                Class conversationGroup = ConversationUtils.getConversationGroup(bean);
+
+                Set<Annotation> qualifiers = bean.getQualifiers();
+
+                conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
+
+                return windowContextManager.getCurrentWindowContext()
+                        .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
+            }
+        };
     }
 
     //TODO improve performance

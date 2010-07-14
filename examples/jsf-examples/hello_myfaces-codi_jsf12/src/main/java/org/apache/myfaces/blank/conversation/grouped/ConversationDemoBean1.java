@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationAware;
 
 import javax.inject.Named;
 import javax.inject.Inject;
@@ -36,7 +35,7 @@ import java.util.Date;
 @Named
 @ConversationScoped
 @ConversationGroup(ConversationGroup1.class)
-public class ConversationDemoBean1 implements Serializable, ConversationAware
+public class ConversationDemoBean1 implements Serializable
 {
     private String value = "Hello grouped conversation1! ";
     private Date createdAt;
@@ -45,6 +44,7 @@ public class ConversationDemoBean1 implements Serializable, ConversationAware
     @Inject
     private WindowContext windowContext;
 
+    @Inject
     private Conversation conversation;
 
     @PostConstruct
@@ -67,10 +67,5 @@ public class ConversationDemoBean1 implements Serializable, ConversationAware
     public String getValue()
     {
         return value + createdAt.toLocaleString();
-    }
-
-    public void setConversation(Conversation conversation)
-    {
-        this.conversation = conversation;
     }
 }
