@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
 /**
+ * TODO
  * @author Gerhard Petracek
  */
 public interface EditableConversation
@@ -28,4 +29,11 @@ public interface EditableConversation
     void deactivate();
 
     <T> void addBean(BeanEntry<T> beanInstance);
+
+    /**
+     * @param key class of the requested bean
+     * @param <T> type of the requested bean
+     * @return an instance of the requested bean if the conversation is active - null otherwise
+     */
+    <T> T getBean(Class<T> key);
 }

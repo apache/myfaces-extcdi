@@ -48,12 +48,5 @@ public interface Conversation extends Serializable
      * This approach allows a better performance, if the conversation is needed immediately.
      */
     void restart();
-
-    /**
-     * @param key class of the requested bean
-     * @param <T> type of the requested bean
-     * @return an instance of the requested bean if the conversation is active - null otherwise
-     */
-    <T> T getBean(Class<T> key);
 }
 

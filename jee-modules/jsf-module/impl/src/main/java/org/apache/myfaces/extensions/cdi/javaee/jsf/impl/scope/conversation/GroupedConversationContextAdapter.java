@@ -85,7 +85,7 @@ public class GroupedConversationContextAdapter extends AbstractConversationConte
         Conversation foundConversation = getConversation(conversationManager, beanDescriptor);
 
         //noinspection unchecked
-        T conversationScopedBean = (T)foundConversation.getBean(beanClass);
+        T conversationScopedBean = (T)((EditableConversation)foundConversation).getBean(beanClass);
 
         if(conversationScopedBean instanceof ConversationAware)
         {

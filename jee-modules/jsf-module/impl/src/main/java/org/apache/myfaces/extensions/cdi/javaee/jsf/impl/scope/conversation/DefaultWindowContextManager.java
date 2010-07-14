@@ -81,6 +81,21 @@ public class DefaultWindowContextManager implements WindowContextManager
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver)
     {
+        processConversationAwareRedirectsAndForwards(phaseEvent, requestTypeResolver);
+
+        //for performance reasons + cleanup at the beginning of the request (check timeout,...)
+        //+ we aren't allowed to cleanup in case of redirects
+        //we would transfer the restored view-id into the conversation
+        if (isPartialOrGetRequest(requestTypeResolver))
+        {
+            return;
+        }
+
+        cleanupInactiveConversations();
+    }
+
+    private void processConversationAwareRedirectsAndForwards(PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver)
+    {
         //restore view-id in case of a get request - we need it esp. for redirects
         if (!requestTypeResolver.isPostRequest())
         {
@@ -97,15 +112,15 @@ public class DefaultWindowContextManager implements WindowContextManager
                         .put(AccessScopeAwareNavigationHandler.OLD_VIEW_ID_KEY, oldViewId);
             }
         }
+    }
 
-        //for performance reasons + cleanup at the beginning of the request (check timeout,...)
-        //+ we aren't allowed to cleanup in case of redirects
-        //we would transfer the restored view-id into the conversation
-        if (requestTypeResolver.isPartialRequest() || !requestTypeResolver.isPostRequest())
-        {
-            return;
-        }
+    private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)
+    {
+        return requestTypeResolver.isPartialRequest() || !requestTypeResolver.isPostRequest();
+    }
 
+    private void cleanupInactiveConversations()
+    {
         for (WindowContext windowContext : this.windowContextMap.values())
         {
             for (Conversation conversation :
