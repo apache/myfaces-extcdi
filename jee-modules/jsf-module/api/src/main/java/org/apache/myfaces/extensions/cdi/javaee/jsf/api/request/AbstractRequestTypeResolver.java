@@ -33,12 +33,12 @@ public abstract class AbstractRequestTypeResolver implements RequestTypeResolver
 
     private RequestTypeResolver defaultRequestTypeResolver;
 
-    public final boolean isPartialRequest()
+    public boolean isPartialRequest()
     {
         return getCurrentRequestTypeResolver().isPartialRequest();
     }
 
-    public final boolean isPostRequest()
+    public boolean isPostRequest()
     {
         return getCurrentRequestTypeResolver().isPostRequest();
     }
