@@ -28,6 +28,7 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.faces.event.PhaseListener;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -71,9 +72,14 @@ public class PhaseListenerExtension implements Extension
     //current workaround some servers
     public static List<PhaseListener> consumePhaseListeners()
     {
-        List<PhaseListener> result = new ArrayList<PhaseListener>(phaseListeners.size());
-        result.addAll(phaseListeners);
-        phaseListeners.clear();
-        return result;
+        int phaseListenerListSize = phaseListeners.size();
+        if(phaseListenerListSize > 0)
+        {
+            List<PhaseListener> result = new ArrayList<PhaseListener>(phaseListenerListSize);
+            result.addAll(phaseListeners);
+            phaseListeners.clear();
+            return result;
+        }
+        return Collections.emptyList();
     }
 }
