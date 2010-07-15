@@ -27,6 +27,7 @@
     </application>
 
     <factory>
+        <lifecycle-factory>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.listener.phase.CodiLifecycleFactoryWrapper</lifecycle-factory>
         <faces-context-factory>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.CodiFacesContextFactory</faces-context-factory>
         <render-kit-factory>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.CodiRenderKitFactory</render-kit-factory>
     </factory>

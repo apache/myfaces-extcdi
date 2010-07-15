@@ -4,6 +4,6 @@
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
     <interceptors>
-        <class>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.listener.phase.ViewControllerInterceptor</class>
+        <class>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase.ViewControllerInterceptor</class>
     </interceptors>
 </beans>

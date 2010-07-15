@@ -26,12 +26,17 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.faces.event.PhaseListener;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Gerhard Petracek
  */
 public class PhaseListenerExtension implements Extension
 {
+    private static List<PhaseListener> phaseListeners = new CopyOnWriteArrayList<PhaseListener>();
+
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(JsfPhaseListener.class))
@@ -45,12 +50,30 @@ public class PhaseListenerExtension implements Extension
     private void addPhaseListener(ProcessAnnotatedType processAnnotatedType)
     {
         PhaseListener newPhaseListener = createPhaseListenerInstance(processAnnotatedType);
-        JsfUtils.registerPhaseListener(newPhaseListener);
+
+        try
+        {
+            JsfUtils.registerPhaseListener(newPhaseListener);
+        }
+        catch (IllegalStateException e)
+        {
+            //current workaround some servers
+            phaseListeners.add(newPhaseListener);
+        }
     }
 
     private PhaseListener createPhaseListenerInstance(ProcessAnnotatedType processAnnotatedType)
     {
         return ClassUtils.tryToInstantiateClass(
                 processAnnotatedType.getAnnotatedType().getJavaClass(), PhaseListener.class);
+    }
+
+    //current workaround some servers
+    public static List<PhaseListener> consumePhaseListeners()
+    {
+        List<PhaseListener> result = new ArrayList<PhaseListener>(phaseListeners.size());
+        result.addAll(phaseListeners);
+        phaseListeners.clear();
+        return result;
     }
 }
