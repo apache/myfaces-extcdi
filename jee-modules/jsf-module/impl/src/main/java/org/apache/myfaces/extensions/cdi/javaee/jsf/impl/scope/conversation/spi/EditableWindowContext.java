@@ -21,11 +21,12 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 import java.util.Map;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
  */
-public interface DeactivationAwareWindowContext
+public interface EditableWindowContext
 {
     void removeInactiveConversations();
 
@@ -35,4 +36,17 @@ public interface DeactivationAwareWindowContext
      */
     Map<ConversationKey /*conversation group*/, Conversation> getConversations();
 
+    /**
+     * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
+     * @return a new conversation for the given group
+     */
+    Conversation createConversation(Class conversationGroup, Annotation... qualifiers);
+
+    /**
+     * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
+     * @return a new conversation for the given group
+     */
+    Conversation getConversation(Class conversationGroup, Annotation... qualifiers);
 }

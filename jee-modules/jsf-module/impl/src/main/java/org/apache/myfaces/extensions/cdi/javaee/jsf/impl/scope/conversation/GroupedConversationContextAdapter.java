@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEn
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -97,7 +98,7 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
 
         conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
 
-        return windowContextManager.getCurrentWindowContext()
+        return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
 }

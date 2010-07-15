@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResol
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.restoreInformationOfRequest;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.DeactivationAwareWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -117,7 +117,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         for (WindowContext windowContext : this.windowContextMap.values())
         {
             for (Conversation conversation :
-                    ((DeactivationAwareWindowContext)windowContext).getConversations().values())
+                    ((EditableWindowContext)windowContext).getConversations().values())
             {
                 //TODO
                 if (!((EditableConversation)conversation).isActive())
@@ -127,7 +127,7 @@ public class DefaultWindowContextManager implements WindowContextManager
             }
 
             //TODO
-            ((DeactivationAwareWindowContext)windowContext).removeInactiveConversations();
+            ((EditableWindowContext)windowContext).removeInactiveConversations();
         }
     }
 
@@ -168,7 +168,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
                 conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
 
-                return windowContextManager.getCurrentWindowContext()
+                return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
                         .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
             }
         };
@@ -236,7 +236,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetWindowContext(WindowContext windowContext)
     {
-        for (Conversation conversation : ((DeactivationAwareWindowContext)windowContext).getConversations().values())
+        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
             conversation.restart();
         }
@@ -254,7 +254,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetConversations(WindowContext windowContext)
     {
-        for (Conversation conversation : ((DeactivationAwareWindowContext)windowContext).getConversations().values())
+        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
             //TODO
             ((EditableConversation)conversation).deactivate();

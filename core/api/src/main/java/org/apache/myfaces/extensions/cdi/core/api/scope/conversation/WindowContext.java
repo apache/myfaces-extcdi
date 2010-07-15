@@ -37,22 +37,6 @@ public interface WindowContext extends AttributeAware, Serializable
     Long getId();
 
     /**
-     * TODO move down
-     * @param conversationGroup group of the conversation in question
-     * @param qualifiers optional qualifiers for the conversation
-     * @return a new conversation for the given group
-     */
-    Conversation createConversation(Class conversationGroup, Annotation... qualifiers);
-
-    /**
-     * TODO move down
-     * @param conversationGroup group of the conversation in question
-     * @param qualifiers optional qualifiers for the conversation
-     * @return a new conversation for the given group
-     */
-    Conversation getConversation(Class conversationGroup, Annotation... qualifiers);
-
-    /**
      * @param conversationGroup group of the conversation in question
      * @param qualifiers optional qualifiers for the conversation
      * @return the removed conversation - null otherwise

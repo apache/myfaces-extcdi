@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.DeactivationAwareWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 
 import java.util.Collections;
@@ -38,7 +38,7 @@ import java.lang.annotation.Annotation;
  *
  * @author Gerhard Petracek
  */
-public class JsfWindowContext implements WindowContext, DeactivationAwareWindowContext
+public class JsfWindowContext implements WindowContext, EditableWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
