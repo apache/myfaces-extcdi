@@ -28,6 +28,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -46,6 +47,19 @@ public class CodiUtils
     public static <T> T createNewInstanceOfBean(Bean<T> bean, CreationalContext<T> creationalContext)
     {
         return bean.create(creationalContext);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBeanByName(String beanName, Class<T> targetClass)
+    {
+        Set<Bean<?>> foundBeans = BeanManagerProvider.getInstance().getBeanManager().getBeans(beanName);
+
+        if(foundBeans.size() != 1)
+        {
+            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName());
+        }
+
+        //noinspection unchecked
+        return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
     }
 
     public static <T> T getOrCreateScopedInstanceOfBean(Bean<T> bean)

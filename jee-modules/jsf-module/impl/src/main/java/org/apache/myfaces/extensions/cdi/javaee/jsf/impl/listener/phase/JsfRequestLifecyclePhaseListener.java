@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfPhaseListener;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 
-import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -46,10 +46,9 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
 
     private JsfRequestLifecycleBroadcaster resolveBroadcaster()
     {
-        //cdi has to inject the event - TODO refactor it
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        return (JsfRequestLifecycleBroadcaster) facesContext.getApplication().getELResolver()
-                .getValue(facesContext.getELContext(), null, JsfRequestLifecycleBroadcaster.BEAN_NAME);
+        //cdi has to inject the event
+        return getOrCreateScopedInstanceOfBeanByName(
+                JsfRequestLifecycleBroadcaster.BEAN_NAME, JsfRequestLifecycleBroadcaster.class);
     }
 
     public PhaseId getPhaseId()
