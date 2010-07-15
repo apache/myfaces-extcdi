@@ -53,15 +53,17 @@ public class ConversationDemoBean1 implements Serializable
         this.createdAt = new Date();
     }
 
-    public void endGroup1()
+    public String endGroup1()
     {
         this.windowContext.endConversationGroup(ConversationGroup1.class);
+        return null;
     }
 
-    public void endConversation()
+    public String endConversation()
     {
         //this.conversation.end();
         this.conversation.restart();
+        return null;
     }
 
     public String getValue()
