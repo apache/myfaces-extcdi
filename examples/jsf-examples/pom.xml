@@ -44,6 +44,7 @@
     
     <modules>
         <module>hello_myfaces-codi_jsf12</module>
+        <module>hello_myfaces-codi_jsf20</module>
     </modules>
 
     <profiles>
