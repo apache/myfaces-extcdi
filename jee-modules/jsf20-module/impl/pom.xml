@@ -137,6 +137,21 @@
                             <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-jsf12-module-impl</include>
                         </includes>
                     </artifactSet>
+<!--
+                    <filters>
+                      <filter>
+                          <artifact>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-jsf12-module-impl</artifact>
+                          <excludes>
+                              <exclude>/META-INF/faces-config.xml</exclude>
+                              <exclude>/META-INF/beans.xml</exclude>
+                              <exclude>/META-INF/services/javax.enterprise.inject.spi.Extension</exclude>
+                          </excludes>
+                      </filter>
+                    </filters>
+-->
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                    </transformers>
                 </configuration>
             </plugin>
         </plugins>
