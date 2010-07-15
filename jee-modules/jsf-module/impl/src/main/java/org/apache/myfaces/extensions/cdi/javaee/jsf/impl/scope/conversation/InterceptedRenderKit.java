@@ -31,31 +31,31 @@ import java.io.Writer;
  */
 class InterceptedRenderKit extends RenderKit
 {
-    private RenderKit renderKit;
+    private final RenderKit wrapped;
 
-    public InterceptedRenderKit(RenderKit renderKit)
+    InterceptedRenderKit(RenderKit wrapped)
     {
-        this.renderKit = renderKit;
+        this.wrapped = wrapped;
     }
 
     public void addRenderer(String s, String s1, Renderer renderer)
     {
-        renderKit.addRenderer(s, s1, renderer);
+        wrapped.addRenderer(s, s1, renderer);
     }
 
     public Renderer getRenderer(String s, String s1)
     {
-        return renderKit.getRenderer(s, s1);
+        return wrapped.getRenderer(s, s1);
     }
 
     public ResponseStateManager getResponseStateManager()
     {
-        return renderKit.getResponseStateManager();
+        return wrapped.getResponseStateManager();
     }
 
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
     {
-        ResponseWriter responseWriter = renderKit.createResponseWriter(writer, s, s1);
+        ResponseWriter responseWriter = wrapped.createResponseWriter(writer, s, s1);
 
         if (responseWriter == null)
         {
@@ -67,6 +67,6 @@ class InterceptedRenderKit extends RenderKit
 
     public ResponseStream createResponseStream(OutputStream outputStream)
     {
-        return renderKit.createResponseStream(outputStream);
+        return wrapped.createResponseStream(outputStream);
     }
 }

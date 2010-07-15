@@ -16,26 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
         .addWindowContextIdHolderComponent;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.component.UIComponent;
 import java.io.IOException;
 import java.io.Writer;
 
 /**
  * Adds
- * {@link WindowContextIdHolderComponent}
+ * {@link org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent}
  * to the tree before the call of {@link #startDocument}
  *
  * @author Gerhard Petracek
  */
 class InterceptedResponseWriter extends ResponseWriter
 {
-    private ResponseWriter wrapped;
+    private final ResponseWriter wrapped;
 
     InterceptedResponseWriter(ResponseWriter wrapped)
     {
@@ -82,6 +82,18 @@ class InterceptedResponseWriter extends ResponseWriter
             throws IOException
     {
         wrapped.endElement(s);
+    }
+
+    public void startCDATA()
+            throws IOException
+    {
+        wrapped.startCDATA();
+    }
+
+    public void endCDATA()
+            throws IOException
+    {
+        wrapped.endCDATA();
     }
 
     public void writeAttribute(String s, Object o, String s1)

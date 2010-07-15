@@ -19,8 +19,6 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
-import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
@@ -38,11 +36,9 @@ import java.util.Set;
  *
  * @author Gerhard Petracek
  */
-public class GroupedConversationContextAdapter extends AbstractConversationContextAdapter
+class GroupedConversationContextAdapter extends AbstractConversationContextAdapter
 {
-    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
-
-    public GroupedConversationContextAdapter(BeanManager beanManager)
+    GroupedConversationContextAdapter(BeanManager beanManager)
     {
         super(beanManager);
     }

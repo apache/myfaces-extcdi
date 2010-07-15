@@ -26,12 +26,13 @@ import javax.faces.FacesException;
 /**
  * @author Gerhard Petracek
  */
-public class CodiFacesContextFactory extends
-         org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory
+public class CodiFacesContextFactory extends FacesContextFactory
 {
+    protected final FacesContextFactory wrappedFacesContextFactory;
+
     public CodiFacesContextFactory(FacesContextFactory wrappedFacesContextFactory)
     {
-        super(wrappedFacesContextFactory);
+        this.wrappedFacesContextFactory = wrappedFacesContextFactory;
     }
 
     @Override
@@ -48,6 +49,21 @@ public class CodiFacesContextFactory extends
             return null;
         }
 
+        return new CodiFacesContextWrapper(facesContext);
+    }
+
+    @Override
+    public FacesContextFactory getWrapped()
+    {
+        return wrappedFacesContextFactory.getWrapped();
+    }
+
+    public static FacesContext wrapFacesContext(FacesContext facesContext)
+    {
+        if(facesContext instanceof CodiFacesContextWrapper)
+        {
+            return facesContext;
+        }
         return new CodiFacesContextWrapper(facesContext);
     }
 }

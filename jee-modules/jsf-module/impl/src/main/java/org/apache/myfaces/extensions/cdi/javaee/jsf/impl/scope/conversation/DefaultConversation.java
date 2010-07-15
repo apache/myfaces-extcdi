@@ -123,13 +123,6 @@ public class DefaultConversation implements Conversation, EditableConversation
         this.beanStorage.addBean((BeanEntry<Serializable>) beanEntry);
     }
 
-    /*
-    private BeanEntryHolder createBean(BeanEntry<Serializable> beanEntry)
-    {
-        return new BeanEntryHolder(beanEntry, FacesContext.getCurrentInstance().getViewRoot().getViewId());
-    }
-    */
-
     private boolean isConversationTimedout()
     {
         if (this.windowScoped)

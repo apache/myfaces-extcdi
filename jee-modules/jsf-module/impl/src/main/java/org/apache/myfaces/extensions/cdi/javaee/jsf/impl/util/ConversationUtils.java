@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessS
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.UuidEntry;
@@ -32,11 +33,13 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ExternalContext;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
+import java.io.IOException;
 
 /**
  * internal! utils
@@ -314,5 +317,53 @@ public class ConversationUtils
         }
 
         return null;
+    }
+
+    public static void addWindowContextIdHolderComponent()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        List<UIComponent> uiComponents = facesContext.getViewRoot().getChildren();
+        for (UIComponent uiComponent : uiComponents)
+        {
+            if (uiComponent instanceof WindowContextIdHolderComponent)
+            {
+                //in this case we have the same view-root
+                return;
+            }
+        }
+
+        facesContext.getViewRoot().getChildren().add(createComponentWithCurrentWindowContextId());
+    }
+
+    private static WindowContextIdHolderComponent createComponentWithCurrentWindowContextId()
+    {
+        Bean<WindowContextManager> conversationManagerBean = resolveConversationManagerBean();
+
+        WindowContextManager conversationManager = CodiUtils.getOrCreateScopedInstanceOfBean(conversationManagerBean);
+
+        return new WindowContextIdHolderComponent(conversationManager.getCurrentWindowContext().getId());
+    }
+
+    public static void sendRedirect(ExternalContext externalContext, String url) throws IOException
+    {
+        Long windowContextId = resolveWindowContextId();
+
+        if (windowContextId != null)
+        {
+            UuidEntry uuidEntry = storeUuidEntry(externalContext.getSessionMap(),
+                                                 windowContextId,
+                                                 getOldViewIdFromRequest(externalContext.getRequestMap()));
+
+            url = url + "?" + UUID_ID_KEY + "=" + uuidEntry.getUuid();
+            url = externalContext.encodeActionURL(url);
+        }
+
+        externalContext.redirect(url);
+    }
+
+    private static Long resolveWindowContextId()
+    {
+        return ConversationUtils.resolveWindowContextId(false
+                /*TODO log warning if request parameter is disabled - we have to use false here*/);
     }
 }

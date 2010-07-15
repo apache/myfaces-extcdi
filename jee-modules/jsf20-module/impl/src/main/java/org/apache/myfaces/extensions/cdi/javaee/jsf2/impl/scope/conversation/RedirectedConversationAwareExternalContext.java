@@ -16,32 +16,48 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 
 import javax.faces.context.ExternalContext;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+import javax.faces.context.Flash;
 import java.net.URL;
+import java.net.MalformedURLException;
 import java.security.Principal;
-import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.List;
+import java.util.Locale;
+import java.util.Iterator;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Writer;
+import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
  */
 public class RedirectedConversationAwareExternalContext extends ExternalContext
 {
-    private ExternalContext wrapped;
+    private final ExternalContext wrapped;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;
+    }
+
+    @Override
+    public void addResponseCookie(String s, String s1, Map<String, Object> stringObjectMap)
+    {
+        wrapped.addResponseCookie(s, s1, stringObjectMap);
+    }
+
+    @Override
+    public void addResponseHeader(String s, String s1)
+    {
+        wrapped.addResponseHeader(s, s1);
     }
 
     public void dispatch(String s)
@@ -55,9 +71,27 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.encodeActionURL(s);
     }
 
+    @Override
+    public String encodeBookmarkableURL(String s, Map<String, List<String>> stringListMap)
+    {
+        return wrapped.encodeBookmarkableURL(s, stringListMap);
+    }
+
     public String encodeNamespace(String s)
     {
         return wrapped.encodeNamespace(s);
+    }
+
+    @Override
+    public String encodePartialActionURL(String s)
+    {
+        return wrapped.encodePartialActionURL(s);
+    }
+
+    @Override
+    public String encodeRedirectURL(String s, Map<String, List<String>> stringListMap)
+    {
+        return wrapped.encodeRedirectURL(s, stringListMap);
     }
 
     public String encodeResourceURL(String s)
@@ -80,6 +114,18 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.getContext();
     }
 
+    @Override
+    public String getContextName()
+    {
+        return wrapped.getContextName();
+    }
+
+    @Override
+    public Flash getFlash()
+    {
+        return wrapped.getFlash();
+    }
+
     public String getInitParameter(String s)
     {
         return wrapped.getInitParameter(s);
@@ -88,6 +134,18 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     public Map getInitParameterMap()
     {
         return wrapped.getInitParameterMap();
+    }
+
+    @Override
+    public String getMimeType(String s)
+    {
+        return wrapped.getMimeType(s);
+    }
+
+    @Override
+    public String getRealPath(String s)
+    {
+        return wrapped.getRealPath(s);
     }
 
     public String getRemoteUser()
@@ -100,11 +158,19 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.getRequest();
     }
 
+    @Override
     public String getRequestCharacterEncoding()
     {
         return wrapped.getRequestCharacterEncoding();
     }
 
+    @Override
+    public int getRequestContentLength()
+    {
+        return wrapped.getRequestContentLength();
+    }
+
+    @Override
     public String getRequestContentType()
     {
         return wrapped.getRequestContentType();
@@ -165,6 +231,23 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.getRequestPathInfo();
     }
 
+    @Override
+    public String getRequestScheme()
+    {
+        return wrapped.getRequestScheme();
+    }
+
+    @Override
+    public String getRequestServerName()
+    {
+        return wrapped.getRequestServerName();
+    }
+
+    public int getRequestServerPort()
+    {
+        return wrapped.getRequestServerPort();
+    }
+
     public String getRequestServletPath()
     {
         return wrapped.getRequestServletPath();
@@ -191,9 +274,36 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.getResponse();
     }
 
+    @Override
+    public int getResponseBufferSize()
+    {
+        return wrapped.getResponseBufferSize();
+    }
+
+    @Override
+    public String getResponseCharacterEncoding()
+    {
+        return wrapped.getResponseCharacterEncoding();
+    }
+
+    @Override
     public String getResponseContentType()
     {
         return wrapped.getResponseContentType();
+    }
+
+    @Override
+    public OutputStream getResponseOutputStream()
+            throws IOException
+    {
+        return wrapped.getResponseOutputStream();
+    }
+
+    @Override
+    public Writer getResponseOutputWriter()
+            throws IOException
+    {
+        return wrapped.getResponseOutputWriter();
     }
 
     public Object getSession(boolean b)
@@ -211,30 +321,16 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return wrapped.getUserPrincipal();
     }
 
-    public void setRequest(Object o)
+    @Override
+    public void invalidateSession()
     {
-        wrapped.setRequest(o);
+        wrapped.invalidateSession();
     }
 
-    public void setRequestCharacterEncoding(String s)
-            throws UnsupportedEncodingException
+    @Override
+    public boolean isResponseCommitted()
     {
-        wrapped.setRequestCharacterEncoding(s);
-    }
-
-    public void setResponse(Object o)
-    {
-        wrapped.setResponse(o);
-    }
-
-    public void setResponseCharacterEncoding(String s)
-    {
-        wrapped.setResponseCharacterEncoding(s);
-    }
-
-    public String getResponseCharacterEncoding()
-    {
-        return wrapped.getResponseCharacterEncoding();
+        return wrapped.isResponseCommitted();
     }
 
     public boolean isUserInRole(String s)
@@ -250,6 +346,81 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     public void log(String s, Throwable throwable)
     {
         wrapped.log(s, throwable);
+    }
+
+    @Override
+    public void responseFlushBuffer()
+            throws IOException
+    {
+        wrapped.responseFlushBuffer();
+    }
+
+    @Override
+    public void responseReset()
+    {
+        wrapped.responseReset();
+    }
+
+    @Override
+    public void responseSendError(int i, String s)
+            throws IOException
+    {
+        wrapped.responseSendError(i, s);
+    }
+
+    @Override
+    public void setRequest(Object o)
+    {
+        wrapped.setRequest(o);
+    }
+
+    @Override
+    public void setRequestCharacterEncoding(String s)
+            throws UnsupportedEncodingException
+    {
+        wrapped.setRequestCharacterEncoding(s);
+    }
+
+    @Override
+    public void setResponse(Object o)
+    {
+        wrapped.setResponse(o);
+    }
+
+    @Override
+    public void setResponseBufferSize(int i)
+    {
+        wrapped.setResponseBufferSize(i);
+    }
+
+    @Override
+    public void setResponseCharacterEncoding(String s)
+    {
+        wrapped.setResponseCharacterEncoding(s);
+    }
+
+    @Override
+    public void setResponseContentLength(int i)
+    {
+        wrapped.setResponseContentLength(i);
+    }
+
+    @Override
+    public void setResponseContentType(String s)
+    {
+        wrapped.setResponseContentType(s);
+    }
+
+    @Override
+    public void setResponseHeader(String s, String s1)
+    {
+        wrapped.setResponseHeader(s, s1);
+    }
+
+    @Override
+    public void setResponseStatus(int i)
+    {
+        wrapped.setResponseStatus(i);
     }
 
     public void redirect(String url)

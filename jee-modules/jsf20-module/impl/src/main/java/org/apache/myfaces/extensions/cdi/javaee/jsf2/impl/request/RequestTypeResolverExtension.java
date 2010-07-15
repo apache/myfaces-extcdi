@@ -1,4 +1,4 @@
-<!--
+/*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -15,19 +15,26 @@
  * KIND, either express or implied.  See the License for the
  * specific language governing permissions and limitations
  * under the License.
--->
+ */
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
-<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
-              version="2.0">
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRequestTypeResolver;
 
-    <application>
-        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
-    </application>
+import javax.enterprise.inject.spi.Extension;
+import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.event.Observes;
 
-    <factory>
-        <faces-context-factory>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.CodiFacesContextFactory</faces-context-factory>
-        <render-kit-factory>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.CodiRenderKitFactory</render-kit-factory>
-    </factory>
-</faces-config>
+/**
+ * @author Gerhard Petracek
+ */
+public class RequestTypeResolverExtension implements Extension
+{
+    public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
+    {
+        if(DefaultRequestTypeResolver.class.isAssignableFrom(processAnnotatedType.getAnnotatedType().getJavaClass()))
+        {
+            //veto the RequestTypeResolver for jsf 1.2
+            processAnnotatedType.veto();
+        }
+    }
+}
