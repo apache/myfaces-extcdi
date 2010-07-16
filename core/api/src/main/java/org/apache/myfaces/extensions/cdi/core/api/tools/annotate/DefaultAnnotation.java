@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.io.Serializable;
 
 /**
  * <p>A small helper class to create an Annotation instance of the given annotation class
@@ -38,8 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Mark Struberg
  * @author Gerhard Petracek
  */
-public class DefaultAnnotation implements InvocationHandler
+public class DefaultAnnotation implements InvocationHandler, Serializable
 {
+    private static final long serialVersionUID = -2345068201195886173L;
     private Class<? extends Annotation> annotationClass;
 
     /**
