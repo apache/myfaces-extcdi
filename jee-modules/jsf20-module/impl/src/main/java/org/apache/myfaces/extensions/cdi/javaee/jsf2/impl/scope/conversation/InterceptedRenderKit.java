@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
+        .addWindowContextIdHolderComponent;
+
 import javax.faces.render.RenderKit;
 import javax.faces.render.ClientBehaviorRenderer;
 import javax.faces.render.Renderer;
@@ -57,14 +60,9 @@ class InterceptedRenderKit extends RenderKit
 
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
     {
-        ResponseWriter responseWriter = this.wrapped.createResponseWriter(writer, s, s1);
+        addWindowContextIdHolderComponent();
 
-        if (responseWriter == null)
-        {
-            return null;
-        }
-
-        return new InterceptedResponseWriter(responseWriter);
+        return this.wrapped.createResponseWriter(writer, s, s1);
     }
 
     public ClientBehaviorRenderer getClientBehaviorRenderer(String s)
