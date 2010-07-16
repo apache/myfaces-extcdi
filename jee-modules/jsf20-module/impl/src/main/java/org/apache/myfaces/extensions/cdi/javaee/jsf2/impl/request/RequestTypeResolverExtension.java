@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRequestTypeResolver;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.DefaultWindowContextConfig;
 
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
@@ -31,9 +32,15 @@ public class RequestTypeResolverExtension implements Extension
 {
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
-        if(DefaultRequestTypeResolver.class.isAssignableFrom(processAnnotatedType.getAnnotatedType().getJavaClass()))
+        Class beanClass = processAnnotatedType.getAnnotatedType().getJavaClass();
+        if(DefaultRequestTypeResolver.class.isAssignableFrom(beanClass))
         {
             //veto the RequestTypeResolver for jsf 1.2
+            processAnnotatedType.veto();
+        }
+        else if(DefaultWindowContextConfig.class.getName().equals(beanClass.getName()))
+        {
+            //veto the config for jsf 1.2
             processAnnotatedType.veto();
         }
     }

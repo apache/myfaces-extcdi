@@ -16,39 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
-import java.util.UUID;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.UUID_ID_KEY;
+
+import javax.faces.context.ExternalContext;
+import java.io.IOException;
 
 /**
- * TODO
  * @author Gerhard Petracek
  */
-public class UuidEntry
+public class DefaultRedirectProcessor implements RedirectProcessor
 {
-    private final String uuid;
-    private final long windowContextId;
-    private final String viewId;
-
-    public UuidEntry(long windowContextId, String viewId)
+    public void redirect(ExternalContext externalContext, String url, String uniqueRequestId) throws IOException
     {
-        this.uuid = UUID.randomUUID().toString().replace("-", "");
-        this.viewId = viewId;
-        this.windowContextId = windowContextId;
-    }
+        //TODO try to use special jsf 2.0 api's
+        if (uniqueRequestId != null)
+        {
+            url = url + "?" + UUID_ID_KEY + "=" + uniqueRequestId;
 
-    public String getUuid()
-    {
-        return uuid;
-    }
+            url = externalContext.encodeActionURL(url);
+        }
 
-    public long getWindowContextId()
-    {
-        return windowContextId;
-    }
-
-    public String getViewId()
-    {
-        return viewId;
+        externalContext.redirect(url);
     }
 }

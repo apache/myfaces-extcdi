@@ -24,15 +24,15 @@ import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.T
 import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-@Singleton
+@ApplicationScoped
 public class DefaultCodiWebConfig extends CodiWebConfig12
 {
     private static final long serialVersionUID = 2195635039365964148L;

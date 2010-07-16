@@ -21,18 +21,21 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectProcessor;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 /**
  * @author Gerhard Petracek
  */
-@Singleton
-public class DefaultWindowContextConfig extends WindowContextConfig
+@ApplicationScoped
+public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 {
     private static final long serialVersionUID = -1065123725125153533L;
 
@@ -173,5 +176,10 @@ public class DefaultWindowContextConfig extends WindowContextConfig
         }
 
         setAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.parseInt(timeoutString));
+    }
+
+    public RedirectProcessor getRedirectProcessor()
+    {
+        return new DefaultRedirectProcessor();
     }
 }

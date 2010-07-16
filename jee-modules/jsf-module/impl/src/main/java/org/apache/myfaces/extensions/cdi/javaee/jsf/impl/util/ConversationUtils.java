@@ -19,15 +19,18 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import static org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider.getInstance;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.UuidEntry;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -210,6 +213,7 @@ public class ConversationUtils
 
         if (windowContextIdHolder != null)
         {
+            //TODO cache for request
             return windowContextIdHolder.getWindowContextId();
         }
 
@@ -344,26 +348,47 @@ public class ConversationUtils
         return new WindowContextIdHolderComponent(conversationManager.getCurrentWindowContext().getId());
     }
 
-    public static void sendRedirect(ExternalContext externalContext, String url) throws IOException
+    public static void sendRedirect(ExternalContext externalContext,
+                                    String url,
+                                    RedirectProcessor redirectProcessor) throws IOException
     {
-        Long windowContextId = resolveWindowContextId();
-
-        if (windowContextId != null)
+        if(redirectProcessor != null)
         {
-            UuidEntry uuidEntry = storeUuidEntry(externalContext.getSessionMap(),
-                                                 windowContextId,
-                                                 getOldViewIdFromRequest(externalContext.getRequestMap()));
+            Long windowContextId = resolveWindowContextId();
 
-            url = url + "?" + UUID_ID_KEY + "=" + uuidEntry.getUuid();
-            url = externalContext.encodeActionURL(url);
+            String uniqueRequestId = null;
+            if (windowContextId != null)
+            {
+                UuidEntry uuidEntry = storeUuidEntry(externalContext.getSessionMap(),
+                                                     windowContextId,
+                                                     getOldViewIdFromRequest(externalContext.getRequestMap()));
+
+                uniqueRequestId = uuidEntry.getUuid();
+            }
+
+            redirectProcessor.redirect(externalContext, url, uniqueRequestId);
         }
-
-        externalContext.redirect(url);
+        else
+        {
+            //TODO log warning in case of project stage dev.
+            externalContext.redirect(url);
+        }
     }
 
     private static Long resolveWindowContextId()
     {
         return ConversationUtils.resolveWindowContextId(false
                 /*TODO log warning if request parameter is disabled - we have to use false here*/);
+    }
+
+    public static RedirectProcessor getRedirectProcessor()
+    {
+        Set<Bean<?>> configResolvers = getInstance().getBeanManager().getBeans(ConfigResolver.class);
+
+        //TODO
+        ConfigResolver configResolver = (ConfigResolver) CodiUtils
+                .getOrCreateScopedInstanceOfBean(configResolvers.iterator().next());
+
+        return configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectProcessor();
     }
 }

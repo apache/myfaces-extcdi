@@ -127,6 +127,14 @@ public class ClassUtils
         return null;
     }
 
+    public static <T> T tryToInstantiateClassForName(String className, Class<T> targetType)
+    {
+        Object result = tryToInstantiateClassForName(className);
+
+        //noinspection unchecked
+        return result != null ? (T)result : null;
+    }
+
     public static Object tryToInstantiateClassForName(String className)
     {
         try

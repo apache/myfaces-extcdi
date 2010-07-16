@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.Flash;
@@ -42,6 +43,8 @@ import java.io.IOException;
 public class RedirectedConversationAwareExternalContext extends ExternalContext
 {
     private final ExternalContext wrapped;
+
+    private RedirectProcessor redirectProcessor;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
@@ -161,6 +164,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     @Override
     public String getRequestCharacterEncoding()
     {
+        //TODO codi config
         return wrapped.getRequestCharacterEncoding();
     }
 
@@ -283,6 +287,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     @Override
     public String getResponseCharacterEncoding()
     {
+        //TODO codi config - depending on getResponseContentType
+
         return wrapped.getResponseCharacterEncoding();
     }
 
@@ -426,6 +432,15 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     public void redirect(String url)
             throws IOException
     {
-        sendRedirect(this.wrapped, url);
+        lazyInit();
+        sendRedirect(this.wrapped, url, this.redirectProcessor);
+    }
+
+    private synchronized void lazyInit()
+    {
+        if(this.redirectProcessor == null)
+        {
+            this.redirectProcessor = getRedirectProcessor();
+        }
     }
 }
