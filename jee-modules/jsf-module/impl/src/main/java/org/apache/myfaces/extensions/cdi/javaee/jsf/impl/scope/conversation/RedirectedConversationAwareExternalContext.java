@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 {
     private ExternalContext wrapped;
 
-    private static RedirectProcessor redirectProcessor;
+    private static RedirectHandler redirectHandler;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
@@ -259,14 +259,14 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
             throws IOException
     {
         lazyInit();
-        sendRedirect(this.wrapped, url, redirectProcessor);
+        sendRedirect(this.wrapped, url, redirectHandler);
     }
 
     private synchronized void lazyInit()
     {
-        if(redirectProcessor == null)
+        if(redirectHandler == null)
         {
-            redirectProcessor = getRedirectProcessor();
+            redirectHandler = getRedirectHandler();
         }
     }
 }

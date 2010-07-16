@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectHandler;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
@@ -178,8 +178,8 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         setAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.parseInt(timeoutString));
     }
 
-    public RedirectProcessor getRedirectProcessor()
+    public RedirectHandler getRedirectHandler()
     {
-        return new DefaultRedirectProcessor();
+        return new DefaultRedirectHandler();
     }
 }

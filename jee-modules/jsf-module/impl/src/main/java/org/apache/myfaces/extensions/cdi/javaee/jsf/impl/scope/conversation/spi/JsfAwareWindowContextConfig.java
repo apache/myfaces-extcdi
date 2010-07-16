@@ -25,5 +25,5 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
  */
 public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
 {
-    public abstract RedirectProcessor getRedirectProcessor();
+    public abstract RedirectHandler getRedirectHandler();
 }

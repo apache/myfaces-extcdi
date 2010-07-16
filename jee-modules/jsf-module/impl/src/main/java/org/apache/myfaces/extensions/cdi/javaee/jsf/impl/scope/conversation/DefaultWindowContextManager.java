@@ -31,6 +31,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.restoreInformationOfRequest;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
@@ -74,17 +76,24 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     private WindowContextConfig windowContextConfig;
 
+    private RedirectHandler redirectHandler;
+
     @PostConstruct
     protected void init()
     {
-        windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
+        this.windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
+        this.redirectHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectHandler();
     }
 
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
-                           RequestTypeResolver requestTypeResolver)
+                           RequestTypeResolver requestTypeResolver,
+                           ConfigResolver configResolver)
     {
-        processConversationAwareRedirectsAndForwards(phaseEvent, requestTypeResolver);
+        processConversationAwareRedirectsAndForwards(phaseEvent,
+                                                     requestTypeResolver,
+                                                     configResolver.resolve(
+                                                             JsfAwareWindowContextConfig.class).getRedirectHandler());
 
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
@@ -98,12 +107,12 @@ public class DefaultWindowContextManager implements WindowContextManager
     }
 
     private void processConversationAwareRedirectsAndForwards(
-            PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver)
+            PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver, RedirectHandler redirectHandler)
     {
         //restore view-id in case of a get request - we need it esp. for redirects
         if (!requestTypeResolver.isPostRequest())
         {
-            restoreInformationOfRequest(phaseEvent.getFacesContext());
+            restoreInformationOfRequest(phaseEvent.getFacesContext(), redirectHandler);
         }
     }
 
@@ -177,7 +186,8 @@ public class DefaultWindowContextManager implements WindowContextManager
     //TODO improve performance
     public WindowContext getCurrentWindowContext()
     {
-        Long windowContextId = resolveWindowContextId(this.windowContextConfig.isGetRequestParameterSupported());
+        Long windowContextId = resolveWindowContextId(this.windowContextConfig.isGetRequestParameterSupported(),
+                                                      this.redirectHandler);
 
         if (windowContextId == null)
         {

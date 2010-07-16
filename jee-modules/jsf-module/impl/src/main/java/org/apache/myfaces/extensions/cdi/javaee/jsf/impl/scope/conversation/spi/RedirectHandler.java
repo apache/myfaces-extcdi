@@ -24,7 +24,9 @@ import java.io.IOException;
 /**
  * @author Gerhard Petracek
  */
-public interface RedirectProcessor
+public interface RedirectHandler
 {
-    void redirect(ExternalContext externalContext, String url, String uniqueRequestId) throws IOException;
+    void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException;
+
+    String restoreRequestIdKey(ExternalContext externalContext);
 }

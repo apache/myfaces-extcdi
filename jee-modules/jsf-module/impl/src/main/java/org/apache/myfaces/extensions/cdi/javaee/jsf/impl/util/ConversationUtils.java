@@ -29,7 +29,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.enterprise.inject.spi.Bean;
@@ -155,14 +155,24 @@ public class ConversationUtils
     }
 
     //TODO
-    public static Long resolveWindowContextId(boolean requestParameterSupported)
+    public static Long resolveWindowContextId(boolean requestParameterSupported, RedirectHandler redirectHandler)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         Map<String, String> requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
         Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
 
-        String uuidKey = requestParameterMap.get(UUID_ID_KEY);
+        String uuidKey = null;
+
+        if(redirectHandler != null)
+        {
+            uuidKey = redirectHandler.restoreRequestIdKey(facesContext.getExternalContext());
+        }
+
+        if(uuidKey == null)
+        {
+            uuidKey = requestParameterMap.get(UUID_ID_KEY);
+        }
 
         //try to restore {@link UuidEntry}
         if(uuidKey != null)
@@ -213,6 +223,9 @@ public class ConversationUtils
 
         if (windowContextIdHolder != null)
         {
+            requestMap.put(
+                    WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowContextIdHolder.getWindowContextId());
+
             //TODO cache for request
             return windowContextIdHolder.getWindowContextId();
         }
@@ -252,7 +265,7 @@ public class ConversationUtils
     }
 
     //TODO
-    public static void restoreInformationOfRequest(FacesContext facesContext)
+    public static void restoreInformationOfRequest(FacesContext facesContext, RedirectHandler redirectHandler)
     {
         Map<String, String> requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
         Map<String, Object> requstMap = facesContext.getExternalContext().getRequestMap();
@@ -260,7 +273,17 @@ public class ConversationUtils
 
         requstMap.put(NEW_VIEW_ID_KEY, facesContext.getViewRoot().getViewId());
 
-        String uuidKey = requestParameterMap.get(UUID_ID_KEY);
+        String uuidKey = null;
+
+        if(redirectHandler != null)
+        {
+            uuidKey = redirectHandler.restoreRequestIdKey(facesContext.getExternalContext());
+        }
+
+        if(uuidKey == null)
+        {
+            uuidKey = requestParameterMap.get(UUID_ID_KEY);
+        }
 
         if(uuidKey != null)
         {
@@ -350,11 +373,11 @@ public class ConversationUtils
 
     public static void sendRedirect(ExternalContext externalContext,
                                     String url,
-                                    RedirectProcessor redirectProcessor) throws IOException
+                                    RedirectHandler redirectHandler) throws IOException
     {
-        if(redirectProcessor != null)
+        if(redirectHandler != null)
         {
-            Long windowContextId = resolveWindowContextId();
+            Long windowContextId = resolveWindowContextId(redirectHandler);
 
             String uniqueRequestId = null;
             if (windowContextId != null)
@@ -366,7 +389,7 @@ public class ConversationUtils
                 uniqueRequestId = uuidEntry.getUuid();
             }
 
-            redirectProcessor.redirect(externalContext, url, uniqueRequestId);
+            redirectHandler.sendRedirect(externalContext, url, uniqueRequestId);
         }
         else
         {
@@ -375,13 +398,14 @@ public class ConversationUtils
         }
     }
 
-    private static Long resolveWindowContextId()
+    private static Long resolveWindowContextId(RedirectHandler redirectHandler)
     {
         return ConversationUtils.resolveWindowContextId(false
-                /*TODO log warning if request parameter is disabled - we have to use false here*/);
+                /*TODO log warning if request parameter is disabled - we have to use false here*/,
+                redirectHandler);
     }
 
-    public static RedirectProcessor getRedirectProcessor()
+    public static RedirectHandler getRedirectHandler()
     {
         Set<Bean<?>> configResolvers = getInstance().getBeanManager().getBeans(ConfigResolver.class);
 
@@ -389,6 +413,6 @@ public class ConversationUtils
         ConfigResolver configResolver = (ConfigResolver) CodiUtils
                 .getOrCreateScopedInstanceOfBean(configResolvers.iterator().next());
 
-        return configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectProcessor();
+        return configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectHandler();
     }
 }

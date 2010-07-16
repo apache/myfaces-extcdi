@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectProcessor;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.UUID_ID_KEY;
 
 import javax.faces.context.ExternalContext;
@@ -27,18 +27,22 @@ import java.io.IOException;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultRedirectProcessor implements RedirectProcessor
+public class DefaultRedirectHandler implements RedirectHandler
 {
-    public void redirect(ExternalContext externalContext, String url, String uniqueRequestId) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException
     {
-        //TODO try to use special jsf 2.0 api's
-        if (uniqueRequestId != null)
+        if (requestIdKey != null)
         {
-            url = url + "?" + UUID_ID_KEY + "=" + uniqueRequestId;
+            url = url + "?" + UUID_ID_KEY + "=" + requestIdKey;
 
             url = externalContext.encodeActionURL(url);
         }
 
         externalContext.redirect(url);
+    }
+
+    public String restoreRequestIdKey(ExternalContext externalContext)
+    {
+        return externalContext.getRequestParameterMap().get(UUID_ID_KEY);
     }
 }
