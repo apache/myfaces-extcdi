@@ -37,9 +37,26 @@ public abstract class AbstractConversationContextAdapter implements Context
 {
     protected BeanManager beanManager;
 
+    private static RuntimeException runtimeException = new RuntimeException();
+
+    //workaround for weld
+    private final boolean useFallback;
+
     public AbstractConversationContextAdapter(BeanManager beanManager)
     {
         this.beanManager = beanManager;
+
+        boolean useFallback = true;
+        for(StackTraceElement element : runtimeException.getStackTrace())
+        {
+            if(element.toString().contains("org.apache.webbeans."))
+            {
+                useFallback = false;
+                break;
+            }
+        }
+
+        this.useFallback = useFallback;
     }
 
     /**
@@ -59,6 +76,18 @@ public abstract class AbstractConversationContextAdapter implements Context
     {
         if (component instanceof Bean)
         {
+            //workaround for weld - start
+            if(useFallback)
+            {
+                T scopedBean = get(component);
+
+                if(scopedBean != null)
+                {
+                    return scopedBean;
+                }
+            }
+            //workaround for weld - end
+
             WindowContextManager conversationManager = resolveWindowContextManager();
 
             Bean<T> bean = ((Bean<T>) component);

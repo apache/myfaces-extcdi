@@ -105,6 +105,8 @@ public class DefaultAnnotation implements InvocationHandler, Serializable
         return method.getDefaultValue();
     }
 
+    //don't change these methods!
+
     @Override
     public boolean equals(Object o)
     {
