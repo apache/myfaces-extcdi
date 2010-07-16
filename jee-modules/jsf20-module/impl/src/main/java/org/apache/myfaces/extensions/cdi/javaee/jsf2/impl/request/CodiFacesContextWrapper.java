@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.BeforeAfterFacesRequestBroadcaster;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.RedirectedConversationAwareExternalContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
 import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseStream;
