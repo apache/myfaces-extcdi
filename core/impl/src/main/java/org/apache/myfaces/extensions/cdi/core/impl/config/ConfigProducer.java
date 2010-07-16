@@ -28,7 +28,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Singleton;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
@@ -46,7 +45,7 @@ public class ConfigProducer
     private static Set<Class<? extends CodiConfig>> configFilter;
 
     @Produces
-    @Singleton
+    @ApplicationScoped
     public Set<CodiConfig> createCodiConfig()
     {
         if(configInitialized == null)
@@ -82,15 +81,24 @@ public class ConfigProducer
             {
                 Set<CodiConfig> configs = createCodiConfig();
 
+                CodiConfig defaultConfig = null;
                 for(CodiConfig config : configs)
                 {
                     if(targetType.isAssignableFrom(config.getClass()))
                     {
-                        //noinspection unchecked
-                        return (T)config;
+                        if(!config.getClass().getName().startsWith("org.apache.myfaces.extensions.cdi."))
+                        {
+                            //noinspection unchecked
+                            return (T)config;
+                        }
+                        else
+                        {
+                            defaultConfig = config;
+                        }
                     }
                 }
-                return null;
+                //noinspection unchecked
+                return (T)defaultConfig;
             }
         };
     }
