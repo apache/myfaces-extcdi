@@ -19,13 +19,16 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import java.util.UUID;
+import java.io.Serializable;
 
 /**
  * TODO
  * @author Gerhard Petracek
  */
-class UuidEntry
+class UuidEntry implements Serializable
 {
+    private static final long serialVersionUID = 6432829470922720553L;
+
     private final String uuid;
     private final long windowContextId;
     private final String viewId;
