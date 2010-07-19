@@ -16,16 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
+class TimeoutConversationExpirationEvaluator implements ConversationExpirationEvaluator
 {
-    public abstract RedirectHandler getRedirectHandler();
+    private final long conversationTimeoutInMs;
 
-    public abstract ConversationFactory getConversationFactory();
+    private Date lastAccess;
+
+    TimeoutConversationExpirationEvaluator(int conversationTimeoutInMinutes)
+    {
+        this.conversationTimeoutInMs = conversationTimeoutInMinutes * 60000;
+    }
+
+    public boolean isExpired()
+    {
+
+        return this.lastAccess == null ||
+                (this.lastAccess.getTime() + this.conversationTimeoutInMs) < System.currentTimeMillis();
+    }
+
+    public void touch()
+    {
+        this.lastAccess = new Date();
+    }
+
+    public void expire()
+    {
+        this.lastAccess = null;
+    }
 }

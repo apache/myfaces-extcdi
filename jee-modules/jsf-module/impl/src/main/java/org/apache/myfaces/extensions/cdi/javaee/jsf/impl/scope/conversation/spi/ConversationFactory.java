@@ -18,14 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
+public interface ConversationFactory
 {
-    public abstract RedirectHandler getRedirectHandler();
-
-    public abstract ConversationFactory getConversationFactory();
+    Conversation createConversation(ConversationKey conversationKey, ConversationConfiguration config);
 }

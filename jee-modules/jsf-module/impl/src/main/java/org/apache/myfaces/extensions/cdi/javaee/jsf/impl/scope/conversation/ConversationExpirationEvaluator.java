@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
-
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
+public interface ConversationExpirationEvaluator
 {
-    public abstract RedirectHandler getRedirectHandler();
+    boolean isExpired();
 
-    public abstract ConversationFactory getConversationFactory();
+    void touch();
+
+    void expire();
 }

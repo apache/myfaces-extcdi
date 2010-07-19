@@ -19,16 +19,10 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getOldViewIdFromRequest;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getNewViewIdFromRequest;
-
-import javax.faces.context.FacesContext;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author Gerhard Petracek
@@ -37,40 +31,32 @@ public class DefaultConversation implements Conversation, EditableConversation
 {
     private static final long serialVersionUID = -2958548175169003298L;
 
-    //for easier debugging
     @SuppressWarnings({"FieldCanBeLocal", "UnusedDeclaration"})
     private final ConversationKey conversationKey;
-
-    private final boolean windowScoped;
-
-    private String lastViewId; //for access scope
+    private ConversationExpirationEvaluator expirationEvaluator;
 
     private final BeanStorage beanStorage = new BeanStorage();
 
-    private final long conversationTimeoutInMs;
-
-    private boolean active;
-
-    private Date lastAccess;
-
-    public DefaultConversation(ConversationKey conversationKey, int conversationTimeoutInMinutes)
+    public DefaultConversation(ConversationKey conversationKey, ConversationExpirationEvaluator expirationEvaluator)
     {
         this.conversationKey = conversationKey;
-        this.windowScoped = WindowScoped.class.isAssignableFrom(conversationKey.getConversationGroup());
+        this.expirationEvaluator = expirationEvaluator;
 
-        tryToProcessViewAccessScope();
-
-        this.conversationTimeoutInMs = conversationTimeoutInMinutes * 60000;
+        this.expirationEvaluator.touch();
     }
+
+    //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}
+    private boolean active;
 
     public boolean isActive()
     {
-        return !isConversationTimedout() && this.active;
+        return !isConversationExpired() && this.active;
     }
 
     public void deactivate()
     {
-        if (!this.windowScoped)
+        this.expirationEvaluator.expire();
+        if (this.expirationEvaluator.isExpired())
         {
             this.active = false;
         }
@@ -87,7 +73,7 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     public void restart()
     {
-        touchConversation(true);
+        touchConversation();
         this.beanStorage.resetStorage();
     }
 
@@ -99,7 +85,7 @@ public class DefaultConversation implements Conversation, EditableConversation
             return null;
         }
 
-        touchConversation(true);
+        touchConversation();
 
         BeanEntry scopedBean = this.beanStorage.getBean(key);
 
@@ -113,68 +99,29 @@ public class DefaultConversation implements Conversation, EditableConversation
 
     public <T> void addBean(BeanEntry<T> beanEntry)
     {
-        tryToProcessViewAccessScope();
-
         //TODO check if conversation is active
-        touchConversation(false);
+        touchConversation();
 
         //TODO
         //noinspection unchecked
         this.beanStorage.addBean((BeanEntry<Serializable>) beanEntry);
     }
 
-    private boolean isConversationTimedout()
+    private boolean isConversationExpired()
     {
-        if (this.windowScoped)
-        {
-            return false;
-        }
-
-        if (this.lastViewId != null)
-        {
-            return isInvalidConversationForCurrentView();
-        }
-
-        return this.lastAccess == null ||
-                (this.lastAccess.getTime() + this.conversationTimeoutInMs) < System.currentTimeMillis();
+        return this.expirationEvaluator.isExpired();
     }
 
-    private boolean isInvalidConversationForCurrentView()
-    {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        String fromViewId = getOldViewIdFromRequest(facesContext);
-
-        if (fromViewId != null && fromViewId.endsWith(this.lastViewId))
-        {
-            this.lastViewId = getNewViewIdFromRequest(facesContext);
-        }
-        return !this.lastViewId.equals(getCurrentViewId());
-    }
-
-    private void touchConversation(boolean updateViewId)
+    private void touchConversation()
     {
         this.active = true;
-        this.lastAccess = new Date();
 
-        //just update it if it is a view-access scope (= there is already a value)
-        if (updateViewId && this.lastViewId != null)
-        {
-            this.lastViewId = getCurrentViewId();
-        }
+        this.expirationEvaluator.touch();
     }
 
-    private String getCurrentViewId()
+    //just for test-cases (to expire a conversation manually)
+    public ConversationExpirationEvaluator getExpirationEvaluator()
     {
-        return FacesContext.getCurrentInstance().getViewRoot().getViewId();
-    }
-
-    private void tryToProcessViewAccessScope()
-    {
-        //workaround
-        if(this.conversationKey instanceof DefaultConversationKey &&
-                 ((DefaultConversationKey)this.conversationKey).isViewAccessScopedAnnotationPresent())
-        {
-            this.lastViewId = getCurrentViewId();
-        }
+        return expirationEvaluator;
     }
 }

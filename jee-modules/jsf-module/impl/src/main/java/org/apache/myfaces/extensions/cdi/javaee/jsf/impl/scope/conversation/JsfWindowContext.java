@@ -24,6 +24,11 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationConfiguration;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation
+        .JsfAwareConversationFactory.ConversationPropertyKeys.TIMEOUT;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -126,7 +131,24 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
     {
         ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
 
-        return new DefaultConversation(conversationKey, this.config.getConversationTimeoutInMinutes());
+        ConversationFactory conversationFactory =  ((JsfAwareWindowContextConfig)this.config).getConversationFactory();
+
+        return conversationFactory.createConversation(conversationKey, transformConfiguration(this.config));
+    }
+
+    private ConversationConfiguration transformConfiguration(final WindowContextConfig config)
+    {
+        return new ConversationConfiguration()
+        {
+            public <T> T getValue(String key, Class<T> targetType)
+            {
+                if(TIMEOUT.getKey().equals(key))
+                {
+                    return (T)(Integer)config.getConversationTimeoutInMinutes();
+                }
+                throw new IllegalArgumentException(key + " isn't a supported key");
+            }
+        };
     }
 
     public Map<ConversationKey /*conversation group*/, Conversation> getConversations()

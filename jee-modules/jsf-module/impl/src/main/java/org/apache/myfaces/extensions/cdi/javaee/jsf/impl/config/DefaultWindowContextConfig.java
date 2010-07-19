@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.JsfAwareConversationFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectHandler;
 
 import javax.enterprise.context.Dependent;
@@ -181,5 +183,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     public RedirectHandler getRedirectHandler()
     {
         return new DefaultRedirectHandler();
+    }
+
+    public ConversationFactory getConversationFactory()
+    {
+        return new JsfAwareConversationFactory();
     }
 }
