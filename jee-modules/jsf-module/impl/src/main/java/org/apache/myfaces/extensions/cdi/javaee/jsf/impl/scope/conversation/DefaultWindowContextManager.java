@@ -24,12 +24,15 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_MANAGER_BEAN_NAME;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.restoreInformationOfRequest;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.cacheWindowId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
@@ -59,7 +62,7 @@ import java.lang.annotation.Annotation;
  *
  * @author Gerhard Petracek
  */
-@Named("windowContextManager")
+@Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
 @SessionScoped
 public class DefaultWindowContextManager implements WindowContextManager
 {
@@ -88,12 +91,9 @@ public class DefaultWindowContextManager implements WindowContextManager
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
-                           ConfigResolver configResolver)
+                           WindowContextManager windowContextManager)
     {
-        processConversationAwareRedirectsAndForwards(phaseEvent,
-                                                     requestTypeResolver,
-                                                     configResolver.resolve(
-                                                             JsfAwareWindowContextConfig.class).getRedirectHandler());
+        restoreInformationOfRequest(phaseEvent.getFacesContext(), windowContextManager);
 
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
@@ -104,16 +104,6 @@ public class DefaultWindowContextManager implements WindowContextManager
         }
 
         cleanupInactiveConversations();
-    }
-
-    private void processConversationAwareRedirectsAndForwards(
-            PhaseEvent phaseEvent, RequestTypeResolver requestTypeResolver, RedirectHandler redirectHandler)
-    {
-        //restore view-id in case of a get request - we need it esp. for redirects
-        if (!requestTypeResolver.isPostRequest())
-        {
-            restoreInformationOfRequest(phaseEvent.getFacesContext(), redirectHandler);
-        }
     }
 
     private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)
@@ -192,6 +182,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         if (windowContextId == null)
         {
             windowContextId = this.lastWindowContextId.incrementAndGet();
+            cacheWindowId(windowContextId);
         }
 
         return getWindowContext(windowContextId);

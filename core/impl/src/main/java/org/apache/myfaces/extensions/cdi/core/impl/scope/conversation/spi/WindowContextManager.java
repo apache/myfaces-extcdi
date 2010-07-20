@@ -27,6 +27,8 @@ import java.io.Serializable;
  */
 public interface WindowContextManager extends Serializable
 {
+    String WINDOW_CONTEXT_MANAGER_BEAN_NAME = "windowContextManager";
+
     String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowContextId";
 
     WindowContext getCurrentWindowContext();

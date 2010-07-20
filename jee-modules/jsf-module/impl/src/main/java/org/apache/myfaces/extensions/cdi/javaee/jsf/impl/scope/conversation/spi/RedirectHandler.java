@@ -27,7 +27,7 @@ import java.io.Serializable;
  */
 public interface RedirectHandler extends Serializable
 {
-    void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException;
+    void sendRedirect(ExternalContext externalContext, String url, Long windowId) throws IOException;
 
-    String restoreRequestIdKey(ExternalContext externalContext);
+    Long restoreWindowId(ExternalContext externalContext);
 }

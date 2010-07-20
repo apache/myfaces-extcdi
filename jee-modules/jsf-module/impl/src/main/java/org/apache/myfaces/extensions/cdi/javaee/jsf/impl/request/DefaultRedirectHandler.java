@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request;
 
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.UUID_ID_KEY;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.parseWindowId;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -31,11 +33,11 @@ public class DefaultRedirectHandler implements RedirectHandler
 {
     private static final long serialVersionUID = -103516988654873089L;
 
-    public void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url, Long windowId) throws IOException
     {
-        if (requestIdKey != null)
+        if (windowId != null)
         {
-            url = url + "?" + UUID_ID_KEY + "=" + requestIdKey;
+            url = url + "?" + WINDOW_CONTEXT_ID_PARAMETER_KEY + "=" + windowId;
 
             url = externalContext.encodeActionURL(url);
         }
@@ -43,8 +45,8 @@ public class DefaultRedirectHandler implements RedirectHandler
         externalContext.redirect(url);
     }
 
-    public String restoreRequestIdKey(ExternalContext externalContext)
+    public Long restoreWindowId(ExternalContext externalContext)
     {
-        return externalContext.getRequestParameterMap().get(UUID_ID_KEY);
+        return parseWindowId(externalContext.getRequestParameterMap().get(WINDOW_CONTEXT_ID_PARAMETER_KEY));
     }
 }

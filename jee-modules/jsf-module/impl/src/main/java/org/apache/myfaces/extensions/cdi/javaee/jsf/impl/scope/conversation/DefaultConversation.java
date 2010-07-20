@@ -42,7 +42,8 @@ public class DefaultConversation implements Conversation, EditableConversation
         this.conversationKey = conversationKey;
         this.expirationEvaluator = expirationEvaluator;
 
-        this.expirationEvaluator.touch();
+        //TODO remove it after further tests
+        //this.expirationEvaluator.touch();
     }
 
     //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}

@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getOldViewIdFromRequest;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getNewViewIdFromRequest;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getOldViewId;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.getNewViewId;
 
 import javax.faces.context.FacesContext;
 
@@ -37,14 +37,13 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
             return true;
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        String fromViewId = getOldViewIdFromRequest(facesContext);
+        String oldViewId = getOldViewId();
 
-        if (fromViewId != null && fromViewId.endsWith(this.lastViewId))
+        if (oldViewId != null && oldViewId.equals(this.lastViewId))
         {
-            this.lastViewId = getNewViewIdFromRequest(facesContext);
+            this.lastViewId = getNewViewId();
         }
-        return !this.lastViewId.equals(getCurrentViewId());
+        return !getCurrentViewId().equals(this.lastViewId);
     }
 
     public void touch()

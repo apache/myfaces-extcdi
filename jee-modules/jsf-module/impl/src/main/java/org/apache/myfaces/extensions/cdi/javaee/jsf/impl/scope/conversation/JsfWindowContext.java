@@ -54,6 +54,8 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
     private Map<ConversationKey, Conversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, Conversation>();
 
+    private Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
+
     public JsfWindowContext(Long windowContextId, WindowContextConfig config)
     {
         this.id = windowContextId;
@@ -180,21 +182,27 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     public boolean setAttribute(String name, Object value)
     {
-        throw new IllegalStateException("not implemented");
+        return setAttribute(name, value, true);
     }
 
     public boolean setAttribute(String name, Object value, boolean forceOverride)
     {
-        throw new IllegalStateException("not implemented");
+        if(value == null || (!forceOverride && containsAttribute(name)))
+        {
+            return false;
+        }
+        this.attributes.put(name, value);
+        return true;
     }
 
     public boolean containsAttribute(String name)
     {
-        throw new IllegalStateException("not implemented");
+        return this.attributes.containsKey(name);
     }
 
     public <T> T getAttribute(String name, Class<T> targetType)
     {
-        throw new IllegalStateException("not implemented");
+        //noinspection unchecked
+        return (T)this.attributes.get(name);
     }
 }

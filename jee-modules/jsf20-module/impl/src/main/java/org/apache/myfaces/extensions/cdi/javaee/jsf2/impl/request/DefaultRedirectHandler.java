@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.UUID_ID_KEY;
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -42,33 +43,33 @@ public class DefaultRedirectHandler extends
     }
 
     @Override
-    public void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url, Long windowId) throws IOException
     {
         if(this.useFallback ||
                 //here we have an ajax nav. - currently it doesn't work in combination with the flash scope
                 FacesContext.getCurrentInstance().getPartialViewContext().isPartialRequest())
         {
-            super.sendRedirect(externalContext, url, requestIdKey);
+            super.sendRedirect(externalContext, url, windowId);
             return;
         }
         
-        if (requestIdKey != null)
+        if (windowId != null)
         {
-            externalContext.getRequestMap().put(UUID_ID_KEY, requestIdKey);
-            externalContext.getFlash().keep(UUID_ID_KEY);
+            externalContext.getRequestMap().put(WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
+            externalContext.getFlash().keep(WINDOW_CONTEXT_ID_PARAMETER_KEY);
         }
 
         externalContext.redirect(url);
     }
 
     @Override
-    public String restoreRequestIdKey(ExternalContext externalContext)
+    public Long restoreWindowId(ExternalContext externalContext)
     {
         if(this.useFallback)
         {
-            return super.restoreRequestIdKey(externalContext);
+            return super.restoreWindowId(externalContext);
         }
 
-        return (String)externalContext.getFlash().remove(UUID_ID_KEY);
+        return (Long)externalContext.getFlash().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 }

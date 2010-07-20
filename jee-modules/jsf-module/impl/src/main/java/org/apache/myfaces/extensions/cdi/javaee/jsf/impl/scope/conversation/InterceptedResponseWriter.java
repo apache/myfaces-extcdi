@@ -20,11 +20,13 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
         .addWindowContextIdHolderComponent;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
+        .storeCurrentViewIdAsOldViewId;
 
-import javax.faces.component.UIComponent;
 import javax.faces.context.ResponseWriter;
+import javax.faces.context.ResponseWriterWrapper;
+import javax.faces.context.FacesContext;
 import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Adds
@@ -33,7 +35,7 @@ import java.io.Writer;
  *
  * @author Gerhard Petracek
  */
-class InterceptedResponseWriter extends ResponseWriter
+class InterceptedResponseWriter extends ResponseWriterWrapper
 {
     private ResponseWriter wrapped;
 
@@ -42,22 +44,7 @@ class InterceptedResponseWriter extends ResponseWriter
         this.wrapped = wrapped;
     }
 
-    public String getContentType()
-    {
-        return wrapped.getContentType();
-    }
-
-    public String getCharacterEncoding()
-    {
-        return wrapped.getCharacterEncoding();
-    }
-
-    public void flush()
-            throws IOException
-    {
-        wrapped.flush();
-    }
-
+    @Override
     public void startDocument()
             throws IOException
     {
@@ -66,116 +53,17 @@ class InterceptedResponseWriter extends ResponseWriter
         wrapped.startDocument();
     }
 
+    @Override
     public void endDocument()
             throws IOException
     {
+        storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
+
         wrapped.endDocument();
     }
 
-    public void startElement(String s, UIComponent uiComponent)
-            throws IOException
+    protected ResponseWriter getWrapped()
     {
-        wrapped.startElement(s, uiComponent);
-    }
-
-    public void endElement(String s)
-            throws IOException
-    {
-        wrapped.endElement(s);
-    }
-
-    public void writeAttribute(String s, Object o, String s1)
-            throws IOException
-    {
-        wrapped.writeAttribute(s, o, s1);
-    }
-
-    public void writeURIAttribute(String s, Object o, String s1)
-            throws IOException
-    {
-        wrapped.writeURIAttribute(s, o, s1);
-    }
-
-    public void writeComment(Object o)
-            throws IOException
-    {
-        wrapped.writeComment(o);
-    }
-
-    public void writeText(Object o, String s)
-            throws IOException
-    {
-        wrapped.writeText(o, s);
-    }
-
-    public void writeText(char[] chars, int i, int i1)
-            throws IOException
-    {
-        wrapped.writeText(chars, i, i1);
-    }
-
-    public ResponseWriter cloneWithWriter(Writer writer)
-    {
-        return wrapped.cloneWithWriter(writer);
-    }
-
-    public void writeText(Object o, UIComponent uiComponent, String s)
-            throws IOException
-    {
-        wrapped.writeText(o, uiComponent, s);
-    }
-
-    public void close()
-            throws IOException
-    {
-        wrapped.close();
-    }
-
-    public Writer append(char c)
-            throws IOException
-    {
-        return wrapped.append(c);
-    }
-
-    public Writer append(CharSequence csq, int start, int end)
-            throws IOException
-    {
-        return wrapped.append(csq, start, end);
-    }
-
-    public Writer append(CharSequence csq)
-            throws IOException
-    {
-        return wrapped.append(csq);
-    }
-
-    public void write(String str, int off, int len)
-            throws IOException
-    {
-        wrapped.write(str, off, len);
-    }
-
-    public void write(String str)
-            throws IOException
-    {
-        wrapped.write(str);
-    }
-
-    public void write(char[] cbuf, int off, int len)
-            throws IOException
-    {
-        wrapped.write(cbuf, off, len);
-    }
-
-    public void write(char[] cbuf)
-            throws IOException
-    {
-        wrapped.write(cbuf);
-    }
-
-    public void write(int c)
-            throws IOException
-    {
-        wrapped.write(c);
+        return this.wrapped;
     }
 }
