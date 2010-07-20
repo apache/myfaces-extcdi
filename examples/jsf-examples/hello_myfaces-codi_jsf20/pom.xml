@@ -88,6 +88,12 @@
             <version>${owb.version}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.openwebbeans</groupId>
+            <artifactId>openwebbeans-web</artifactId>
+            <version>${owb.version}</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <!-- required for tomcat -->
         <dependency>
@@ -123,19 +129,6 @@
             <artifactId>geronimo-jcdi_1.0_spec</artifactId>
             <version>1.0-beta</version>
             <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-spi</artifactId>
-            <version>${owb.version}</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-web</artifactId>
-            <version>${owb.version}</version>
         </dependency>
 
         <dependency>
