@@ -29,6 +29,8 @@ import java.io.IOException;
  */
 public class DefaultRedirectHandler implements RedirectHandler
 {
+    private static final long serialVersionUID = -103516988654873089L;
+
     public void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException
     {
         if (requestIdKey != null)

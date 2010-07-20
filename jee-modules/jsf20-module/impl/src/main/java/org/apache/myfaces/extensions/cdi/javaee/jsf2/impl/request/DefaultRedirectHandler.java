@@ -31,7 +31,9 @@ import java.io.IOException;
 public class DefaultRedirectHandler extends
         org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectHandler
 {
-    //workaround for myfaces core2
+    private static final long serialVersionUID = 4040116087475343221L;
+
+    //workaround for mojarra
     private final boolean useFallback;
 
     public DefaultRedirectHandler()
