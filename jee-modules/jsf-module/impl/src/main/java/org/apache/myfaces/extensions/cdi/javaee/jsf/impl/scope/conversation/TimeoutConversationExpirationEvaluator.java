@@ -36,7 +36,6 @@ class TimeoutConversationExpirationEvaluator implements ConversationExpirationEv
 
     public boolean isExpired()
     {
-
         return this.lastAccess == null ||
                 (this.lastAccess.getTime() + this.conversationTimeoutInMs) < System.currentTimeMillis();
     }

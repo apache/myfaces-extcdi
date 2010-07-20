@@ -20,11 +20,12 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface RedirectHandler
+public interface RedirectHandler extends Serializable
 {
     void sendRedirect(ExternalContext externalContext, String url, String requestIdKey) throws IOException;
 
