@@ -70,10 +70,21 @@
             <version>${owb.version}</version>
             <scope>compile</scope>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.openwebbeans</groupId>
+            <artifactId>openwebbeans-spi</artifactId>
+            <version>${owb.version}</version>
+            <scope>compile</scope>
+        </dependency>
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-jsf</artifactId>
+            <version>${owb.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.openwebbeans</groupId>
+            <artifactId>openwebbeans-resource</artifactId>
             <version>${owb.version}</version>
             <scope>runtime</scope>
         </dependency>
