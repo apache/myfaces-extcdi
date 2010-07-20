@@ -62,7 +62,16 @@
 
     <properties>
         <owb.version>1.0.0-alpha-1</owb.version>
-        <myfaces.version>2.0.1-SNAPSHOT</myfaces.version>
+
+        <!-- JSF-2.0 implementations-->
+        <myfaces2.version>2.0.1</myfaces2.version>
+        <mojarra2.version>2.0.3-b03</mojarra2.version>
+
+        <!-- JSF-1.1 implementations-->
+        <myfaces1.version>1.2.8</myfaces1.version>
+        <mojarra1.version>1.2_14</mojarra1.version>
+
+        <maven.jetty.plugin.version>7.1.5.v20100705</maven.jetty.plugin.version>
     </properties>
 
     <dependencyManagement>

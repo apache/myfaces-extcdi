@@ -42,7 +42,6 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
