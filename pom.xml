@@ -65,6 +65,7 @@
         <module>jse-modules</module>
         <!--module>test-modules</module-->
         <module>examples</module>
+        <module>dist</module>
     </modules>
 
     <profiles>
