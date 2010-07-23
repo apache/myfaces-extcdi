@@ -21,13 +21,13 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.AbstractRequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-@ApplicationScoped
+@RequestScoped
 public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
 {
     protected RequestTypeResolver createDefaultRequestTypeResolver()
