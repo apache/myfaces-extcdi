@@ -29,12 +29,24 @@
     <head><title>CODI JSF 2.0 Demo</title></head>
 
     <body>
-        <h:form>
-            <h:commandLink value="next" action="next"/>
-        </h:form>
-        <h:outputText value="#{conversationDemoBean1.value}"/>
+        <f:view>
+            <h:form>
+                <h3>values of ViewAccessScoped bean 1:</h3>
+                value&nbsp;<h:outputText value="#{vaBean1.value}"/><br/>
+                createdAt&nbsp; <h:outputText value="#{vaBean1.createdAt}"/><br/>
+                sample&nbsp; <h:outputText value="#{vaBean1.sampleField}"/><br/>
+                viewParam&nbsp; <h:outputText value="#{vaBean1.viewParam}"/><br/>
 
-        <h:link value="ViewAccessScoped example" outcome="viewAccessBeanPage.xhtml"/>
-        <h:messages globalOnly="true"/>
+                <h3>bean 2 will not get touched on this page</h3>
+                This means it gets another instance on page 1!
+
+                <br/><br/>
+
+                <h:commandButton value="back" action="#{vaBean1.back}"/><br/>
+                <h:commandButton value="stay on page" action="#{vaBean1.stay}"/>
+                                
+                <h:messages globalOnly="true"/>
+            </h:form>
+        </f:view>
     </body>
 </html>

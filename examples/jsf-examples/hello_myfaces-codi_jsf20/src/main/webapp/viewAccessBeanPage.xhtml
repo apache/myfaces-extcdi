@@ -29,12 +29,30 @@
     <head><title>CODI JSF 2.0 Demo</title></head>
 
     <body>
-        <h:form>
-            <h:commandLink value="next" action="next"/>
-        </h:form>
-        <h:outputText value="#{conversationDemoBean1.value}"/>
+        <f:view>
+            <h:form>
+                <h3>values of ViewAccessScoped bean 1:</h3>
+                value&nbsp; <h:outputText value="#{vaBean1.value}"/><br/>
+                createdAt&nbsp; <h:outputText value="#{vaBean1.createdAt}"/><br/>
+                sample&nbsp; <h:outputText value="#{vaBean1.sampleField}"/><br/>
+                viewParam&nbsp; <h:outputText value="#{vaBean1.viewParam}"/><br/>
 
-        <h:link value="ViewAccessScoped example" outcome="viewAccessBeanPage.xhtml"/>
-        <h:messages globalOnly="true"/>
+
+
+                <h3>values of ViewAccessScoped bean 2:</h3>
+                value&nbsp; <h:outputText value="#{vaBean2.value}"/><br/>
+                createdAt&nbsp; <h:outputText value="#{vaBean2.createdAt}"/><br/>
+                sample&nbsp; <h:outputText value="#{vaBean2.sampleField}"/><br/>
+                viewParam&nbsp; <h:outputText value="#{vaBean2.viewParam}"/><br/>
+
+                <br/><br/>
+
+                <h:commandButton value="forward" action="#{vaBean1.forward}"/><br/>
+                <h:commandButton value="stay on page" action="#{vaBean1.stay}"/>
+            </h:form>
+
+            <h:messages globalOnly="true"/>
+
+        </f:view>
     </body>
 </html>
