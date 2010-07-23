@@ -81,6 +81,7 @@ class BeanStorage implements Serializable
         {
             oldBeanInstance = beanHolder.resetBeanInstance();
             fireUnscopeBeanEvent(oldBeanInstance, beanHolder);
+            beanHolder.getBean().destroy(oldBeanInstance, beanHolder.getCreationalContext());
         }
     }
 
