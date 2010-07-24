@@ -153,15 +153,15 @@ public class DefaultWindowContextManager implements WindowContextManager
 
             public void end()
             {
-                findConversaiton().end();
+                findConversation().end();
             }
 
             public void restart()
             {
-                findConversaiton().restart();
+                findConversation().restart();
             }
 
-            private Conversation findConversaiton()
+            private Conversation findConversation()
             {
                 Bean<?> bean = injectionPoint.getBean();
                 Class conversationGroup = ConversationUtils.getConversationGroup(bean);
