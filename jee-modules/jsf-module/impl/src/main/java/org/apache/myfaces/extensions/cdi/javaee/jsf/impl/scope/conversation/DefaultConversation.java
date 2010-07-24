@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
+
 import java.io.Serializable;
 
 /**
@@ -69,6 +71,7 @@ public class DefaultConversation implements Conversation, EditableConversation
         {
             this.active = false;
             this.beanStorage.resetStorage();
+            RequestCache.resetConversationCache();
         }
     }
 

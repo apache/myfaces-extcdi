@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation
         .JsfAwareConversationFactory.ConversationPropertyKeys.TIMEOUT;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -79,19 +80,26 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
     {
         ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
 
-        Conversation conversation = this.groupedConversations.get(conversationKey);
+        Conversation conversation = RequestCache.getConversation(conversationKey);
 
-        //TODO
-        if (conversation != null && !((EditableConversation)conversation).isActive())
+        if(conversation == null)
         {
-            endAndRemoveConversation(conversationKey, conversation);
-            conversation = null;
-        }
+            conversation = this.groupedConversations.get(conversationKey);
 
-        if (conversation == null)
-        {
-            conversation = createConversation(conversationGroupKey, qualifiers);
-            this.groupedConversations.put(conversationKey, conversation);
+            //TODO
+            if (conversation != null && !((EditableConversation)conversation).isActive())
+            {
+                endAndRemoveConversation(conversationKey, conversation);
+                conversation = null;
+            }
+
+            if (conversation == null)
+            {
+                conversation = createConversation(conversationGroupKey, qualifiers);
+                this.groupedConversations.put(conversationKey, conversation);
+            }
+
+            RequestCache.setConversation(conversationKey, conversation);
         }
         return conversation;
     }

@@ -329,6 +329,8 @@ public class ConversationUtils
     {
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
 
+        RequestCache.resetCache();
+        
         if(redirectHandler != null)
         {
             redirectHandler.sendRedirect(

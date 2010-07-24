@@ -109,6 +109,7 @@ public class DefaultWindowContextManager implements WindowContextManager
     protected void recordCurrentViewAsOldViewId(@Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
     {
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
+        RequestCache.resetCache();
     }
 
     private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)
@@ -118,21 +119,20 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     private void cleanupInactiveConversations()
     {
-        for (WindowContext windowContext : this.windowContextMap.values())
-        {
-            for (Conversation conversation :
-                    ((EditableWindowContext)windowContext).getConversations().values())
-            {
-                //TODO
-                if (!((EditableConversation)conversation).isActive())
-                {
-                    conversation.end();
-                }
-            }
+        //don't cleanup all window contexts (it would cause a side-effect with the access-scope and multiple windows 
+        WindowContext windowContext = getCurrentWindowContext();
 
+        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
+        {
             //TODO
-            ((EditableWindowContext)windowContext).removeInactiveConversations();
+            if (!((EditableConversation)conversation).isActive())
+            {
+                conversation.end();
+            }
         }
+
+        //TODO
+        ((EditableWindowContext)windowContext).removeInactiveConversations();
     }
 
     @Produces

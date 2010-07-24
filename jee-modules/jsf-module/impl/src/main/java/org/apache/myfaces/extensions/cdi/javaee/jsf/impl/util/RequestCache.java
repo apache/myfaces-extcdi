@@ -20,8 +20,12 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 
 import javax.enterprise.inject.spi.Bean;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -36,12 +40,20 @@ public class RequestCache
     private static ThreadLocal<Bean<WindowContextManager>> windowContextManagerBeanCache
             = new ThreadLocal<Bean<WindowContextManager>>();
 
+    private static ThreadLocal<Map<ConversationKey, Conversation>> conversationCache
+            = new ThreadLocal<Map<ConversationKey, Conversation>>();
 
     public static void resetCache()
     {
         windowContextManagerCache.remove();
         windowContextManagerBeanCache.remove();
         windowIdCache.remove();
+        resetConversationCache();
+    }
+
+    public static void resetConversationCache()
+    {
+        conversationCache.remove();
     }
 
     public static WindowContextManager resolveWindowContextManager(Bean<WindowContextManager> windowContextManagerBean)
@@ -78,5 +90,27 @@ public class RequestCache
     public static void setCurrentWindowId(Long windowId)
     {
         windowIdCache.set(windowId);
+    }
+
+    public static Conversation getConversation(ConversationKey conversationKey)
+    {
+        return getConversationCache().get(conversationKey);
+    }
+
+    public static void setConversation(ConversationKey conversationKey, Conversation conversation)
+    {
+        getConversationCache().put(conversationKey, conversation);
+    }
+
+    private static Map<ConversationKey, Conversation> getConversationCache()
+    {
+        Map<ConversationKey, Conversation> conversationMap = conversationCache.get();
+
+        if(conversationMap == null)
+        {
+            conversationMap = new HashMap<ConversationKey, Conversation>();
+            conversationCache.set(conversationMap);
+        }
+        return conversationMap;
     }
 }
