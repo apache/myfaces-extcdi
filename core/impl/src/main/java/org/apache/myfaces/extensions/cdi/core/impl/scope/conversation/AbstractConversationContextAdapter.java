@@ -88,13 +88,13 @@ public abstract class AbstractConversationContextAdapter implements Context
             }
             //workaround for weld - end
 
-            WindowContextManager conversationManager = resolveWindowContextManager();
+            WindowContextManager windowContextManager = resolveWindowContextManager();
 
             Bean<T> bean = ((Bean<T>) component);
 
             BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean);
 
-            scopeBeanEntry(conversationManager, beanEntry);
+            scopeBeanEntry(windowContextManager, beanEntry);
 
             return beanEntry.getBeanInstance();
         }

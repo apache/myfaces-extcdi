@@ -20,12 +20,9 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
         .addWindowContextIdHolderComponent;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
-        .storeCurrentViewIdAsOldViewId;
 
 import javax.faces.context.ResponseWriter;
 import javax.faces.context.ResponseWriterWrapper;
-import javax.faces.context.FacesContext;
 import java.io.IOException;
 
 /**
@@ -51,15 +48,6 @@ class InterceptedResponseWriter extends ResponseWriterWrapper
         addWindowContextIdHolderComponent();
 
         wrapped.startDocument();
-    }
-
-    @Override
-    public void endDocument()
-            throws IOException
-    {
-        storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
-
-        wrapped.endDocument();
     }
 
     protected ResponseWriter getWrapped()

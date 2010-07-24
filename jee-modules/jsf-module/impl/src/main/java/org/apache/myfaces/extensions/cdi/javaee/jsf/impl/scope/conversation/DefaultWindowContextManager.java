@@ -30,9 +30,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhas
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.restoreInformationOfRequest;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.cacheWindowId;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
@@ -104,6 +102,11 @@ public class DefaultWindowContextManager implements WindowContextManager
         }
 
         cleanupInactiveConversations();
+    }
+
+    protected void recordCurrentViewAsOldViewId(@Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
+    {
+        storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
     }
 
     private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)

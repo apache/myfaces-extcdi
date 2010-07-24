@@ -81,15 +81,13 @@ class BeanStorage implements Serializable
         {
             oldBeanInstance = beanHolder.resetBeanInstance();
             fireUnscopeBeanEvent(oldBeanInstance, beanHolder);
-            beanHolder.getBean().destroy(oldBeanInstance, beanHolder.getCreationalContext());
+            destroyBean(beanHolder.getCreationalContext(), beanHolder.getBean(), oldBeanInstance);
         }
     }
 
     private <T extends Serializable> void fireUnscopeBeanEvent(T instance, BeanEntry<T> beanHolder)
     {
         getOrCreateBeanManager().fireEvent(new UnscopeBeanEvent(instance));
-
-        destroyBean(beanHolder.getCreationalContext(), beanHolder.getBean(), instance);
     }
 
     private BeanManager getOrCreateBeanManager()
