@@ -30,9 +30,7 @@ import javax.inject.Named;
 import java.lang.annotation.Annotation;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
@@ -63,56 +61,28 @@ class DefaultConversationKey implements ConversationKey
     {
         this.groupKey = groupKey;
 
-        this.qualifiers.addAll(Arrays.asList(qualifiers));
-
-        Iterator<Annotation> qualifierIterator = this.qualifiers.iterator();
-
-        Annotation qualifier;
-
         //TODO maybe we have to add a real qualifier instead
-        while(qualifierIterator.hasNext())
+        Class<? extends Annotation> annotationType;
+        for(Annotation qualifier : qualifiers)
         {
-            qualifier = qualifierIterator.next();
+            annotationType = qualifier.annotationType();
 
-            if(ViewAccessScoped.class.isAssignableFrom(qualifier.annotationType()))
+            if(ViewAccessScoped.class.isAssignableFrom(annotationType))
             {
-                qualifierIterator.remove();
                 this.viewAccessScopedAnnotationPresent = true;
             }
-            else if(ConversationGroup.class.isAssignableFrom(qualifier.annotationType()))
+            else if(Any.class.isAssignableFrom(annotationType) ||
+                    Default.class.isAssignableFrom(annotationType) ||
+                    Named.class.isAssignableFrom(annotationType) && "".equals(((Named)qualifier).value()) ||
+                    ConversationGroup.class.isAssignableFrom(annotationType))
             {
-                //TODO test with injection into other beans
-                qualifierIterator.remove();
+                //won't be used for this key!
             }
-            else if(Any.class.isAssignableFrom(qualifier.annotationType()))
+            else
             {
-                //TODO test with injection into other beans
-                qualifierIterator.remove();
-            }
-            else if(Default.class.isAssignableFrom(qualifier.annotationType()))
-            {
-                //TODO test with injection into other beans
-                qualifierIterator.remove();
-            }
-            else if(Named.class.isAssignableFrom(qualifier.annotationType()))
-            {
-                if("".equals(((Named)qualifier).value()))
-                {
-                    //TODO test with injection into other beans
-                    qualifierIterator.remove();
-                }
+                this.qualifiers.add(qualifier);
             }
         }
-
-        /*
-        //TODO remove as soon as the new version is tested
-        //old version
-        if(this.qualifiers.contains(VIEW_ACCESS_SCOPED))
-        {
-            this.qualifiers.remove(VIEW_ACCESS_SCOPED);
-            this.viewAccessScopedAnnotationPresent = true;
-        }
-        */
 
         //for easier manual usage of the WindowContextManager
         if(this.qualifiers.isEmpty())
