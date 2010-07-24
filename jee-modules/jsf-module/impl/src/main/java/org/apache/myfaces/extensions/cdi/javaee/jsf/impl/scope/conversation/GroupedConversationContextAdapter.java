@@ -55,15 +55,9 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
         return FacesContext.getCurrentInstance().getExternalContext().getSession(false) != null;
     }
 
-    /**
-     * @return the descriptor of a custom
-     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
-     * with the qualifier {@link org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf} or
-     *         the descriptor of the default implementation provided by this module
-     */
-    protected Bean<WindowContextManager> resolveWindowContextManagerBean()
+    protected WindowContextManager resolveWindowContextManager()
     {
-        return RequestCache.resolveWindowContextManagerBean();
+        return RequestCache.getWindowContextManager();
     }
 
     /**

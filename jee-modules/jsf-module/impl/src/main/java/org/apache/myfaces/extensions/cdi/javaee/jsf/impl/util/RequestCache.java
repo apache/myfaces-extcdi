@@ -56,7 +56,29 @@ public class RequestCache
         conversationCache.remove();
     }
 
-    public static WindowContextManager resolveWindowContextManager(Bean<WindowContextManager> windowContextManagerBean)
+    public static WindowContextManager getWindowContextManager()
+    {
+        WindowContextManager windowContextManager = windowContextManagerCache.get();
+
+        if(windowContextManager == null)
+        {
+            return resolveWindowContextManager(resolveWindowContextManagerBean());
+        }
+
+        /* TODO remove it after tests
+        if(windowContextManager == null)
+        {
+            windowContextManager = CodiUtils.getOrCreateScopedInstanceOfBeanByName(
+                WindowContextManager.WINDOW_CONTEXT_MANAGER_BEAN_NAME, WindowContextManager.class);
+
+            windowContextManagerCache.set(windowContextManager);
+        }
+        */
+
+        return windowContextManager;
+    }
+
+    private static WindowContextManager resolveWindowContextManager(Bean<WindowContextManager> windowContextManagerBean)
     {
         WindowContextManager windowContextManager = windowContextManagerCache.get();
 
@@ -69,7 +91,7 @@ public class RequestCache
         return windowContextManager;
     }
 
-    public static Bean<WindowContextManager> resolveWindowContextManagerBean()
+    private static Bean<WindowContextManager> resolveWindowContextManagerBean()
     {
         Bean<WindowContextManager> windowContextManagerBean = windowContextManagerBeanCache.get();
 

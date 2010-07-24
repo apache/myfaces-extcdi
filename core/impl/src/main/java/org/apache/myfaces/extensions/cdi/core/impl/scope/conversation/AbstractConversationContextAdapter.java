@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
@@ -127,18 +126,7 @@ public abstract class AbstractConversationContextAdapter implements Context
      * @return an instance of a custom (the default)
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
      */
-    private WindowContextManager resolveWindowContextManager()
-    {
-        Bean<WindowContextManager> windowContextManagerBean = resolveWindowContextManagerBean();
-        return CodiUtils.getOrCreateScopedInstanceOfBean(windowContextManagerBean);
-
-        //TODO cleanup:
-        //return (WindowContextManager)this.beanManager.getReference(
-        //windowContextManagerBean, ConversationManager.class,
-        //getConversationManagerCreationalContextFor(windowContextManagerBean));
-    }
-
-    protected abstract Bean<WindowContextManager> resolveWindowContextManagerBean();
+    protected abstract WindowContextManager resolveWindowContextManager();
 
     /**
      * @param conversationManager the current

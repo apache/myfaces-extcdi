@@ -356,7 +356,6 @@ public class ConversationUtils
 
     public static WindowContextManager getWindowContextManager()
     {
-        return CodiUtils.getOrCreateScopedInstanceOfBeanByName(
-                WindowContextManager.WINDOW_CONTEXT_MANAGER_BEAN_NAME, WindowContextManager.class);
+        return RequestCache.getWindowContextManager();
     }
 }
