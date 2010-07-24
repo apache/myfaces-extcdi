@@ -84,7 +84,7 @@ public class DefaultConversation implements Conversation, EditableConversation
     @SuppressWarnings({"unchecked"})
     public <T> T getBean(Class<T> key)
     {
-        if (!isActive())
+        if (!this.active)
         {
             return null;
         }
