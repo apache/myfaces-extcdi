@@ -37,6 +37,11 @@ import java.util.Locale;
  */
 public class JsfUtils
 {
+    public static void resetCaches()
+    {
+        RequestCache.resetCache();
+    }
+
     public static void registerPhaseListener(PhaseListener phaseListener)
     {
         LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(

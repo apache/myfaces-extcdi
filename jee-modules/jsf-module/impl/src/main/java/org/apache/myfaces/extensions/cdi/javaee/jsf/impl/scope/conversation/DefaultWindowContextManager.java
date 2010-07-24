@@ -30,6 +30,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhas
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
@@ -179,32 +181,36 @@ public class DefaultWindowContextManager implements WindowContextManager
     //TODO improve performance
     public WindowContext getCurrentWindowContext()
     {
-        Long windowContextId = resolveWindowContextId(this.windowContextConfig.isGetRequestParameterSupported(),
-                                                      this.redirectHandler);
+        Long windowContextId = RequestCache.getCurrentWindowId();
 
-        if (windowContextId == null)
+        if(windowContextId == null)
         {
-            windowContextId = this.lastWindowContextId.incrementAndGet();
-            cacheWindowId(windowContextId);
+            windowContextId = resolveWindowContextId(this.windowContextConfig.isGetRequestParameterSupported(),
+                                                     this.redirectHandler);
+
+            if (windowContextId == null)
+            {
+                windowContextId = this.lastWindowContextId.incrementAndGet();
+                cacheWindowId(windowContextId);
+            }
+
+            RequestCache.setCurrentWindowId(windowContextId);
         }
 
         return getWindowContext(windowContextId);
     }
 
-    public WindowContext getWindowContext(long windowContextId)
+    public synchronized WindowContext getWindowContext(long windowContextId)
     {
-        synchronized (this)
+        WindowContext result = this.windowContextMap.get(windowContextId);
+
+        if (result == null)
         {
-            WindowContext result = this.windowContextMap.get(windowContextId);
+            result = new JsfWindowContext(windowContextId, this.windowContextConfig);
 
-            if (result == null)
-            {
-                result = new JsfWindowContext(windowContextId, this.windowContextConfig);
-
-                this.windowContextMap.put(windowContextId, result);
-            }
-            return result;
+            this.windowContextMap.put(windowContextId, result);
         }
+        return result;
     }
 
     public void activateWindowContext(long id)
@@ -214,6 +220,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void activateWindowContext(WindowContext windowContext)
     {
+        JsfUtils.resetCaches();
         FacesContext facesContext = FacesContext.getCurrentInstance();
         WindowContextIdHolderComponent windowContextIdHolder =
                 ConversationUtils.getWindowContextIdHolderComponent(facesContext);
@@ -240,6 +247,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetWindowContext(WindowContext windowContext)
     {
+        JsfUtils.resetCaches();
         for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
             conversation.restart();
@@ -258,6 +266,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void resetConversations(WindowContext windowContext)
     {
+        JsfUtils.resetCaches();
         for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
             //TODO
@@ -282,6 +291,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     public void removeWindowContext(WindowContext windowContext)
     {
+        JsfUtils.resetCaches();
         this.windowContextMap.remove(windowContext.getId());
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -306,6 +316,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
     {
+        JsfUtils.resetCaches();
         Iterator<UIComponent> uiComponents = facesContext.getViewRoot().getChildren().iterator();
 
         UIComponent uiComponent;

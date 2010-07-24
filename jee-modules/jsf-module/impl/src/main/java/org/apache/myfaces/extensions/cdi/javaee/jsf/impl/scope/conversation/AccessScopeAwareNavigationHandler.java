@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory.wrapFacesContext;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
@@ -39,6 +40,8 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
 
     public void handleNavigation(FacesContext facesContext, String s, String s1)
     {
+        JsfUtils.resetCaches();
+
         //TODO check myfaces core - issue? facesContext is not wrapped here
         facesContext = wrapFacesContext(facesContext);
 

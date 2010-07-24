@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEn
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
 import javax.enterprise.inject.spi.Bean;
@@ -62,7 +63,7 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
      */
     protected Bean<WindowContextManager> resolveWindowContextManagerBean()
     {
-        return ConversationUtils.resolveConversationManagerBean();
+        return RequestCache.resolveWindowContextManagerBean();
     }
 
     /**
