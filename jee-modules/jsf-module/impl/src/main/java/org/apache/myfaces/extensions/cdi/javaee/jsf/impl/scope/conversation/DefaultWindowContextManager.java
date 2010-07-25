@@ -29,6 +29,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.BeforeFacesRequest;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
@@ -110,6 +111,13 @@ public class DefaultWindowContextManager implements WindowContextManager
     {
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
         RequestCache.resetCache();
+    }
+
+    protected void start(@Observes @BeforeFacesRequest FacesContext facesContext)
+    {
+        //TODO activate it only in project-stage dev.
+        //org.apache.myfaces.view.facelets.tag.ui.DebugPhaseListener causes re-eval (+ caching) of window-id
+        JsfUtils.resetCaches();
     }
 
     private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)
