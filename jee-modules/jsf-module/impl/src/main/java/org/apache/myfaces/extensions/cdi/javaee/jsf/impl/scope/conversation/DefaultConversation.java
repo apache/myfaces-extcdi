@@ -89,14 +89,14 @@ public class DefaultConversation implements Conversation, EditableConversation
             return null;
         }
 
-        touchConversation();
-
         BeanEntry scopedBean = this.beanStorage.getBean(key);
 
         if (scopedBean == null)
         {
             return null;
         }
+
+        touchConversation();
 
         return (T) scopedBean.getBeanInstance();
     }
