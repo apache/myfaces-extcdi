@@ -45,14 +45,21 @@ public class RequestCache
 
     public static void resetCache()
     {
+        windowContextManagerCache.set(null);
         windowContextManagerCache.remove();
+
+        windowContextManagerBeanCache.set(null);
         windowContextManagerBeanCache.remove();
+
+        windowIdCache.set(null);
         windowIdCache.remove();
+
         resetConversationCache();
     }
 
     public static void resetConversationCache()
     {
+        conversationCache.set(null);
         conversationCache.remove();
     }
 

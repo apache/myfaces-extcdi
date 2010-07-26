@@ -181,7 +181,7 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
             conversation = conversations.next();
 
             //TODO
-            if (!((EditableConversation)conversation).isActive())
+            if (!((EditableConversation)conversation).getActiveState())
             {
                 conversations.remove();
             }

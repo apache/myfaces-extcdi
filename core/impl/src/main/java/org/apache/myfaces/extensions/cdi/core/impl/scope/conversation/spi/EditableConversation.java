@@ -24,9 +24,25 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
  */
 public interface EditableConversation
 {
+    /**
+     * @return evaluates and returns if the conversation is active
+     */
     boolean isActive();
 
+    /**
+     * @return returns if the conversation is active (without evaluation)
+     */
+    boolean getActiveState();
+
+    /**
+     * has to expire a conversation. if the conversation is expired afterwards it has to be inactive
+     */
     void deactivate();
+
+    /**
+     * deactivates a conversation in any case (independent of the expiration mechanism)
+     */
+    void forceEnd();
 
     <T> void addBean(BeanEntry<T> beanInstance);
 

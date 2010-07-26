@@ -39,6 +39,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
@@ -89,6 +90,30 @@ public class DefaultWindowContextManager implements WindowContextManager
         this.redirectHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectHandler();
     }
 
+    @PreDestroy
+    protected void destroyAllConversations()
+    {
+        for (WindowContext windowContext : this.windowContextMap.values())
+        {
+            for (Conversation conversation :
+                    ((EditableWindowContext)windowContext).getConversations().values())
+            {
+                //TODO
+                if(conversation instanceof EditableConversation)
+                {
+                    ((EditableConversation)conversation).forceEnd();
+                }
+                else
+                {
+                    conversation.end();
+                }
+            }
+
+            //TODO
+            ((EditableWindowContext)windowContext).removeInactiveConversations();
+        }
+    }
+
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
@@ -113,7 +138,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         RequestCache.resetCache();
     }
 
-    protected void start(@Observes @BeforeFacesRequest FacesContext facesContext)
+    protected void resetCacheInDevMode(@Observes @BeforeFacesRequest FacesContext facesContext)
     {
         //TODO activate it only in project-stage dev.
         //org.apache.myfaces.view.facelets.tag.ui.DebugPhaseListener causes re-eval (+ caching) of window-id
@@ -132,7 +157,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
         for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
-            //TODO
+            //TODO test the usage of #isActiveState instead of isActive
             if (!((EditableConversation)conversation).isActive())
             {
                 conversation.end();

@@ -56,6 +56,11 @@ public class DefaultConversation implements Conversation, EditableConversation
         return !isConversationExpired() && this.active;
     }
 
+    public boolean getActiveState()
+    {
+        return active;
+    }
+
     public void deactivate()
     {
         this.expirationEvaluator.expire();
@@ -63,6 +68,12 @@ public class DefaultConversation implements Conversation, EditableConversation
         {
             this.active = false;
         }
+    }
+
+    public void forceEnd()
+    {
+        this.active = false;
+        end();
     }
 
     public void end()
