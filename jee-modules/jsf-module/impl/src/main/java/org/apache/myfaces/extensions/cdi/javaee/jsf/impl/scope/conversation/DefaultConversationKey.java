@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.impl.utils.DefaultLiteral;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
-import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
@@ -45,14 +45,15 @@ class DefaultConversationKey implements ConversationKey
     private static final String INVALID_VIEW_ACCESS_SCOPE_DEFINITION =
             ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
 
-    private final Class<?> groupKey;
-    private final Set<Annotation> qualifiers = new HashSet<Annotation>();
+    private Class<?> groupKey;
+    private Set<Annotation> qualifiers;
 
-    //TODO remove as soon as the new version is tested
-    //old version
-    //workaround
-    //private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
-    private static final Default DEFAULT_QUALIFIER = DefaultAnnotation.of(Default.class);
+    private final static Annotation DEFAULT_LITERAL = new DefaultLiteral();
+
+    private final static Set<Annotation> DEFAULT_QUALIFIERS = new HashSet<Annotation>();
+    static {
+        DEFAULT_QUALIFIERS.add(DEFAULT_LITERAL);
+    }
 
     //workaround
     private boolean viewAccessScopedAnnotationPresent;
@@ -73,26 +74,29 @@ class DefaultConversationKey implements ConversationKey
             }
             else if(Any.class.isAssignableFrom(annotationType) ||
                     Default.class.isAssignableFrom(annotationType) ||
-                    Named.class.isAssignableFrom(annotationType) && "".equals(((Named)qualifier).value()) ||
+                    Named.class.isAssignableFrom(annotationType)   ||
                     ConversationGroup.class.isAssignableFrom(annotationType))
             {
                 //won't be used for this key!
             }
             else
             {
+                if (this.qualifiers == null)
+                {
+                    this.qualifiers = new HashSet<Annotation>();
+                }
                 this.qualifiers.add(qualifier);
             }
         }
 
-        //for easier manual usage of the WindowContextManager
-        if(this.qualifiers.isEmpty())
-        {
-            this.qualifiers.add(DEFAULT_QUALIFIER);
-        }
-
+        //X TODO drop and move validation to deploy time!
         validate();
     }
 
+
+    /**
+     * @deprecated TODO this must be validated at deploy time instead !
+     */
     private void validate()
     {
         boolean defaultQualifierUsed = isDefaultQualifier();
@@ -126,6 +130,11 @@ class DefaultConversationKey implements ConversationKey
 
     private boolean isDefaultQualifier()
     {
+        if (qualifiers == null)
+        {
+            return true;
+        }
+
         for(Annotation qualifier : this.qualifiers)
         {
             if(Default.class.isAssignableFrom(qualifier.getClass()))
@@ -143,6 +152,10 @@ class DefaultConversationKey implements ConversationKey
 
     public Set<Annotation> getQualifiers()
     {
+        if (qualifiers == null)
+        {
+            return Collections.EMPTY_SET;
+        }
         return Collections.unmodifiableSet(this.qualifiers);
     }
 
@@ -164,6 +177,15 @@ class DefaultConversationKey implements ConversationKey
         {
             return false;
         }
+        if (qualifiers == null && that.qualifiers == null)
+        {
+            return true;
+        }
+        if (qualifiers != null && that.qualifiers == null)
+        {
+            return false;
+        }
+
         if (!qualifiers.equals(that.qualifiers))
         {
             return false;
@@ -176,7 +198,10 @@ class DefaultConversationKey implements ConversationKey
     public int hashCode()
     {
         int result = groupKey.hashCode();
-        result = 31 * result + qualifiers.hashCode();
+        if (qualifiers != null)
+        {
+            result = 31 * result + qualifiers.hashCode();
+        }
         return result;
     }
 }
