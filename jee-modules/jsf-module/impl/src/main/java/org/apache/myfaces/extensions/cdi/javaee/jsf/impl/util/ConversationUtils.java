@@ -96,12 +96,14 @@ public class ConversationUtils
 
     public static Class getConversationGroup(Bean<?> bean)
     {
-        if(bean.getStereotypes().contains(WindowScoped.class))
+        Set<Class<? extends Annotation>> stereotypes = bean.getStereotypes();
+
+        if(stereotypes.contains(WindowScoped.class))
         {
             return WindowScoped.class;
         }
 
-        if(bean.getStereotypes().contains(ViewAccessScoped.class))
+        if(stereotypes.contains(ViewAccessScoped.class))
         {
             return ViewAccessScoped.class;
         }

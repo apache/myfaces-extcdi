@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.DeactivatedCodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ApplicationCache;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
@@ -36,6 +37,7 @@ import java.util.Arrays;
 /**
  * @author Gerhard Petracek
  */
+@SuppressWarnings({"UnusedDeclaration"})
 public class ConfigProducer
 {
     private static Boolean configInitialized;
@@ -79,9 +81,16 @@ public class ConfigProducer
         {
             public <T extends CodiConfig> T resolve(Class<T> targetType)
             {
+                CodiConfig codiConfig = ApplicationCache.getConfig(targetType);
+
+                if(codiConfig != null)
+                {
+                    //noinspection unchecked
+                    return (T)codiConfig;
+                }
+
                 Set<CodiConfig> configs = createCodiConfig();
 
-                CodiConfig defaultConfig = null;
                 for(CodiConfig config : configs)
                 {
                     if(targetType.isAssignableFrom(config.getClass()))
@@ -93,12 +102,14 @@ public class ConfigProducer
                         }
                         else
                         {
-                            defaultConfig = config;
+                            codiConfig = config;
                         }
                     }
                 }
+
+                ApplicationCache.setConfig(targetType, codiConfig);
                 //noinspection unchecked
-                return (T)defaultConfig;
+                return (T)codiConfig;
             }
         };
     }
