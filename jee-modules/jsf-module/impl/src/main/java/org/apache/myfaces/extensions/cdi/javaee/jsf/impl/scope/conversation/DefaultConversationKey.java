@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.utils.DefaultLiteral;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
@@ -47,13 +46,6 @@ class DefaultConversationKey implements ConversationKey
 
     private Class<?> groupKey;
     private Set<Annotation> qualifiers;
-
-    private final static Annotation DEFAULT_LITERAL = new DefaultLiteral();
-
-    private final static Set<Annotation> DEFAULT_QUALIFIERS = new HashSet<Annotation>();
-    static {
-        DEFAULT_QUALIFIERS.add(DEFAULT_LITERAL);
-    }
 
     //workaround
     private boolean viewAccessScopedAnnotationPresent;
