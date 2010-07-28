@@ -122,7 +122,8 @@ public class DefaultWindowContextManager implements WindowContextManager
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
         //we would transfer the restored view-id into the conversation
-        if (isPartialOrGetRequest(requestTypeResolver))
+        //don't ignore partial requests - in case of ajax-navigation we wouldn't check for expiration
+        if (!requestTypeResolver.isPostRequest())
         {
             return;
         }
@@ -141,11 +142,6 @@ public class DefaultWindowContextManager implements WindowContextManager
         //TODO activate it only in project-stage dev.
         //org.apache.myfaces.view.facelets.tag.ui.DebugPhaseListener causes re-eval (+ caching) of window-id
         JsfUtils.resetCaches();
-    }
-
-    private boolean isPartialOrGetRequest(RequestTypeResolver requestTypeResolver)
-    {
-        return requestTypeResolver.isPartialRequest() || !requestTypeResolver.isPostRequest();
     }
 
     private void cleanupInactiveConversations()
