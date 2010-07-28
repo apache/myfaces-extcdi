@@ -30,10 +30,10 @@ public interface ConfigParameter
 
     static final Boolean TRANSACTION_TOKEN_ENABLED_DEFAULT = Boolean.FALSE;
 
-    static final String GET_REQUEST_PARAMETER_ENABLED =
-            CoreCodiConfigParameter.BASE_NAME + "GET_REQUEST_PARAMETER_ENABLED";
+    static final String URL_PARAMETER_ENABLED =
+            CoreCodiConfigParameter.BASE_NAME + "URL_PARAMETER_ENABLED";
 
-    static final boolean GET_REQUEST_PARAMETER_ENABLED_DEFAULT = true;
+    static final boolean URL_PARAMETER_ENABLED_DEFAULT = true;
 
     static final String GROUPED_CONVERSATION_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "GROUPED_CONVERSATION_TIMEOUT";
@@ -43,5 +43,7 @@ public interface ConfigParameter
     static final String WINDOW_CONTEXT_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "WINDOW_CONTEXT_TIMEOUT";
 
+    //TODO
     static final int WINDOW_CONTEXT_TIMEOUT_DEFAULT = 60;
+    static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 50;
 }

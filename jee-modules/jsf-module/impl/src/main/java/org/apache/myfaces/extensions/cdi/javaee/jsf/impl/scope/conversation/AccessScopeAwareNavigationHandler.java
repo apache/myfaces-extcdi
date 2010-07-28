@@ -40,6 +40,7 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
 
     public void handleNavigation(FacesContext facesContext, String s, String s1)
     {
+        //we have to reset it due to possible redirects
         JsfUtils.resetCaches();
 
         //TODO check myfaces core - issue? facesContext is not wrapped here

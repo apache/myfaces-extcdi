@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -40,6 +40,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -50,6 +51,9 @@ import java.util.Set;
  */
 public class ConversationUtils
 {
+    public static final String EXISTING_WINDOW_ID_SET_KEY =
+            WindowContext.class.getName() + ":EXISTING_WINDOW_ID_LIST";
+
     private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
 
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
@@ -155,19 +159,20 @@ public class ConversationUtils
     }
 
     //TODO
-    public static Long resolveWindowContextId(boolean requestParameterSupported, RedirectHandler redirectHandler)
+    public static String resolveWindowContextId(boolean requestParameterSupported, WindowHandler windowHandler)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        Map<String, String> requestParameterMap = facesContext.getExternalContext().getRequestParameterMap();
-        Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        Map<String, String> requestParameterMap = externalContext.getRequestParameterMap();
+        Map<String, Object> requestMap = externalContext.getRequestMap();
 
         //try to find id in request map
-        Long id = tryToFindWindowIdInRequestMap(requestMap);
+        String id = tryToFindWindowIdInRequestMap(requestMap);
 
-        if(id == null && redirectHandler != null)
+        if(id == null && windowHandler != null)
         {
-            id = redirectHandler.restoreWindowId(facesContext.getExternalContext());
+            id = windowHandler.restoreWindowId(facesContext.getExternalContext());
         }
 
         if(id == null)
@@ -175,9 +180,9 @@ public class ConversationUtils
             id = tryToRestoreWindowIdFromRequestParameterMap(requestParameterSupported, requestParameterMap);
         }
 
-        if(id != null)
+        if(id != null && !cacheWindowId(externalContext, id))
         {
-            cacheWindowId(requestMap, id);
+            id = null;
         }
 
         if (id != null)
@@ -200,7 +205,7 @@ public class ConversationUtils
         return null;
     }
 
-    private static Long tryToRestoreWindowIdFromRequestParameterMap(
+    private static String tryToRestoreWindowIdFromRequestParameterMap(
             boolean requestParameterSupported, Map<String, String> requestParameterMap)
     {
         //try to restore get-request parameter
@@ -211,38 +216,45 @@ public class ConversationUtils
             idViaGetRequest = requestParameterMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
         }
 
-        return parseWindowId(idViaGetRequest);
+        return idViaGetRequest;
     }
 
-    public static Long parseWindowId(String windowIdAsString)
+    public static void cacheWindowId(String id)
     {
-        if (windowIdAsString != null)
+        cacheWindowId(FacesContext.getCurrentInstance().getExternalContext(), id);
+    }
+
+    /**
+     * @param externalContext externalContext
+     * @param id windowId
+     * @return false if the id doesn't exist in the storage (e.g. in case of bookmarks)
+     */
+    public static boolean cacheWindowId(ExternalContext externalContext, String id)
+    {
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+        Set<String> existingWindowIdSet = (Set)sessionMap.get(EXISTING_WINDOW_ID_SET_KEY);
+
+        if(existingWindowIdSet == null)
         {
-            try
-            {
-                return Long.parseLong(windowIdAsString);
-            }
-            catch (NumberFormatException e)
-            {
-                return null;
-            }
+            existingWindowIdSet = new HashSet<String>();
+            sessionMap.put(EXISTING_WINDOW_ID_SET_KEY, existingWindowIdSet);
         }
-        return null;
-    }
 
-    public static void cacheWindowId(Long id)
-    {
-        cacheWindowId(FacesContext.getCurrentInstance().getExternalContext().getRequestMap(), id);
-    }
-    
-    private static void cacheWindowId(Map<String, Object> requestMap, Long id)
-    {
+        if(!existingWindowIdSet.contains(id))
+        {
+            return false;
+        }
+
+        //TODO check if it should be replace with the RequestCache 
+        Map<String, Object> requestMap = externalContext.getRequestMap();
         requestMap.put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, id);
+
+        return true;
     }
 
-    private static Long tryToFindWindowIdInRequestMap(Map<String, Object> requestMap)
+    private static String tryToFindWindowIdInRequestMap(Map<String, Object> requestMap)
     {
-        return (Long) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+        return (String) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 
     public static void restoreInformationOfRequest(FacesContext facesContext,
@@ -327,16 +339,15 @@ public class ConversationUtils
 
     public static void sendRedirect(ExternalContext externalContext,
                                     String url,
-                                    RedirectHandler redirectHandler) throws IOException
+                                    WindowHandler windowHandler) throws IOException
     {
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
 
         RequestCache.resetCache();
         
-        if(redirectHandler != null)
+        if(windowHandler != null)
         {
-            redirectHandler.sendRedirect(
-                    externalContext, url, getWindowContextManager().getCurrentWindowContext().getId());
+            windowHandler.sendRedirect(externalContext, url);
         }
         else
         {
@@ -345,7 +356,7 @@ public class ConversationUtils
         }
     }
 
-    public static RedirectHandler getRedirectHandler()
+    public static WindowHandler getWindowHandler()
     {
         Set<Bean<?>> configResolvers = getInstance().getBeanManager().getBeans(ConfigResolver.class);
 
@@ -353,11 +364,26 @@ public class ConversationUtils
         ConfigResolver configResolver = (ConfigResolver) CodiUtils
                 .getOrCreateScopedInstanceOfBean(configResolvers.iterator().next());
 
-        return configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectHandler();
+        return configResolver.resolve(JsfAwareWindowContextConfig.class).getWindowHandler();
     }
 
     public static WindowContextManager getWindowContextManager()
     {
         return RequestCache.getWindowContextManager();
+    }
+
+    public static Set<String> getExistingWindowIdSet(ExternalContext externalContext)
+    {
+        Map<String, Object> sessionMap = externalContext.getSessionMap();
+
+        @SuppressWarnings({"unchecked"})
+        Set<String> existingWindowIdSet = (Set)sessionMap.get(EXISTING_WINDOW_ID_SET_KEY);
+
+        if(existingWindowIdSet == null)
+        {
+            existingWindowIdSet = new HashSet<String>();
+            sessionMap.put(EXISTING_WINDOW_ID_SET_KEY, existingWindowIdSet);
+        }
+        return existingWindowIdSet;
     }
 }

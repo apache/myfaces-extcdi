@@ -21,11 +21,11 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.JsfAwareConversationFactory;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectHandler;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
@@ -47,9 +47,9 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     @Named
     @Dependent
     @Config(WindowContextConfig.class)
-    public boolean getRequestParameterSupported()
+    public boolean getUrlParameterSupported()
     {
-        return isGetRequestParameterSupported();
+        return isUrlParameterSupported();
     }
 
     @Produces
@@ -70,10 +70,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getConversationTimeoutInMinutes();
     }
 
-    public boolean isGetRequestParameterSupported()
+    //TODO <- add methods for all config parameters ->
+
+    public boolean isUrlParameterSupported()
     {
         lazyInit();
-        return getAttribute(GET_REQUEST_PARAMETER_ENABLED, Boolean.class);
+        return getAttribute(URL_PARAMETER_ENABLED, Boolean.class);
     }
 
     public int getWindowContextTimeoutInMinutes()
@@ -105,21 +107,21 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
         configInitialized = true;
 
-        initGetRequestParameterEnabled(facesContext);
+        initUrlParameterEnabled(facesContext);
         initWindowContextConversationTimeout(facesContext);
         initGroupedConversationTimeout(facesContext);
     }
 
-    private void initGetRequestParameterEnabled(FacesContext facesContext)
+    private void initUrlParameterEnabled(FacesContext facesContext)
     {
-        boolean requestParameterEnabled = GET_REQUEST_PARAMETER_ENABLED_DEFAULT;
+        boolean requestParameterEnabled = URL_PARAMETER_ENABLED_DEFAULT;
 
         String requestParameterEnabledString =
-                facesContext.getExternalContext().getInitParameter(GET_REQUEST_PARAMETER_ENABLED);
+                facesContext.getExternalContext().getInitParameter(URL_PARAMETER_ENABLED);
 
         if (requestParameterEnabledString == null)
         {
-            setAttribute(GET_REQUEST_PARAMETER_ENABLED, requestParameterEnabled);
+            setAttribute(URL_PARAMETER_ENABLED, requestParameterEnabled);
             return;
         }
 
@@ -127,11 +129,11 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
         if ("".equals(requestParameterEnabledString))
         {
-            setAttribute(GET_REQUEST_PARAMETER_ENABLED, requestParameterEnabled);
+            setAttribute(URL_PARAMETER_ENABLED, requestParameterEnabled);
             return;
         }
 
-        setAttribute(GET_REQUEST_PARAMETER_ENABLED, Boolean.parseBoolean(requestParameterEnabledString));
+        setAttribute(URL_PARAMETER_ENABLED, Boolean.parseBoolean(requestParameterEnabledString));
     }
 
     private void initWindowContextConversationTimeout(FacesContext facesContext)
@@ -180,9 +182,9 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         setAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.parseInt(timeoutString));
     }
 
-    public RedirectHandler getRedirectHandler()
+    public WindowHandler getWindowHandler()
     {
-        return new DefaultRedirectHandler();
+        return new DefaultWindowHandler(isUrlParameterSupported());
     }
 
     public ConversationFactory getConversationFactory()

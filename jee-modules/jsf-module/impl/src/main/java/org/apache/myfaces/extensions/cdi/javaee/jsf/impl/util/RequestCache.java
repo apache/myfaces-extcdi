@@ -32,7 +32,7 @@ import java.util.HashMap;
  */
 public class RequestCache
 {
-    private static ThreadLocal<Long> windowIdCache = new ThreadLocal<Long>();
+    private static ThreadLocal<String> windowIdCache = new ThreadLocal<String>();
 
     private static ThreadLocal<WindowContextManager> windowContextManagerCache
             = new ThreadLocal<WindowContextManager>();
@@ -111,12 +111,12 @@ public class RequestCache
         return windowContextManagerBean;
     }
 
-    public static Long getCurrentWindowId()
+    public static String getCurrentWindowId()
     {
         return windowIdCache.get();
     }
 
-    public static void setCurrentWindowId(Long windowId)
+    public static void setCurrentWindowId(String windowId)
     {
         windowIdCache.set(windowId);
     }

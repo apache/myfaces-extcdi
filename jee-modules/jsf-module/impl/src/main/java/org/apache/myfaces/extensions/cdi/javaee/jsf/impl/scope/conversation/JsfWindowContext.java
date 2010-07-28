@@ -48,7 +48,7 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
-    private final Long id;
+    private final String id;
 
     private final WindowContextConfig config;
 
@@ -57,13 +57,13 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     private Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
-    public JsfWindowContext(Long windowContextId, WindowContextConfig config)
+    public JsfWindowContext(String windowContextId, WindowContextConfig config)
     {
         this.id = windowContextId;
         this.config = config;
     }
 
-    public Long getId()
+    public String getId()
     {
         return this.id;
     }

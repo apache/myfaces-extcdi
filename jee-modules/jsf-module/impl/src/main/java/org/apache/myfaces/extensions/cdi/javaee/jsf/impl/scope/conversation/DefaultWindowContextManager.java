@@ -30,12 +30,12 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhas
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.BeforeFacesRequest;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.annotation.PostConstruct;
@@ -48,6 +48,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.Bean;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
@@ -56,7 +57,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
 import java.lang.annotation.Annotation;
 
 /**
@@ -64,16 +64,14 @@ import java.lang.annotation.Annotation;
  *
  * @author Gerhard Petracek
  */
+@SuppressWarnings({"UnusedDeclaration"})
 @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
 @SessionScoped
 public class DefaultWindowContextManager implements WindowContextManager
 {
     private static final long serialVersionUID = 2872151847183166424L;
 
-    private Map<Long, WindowContext> windowContextMap = new ConcurrentHashMap<Long, WindowContext>();
-
-    //TODO refactor to UUID?
-    private AtomicLong lastWindowContextId = new AtomicLong(0);
+    private Map<String, WindowContext> windowContextMap = new ConcurrentHashMap<String, WindowContext>();
 
     @Inject
     @SuppressWarnings({"UnusedDeclaration"})
@@ -81,13 +79,13 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     private WindowContextConfig windowContextConfig;
 
-    private RedirectHandler redirectHandler;
+    private WindowHandler windowHandler;
 
     @PostConstruct
     protected void init()
     {
         this.windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
-        this.redirectHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getRedirectHandler();
+        this.windowHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getWindowHandler();
     }
 
     @PreDestroy
@@ -214,16 +212,16 @@ public class DefaultWindowContextManager implements WindowContextManager
     //TODO improve performance
     public WindowContext getCurrentWindowContext()
     {
-        Long windowContextId = RequestCache.getCurrentWindowId();
+        String windowContextId = RequestCache.getCurrentWindowId();
 
         if(windowContextId == null)
         {
-            windowContextId = resolveWindowContextId(this.windowContextConfig.isGetRequestParameterSupported(),
-                                                     this.redirectHandler);
+            windowContextId = resolveWindowContextId(this.windowContextConfig.isUrlParameterSupported(),
+                                                     this.windowHandler);
 
             if (windowContextId == null)
             {
-                windowContextId = this.lastWindowContextId.incrementAndGet();
+                windowContextId = this.windowHandler.createWindowId();
                 cacheWindowId(windowContextId);
             }
 
@@ -233,7 +231,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         return getWindowContext(windowContextId);
     }
 
-    public synchronized WindowContext getWindowContext(long windowContextId)
+    public synchronized WindowContext getWindowContext(String windowContextId)
     {
         WindowContext result = this.windowContextMap.get(windowContextId);
 
@@ -246,12 +244,12 @@ public class DefaultWindowContextManager implements WindowContextManager
         return result;
     }
 
-    public void activateWindowContext(long id)
+    public boolean activateWindowContext(String windowContextId)
     {
-        activateWindowContext(getWindowContext(id));
+        return activateWindowContext(getWindowContext(windowContextId));
     }
 
-    public void activateWindowContext(WindowContext windowContext)
+    public boolean activateWindowContext(WindowContext windowContext)
     {
         JsfUtils.resetCaches();
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -263,7 +261,7 @@ public class DefaultWindowContextManager implements WindowContextManager
             windowContextIdHolder.changeWindowContextId(windowContext.getId());
         }
 
-        setWindowContextIdOfRequest(facesContext, windowContext.getId());
+        return cacheWindowId(facesContext.getExternalContext(), windowContext.getId());
     }
 
     //TODO
@@ -273,9 +271,9 @@ public class DefaultWindowContextManager implements WindowContextManager
     }
 
     //TODO
-    public void resetWindowContext(long id)
+    public void resetWindowContext(String windowContextId)
     {
-        resetWindowContext(getWindowContext(id));
+        resetWindowContext(getWindowContext(windowContextId));
     }
 
     public void resetWindowContext(WindowContext windowContext)
@@ -292,7 +290,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         resetConversations(getCurrentWindowContext());
     }
 
-    public void resetConversations(long windowContextId)
+    public void resetConversations(String windowContextId)
     {
         resetConversations(getWindowContext(windowContextId));
     }
@@ -317,9 +315,9 @@ public class DefaultWindowContextManager implements WindowContextManager
         removeWindowContext(getCurrentWindowContext());
     }
 
-    public void removeWindowContext(long id)
+    public void removeWindowContext(String windowContextId)
     {
-        removeWindowContext(getWindowContext(id));
+        removeWindowContext(getWindowContext(windowContextId));
     }
 
     public void removeWindowContext(WindowContext windowContext)
@@ -328,23 +326,14 @@ public class DefaultWindowContextManager implements WindowContextManager
         this.windowContextMap.remove(windowContext.getId());
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
         removeWindowContextIdHolderComponent(facesContext);
-        setWindowContextIdOfRequest(facesContext, null);
+
+        //reset existing information
+        getExistingWindowIdSet(externalContext).remove(windowContext.getId());
+        externalContext.getRequestMap().remove(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
         windowContext.endConversations();
-    }
-
-
-    private void setWindowContextIdOfRequest(FacesContext facesContext, Long newId)
-    {
-        Map requestMap = facesContext.getExternalContext().getRequestMap();
-
-        if (newId != null)
-        {
-            //noinspection unchecked
-            requestMap.put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, newId);
-        }
-        requestMap.remove(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)

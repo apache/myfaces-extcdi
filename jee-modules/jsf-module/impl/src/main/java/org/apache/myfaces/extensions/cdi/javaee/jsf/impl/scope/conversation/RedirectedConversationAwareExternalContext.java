@@ -19,7 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -40,22 +41,47 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 {
     private ExternalContext wrapped;
 
-    private static RedirectHandler redirectHandler;
+    private WindowHandler windowHandler;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;
     }
 
+    public String encodeActionURL(String s)
+    {
+        lazyInit();
+        String url = addWindowIdToUrl(s);
+        return wrapped.encodeActionURL(url);
+    }
+
+    public void redirect(String url)
+            throws IOException
+    {
+        lazyInit();
+        sendRedirect(this.wrapped, url, windowHandler);
+    }
+
+    private synchronized void lazyInit()
+    {
+        if(windowHandler == null)
+        {
+            windowHandler = getWindowHandler();
+        }
+    }
+
+    private String addWindowIdToUrl(String url)
+    {
+        return this.windowHandler.encodeURL(this.wrapped, url);
+    }
+
+    /*
+     * generated
+     */
     public void dispatch(String s)
             throws IOException
     {
         wrapped.dispatch(s);
-    }
-
-    public String encodeActionURL(String s)
-    {
-        return wrapped.encodeActionURL(s);
     }
 
     public String encodeNamespace(String s)
@@ -253,20 +279,5 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     public void log(String s, Throwable throwable)
     {
         wrapped.log(s, throwable);
-    }
-
-    public void redirect(String url)
-            throws IOException
-    {
-        lazyInit();
-        sendRedirect(this.wrapped, url, redirectHandler);
-    }
-
-    private synchronized void lazyInit()
-    {
-        if(redirectHandler == null)
-        {
-            redirectHandler = getRedirectHandler();
-        }
     }
 }

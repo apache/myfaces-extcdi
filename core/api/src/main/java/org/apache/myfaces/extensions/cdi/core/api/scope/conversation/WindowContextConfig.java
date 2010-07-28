@@ -29,7 +29,7 @@ public abstract class WindowContextConfig extends AbstractCodiConfig
 
     //deactivate it for higher security
 
-    public abstract boolean isGetRequestParameterSupported();
+    public abstract boolean isUrlParameterSupported();
 
     public abstract int getWindowContextTimeoutInMinutes();
 

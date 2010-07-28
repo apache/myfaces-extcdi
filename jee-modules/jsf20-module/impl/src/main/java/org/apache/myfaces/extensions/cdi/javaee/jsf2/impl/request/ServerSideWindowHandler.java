@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
 
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowHandler;
+
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
@@ -27,29 +29,34 @@ import javax.faces.context.FacesContext;
 import java.io.IOException;
 
 /**
+ * use this implementation to avoid tokens in the url.
+ * attention: e.g. manual window refreshes aren't supported due to browser restrictions
+ *
  * @author Gerhard Petracek
  */
-public class DefaultRedirectHandler extends
-        org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRedirectHandler
+@SuppressWarnings({"UnusedDeclaration"})
+public class ServerSideWindowHandler extends DefaultWindowHandler
 {
     private static final long serialVersionUID = 4040116087475343221L;
 
     //workaround for mojarra
     private final boolean useFallback;
 
-    public DefaultRedirectHandler()
+    public ServerSideWindowHandler(boolean useWindowAwareUrlEncoding)
     {
+        super(useWindowAwareUrlEncoding);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;
     }
 
     @Override
-    public void sendRedirect(ExternalContext externalContext, String url, Long windowId) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url) throws IOException
     {
-        if(this.useFallback ||
+        String windowId = getCurrentWindowId();
+        if(this.useWindowAwareUrlEncoding || this.useFallback ||
                 //here we have an ajax nav. - currently it doesn't work in combination with the flash scope
                 FacesContext.getCurrentInstance().getPartialViewContext().isPartialRequest())
         {
-            super.sendRedirect(externalContext, url, windowId);
+            super.sendRedirect(externalContext, url);
             return;
         }
         
@@ -63,13 +70,13 @@ public class DefaultRedirectHandler extends
     }
 
     @Override
-    public Long restoreWindowId(ExternalContext externalContext)
+    public String restoreWindowId(ExternalContext externalContext)
     {
-        if(this.useFallback)
+        if(this.useWindowAwareUrlEncoding || this.useFallback)
         {
             return super.restoreWindowId(externalContext);
         }
 
-        return (Long)externalContext.getFlash().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
+        return (String)externalContext.getFlash().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 }

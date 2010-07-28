@@ -18,20 +18,24 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
-import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.DefaultRedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.ServerSideWindowHandler;
+
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author Gerhard Petracek
  */
+@ApplicationScoped
+@SuppressWarnings({"UnusedDeclaration"})
 public class DefaultWindowContextConfig extends
         org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.DefaultWindowContextConfig
 {
     private static final long serialVersionUID = 5184658265260290647L;
 
     @Override
-    public RedirectHandler getRedirectHandler()
+    public WindowHandler getWindowHandler()
     {
-        return new DefaultRedirectHandler();
+        return new ServerSideWindowHandler(isUrlParameterSupported());
     }
 }

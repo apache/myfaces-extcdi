@@ -34,7 +34,7 @@ public interface WindowContext extends AttributeAware, Serializable
     /**
      * @return the id of the conversation (unique for each window/tab)
      */
-    Long getId();
+    String getId();
 
     /**
      * @param conversationGroup group of the conversation in question

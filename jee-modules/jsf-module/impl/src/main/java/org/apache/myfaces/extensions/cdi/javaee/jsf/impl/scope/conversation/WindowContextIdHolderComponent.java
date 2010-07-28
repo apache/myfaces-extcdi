@@ -28,13 +28,14 @@ import javax.faces.context.FacesContext;
  */
 public class WindowContextIdHolderComponent extends UIOutput
 {
-    private long windowContextId;
+    private String windowContextId;
 
+    @SuppressWarnings({"UnusedDeclaration"})
     public WindowContextIdHolderComponent()
     {
     }
 
-    public WindowContextIdHolderComponent(long windowContextId)
+    public WindowContextIdHolderComponent(String windowContextId)
     {
         this.windowContextId = windowContextId;
     }
@@ -58,18 +59,18 @@ public class WindowContextIdHolderComponent extends UIOutput
         Object[] values = (Object[]) state;
         super.restoreState(facesContext, values[0]);
 
-        this.windowContextId = (Long) values[1];
+        this.windowContextId = (String) values[1];
 
         facesContext.getExternalContext().getRequestMap()
                 .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, this.windowContextId);
     }
 
-    public long getWindowContextId()
+    public String getWindowContextId()
     {
         return windowContextId;
     }
 
-    void changeWindowContextId(long windowContextId)
+    void changeWindowContextId(String windowContextId)
     {
         this.windowContextId = windowContextId;
     }

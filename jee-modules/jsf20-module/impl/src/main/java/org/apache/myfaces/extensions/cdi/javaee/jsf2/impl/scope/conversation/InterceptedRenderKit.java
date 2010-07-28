@@ -38,7 +38,7 @@ class InterceptedRenderKit extends RenderKit
 {
     private final RenderKit wrapped;
 
-    public InterceptedRenderKit(RenderKit wrapped)
+    InterceptedRenderKit(RenderKit wrapped)
     {
         this.wrapped = wrapped;
     }

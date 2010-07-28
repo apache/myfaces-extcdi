@@ -40,6 +40,8 @@ public class CodiFacesContextFactory extends FacesContextFactory
                                         Object response,
                                         Lifecycle lifecycle) throws FacesException
     {
+        //TODO wrap response if it's an instance of HttpServletResponse (to use #encodeURL)
+        
         FacesContext facesContext =
                 this.wrappedFacesContextFactory.getFacesContext(context, request, response, lifecycle);
 

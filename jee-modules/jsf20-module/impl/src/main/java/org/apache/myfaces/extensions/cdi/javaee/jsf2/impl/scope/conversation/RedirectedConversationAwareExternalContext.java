@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.RedirectHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
@@ -32,7 +32,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 {
     private final ExternalContext wrapped;
 
-    private RedirectHandler redirectHandler;
+    private WindowHandler windowHandler;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
@@ -49,14 +49,26 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
             throws IOException
     {
         lazyInit();
-        sendRedirect(this.wrapped, url, this.redirectHandler);
+        sendRedirect(this.wrapped, url, this.windowHandler);
+    }
+
+    public String encodeActionURL(String s)
+    {
+        lazyInit();
+        String url = addWindowIdToUrl(s);
+        return wrapped.encodeActionURL(url);
     }
 
     private synchronized void lazyInit()
     {
-        if(this.redirectHandler == null)
+        if(this.windowHandler == null)
         {
-            this.redirectHandler = getRedirectHandler();
+            this.windowHandler = getWindowHandler();
         }
+    }
+
+    private String addWindowIdToUrl(String url)
+    {
+        return this.windowHandler.encodeURL(this.wrapped, url);
     }
 }
