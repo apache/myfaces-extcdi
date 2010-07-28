@@ -21,4 +21,4 @@
 #org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.view.ViewScopedExtension
 
 # we have to activate this extension in any case!
-org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.RequestTypeResolverExtension
+org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.Jsf12AwareFilterExtension

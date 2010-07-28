@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowHandler;
 
@@ -42,7 +42,7 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
     //workaround for mojarra
     private final boolean useFallback;
 
-    public ServerSideWindowHandler(boolean useWindowAwareUrlEncoding)
+    protected ServerSideWindowHandler(boolean useWindowAwareUrlEncoding)
     {
         super(useWindowAwareUrlEncoding);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;

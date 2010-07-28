@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.config;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.ServerSideWindowHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.ServerSideWindowHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -36,6 +36,9 @@ public class DefaultWindowContextConfig extends
     @Override
     public WindowHandler getWindowHandler()
     {
-        return new ServerSideWindowHandler(isUrlParameterSupported());
+        return new ServerSideWindowHandler(isUrlParameterSupported())
+        {
+            private static final long serialVersionUID = -9034142203391043297L;
+        };
     }
 }

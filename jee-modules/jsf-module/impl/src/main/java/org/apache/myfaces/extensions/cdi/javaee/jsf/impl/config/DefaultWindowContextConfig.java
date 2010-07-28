@@ -184,7 +184,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
     public WindowHandler getWindowHandler()
     {
-        return new DefaultWindowHandler(isUrlParameterSupported());
+        return new DefaultWindowHandler(isUrlParameterSupported())
+        {
+            private static final long serialVersionUID = 7376499174252256735L;
+        };
     }
 
     public ConversationFactory getConversationFactory()

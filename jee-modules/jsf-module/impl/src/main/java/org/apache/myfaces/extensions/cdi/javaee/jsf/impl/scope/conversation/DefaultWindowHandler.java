@@ -43,7 +43,7 @@ public class DefaultWindowHandler implements WindowHandler
 
     protected final boolean useWindowAwareUrlEncoding;
 
-    public DefaultWindowHandler(boolean useWindowAwareUrlEncoding)
+    protected DefaultWindowHandler(boolean useWindowAwareUrlEncoding)
     {
         this.useWindowAwareUrlEncoding = useWindowAwareUrlEncoding;
     }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
+package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.DefaultRequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.DefaultWindowContextConfig;
@@ -26,9 +26,13 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.event.Observes;
 
 /**
+ * filters implementations for jsf 1.2
+ * this module contains all replacements for jsf 2.0
+ * 
  * @author Gerhard Petracek
  */
-public class RequestTypeResolverExtension implements Extension
+@SuppressWarnings({"UnusedDeclaration"})
+public class Jsf12AwareFilterExtension implements Extension
 {
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
