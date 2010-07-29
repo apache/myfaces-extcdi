@@ -20,3 +20,5 @@
 org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase.PhaseListenerExtension
 
 org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.GroupedConversationContextExtension
+
+org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.ViewDefinitionExtension

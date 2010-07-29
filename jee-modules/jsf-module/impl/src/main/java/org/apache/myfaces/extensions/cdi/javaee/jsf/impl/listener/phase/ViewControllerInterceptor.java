@@ -18,21 +18,25 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.listener.phase.View;
+import org.apache.myfaces.extensions.cdi.core.api.view.definition.AnyView;
+import org.apache.myfaces.extensions.cdi.core.api.view.definition.View;
+import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.ViewDefinitionCache;
 
 import javax.interceptor.Interceptor;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
  */
 
-@View
+@View(AnyView.class)
 @Interceptor
 public class ViewControllerInterceptor
 {
@@ -57,20 +61,20 @@ public class ViewControllerInterceptor
 
     private boolean invokeListenerMethod(InvocationContext invocationContext)
     {
-        if(!isObserverMethod(invocationContext) || !isViewAnnotationPresent(invocationContext))
+        if(!isObserverMethod(invocationContext))
         {
             return true;
         }
 
         View view = getViewAnnotation(invocationContext);
 
-        if(view.value().length == 1 && "*".equals(view.value()[0]))
-        {
-            return true;
-        }
-
         String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-        return isMethodBoundToView(view.value(), viewId);
+
+        if(view.inline().length > 1 || !"".equals(view.inline()[0]))
+        {
+            return isMethodBoundToView(view.inline(), viewId);
+        }
+        return isMethodBoundToViewDefinition(view.value(), viewId);
     }
 
     private boolean isObserverMethod(InvocationContext invocationContext)
@@ -89,22 +93,17 @@ public class ViewControllerInterceptor
         return false;
     }
 
-    private boolean isViewAnnotationPresent(InvocationContext invocationContext)
-    {
-        return invocationContext.getMethod().isAnnotationPresent(View.class) ||
-             invocationContext.getMethod().getDeclaringClass().isAnnotationPresent(View.class);
-    }
-
     private View getViewAnnotation(InvocationContext invocationContext)
     {
         View view;
-        if(invocationContext.getMethod().isAnnotationPresent(View.class))
+        Method method = invocationContext.getMethod();
+        if(method.isAnnotationPresent(View.class))
         {
-            view = invocationContext.getMethod().getAnnotation(View.class);
+            view = method.getAnnotation(View.class);
         }
         else
         {
-            view = invocationContext.getMethod().getDeclaringClass().getAnnotation(View.class);
+            view = method.getDeclaringClass().getAnnotation(View.class);
         }
         return view;
     }
@@ -119,5 +118,22 @@ public class ViewControllerInterceptor
             }
         }
         return false;
+    }
+
+    private boolean isMethodBoundToViewDefinition (Class<? extends ViewDefinition>[] viewDefinitions, String viewId)
+    {
+        for(Class<? extends ViewDefinition> viewDefinition : viewDefinitions)
+        {
+            if(resolveViewId(viewDefinition).equals(viewId))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String resolveViewId(Class<? extends ViewDefinition> viewDefinitionClass)
+    {
+        return ViewDefinitionCache.getViewDefinition(viewDefinitionClass).getViewId();
     }
 }

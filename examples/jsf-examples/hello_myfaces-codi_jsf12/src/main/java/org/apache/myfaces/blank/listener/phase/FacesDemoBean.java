@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.blank.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.listener.phase.View;
+import org.apache.myfaces.blank.view.DemoPages;
+import org.apache.myfaces.blank.view.InvalidPage;
+import org.apache.myfaces.extensions.cdi.core.api.view.definition.View;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
@@ -64,19 +66,19 @@ public class FacesDemoBean
         this.text = "Hello MyFaces CODI";
     }
 
-    @View("/helloMyFacesCodi.jsp")
+    @View(DemoPages.HelloMyFacesCodi.class)
     public void preInvokeApplication(@Observes @BeforePhase(PhaseId.INVOKE_APPLICATION) PhaseEvent event)
     {
         addGlobalMessage("preInvokeApplication in phase:" + event.getPhaseId());
     }
 
-    @View("/invalidPage.jsp")
+    @View(InvalidPage.class)
     public void postRestoreViewInvalid(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
         addGlobalMessage("postRestoreViewInvalid in phase:" + event.getPhaseId());
     }
 
-    @View({"/invalidPage.jsp", "/helloMyFacesCodi.jsp"})
+    @View({InvalidPage.class, DemoPages.HelloMyFacesCodi.class})
     public void postRestoreView(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
     {
         addGlobalMessage("postRestoreView in phase:" + event.getPhaseId());
