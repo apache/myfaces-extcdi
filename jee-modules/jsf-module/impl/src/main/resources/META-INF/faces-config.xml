@@ -25,6 +25,7 @@
 
     <application>
         <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.flow.FlowNavigationHandler</navigation-handler>
     </application>
 
     <factory>

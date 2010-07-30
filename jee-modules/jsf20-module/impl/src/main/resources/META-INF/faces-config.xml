@@ -23,6 +23,7 @@
               version="2.0">
 
     <application>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.flow.FlowNavigationHandler</navigation-handler>
         <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
     </application>
 

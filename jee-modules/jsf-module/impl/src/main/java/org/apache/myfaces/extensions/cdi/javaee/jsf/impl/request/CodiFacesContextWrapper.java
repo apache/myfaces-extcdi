@@ -52,6 +52,8 @@ class CodiFacesContextWrapper extends FacesContext
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
+
+        setCurrentInstance(this);
         //(currently) causes issue in combination with geronimo 3.0-m1
         init();
     }
