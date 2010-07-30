@@ -24,11 +24,13 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Editab
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 
+import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class DefaultConversation implements Conversation, EditableConversation
 {
     private static final long serialVersionUID = -2958548175169003298L;

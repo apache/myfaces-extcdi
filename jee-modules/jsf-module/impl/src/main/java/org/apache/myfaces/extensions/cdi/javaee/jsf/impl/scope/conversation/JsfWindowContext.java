@@ -31,6 +31,7 @@ import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversati
         .JsfAwareConversationFactory.ConversationPropertyKeys.TIMEOUT;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 
+import javax.enterprise.inject.Typed;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,6 +45,7 @@ import java.lang.annotation.Annotation;
  *
  * @author Gerhard Petracek
  */
+@Typed()
 public class JsfWindowContext implements WindowContext, EditableWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
