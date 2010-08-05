@@ -37,6 +37,11 @@ import java.util.Locale;
  */
 public class JsfUtils
 {
+    public static void resetConversationCache()
+    {
+        RequestCache.resetConversationCache();
+    }
+
     public static void resetCaches()
     {
         RequestCache.resetCache();

@@ -96,15 +96,7 @@ public class DefaultWindowContextManager implements WindowContextManager
             for (Conversation conversation :
                     ((EditableWindowContext)windowContext).getConversations().values())
             {
-                //TODO
-                if(conversation instanceof EditableConversation)
-                {
-                    ((EditableConversation)conversation).forceEnd();
-                }
-                else
-                {
-                    conversation.end();
-                }
+                conversation.end();
             }
 
             //TODO

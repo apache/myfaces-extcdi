@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
@@ -31,7 +30,7 @@ import java.io.Serializable;
  * @author Gerhard Petracek
  */
 @Typed()
-public class DefaultConversation implements Conversation, EditableConversation
+public class DefaultConversation implements EditableConversation
 {
     private static final long serialVersionUID = -2958548175169003298L;
 
@@ -70,12 +69,6 @@ public class DefaultConversation implements Conversation, EditableConversation
         {
             this.active = false;
         }
-    }
-
-    public void forceEnd()
-    {
-        this.active = false;
-        end();
     }
 
     public void end()

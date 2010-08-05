@@ -18,11 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+
 /**
  * TODO
  * @author Gerhard Petracek
  */
-public interface EditableConversation
+public interface EditableConversation extends Conversation
 {
     /**
      * @return evaluates and returns if the conversation is active
@@ -38,11 +40,6 @@ public interface EditableConversation
      * has to expire a conversation. if the conversation is expired afterwards it has to be inactive
      */
     void deactivate();
-
-    /**
-     * deactivates a conversation in any case (independent of the expiration mechanism)
-     */
-    void forceEnd();
 
     <T> void addBean(BeanEntry<T> beanInstance);
 

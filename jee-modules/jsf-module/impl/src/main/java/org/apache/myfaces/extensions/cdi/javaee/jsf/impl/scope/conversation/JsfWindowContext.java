@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation
         .JsfAwareConversationFactory.ConversationPropertyKeys.TIMEOUT;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 
 import javax.enterprise.inject.Typed;
 import java.util.Collections;
@@ -70,12 +71,24 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
         return this.id;
     }
 
-    public synchronized void endConversations()
+    public void endConversations()
+    {
+        endConversations(false);
+    }
+
+    public void end()
+    {
+        endConversations(true);
+        this.attributes.clear();
+    }
+
+    public synchronized void endConversations(boolean forceEnd)
     {
         for (Map.Entry<ConversationKey, Conversation> conversationEntry : this.groupedConversations.entrySet())
         {
-            endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue());
+            endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), forceEnd);
         }
+        JsfUtils.resetConversationCache();
     }
 
     public Conversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
@@ -91,7 +104,7 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
             //TODO
             if (conversation != null && !((EditableConversation)conversation).isActive())
             {
-                endAndRemoveConversation(conversationKey, conversation);
+                endAndRemoveConversation(conversationKey, conversation, true);
                 conversation = null;
             }
 
@@ -111,7 +124,7 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
         ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
 
         Conversation conversation = this.groupedConversations.get(conversationKey);
-        return endAndRemoveConversation(conversationKey, conversation);
+        return endAndRemoveConversation(conversationKey, conversation, true);
     }
 
     public Set<Conversation> endConversationGroup(Class conversationGroupKey)
@@ -122,21 +135,33 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
             if(conversationGroupKey.isAssignableFrom(conversationEntry.getKey().getConversationGroup()))
             {
                 removedConversations.add(
-                        endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue()));
+                        endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), true));
             }
         }
         return removedConversations;
     }
 
-    private Conversation endAndRemoveConversation(ConversationKey conversationKey, Conversation conversation)
+    private Conversation endAndRemoveConversation(ConversationKey conversationKey,
+                                                  Conversation conversation,
+                                                  boolean forceEnd)
     {
-        //TODO
-        if (((EditableConversation)conversation).isActive())
+        if (forceEnd)
         {
             conversation.end();
+            return this.groupedConversations.remove(conversationKey);
+        }
+        else if(conversation instanceof EditableConversation)
+        {
+            ((EditableConversation)conversation).deactivate();
+
+            if(!((EditableConversation)conversation).isActive())
+            {
+                conversation.end();
+                return this.groupedConversations.remove(conversationKey);
+            }
         }
 
-        return this.groupedConversations.remove(conversationKey);
+        return null;
     }
 
     public Conversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
