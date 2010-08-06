@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
@@ -100,11 +102,11 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     {
         if (configInitialized == null)
         {
-            init(FacesContext.getCurrentInstance());
+            init(FacesContext.getCurrentInstance(), CodiUtils.getCurrentProjectStage());
         }
     }
 
-    private synchronized void init(FacesContext facesContext)
+    private synchronized void init(FacesContext facesContext, ProjectStage currentProjectStage)
     {
         if (configInitialized != null || facesContext == null)
         {
@@ -114,7 +116,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         configInitialized = true;
 
         initUrlParameterEnabled(facesContext);
-        initMaxWindowContextCount(facesContext);
+        initMaxWindowContextCount(facesContext, ProjectStage.SystemTest.equals(currentProjectStage));
         initWindowContextTimeout(facesContext);
         initGroupedConversationTimeout(facesContext);
     }
@@ -143,9 +145,14 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         setAttribute(URL_PARAMETER_ENABLED, Boolean.parseBoolean(requestParameterEnabledString));
     }
 
-    private void initMaxWindowContextCount(FacesContext facesContext)
+    private void initMaxWindowContextCount(FacesContext facesContext, boolean inProjectStageSystemTest)
     {
         int maxCount = MAX_WINDOW_CONTEXT_COUNT_DEFAULT;
+
+        if(inProjectStageSystemTest)
+        {
+            maxCount = Integer.MAX_VALUE;
+        }
 
         String maxCountString = facesContext.getExternalContext().getInitParameter(MAX_WINDOW_CONTEXT_COUNT);
 

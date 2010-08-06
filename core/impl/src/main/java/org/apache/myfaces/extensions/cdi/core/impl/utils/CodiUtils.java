@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
 import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
+import java.lang.annotation.Annotation;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -37,6 +39,7 @@ import java.util.Set;
  */
 public class CodiUtils
 {
+    //TODO change source
     public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
 
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
@@ -52,6 +55,20 @@ public class CodiUtils
     public static <T> T getOrCreateScopedInstanceOfBeanByName(String beanName, Class<T> targetClass)
     {
         Set<Bean<?>> foundBeans = BeanManagerProvider.getInstance().getBeanManager().getBeans(beanName);
+
+        if(foundBeans.size() != 1)
+        {
+            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName());
+        }
+
+        //noinspection unchecked
+        return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBeanByClass(Class<T> targetClass, Annotation... qualifier)
+    {
+        Set<? extends Bean> foundBeans = BeanManagerProvider.getInstance().getBeanManager()
+                .getBeans(targetClass, qualifier);
 
         if(foundBeans.size() != 1)
         {
@@ -126,5 +143,10 @@ public class CodiUtils
         }
 
         return value;
+    }
+
+    public static ProjectStage getCurrentProjectStage()
+    {
+        return getOrCreateScopedInstanceOfBeanByClass(ProjectStage.class);
     }
 }
