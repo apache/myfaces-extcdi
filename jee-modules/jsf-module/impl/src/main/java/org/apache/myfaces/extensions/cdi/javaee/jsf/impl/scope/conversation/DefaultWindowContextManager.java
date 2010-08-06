@@ -59,7 +59,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.lang.annotation.Annotation;
 
 /**
@@ -89,9 +88,6 @@ public class DefaultWindowContextManager implements WindowContextManager
     private WindowHandler windowHandler;
 
     private boolean projectStageDevelopment;
-
-    //just for project stage dev.
-    private AtomicInteger windowContextCounter = new AtomicInteger(1);
 
     @PostConstruct
     protected void init()
@@ -217,9 +213,9 @@ public class DefaultWindowContextManager implements WindowContextManager
     {
         String windowContextId = this.windowHandler.createWindowId();
 
-        int currentWindowContextCount = this.windowContextCounter.getAndIncrement();
+        int windowContextCount = getNumberOfNextWindowContext();
 
-        if(this.windowContextConfig.getMaxWindowContextCount() < currentWindowContextCount)
+        if(this.windowContextConfig.getMaxWindowContextCount() < windowContextCount)
         {
             if(!cleanupInactiveWindowContexts())
             {
@@ -227,8 +223,7 @@ public class DefaultWindowContextManager implements WindowContextManager
                 throw tooManyOpenWindowException(this.windowContextConfig.getWindowContextTimeoutInMinutes());
             }
 
-            currentWindowContextCount = this.windowContextMap.size() + 1;
-            this.windowContextCounter.set(currentWindowContextCount + 1);
+            windowContextCount = getNumberOfNextWindowContext();
         }
 
         if(this.projectStageDevelopment &&
@@ -237,10 +232,15 @@ public class DefaultWindowContextManager implements WindowContextManager
             //it's easier for developers to check the current window context
             //after a cleanup of window contexts it isn't reliable
             //however - such a cleanup shouldn't occur during development
-            windowContextId = convertToDevWindowContextId(windowContextId, currentWindowContextCount);
+            windowContextId = convertToDevWindowContextId(windowContextId, windowContextCount);
         }
         cacheWindowId(windowContextId);
         return windowContextId;
+    }
+
+    private int getNumberOfNextWindowContext()
+    {
+        return this.windowContextMap.size() + 1;
     }
 
     public synchronized WindowContext getWindowContext(String windowContextId)
@@ -378,13 +378,18 @@ public class DefaultWindowContextManager implements WindowContextManager
         for (WindowContext windowContext : this.windowContextMap.values())
         {
             if(windowContext instanceof EditableWindowContext &&
-                    !((EditableWindowContext)windowContext).isActive())
+                    isEligibleForCleanup((EditableWindowContext)windowContext))
             {
                 removeWindowContext(windowContext);
             }
         }
 
         return this.windowContextMap.size() < count;
+    }
+
+    private boolean isEligibleForCleanup(EditableWindowContext editableWindowContext)
+    {
+        return !editableWindowContext.isActive() || editableWindowContext.getConversations().isEmpty();
     }
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
