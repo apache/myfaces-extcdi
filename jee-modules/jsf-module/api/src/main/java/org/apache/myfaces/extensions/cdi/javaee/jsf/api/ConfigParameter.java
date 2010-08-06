@@ -43,7 +43,10 @@ public interface ConfigParameter
     static final String WINDOW_CONTEXT_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "WINDOW_CONTEXT_TIMEOUT";
 
-    //TODO
     static final int WINDOW_CONTEXT_TIMEOUT_DEFAULT = 60;
-    static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 50;
+
+    static final String MAX_WINDOW_CONTEXT_COUNT =
+            CoreCodiConfigParameter.BASE_NAME + "MAX_WINDOW_CONTEXT_COUNT";
+
+    static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 64;
 }

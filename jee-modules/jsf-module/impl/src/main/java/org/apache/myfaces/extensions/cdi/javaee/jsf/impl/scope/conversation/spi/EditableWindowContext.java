@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 import java.util.Map;
 import java.lang.annotation.Annotation;
@@ -26,8 +27,15 @@ import java.lang.annotation.Annotation;
 /**
  * @author Gerhard Petracek
  */
-public interface EditableWindowContext
+public interface EditableWindowContext extends WindowContext
 {
+    /**
+     * @return evaluates and returns if the context is active
+     */
+    boolean isActive();
+
+    void touch();
+
     void removeInactiveConversations();
 
     /**

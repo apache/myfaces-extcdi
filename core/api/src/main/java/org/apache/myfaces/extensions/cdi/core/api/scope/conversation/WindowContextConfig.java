@@ -34,4 +34,6 @@ public abstract class WindowContextConfig extends AbstractCodiConfig
     public abstract int getWindowContextTimeoutInMinutes();
 
     public abstract int getConversationTimeoutInMinutes();
+
+    public abstract int getMaxWindowContextCount();
 }

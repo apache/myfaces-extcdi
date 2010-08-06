@@ -50,7 +50,7 @@ class DefaultConversationKey implements ConversationKey
     //workaround
     private boolean viewAccessScopedAnnotationPresent;
 
-    DefaultConversationKey(Class<?> groupKey, Annotation... qualifiers)
+    DefaultConversationKey(Class<?> groupKey, boolean validateKey, Annotation... qualifiers)
     {
         this.groupKey = groupKey;
 
@@ -82,7 +82,10 @@ class DefaultConversationKey implements ConversationKey
         }
 
         //X TODO drop and move validation to deploy time!
-        validate();
+        if(validateKey)
+        {
+            validate();
+        }
     }
 
 

@@ -90,6 +90,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.class);
     }
 
+    public int getMaxWindowContextCount()
+    {
+        lazyInit();
+        return getAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.class);
+    }
+
     private void lazyInit()
     {
         if (configInitialized == null)
@@ -108,7 +114,8 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         configInitialized = true;
 
         initUrlParameterEnabled(facesContext);
-        initWindowContextConversationTimeout(facesContext);
+        initMaxWindowContextCount(facesContext);
+        initWindowContextTimeout(facesContext);
         initGroupedConversationTimeout(facesContext);
     }
 
@@ -136,7 +143,30 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         setAttribute(URL_PARAMETER_ENABLED, Boolean.parseBoolean(requestParameterEnabledString));
     }
 
-    private void initWindowContextConversationTimeout(FacesContext facesContext)
+    private void initMaxWindowContextCount(FacesContext facesContext)
+    {
+        int maxCount = MAX_WINDOW_CONTEXT_COUNT_DEFAULT;
+
+        String maxCountString = facesContext.getExternalContext().getInitParameter(MAX_WINDOW_CONTEXT_COUNT);
+
+        if (maxCountString == null)
+        {
+            setAttribute(MAX_WINDOW_CONTEXT_COUNT, maxCount);
+            return;
+        }
+
+        maxCountString = maxCountString.trim();
+
+        if ("".equals(maxCountString))
+        {
+            setAttribute(MAX_WINDOW_CONTEXT_COUNT, maxCount);
+            return;
+        }
+
+        setAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.parseInt(maxCountString));
+    }
+
+    private void initWindowContextTimeout(FacesContext facesContext)
     {
         int timeoutInMinutes = WINDOW_CONTEXT_TIMEOUT_DEFAULT;
 

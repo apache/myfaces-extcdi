@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
@@ -34,6 +35,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
@@ -57,6 +59,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.lang.annotation.Annotation;
 
 /**
@@ -77,15 +80,25 @@ public class DefaultWindowContextManager implements WindowContextManager
     @SuppressWarnings({"UnusedDeclaration"})
     private ConfigResolver configResolver;
 
+    @Inject
+    @SuppressWarnings({"UnusedDeclaration"})
+    private ProjectStage projectStage;
+
     private WindowContextConfig windowContextConfig;
 
     private WindowHandler windowHandler;
+
+    private boolean projectStageDevelopment;
+
+    //just for project stage dev.
+    private AtomicInteger windowContextCounter = new AtomicInteger(1);
 
     @PostConstruct
     protected void init()
     {
         this.windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
         this.windowHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getWindowHandler();
+        this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
     }
 
     @PreDestroy
@@ -99,7 +112,6 @@ public class DefaultWindowContextManager implements WindowContextManager
                 conversation.end();
             }
 
-            //TODO
             ((EditableWindowContext)windowContext).removeInactiveConversations();
         }
     }
@@ -121,6 +133,7 @@ public class DefaultWindowContextManager implements WindowContextManager
         }
 
         cleanupInactiveConversations();
+        cleanupInactiveWindowContexts();
     }
 
     protected void recordCurrentViewAsOldViewId(@Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
@@ -134,24 +147,6 @@ public class DefaultWindowContextManager implements WindowContextManager
         //TODO activate it only in project-stage dev.
         //org.apache.myfaces.view.facelets.tag.ui.DebugPhaseListener causes re-eval (+ caching) of window-id
         JsfUtils.resetCaches();
-    }
-
-    private void cleanupInactiveConversations()
-    {
-        //don't cleanup all window contexts (it would cause a side-effect with the access-scope and multiple windows 
-        WindowContext windowContext = getCurrentWindowContext();
-
-        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
-        {
-            //TODO test the usage of #isActiveState instead of isActive
-            if (!((EditableConversation)conversation).isActive())
-            {
-                conversation.end();
-            }
-        }
-
-        //TODO
-        ((EditableWindowContext)windowContext).removeInactiveConversations();
     }
 
     @Produces
@@ -209,8 +204,7 @@ public class DefaultWindowContextManager implements WindowContextManager
 
             if (windowContextId == null)
             {
-                windowContextId = this.windowHandler.createWindowId();
-                cacheWindowId(windowContextId);
+                windowContextId = createNewWindowContextId();
             }
 
             RequestCache.setCurrentWindowId(windowContextId);
@@ -219,16 +213,52 @@ public class DefaultWindowContextManager implements WindowContextManager
         return getWindowContext(windowContextId);
     }
 
+    private synchronized String createNewWindowContextId()
+    {
+        String windowContextId = this.windowHandler.createWindowId();
+
+        int currentWindowContextCount = this.windowContextCounter.getAndIncrement();
+
+        if(this.windowContextConfig.getMaxWindowContextCount() < currentWindowContextCount)
+        {
+            if(!cleanupInactiveWindowContexts())
+            {
+                //TODO
+                throw tooManyOpenWindowException(this.windowContextConfig.getWindowContextTimeoutInMinutes());
+            }
+
+            currentWindowContextCount = this.windowContextMap.size() + 1;
+            this.windowContextCounter.set(currentWindowContextCount + 1);
+        }
+
+        if(this.projectStageDevelopment &&
+                this.windowHandler instanceof DefaultWindowHandler /*only in this case we know all details*/)
+        {
+            //it's easier for developers to check the current window context
+            //after a cleanup of window contexts it isn't reliable
+            //however - such a cleanup shouldn't occur during development
+            windowContextId = convertToDevWindowContextId(windowContextId, currentWindowContextCount);
+        }
+        cacheWindowId(windowContextId);
+        return windowContextId;
+    }
+
     public synchronized WindowContext getWindowContext(String windowContextId)
     {
         WindowContext result = this.windowContextMap.get(windowContextId);
 
         if (result == null)
         {
-            result = new JsfWindowContext(windowContextId, this.windowContextConfig);
+            result = new JsfWindowContext(windowContextId, this.windowContextConfig, this.projectStageDevelopment);
 
             this.windowContextMap.put(windowContextId, result);
         }
+
+        if(result instanceof EditableWindowContext)
+        {
+            ((EditableWindowContext)result).touch();
+        }
+
         return result;
     }
 
@@ -324,6 +354,39 @@ public class DefaultWindowContextManager implements WindowContextManager
         windowContext.endConversations();
     }
 
+    private void cleanupInactiveConversations()
+    {
+        //don't cleanup all window contexts (it would cause a side-effect with the access-scope and multiple windows
+        WindowContext windowContext = getCurrentWindowContext();
+
+        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
+        {
+            //TODO test the usage of #isActiveState instead of isActive
+            if (!((EditableConversation)conversation).isActive())
+            {
+                conversation.end();
+            }
+        }
+
+        ((EditableWindowContext)windowContext).removeInactiveConversations();
+    }
+
+    private boolean cleanupInactiveWindowContexts()
+    {
+        int count = this.windowContextMap.size();
+
+        for (WindowContext windowContext : this.windowContextMap.values())
+        {
+            if(windowContext instanceof EditableWindowContext &&
+                    !((EditableWindowContext)windowContext).isActive())
+            {
+                removeWindowContext(windowContext);
+            }
+        }
+
+        return this.windowContextMap.size() < count;
+    }
+
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
     {
         JsfUtils.resetCaches();
@@ -339,5 +402,19 @@ public class DefaultWindowContextManager implements WindowContextManager
                 return;
             }
         }
+    }
+
+    private String convertToDevWindowContextId(String windowContextId, int currentWindowContextCount)
+    {
+        Set<String> windowContextIdSet =
+                ConversationUtils.getExistingWindowIdSet(FacesContext.getCurrentInstance().getExternalContext());
+
+        if(windowContextIdSet.remove(windowContextId))
+        {
+            String devWindowContextId = currentWindowContextCount + windowContextId;
+            windowContextIdSet.add(devWindowContextId);
+            return devWindowContextId;
+        }
+        return windowContextId;
     }
 }

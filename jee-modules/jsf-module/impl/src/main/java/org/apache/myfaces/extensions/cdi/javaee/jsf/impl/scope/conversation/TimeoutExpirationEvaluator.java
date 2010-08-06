@@ -18,19 +18,30 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
+import java.util.Date;
+
 /**
  * @author Gerhard Petracek
  */
-class TimeoutConversationExpirationEvaluator extends TimeoutExpirationEvaluator
-        implements ConversationExpirationEvaluator
+public class TimeoutExpirationEvaluator
 {
-    TimeoutConversationExpirationEvaluator(int conversationTimeoutInMinutes)
+    private final long timeoutInMs;
+
+    protected Date lastAccess;
+
+    TimeoutExpirationEvaluator(int timeoutInMinutes)
     {
-        super(conversationTimeoutInMinutes);
+        this.timeoutInMs = timeoutInMinutes * 60000;
     }
 
-    public void expire()
+    public boolean isExpired()
     {
-        this.lastAccess = null;
+        return this.lastAccess == null ||
+                (this.lastAccess.getTime() + this.timeoutInMs) < System.currentTimeMillis();
+    }
+
+    public void touch()
+    {
+        this.lastAccess = new Date();
     }
 }

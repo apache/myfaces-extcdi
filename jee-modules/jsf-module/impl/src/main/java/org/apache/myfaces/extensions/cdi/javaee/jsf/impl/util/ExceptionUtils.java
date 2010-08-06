@@ -16,21 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 /**
  * @author Gerhard Petracek
  */
-class TimeoutConversationExpirationEvaluator extends TimeoutExpirationEvaluator
-        implements ConversationExpirationEvaluator
+public class ExceptionUtils
 {
-    TimeoutConversationExpirationEvaluator(int conversationTimeoutInMinutes)
+    public static RuntimeException tooManyOpenWindowException(int windowContextTimeoutInMinutes)
     {
-        super(conversationTimeoutInMinutes);
-    }
-
-    public void expire()
-    {
-        this.lastAccess = null;
+        return new RuntimeException("Too many active Windows/Tabs have been opened!" +
+            " Please continue with one of the existing windows or wait up to "
+                + windowContextTimeoutInMinutes + " minutes.");
     }
 }

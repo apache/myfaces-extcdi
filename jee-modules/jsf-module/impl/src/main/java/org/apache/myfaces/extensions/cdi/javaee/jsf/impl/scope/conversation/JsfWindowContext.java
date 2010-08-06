@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -47,7 +46,7 @@ import java.lang.annotation.Annotation;
  * @author Gerhard Petracek
  */
 @Typed()
-public class JsfWindowContext implements WindowContext, EditableWindowContext
+public class JsfWindowContext implements EditableWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
@@ -55,15 +54,22 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     private final WindowContextConfig config;
 
+    private final boolean projectStageDevelopment;
+
     private Map<ConversationKey, Conversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, Conversation>();
 
     private Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
-    public JsfWindowContext(String windowContextId, WindowContextConfig config)
+    private final TimeoutExpirationEvaluator expirationEvaluator;
+
+    protected JsfWindowContext(String windowContextId, WindowContextConfig config, boolean projectStageDevelopment)
     {
         this.id = windowContextId;
         this.config = config;
+        this.expirationEvaluator = new TimeoutExpirationEvaluator(this.config.getWindowContextTimeoutInMinutes());
+
+        this.projectStageDevelopment = projectStageDevelopment;
     }
 
     public String getId()
@@ -93,7 +99,8 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     public Conversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+        ConversationKey conversationKey =
+                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         Conversation conversation = RequestCache.getConversation(conversationKey);
 
@@ -121,7 +128,8 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     public Conversation endConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+        ConversationKey conversationKey =
+                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         Conversation conversation = this.groupedConversations.get(conversationKey);
         return endAndRemoveConversation(conversationKey, conversation, true);
@@ -166,7 +174,8 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
 
     public Conversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        ConversationKey conversationKey = new DefaultConversationKey(conversationGroupKey, qualifiers);
+        ConversationKey conversationKey =
+                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         ConversationFactory conversationFactory =  ((JsfAwareWindowContextConfig)this.config).getConversationFactory();
 
@@ -196,6 +205,16 @@ public class JsfWindowContext implements WindowContext, EditableWindowContext
     public WindowContextConfig getConfig()
     {
         return this.config;
+    }
+
+    public boolean isActive()
+    {
+        return !this.expirationEvaluator.isExpired();
+    }
+
+    public void touch()
+    {
+        this.expirationEvaluator.touch();
     }
 
     public void removeInactiveConversations()
