@@ -32,10 +32,12 @@
         <f:view>
             <h:form>
                 <h3>values of ViewAccessScoped bean 1:</h3>
-                value&nbsp;<h:outputText value="#{vaBean1.value}"/><br/>
-                createdAt&nbsp; <h:outputText value="#{vaBean1.createdAt}"/><br/>
-                sample&nbsp; <h:outputText value="#{vaBean1.sampleField}"/><br/>
-                viewParam&nbsp; <h:outputText value="#{vaBean1.viewParam}"/><br/>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="value"/> <h:outputText value="#{vaBean1.value}"/>
+                    <h:outputLabel value="createdAt"/> <h:outputText value="#{vaBean1.createdAt}"/>
+                    <h:outputLabel value="sample"/> <h:outputText value="#{vaBean1.sampleField}"/>
+                    <h:outputLabel value="viewParam"/> <h:outputText value="#{vaBean1.viewParam}"/>
+                </h:panelGrid>
 
                 <h3>bean 2 will not get touched on this page</h3>
                 This means it gets another instance on page 1!
