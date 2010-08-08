@@ -146,7 +146,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     protected void cleanupAndRecordCurrentViewAsOldViewId(
             @Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
     {
-        storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
+        storeCurrentViewIdAsOldViewId(phaseEvent.getFacesContext());
 
         cleanupInactiveWindowContexts();
         RequestCache.resetCache();
