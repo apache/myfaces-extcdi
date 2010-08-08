@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface WindowContextQuotaHandler
+public interface WindowContextQuotaHandler extends Serializable
 {
     boolean checkQuota(int activeWindowContextCount);
 

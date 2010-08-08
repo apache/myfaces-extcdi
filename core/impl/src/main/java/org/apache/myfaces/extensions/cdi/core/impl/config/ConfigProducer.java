@@ -79,6 +79,8 @@ public class ConfigProducer
     {
         return new ConfigResolver()
         {
+            private static final long serialVersionUID = -4410313406799415118L;
+
             public <T extends CodiConfig> T resolve(Class<T> targetType)
             {
                 CodiConfig codiConfig = ApplicationCache.getConfig(targetType);

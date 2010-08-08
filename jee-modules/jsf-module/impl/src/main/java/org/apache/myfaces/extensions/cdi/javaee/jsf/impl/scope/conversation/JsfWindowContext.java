@@ -187,6 +187,8 @@ public class JsfWindowContext implements EditableWindowContext
     {
         return new ConversationConfiguration()
         {
+            private static final long serialVersionUID = 7592517957368180995L;
+
             public <T> T getValue(String key, Class<T> targetType)
             {
                 if(TIMEOUT.getKey().equals(key))

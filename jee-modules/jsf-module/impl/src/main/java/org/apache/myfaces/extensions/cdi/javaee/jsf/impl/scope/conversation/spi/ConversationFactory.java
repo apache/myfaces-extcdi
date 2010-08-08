@@ -20,10 +20,12 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationFactory
+public interface ConversationFactory extends Serializable
 {
     Conversation createConversation(ConversationKey conversationKey, ConversationConfiguration config);
 }

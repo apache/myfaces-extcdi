@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationExpirationEvaluator
+public interface ConversationExpirationEvaluator extends Serializable
 {
     boolean isExpired();
 

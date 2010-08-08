@@ -23,6 +23,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
  */
 class WindowConversationExpirationEvaluator implements ConversationExpirationEvaluator
 {
+    private static final long serialVersionUID = 6646005969384698897L;
+
     public boolean isExpired()
     {
         return false;

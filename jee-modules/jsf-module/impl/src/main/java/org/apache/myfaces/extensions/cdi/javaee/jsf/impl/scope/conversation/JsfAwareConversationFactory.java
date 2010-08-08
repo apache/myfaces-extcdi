@@ -29,6 +29,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScope
  */
 public class JsfAwareConversationFactory implements ConversationFactory
 {
+    private static final long serialVersionUID = 2329113439978807663L;
+
     enum ConversationPropertyKeys
     {
         TIMEOUT("timeout");

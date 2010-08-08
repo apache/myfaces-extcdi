@@ -34,6 +34,8 @@ import java.util.Date;
  */
 public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandler
 {
+    private static final long serialVersionUID = 4354405166761604711L;
+
     private final int maxWindowContextCount;
 
     public DefaultWindowContextQuotaHandler(int maxWindowContextCount)

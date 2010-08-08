@@ -29,6 +29,7 @@ import javax.faces.context.FacesContext;
 class ViewAccessConversationExpirationEvaluator implements ConversationExpirationEvaluator
 {
     private String lastViewId; //for access scope
+    private static final long serialVersionUID = 5586717766107967144L;
 
     public boolean isExpired()
     {

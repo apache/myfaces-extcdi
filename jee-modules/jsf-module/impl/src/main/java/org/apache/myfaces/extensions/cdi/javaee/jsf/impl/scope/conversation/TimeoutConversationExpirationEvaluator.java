@@ -24,6 +24,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 class TimeoutConversationExpirationEvaluator extends TimeoutExpirationEvaluator
         implements ConversationExpirationEvaluator
 {
+    private static final long serialVersionUID = 6035785888847376129L;
+
     TimeoutConversationExpirationEvaluator(int conversationTimeoutInMinutes)
     {
         super(conversationTimeoutInMinutes);

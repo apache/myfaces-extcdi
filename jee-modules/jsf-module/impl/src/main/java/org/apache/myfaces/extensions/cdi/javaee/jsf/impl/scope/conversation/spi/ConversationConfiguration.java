@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationConfiguration
+public interface ConversationConfiguration extends Serializable
 {
     public <T> T getValue(String key, Class<T> targetType);
 }

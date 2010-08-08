@@ -19,12 +19,15 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import java.util.Date;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public class TimeoutExpirationEvaluator
+public class TimeoutExpirationEvaluator implements Serializable
 {
+    private static final long serialVersionUID = -1132091879142732148L;
+
     private final long timeoutInMs;
 
     protected Date lastAccess;

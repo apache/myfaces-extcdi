@@ -32,6 +32,8 @@ import java.io.Serializable;
  */
 class FacesMessageInterpolator implements MessageInterpolator
 {
+    private static final long serialVersionUID = -5367321374822078592L;
+    
     private MessageInterpolator messageInterpolator;
 
     public FacesMessageInterpolator(ELProvider elProvider)

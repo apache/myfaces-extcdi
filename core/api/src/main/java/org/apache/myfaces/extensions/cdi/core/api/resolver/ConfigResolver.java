@@ -20,10 +20,12 @@ package org.apache.myfaces.extensions.cdi.core.api.resolver;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface ConfigResolver
+public interface ConfigResolver extends Serializable
 {
     public <T extends CodiConfig> T resolve(Class<T> targetType);
 }
