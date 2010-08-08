@@ -129,12 +129,14 @@ public class DefaultWindowContextManager implements WindowContextManager
         }
 
         cleanupInactiveConversations();
-        cleanupInactiveWindowContexts();
     }
 
-    protected void recordCurrentViewAsOldViewId(@Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
+    protected void cleanupAndRecordCurrentViewAsOldViewId(
+            @Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
     {
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
+
+        cleanupInactiveWindowContexts();
         RequestCache.resetCache();
     }
 
