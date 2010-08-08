@@ -257,13 +257,6 @@ public class ConversationUtils
         return (String) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 
-    public static void restoreInformationOfRequest(FacesContext facesContext,
-                                                   WindowContextManager windowContextManager)
-    {
-        WindowContext windowContext = windowContextManager.getCurrentWindowContext();
-        windowContext.setAttribute(NEW_VIEW_ID_KEY, facesContext.getViewRoot().getViewId());
-    }
-
     public static void storeCurrentViewIdAsOldViewId(FacesContext facesContext
     /*TODO add window context as parameter and test it in combination with redirects*/)
     {

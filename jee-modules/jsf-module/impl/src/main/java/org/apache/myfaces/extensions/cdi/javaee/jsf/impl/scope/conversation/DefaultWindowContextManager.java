@@ -126,9 +126,10 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
-                           WindowContextManager windowContextManager)
+                           WindowContext windowContext)
     {
-        restoreInformationOfRequest(phaseEvent.getFacesContext(), windowContextManager);
+        //don't refactor it to a lazy restore
+        storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), windowContext);
 
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
