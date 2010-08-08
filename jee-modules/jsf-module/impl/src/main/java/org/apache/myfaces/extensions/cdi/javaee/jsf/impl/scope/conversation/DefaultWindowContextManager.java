@@ -30,7 +30,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.BeforeFacesRequest;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
@@ -65,8 +64,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
 /**
- * TODO don't cleanup in case of partial requests (via RequestTypeResolver)
- *
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
@@ -152,13 +149,6 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         RequestCache.resetCache();
     }
 
-    protected void resetCacheInDevMode(@Observes @BeforeFacesRequest FacesContext facesContext)
-    {
-        //TODO activate it only in project-stage dev.
-        //org.apache.myfaces.view.facelets.tag.ui.DebugPhaseListener causes re-eval (+ caching) of window-id
-        JsfUtils.resetCaches();
-    }
-
     @Produces
     @Named(WindowContext.CURRENT_WINDOW_CONTEXT_BEAN_NAME)
     @RequestScoped
@@ -202,7 +192,6 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         };
     }
 
-    //TODO improve performance
     public WindowContext getCurrentWindowContext()
     {
         String windowContextId = RequestCache.getCurrentWindowId();
@@ -291,13 +280,11 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return cacheWindowId(facesContext.getExternalContext(), windowContext.getId());
     }
 
-    //TODO
     public void resetCurrentWindowContext()
     {
         resetWindowContext(getCurrentWindowContext());
     }
 
-    //TODO
     public void resetWindowContext(String windowContextId)
     {
         resetWindowContext(getWindowContext(windowContextId));
@@ -327,7 +314,6 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         JsfUtils.resetCaches();
         for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
-            //TODO
             ((EditableConversation)conversation).deactivate();
              //it isn't possible to deactivate window scoped conversations
             if (!((EditableConversation)conversation).isActive())
@@ -370,7 +356,6 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
         {
-            //TODO test the usage of #isActiveState instead of isActive
             if (!((EditableConversation)conversation).isActive())
             {
                 conversation.end();
