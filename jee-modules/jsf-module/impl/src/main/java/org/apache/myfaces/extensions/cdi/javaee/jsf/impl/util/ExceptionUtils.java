@@ -25,7 +25,7 @@ public class ExceptionUtils
 {
     public static RuntimeException tooManyOpenWindowException(int windowContextTimeoutInMinutes)
     {
-        return new RuntimeException("Too many active Windows/Tabs have been opened!" +
+        return new RuntimeException("Too many active windows/tabs have been opened!" +
             " Please continue with one of the existing windows or wait up to "
                 + windowContextTimeoutInMinutes + " minutes.");
     }

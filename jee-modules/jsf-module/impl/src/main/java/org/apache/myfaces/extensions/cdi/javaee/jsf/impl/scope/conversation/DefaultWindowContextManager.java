@@ -35,10 +35,11 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -58,6 +59,8 @@ import javax.inject.Named;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
@@ -69,7 +72,7 @@ import java.lang.annotation.Annotation;
 @SuppressWarnings({"UnusedDeclaration"})
 @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
 @SessionScoped
-public class DefaultWindowContextManager implements WindowContextManager
+public class DefaultWindowContextManager implements EditableWindowContextManager
 {
     private static final long serialVersionUID = 2872151847183166424L;
 
@@ -89,11 +92,19 @@ public class DefaultWindowContextManager implements WindowContextManager
 
     private boolean projectStageDevelopment;
 
+    private WindowContextQuotaHandler windowContextQuotaHandler;
+
     @PostConstruct
     protected void init()
     {
         this.windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
-        this.windowHandler = configResolver.resolve(JsfAwareWindowContextConfig.class).getWindowHandler();
+
+        JsfAwareWindowContextConfig jsfAwareWindowContextConfig =
+                configResolver.resolve(JsfAwareWindowContextConfig.class);
+
+        this.windowHandler = jsfAwareWindowContextConfig.getWindowHandler();
+        this.windowContextQuotaHandler = jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
+
         this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
     }
 
@@ -215,17 +226,12 @@ public class DefaultWindowContextManager implements WindowContextManager
     {
         String windowContextId = this.windowHandler.createWindowId();
 
-        int windowContextCount = getNumberOfNextWindowContext();
-
-        if(this.windowContextConfig.getMaxWindowContextCount() < windowContextCount)
+        if(this.windowContextQuotaHandler.checkQuota(getNumberOfNextWindowContext()))
         {
             if(!cleanupInactiveWindowContexts())
             {
-                //TODO
-                throw tooManyOpenWindowException(this.windowContextConfig.getWindowContextTimeoutInMinutes());
+                this.windowContextQuotaHandler.handleQuotaViolation();
             }
-
-            windowContextCount = getNumberOfNextWindowContext();
         }
 
         if(this.projectStageDevelopment &&
@@ -234,7 +240,7 @@ public class DefaultWindowContextManager implements WindowContextManager
             //it's easier for developers to check the current window context
             //after a cleanup of window contexts it isn't reliable
             //however - such a cleanup shouldn't occur during development
-            windowContextId = convertToDevWindowContextId(windowContextId, windowContextCount);
+            windowContextId = convertToDevWindowContextId(windowContextId, getNumberOfNextWindowContext());
         }
         cacheWindowId(windowContextId);
         return windowContextId;
@@ -423,5 +429,10 @@ public class DefaultWindowContextManager implements WindowContextManager
             return devWindowContextId;
         }
         return windowContextId;
+    }
+
+    public Collection<WindowContext> getWindowContexts()
+    {
+        return Collections.unmodifiableCollection(this.windowContextMap.values());
     }
 }

@@ -16,37 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
-
-import java.util.Date;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
 /**
  * @author Gerhard Petracek
  */
-public class TimeoutExpirationEvaluator
+public interface WindowContextQuotaHandler
 {
-    private final long timeoutInMs;
+    boolean checkQuota(int activeWindowContextCount);
 
-    protected Date lastAccess;
-
-    protected TimeoutExpirationEvaluator(int timeoutInMinutes)
-    {
-        this.timeoutInMs = timeoutInMinutes * 60000;
-    }
-
-    public boolean isExpired()
-    {
-        return this.lastAccess == null ||
-                (this.lastAccess.getTime() + this.timeoutInMs) < System.currentTimeMillis();
-    }
-
-    public void touch()
-    {
-        this.lastAccess = new Date();
-    }
-
-    Date getLastAccess()
-    {
-        return lastAccess;
-    }
+    void handleQuotaViolation();
 }

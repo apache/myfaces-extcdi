@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 import java.util.Map;
+import java.util.Date;
 import java.lang.annotation.Annotation;
 
 /**
@@ -33,6 +34,8 @@ public interface EditableWindowContext extends WindowContext
      * @return evaluates and returns if the context is active
      */
     boolean isActive();
+
+    Date getLastAccess();
 
     void touch();
 

@@ -34,27 +34,4 @@ public interface WindowContextManager extends Serializable
     WindowContext getCurrentWindowContext();
 
     WindowContext getWindowContext(String windowContextId);
-
-    boolean activateWindowContext(String windowContextId);
-
-    boolean activateWindowContext(WindowContext windowContext);
-
-    void resetCurrentWindowContext();
-
-    void resetWindowContext(String windowContextId);
-
-    void resetWindowContext(WindowContext windowContext);
-
-    //TODO
-    void resetConversations();
-
-    void resetConversations(String windowContextId);
-
-    void resetConversations(WindowContext windowContext);
-
-    void removeCurrentWindowContext();
-
-    void removeWindowContext(String windowContextId);
-
-    void removeWindowContext(WindowContext windowContext);
 }

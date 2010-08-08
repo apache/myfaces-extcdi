@@ -28,4 +28,6 @@ public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
     public abstract WindowHandler getWindowHandler();
 
     public abstract ConversationFactory getConversationFactory();
+
+    public abstract WindowContextQuotaHandler getWindowContextQuotaHandler();
 }

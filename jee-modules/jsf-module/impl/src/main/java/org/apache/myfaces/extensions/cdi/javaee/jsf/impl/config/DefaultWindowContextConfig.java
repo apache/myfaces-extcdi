@@ -27,7 +27,9 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.Defa
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.JsfAwareConversationFactory;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowContextQuotaHandler;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
@@ -230,5 +232,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     public ConversationFactory getConversationFactory()
     {
         return new JsfAwareConversationFactory();
+    }
+
+    public WindowContextQuotaHandler getWindowContextQuotaHandler()
+    {
+        return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
     }
 }

@@ -32,6 +32,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 
 import javax.enterprise.inject.Typed;
+import java.util.Date;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
@@ -210,6 +211,11 @@ public class JsfWindowContext implements EditableWindowContext
     public boolean isActive()
     {
         return !this.expirationEvaluator.isExpired();
+    }
+
+    public Date getLastAccess()
+    {
+        return this.expirationEvaluator.getLastAccess();
     }
 
     public void touch()
