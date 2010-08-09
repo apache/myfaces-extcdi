@@ -100,6 +100,30 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.class);
     }
 
+    public WindowHandler getWindowHandler()
+    {
+        return new DefaultWindowHandler(isUrlParameterSupported())
+        {
+            private static final long serialVersionUID = 7376499174252256735L;
+        };
+    }
+
+    public ConversationFactory getConversationFactory()
+    {
+        return new JsfAwareConversationFactory();
+    }
+
+    public WindowContextQuotaHandler getWindowContextQuotaHandler()
+    {
+        return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
+    }
+
+    public boolean disableInitialRedirect()
+    {
+        lazyInit();
+        return getAttribute(DISABLE_INITIAL_REDIRECT, Boolean.class);
+    }
+
     private void lazyInit()
     {
         if (configInitialized == null)
@@ -121,6 +145,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initMaxWindowContextCount(facesContext, ProjectStage.SystemTest.equals(currentProjectStage));
         initWindowContextTimeout(facesContext);
         initGroupedConversationTimeout(facesContext);
+        initDisableInitialRedirect(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
@@ -221,21 +246,27 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         setAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.parseInt(timeoutString));
     }
 
-    public WindowHandler getWindowHandler()
+    private void initDisableInitialRedirect(FacesContext facesContext)
     {
-        return new DefaultWindowHandler(isUrlParameterSupported())
+        boolean disableInitialRedirect = DISABLE_INITIAL_REDIRECT_DEFAULT;
+
+        String disableInitialRedirectString =
+                facesContext.getExternalContext().getInitParameter(DISABLE_INITIAL_REDIRECT);
+
+        if (disableInitialRedirectString == null)
         {
-            private static final long serialVersionUID = 7376499174252256735L;
-        };
-    }
+            setAttribute(DISABLE_INITIAL_REDIRECT, disableInitialRedirect);
+            return;
+        }
 
-    public ConversationFactory getConversationFactory()
-    {
-        return new JsfAwareConversationFactory();
-    }
+        disableInitialRedirectString = disableInitialRedirectString.trim();
 
-    public WindowContextQuotaHandler getWindowContextQuotaHandler()
-    {
-        return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
+        if ("".equals(disableInitialRedirectString))
+        {
+            setAttribute(DISABLE_INITIAL_REDIRECT, disableInitialRedirect);
+            return;
+        }
+
+        setAttribute(DISABLE_INITIAL_REDIRECT, Boolean.parseBoolean(disableInitialRedirectString));
     }
 }

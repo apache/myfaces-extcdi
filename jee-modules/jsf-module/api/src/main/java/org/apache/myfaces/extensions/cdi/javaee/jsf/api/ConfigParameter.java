@@ -35,6 +35,11 @@ public interface ConfigParameter
 
     static final boolean URL_PARAMETER_ENABLED_DEFAULT = true;
 
+    static final String DISABLE_INITIAL_REDIRECT =
+            CoreCodiConfigParameter.BASE_NAME + "DISABLE_INITIAL_REDIRECT";
+
+    static final boolean DISABLE_INITIAL_REDIRECT_DEFAULT = false;
+
     static final String GROUPED_CONVERSATION_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "GROUPED_CONVERSATION_TIMEOUT";
 

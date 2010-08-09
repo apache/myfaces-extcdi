@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
@@ -35,6 +34,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -62,6 +62,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
@@ -83,7 +84,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     @SuppressWarnings({"UnusedDeclaration"})
     private ProjectStage projectStage;
 
-    private WindowContextConfig windowContextConfig;
+    private JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
 
     private WindowHandler windowHandler;
 
@@ -94,13 +95,10 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     @PostConstruct
     protected void init()
     {
-        this.windowContextConfig = this.configResolver.resolve(WindowContextConfig.class);
+        this.jsfAwareWindowContextConfig = this.configResolver.resolve(JsfAwareWindowContextConfig.class);
 
-        JsfAwareWindowContextConfig jsfAwareWindowContextConfig =
-                configResolver.resolve(JsfAwareWindowContextConfig.class);
-
-        this.windowHandler = jsfAwareWindowContextConfig.getWindowHandler();
-        this.windowContextQuotaHandler = jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
+        this.windowHandler = this.jsfAwareWindowContextConfig.getWindowHandler();
+        this.windowContextQuotaHandler = this.jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
 
         this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
     }
@@ -122,11 +120,20 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
-                           RequestTypeResolver requestTypeResolver,
-                           WindowContext windowContext)
+                           RequestTypeResolver requestTypeResolver)
     {
+
+        if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
+        {
+            boolean continueRequest = processGetRequest(phaseEvent.getFacesContext());
+            if (!continueRequest)
+            {
+                return;
+            }
+        }
+
         //don't refactor it to a lazy restore
-        storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), windowContext);
+        storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), getCurrentWindowContext());
 
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
@@ -198,7 +205,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if(windowContextId == null)
         {
-            windowContextId = resolveWindowContextId(this.windowContextConfig.isUrlParameterSupported(),
+            windowContextId = resolveWindowContextId(this.jsfAwareWindowContextConfig.isUrlParameterSupported(),
                                                      this.windowHandler);
 
             if (windowContextId == null)
@@ -247,7 +254,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if (result == null)
         {
-            result = new JsfWindowContext(windowContextId, this.windowContextConfig, this.projectStageDevelopment);
+            result = new JsfWindowContext(
+                    windowContextId, this.jsfAwareWindowContextConfig, this.projectStageDevelopment);
 
             this.windowContextMap.put(windowContextId, result);
         }
@@ -420,5 +428,61 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     public Collection<WindowContext> getWindowContexts()
     {
         return Collections.unmodifiableCollection(this.windowContextMap.values());
+    }
+
+    /**
+     * an external app might call a page without url parameter.
+     * to support such an use-case it's possible to
+     *  - deactivate the url parameter support (requires a special WindowHandler see e.g.
+     *    ServerSideWindowHandler for jsf2
+     *  - disable the initial redirect
+     *  - use windowId=automatedEntryPoint as url parameter to force a new window context
+     * @param facesContext current facesContext
+     * @return true if the current request should be continued
+     */
+    private boolean processGetRequest(FacesContext facesContext)
+    {
+        boolean isUrlParameterSupported = this.jsfAwareWindowContextConfig.isUrlParameterSupported();
+        boolean useWindowIdForFirstPage = !this.jsfAwareWindowContextConfig.disableInitialRedirect();
+
+        if(!isUrlParameterSupported)
+        {
+            useWindowIdForFirstPage = false;
+        }
+
+        if(useWindowIdForFirstPage)
+        {
+            String windowId = facesContext.getExternalContext()
+                    .getRequestParameterMap().get(WINDOW_CONTEXT_ID_PARAMETER_KEY);
+
+            if("automatedEntryPoint".equalsIgnoreCase(windowId))
+            {
+                return true;
+            }
+
+            windowId = resolveWindowContextId(isUrlParameterSupported, ConversationUtils.getWindowHandler());
+
+            if(windowId == null)
+            {
+                redirect(facesContext);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void redirect(FacesContext facesContext)
+    {
+        try
+        {
+            String targetURL = facesContext.getApplication()
+                    .getViewHandler().getActionURL(facesContext, facesContext.getViewRoot().getViewId());
+
+            this.windowHandler.sendRedirect(FacesContext.getCurrentInstance().getExternalContext(), targetURL);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

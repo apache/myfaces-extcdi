@@ -349,7 +349,7 @@ public class ConversationUtils
         }
     }
 
-    public static WindowHandler getWindowHandler()
+    public static JsfAwareWindowContextConfig getJsfAwareWindowContextConfig()
     {
         Set<Bean<?>> configResolvers = getInstance().getBeanManager().getBeans(ConfigResolver.class);
 
@@ -357,7 +357,12 @@ public class ConversationUtils
         ConfigResolver configResolver = (ConfigResolver) CodiUtils
                 .getOrCreateScopedInstanceOfBean(configResolvers.iterator().next());
 
-        return configResolver.resolve(JsfAwareWindowContextConfig.class).getWindowHandler();
+        return configResolver.resolve(JsfAwareWindowContextConfig.class);
+    }
+
+    public static WindowHandler getWindowHandler()
+    {
+        return getJsfAwareWindowContextConfig().getWindowHandler();
     }
 
     public static WindowContextManager getWindowContextManager()

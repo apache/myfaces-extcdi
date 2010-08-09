@@ -30,4 +30,6 @@ public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
     public abstract ConversationFactory getConversationFactory();
 
     public abstract WindowContextQuotaHandler getWindowContextQuotaHandler();
+
+    public abstract boolean disableInitialRedirect();
 }
