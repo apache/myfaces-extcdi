@@ -94,6 +94,24 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.class);
     }
 
+    public boolean isScopeBeanEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_SCOPE_BEAN_EVENT, Boolean.class);
+    }
+
+    public boolean isBeanAccessEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_BEAN_ACCESS_EVENT, Boolean.class);
+    }
+
+    public boolean isUnscopeBeanEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_UNSCOPE_BEAN_EVENT, Boolean.class);
+    }
+
     public int getMaxWindowContextCount()
     {
         lazyInit();
@@ -118,7 +136,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
     }
 
-    public boolean disableInitialRedirect()
+    public boolean isInitialRedirectDisable()
     {
         lazyInit();
         return getAttribute(DISABLE_INITIAL_REDIRECT, Boolean.class);
@@ -146,6 +164,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initWindowContextTimeout(facesContext);
         initGroupedConversationTimeout(facesContext);
         initDisableInitialRedirect(facesContext);
+        initConversatonEvents(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
@@ -268,5 +287,84 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         }
 
         setAttribute(DISABLE_INITIAL_REDIRECT, Boolean.parseBoolean(disableInitialRedirectString));
+    }
+
+    private void initConversatonEvents(FacesContext facesContext)
+    {
+        initScopeBeanEvent(facesContext);
+        initBeanAccessEvent(facesContext);
+        initUnscopeBeanEvent(facesContext);
+    }
+
+    private void initScopeBeanEvent(FacesContext facesContext)
+    {
+        boolean disableInitialRedirect = ENABLE_SCOPE_BEAN_EVENT_DEFAULT;
+
+        String disableInitialRedirectString =
+                facesContext.getExternalContext().getInitParameter(ENABLE_SCOPE_BEAN_EVENT);
+
+        if (disableInitialRedirectString == null)
+        {
+            setAttribute(ENABLE_SCOPE_BEAN_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        disableInitialRedirectString = disableInitialRedirectString.trim();
+
+        if ("".equals(disableInitialRedirectString))
+        {
+            setAttribute(ENABLE_SCOPE_BEAN_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        setAttribute(ENABLE_SCOPE_BEAN_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
+    }
+
+    private void initBeanAccessEvent(FacesContext facesContext)
+    {
+        boolean disableInitialRedirect = ENABLE_BEAN_ACCESS_EVENT_DEFAULT;
+
+        String disableInitialRedirectString =
+                facesContext.getExternalContext().getInitParameter(ENABLE_BEAN_ACCESS_EVENT);
+
+        if (disableInitialRedirectString == null)
+        {
+            setAttribute(ENABLE_BEAN_ACCESS_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        disableInitialRedirectString = disableInitialRedirectString.trim();
+
+        if ("".equals(disableInitialRedirectString))
+        {
+            setAttribute(ENABLE_BEAN_ACCESS_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        setAttribute(ENABLE_BEAN_ACCESS_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
+    }
+
+    private void initUnscopeBeanEvent(FacesContext facesContext)
+    {
+        boolean disableInitialRedirect = ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT;
+
+        String disableInitialRedirectString =
+                facesContext.getExternalContext().getInitParameter(ENABLE_UNSCOPE_BEAN_EVENT);
+
+        if (disableInitialRedirectString == null)
+        {
+            setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        disableInitialRedirectString = disableInitialRedirectString.trim();
+
+        if ("".equals(disableInitialRedirectString))
+        {
+            setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, disableInitialRedirect);
+            return;
+        }
+
+        setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
     }
 }

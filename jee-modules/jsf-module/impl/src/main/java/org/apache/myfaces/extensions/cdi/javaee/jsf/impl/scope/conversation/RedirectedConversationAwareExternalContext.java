@@ -72,7 +72,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 
     private String addWindowIdToUrl(String url)
     {
-        return this.windowHandler.encodeURL(this.wrapped, url);
+        return this.windowHandler.encodeURL(url);
     }
 
     /*

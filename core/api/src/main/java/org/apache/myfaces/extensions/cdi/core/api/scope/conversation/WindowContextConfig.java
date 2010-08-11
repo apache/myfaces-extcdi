@@ -18,22 +18,17 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.AbstractCodiConfig;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class WindowContextConfig extends AbstractCodiConfig
+public interface WindowContextConfig extends Serializable
 {
-    //TODO
+    //deactivate it e.g. for higher security
+    boolean isUrlParameterSupported();
 
-    //deactivate it for higher security
+    int getWindowContextTimeoutInMinutes();
 
-    public abstract boolean isUrlParameterSupported();
-
-    public abstract int getWindowContextTimeoutInMinutes();
-
-    public abstract int getConversationTimeoutInMinutes();
-
-    public abstract int getMaxWindowContextCount();
+    int getMaxWindowContextCount();
 }

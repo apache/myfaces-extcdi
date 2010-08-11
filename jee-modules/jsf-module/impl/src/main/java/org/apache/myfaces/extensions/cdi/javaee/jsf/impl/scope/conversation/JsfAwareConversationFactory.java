@@ -20,9 +20,9 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationConfiguration;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 
 /**
  * @author Gerhard Petracek
@@ -48,7 +48,7 @@ public class JsfAwareConversationFactory implements ConversationFactory
         }
     }
     
-    public Conversation createConversation(ConversationKey conversationKey, ConversationConfiguration configuration)
+    public Conversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
     {
         if(WindowScoped.class.isAssignableFrom(conversationKey.getConversationGroup()))
         {
@@ -64,7 +64,6 @@ public class JsfAwareConversationFactory implements ConversationFactory
 
         return new DefaultConversation(
                 conversationKey,
-                new TimeoutConversationExpirationEvaluator(
-                        configuration.getValue(ConversationPropertyKeys.TIMEOUT.getKey(), Integer.class)));
+                new TimeoutConversationExpirationEvaluator(configuration.getConversationTimeoutInMinutes()));
     }
 }

@@ -49,14 +49,15 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
     }
 
     @Override
-    public void sendRedirect(ExternalContext externalContext, String url) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
+            throws IOException
     {
         String windowId = getCurrentWindowId();
         if(this.useWindowAwareUrlEncoding || this.useFallback ||
                 //here we have an ajax nav. - currently it doesn't work in combination with the flash scope
                 FacesContext.getCurrentInstance().getPartialViewContext().isPartialRequest())
         {
-            super.sendRedirect(externalContext, url);
+            super.sendRedirect(externalContext, url, addRequestParameter);
             return;
         }
         
@@ -64,6 +65,11 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
         {
             externalContext.getRequestMap().put(WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
             externalContext.getFlash().keep(WINDOW_CONTEXT_ID_PARAMETER_KEY);
+        }
+
+        if(addRequestParameter)
+        {
+            url = addRequestParameter(externalContext, url);
         }
 
         externalContext.redirect(url);

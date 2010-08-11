@@ -54,4 +54,19 @@ public interface ConfigParameter
             CoreCodiConfigParameter.BASE_NAME + "MAX_WINDOW_CONTEXT_COUNT";
 
     static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 64;
+
+    static final String ENABLE_SCOPE_BEAN_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_SCOPE_BEAN_EVENT";
+
+    static final boolean ENABLE_SCOPE_BEAN_EVENT_DEFAULT = false;
+
+    static final String ENABLE_BEAN_ACCESS_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_BEAN_ACCESS_EVENT";
+
+    static final boolean ENABLE_BEAN_ACCESS_EVENT_DEFAULT = false;
+
+    static final String ENABLE_UNSCOPE_BEAN_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_UNSCOPE_BEAN_EVENT";
+
+    static final boolean ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT = false;
 }

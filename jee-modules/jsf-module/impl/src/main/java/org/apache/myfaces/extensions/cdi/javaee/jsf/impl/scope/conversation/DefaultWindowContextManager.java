@@ -443,7 +443,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     private boolean processGetRequest(FacesContext facesContext)
     {
         boolean isUrlParameterSupported = this.jsfAwareWindowContextConfig.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = !this.jsfAwareWindowContextConfig.disableInitialRedirect();
+        boolean useWindowIdForFirstPage = !this.jsfAwareWindowContextConfig.isInitialRedirectDisable();
 
         if(!isUrlParameterSupported)
         {
@@ -460,7 +460,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
                 return true;
             }
 
-            windowId = resolveWindowContextId(isUrlParameterSupported, ConversationUtils.getWindowHandler());
+            windowId = resolveWindowContextId(isUrlParameterSupported, this.windowHandler);
 
             if(windowId == null)
             {
@@ -478,30 +478,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             String targetURL = facesContext.getApplication()
                     .getViewHandler().getActionURL(facesContext, facesContext.getViewRoot().getViewId());
 
-
-            char delimiter = '?';
-            if (targetURL.contains("?"))
-            {
-                delimiter = '&';
-            }
-
-            // add any given RequestParameters other than the windowId.
-            // this is e.g. needed for f:viewParam handling
-            Map<String, String> requestParms = facesContext.getExternalContext().getRequestParameterMap();
-            for(Map.Entry<String, String> requestParam : requestParms.entrySet())
-            {
-                String key = requestParam.getKey();
-                if (key.equals(WINDOW_CONTEXT_ID_PARAMETER_KEY))
-                {
-                    continue;
-                }
-
-                targetURL += delimiter + key + "=" + requestParam.getValue();
-                delimiter = '&';
-            }
-
-
-            this.windowHandler.sendRedirect(FacesContext.getCurrentInstance().getExternalContext(), targetURL);
+            // add requst-parameters e.g. for f:viewParam handling
+            this.windowHandler.sendRedirect(FacesContext.getCurrentInstance().getExternalContext(), targetURL, true);
         }
         catch (IOException e)
         {

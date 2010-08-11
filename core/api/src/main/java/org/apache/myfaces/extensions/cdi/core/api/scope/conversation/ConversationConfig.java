@@ -16,14 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationConfiguration extends Serializable
+public interface ConversationConfig extends Serializable
 {
-    public <T> T getValue(String key, Class<T> targetType);
+    int getConversationTimeoutInMinutes();
+
+    boolean isScopeBeanEventEnable();
+
+    boolean isBeanAccessEventEnable();
+
+    boolean isUnscopeBeanEventEnable();
 }

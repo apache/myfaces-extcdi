@@ -19,17 +19,23 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.config.AbstractCodiConfig;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends WindowContextConfig
+public abstract class JsfAwareWindowContextConfig extends AbstractCodiConfig
+        implements WindowContextConfig, ConversationConfig
 {
+    //TODO add factories for EditableWindowContext and EditableWindowContextManager
+    //-> TODO refactor EditableWindowContextManager (it should use a producer method)
+    
     public abstract WindowHandler getWindowHandler();
 
     public abstract ConversationFactory getConversationFactory();
 
     public abstract WindowContextQuotaHandler getWindowContextQuotaHandler();
 
-    public abstract boolean disableInitialRedirect();
+    public abstract boolean isInitialRedirectDisable();
 }

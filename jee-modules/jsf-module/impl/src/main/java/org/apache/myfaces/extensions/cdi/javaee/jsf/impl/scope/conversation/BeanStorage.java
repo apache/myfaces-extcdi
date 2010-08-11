@@ -39,12 +39,12 @@ class BeanStorage implements Serializable
 
     private Map<Class, BeanEntry<Serializable>> beanMap = new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
 
-    public BeanEntry getBean(Class beanClass)
+    BeanEntry getBean(Class beanClass)
     {
         return this.beanMap.get(beanClass);
     }
 
-    public BeanEntry addBean(BeanEntry<Serializable> beanEntry)
+    BeanEntry addBean(BeanEntry<Serializable> beanEntry)
     {
         Class beanClass = beanEntry.getBean().getBeanClass();
         this.beanMap.remove(beanClass);
@@ -53,13 +53,18 @@ class BeanStorage implements Serializable
     }
 
     //TODO don't reset window scoped beans
-    public void resetStorage()
+    void resetStorage()
     {
         Serializable oldBeanInstance;
         for (BeanEntry<Serializable> beanHolder : this.beanMap.values())
         {
             oldBeanInstance = beanHolder.resetBeanInstance();
-            fireUnscopeBeanEvent(oldBeanInstance);
+
+            if(beanHolder.isUnscopeBeanEventEnabled())
+            {
+                fireUnscopeBeanEvent(oldBeanInstance);
+            }
+
             destroyBean(beanHolder.getCreationalContext(), beanHolder.getBean(), oldBeanInstance);
         }
     }

@@ -16,31 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.context.spi.CreationalContext;
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface BeanEntry<T> extends Serializable
+public final class BeanAccessEvent extends ConversationEvent
 {
-    Bean<T> getBean();
-
-    CreationalContext<T> getCreationalContext();
-
-    T getBeanInstance();
-
-    /**
-     * @return the old instance
-     */
-    T resetBeanInstance();
-
-    boolean isScopeBeanEventEnabled();
-
-    boolean isBeanAccessEventEnabled();
-
-    boolean isUnscopeBeanEventEnabled();
+    public BeanAccessEvent(Serializable bean)
+    {
+        super(bean);
+    }
 }

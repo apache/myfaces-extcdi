@@ -30,6 +30,7 @@ import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -48,7 +49,7 @@ public class DefaultWindowHandler implements WindowHandler
         this.useWindowAwareUrlEncoding = useWindowAwareUrlEncoding;
     }
 
-    public String encodeURL(ExternalContext externalContext, String url)
+    public String encodeURL(String url)
     {
         if(this.useWindowAwareUrlEncoding)
         {
@@ -57,11 +58,31 @@ public class DefaultWindowHandler implements WindowHandler
         return url;
     }
 
-    public void sendRedirect(ExternalContext externalContext, String url) throws IOException
+    public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
+            throws IOException
     {
-        url = externalContext.encodeActionURL(encodeURL(externalContext, url));
+        url = externalContext.encodeActionURL(encodeURL(url));
 
+        if(addRequestParameter)
+        {
+            url = addRequestParameter(externalContext, url);
+        }
         externalContext.redirect(url);
+    }
+
+    protected String addRequestParameter(ExternalContext externalContext, String url)
+    {
+        Map<String, String> requestParms = externalContext.getRequestParameterMap();
+        for(Map.Entry<String, String> requestParam : requestParms.entrySet())
+        {
+            String key = requestParam.getKey();
+
+            if(!url.contains(key + "="))
+            {
+                url += "&" + key + "=" + requestParam.getValue();
+            }
+        }
+        return url;
     }
 
     //TODO add a counter in case of project stage dev

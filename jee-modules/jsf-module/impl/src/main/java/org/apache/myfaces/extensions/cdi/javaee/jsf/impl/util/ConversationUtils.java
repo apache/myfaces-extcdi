@@ -340,7 +340,7 @@ public class ConversationUtils
         
         if(windowHandler != null)
         {
-            windowHandler.sendRedirect(externalContext, url);
+            windowHandler.sendRedirect(externalContext, url, false);
         }
         else
         {

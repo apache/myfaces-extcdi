@@ -27,9 +27,9 @@ import java.io.Serializable;
  */
 public interface WindowHandler extends Serializable
 {
-    String encodeURL(ExternalContext externalContext, String url);
+    String encodeURL(String url);
 
-    void sendRedirect(ExternalContext externalContext, String url) throws IOException;
+    void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter) throws IOException;
 
     String createWindowId();
 

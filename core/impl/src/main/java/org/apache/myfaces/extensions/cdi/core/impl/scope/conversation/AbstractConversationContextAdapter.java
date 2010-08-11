@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
@@ -35,6 +36,14 @@ import java.lang.annotation.Annotation;
 public abstract class AbstractConversationContextAdapter implements Context
 {
     protected BeanManager beanManager;
+
+    private ConversationConfig conversationConfig;
+
+    private boolean scopeBeanEventEnable = false;
+
+    private boolean beanAccessEventEnable = false;
+
+    private boolean unscopeBeanEventEnable = false;
 
     private static RuntimeException runtimeException = new RuntimeException();
 
@@ -87,11 +96,14 @@ public abstract class AbstractConversationContextAdapter implements Context
             }
             //workaround for weld - end
 
+            lazyInitConversationConfig();
+
             WindowContextManager windowContextManager = resolveWindowContextManager();
 
             Bean<T> bean = ((Bean<T>) component);
 
-            BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean);
+            BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean,
+                    this.scopeBeanEventEnable, this.beanAccessEventEnable, this.unscopeBeanEventEnable);
 
             scopeBeanEntry(windowContextManager, beanEntry);
 
@@ -100,6 +112,18 @@ public abstract class AbstractConversationContextAdapter implements Context
 
         Class invalidComponentClass = component.create(creationalContext).getClass();
         throw new IllegalStateException(invalidComponentClass + " is no valid conversation scoped bean");
+    }
+
+    private void lazyInitConversationConfig()
+    {
+        if(this.conversationConfig == null)
+        {
+            this.conversationConfig = getConversationConfig();
+
+            this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnable();
+            this.beanAccessEventEnable = this.conversationConfig.isBeanAccessEventEnable();
+            this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnable();
+        }
     }
 
     /**
@@ -147,4 +171,6 @@ public abstract class AbstractConversationContextAdapter implements Context
      * @param beanEntry           current bean-entry
      */
     protected abstract <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry);
+
+    protected abstract ConversationConfig getConversationConfig();
 }

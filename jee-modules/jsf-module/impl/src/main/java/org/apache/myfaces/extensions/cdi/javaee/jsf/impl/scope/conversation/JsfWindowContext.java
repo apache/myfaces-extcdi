@@ -24,10 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Editab
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationConfiguration;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation
-        .JsfAwareConversationFactory.ConversationPropertyKeys.TIMEOUT;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 
@@ -53,7 +50,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     private final String id;
 
-    private final WindowContextConfig config;
+    private final JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
 
     private final boolean projectStageDevelopment;
 
@@ -64,11 +61,14 @@ public class JsfWindowContext implements EditableWindowContext
 
     private final TimeoutExpirationEvaluator expirationEvaluator;
 
-    protected JsfWindowContext(String windowContextId, WindowContextConfig config, boolean projectStageDevelopment)
+    protected JsfWindowContext(String windowContextId,
+                               JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
+                               boolean projectStageDevelopment)
     {
         this.id = windowContextId;
-        this.config = config;
-        this.expirationEvaluator = new TimeoutExpirationEvaluator(this.config.getWindowContextTimeoutInMinutes());
+        this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
+        this.expirationEvaluator = new TimeoutExpirationEvaluator(
+                this.jsfAwareWindowContextConfig.getWindowContextTimeoutInMinutes());
 
         this.projectStageDevelopment = projectStageDevelopment;
     }
@@ -178,26 +178,9 @@ public class JsfWindowContext implements EditableWindowContext
         ConversationKey conversationKey =
                 new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
-        ConversationFactory conversationFactory =  ((JsfAwareWindowContextConfig)this.config).getConversationFactory();
+        ConversationFactory conversationFactory = this.jsfAwareWindowContextConfig.getConversationFactory();
 
-        return conversationFactory.createConversation(conversationKey, transformConfiguration(this.config));
-    }
-
-    private ConversationConfiguration transformConfiguration(final WindowContextConfig config)
-    {
-        return new ConversationConfiguration()
-        {
-            private static final long serialVersionUID = 7592517957368180995L;
-
-            public <T> T getValue(String key, Class<T> targetType)
-            {
-                if(TIMEOUT.getKey().equals(key))
-                {
-                    return (T)(Integer)config.getConversationTimeoutInMinutes();
-                }
-                throw new IllegalArgumentException(key + " isn't a supported key");
-            }
-        };
+        return conversationFactory.createConversation(conversationKey, this.jsfAwareWindowContextConfig);
     }
 
     public Map<ConversationKey /*conversation group*/, Conversation> getConversations()
@@ -207,7 +190,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     public WindowContextConfig getConfig()
     {
-        return this.config;
+        return this.jsfAwareWindowContextConfig;
     }
 
     public boolean isActive()
