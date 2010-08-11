@@ -40,10 +40,10 @@ public interface ConfigParameter
 
     static final boolean DISABLE_INITIAL_REDIRECT_DEFAULT = false;
 
-    static final String GROUPED_CONVERSATION_TIMEOUT =
-            CoreCodiConfigParameter.BASE_NAME + "GROUPED_CONVERSATION_TIMEOUT";
+    static final String CONVERSATION_TIMEOUT =
+            CoreCodiConfigParameter.BASE_NAME + "CONVERSATION_TIMEOUT";
 
-    static final int GROUPED_CONVERSATION_TIMEOUT_DEFAULT = 30;
+    static final int CONVERSATION_TIMEOUT_DEFAULT = 30;
 
     static final String WINDOW_CONTEXT_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "WINDOW_CONTEXT_TIMEOUT";

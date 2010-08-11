@@ -91,7 +91,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     public int getConversationTimeoutInMinutes()
     {
         lazyInit();
-        return getAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.class);
+        return getAttribute(CONVERSATION_TIMEOUT, Integer.class);
     }
 
     public boolean isScopeBeanEventEnable()
@@ -162,131 +162,43 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initUrlParameterEnabled(facesContext);
         initMaxWindowContextCount(facesContext, ProjectStage.SystemTest.equals(currentProjectStage));
         initWindowContextTimeout(facesContext);
-        initGroupedConversationTimeout(facesContext);
+        initConversationTimeout(facesContext);
         initDisableInitialRedirect(facesContext);
         initConversatonEvents(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
     {
-        boolean requestParameterEnabled = URL_PARAMETER_ENABLED_DEFAULT;
-
-        String requestParameterEnabledString =
-                facesContext.getExternalContext().getInitParameter(URL_PARAMETER_ENABLED);
-
-        if (requestParameterEnabledString == null)
-        {
-            setAttribute(URL_PARAMETER_ENABLED, requestParameterEnabled);
-            return;
-        }
-
-        requestParameterEnabledString = requestParameterEnabledString.trim();
-
-        if ("".equals(requestParameterEnabledString))
-        {
-            setAttribute(URL_PARAMETER_ENABLED, requestParameterEnabled);
-            return;
-        }
-
-        setAttribute(URL_PARAMETER_ENABLED, Boolean.parseBoolean(requestParameterEnabledString));
+        initConfig(facesContext, URL_PARAMETER_ENABLED, new BooleanConfigValueParser(), URL_PARAMETER_ENABLED_DEFAULT);
     }
 
     private void initMaxWindowContextCount(FacesContext facesContext, boolean inProjectStageSystemTest)
     {
-        int maxCount = MAX_WINDOW_CONTEXT_COUNT_DEFAULT;
+        int defaultMaxCount = MAX_WINDOW_CONTEXT_COUNT_DEFAULT;
 
         if(inProjectStageSystemTest)
         {
-            maxCount = Integer.MAX_VALUE;
+            defaultMaxCount = Integer.MAX_VALUE;
         }
 
-        String maxCountString = facesContext.getExternalContext().getInitParameter(MAX_WINDOW_CONTEXT_COUNT);
-
-        if (maxCountString == null)
-        {
-            setAttribute(MAX_WINDOW_CONTEXT_COUNT, maxCount);
-            return;
-        }
-
-        maxCountString = maxCountString.trim();
-
-        if ("".equals(maxCountString))
-        {
-            setAttribute(MAX_WINDOW_CONTEXT_COUNT, maxCount);
-            return;
-        }
-
-        setAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.parseInt(maxCountString));
+        initConfig(facesContext, MAX_WINDOW_CONTEXT_COUNT, new IntegerConfigValueParser(), defaultMaxCount);
     }
 
     private void initWindowContextTimeout(FacesContext facesContext)
     {
-        int timeoutInMinutes = WINDOW_CONTEXT_TIMEOUT_DEFAULT;
-
-        String timeoutString = facesContext.getExternalContext().getInitParameter(WINDOW_CONTEXT_TIMEOUT);
-
-        if (timeoutString == null)
-        {
-            setAttribute(WINDOW_CONTEXT_TIMEOUT, timeoutInMinutes);
-            return;
-        }
-
-        timeoutString = timeoutString.trim();
-
-        if ("".equals(timeoutString))
-        {
-            setAttribute(WINDOW_CONTEXT_TIMEOUT, timeoutInMinutes);
-            return;
-        }
-
-        setAttribute(WINDOW_CONTEXT_TIMEOUT, Integer.parseInt(timeoutString));
+        initConfig(facesContext,
+                WINDOW_CONTEXT_TIMEOUT, new IntegerConfigValueParser(), WINDOW_CONTEXT_TIMEOUT_DEFAULT);
     }
 
-    private void initGroupedConversationTimeout(FacesContext facesContext)
+    private void initConversationTimeout(FacesContext facesContext)
     {
-        int timeoutInMinutes = GROUPED_CONVERSATION_TIMEOUT_DEFAULT;
-
-        String timeoutString = facesContext.getExternalContext().getInitParameter(GROUPED_CONVERSATION_TIMEOUT);
-
-        if (timeoutString == null)
-        {
-            setAttribute(GROUPED_CONVERSATION_TIMEOUT, timeoutInMinutes);
-            return;
-        }
-
-        timeoutString = timeoutString.trim();
-
-        if ("".equals(timeoutString))
-        {
-            setAttribute(GROUPED_CONVERSATION_TIMEOUT, timeoutInMinutes);
-            return;
-        }
-
-        setAttribute(GROUPED_CONVERSATION_TIMEOUT, Integer.parseInt(timeoutString));
+        initConfig(facesContext, CONVERSATION_TIMEOUT, new IntegerConfigValueParser(), CONVERSATION_TIMEOUT_DEFAULT);
     }
 
     private void initDisableInitialRedirect(FacesContext facesContext)
     {
-        boolean disableInitialRedirect = DISABLE_INITIAL_REDIRECT_DEFAULT;
-
-        String disableInitialRedirectString =
-                facesContext.getExternalContext().getInitParameter(DISABLE_INITIAL_REDIRECT);
-
-        if (disableInitialRedirectString == null)
-        {
-            setAttribute(DISABLE_INITIAL_REDIRECT, disableInitialRedirect);
-            return;
-        }
-
-        disableInitialRedirectString = disableInitialRedirectString.trim();
-
-        if ("".equals(disableInitialRedirectString))
-        {
-            setAttribute(DISABLE_INITIAL_REDIRECT, disableInitialRedirect);
-            return;
-        }
-
-        setAttribute(DISABLE_INITIAL_REDIRECT, Boolean.parseBoolean(disableInitialRedirectString));
+        initConfig(facesContext,
+                DISABLE_INITIAL_REDIRECT, new BooleanConfigValueParser(), DISABLE_INITIAL_REDIRECT_DEFAULT);
     }
 
     private void initConversatonEvents(FacesContext facesContext)
@@ -298,73 +210,50 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
     private void initScopeBeanEvent(FacesContext facesContext)
     {
-        boolean disableInitialRedirect = ENABLE_SCOPE_BEAN_EVENT_DEFAULT;
-
-        String disableInitialRedirectString =
-                facesContext.getExternalContext().getInitParameter(ENABLE_SCOPE_BEAN_EVENT);
-
-        if (disableInitialRedirectString == null)
-        {
-            setAttribute(ENABLE_SCOPE_BEAN_EVENT, disableInitialRedirect);
-            return;
-        }
-
-        disableInitialRedirectString = disableInitialRedirectString.trim();
-
-        if ("".equals(disableInitialRedirectString))
-        {
-            setAttribute(ENABLE_SCOPE_BEAN_EVENT, disableInitialRedirect);
-            return;
-        }
-
-        setAttribute(ENABLE_SCOPE_BEAN_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
+        initConfig(facesContext,
+                ENABLE_SCOPE_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_SCOPE_BEAN_EVENT_DEFAULT);
     }
 
     private void initBeanAccessEvent(FacesContext facesContext)
     {
-        boolean disableInitialRedirect = ENABLE_BEAN_ACCESS_EVENT_DEFAULT;
-
-        String disableInitialRedirectString =
-                facesContext.getExternalContext().getInitParameter(ENABLE_BEAN_ACCESS_EVENT);
-
-        if (disableInitialRedirectString == null)
-        {
-            setAttribute(ENABLE_BEAN_ACCESS_EVENT, disableInitialRedirect);
-            return;
-        }
-
-        disableInitialRedirectString = disableInitialRedirectString.trim();
-
-        if ("".equals(disableInitialRedirectString))
-        {
-            setAttribute(ENABLE_BEAN_ACCESS_EVENT, disableInitialRedirect);
-            return;
-        }
-
-        setAttribute(ENABLE_BEAN_ACCESS_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
+        initConfig(facesContext,
+                ENABLE_BEAN_ACCESS_EVENT, new BooleanConfigValueParser(), ENABLE_BEAN_ACCESS_EVENT_DEFAULT);
     }
 
     private void initUnscopeBeanEvent(FacesContext facesContext)
     {
-        boolean disableInitialRedirect = ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT;
+        initConfig(facesContext,
+                ENABLE_UNSCOPE_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT);
+    }
 
-        String disableInitialRedirectString =
-                facesContext.getExternalContext().getInitParameter(ENABLE_UNSCOPE_BEAN_EVENT);
+    protected <T> void initConfig(FacesContext facesContext,
+                                  String configKey,
+                                  ConfigValueParser<T> configValueParser,
+                                  T defaultValue)
+    {
+        String customValue = facesContext.getExternalContext().getInitParameter(configKey);
 
-        if (disableInitialRedirectString == null)
+        if (customValue == null)
         {
-            setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, disableInitialRedirect);
+            setAttribute(configKey, defaultValue);
             return;
         }
 
-        disableInitialRedirectString = disableInitialRedirectString.trim();
+        customValue = customValue.trim();
 
-        if ("".equals(disableInitialRedirectString))
+        if ("".equals(customValue))
         {
-            setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, disableInitialRedirect);
+            setAttribute(configKey, defaultValue);
             return;
         }
 
-        setAttribute(ENABLE_UNSCOPE_BEAN_EVENT, Boolean.parseBoolean(disableInitialRedirectString));
+        if(configValueParser == null)
+        {
+            setAttribute(configKey, customValue);
+        }
+        else
+        {
+            setAttribute(configKey, configValueParser.parse(customValue));
+        }
     }
 }
