@@ -46,11 +46,9 @@ class BeanStorage implements Serializable
 
     public BeanEntry addBean(BeanEntry<Serializable> beanEntry)
     {
-        //BeanEntryHolder newBean = new BeanEntryHolder(beanHolder);
         Class beanClass = beanEntry.getBean().getBeanClass();
         this.beanMap.remove(beanClass);
         this.beanMap.put(beanClass, beanEntry);
-        //this.beanAccessedEventEvent.fire(new BeanAccessedEvent(bean.getBeanInstance()));
         return beanEntry;
     }
 

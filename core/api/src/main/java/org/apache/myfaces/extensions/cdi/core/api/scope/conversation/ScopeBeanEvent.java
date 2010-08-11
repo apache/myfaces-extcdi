@@ -18,18 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import javax.enterprise.inject.spi.Bean;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
-public class BeanNotFoundException extends IllegalStateException
+public final class ScopeBeanEvent extends ConversationEvent
 {
-    private static final long serialVersionUID = -3071556589834210682L;
-
-    public <T> BeanNotFoundException(Bean<T> foundBean)
+    public ScopeBeanEvent(Serializable bean)
     {
-        super("No bean found for class " + foundBean.getBeanClass());
+        super(bean);
     }
 }

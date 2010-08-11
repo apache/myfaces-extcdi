@@ -20,9 +20,12 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
+import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ScopeBeanEvent;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
@@ -41,7 +44,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
     {
         this.bean = bean;
         this.creationalContext = creationalContext;
-        this.currentBeanInstance = createNewInstanceOfBean(bean, creationalContext);
+        createNewBeanInstance();
     }
 
     public Bean<T> getBean()
@@ -58,7 +61,8 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
     {
         if (this.currentBeanInstance == null)
         {
-            this.currentBeanInstance = createNewInstanceOfBean(this.creationalContext, this.bean);
+            //in case of a reset
+            createNewBeanInstance();
         }
         return this.currentBeanInstance;
     }
@@ -70,5 +74,15 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         this.currentBeanInstance = null;
 
         return oldBeanInstance;
+    }
+
+    private void createNewBeanInstance()
+    {
+        this.currentBeanInstance = createNewInstanceOfBean(this.bean, this.creationalContext);
+
+        //we don't have to check the implementation of Serializable - cdi already checked it
+
+        BeanManagerProvider.getInstance().getBeanManager()
+                .fireEvent(new ScopeBeanEvent((Serializable)this.currentBeanInstance));
     }
 }
