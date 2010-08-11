@@ -51,4 +51,6 @@ public interface EditableWindowContextManager extends WindowContextManager
     void removeWindowContext(WindowContext windowContext);
 
     Collection<WindowContext> getWindowContexts();
+
+    void destroy();
 }

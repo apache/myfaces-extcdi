@@ -18,17 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .WINDOW_CONTEXT_MANAGER_BEAN_NAME;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
@@ -38,50 +31,31 @@ import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.Conversatio
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.context.Dependent;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.Typed;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
-import java.lang.annotation.Annotation;
-import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 @SuppressWarnings({"UnusedDeclaration"})
-@Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
-@SessionScoped
 public class DefaultWindowContextManager implements EditableWindowContextManager
 {
     private static final long serialVersionUID = 2872151847183166424L;
 
     private Map<String, WindowContext> windowContextMap = new ConcurrentHashMap<String, WindowContext>();
 
-    @Inject
-    @SuppressWarnings({"UnusedDeclaration"})
-    private ConfigResolver configResolver;
-
-    @Inject
-    @SuppressWarnings({"UnusedDeclaration"})
     private ProjectStage projectStage;
 
     private JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
@@ -92,111 +66,20 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private WindowContextQuotaHandler windowContextQuotaHandler;
 
-    @PostConstruct
+    protected DefaultWindowContextManager(JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
+                                          ProjectStage projectStage)
+    {
+        this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
+        this.projectStage = projectStage;
+        init();
+    }
+
     protected void init()
     {
-        this.jsfAwareWindowContextConfig = this.configResolver.resolve(JsfAwareWindowContextConfig.class);
-
         this.windowHandler = this.jsfAwareWindowContextConfig.getWindowHandler();
         this.windowContextQuotaHandler = this.jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
 
         this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
-    }
-
-    @PreDestroy
-    protected void destroyAllConversations()
-    {
-        for (WindowContext windowContext : this.windowContextMap.values())
-        {
-            for (Conversation conversation :
-                    ((EditableWindowContext)windowContext).getConversations().values())
-            {
-                conversation.end();
-            }
-
-            ((EditableWindowContext)windowContext).removeInactiveConversations();
-        }
-    }
-
-    //don't change/optimize this observer!!!
-    protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
-                           RequestTypeResolver requestTypeResolver)
-    {
-
-        if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
-        {
-            boolean continueRequest = processGetRequest(phaseEvent.getFacesContext());
-            if (!continueRequest)
-            {
-                return;
-            }
-        }
-
-        //don't refactor it to a lazy restore
-        storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), getCurrentWindowContext());
-
-        //for performance reasons + cleanup at the beginning of the request (check timeout,...)
-        //+ we aren't allowed to cleanup in case of redirects
-        //we would transfer the restored view-id into the conversation
-        //don't ignore partial requests - in case of ajax-navigation we wouldn't check for expiration
-        if (!requestTypeResolver.isPostRequest())
-        {
-            return;
-        }
-
-        cleanupInactiveConversations();
-    }
-
-    protected void cleanupAndRecordCurrentViewAsOldViewId(
-            @Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
-    {
-        storeCurrentViewIdAsOldViewId(phaseEvent.getFacesContext());
-
-        cleanupInactiveWindowContexts();
-        RequestCache.resetCache();
-    }
-
-    @Produces
-    @Named(WindowContext.CURRENT_WINDOW_CONTEXT_BEAN_NAME)
-    @RequestScoped
-    protected WindowContext currentWindowContext()
-    {
-        return getCurrentWindowContext();
-    }
-
-    @Produces
-    @Dependent
-    protected Conversation currentConversation(final InjectionPoint injectionPoint,
-                                               final WindowContextManager windowContextManager)
-    {
-        //for @Inject Conversation conversation;
-        return new Conversation()
-        {
-            private static final long serialVersionUID = 7754789230388003028L;
-
-            public void end()
-            {
-                findConversation().end();
-            }
-
-            public void restart()
-            {
-                findConversation().restart();
-            }
-
-            private Conversation findConversation()
-            {
-                Bean<?> bean = injectionPoint.getBean();
-                Class conversationGroup = ConversationUtils.getConversationGroup(bean);
-
-                Set<Annotation> qualifiers = bean.getQualifiers();
-
-                conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
-
-                return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
-                        .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
-            }
-        };
     }
 
     public WindowContext getCurrentWindowContext()
@@ -225,7 +108,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if(this.windowContextQuotaHandler.checkQuota(getNumberOfNextWindowContext()))
         {
-            if(!cleanupInactiveWindowContexts())
+            if(!cleanupInactiveWindowContexts(this))
             {
                 this.windowContextQuotaHandler.handleQuotaViolation();
             }
@@ -254,8 +137,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if (result == null)
         {
-            result = new JsfWindowContext(
-                    windowContextId, this.jsfAwareWindowContextConfig, this.projectStageDevelopment);
+            result = createWindowContext(windowContextId);
 
             this.windowContextMap.put(windowContextId, result);
         }
@@ -266,6 +148,18 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
 
         return result;
+    }
+
+    private WindowContext createWindowContext(String windowContextId)
+    {
+        WindowContextFactory windowContextFactory = this.jsfAwareWindowContextConfig.getWindowContextFactory();
+
+        if(windowContextFactory != null)
+        {
+            return windowContextFactory.createWindowContext(windowContextId, this.jsfAwareWindowContextConfig);
+        }
+        
+        return new JsfWindowContext(windowContextId, this.jsfAwareWindowContextConfig, this.projectStageDevelopment);
     }
 
     public boolean activateWindowContext(String windowContextId)
@@ -352,46 +246,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         //reset existing information
         getExistingWindowIdSet(externalContext).remove(windowContext.getId());
-        externalContext.getRequestMap().remove(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+        externalContext.getRequestMap().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
         windowContext.endConversations();
-    }
-
-    private void cleanupInactiveConversations()
-    {
-        //don't cleanup all window contexts (it would cause a side-effect with the access-scope and multiple windows
-        WindowContext windowContext = getCurrentWindowContext();
-
-        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
-        {
-            if (!((EditableConversation)conversation).isActive())
-            {
-                conversation.end();
-            }
-        }
-
-        ((EditableWindowContext)windowContext).removeInactiveConversations();
-    }
-
-    private boolean cleanupInactiveWindowContexts()
-    {
-        int count = this.windowContextMap.size();
-
-        for (WindowContext windowContext : this.windowContextMap.values())
-        {
-            if(windowContext instanceof EditableWindowContext &&
-                    isEligibleForCleanup((EditableWindowContext)windowContext))
-            {
-                removeWindowContext(windowContext);
-            }
-        }
-
-        return this.windowContextMap.size() < count;
-    }
-
-    private boolean isEligibleForCleanup(EditableWindowContext editableWindowContext)
-    {
-        return !editableWindowContext.isActive() || editableWindowContext.getConversations().isEmpty();
     }
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
@@ -430,60 +287,17 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return Collections.unmodifiableCollection(this.windowContextMap.values());
     }
 
-    /**
-     * an external app might call a page without url parameter.
-     * to support such an use-case it's possible to
-     *  - deactivate the url parameter support (requires a special WindowHandler see e.g.
-     *    ServerSideWindowHandler for jsf2
-     *  - disable the initial redirect
-     *  - use windowId=automatedEntryPoint as url parameter to force a new window context
-     * @param facesContext current facesContext
-     * @return true if the current request should be continued
-     */
-    private boolean processGetRequest(FacesContext facesContext)
+    public void destroy()
     {
-        boolean isUrlParameterSupported = this.jsfAwareWindowContextConfig.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = !this.jsfAwareWindowContextConfig.isInitialRedirectDisable();
-
-        if(!isUrlParameterSupported)
+        for (WindowContext windowContext : this.windowContextMap.values())
         {
-            useWindowIdForFirstPage = false;
-        }
-
-        if(useWindowIdForFirstPage)
-        {
-            String windowId = facesContext.getExternalContext()
-                    .getRequestParameterMap().get(WINDOW_CONTEXT_ID_PARAMETER_KEY);
-
-            if("automatedEntryPoint".equalsIgnoreCase(windowId))
+            for (Conversation conversation :
+                    ((EditableWindowContext)windowContext).getConversations().values())
             {
-                return true;
+                conversation.end();
             }
 
-            windowId = resolveWindowContextId(isUrlParameterSupported, this.windowHandler);
-
-            if(windowId == null)
-            {
-                redirect(facesContext);
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private void redirect(FacesContext facesContext)
-    {
-        try
-        {
-            String targetURL = facesContext.getApplication()
-                    .getViewHandler().getActionURL(facesContext, facesContext.getViewRoot().getViewId());
-
-            // add requst-parameters e.g. for f:viewParam handling
-            this.windowHandler.sendRedirect(FacesContext.getCurrentInstance().getExternalContext(), targetURL, true);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
+            ((EditableWindowContext)windowContext).removeInactiveConversations();
         }
     }
 }

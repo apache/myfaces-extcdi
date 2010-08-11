@@ -32,6 +32,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -44,6 +46,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collection;
 
 /**
  * internal! utils
@@ -383,5 +386,27 @@ public class ConversationUtils
             sessionMap.put(EXISTING_WINDOW_ID_SET_KEY, existingWindowIdSet);
         }
         return existingWindowIdSet;
+    }
+
+    public static boolean cleanupInactiveWindowContexts(EditableWindowContextManager windowContextManager)
+    {
+        Collection<WindowContext> windowContexts = windowContextManager.getWindowContexts();
+        int count = windowContexts.size();
+
+        for (WindowContext windowContext : windowContexts)
+        {
+            if(windowContext instanceof EditableWindowContext &&
+                    isEligibleForCleanup((EditableWindowContext)windowContext))
+            {
+                windowContextManager.removeWindowContext(windowContext);
+            }
+        }
+
+        return windowContexts.size() < count;
+    }
+
+    private static boolean isEligibleForCleanup(EditableWindowContext editableWindowContext)
+    {
+        return !editableWindowContext.isActive() || editableWindowContext.getConversations().isEmpty();
     }
 }

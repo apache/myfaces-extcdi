@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextFactory;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
@@ -128,11 +130,27 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
     public ConversationFactory getConversationFactory()
     {
+        //TODO add config parameter
         return new JsfAwareConversationFactory();
+    }
+
+    public WindowContextFactory getWindowContextFactory()
+    {
+        //TODO add config parameter
+        //we don't need a default implementation
+        return null;
+    }
+
+    public WindowContextManagerFactory getWindowContextManagerFactory()
+    {
+        //TODO add config parameter
+        //we don't need a default implementation
+        return null;
     }
 
     public WindowContextQuotaHandler getWindowContextQuotaHandler()
     {
+        //TODO add config parameter
         return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
     }
 
