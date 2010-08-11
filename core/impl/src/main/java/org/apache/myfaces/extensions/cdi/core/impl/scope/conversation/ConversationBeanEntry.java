@@ -113,8 +113,13 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         return this.unscopeBeanEventEnable;
     }
 
-    private void createNewBeanInstance()
+    private synchronized void createNewBeanInstance()
     {
+        if(this.currentBeanInstance != null)
+        {
+            return;
+        }
+        
         this.currentBeanInstance = createNewInstanceOfBean(this.bean, this.creationalContext);
 
         if(this.scopeBeanEventEnable)
