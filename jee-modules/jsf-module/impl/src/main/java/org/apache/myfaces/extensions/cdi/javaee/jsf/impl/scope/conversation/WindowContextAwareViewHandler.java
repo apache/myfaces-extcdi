@@ -28,18 +28,18 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-public class WindowIdAwareViewHandler extends ViewHandlerWrapper
+public class WindowContextAwareViewHandler extends ViewHandlerWrapper
 {
     private ViewHandler wrapped;
 
     private WindowHandler windowHandler;
 
-    public WindowIdAwareViewHandler(ViewHandler wrapped)
+    public WindowContextAwareViewHandler(ViewHandler wrapped)
     {
         this.wrapped = wrapped;
     }
 
-    protected ViewHandler getWrapped()
+    public ViewHandler getWrapped()
     {
         return this.wrapped;
     }
