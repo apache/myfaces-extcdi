@@ -64,13 +64,13 @@ public class ConfigProducer
             return; //paranoid mode
         }
 
-        configInitialized = true;
-
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
         createConfigFilter(beanManager);
 
         createConfig(beanManager);
+
+        configInitialized = true;
     }
 
     @Produces
