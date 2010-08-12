@@ -90,6 +90,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(ALLOW_UNKNOWN_WINDOW_IDS, Boolean.class);
     }
 
+    public boolean isAddWindowIdToActionUrlsEnabled()
+    {
+        lazyInit();
+        return getAttribute(ADD_WINDOW_ID_TO_ACTION_URL_ENABLED, Boolean.class);
+    }
+
     public int getWindowContextTimeoutInMinutes()
     {
         lazyInit();
@@ -188,6 +194,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initConversationTimeout(facesContext);
         initDisableInitialRedirect(facesContext);
         initConversatonEvents(facesContext);
+        initActionUrlEncoding(facesContext);
 
         //init custom implementations
         initWindowContextManagerFactory(facesContext);
@@ -261,6 +268,17 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
                 ENABLE_UNSCOPE_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT);
     }
 
+    private void initActionUrlEncoding(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ADD_WINDOW_ID_TO_ACTION_URL_ENABLED,
+                new BooleanConfigValueParser(),
+                ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT);
+    }
+
+    /*
+     * custom implementations
+     */
     private void initWindowContextManagerFactory(FacesContext facesContext)
     {
         initConfig(facesContext,

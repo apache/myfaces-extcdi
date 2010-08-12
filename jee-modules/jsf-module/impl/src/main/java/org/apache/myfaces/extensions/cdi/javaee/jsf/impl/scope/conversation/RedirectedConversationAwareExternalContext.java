@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -43,6 +46,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 
     private WindowHandler windowHandler;
 
+    private boolean encodeActionURLs;
+
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;
@@ -51,8 +56,13 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     public String encodeActionURL(String s)
     {
         lazyInit();
-        String url = addWindowIdToUrl(s);
-        return wrapped.encodeActionURL(url);
+
+        if(this.encodeActionURLs)
+        {
+            String url = addWindowIdToUrl(s);
+            return this.wrapped.encodeActionURL(url);
+        }
+        return this.wrapped.encodeActionURL(s);
     }
 
     public void redirect(String url)
@@ -64,9 +74,12 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 
     private synchronized void lazyInit()
     {
-        if(windowHandler == null)
+        if(this.windowHandler == null)
         {
-            windowHandler = getWindowHandler();
+            this.windowHandler = getWindowHandler();
+            this.encodeActionURLs = CodiUtils
+                    .getOrCreateScopedInstanceOfBeanByClass(ConfigResolver.class)
+                    .resolve(JsfAwareWindowContextConfig.class).isAddWindowIdToActionUrlsEnabled();
         }
     }
 

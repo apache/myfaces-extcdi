@@ -40,6 +40,11 @@ public interface ConfigParameter
 
     static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = false;
 
+    static final String ADD_WINDOW_ID_TO_ACTION_URL_ENABLED =
+            CoreCodiConfigParameter.BASE_NAME + "ADD_WINDOW_ID_TO_ACTION_URL_ENABLED";
+
+    static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = false;
+
     static final String DISABLE_INITIAL_REDIRECT =
             CoreCodiConfigParameter.BASE_NAME + "DISABLE_INITIAL_REDIRECT";
 

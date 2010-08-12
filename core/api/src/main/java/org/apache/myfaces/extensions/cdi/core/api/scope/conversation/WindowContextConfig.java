@@ -30,6 +30,9 @@ public interface WindowContextConfig extends Serializable
 
     boolean isUnknownWindowIdsAllowed();
 
+    @Deprecated
+    boolean isAddWindowIdToActionUrlsEnabled();
+    
     int getWindowContextTimeoutInMinutes();
 
     int getMaxWindowContextCount();
