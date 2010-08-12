@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
 
@@ -32,7 +33,7 @@ import java.util.HashMap;
  */
 public class RequestCache
 {
-    private static ThreadLocal<String> windowIdCache = new ThreadLocal<String>();
+    private static ThreadLocal<WindowContext> windowContextCache = new ThreadLocal<WindowContext>();
 
     private static ThreadLocal<WindowContextManager> windowContextManagerCache
             = new ThreadLocal<WindowContextManager>();
@@ -51,8 +52,8 @@ public class RequestCache
         windowContextManagerBeanCache.set(null);
         windowContextManagerBeanCache.remove();
 
-        windowIdCache.set(null);
-        windowIdCache.remove();
+        windowContextCache.set(null);
+        windowContextCache.remove();
 
         resetConversationCache();
     }
@@ -111,14 +112,14 @@ public class RequestCache
         return windowContextManagerBean;
     }
 
-    public static String getCurrentWindowId()
+    public static WindowContext getCurrentWindowContext()
     {
-        return windowIdCache.get();
+        return windowContextCache.get();
     }
 
-    public static void setCurrentWindowId(String windowId)
+    public static void setCurrentWindowContext(WindowContext windowContext)
     {
-        windowIdCache.set(windowId);
+        windowContextCache.set(windowContext);
     }
 
     public static EditableConversation getConversation(ConversationKey conversationKey)

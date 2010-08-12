@@ -86,22 +86,26 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     public WindowContext getCurrentWindowContext()
     {
-        String windowContextId = RequestCache.getCurrentWindowId();
+        WindowContext windowContext = RequestCache.getCurrentWindowContext();
 
-        if(windowContextId == null)
+        if(windowContext != null)
         {
-            windowContextId = resolveWindowContextId(this.jsfAwareWindowContextConfig.isUrlParameterSupported(),
-                                                     this.windowHandler);
-
-            if (windowContextId == null)
-            {
-                windowContextId = createNewWindowContextId();
-            }
-
-            RequestCache.setCurrentWindowId(windowContextId);
+            return windowContext;
         }
 
-        return getWindowContext(windowContextId);
+        String windowContextId =
+                resolveWindowContextId(this.jsfAwareWindowContextConfig.isUrlParameterSupported(), this.windowHandler);
+
+        if (windowContextId == null)
+        {
+            windowContextId = createNewWindowContextId();
+        }
+
+        windowContext = getWindowContext(windowContextId);
+
+        RequestCache.setCurrentWindowContext(windowContext);
+
+        return windowContext;
     }
 
     private synchronized String createNewWindowContextId()
