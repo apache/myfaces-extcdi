@@ -232,6 +232,7 @@ public class ConversationUtils
     /**
      * @param externalContext externalContext
      * @param id windowId
+     * @param allowUnknownWindowIds true to force the usage of the given id
      * @return false if the id doesn't exist in the storage (e.g. in case of bookmarks)
      */
     public static boolean cacheWindowId(ExternalContext externalContext, String id, boolean allowUnknownWindowIds)
