@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public final class BeanAccessEvent extends ConversationEvent
+public final class BeanAccessEvent extends BeanEvent
 {
     public BeanAccessEvent(Serializable bean)
     {

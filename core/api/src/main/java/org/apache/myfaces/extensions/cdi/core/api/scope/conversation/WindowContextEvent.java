@@ -18,15 +18,20 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import java.io.Serializable;
-
 /**
  * @author Gerhard Petracek
  */
-public final class ScopeBeanEvent extends BeanEvent
+public abstract class WindowContextEvent
 {
-    public ScopeBeanEvent(Serializable bean)
+    private final String windowContextId;
+
+    public WindowContextEvent(String windowContextId)
     {
-        super(bean);
+        this.windowContextId = windowContextId;
+    }
+
+    public final String getWindowContextId()
+    {
+        return windowContextId;
     }
 }

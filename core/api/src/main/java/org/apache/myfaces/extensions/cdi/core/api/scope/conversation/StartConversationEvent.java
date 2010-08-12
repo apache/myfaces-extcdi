@@ -18,15 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import java.io.Serializable;
-
 /**
  * @author Gerhard Petracek
  */
-public final class ScopeBeanEvent extends BeanEvent
+public final class StartConversationEvent extends ConversationEvent
 {
-    public ScopeBeanEvent(Serializable bean)
+    public StartConversationEvent(Conversation conversation)
     {
-        super(bean);
+        super(conversation);
     }
 }

@@ -23,7 +23,7 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public final class UnscopeBeanEvent extends ConversationEvent
+public final class UnscopeBeanEvent extends BeanEvent
 {
     public UnscopeBeanEvent(Serializable bean)
     {

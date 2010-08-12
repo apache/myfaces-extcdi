@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.windowContextNotEditable;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.windowContextNotEditableException;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -314,7 +314,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     {
         if(!(windowContext instanceof EditableWindowContext))
         {
-            throw windowContextNotEditable(windowContext);
+            throw windowContextNotEditableException(windowContext);
         }
 
         return (EditableWindowContext)windowContext;

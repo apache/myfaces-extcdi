@@ -37,21 +37,26 @@ public class ExceptionUtils
                 + windowContextTimeoutInMinutes + " minutes.");
     }
 
-    public static RuntimeException windowContextManagerNotEditable(WindowContextManager windowContextManager)
+    public static RuntimeException windowContextManagerNotEditableException(WindowContextManager windowContextManager)
     {
         return new RuntimeException(windowContextManager.getClass().getName() + " has to implement "
                 + EditableWindowContextManager.class.getName());
     }
 
-    public static RuntimeException windowContextNotEditable(WindowContext windowContext)
+    public static RuntimeException windowContextNotEditableException(WindowContext windowContext)
     {
         return new RuntimeException(windowContext.getClass().getName() + " has to implement "
                 + EditableWindowContext.class.getName());
     }
 
-    public static RuntimeException conversationNotEditable(Conversation conversation)
+    public static RuntimeException conversationNotEditableException(Conversation conversation)
     {
         return new RuntimeException(conversation.getClass().getName() + " has to implement "
                 + EditableConversation.class.getName());
+    }
+
+    public static RuntimeException invalidViewException(String viewId)
+    {
+        return new RuntimeException("View-ID: " + viewId + " doesn't exist.");
     }
 }

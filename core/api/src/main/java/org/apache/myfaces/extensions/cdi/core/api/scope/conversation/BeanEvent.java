@@ -23,10 +23,17 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public final class ScopeBeanEvent extends BeanEvent
+public abstract class BeanEvent
 {
-    public ScopeBeanEvent(Serializable bean)
+    private final Serializable bean;
+
+    public BeanEvent(Serializable bean)
     {
-        super(bean);
+        this.bean = bean;
+    }
+
+    public final Serializable getBeanInstance()
+    {
+        return bean;
     }
 }

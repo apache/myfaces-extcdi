@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.conversationNotEditable;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.conversationNotEditableException;
 
 import javax.enterprise.inject.Typed;
 import java.util.Date;
@@ -137,7 +137,7 @@ public class JsfWindowContext implements EditableWindowContext
 
         if(!(conversation instanceof EditableConversation))
         {
-            throw conversationNotEditable(conversation);
+            throw conversationNotEditableException(conversation);
         }
         return endAndRemoveConversation(conversationKey, (EditableConversation)conversation, true);
     }

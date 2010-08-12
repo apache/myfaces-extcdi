@@ -16,17 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition;
 
-import java.io.Serializable;
+import javax.enterprise.inject.Stereotype;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Gerhard Petracek
  */
-public final class ScopeBeanEvent extends BeanEvent
+@Stereotype
+
+//don't use @Inherited
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
+public @interface PageBean
 {
-    public ScopeBeanEvent(Serializable bean)
+    Class value();
+
+    String name() default "";
+
+    @Target(TYPE)
+    @Retention(RUNTIME)
+    @Documented
+    public static @interface List
     {
-        super(bean);
+        PageBean[] value();
     }
 }

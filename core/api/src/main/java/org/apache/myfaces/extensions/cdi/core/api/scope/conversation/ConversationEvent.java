@@ -18,22 +18,20 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import java.io.Serializable;
-
 /**
  * @author Gerhard Petracek
  */
 public abstract class ConversationEvent
 {
-    private final Serializable bean;
+    private final Conversation conversation;
 
-    public ConversationEvent(Serializable bean)
+    public ConversationEvent(Conversation conversation)
     {
-        this.bean = bean;
+        this.conversation = conversation;
     }
 
-    public final Serializable getBeanInstance()
+    public final Conversation getConversation()
     {
-        return bean;
+        return conversation;
     }
 }

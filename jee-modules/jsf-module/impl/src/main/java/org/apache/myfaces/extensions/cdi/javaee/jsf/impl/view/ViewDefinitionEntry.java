@@ -20,6 +20,13 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.PageBean;
+
+import javax.inject.Named;
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.beans.Introspector;
 
 /**
  * @author Gerhard Petracek
@@ -29,6 +36,7 @@ public class ViewDefinitionEntry
     private final String viewId;
     private final Class<? extends ViewDefinition> viewDefinitionClass;
     private final NavigationMode navigationMode;
+    private final List<String> beanNames;
 
     public ViewDefinitionEntry(String viewId,
                                Class<? extends ViewDefinition> viewDefinitionClass,
@@ -37,7 +45,9 @@ public class ViewDefinitionEntry
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;
         this.navigationMode = navigationMode;
-        //TODO validate view-di
+
+        beanNames = Collections.unmodifiableList(findBeanNames(viewDefinitionClass));
+        //TODO validate view-id
     }
 
     public String getViewId()
@@ -53,6 +63,66 @@ public class ViewDefinitionEntry
     public NavigationMode getNavigationMode()
     {
         return navigationMode;
+    }
+
+    public List<String> getBeanNames()
+    {
+        return beanNames;
+    }
+
+    private List<String> findBeanNames(Class<? extends ViewDefinition> viewDefinitionClass)
+    {
+        if(!viewDefinitionClass.isAnnotationPresent(PageBean.class) &&
+                !viewDefinitionClass.isAnnotationPresent(PageBean.List.class))
+        {
+            return Collections.emptyList();
+        }
+
+        List<String> result = new ArrayList<String>();
+
+        if(viewDefinitionClass.isAnnotationPresent(PageBean.class))
+        {
+            result.add(extractBeanName(viewDefinitionClass.getAnnotation(PageBean.class)));
+        }
+
+        if(viewDefinitionClass.isAnnotationPresent(PageBean.List.class))
+        {
+            result.addAll(extractBeanNames(viewDefinitionClass.getAnnotation(PageBean.List.class)));
+        }
+
+        return result;
+    }
+
+    private List<String> extractBeanNames(PageBean.List pageBeanList)
+    {
+        List<String> result = new ArrayList<String>();
+        for(PageBean pageBean : pageBeanList.value())
+        {
+            result.add(extractBeanName(pageBean));
+        }
+        return result;
+    }
+
+    private String extractBeanName(PageBean pageBean)
+    {
+        if(!"".equals(pageBean.name()))
+        {
+            return pageBean.name();
+        }
+
+        Class<?> pageBeanClass = pageBean.value();
+
+        if(pageBeanClass.isAnnotationPresent(Named.class))
+        {
+            String beanName = pageBeanClass.getAnnotation(Named.class).value();
+
+            if(!"".equals(beanName))
+            {
+                return beanName;
+            }
+        }
+
+        return Introspector.decapitalize(pageBeanClass.getSimpleName());
     }
 
     @Override

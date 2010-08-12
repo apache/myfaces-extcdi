@@ -28,7 +28,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEn
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.windowContextManagerNotEditable;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils
+        .windowContextManagerNotEditableException;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -78,7 +79,7 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
     {
         if(!(windowContextManager instanceof EditableWindowContextManager))
         {
-            throw windowContextManagerNotEditable(windowContextManager);
+            throw windowContextManagerNotEditableException(windowContextManager);
         }
 
         Class<?> beanClass = beanDescriptor.getBeanClass();
@@ -93,7 +94,7 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
     {
         if(!(windowContextManager instanceof EditableWindowContextManager))
         {
-            throw windowContextManagerNotEditable(windowContextManager);
+            throw windowContextManagerNotEditableException(windowContextManager);
         }
 
         Bean<?> bean = beanEntry.getBean();
