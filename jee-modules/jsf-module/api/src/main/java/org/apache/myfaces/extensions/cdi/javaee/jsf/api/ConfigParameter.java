@@ -35,6 +35,11 @@ public interface ConfigParameter
 
     static final boolean URL_PARAMETER_ENABLED_DEFAULT = true;
 
+    static final String ALLOW_UNKNOWN_WINDOW_IDS =
+            CoreCodiConfigParameter.BASE_NAME + "ALLOW_UNKNOWN_WINDOW_IDS";
+
+    static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = false;
+
     static final String DISABLE_INITIAL_REDIRECT =
             CoreCodiConfigParameter.BASE_NAME + "DISABLE_INITIAL_REDIRECT";
 
