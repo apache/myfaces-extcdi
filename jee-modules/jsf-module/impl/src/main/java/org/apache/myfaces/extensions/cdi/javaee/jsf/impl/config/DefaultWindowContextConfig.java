@@ -132,12 +132,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.class);
     }
 
-    public WindowHandler getWindowHandler()
+    public boolean isInitialRedirectDisable()
     {
-        return new DefaultWindowHandler(isUrlParameterSupported())
-        {
-            private static final long serialVersionUID = 7376499174252256735L;
-        };
+        lazyInit();
+        return getAttribute(DISABLE_INITIAL_REDIRECT, Boolean.class);
     }
 
     public ConversationFactory getConversationFactory()
@@ -164,10 +162,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(WindowContextQuotaHandler.class.getName(), WindowContextQuotaHandler.class);
     }
 
-    public boolean isInitialRedirectDisable()
+    public WindowHandler getWindowHandler()
     {
         lazyInit();
-        return getAttribute(DISABLE_INITIAL_REDIRECT, Boolean.class);
+        return getAttribute(WindowHandler.class.getName(), WindowHandler.class);
     }
 
     private void lazyInit()
@@ -201,6 +199,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initWindowContextFactory(facesContext);
         initConversationFactory(facesContext);
         initWindowContextQuotaHandler(facesContext);
+        initWindowHandler(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
@@ -309,6 +308,17 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
                    WindowContextQuotaHandler.class.getName(),
                    new CustomImplementationParser<WindowContextQuotaHandler>(),
                    new DefaultWindowContextQuotaHandler(getMaxWindowContextCount()));
+    }
+
+    private void initWindowHandler(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                   WindowHandler.class.getName(),
+                   new CustomImplementationParser<WindowHandler>(),
+                   new DefaultWindowHandler(isUrlParameterSupported())
+                   {
+                       private static final long serialVersionUID = 7376499174252256735L;
+                   });
     }
 
     protected <T> void initConfig(FacesContext facesContext,
