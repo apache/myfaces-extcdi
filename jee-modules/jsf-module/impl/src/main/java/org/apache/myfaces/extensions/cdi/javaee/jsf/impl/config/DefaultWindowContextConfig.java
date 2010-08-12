@@ -136,28 +136,26 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
 
     public ConversationFactory getConversationFactory()
     {
-        //TODO add config parameter
-        return new JsfAwareConversationFactory();
+        lazyInit();
+        return getAttribute(ConversationFactory.class.getName(), ConversationFactory.class);
     }
 
     public WindowContextFactory getWindowContextFactory()
     {
-        //TODO add config parameter
-        //we don't need a default implementation
-        return null;
+        lazyInit();
+        return getAttribute(WindowContextFactory.class.getName(), WindowContextFactory.class);
     }
 
     public WindowContextManagerFactory getWindowContextManagerFactory()
     {
-        //TODO add config parameter
-        //we don't need a default implementation
-        return null;
+        lazyInit();
+        return getAttribute(WindowContextManagerFactory.class.getName(), WindowContextManagerFactory.class);
     }
 
     public WindowContextQuotaHandler getWindowContextQuotaHandler()
     {
-        //TODO add config parameter
-        return new DefaultWindowContextQuotaHandler(getMaxWindowContextCount());
+        lazyInit();
+        return getAttribute(WindowContextQuotaHandler.class.getName(), WindowContextQuotaHandler.class);
     }
 
     public boolean isInitialRedirectDisable()
@@ -190,6 +188,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initConversationTimeout(facesContext);
         initDisableInitialRedirect(facesContext);
         initConversatonEvents(facesContext);
+
+        //init custom implementations
+        initWindowContextManagerFactory(facesContext);
+        initWindowContextFactory(facesContext);
+        initConversationFactory(facesContext);
+        initWindowContextQuotaHandler(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
@@ -255,6 +259,38 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     {
         initConfig(facesContext,
                 ENABLE_UNSCOPE_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT);
+    }
+
+    private void initWindowContextManagerFactory(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                   WindowContextManagerFactory.class.getName(),
+                   new CustomImplementationParser<WindowContextManagerFactory>(),
+                   null);
+    }
+
+    private void initWindowContextFactory(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                   WindowContextFactory.class.getName(),
+                   new CustomImplementationParser<WindowContextFactory>(),
+                   null);
+    }
+
+    private void initConversationFactory(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                   ConversationFactory.class.getName(),
+                   new CustomImplementationParser<ConversationFactory>(),
+                   new JsfAwareConversationFactory());
+    }
+
+    private void initWindowContextQuotaHandler(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                   WindowContextQuotaHandler.class.getName(),
+                   new CustomImplementationParser<WindowContextQuotaHandler>(),
+                   new DefaultWindowContextQuotaHandler(getMaxWindowContextCount()));
     }
 
     protected <T> void initConfig(FacesContext facesContext,
