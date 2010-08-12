@@ -27,6 +27,7 @@ class CustomImplementationParser<T> implements ConfigValueParser<T>
 {
     public T parse(String value)
     {
+        //TODO throw an invalid config exception if the result is null
         return (T)ClassUtils.tryToInstantiateClassForName(value);
     }
 }

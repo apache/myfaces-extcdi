@@ -18,12 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-
 /**
  * @author Gerhard Petracek
  */
 public interface WindowContextFactory
 {
-    EditableWindowContext createWindowContext(String windowContextId, WindowContextConfig windowContextConfig);  
+    EditableWindowContext createWindowContext(String windowContextId, JsfAwareWindowContextConfig windowContextConfig);
 }
