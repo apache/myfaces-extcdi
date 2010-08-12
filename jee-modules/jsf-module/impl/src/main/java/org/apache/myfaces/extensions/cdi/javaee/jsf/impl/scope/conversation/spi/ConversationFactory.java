@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 
 import java.io.Serializable;
@@ -28,5 +27,5 @@ import java.io.Serializable;
  */
 public interface ConversationFactory extends Serializable
 {
-    Conversation createConversation(ConversationKey conversationKey, ConversationConfig config);
+    EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig config);
 }

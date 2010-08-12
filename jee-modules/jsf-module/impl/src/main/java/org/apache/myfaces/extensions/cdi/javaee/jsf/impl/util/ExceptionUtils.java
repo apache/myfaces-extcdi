@@ -18,6 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
+
 /**
  * @author Gerhard Petracek
  */
@@ -28,5 +35,23 @@ public class ExceptionUtils
         return new RuntimeException("Too many active windows/tabs have been opened!" +
             " Please continue with one of the existing windows or wait up to "
                 + windowContextTimeoutInMinutes + " minutes.");
+    }
+
+    public static RuntimeException windowContextManagerNotEditable(WindowContextManager windowContextManager)
+    {
+        return new RuntimeException(windowContextManager.getClass().getName() + " has to implement "
+                + EditableWindowContextManager.class.getName());
+    }
+
+    public static RuntimeException windowContextNotEditable(WindowContext windowContext)
+    {
+        return new RuntimeException(windowContext.getClass().getName() + " has to implement "
+                + EditableWindowContext.class.getName());
+    }
+
+    public static RuntimeException conversationNotEditable(Conversation conversation)
+    {
+        return new RuntimeException(conversation.getClass().getName() + " has to implement "
+                + EditableConversation.class.getName());
     }
 }

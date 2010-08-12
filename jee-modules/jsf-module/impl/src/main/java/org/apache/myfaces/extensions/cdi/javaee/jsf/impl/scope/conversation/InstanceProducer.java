@@ -53,7 +53,7 @@ final class InstanceProducer
     @SessionScoped
     @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
     protected EditableWindowContextManager createWindowContextManager(ConfigResolver configResolver,
-                                                              ProjectStage projectStage)
+                                                                      ProjectStage projectStage)
     {
         JsfAwareWindowContextConfig jsfAwareWindowContextConfig =
                 configResolver.resolve(JsfAwareWindowContextConfig.class);

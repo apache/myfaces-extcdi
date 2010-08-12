@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
 
 import javax.enterprise.inject.spi.Bean;
 import java.util.Map;
@@ -40,8 +40,8 @@ public class RequestCache
     private static ThreadLocal<Bean<WindowContextManager>> windowContextManagerBeanCache
             = new ThreadLocal<Bean<WindowContextManager>>();
 
-    private static ThreadLocal<Map<ConversationKey, Conversation>> conversationCache
-            = new ThreadLocal<Map<ConversationKey, Conversation>>();
+    private static ThreadLocal<Map<ConversationKey, EditableConversation>> conversationCache
+            = new ThreadLocal<Map<ConversationKey, EditableConversation>>();
 
     public static void resetCache()
     {
@@ -121,23 +121,23 @@ public class RequestCache
         windowIdCache.set(windowId);
     }
 
-    public static Conversation getConversation(ConversationKey conversationKey)
+    public static EditableConversation getConversation(ConversationKey conversationKey)
     {
         return getConversationCache().get(conversationKey);
     }
 
-    public static void setConversation(ConversationKey conversationKey, Conversation conversation)
+    public static void setConversation(ConversationKey conversationKey, EditableConversation conversation)
     {
         getConversationCache().put(conversationKey, conversation);
     }
 
-    private static Map<ConversationKey, Conversation> getConversationCache()
+    private static Map<ConversationKey, EditableConversation> getConversationCache()
     {
-        Map<ConversationKey, Conversation> conversationMap = conversationCache.get();
+        Map<ConversationKey, EditableConversation> conversationMap = conversationCache.get();
 
         if(conversationMap == null)
         {
-            conversationMap = new HashMap<ConversationKey, Conversation>();
+            conversationMap = new HashMap<ConversationKey, EditableConversation>();
             conversationCache.set(conversationMap);
         }
         return conversationMap;

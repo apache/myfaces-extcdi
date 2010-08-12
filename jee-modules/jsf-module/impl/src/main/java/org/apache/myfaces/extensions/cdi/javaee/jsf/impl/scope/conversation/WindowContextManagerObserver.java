@@ -30,11 +30,9 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.EditableConversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.enterprise.event.Observes;
 import javax.faces.event.PhaseEvent;
@@ -50,18 +48,22 @@ final class WindowContextManagerObserver
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
-                           WindowContextManager windowContextManager)
+                           EditableWindowContextManager windowContextManager,
+                           ConfigResolver configResolver)
     {
-        WindowContext windowContext = windowContextManager.getCurrentWindowContext();
         if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
         {
-            boolean continueRequest = processGetRequest(phaseEvent.getFacesContext(), windowContext.getConfig());
+            //don't use the config of the current window context - it would trigger a touch
+            boolean continueRequest = processGetRequest(
+                    phaseEvent.getFacesContext(), configResolver.resolve(JsfAwareWindowContextConfig.class));
+            
             if (!continueRequest)
             {
                 return;
             }
         }
 
+        EditableWindowContext windowContext = (EditableWindowContext)windowContextManager.getCurrentWindowContext();
         //don't refactor it to a lazy restore
         storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), windowContext);
 
@@ -152,16 +154,16 @@ final class WindowContextManagerObserver
     }
 
     //don't cleanup all window contexts (it would cause a side-effect with the access-scope and multiple windows
-    private void cleanupInactiveConversations(WindowContext windowContext)
+    private void cleanupInactiveConversations(EditableWindowContext windowContext)
     {
-        for (Conversation conversation : ((EditableWindowContext)windowContext).getConversations().values())
+        for (EditableConversation conversation : windowContext.getConversations().values())
         {
-            if (!((EditableConversation)conversation).isActive())
+            if (!conversation.isActive())
             {
                 conversation.end();
             }
         }
 
-        ((EditableWindowContext)windowContext).removeInactiveConversations();
+        windowContext.removeInactiveConversations();
     }
 }

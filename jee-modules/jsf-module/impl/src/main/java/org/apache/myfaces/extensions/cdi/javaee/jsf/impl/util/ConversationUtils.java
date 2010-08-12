@@ -390,13 +390,12 @@ public class ConversationUtils
 
     public static boolean cleanupInactiveWindowContexts(EditableWindowContextManager windowContextManager)
     {
-        Collection<WindowContext> windowContexts = windowContextManager.getWindowContexts();
+        Collection<EditableWindowContext> windowContexts = windowContextManager.getWindowContexts();
         int count = windowContexts.size();
 
-        for (WindowContext windowContext : windowContexts)
+        for (EditableWindowContext windowContext : windowContexts)
         {
-            if(windowContext instanceof EditableWindowContext &&
-                    isEligibleForCleanup((EditableWindowContext)windowContext))
+            if(isEligibleForCleanup(windowContext))
             {
                 windowContextManager.removeWindowContext(windowContext);
             }

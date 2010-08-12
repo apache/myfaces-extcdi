@@ -153,24 +153,24 @@ public abstract class AbstractConversationContextAdapter implements Context
     protected abstract WindowContextManager resolveWindowContextManager();
 
     /**
-     * @param conversationManager the current
+     * @param windowContextManager the current
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
      * @param beanDescriptor      descriptor of the requested bean
      * @return the instance of the requested bean if it exists in the current
      *         {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
      *         null otherwise
      */
-    protected abstract <T> T resolveBeanInstance(WindowContextManager conversationManager, Bean<T> beanDescriptor);
+    protected abstract <T> T resolveBeanInstance(WindowContextManager windowContextManager, Bean<T> beanDescriptor);
 
     /**
      * Store the given bean in the
      * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
      *
-     * @param conversationManager current
+     * @param windowContextManager current
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
      * @param beanEntry           current bean-entry
      */
-    protected abstract <T> void scopeBeanEntry(WindowContextManager conversationManager, BeanEntry<T> beanEntry);
+    protected abstract <T> void scopeBeanEntry(WindowContextManager windowContextManager, BeanEntry<T> beanEntry);
 
     protected abstract ConversationConfig getConversationConfig();
 }

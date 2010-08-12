@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 import java.util.Collection;
@@ -65,7 +64,7 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
             EditableWindowContextManager editableWindowContextManager =
                     (EditableWindowContextManager)windowContextManager;
 
-            Collection<WindowContext> activeWindowContexts = editableWindowContextManager.getWindowContexts();
+            Collection<EditableWindowContext> activeWindowContexts = editableWindowContextManager.getWindowContexts();
 
             int activeWindowContextCountBeforeCleanup = activeWindowContexts.size();
 
@@ -80,9 +79,9 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
     }
 
     private void removeEldestWindowContext(EditableWindowContextManager editableWindowContextManager,
-                                           Collection<WindowContext> activeWindowContexts)
+                                           Collection<EditableWindowContext> activeWindowContexts)
     {
-        WindowContext windowContextToRemove = findEldestWindowContext(activeWindowContexts);
+        EditableWindowContext windowContextToRemove = findEldestWindowContext(activeWindowContexts);
 
         if(windowContextToRemove != null)
         {
@@ -90,19 +89,16 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
         }
     }
 
-    private WindowContext findEldestWindowContext(Collection<WindowContext> activeWindowContexts)
+    private EditableWindowContext findEldestWindowContext(Collection<EditableWindowContext> activeWindowContexts)
     {
         Date lastAccess = new Date();
-        WindowContext result = null;
-        for(WindowContext windowContext : activeWindowContexts)
+        EditableWindowContext result = null;
+        for(EditableWindowContext windowContext : activeWindowContexts)
         {
-            if(windowContext instanceof EditableWindowContext)
+            if(lastAccess.after(windowContext.getLastAccess()))
             {
-                if(lastAccess.after(((EditableWindowContext)windowContext).getLastAccess()))
-                {
-                    lastAccess = ((EditableWindowContext)windowContext).getLastAccess();
-                    result = windowContext;
-                }
+                lastAccess = windowContext.getLastAccess();
+                result = windowContext;
             }
         }
         return result;
