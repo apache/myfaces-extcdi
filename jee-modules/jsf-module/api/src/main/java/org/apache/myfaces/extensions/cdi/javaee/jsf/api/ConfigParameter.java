@@ -40,14 +40,10 @@ public interface ConfigParameter
 
     static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = false;
 
-    //TODO impl. should encode just the page url - otherwise we have to rename this config entry
-    @Deprecated
     static final String ADD_WINDOW_ID_TO_ACTION_URL_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "ADD_WINDOW_ID_TO_ACTION_URL_ENABLED";
 
-    //for now we need the default 'true' due to the default approach
-    @Deprecated
-    static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = true;
+    static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = false;
 
     static final String DISABLE_INITIAL_REDIRECT =
             CoreCodiConfigParameter.BASE_NAME + "DISABLE_INITIAL_REDIRECT";
