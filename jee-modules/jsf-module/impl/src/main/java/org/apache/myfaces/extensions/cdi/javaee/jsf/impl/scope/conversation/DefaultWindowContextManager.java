@@ -62,6 +62,10 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
 
+    private boolean allowUnknownWindowIds = false;
+
+    private boolean urlParameterSupported = true;
+
     private WindowHandler windowHandler;
 
     private boolean projectStageDevelopment;
@@ -80,6 +84,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     {
         this.windowHandler = this.jsfAwareWindowContextConfig.getWindowHandler();
         this.windowContextQuotaHandler = this.jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
+        this.allowUnknownWindowIds = this.jsfAwareWindowContextConfig.isUnknownWindowIdsAllowed();
+        this.urlParameterSupported = this.jsfAwareWindowContextConfig.isUrlParameterSupported();
 
         this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
     }
@@ -94,7 +100,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
 
         String windowContextId =
-                resolveWindowContextId(this.jsfAwareWindowContextConfig.isUrlParameterSupported(), this.windowHandler);
+                resolveWindowContextId(this.windowHandler, this.urlParameterSupported, this.allowUnknownWindowIds);
 
         if (windowContextId == null)
         {
@@ -128,7 +134,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             //however - such a cleanup shouldn't occur during development
             windowContextId = convertToDevWindowContextId(windowContextId, getNumberOfNextWindowContext());
         }
-        cacheWindowId(windowContextId);
+        cacheWindowId(windowContextId, this.allowUnknownWindowIds);
         return windowContextId;
     }
 
@@ -188,7 +194,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             windowContextIdHolder.changeWindowContextId(windowContext.getId());
         }
 
-        return cacheWindowId(facesContext.getExternalContext(), windowContext.getId());
+        return cacheWindowId(facesContext.getExternalContext(), windowContext.getId(), this.allowUnknownWindowIds);
     }
 
     public void resetCurrentWindowContext()

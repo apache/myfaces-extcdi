@@ -162,7 +162,9 @@ public class ConversationUtils
     }
 
     //TODO
-    public static String resolveWindowContextId(boolean requestParameterSupported, WindowHandler windowHandler)
+    public static String resolveWindowContextId(WindowHandler windowHandler,
+                                                boolean requestParameterSupported,
+                                                boolean allowUnknownWindowIds)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
@@ -183,7 +185,7 @@ public class ConversationUtils
             id = tryToRestoreWindowIdFromRequestParameterMap(requestParameterSupported, requestParameterMap);
         }
 
-        if(id != null && !cacheWindowId(externalContext, id))
+        if(id != null && !cacheWindowId(externalContext, id, allowUnknownWindowIds))
         {
             id = null;
         }
@@ -222,9 +224,9 @@ public class ConversationUtils
         return idViaGetRequest;
     }
 
-    public static void cacheWindowId(String id)
+    public static void cacheWindowId(String id, boolean allowUnknownWindowIds)
     {
-        cacheWindowId(FacesContext.getCurrentInstance().getExternalContext(), id);
+        cacheWindowId(FacesContext.getCurrentInstance().getExternalContext(), id, allowUnknownWindowIds);
     }
 
     /**
@@ -232,7 +234,7 @@ public class ConversationUtils
      * @param id windowId
      * @return false if the id doesn't exist in the storage (e.g. in case of bookmarks)
      */
-    public static boolean cacheWindowId(ExternalContext externalContext, String id)
+    public static boolean cacheWindowId(ExternalContext externalContext, String id, boolean allowUnknownWindowIds)
     {
         Map<String, Object> sessionMap = externalContext.getSessionMap();
         Set<String> existingWindowIdSet = (Set)sessionMap.get(EXISTING_WINDOW_ID_SET_KEY);
@@ -243,7 +245,7 @@ public class ConversationUtils
             sessionMap.put(EXISTING_WINDOW_ID_SET_KEY, existingWindowIdSet);
         }
 
-        if(!existingWindowIdSet.contains(id))
+        if(!allowUnknownWindowIds && !existingWindowIdSet.contains(id))
         {
             return false;
         }

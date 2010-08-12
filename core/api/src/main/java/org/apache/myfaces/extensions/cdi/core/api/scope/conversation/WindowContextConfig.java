@@ -28,6 +28,8 @@ public interface WindowContextConfig extends Serializable
     //deactivate it e.g. for higher security
     boolean isUrlParameterSupported();
 
+    boolean isUnknownWindowIdsAllowed();
+
     int getWindowContextTimeoutInMinutes();
 
     int getMaxWindowContextCount();

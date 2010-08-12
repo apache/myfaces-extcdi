@@ -84,6 +84,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(URL_PARAMETER_ENABLED, Boolean.class);
     }
 
+    public boolean isUnknownWindowIdsAllowed()
+    {
+        lazyInit();
+        return getAttribute(ALLOW_UNKNOWN_WINDOW_IDS, Boolean.class);
+    }
+
     public int getWindowContextTimeoutInMinutes()
     {
         lazyInit();
@@ -178,6 +184,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         configInitialized = true;
 
         initUrlParameterEnabled(facesContext);
+        initAllowUnknownWindowIds(facesContext);
         initMaxWindowContextCount(facesContext, ProjectStage.SystemTest.equals(currentProjectStage));
         initWindowContextTimeout(facesContext);
         initConversationTimeout(facesContext);
@@ -188,6 +195,12 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     private void initUrlParameterEnabled(FacesContext facesContext)
     {
         initConfig(facesContext, URL_PARAMETER_ENABLED, new BooleanConfigValueParser(), URL_PARAMETER_ENABLED_DEFAULT);
+    }
+
+    private void initAllowUnknownWindowIds(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ALLOW_UNKNOWN_WINDOW_IDS, new BooleanConfigValueParser(), ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT);
     }
 
     private void initMaxWindowContextCount(FacesContext facesContext, boolean inProjectStageSystemTest)

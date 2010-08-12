@@ -31,7 +31,6 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.enterprise.event.Observes;
@@ -100,17 +99,12 @@ final class WindowContextManagerObserver
      * @param config window config
      * @return true if the current request should be continued
      */
-    private boolean processGetRequest(FacesContext facesContext, WindowContextConfig config)
+    private boolean processGetRequest(FacesContext facesContext, JsfAwareWindowContextConfig config)
     {
-        boolean isUrlParameterSupported = config.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = true;
+        boolean urlParameterSupported = config.isUrlParameterSupported();
+        boolean useWindowIdForFirstPage = !config.isInitialRedirectDisable();
 
-        if(config instanceof JsfAwareWindowContextConfig)
-        {
-            useWindowIdForFirstPage = !((JsfAwareWindowContextConfig)config).isInitialRedirectDisable();
-        }
-
-        if(!isUrlParameterSupported)
+        if(!urlParameterSupported)
         {
             useWindowIdForFirstPage = false;
         }
@@ -126,7 +120,7 @@ final class WindowContextManagerObserver
             }
 
             WindowHandler windowHandler = ConversationUtils.getWindowHandler();
-            windowId = resolveWindowContextId(isUrlParameterSupported, windowHandler);
+            windowId = resolveWindowContextId(windowHandler, urlParameterSupported, config.isUnknownWindowIdsAllowed());
 
             if(windowId == null)
             {
