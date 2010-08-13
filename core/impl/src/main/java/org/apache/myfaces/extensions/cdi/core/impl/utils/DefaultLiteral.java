@@ -23,7 +23,6 @@ import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * Literal for the {@link Default} annotation.
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class DefaultLiteral extends AnnotationLiteral<Default> implements Default
 {

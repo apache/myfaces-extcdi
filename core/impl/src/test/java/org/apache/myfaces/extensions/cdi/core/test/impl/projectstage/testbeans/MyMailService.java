@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
 
 /**
  * Test mailservice interface
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public interface MyMailService {
 

@@ -25,7 +25,6 @@ import org.testng.annotations.Test;
 
 
 /**
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class ProjectStageProducerTest
 {

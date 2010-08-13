@@ -30,7 +30,6 @@ import javax.faces.context.FacesContext;
  * {@link javax.faces.application.ProjectStage#Production}, we'll go on
  * and try to figure out our own EXTCDI 
  * {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}s
- * @author <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class Jsf2ProjectStageProducer extends ProjectStageProducer
 {

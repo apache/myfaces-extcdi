@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageHolder;
 
 /**
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class TestProjectStages implements ProjectStageHolder
 {

@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
 
 /**
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class MyMailServiceImpl implements MyMailService
 {

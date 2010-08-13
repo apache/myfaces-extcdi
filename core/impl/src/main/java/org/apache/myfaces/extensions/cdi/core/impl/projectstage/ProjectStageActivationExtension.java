@@ -34,7 +34,6 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActiv
  * the current {@link ProjectStage} is not in the list, we simply
  * veto that bean.</p>
  *
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class ProjectStageActivationExtension implements Extension
 {

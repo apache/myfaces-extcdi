@@ -38,7 +38,6 @@ import java.lang.annotation.Target;
  * public class MockMailServiceImpl implements MailService {...}
  * </pre>
  *
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

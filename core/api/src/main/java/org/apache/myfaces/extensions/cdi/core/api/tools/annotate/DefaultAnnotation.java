@@ -36,8 +36,6 @@ import java.io.Serializable;
  * Annotation a = DefaultAnnotation.of(annotationClass)
  * </pre>
  *
- * @author Mark Struberg
- * @author Gerhard Petracek
  */
 public class DefaultAnnotation implements InvocationHandler, Serializable
 {

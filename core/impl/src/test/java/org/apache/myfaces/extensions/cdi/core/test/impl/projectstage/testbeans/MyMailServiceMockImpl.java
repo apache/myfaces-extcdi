@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActiv
 import javax.enterprise.inject.Alternative;
 
 /**
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 @Alternative
 @ProjectStageActivated({ProjectStage.CUnitTest.class, ProjectStage.CDevelopment.class})

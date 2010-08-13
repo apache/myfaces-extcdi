@@ -23,7 +23,6 @@ package org.apache.myfaces.extensions.cdi.core.api.projectstage;
  * stage holders. A project stage holder is a class which
  * contains 1 or many {@link ProjectStage}s.
  * 
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public interface ProjectStageHolder 
 {

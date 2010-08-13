@@ -25,7 +25,6 @@ import org.testng.annotations.Test;
 
 /**
  * Test for {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class ProjectStageTest {
 

@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class ContainerTestBase
 {

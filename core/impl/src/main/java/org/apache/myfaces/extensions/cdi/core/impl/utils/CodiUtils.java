@@ -35,7 +35,6 @@ import java.lang.annotation.Annotation;
 /**
  * This is a collection of a few useful static helper functions.
  * <p/>
- * <a href="mailto:struberg@yahoo.de">Mark Struberg</a>
  */
 public class CodiUtils
 {
