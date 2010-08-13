@@ -25,9 +25,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.windowContextNotEditableException;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.*;
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.resolveWindowContextId;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.windowContextNotEditableException;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -41,7 +40,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
@@ -71,6 +69,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     private boolean projectStageDevelopment;
 
     private WindowContextQuotaHandler windowContextQuotaHandler;
+
+    //TODO add config + refactor DefaultWindowContextManager
+    private static final int DEFAULT_WINDOW_KEY_LENGTH = 3;
 
     protected DefaultWindowContextManager(JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
                                           ProjectStage projectStage)
@@ -118,6 +119,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     {
         String windowContextId = this.windowHandler.createWindowId();
 
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
         if(this.windowContextQuotaHandler.checkQuota(getNumberOfNextWindowContext()))
         {
             if(!cleanupInactiveWindowContexts(this))
@@ -134,7 +137,10 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             //however - such a cleanup shouldn't occur during development
             windowContextId = convertToDevWindowContextId(windowContextId, getNumberOfNextWindowContext());
         }
-        cacheWindowId(windowContextId, this.allowUnknownWindowIds);
+
+        storeCreatedWindowContextId(externalContext, windowContextId);
+        cacheWindowId(externalContext, windowContextId, this.allowUnknownWindowIds);
+
         return windowContextId;
     }
 
@@ -260,7 +266,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         removeWindowContextIdHolderComponent(facesContext);
 
         //reset existing information
-        getExistingWindowIdSet(externalContext).remove(windowContext.getId());
+        removeExistingWindowId(externalContext, windowContext.getId());
         externalContext.getRequestMap().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
         windowContext.endConversations();
@@ -285,16 +291,13 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private String convertToDevWindowContextId(String windowContextId, int currentWindowContextCount)
     {
-        Set<String> windowContextIdSet =
-                ConversationUtils.getExistingWindowIdSet(FacesContext.getCurrentInstance().getExternalContext());
+        String devWindowContextId = currentWindowContextCount + windowContextId;
 
-        if(windowContextIdSet.remove(windowContextId))
+        if(devWindowContextId.length() > DEFAULT_WINDOW_KEY_LENGTH + ("" + currentWindowContextCount).length())
         {
-            String devWindowContextId = currentWindowContextCount + windowContextId;
-            windowContextIdSet.add(devWindowContextId);
-            return devWindowContextId;
+            return windowContextId;
         }
-        return windowContextId;
+        return devWindowContextId;
     }
 
     public Collection<EditableWindowContext> getWindowContexts()

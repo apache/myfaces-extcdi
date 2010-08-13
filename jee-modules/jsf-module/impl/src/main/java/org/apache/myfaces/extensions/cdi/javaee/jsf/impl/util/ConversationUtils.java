@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * internal! utils
@@ -200,14 +201,22 @@ public class ConversationUtils
 
         if (windowContextIdHolder != null)
         {
-            requestMap.put(
-                    WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowContextIdHolder.getWindowContextId());
-
             //TODO cache for request
-            return windowContextIdHolder.getWindowContextId();
+            id = windowContextIdHolder.getWindowContextId();
+
+            if(id != null && !cacheWindowId(externalContext, id, allowUnknownWindowIds))
+            {
+                id = null;
+            }
+
+            if(id != null)
+            {
+                requestMap.put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY,
+                               windowContextIdHolder.getWindowContextId());
+            }
         }
 
-        return null;
+        return id;
     }
 
     private static String tryToRestoreWindowIdFromRequestParameterMap(
@@ -222,11 +231,6 @@ public class ConversationUtils
         }
 
         return idViaGetRequest;
-    }
-
-    public static void cacheWindowId(String id, boolean allowUnknownWindowIds)
-    {
-        cacheWindowId(FacesContext.getCurrentInstance().getExternalContext(), id, allowUnknownWindowIds);
     }
 
     /**
@@ -376,7 +380,23 @@ public class ConversationUtils
         return RequestCache.getWindowContextManager();
     }
 
+    public static boolean removeExistingWindowId(ExternalContext externalContext, String windowContextId)
+    {
+        return getEditableWindowIdSet(externalContext).remove(windowContextId);
+    }
+
     public static Set<String> getExistingWindowIdSet(ExternalContext externalContext)
+    {
+        Set<String> existingWindowIdSet = getEditableWindowIdSet(externalContext);
+        return Collections.unmodifiableSet(existingWindowIdSet);
+    }
+
+    public static void storeCreatedWindowContextId(ExternalContext externalContext, String windowContextId)
+    {
+        getEditableWindowIdSet(externalContext).add(windowContextId);
+    }
+
+    private static Set<String> getEditableWindowIdSet(ExternalContext externalContext)
     {
         Map<String, Object> sessionMap = externalContext.getSessionMap();
 

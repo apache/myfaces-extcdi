@@ -22,8 +22,11 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
+        .getExistingWindowIdSet;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils
+        .getWindowContextIdHolderComponent;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -88,13 +91,20 @@ public class DefaultWindowHandler implements WindowHandler
     //TODO add a counter in case of project stage dev
     public String createWindowId()
     {
+        String oldWindowContextId = resolveExpiredWindowContextId();
+
+        if(oldWindowContextId != null)
+        {
+            return oldWindowContextId;
+        }
+
         String uuid = UUID.randomUUID().toString().replace("-", "");
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
         synchronized (externalContext.getSessionMap())
         {
-            Set<String> existingWindowIdSet = ConversationUtils.getExistingWindowIdSet(externalContext);
+            Set<String> existingWindowIdSet = getExistingWindowIdSet(externalContext);
 
             String shortUuid;
             int startIndex = 0;
@@ -110,10 +120,24 @@ public class DefaultWindowHandler implements WindowHandler
                 }
                 startIndex++;
             }
-            existingWindowIdSet.add(uuid);
         }
 
         return uuid;
+    }
+
+    //to avoid inconsistent behavior in case of re-activated but expired windows in combination with browser refreshes
+    //-> get and recycle old id to avoid a redirect
+    private String resolveExpiredWindowContextId()
+    {
+        WindowContextIdHolderComponent windowContextIdHolderComponent =
+                getWindowContextIdHolderComponent(FacesContext.getCurrentInstance());
+
+        if(windowContextIdHolderComponent == null)
+        {
+            return null;
+        }
+
+        return windowContextIdHolderComponent.getWindowContextId();
     }
 
     public String restoreWindowId(ExternalContext externalContext)

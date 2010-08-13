@@ -61,6 +61,7 @@ public class WindowContextIdHolderComponent extends UIOutput
 
         this.windowContextId = (String) values[1];
 
+        //TODO test if we can remove the request-map based cache (there is a new approach)
         facesContext.getExternalContext().getRequestMap()
                 .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, this.windowContextId);
     }
