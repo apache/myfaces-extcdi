@@ -57,7 +57,7 @@ public class CodiUtils
 
         if(foundBeans.size() != 1)
         {
-            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName());
+            throw new IllegalStateException(foundBeans.size() + " beans found with name: " + beanName);
         }
 
         //noinspection unchecked

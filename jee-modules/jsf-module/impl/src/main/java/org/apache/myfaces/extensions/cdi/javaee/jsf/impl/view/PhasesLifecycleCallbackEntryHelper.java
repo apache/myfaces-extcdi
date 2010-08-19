@@ -18,36 +18,43 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId.convertToFacesClass;
 
-import javax.enterprise.event.Observes;
-import javax.faces.event.PhaseEvent;
+import java.lang.reflect.Method;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
  */
-final class PreRenderViewBeanLoader
+class PhasesLifecycleCallbackEntryHelper
 {
-    protected void initBeans(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
+    private Map<javax.faces.event.PhaseId, List<Method>> methods
+            = new HashMap<javax.faces.event.PhaseId, List<Method>>();
+
+    void add(PhaseId phaseId, Method method)
     {
-        String viewId = event.getFacesContext().getViewRoot().getViewId();
+        javax.faces.event.PhaseId id = convertToFacesClass(phaseId);
+        List<Method> methodList = this.methods.get(id);
 
-        ViewDefinitionEntry viewDefinitionEntry = ViewDefinitionCache.getViewDefinition(viewId);
-
-        if(viewDefinitionEntry == null)
+        if(methodList == null)
         {
-            return;
+            methodList = new ArrayList<Method>();
+            methods.put(id, methodList);
         }
+        methodList.add(method);
+    }
 
-        List<PageBeanDefinitionEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
+    boolean isEmpty()
+    {
+        return methods.isEmpty();
+    }
 
-        for(PageBeanDefinitionEntry beanEntry : beanEntries)
-        {
-            //resolve bean to trigger @PostConstruct if it isn't scoped
-            CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);
-        }
+    List<Method> getMethodsFor(javax.faces.event.PhaseId phaseId)
+    {
+        return methods.get(phaseId);
     }
 }

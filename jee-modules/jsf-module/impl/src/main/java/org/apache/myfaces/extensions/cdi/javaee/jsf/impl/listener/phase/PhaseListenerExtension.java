@@ -49,6 +49,7 @@ public class PhaseListenerExtension implements Extension
     {
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(JsfPhaseListener.class))
         {
+            //TODO check config if phase-listener is deactivated
             addPhaseListener(processAnnotatedType);
 
             processAnnotatedType.veto();

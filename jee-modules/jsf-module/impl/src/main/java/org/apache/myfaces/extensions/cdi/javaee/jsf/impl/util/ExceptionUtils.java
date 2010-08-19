@@ -24,10 +24,16 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
+
+import javax.faces.event.PhaseId;
+import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
  */
+//TODO create CODI exceptions
 public class ExceptionUtils
 {
     public static RuntimeException tooManyOpenWindowException(int windowContextTimeoutInMinutes)
@@ -58,5 +64,23 @@ public class ExceptionUtils
     public static RuntimeException invalidViewException(String viewId)
     {
         return new RuntimeException("View-ID: " + viewId + " doesn't exist.");
+    }
+
+    public static IllegalArgumentException invalidPhasesCallbackMethod(Class targetClass, Method method)
+    {
+        return new IllegalArgumentException(targetClass.getName() + "#" + method.getName() + " is annotated with " +
+                BeforePhase.class.getName() + " or " + AfterPhase.class.getName() +
+                " and the method signature isn't supported. " +
+                "Supported arguments: no-args or one parameter of type: " +
+                PhaseId.class.getName());
+    }
+
+    public static IllegalStateException unsupportedPhasesLifecycleCallback()
+    {
+        return new IllegalStateException("The usage of @ + " + BeforePhase.class.getName() +
+                "(PhaseId.RESTORE_VIEW) as well as @" + BeforePhase.class.getName() + "(PhaseId.ANY_PHASE) "+
+                "is not supported as request-lifecycle-callback. " +
+                "If you really need it, use an phases-observer-method e.g.: " +
+                "protected void preRestoreView(@Observes @BeforePhase(PhaseId.RESTORE_VIEW) PhaseEvent event) ");
     }
 }
