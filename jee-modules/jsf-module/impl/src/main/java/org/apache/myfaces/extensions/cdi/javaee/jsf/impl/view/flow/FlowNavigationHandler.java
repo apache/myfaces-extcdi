@@ -56,8 +56,14 @@ public class FlowNavigationHandler extends NavigationHandler
     {
         if(outcome != null && outcome.contains("."))
         {
+            String originalOutcome = outcome;
+
             if(!otherOutcomes.contains(outcome))
             {
+                if(outcome.startsWith("class "))
+                {
+                    outcome = outcome.substring(6);
+                }
                 ViewDefinitionEntry entry = viewDefinitions.get(outcome);
 
                 if(entry == null)
@@ -66,7 +72,7 @@ public class FlowNavigationHandler extends NavigationHandler
 
                     if(loadedClass == null)
                     {
-                        otherOutcomes.add(outcome);
+                        otherOutcomes.add(originalOutcome);
                     }
                     else if(loadedClass instanceof Class && ViewDefinition.class.isAssignableFrom((Class)loadedClass))
                     {
