@@ -86,7 +86,7 @@
         <myfaces2.version>2.0.1</myfaces2.version>
         <mojarra2.version>2.0.3-b03</mojarra2.version>
 
-        <!-- JSF-1.1 implementations-->
+        <!-- JSF-1.2 implementations-->
         <myfaces1.version>1.2.8</myfaces1.version>
         <mojarra1.version>1.2_14</mojarra1.version>
 
