@@ -25,11 +25,11 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>8</version>
+        <version>9</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
-    <artifactId>myfaces-extcdi-module</artifactId>
+    <artifactId>myfaces-extcdi-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Apache MyFaces CODI</name>
@@ -48,18 +48,29 @@
         </site>
     </distributionManagement>
 
-    <!-- WARNING: DO NOT GENERATE SITE FROM HERE DIRECTLY
-    Since this project has an async release procedure (not
-    all modules should be released at once), the parent pom.xml 
-    is not this (there is a module for that). Use maven site 
-    plugin here cause problems when the site is generated.
-    The procedure must execute site commmand first on parent 
-    module and then on each module listed below. 
-     -->
+    <issueManagement>
+        <system>jira</system>
+        <url>http://issues.apache.org/jira/browse/EXTCDI</url>
+    </issueManagement>
 
+    <ciManagement>
+        <system>continuum</system>
+        <url>http://myfaces.zones.apache.org:8080/continuum</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <sendOnSuccess>true</sendOnSuccess>
+                <configuration>
+                    <address>commits@myfaces.apache.org</address>
+                </configuration>
+            </notifier>
+        </notifiers>
+    </ciManagement>
+
+    <inceptionYear>2008</inceptionYear>
 
     <modules>
-        <module>parent</module>
+        <module>site</module>
         <module>core</module>
         <module>jee-modules</module>
         <module>jse-modules</module>
@@ -68,30 +79,413 @@
         <module>dist</module>
     </modules>
 
+    <properties>
+        <owb.version>1.0.0-alpha-1</owb.version>
+
+        <!-- JSF-2.0 implementations-->
+        <myfaces2.version>2.0.1</myfaces2.version>
+        <mojarra2.version>2.0.3-b03</mojarra2.version>
+
+        <!-- JSF-1.1 implementations-->
+        <myfaces1.version>1.2.8</myfaces1.version>
+        <mojarra1.version>1.2_14</mojarra1.version>
+
+        <maven.jetty.plugin.version>7.1.5.v20100705</maven.jetty.plugin.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- OWB specific dependencies-->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+                <version>1.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-impl</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-spi</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-web</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-jsf</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans.test</groupId>
+                <artifactId>cditest</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans.test</groupId>
+                <artifactId>cditest-owb</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+
+
+            <!-- the JSF independent core -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+                <artifactId>myfaces-extcdi-core-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+                <artifactId>myfaces-extcdi-core-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- the JSF-1.2 specific library -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- the JSF-2.0 specific library, which includes the JSF-1.2 parts -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- the BV-1.0 specific library -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+                <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- CODI-I18N Message Module -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+                <artifactId>myfaces-extcdi-message-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+                <artifactId>myfaces-extcdi-message-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!--
+                We currently need this for the CDI test container to emulate the @SessionScoped.
+                TODO: Finally this should not be necessary anymore.
+            -->
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-servlet_2.5_spec</artifactId>
+                <version>1.2</version>
+                <scope>test</scope>
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-el_2.2_spec</artifactId>
+                <version>1.0-beta</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-validation_1.0_spec</artifactId>
+                <version>1.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-validation_1.0_spec</artifactId>
+                <version>1.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
+    <!-- These dependencies are needed for each and every module in this project -->
+    <dependencies>
+
+        <!-- atinject and cdi specs for OWB-->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jcdi_1.0_spec</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- the interceptors spec from EE6 -->
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-interceptor_1.1_spec</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- we use testng for testing -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <classifier>jdk15</classifier>
+            <version>5.1</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+
+        <plugins>
+            <plugin>
+                <!--
+                    - Copy LICENSE.txt and NOTICE.txt so that they are included
+                    - in the -javadoc jar file for the component.
+                -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>javadoc.resources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <copy todir="${project.build.directory}/apidocs/META-INF">
+                                    <fileset dir="${basedir}">
+                                        <include name="LICENSE.txt"/>
+                                        <include name="NOTICE.txt"/>
+                                    </fileset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>javadoc.site.copy</id>
+                        <phase>site</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <!-- Copy javadoc to another directory, to keep javadoc of previous versions on site -->
+                                <copy todir="${project.build.directory}/site/apidocs-${project.version}"
+                                      failonerror="false">
+                                    <fileset dir="${project.build.directory}/site/apidocs"/>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+                - Make a checkstyle violation a compile error. Note that if a compile error occurs,
+                - further information can be found in target/site/checkstyle.html (present even when
+                - just the compile goal and not the site goal has been run). Note also that child
+                - projects may redeclare this plugin and provide different configuration settings
+                - to use different checks (more or less strict than the default).
+            -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>verify-style</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <configLocation>default/myfaces-checks-standard.xml</configLocation>
+                    <headerLocation>default/myfaces-header.txt</headerLocation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <!-- Set compile source at 1.5, since the target JSF impl is 1.2 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                    <optimize>false</optimize>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <preparationGoals>clean install</preparationGoals>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+<!--
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.1</version>
+            </plugin>
+-->
+<!--
+            <plugin>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.4.3</version>
+            </plugin>
+-->
+<!--
+            <plugin>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>2.0.1</version>
+            </plugin>
+-->
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <rulesets>
+                        <ruleset>/rulesets/basic.xml</ruleset>
+                        <ruleset>/rulesets/unusedcode.xml</ruleset>
+                    </rulesets>
+                    <linkXref>true</linkXref>
+                    <minimumTokens>100</minimumTokens>
+                    <targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <configLocation>default/myfaces-checks-standard.xml</configLocation>
+                    <headerLocation>default/myfaces-header.txt</headerLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>    
+
     <profiles>
-        <!-- This profile is invoked by -DprepareRelease=true.  This allows mvn release:prepare to
-            run successfully on the assembly projects. -->
         <profile>
-            <id>prepare-release</id>
+            <!-- use this profile to test CODI with mojarra-->
+            <id>mojarra</id>
+            <repositories>
+                <repository>
+                    <id>maven2-repository.dev.java.net</id>
+                    <name>Java.net Repository for Maven</name>
+                    <url>http://download.java.net/maven/1/</url>
+                    <layout>legacy</layout>
+                </repository>
+            </repositories>
+        </profile>
+
+        <profile>
+            <id>generate-assembly</id>
             <activation>
                 <property>
-                    <name>prepareRelease</name>
+                    <name>performRelease</name>
+                    <value>true</value>
                 </property>
             </activation>
-            <modules>
-                <module>assembly</module>
-            </modules>
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <configuration>
-                            <arguments>-DprepareRelease</arguments>
-                        </configuration>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.3</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
-        </profile>
+        </profile>        
     </profiles>
 
 </project>

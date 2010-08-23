@@ -33,22 +33,22 @@ public interface ConfigParameter
     static final String URL_PARAMETER_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "URL_PARAMETER_ENABLED";
 
-    static final boolean URL_PARAMETER_ENABLED_DEFAULT = true;
+    static final boolean URL_PARAMETER_ENABLED_DEFAULT = false;
 
     static final String ALLOW_UNKNOWN_WINDOW_IDS =
             CoreCodiConfigParameter.BASE_NAME + "ALLOW_UNKNOWN_WINDOW_IDS";
 
-    static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = false;
+    static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = true;
 
     static final String ADD_WINDOW_ID_TO_ACTION_URL_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "ADD_WINDOW_ID_TO_ACTION_URL_ENABLED";
 
-    static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = false;
+    static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = true;
 
     static final String DISABLE_INITIAL_REDIRECT =
             CoreCodiConfigParameter.BASE_NAME + "DISABLE_INITIAL_REDIRECT";
 
-    static final boolean DISABLE_INITIAL_REDIRECT_DEFAULT = false;
+    static final boolean DISABLE_INITIAL_REDIRECT_DEFAULT = true;
 
     static final String CONVERSATION_TIMEOUT =
             CoreCodiConfigParameter.BASE_NAME + "CONVERSATION_TIMEOUT";
@@ -63,7 +63,7 @@ public interface ConfigParameter
     static final String MAX_WINDOW_CONTEXT_COUNT =
             CoreCodiConfigParameter.BASE_NAME + "MAX_WINDOW_CONTEXT_COUNT";
 
-    static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 64;
+    static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 128;
 
     static final String ENABLE_SCOPE_BEAN_EVENT =
             CoreCodiConfigParameter.BASE_NAME + "ENABLE_SCOPE_BEAN_EVENT";
