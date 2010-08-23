@@ -37,12 +37,7 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/examples</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/branches/1_0_0_rc/examples</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/branches/1_0_0_rc/examples</url>
-    </scm>
-    
+
     <modules>
         <module>jsf-examples</module>
     </modules>
