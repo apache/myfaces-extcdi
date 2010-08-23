@@ -37,6 +37,8 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 {
     private FacesContext wrappedFacesContext;
 
+    private ExternalContext wrappedExternalContext;
+
     private BeanManager beanManager;
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
@@ -44,6 +46,9 @@ class CodiFacesContextWrapper extends FacesContextWrapper
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
+
+        this.wrappedExternalContext =
+                new RedirectedConversationAwareExternalContext(wrappedFacesContext.getExternalContext());
 
         setCurrentInstance(this);
         //(currently) causes issue in combination with geronimo 3.0-m1
@@ -76,7 +81,7 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     public ExternalContext getExternalContext()
     {
-        return new RedirectedConversationAwareExternalContext(wrappedFacesContext.getExternalContext());
+        return wrappedExternalContext;
     }
 
     public void release()
