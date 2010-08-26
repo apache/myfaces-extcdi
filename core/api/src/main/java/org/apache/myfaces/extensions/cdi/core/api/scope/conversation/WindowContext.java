@@ -60,6 +60,7 @@ public interface WindowContext extends AttributeAware, Serializable
 
     /**
      * invalidate the whole {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * it also invalidates all <i>Codi</i> conversations immediately.
      */
     void end();
 
