@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
@@ -94,14 +95,16 @@ public class PhaseListenerExtension implements Extension
     //current workaround some servers
     public static List<PhaseListener> consumePhaseListeners()
     {
-        ClassLoader cl = ClassUtils.getClassLoader(null);
-        List<PhaseListener> plList = phaseListeners.get(cl);
+        ClassLoader classLoader = ClassUtils.getClassLoader(null);
+        List<PhaseListener> foundPhaseListeners = phaseListeners.get(classLoader);
 
-        if(plList != null && ! plList.isEmpty())
+        if(foundPhaseListeners != null && ! foundPhaseListeners.isEmpty())
         {
-            List<PhaseListener> result = new ArrayList<PhaseListener>(plList.size());
-            result.addAll(plList);
-            plList.clear();
+            List<PhaseListener> result = new ArrayList<PhaseListener>(foundPhaseListeners.size());
+            result.addAll(foundPhaseListeners);
+            foundPhaseListeners.clear();
+
+            Collections.sort(result, new InvocationOrderComparator<PhaseListener>());
             return result;
         }
         return Collections.emptyList();
