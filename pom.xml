@@ -80,7 +80,7 @@
     </modules>
 
     <properties>
-        <owb.version>1.0.0-alpha-1</owb.version>
+        <owb.version>1.0.0-alpha-2</owb.version>
 
         <!-- JSF-2.0 implementations-->
         <myfaces2.version>2.0.1</myfaces2.version>
