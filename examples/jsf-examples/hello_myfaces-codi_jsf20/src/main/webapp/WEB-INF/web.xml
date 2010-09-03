@@ -40,6 +40,12 @@
         <load-on-startup>1</load-on-startup>
     </servlet>
 
+    <!-- we use geronimos jasper-el version for now as EL-2.2 implementation -->
+    <context-param>
+        <param-name>org.apache.myfaces.EXPRESSION_FACTORY</param-name>
+        <param-value>de.apache.el.ExpressionFactoryImpl</param-value>
+    </context-param>
+
     <!-- Faces Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>

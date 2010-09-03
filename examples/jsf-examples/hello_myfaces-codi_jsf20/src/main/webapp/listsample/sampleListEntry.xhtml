@@ -1,6 +1,4 @@
-<!DOCTYPE html
-        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <!--
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -26,18 +24,31 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
+    <head><title>CODI JSF 2.0 List Demo</title></head>
+
+    <f:metadata>
+        <f:viewParam name="entryId" value="#{sampleListEntry.id}"/>
+    </f:metadata>
 
     <body>
-        <h:form>
-            <h:commandLink value="next" action="next"/>
-        </h:form>
-        <h:outputText value="#{conversationDemoBean1.value}"/><br/>
+        <f:view>
 
-        <h:link value="ViewAccessScoped example" outcome="viewAccessBeanPage.xhtml"/><br/>
-        <h:outputLink value="noCodiPage.xhtml">Page without Codi scoped beans</h:outputLink><br/>
-        <h:outputLink value="listsample/sampleList.xhtml">List sample</h:outputLink>
-        
-        <h:messages globalOnly="true"/>
+            <h:form>
+                <h3>A sample List Entry</h3>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="id"/>
+                    <h:outputText value="#{sampleListEntry.id}"/>
+
+                    <h:outputLabel value="value"/>
+                    <h:inputText value="#{sampleListEntry.value}"/>
+                </h:panelGrid>
+
+                <h:commandButton action="#{sampleListEntry.back}" value="back"/>
+                <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
+            </h:form>
+
+            <h:messages globalOnly="true"/>
+
+        </f:view>
     </body>
 </html>

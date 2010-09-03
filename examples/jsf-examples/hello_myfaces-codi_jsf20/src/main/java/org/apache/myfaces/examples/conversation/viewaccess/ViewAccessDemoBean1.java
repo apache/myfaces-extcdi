@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.blank2.conversation.viewaccess;
+package org.apache.myfaces.examples.conversation.viewaccess;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
@@ -26,13 +26,13 @@ import java.io.Serializable;
 import java.util.Date;
 
 
-@Named("vaBean2")
+@Named("vaBean1")
 @ViewAccessScoped
-public class ViewAccessDemoBean2 implements Serializable
+public class ViewAccessDemoBean1 implements Serializable
 {
     private static final long serialVersionUID = -4238520498463300564L;
 
-    private String value = "Hello view access scoped 2! ";
+    private String value = "Hello view access scoped! ";
     private Date createdAt;
     private String viewParam;
     private String sampleField = null;
@@ -92,9 +92,21 @@ public class ViewAccessDemoBean2 implements Serializable
                 " sampleField: " + sampleField;
     }
 
-    /** dummy action */
-    public String update()
+    /** go forward to page2 */
+    public String forward()
+    {
+        return "viewAccessBeanPage2";
+    }
+
+    /** go back to page1 */
+    public String back()
+    {
+        return "viewAccessBeanPage";
+    }
+
+    public String stay()
     {
         return null;
     }
+
 }
