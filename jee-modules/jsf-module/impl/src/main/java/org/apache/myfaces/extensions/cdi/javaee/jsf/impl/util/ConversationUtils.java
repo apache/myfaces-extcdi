@@ -65,6 +65,8 @@ public class ConversationUtils
     private static final String OLD_VIEW_ID_KEY = "oldViewId";
     private static final String NEW_VIEW_ID_KEY = "newViewId";
 
+    private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
+
     /**
      * @return the descriptor of a custom
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
@@ -344,6 +346,15 @@ public class ConversationUtils
                                     String url,
                                     WindowHandler windowHandler) throws IOException
     {
+        if(isMultipleRedirectDetected(externalContext))
+        {
+            return;
+        }
+        else
+        {
+            redirectPerformed(externalContext);
+        }
+
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
 
         RequestCache.resetCache();
@@ -357,6 +368,16 @@ public class ConversationUtils
             //TODO log warning in case of project stage dev.
             externalContext.redirect(url);
         }
+    }
+
+    private static boolean isMultipleRedirectDetected(ExternalContext externalContext)
+    {
+        return externalContext.getRequestMap().containsKey(REDIRECT_PERFORMED_KEY);
+    }
+
+    private static void redirectPerformed(ExternalContext externalContext)
+    {
+        externalContext.getRequestMap().put(REDIRECT_PERFORMED_KEY, Boolean.TRUE);
     }
 
     public static JsfAwareWindowContextConfig getJsfAwareWindowContextConfig()
