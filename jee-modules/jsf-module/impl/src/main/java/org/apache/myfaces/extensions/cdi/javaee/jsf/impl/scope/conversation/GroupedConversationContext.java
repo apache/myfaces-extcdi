@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractConversationContextAdapter;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
@@ -45,9 +45,9 @@ import java.util.Set;
  *
  * @author Gerhard Petracek
  */
-class GroupedConversationContextAdapter extends AbstractConversationContextAdapter
+class GroupedConversationContext extends AbstractGroupedConversationContext
 {
-    GroupedConversationContextAdapter(BeanManager beanManager)
+    GroupedConversationContext(BeanManager beanManager)
     {
         super(beanManager);
     }
@@ -114,9 +114,10 @@ class GroupedConversationContextAdapter extends AbstractConversationContextAdapt
 
         Set<Annotation> qualifiers = bean.getQualifiers();
 
-        conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
+        EditableWindowContext editableWindowContext = (EditableWindowContext)windowContextManager
+                .getCurrentWindowContext();
 
-        return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
+        return editableWindowContext
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
 }

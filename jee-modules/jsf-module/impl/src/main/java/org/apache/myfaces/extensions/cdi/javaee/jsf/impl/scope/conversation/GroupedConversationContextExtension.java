@@ -18,6 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.ConversationContextAdapter;
+
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
@@ -32,6 +38,9 @@ public class GroupedConversationContextExtension implements Extension
 {
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery event, BeanManager manager)
     {
-        event.addContext(new GroupedConversationContextAdapter(manager));
+        AbstractGroupedConversationContext codiConversationContext = new GroupedConversationContext(manager);
+        event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext));
+        event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext));
+        event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext));
     }
 }

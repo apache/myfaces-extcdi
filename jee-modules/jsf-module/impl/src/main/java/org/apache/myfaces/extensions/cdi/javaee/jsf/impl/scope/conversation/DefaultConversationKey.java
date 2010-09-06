@@ -44,14 +44,18 @@ class DefaultConversationKey implements ConversationKey
     private static final String INVALID_VIEW_ACCESS_SCOPE_DEFINITION =
             ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
 
+    protected Class<? extends Annotation> scopeType;
+
     private Class<?> groupKey;
+
     private Set<Annotation> qualifiers;
 
-    //workaround
-    private boolean viewAccessScopedAnnotationPresent;
-
-    DefaultConversationKey(Class<?> groupKey, boolean validateKey, Annotation... qualifiers)
+    DefaultConversationKey(Class<? extends Annotation> scopeType,
+                           Class<?> groupKey,
+                           boolean validateKey,
+                           Annotation... qualifiers)
     {
+        this.scopeType = scopeType;
         this.groupKey = groupKey;
 
         //TODO maybe we have to add a real qualifier instead
@@ -60,11 +64,7 @@ class DefaultConversationKey implements ConversationKey
         {
             annotationType = qualifier.annotationType();
 
-            if(ViewAccessScoped.class.isAssignableFrom(annotationType))
-            {
-                this.viewAccessScopedAnnotationPresent = true;
-            }
-            else if(Any.class.isAssignableFrom(annotationType) ||
+            if(Any.class.isAssignableFrom(annotationType) ||
                     Default.class.isAssignableFrom(annotationType) ||
                     Named.class.isAssignableFrom(annotationType)   ||
                     ConversationGroup.class.isAssignableFrom(annotationType))
@@ -107,20 +107,15 @@ class DefaultConversationKey implements ConversationKey
         }
     }
 
-    boolean isViewAccessScopedAnnotationPresent()
-    {
-        return viewAccessScopedAnnotationPresent;
-    }
-
     private boolean isWindowScope()
     {
-        return WindowScoped.class.isAssignableFrom(this.groupKey.getClass());
+        return WindowScoped.class.isAssignableFrom(getScope());
     }
 
     @Deprecated
     private boolean isViewAccessScope()
     {
-        return ViewAccessScoped.class.isAssignableFrom(this.groupKey.getClass());
+        return ViewAccessScoped.class.isAssignableFrom(getScope());
     }
 
     private boolean isDefaultQualifier()
@@ -140,6 +135,11 @@ class DefaultConversationKey implements ConversationKey
         return false;
     }
 
+    public Class<? extends Annotation> getScope()
+    {
+        return this.scopeType;
+    }
+
     public Class<?> getConversationGroup()
     {
         return groupKey;
@@ -149,7 +149,7 @@ class DefaultConversationKey implements ConversationKey
     {
         if (qualifiers == null)
         {
-            return Collections.EMPTY_SET;
+            return Collections.emptySet();
         }
         return Collections.unmodifiableSet(this.qualifiers);
     }

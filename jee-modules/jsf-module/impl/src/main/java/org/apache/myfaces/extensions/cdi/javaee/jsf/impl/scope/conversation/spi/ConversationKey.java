@@ -27,6 +27,8 @@ import java.io.Serializable;
  */
 public interface ConversationKey extends Serializable
 {
+    Class<? extends Annotation> getScope();
+
     Class<?> getConversationGroup();
 
     Set<Annotation> getQualifiers();

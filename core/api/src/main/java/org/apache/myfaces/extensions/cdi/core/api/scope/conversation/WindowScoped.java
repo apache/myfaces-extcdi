@@ -18,10 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
-import javax.enterprise.inject.Stereotype;
+import javax.enterprise.context.NormalScope;
 import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Documented;
+import java.lang.annotation.Inherited;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.METHOD;
@@ -30,13 +31,11 @@ import static java.lang.annotation.ElementType.FIELD;
 /**
  * @author Gerhard Petracek
  */
-@Stereotype
-
-@Target({TYPE, METHOD, FIELD})
+@Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
+@NormalScope(passivating=true)
+@Inherited
 @Documented
-
-@ConversationScoped
 public @interface WindowScoped
 {
 }

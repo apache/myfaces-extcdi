@@ -22,9 +22,9 @@ import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider.getInstance;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
@@ -48,6 +48,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * internal! utils
@@ -58,15 +59,16 @@ public class ConversationUtils
     public static final String EXISTING_WINDOW_ID_SET_KEY =
             WindowContext.class.getName() + ":EXISTING_WINDOW_ID_LIST";
 
-    private static final ViewAccessScoped VIEW_ACCESS_SCOPED = DefaultAnnotation.of(ViewAccessScoped.class);
-
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
 
     private static final String OLD_VIEW_ID_KEY = "oldViewId";
     private static final String NEW_VIEW_ID_KEY = "newViewId";
 
-    private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
+    private static Map<Class, Class<? extends Annotation>> conversationGroupToScopeCache =
+            new ConcurrentHashMap<Class, Class<? extends Annotation>>();
 
+    private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
+    
     /**
      * @return the descriptor of a custom
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
@@ -92,30 +94,14 @@ public class ConversationUtils
         return (Bean<WindowContextManager>) conversationManagerBeans.iterator().next();
     }
 
-    public static Class convertViewAccessScope(Bean<?> bean, Class conversationGroup, Set<Annotation> qualifiers)
-    {
-        //workaround to keep the existing api
-        if(ViewAccessScoped.class.isAssignableFrom(conversationGroup))
-        {
-            //TODO maybe we have to add a real qualifier instead
-            qualifiers.add(VIEW_ACCESS_SCOPED);
-            conversationGroup = bean.getBeanClass();
-        }
-        return conversationGroup;
-    }
-
     public static Class getConversationGroup(Bean<?> bean)
     {
-        Set<Class<? extends Annotation>> stereotypes = bean.getStereotypes();
+        Class<? extends Annotation> scopeType = bean.getScope();
 
-        if(stereotypes.contains(WindowScoped.class))
+        //TODO check if we should support conversation groups for @WindowScoped
+        if(WindowScoped.class.isAssignableFrom(scopeType))
         {
             return WindowScoped.class;
-        }
-
-        if(stereotypes.contains(ViewAccessScoped.class))
-        {
-            return ViewAccessScoped.class;
         }
 
         ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
@@ -125,19 +111,7 @@ public class ConversationUtils
             return bean.getBeanClass();
         }
 
-        Class groupClass = conversationGroupAnnotation.value();
-
-        if(WindowScoped.class.isAssignableFrom(groupClass))
-        {
-            return WindowScoped.class;
-        }
-
-        if(ViewAccessScoped.class.isAssignableFrom(groupClass))
-        {
-            return ViewAccessScoped.class;
-        }
-
-        return groupClass;
+        return conversationGroupAnnotation.value();
     }
 
     private static ConversationGroup findConversationGroupAnnotation(Bean<?> bean)
@@ -446,6 +420,42 @@ public class ConversationUtils
         }
 
         return windowContexts.size() < count;
+    }
+
+    public static Class<? extends Annotation> convertToScope(Class conversationGroupKey, Annotation... qualifiers)
+    {
+        Class<? extends Annotation> scopeType = conversationGroupToScopeCache.get(conversationGroupKey);
+
+        if(scopeType != null)
+        {
+            return scopeType;
+        }
+
+        if (WindowScoped.class.isAssignableFrom(conversationGroupKey))
+        {
+            scopeType = WindowScoped.class;
+        }
+        else
+        {
+            BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+            //we just find a bean if the class name is used as implicit group-key
+            //explicit group-keys are only supported for @ConversationScoped
+            Set<Bean<?>> beans = beanManager.getBeans(conversationGroupKey, qualifiers);
+
+            if(beans.size() == 1)
+            {
+                scopeType = beans.iterator().next().getScope();
+            }
+            else
+            {
+                scopeType = ConversationScoped.class;
+            }
+        }
+
+        conversationGroupToScopeCache.put(conversationGroupKey, scopeType);
+
+        return scopeType;
     }
 
     private static boolean isEligibleForCleanup(EditableWindowContext editableWindowContext)

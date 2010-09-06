@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 /**
  * @author Gerhard Petracek
@@ -50,14 +51,12 @@ public class JsfAwareConversationFactory implements ConversationFactory
     
     public EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
     {
-        if(WindowScoped.class.isAssignableFrom(conversationKey.getConversationGroup()))
+        if(WindowScoped.class.isAssignableFrom(conversationKey.getScope()))
         {
             return new DefaultConversation(conversationKey, new WindowConversationExpirationEvaluator());
         }
 
-        //workaround
-        if(conversationKey instanceof DefaultConversationKey &&
-                 ((DefaultConversationKey)conversationKey).isViewAccessScopedAnnotationPresent())
+        if(ViewAccessScoped.class.isAssignableFrom(conversationKey.getScope()))
         {
             return new DefaultConversation(conversationKey, new ViewAccessConversationExpirationEvaluator());
         }

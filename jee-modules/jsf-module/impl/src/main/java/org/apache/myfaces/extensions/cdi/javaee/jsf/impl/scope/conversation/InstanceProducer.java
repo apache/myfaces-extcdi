@@ -112,8 +112,6 @@ final class InstanceProducer
 
                 Set<Annotation> qualifiers = bean.getQualifiers();
 
-                conversationGroup = ConversationUtils.convertViewAccessScope(bean, conversationGroup, qualifiers);
-
                 return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
                         .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
             }

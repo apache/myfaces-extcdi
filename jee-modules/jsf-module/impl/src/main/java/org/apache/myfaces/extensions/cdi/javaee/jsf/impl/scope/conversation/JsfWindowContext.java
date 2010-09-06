@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.convertToScope;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.conversationNotEditableException;
 
 import javax.enterprise.inject.Typed;
@@ -101,8 +102,10 @@ public class JsfWindowContext implements EditableWindowContext
 
     public EditableConversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
+        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+
         ConversationKey conversationKey =
-                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         EditableConversation conversation = RequestCache.getConversation(conversationKey);
 
@@ -130,8 +133,10 @@ public class JsfWindowContext implements EditableWindowContext
 
     public Conversation endConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
+        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+
         ConversationKey conversationKey =
-                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         Conversation conversation = this.groupedConversations.get(conversationKey);
 
@@ -181,8 +186,10 @@ public class JsfWindowContext implements EditableWindowContext
 
     public EditableConversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
+        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+
         ConversationKey conversationKey =
-                new DefaultConversationKey(conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
 
         ConversationFactory conversationFactory = this.jsfAwareWindowContextConfig.getConversationFactory();
 

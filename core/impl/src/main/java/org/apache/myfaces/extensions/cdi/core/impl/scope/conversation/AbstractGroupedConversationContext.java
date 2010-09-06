@@ -18,22 +18,18 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 
-import javax.enterprise.context.spi.Context;
-import javax.enterprise.context.spi.Contextual;
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import java.lang.annotation.Annotation;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.context.spi.CreationalContext;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractConversationContextAdapter implements Context
+public abstract class AbstractGroupedConversationContext
 {
     protected BeanManager beanManager;
 
@@ -50,7 +46,7 @@ public abstract class AbstractConversationContextAdapter implements Context
     //workaround for weld
     private final boolean useFallback;
 
-    public AbstractConversationContextAdapter(BeanManager beanManager)
+    protected AbstractGroupedConversationContext(BeanManager beanManager)
     {
         this.beanManager = beanManager;
 
@@ -67,83 +63,40 @@ public abstract class AbstractConversationContextAdapter implements Context
         this.useFallback = useFallback;
     }
 
-    /**
-     * @return annotation of the codi conversation scope
-     */
-    public Class<? extends Annotation> getScope()
+    public <T> T create(Bean<T> bean, CreationalContext<T> creationalContext)
     {
-        return ConversationScoped.class;
-    }
-
-    /**
-     * @param component         descriptor of the bean
-     * @param creationalContext context for creating a bean
-     * @return a scoped bean-instance
-     */
-    public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
-    {
-        if (component instanceof Bean)
+        //workaround for weld - start
+        if(useFallback)
         {
-            //workaround for weld - start
-            if(useFallback)
+            T scopedBean = resolve(bean);
+
+            if(scopedBean != null)
             {
-                T scopedBean = get(component);
-
-                if(scopedBean != null)
-                {
-                    return scopedBean;
-                }
+                return scopedBean;
             }
-            //workaround for weld - end
-
-            lazyInitConversationConfig();
-
-            WindowContextManager windowContextManager = resolveWindowContextManager();
-
-            Bean<T> bean = ((Bean<T>) component);
-
-            BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean,
-                    this.scopeBeanEventEnable, this.beanAccessEventEnable, this.unscopeBeanEventEnable);
-
-            scopeBeanEntry(windowContextManager, beanEntry);
-
-            return beanEntry.getBeanInstance();
         }
+        //workaround for weld - end
 
-        Class invalidComponentClass = component.create(creationalContext).getClass();
-        throw new IllegalStateException(invalidComponentClass + " is no valid conversation scoped bean");
+        lazyInitConversationConfig();
+
+        WindowContextManager windowContextManager = resolveWindowContextManager();
+
+        BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean,
+                this.scopeBeanEventEnable, this.beanAccessEventEnable, this.unscopeBeanEventEnable);
+
+        scopeBeanEntry(windowContextManager, beanEntry);
+
+        return beanEntry.getBeanInstance();
     }
 
-    private void lazyInitConversationConfig()
+    @SuppressWarnings({"UnnecessaryLocalVariable"})
+    public <T> T resolve(Bean<T> bean)
     {
-        if(this.conversationConfig == null)
-        {
-            this.conversationConfig = getConversationConfig();
+        WindowContextManager windowContextManager = resolveWindowContextManager();
 
-            this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnable();
-            this.beanAccessEventEnable = this.conversationConfig.isBeanAccessEventEnable();
-            this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnable();
-        }
-    }
+        T foundBeanInstance = resolveBeanInstance(windowContextManager, bean);
 
-    /**
-     * @param component descriptor of the bean
-     * @return an instance of the requested bean if it already exists in the current
-     *         {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
-     *         null otherwise
-     */
-    public <T> T get(Contextual<T> component)
-    {
-        if (component instanceof Bean)
-        {
-            Bean<T> bean = ((Bean<T>) component);
-            WindowContextManager windowContextManager = resolveWindowContextManager();
-
-            T foundBeanInstance = resolveBeanInstance(windowContextManager, bean);
-
-            return foundBeanInstance;
-        }
-        throw new IllegalStateException(component.getClass() + " is no valid conversation scoped bean");
+        return foundBeanInstance;
     }
 
     /**
@@ -173,4 +126,18 @@ public abstract class AbstractConversationContextAdapter implements Context
     protected abstract <T> void scopeBeanEntry(WindowContextManager windowContextManager, BeanEntry<T> beanEntry);
 
     protected abstract ConversationConfig getConversationConfig();
+
+    public abstract boolean isActive();
+
+    private void lazyInitConversationConfig()
+    {
+        if(this.conversationConfig == null)
+        {
+            this.conversationConfig = getConversationConfig();
+
+            this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnable();
+            this.beanAccessEventEnable = this.conversationConfig.isBeanAccessEventEnable();
+            this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnable();
+        }
+    }
 }
