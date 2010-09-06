@@ -21,13 +21,18 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.ConversationContextAdapter;
 
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.ProcessBean;
 import javax.enterprise.event.Observes;
+import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * extension for registering the adapter for grouped conversations
@@ -42,5 +47,31 @@ public class GroupedConversationContextExtension implements Extension
         event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext));
         event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext));
         event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext));
+    }
+
+    @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+    public void validateScopes(@Observes ProcessBean processBean)
+    {
+        Bean<?> bean = processBean.getBean();
+        Set<Annotation> qualifiers = bean.getQualifiers();
+
+        Class<? extends Annotation> annotationType;
+        for(Annotation qualifier : qualifiers)
+        {
+            annotationType = qualifier.annotationType();
+
+            if(ConversationGroup.class.isAssignableFrom(annotationType) &&
+                    !ConversationScoped.class.isAssignableFrom(bean.getScope()))
+            {
+                String errorMessage = "Definition error in class: " + bean.getBeanClass().getName() +
+                        "\nIt isn't allowed to use @" + ConversationGroup.class.getName() +
+                        " in combination with @" + bean.getScope().getName() +
+                        ".\nInstead of @" + bean.getScope().getName() + " you can use @" +
+                        ConversationScoped.class.getName() + " or you have to remove the usage of @" +
+                        ConversationGroup.class.getName();
+                processBean.addDefinitionError(new IllegalStateException(errorMessage));
+                return;
+            }
+        }
     }
 }

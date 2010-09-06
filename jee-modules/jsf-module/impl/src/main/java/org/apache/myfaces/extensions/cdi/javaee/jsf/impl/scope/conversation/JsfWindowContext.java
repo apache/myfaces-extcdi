@@ -54,8 +54,6 @@ public class JsfWindowContext implements EditableWindowContext
 
     private final JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
 
-    private final boolean projectStageDevelopment;
-
     private Map<ConversationKey, EditableConversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, EditableConversation>();
 
@@ -63,16 +61,12 @@ public class JsfWindowContext implements EditableWindowContext
 
     private final TimeoutExpirationEvaluator expirationEvaluator;
 
-    protected JsfWindowContext(String windowContextId,
-                               JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
-                               boolean projectStageDevelopment)
+    JsfWindowContext(String windowContextId, JsfAwareWindowContextConfig jsfAwareWindowContextConfig)
     {
         this.id = windowContextId;
         this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
         this.expirationEvaluator = new TimeoutExpirationEvaluator(
                 this.jsfAwareWindowContextConfig.getWindowContextTimeoutInMinutes());
-
-        this.projectStageDevelopment = projectStageDevelopment;
     }
 
     public String getId()
@@ -105,7 +99,7 @@ public class JsfWindowContext implements EditableWindowContext
         Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
-                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
         EditableConversation conversation = RequestCache.getConversation(conversationKey);
 
@@ -136,7 +130,7 @@ public class JsfWindowContext implements EditableWindowContext
         Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
-                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
         Conversation conversation = this.groupedConversations.get(conversationKey);
 
@@ -189,7 +183,7 @@ public class JsfWindowContext implements EditableWindowContext
         Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
-                new DefaultConversationKey(scopeType, conversationGroupKey, this.projectStageDevelopment, qualifiers);
+                new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
         ConversationFactory conversationFactory = this.jsfAwareWindowContextConfig.getConversationFactory();
 

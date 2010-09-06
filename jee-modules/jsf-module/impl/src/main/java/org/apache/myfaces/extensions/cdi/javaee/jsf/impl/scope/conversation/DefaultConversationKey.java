@@ -19,8 +19,6 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.ConversationKey;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 
 import javax.enterprise.inject.Default;
@@ -38,12 +36,6 @@ class DefaultConversationKey implements ConversationKey
 {
     private static final long serialVersionUID = 3577945095460042939L;
 
-    private static final String INVALID_WINDOW_SCOPE_DEFINITION =
-            ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
-
-    private static final String INVALID_VIEW_ACCESS_SCOPE_DEFINITION =
-            ": It isn't allowed to use qualifiers in combination with " + WindowScoped.class.getName();
-
     protected Class<? extends Annotation> scopeType;
 
     private Class<?> groupKey;
@@ -52,7 +44,6 @@ class DefaultConversationKey implements ConversationKey
 
     DefaultConversationKey(Class<? extends Annotation> scopeType,
                            Class<?> groupKey,
-                           boolean validateKey,
                            Annotation... qualifiers)
     {
         this.scopeType = scopeType;
@@ -80,59 +71,6 @@ class DefaultConversationKey implements ConversationKey
                 this.qualifiers.add(qualifier);
             }
         }
-
-        //X TODO drop and move validation to deploy time!
-        if(validateKey)
-        {
-            validate();
-        }
-    }
-
-
-    /**
-     * @deprecated TODO this must be validated at deploy time instead !
-     */
-    private void validate()
-    {
-        boolean defaultQualifierUsed = isDefaultQualifier();
-
-        if(isWindowScope() && !defaultQualifierUsed)
-        {
-            throw new IllegalStateException(this.groupKey.getName() + INVALID_WINDOW_SCOPE_DEFINITION);
-        }
-
-        if(isViewAccessScope() && !defaultQualifierUsed)
-        {
-            throw new IllegalStateException(this.groupKey.getName() + INVALID_VIEW_ACCESS_SCOPE_DEFINITION);
-        }
-    }
-
-    private boolean isWindowScope()
-    {
-        return WindowScoped.class.isAssignableFrom(getScope());
-    }
-
-    @Deprecated
-    private boolean isViewAccessScope()
-    {
-        return ViewAccessScoped.class.isAssignableFrom(getScope());
-    }
-
-    private boolean isDefaultQualifier()
-    {
-        if (qualifiers == null)
-        {
-            return true;
-        }
-
-        for(Annotation qualifier : this.qualifiers)
-        {
-            if(Default.class.isAssignableFrom(qualifier.getClass()))
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     public Class<? extends Annotation> getScope()
