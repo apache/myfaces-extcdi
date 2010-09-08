@@ -43,7 +43,7 @@
 
     <distributionManagement>
         <site>
-            <id>apache-site</id>
+            <id>apache.website</id>
             <url>scpexe://people.apache.org/www/myfaces.apache.org/extensions/cdi</url>
         </site>
     </distributionManagement>
