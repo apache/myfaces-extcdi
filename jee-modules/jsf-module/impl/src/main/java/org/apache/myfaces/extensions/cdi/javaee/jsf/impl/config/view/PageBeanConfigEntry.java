@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-class PageBeanDefinitionEntry
+class PageBeanConfigEntry
 {
     private final String beanName;
 
@@ -41,7 +41,7 @@ class PageBeanDefinitionEntry
 
     private final Map<PhaseId, PhasesLifecycleCallbackEntry> phasesLifecycleCallbacks;
 
-    PageBeanDefinitionEntry(String beanName, Class beanClass)
+    PageBeanConfigEntry(String beanName, Class beanClass)
     {
         this.beanName = beanName;
         this.beanClass = beanClass;

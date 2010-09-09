@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
@@ -35,16 +35,16 @@ final class PreRenderViewBeanLoader
     {
         String viewId = event.getFacesContext().getViewRoot().getViewId();
 
-        ViewDefinitionEntry viewDefinitionEntry = ViewDefinitionCache.getViewDefinition(viewId);
+        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
 
         if(viewDefinitionEntry == null)
         {
             return;
         }
 
-        List<PageBeanDefinitionEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
+        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
 
-        for(PageBeanDefinitionEntry beanEntry : beanEntries)
+        for(PageBeanConfigEntry beanEntry : beanEntries)
         {
             //resolve bean to trigger @PostConstruct if it isn't scoped
             CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);

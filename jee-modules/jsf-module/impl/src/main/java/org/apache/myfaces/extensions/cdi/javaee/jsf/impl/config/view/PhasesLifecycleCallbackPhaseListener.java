@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
@@ -85,20 +85,20 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
         String viewId = viewRoot.getViewId();
 
-        ViewDefinitionEntry viewDefinitionEntry = ViewDefinitionCache.getViewDefinition(viewId);
+        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
 
         if(viewDefinitionEntry == null)
         {
             return;
         }
 
-        List<PageBeanDefinitionEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
+        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
 
         Object bean;
         PhasesLifecycleCallbackEntry phasesLifecycleCallbackEntry;
         List<Method> lifecycleCallbacks;
 
-        for(PageBeanDefinitionEntry beanEntry : beanEntries)
+        for(PageBeanConfigEntry beanEntry : beanEntries)
         {
             phasesLifecycleCallbackEntry = beanEntry.getPhasesLifecycleCallback(phaseEvent.getPhaseId());
 

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId.convertToFacesClass;

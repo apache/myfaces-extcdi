@@ -20,7 +20,7 @@ package org.apache.myfaces.blank.listener.phase;
 
 import org.apache.myfaces.blank.view.DemoPages;
 import org.apache.myfaces.blank.view.InvalidPage;
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.View;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;

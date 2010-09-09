@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.JsfViewExtension;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
@@ -34,7 +34,7 @@ import java.util.Map;
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class ViewDefinitionExtension implements Extension
+public class ViewConfigExtension implements Extension
 {
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
@@ -47,15 +47,15 @@ public class ViewDefinitionExtension implements Extension
 
     private void addPageDefinition(Class pageDefinitionClass)
     {
-        if(!ViewDefinition.class.isAssignableFrom(pageDefinitionClass))
+        if(!ViewConfig.class.isAssignableFrom(pageDefinitionClass))
         {
             throw new IllegalArgumentException(
                     "the page definition " + pageDefinitionClass.getName() + " has to implement "
-                            + ViewDefinition.class.getName());
+                            + ViewConfig.class.getName());
         }
 
         @SuppressWarnings({"unchecked"})
-        Class<? extends ViewDefinition> viewDefinitionClass = (Class<? extends ViewDefinition>)pageDefinitionClass;
+        Class<? extends ViewConfig> viewDefinitionClass = (Class<? extends ViewConfig>)pageDefinitionClass;
 
         if(Modifier.isAbstract(viewDefinitionClass.getModifiers()))
         {
@@ -162,8 +162,8 @@ public class ViewDefinitionExtension implements Extension
                 result = rootPath + result.substring(1);
             }
         }
-        ViewDefinitionCache.addViewDefinition(
-                result, new ViewDefinitionEntry(result, viewDefinitionClass, navigationMode));
+        ViewConfigCache.addViewDefinition(
+                result, new ViewConfigEntry(result, viewDefinitionClass, navigationMode));
     }
 
     private String convertToPathSyntax(String className, Map<String, String> simpleClassNameToPathMapping)

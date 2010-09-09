@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation;
 
-import static org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request.CodiFacesContextFactory.wrapFacesContext;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.listener.request.CodiFacesContextFactory
+        .wrapFacesContext;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;

@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.view.definition;
+package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewDefinition
+public interface ViewConfig
 {
 }

@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.blank.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
 
 /**
  * @author Gerhard Petracek
  */
 @Page(name = "invalid") //interpreted as /invalid.xhtml
-public class InvalidPage implements ViewDefinition
+public class InvalidPage implements ViewConfig
 {
 }

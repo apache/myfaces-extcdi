@@ -18,12 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.AnyView;
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.View;
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.AnyView;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.ViewDefinitionCache;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view.ViewConfigCache;
 
 import javax.interceptor.Interceptor;
 import javax.interceptor.AroundInvoke;
@@ -120,9 +120,9 @@ public class ViewControllerInterceptor
         return false;
     }
 
-    private boolean isMethodBoundToViewDefinition (Class<? extends ViewDefinition>[] viewDefinitions, String viewId)
+    private boolean isMethodBoundToViewDefinition (Class<? extends ViewConfig>[] viewDefinitions, String viewId)
     {
-        for(Class<? extends ViewDefinition> viewDefinition : viewDefinitions)
+        for(Class<? extends ViewConfig> viewDefinition : viewDefinitions)
         {
             if(resolveViewId(viewDefinition).equals(viewId))
             {
@@ -132,8 +132,8 @@ public class ViewControllerInterceptor
         return false;
     }
 
-    private String resolveViewId(Class<? extends ViewDefinition> viewDefinitionClass)
+    private String resolveViewId(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        return ViewDefinitionCache.getViewDefinition(viewDefinitionClass).getViewId();
+        return ViewConfigCache.getViewDefinition(viewDefinitionClass).getViewId();
     }
 }

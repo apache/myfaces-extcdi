@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.BeforeFacesRequest;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.request.BeforeFacesRequest;
 
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;

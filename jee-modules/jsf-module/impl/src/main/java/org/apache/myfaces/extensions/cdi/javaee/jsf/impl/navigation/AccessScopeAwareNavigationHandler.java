@@ -16,9 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.navigation;
 
-import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request.CodiFacesContextFactory.wrapFacesContext;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.request.CodiFacesContextFactory
+        .wrapFacesContext;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util.JsfUtils;

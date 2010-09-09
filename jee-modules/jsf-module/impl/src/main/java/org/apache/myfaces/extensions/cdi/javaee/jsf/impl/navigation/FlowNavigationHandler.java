@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.flow;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.ViewDefinitionCache;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view.ViewDefinitionEntry;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view.ViewConfigEntry;
 
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
@@ -42,7 +42,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class FlowNavigationHandler extends NavigationHandler
 {
     private Set<String> otherOutcomes = new CopyOnWriteArraySet<String>();
-    private Map<String, ViewDefinitionEntry> viewDefinitions = new ConcurrentHashMap<String, ViewDefinitionEntry>();
+    private Map<String, ViewConfigEntry> viewConfigs = new ConcurrentHashMap<String, ViewConfigEntry>();
 
     private NavigationHandler navigationHandler;
 
@@ -64,7 +64,7 @@ public class FlowNavigationHandler extends NavigationHandler
                 {
                     outcome = outcome.substring(6);
                 }
-                ViewDefinitionEntry entry = viewDefinitions.get(outcome);
+                ViewConfigEntry entry = viewConfigs.get(outcome);
 
                 if(entry == null)
                 {
@@ -74,17 +74,17 @@ public class FlowNavigationHandler extends NavigationHandler
                     {
                         otherOutcomes.add(originalOutcome);
                     }
-                    else if(loadedClass instanceof Class && ViewDefinition.class.isAssignableFrom((Class)loadedClass))
+                    else if(loadedClass instanceof Class && ViewConfig.class.isAssignableFrom((Class)loadedClass))
                     {
                         //noinspection unchecked
-                        entry = ViewDefinitionCache.getViewDefinition((Class<? extends ViewDefinition>)loadedClass);
+                        entry = ViewConfigCache.getViewDefinition((Class<? extends ViewConfig>)loadedClass);
                     }
                 }
 
                 if(entry != null)
                 {
                     processViewDefinitionEntry(facesContext, entry);
-                    viewDefinitions.put(outcome, entry);
+                    viewConfigs.put(outcome, entry);
                     //just to invoke all other nav handlers if they have to perform special tasks...
                     navigationHandler.handleNavigation(facesContext, fromAction, null);
                     return;
@@ -95,7 +95,7 @@ public class FlowNavigationHandler extends NavigationHandler
         navigationHandler.handleNavigation(facesContext, fromAction, outcome);
     }
 
-    private void processViewDefinitionEntry(FacesContext facesContext, ViewDefinitionEntry entry)
+    private void processViewDefinitionEntry(FacesContext facesContext, ViewConfigEntry entry)
     {
         String targetViewId = entry.getViewId();
         if(NavigationMode.REDIRECT.equals(entry.getNavigationMode()))

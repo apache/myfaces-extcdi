@@ -16,30 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.view.definition;
-
-import javax.interceptor.InterceptorBinding;
-import javax.enterprise.util.Nonbinding;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
  * @author Gerhard Petracek
  */
-
-@InterceptorBinding
-@Target({TYPE, METHOD})
-@Retention(RUNTIME)
-@Documented
-public @interface View
+public final class ManualView implements ViewConfig
 {
-    @Nonbinding
-    Class<? extends ViewDefinition>[] value();
-
-    @Nonbinding
-    String[] inline() default "";
 }

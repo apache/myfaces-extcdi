@@ -16,25 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.request;
-
-import javax.inject.Qualifier;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.FIELD;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
  * @author Gerhard Petracek
  */
-
-@Target({PARAMETER, FIELD})
-@Retention(RUNTIME)
-@Documented
-
-@Qualifier
-public @interface BeforeFacesRequest
+public final class AnyView implements ViewConfig
 {
 }

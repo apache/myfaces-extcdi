@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.PageBean;
 
@@ -31,15 +31,15 @@ import java.beans.Introspector;
 /**
  * @author Gerhard Petracek
  */
-public class ViewDefinitionEntry
+public class ViewConfigEntry
 {
     private final String viewId;
-    private final Class<? extends ViewDefinition> viewDefinitionClass;
+    private final Class<? extends ViewConfig> viewDefinitionClass;
     private final NavigationMode navigationMode;
-    private final List<PageBeanDefinitionEntry> beanDefinition;
+    private final List<PageBeanConfigEntry> beanDefinition;
 
-    public ViewDefinitionEntry(String viewId,
-                               Class<? extends ViewDefinition> viewDefinitionClass,
+    public ViewConfigEntry(String viewId,
+                               Class<? extends ViewConfig> viewDefinitionClass,
                                NavigationMode navigationMode)
     {
         this.viewId = viewId;
@@ -55,7 +55,7 @@ public class ViewDefinitionEntry
         return viewId;
     }
 
-    public Class<? extends ViewDefinition> getViewDefinitionClass()
+    public Class<? extends ViewConfig> getViewDefinitionClass()
     {
         return viewDefinitionClass;
     }
@@ -65,12 +65,12 @@ public class ViewDefinitionEntry
         return navigationMode;
     }
 
-    List<PageBeanDefinitionEntry> getBeanDefinitions()
+    List<PageBeanConfigEntry> getBeanDefinitions()
     {
         return beanDefinition;
     }
 
-    private List<PageBeanDefinitionEntry> findPageBeanDefinitions(Class<? extends ViewDefinition> viewDefinitionClass)
+    private List<PageBeanConfigEntry> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)
     {
         if(!viewDefinitionClass.isAnnotationPresent(PageBean.class) &&
                 !viewDefinitionClass.isAnnotationPresent(PageBean.List.class))
@@ -78,7 +78,7 @@ public class ViewDefinitionEntry
             return Collections.emptyList();
         }
 
-        List<PageBeanDefinitionEntry> result = new ArrayList<PageBeanDefinitionEntry>();
+        List<PageBeanConfigEntry> result = new ArrayList<PageBeanConfigEntry>();
 
         if(viewDefinitionClass.isAnnotationPresent(PageBean.class))
         {
@@ -93,9 +93,9 @@ public class ViewDefinitionEntry
         return result;
     }
 
-    private List<PageBeanDefinitionEntry> extractBeanEntries(PageBean.List pageBeanList)
+    private List<PageBeanConfigEntry> extractBeanEntries(PageBean.List pageBeanList)
     {
-        List<PageBeanDefinitionEntry> result = new ArrayList<PageBeanDefinitionEntry>();
+        List<PageBeanConfigEntry> result = new ArrayList<PageBeanConfigEntry>();
         for(PageBean pageBean : pageBeanList.value())
         {
             result.add(extractBeanEntry(pageBean));
@@ -103,11 +103,11 @@ public class ViewDefinitionEntry
         return result;
     }
 
-    private PageBeanDefinitionEntry extractBeanEntry(PageBean pageBean)
+    private PageBeanConfigEntry extractBeanEntry(PageBean pageBean)
     {
         if(!"".equals(pageBean.name()))
         {
-            return new PageBeanDefinitionEntry(pageBean.name(), pageBean.value());
+            return new PageBeanConfigEntry(pageBean.name(), pageBean.value());
         }
 
         Class<?> pageBeanClass = pageBean.value();
@@ -129,7 +129,7 @@ public class ViewDefinitionEntry
             pageBeanName = Introspector.decapitalize(pageBeanClass.getSimpleName());
         }
 
-        return new PageBeanDefinitionEntry(pageBeanName, pageBeanClass);
+        return new PageBeanConfigEntry(pageBeanName, pageBeanClass);
     }
 
     @Override
@@ -139,12 +139,12 @@ public class ViewDefinitionEntry
         {
             return true;
         }
-        if (!(o instanceof ViewDefinitionEntry))
+        if (!(o instanceof ViewConfigEntry))
         {
             return false;
         }
 
-        ViewDefinitionEntry that = (ViewDefinitionEntry) o;
+        ViewConfigEntry that = (ViewConfigEntry) o;
 
         if (!viewId.equals(that.viewId))
         {

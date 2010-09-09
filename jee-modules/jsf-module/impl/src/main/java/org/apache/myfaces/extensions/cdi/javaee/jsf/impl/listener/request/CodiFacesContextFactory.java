@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.request;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.request;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
@@ -35,12 +35,13 @@ public class CodiFacesContextFactory extends FacesContextFactory
         this.wrappedFacesContextFactory = wrappedFacesContextFactory;
     }
 
-    @Override
     public FacesContext getFacesContext(Object context,
                                         Object request,
                                         Object response,
                                         Lifecycle lifecycle) throws FacesException
     {
+        //TODO wrap response if it's an instance of HttpServletResponse (to use #encodeURL)
+        
         FacesContext facesContext =
                 this.wrappedFacesContextFactory.getFacesContext(context, request, response, lifecycle);
 
@@ -50,12 +51,6 @@ public class CodiFacesContextFactory extends FacesContextFactory
         }
 
         return new CodiFacesContextWrapper(facesContext);
-    }
-
-    @Override
-    public FacesContextFactory getWrapped()
-    {
-        return wrappedFacesContextFactory.getWrapped();
     }
 
     public static FacesContext wrapFacesContext(FacesContext facesContext)

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.blank.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.JsfViewExtension;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
@@ -30,7 +30,7 @@ import org.apache.myfaces.blank.conversation.grouped.ConversationDemoBean1;
  */
 @Page(basePath = "" /*override default to ignore path level*/,
       navigation = NavigationMode.REDIRECT, extension = JsfViewExtension.JSP)
-public abstract class DemoPages implements ViewDefinition
+public abstract class DemoPages implements ViewConfig
 {
     @PageBean(ConversationDemoBean1.class) //triggers e.g. @PostConstruct before the rendering process (if needed)
     @Page(basePath = ".")

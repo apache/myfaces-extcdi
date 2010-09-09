@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.request;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.BeforeFacesRequest;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.AfterFacesRequest;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.request.BeforeFacesRequest;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.request.AfterFacesRequest;
 
 import javax.enterprise.event.Event;
 import javax.inject.Inject;

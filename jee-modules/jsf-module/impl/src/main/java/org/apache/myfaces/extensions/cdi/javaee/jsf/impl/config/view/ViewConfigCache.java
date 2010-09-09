@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.view;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.view.definition.ViewDefinition;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,16 +26,16 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class ViewDefinitionCache
+public class ViewConfigCache
 {
     //we don't need a ConcurrentHashMap - write access is only allowed during the startup (by one thread)
-    private static Map<String, ViewDefinitionEntry> viewIdToViewDefinitionEntryMapping
-            = new HashMap<String, ViewDefinitionEntry>();
+    private static Map<String, ViewConfigEntry> viewIdToViewDefinitionEntryMapping
+            = new HashMap<String, ViewConfigEntry>();
 
-    private static Map<Class<? extends ViewDefinition>, ViewDefinitionEntry> viewDefinitionToViewDefinitionEntryMapping
-            = new HashMap<Class<? extends ViewDefinition>, ViewDefinitionEntry>();
+    private static Map<Class<? extends ViewConfig>, ViewConfigEntry> viewDefinitionToViewDefinitionEntryMapping
+            = new HashMap<Class<? extends ViewConfig>, ViewConfigEntry>();
 
-    static void addViewDefinition(String viewId, ViewDefinitionEntry viewDefinitionEntry)
+    static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
         if(viewIdToViewDefinitionEntryMapping.containsKey(viewId))
         {
@@ -48,12 +48,12 @@ public class ViewDefinitionCache
                 .put(viewDefinitionEntry.getViewDefinitionClass(), viewDefinitionEntry);
     }
 
-    public static ViewDefinitionEntry getViewDefinition(String viewId)
+    public static ViewConfigEntry getViewDefinition(String viewId)
     {
         return viewIdToViewDefinitionEntryMapping.get(viewId);
     }
 
-    public static ViewDefinitionEntry getViewDefinition(Class<? extends ViewDefinition> viewDefinitionClass)
+    public static ViewConfigEntry getViewDefinition(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return viewDefinitionToViewDefinitionEntryMapping.get(viewDefinitionClass);
     }
