@@ -152,22 +152,22 @@ public class ConversationUtils
         //try to find id in request map
         String id = tryToFindWindowIdInRequestMap(requestMap);
 
-        if(id == null && windowHandler != null)
+        if((id == null || id.length() == 0) && windowHandler != null)
         {
             id = windowHandler.restoreWindowId(facesContext.getExternalContext());
         }
 
-        if(id == null)
+        if(id == null || id.length() == 0)
         {
             id = tryToRestoreWindowIdFromRequestParameterMap(requestParameterSupported, requestParameterMap);
         }
 
-        if(id != null && !cacheWindowId(externalContext, id, allowUnknownWindowIds))
+        if(id != null && id.length() > 0 && !cacheWindowId(externalContext, id, allowUnknownWindowIds))
         {
             id = null;
         }
 
-        if (id != null)
+        if (id != null && id.length() > 0)
         {
             return id;
         }
