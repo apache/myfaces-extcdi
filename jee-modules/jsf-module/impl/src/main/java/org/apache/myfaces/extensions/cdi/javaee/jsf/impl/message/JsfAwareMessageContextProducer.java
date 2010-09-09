@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
+import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
@@ -43,10 +44,12 @@ public class JsfAwareMessageContextProducer
     @Named("messageContext")
     public MessageContext createContext(MessageContext defaultMessageContext,
                                         Instance<MessageFactory> messageFactoryInstance,
-                                        Instance<ELProvider> elProviderInstance)
+                                        Instance<ELProvider> elProviderInstance,
+                                        Instance<ArgumentFilter> argumentFilterInstance)
     {
         MessageFactory messageFactory = null;
         ELProvider elProvider = null;
+        ArgumentFilter argumentFilter = null;
 
         if (!messageFactoryInstance.isUnsatisfied())
         {
@@ -58,12 +61,17 @@ public class JsfAwareMessageContextProducer
             elProvider = elProviderInstance.get();
         }
 
+        if (!argumentFilterInstance.isUnsatisfied())
+        {
+            argumentFilter = argumentFilterInstance.get();
+        }
+
         MessageContext result = defaultMessageContext.config()
                 .use()
-                .localeResolver(createJsfAwareLocaleResolver())
-                .messageResolver(new JsfAwareApplicationMessagesMessageResolver())
-                .messageInterpolator(new FacesMessageInterpolator(elProvider))
-                .addMessageHandler(new JsfAwareMessageHandler())
+                    .localeResolver(createJsfAwareLocaleResolver())
+                    .messageResolver(new JsfAwareApplicationMessagesMessageResolver())
+                    .messageInterpolator(new FacesMessageInterpolator(elProvider, argumentFilter))
+                    .addMessageHandler(new JsfAwareMessageHandler())
                 .create();
 
         if (messageFactory != null)

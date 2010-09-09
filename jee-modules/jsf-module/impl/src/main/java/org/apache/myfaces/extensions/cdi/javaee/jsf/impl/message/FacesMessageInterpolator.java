@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.impl.CompositeMessageInterpolat
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.NumberedArgumentAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
+import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 
 import java.io.Serializable;
 
@@ -36,12 +37,12 @@ class FacesMessageInterpolator implements MessageInterpolator
     
     private MessageInterpolator messageInterpolator;
 
-    public FacesMessageInterpolator(ELProvider elProvider)
+    public FacesMessageInterpolator(ELProvider elProvider, ArgumentFilter argumentFilter)
     {
         if(elProvider != null)
         {
             this.messageInterpolator = new CompositeMessageInterpolator(
-                    new ELAwareMessageInterpolator(elProvider),
+                    new ELAwareMessageInterpolator(elProvider, argumentFilter),
                     new NumberedArgumentAwareMessageInterpolator());
         }
         else

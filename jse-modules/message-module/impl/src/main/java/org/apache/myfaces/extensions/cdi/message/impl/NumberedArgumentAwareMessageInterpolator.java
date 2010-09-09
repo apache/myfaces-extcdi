@@ -27,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * TODO add ArgumentFilter
+ *
  * @author Manfred Geiler
  */
 public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterAwareMessageInterpolator
