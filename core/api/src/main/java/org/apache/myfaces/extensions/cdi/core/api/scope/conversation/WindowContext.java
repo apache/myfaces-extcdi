@@ -29,7 +29,10 @@ import java.util.Set;
  */
 public interface WindowContext extends AttributeAware, Serializable
 {
+    //TODO
     String CURRENT_WINDOW_CONTEXT_BEAN_NAME = "currentWindowContext";
+
+    String CURRENT_WINDOW_BEAN_NAME = "currentWindow";
 
     /**
      * @return the id of the conversation (unique for each window/tab)

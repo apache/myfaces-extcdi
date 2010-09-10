@@ -159,6 +159,7 @@ public class ConversationUtils
 
         if(id == null || id.length() == 0)
         {
+            //depending on the config we have to check it in case of server-side window-ids +a forced id for the request
             id = tryToRestoreWindowIdFromRequestParameterMap(requestParameterSupported, requestParameterMap);
         }
 
@@ -170,6 +171,12 @@ public class ConversationUtils
         if (id != null && id.length() > 0)
         {
             return id;
+        }
+
+        if("".equals(id))
+        {
+            //return null to force a new window id - e.g. in case of #{currentWindow.useNewId}
+            return null;
         }
 
         //try to restore id from component

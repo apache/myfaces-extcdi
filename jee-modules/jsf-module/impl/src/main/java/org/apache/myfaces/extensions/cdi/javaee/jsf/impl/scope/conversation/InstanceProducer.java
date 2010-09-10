@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import static org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext
         .CURRENT_WINDOW_CONTEXT_BEAN_NAME;
+import static org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext
+        .CURRENT_WINDOW_BEAN_NAME;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -43,6 +45,8 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -83,6 +87,38 @@ final class InstanceProducer
     protected WindowContext currentWindowContext(WindowContextManager windowContextManager)
     {
         return windowContextManager.getCurrentWindowContext();
+    }
+
+    @Produces
+    @Named(CURRENT_WINDOW_BEAN_NAME)
+    @RequestScoped
+    protected Map<String, Object> currentWindow(final WindowContextManager windowContextManager)
+    {
+        return new HashMap<String, Object>() {
+            private static final long serialVersionUID = 2356468240049980467L;
+
+            @Override
+            public Object get(Object key)
+            {
+                if(key == null || !(key instanceof String))
+                {
+                    return null;
+                }
+
+                String attributeKey = key.toString();
+
+                if("id".equalsIgnoreCase(attributeKey))
+                {
+                    return windowContextManager.getCurrentWindowContext().getId();
+                }
+
+                if("useNewId".equalsIgnoreCase(key.toString()))
+                {
+                    return ""; //return an empty string as signal for ConversationUtils#resolveWindowContextId
+                }
+                return windowContextManager.getCurrentWindowContext().getAttribute(attributeKey, Object.class);
+            }
+        };
     }
 
     @Produces
