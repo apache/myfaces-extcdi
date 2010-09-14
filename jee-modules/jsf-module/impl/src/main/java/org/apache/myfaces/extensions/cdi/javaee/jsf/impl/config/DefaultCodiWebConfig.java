@@ -21,12 +21,8 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.CodiWebConfig12;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.TRANSACTION_TOKEN_ENABLED;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.TRANSACTION_TOKEN_ENABLED_DEFAULT;
-import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Named;
 import javax.faces.context.FacesContext;
 
 /**
@@ -38,15 +34,6 @@ public class DefaultCodiWebConfig extends CodiWebConfig12
     private static final long serialVersionUID = 2195635039365964148L;
 
     private Boolean configInitialized;
-
-    @Produces
-    @Named
-    @Dependent
-    @Config(CodiWebConfig12.class)
-    public Boolean transactionTokenEnabled()
-    {
-        return isTransactionTokenEnabled();
-    }
 
     public boolean isTransactionTokenEnabled()
     {

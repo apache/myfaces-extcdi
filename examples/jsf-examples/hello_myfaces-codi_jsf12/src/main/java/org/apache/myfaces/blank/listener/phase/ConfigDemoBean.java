@@ -19,7 +19,6 @@
 package org.apache.myfaces.blank.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.Config;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.CodiWebConfig12;
 
@@ -40,10 +39,6 @@ public class ConfigDemoBean extends CodiWebConfig12
 
     @Inject
     private ConfigResolver configResolver;
-
-    @Inject
-    @Config(CodiWebConfig12.class)
-    private Boolean transactionTokenEnabled;
 
     public ConfigDemoBean()
     {

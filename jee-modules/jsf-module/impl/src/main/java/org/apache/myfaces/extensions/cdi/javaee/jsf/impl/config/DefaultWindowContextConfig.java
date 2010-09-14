@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.Config;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.ConfigParameter.*;
@@ -33,11 +31,8 @@ import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.JsfAwareConversationFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.DefaultWindowContextQuotaHandler;
 
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
-import javax.inject.Named;
 
 /**
  * @author Gerhard Petracek
@@ -48,35 +43,6 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     private static final long serialVersionUID = -1065123725125153533L;
 
     private Boolean configInitialized;
-
-    @Produces
-    @Named
-    @Dependent
-    @Config(WindowContextConfig.class)
-    public boolean getUrlParameterSupported()
-    {
-        return isUrlParameterSupported();
-    }
-
-    @Produces
-    @Named
-    @Dependent
-    @Config(WindowContextConfig.class)
-    public Integer windowContextTimeoutInMinutes()
-    {
-        return getWindowContextTimeoutInMinutes();
-    }
-
-    @Produces
-    @Named
-    @Dependent
-    @Config(WindowContextConfig.class)
-    public Integer conversationTimeoutInMinutes()
-    {
-        return getConversationTimeoutInMinutes();
-    }
-
-    //TODO <- add methods for all config parameters ->
 
     public boolean isUrlParameterSupported()
     {
