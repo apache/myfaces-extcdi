@@ -16,20 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
-
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-
-import java.io.Serializable;
+package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
+ * Marker interface
+ *
  * @author Gerhard Petracek
  */
-public interface WindowContextManager extends Serializable
+public interface BeanNames
 {
-    String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowId";
-
-    WindowContext getCurrentWindowContext();
-
-    WindowContext getWindowContext(String windowContextId);
 }

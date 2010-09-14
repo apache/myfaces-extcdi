@@ -16,20 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.impl;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.core.api.BeanNames;
 
 /**
  * @author Gerhard Petracek
  */
-public interface WindowContextManager extends Serializable
+public interface CoreModuleBeanNames extends BeanNames
 {
-    String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowId";
-
-    WindowContext getCurrentWindowContext();
-
-    WindowContext getWindowContext(String windowContextId);
+    /**
+     * bean type: {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
+     */
+    String WINDOW_CONTEXT_MANAGER_BEAN_NAME = "windowContextManager";
 }

@@ -20,15 +20,11 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import static org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext
-        .CURRENT_WINDOW_CONTEXT_BEAN_NAME;
-import static org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext
-        .CURRENT_WINDOW_BEAN_NAME;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
+import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .WINDOW_CONTEXT_MANAGER_BEAN_NAME;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.EditableWindowContextManager;

@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.message;
 
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
+import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.JsfModuleBeanNames.MESSAGE_CONTEXT;
 import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
@@ -41,7 +42,7 @@ public class JsfAwareMessageContextProducer
     @Produces
     @Dependent
     @Jsf
-    @Named("messageContext")
+    @Named(MESSAGE_CONTEXT)
     public MessageContext createContext(MessageContext defaultMessageContext,
                                         Instance<MessageFactory> messageFactoryInstance,
                                         Instance<ELProvider> elProviderInstance,

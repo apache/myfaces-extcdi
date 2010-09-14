@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.javaee.bv.impl;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.BeanValidation;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
+import static org.apache.myfaces.extensions.cdi.javaee.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
@@ -29,6 +30,7 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.MessageInterpolator;
+import javax.inject.Named;
 
 /**
  * @author Gerhard Petracek
@@ -44,6 +46,7 @@ public class CdiAwareBeanValidationProducer
     @Produces
     @Dependent
     @Advanced
+    @Named(VALIDATOR_FACTORY)
     public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
             @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {

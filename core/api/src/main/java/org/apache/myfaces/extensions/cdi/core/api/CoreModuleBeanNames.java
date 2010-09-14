@@ -16,20 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
-
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-
-import java.io.Serializable;
+package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
  * @author Gerhard Petracek
  */
-public interface WindowContextManager extends Serializable
+public interface CoreModuleBeanNames extends BeanNames
 {
-    String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowId";
+    /**
+     * Typesafe version of CURRENT_WINDOW_BEAN_NAME
+     * (bean type: {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext})
+     */
+    String CURRENT_WINDOW_CONTEXT_BEAN_NAME = "currentWindowContext";
 
-    WindowContext getCurrentWindowContext();
+    /**
+     * Useful for EL-Expressions e.g. to call #useNewId or a property of the current window
+     */
+    String CURRENT_WINDOW_BEAN_NAME = "currentWindow";
 
-    WindowContext getWindowContext(String windowContextId);
 }
