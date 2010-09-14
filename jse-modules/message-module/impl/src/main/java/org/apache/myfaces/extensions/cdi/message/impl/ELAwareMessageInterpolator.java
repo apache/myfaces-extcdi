@@ -123,10 +123,12 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
             }
             else
             {
+                //the default impl. is: '{' + expression + '}' 
                 resolvedArgumentValue = this.argumentFilter.getDefaultValue(expression);
             }
 
-            matcher.appendReplacement(buffer, resolvedArgumentValue);
+            matcher.appendReplacement(buffer, "");
+            buffer.append(resolvedArgumentValue);
         }
         matcher.appendTail(buffer);
 
