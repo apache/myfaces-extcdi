@@ -28,14 +28,14 @@
             <supported-locale>en</supported-locale>
         </locale-config>
 
-        <message-bundle>org.apache.myfaces.blank.message.app_messages</message-bundle>
+        <message-bundle>org.apache.myfaces.examples.codi.jsf12.message.app_messages</message-bundle>
 
         <resource-bundle>
-            <base-name>org.apache.myfaces.blank.message.client.bundle.c001</base-name>
+            <base-name>org.apache.myfaces.examples.codi.jsf12.message.client.bundle.c001</base-name>
             <var>c001</var>
         </resource-bundle>
         <resource-bundle>
-            <base-name>org.apache.myfaces.blank.message.client.bundle.c002</base-name>
+            <base-name>org.apache.myfaces.examples.codi.jsf12.message.client.bundle.c002</base-name>
             <var>c002</var>
         </resource-bundle>
     </application>
