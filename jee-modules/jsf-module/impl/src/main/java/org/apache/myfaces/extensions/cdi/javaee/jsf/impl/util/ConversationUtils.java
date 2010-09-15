@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
-import static org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider.getInstance;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import static org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider.getInstance;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;

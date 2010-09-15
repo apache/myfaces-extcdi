@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.DeactivatedCodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.ApplicationCache;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 

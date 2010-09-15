@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.manager;
+package org.apache.myfaces.extensions.cdi.core.api.provider;
 
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 

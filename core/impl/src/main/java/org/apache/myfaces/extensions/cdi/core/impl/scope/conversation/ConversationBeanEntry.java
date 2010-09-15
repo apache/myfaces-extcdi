@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ScopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.BeanAccessEvent;
 

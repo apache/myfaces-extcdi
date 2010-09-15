@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Typed;

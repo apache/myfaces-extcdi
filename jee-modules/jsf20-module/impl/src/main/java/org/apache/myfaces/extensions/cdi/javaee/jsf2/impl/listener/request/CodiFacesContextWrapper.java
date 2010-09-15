@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.javaee.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 

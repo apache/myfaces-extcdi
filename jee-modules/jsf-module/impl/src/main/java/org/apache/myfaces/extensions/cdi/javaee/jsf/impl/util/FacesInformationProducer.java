@@ -27,8 +27,12 @@ import javax.faces.context.FacesContext;
  */
 
 @RequestScoped
-public class FacesInformationProvider
+public class FacesInformationProducer
 {
+    protected FacesInformationProducer()
+    {
+    }
+
     @Produces
     @RequestScoped
     protected FacesContext currentFacesContext()

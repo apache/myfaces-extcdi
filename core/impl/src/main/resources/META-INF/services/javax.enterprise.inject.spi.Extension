@@ -21,6 +21,6 @@
 org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageActivationExtension
 
 # myfaces-codi BeanManager provider
-org.apache.myfaces.extensions.cdi.core.api.manager.BeanManagerProvider
+org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider
 
 org.apache.myfaces.extensions.cdi.core.api.CodiInformationExtension
