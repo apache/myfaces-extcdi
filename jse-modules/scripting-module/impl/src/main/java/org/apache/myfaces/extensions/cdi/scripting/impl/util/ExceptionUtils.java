@@ -53,6 +53,5 @@ public class ExceptionUtils
     {
         return new RuntimeException("Invalid script builder (" + ScriptBuilder.class.getName() + ") state. " +
             "It isn't allowed to override the existing state of the builder with new " + newValueHint);
-
     }
 }

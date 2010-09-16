@@ -30,6 +30,7 @@
                 <h:outputText value="result via injected ScriptBuilder (parameterized  script): #{serverSideScriptingBean.result3}"/>
                 <h:outputText value="result via injected ScriptEngine: #{serverSideScriptingBean.manualResult}"/>
                 <h:outputText value="inline: #{sExec.js['2 * 7']}"/>
+                <h:outputText value="inline: #{sExec.js['[a:3,b:4]']['a + b']}"/>
             </h:panelGrid>
         </f:view>
     </body>

@@ -16,27 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.scripting.impl;
+package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import javax.script.ScriptEngineManager;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-class ScriptEngineManagerProvider
+public class UnmodifiableMap<K, V> extends HashMap<K, V>
 {
-    private static ThreadLocal<ScriptEngineManager> scriptEngineManagerCache = new ThreadLocal<ScriptEngineManager>();
+    private static final long serialVersionUID = -7117422976009229722L;
 
-    static ScriptEngineManager getScriptEngineManagerInstance()
+    @Override
+    public final V put(K key, V value)
     {
-        ScriptEngineManager scriptEngineManager = scriptEngineManagerCache.get();
+        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+    }
 
-        if(scriptEngineManager == null)
-        {
-            scriptEngineManager = new ScriptEngineManager();
-            scriptEngineManagerCache.set(scriptEngineManager);
-        }
+    @Override
+    public final void putAll(Map<? extends K, ? extends V> m)
+    {
+        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+    }
 
-        return scriptEngineManager;
+    @Override
+    public final V remove(Object key)
+    {
+        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+    }
+
+    @Override
+    public final void clear()
+    {
+        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
     }
 }

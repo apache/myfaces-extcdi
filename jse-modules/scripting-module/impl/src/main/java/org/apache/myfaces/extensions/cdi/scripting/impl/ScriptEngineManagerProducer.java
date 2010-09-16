@@ -25,19 +25,14 @@ import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import static org.apache.myfaces.extensions.cdi.scripting.api.ScriptingModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.unknownScriptingLanguage;
-import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.overrideBuilderState;
+import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.*;
 
 import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -63,57 +58,7 @@ public class ScriptEngineManagerProducer
     //TODO add support for args
     public Map<String, Object> createScriptExecutorBean()
     {
-        return new HashMap<String, Object>() {
-            private static final long serialVersionUID = 9030764968435532235L;
-
-            @Override
-            public Object get(Object key)
-            {
-                if(key == null)
-                {
-                    return null;
-                }
-
-                String language;
-
-                if(key instanceof String)
-                {
-                    language = (String)key;
-                }
-                else
-                {
-                    language = key.toString();
-                }
-
-                language = expandLanguageName(language);
-
-                return createScriptExecutorForLanguage(language);
-            }
-        };
-    }
-
-    private Map<String, Object> createScriptExecutorForLanguage(final String language)
-    {
-        return new HashMap<String, Object>() {
-            private static final long serialVersionUID = 6583167904001037920L;
-
-            @Override
-            public Object get(Object key)
-            {
-                String script;
-
-                if(key instanceof String)
-                {
-                    script = (String)key;
-                }
-                else
-                {
-                    script = key.toString();
-                }
-
-                return evalScript(language, script);
-            }
-        };
+        return createExpressionLanguageHelper();
     }
 
     private interface PlaceHolderLanguage extends Language{}
@@ -128,62 +73,9 @@ public class ScriptEngineManagerProducer
         return createScriptExecutor(scriptEngine);
     }
 
-    private ScriptExecutor createScriptExecutor(final ScriptEngine scriptEngine)
+    private ScriptExecutor createScriptExecutor(ScriptEngine scriptEngine)
     {
-        return new ScriptExecutor()
-        {
-            public Object eval(String script)
-            {
-                return eval(script, Object.class);
-            }
-
-            public Object eval(String script, Map<String, Object> arguments)
-            {
-                return eval(script, arguments, Object.class);
-            }
-
-            public Object eval(String script, Bindings bindings)
-            {
-                return eval(script, bindings, Object.class);
-            }
-
-            public <T> T eval(String script, Class<T> returnType)
-            {
-                try
-                {
-                    return (T)scriptEngine.eval(script);
-                }
-                catch (ScriptException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            public <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType)
-            {
-                try
-                {
-                    Bindings bindings = new SimpleBindings(arguments);
-                    return (T)scriptEngine.eval(script, bindings);
-                }
-                catch (ScriptException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            public <T> T eval(String script, Bindings bindings, Class<T> returnType)
-            {
-                try
-                {
-                    return (T)scriptEngine.eval(script, bindings);
-                }
-                catch (ScriptException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
+        return new DefaultScriptExecutor(scriptEngine);
     }
 
     @Produces
@@ -196,75 +88,9 @@ public class ScriptEngineManagerProducer
         return createScriptBuilder(scriptEngine);
     }
 
-    private ScriptBuilder createScriptBuilder(final ScriptEngine scriptEngine)
+    private ScriptBuilder createScriptBuilder(ScriptEngine scriptEngine)
     {
-        return new ScriptBuilder()
-        {
-            private Map<String, Object> arguments;
-            private String script;
-            private Bindings bindings;
-
-            public ScriptBuilder script(String script)
-            {
-                this.script = script;
-                return this;
-            }
-
-            public ScriptBuilder namedArgument(String name, Object value)
-            {
-                if(this.bindings != null)
-                {
-                    throw overrideBuilderState("(named) argument/s");
-                }
-
-                if(this.arguments == null)
-                {
-                    this.arguments = new HashMap<String, Object>();
-                }
-                this.arguments.put(name, value);
-                return this;
-            }
-
-            public ScriptBuilder bindings(Bindings bindings)
-            {
-                if(this.arguments != null)
-                {
-                    throw overrideBuilderState("bindings");
-                }
-
-                this.bindings = bindings;
-                return this;
-            }
-
-            public Object eval()
-            {
-                return eval(Object.class);
-            }
-
-            public <T> T eval(Class<T> returnType)
-            {
-                try
-                {
-                    if(this.bindings == null && this.arguments == null)
-                    {
-                        return (T)scriptEngine.eval(this.script);
-                    }
-
-                    Bindings scriptBindings = this.bindings;
-
-                    if(scriptBindings == null)
-                    {
-                        scriptBindings = new SimpleBindings(this.arguments);
-                    }
-
-                    return (T)scriptEngine.eval(this.script, scriptBindings);
-                }
-                catch (ScriptException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-        };
+        return new DefaultScriptBuilder(scriptEngine);
     }
 
     @Produces
@@ -276,7 +102,7 @@ public class ScriptEngineManagerProducer
 
         String languageName = languageManager.getLanguageName(language);
 
-        return checkedScriptEngine(getScriptEngineManager().getEngineByName(languageName), languageName);
+        return checkedScriptEngine(getCurrentScriptEngineManager().getEngineByName(languageName), languageName);
     }
 
     /*
@@ -308,28 +134,5 @@ public class ScriptEngineManagerProducer
             return scriptEngine;
         }
         throw unknownScriptingLanguage(type);
-    }
-
-    private Object evalScript(String language, String script)
-    {
-        try
-        {
-            return getScriptEngineManager().getEngineByName(language).eval(script);
-        }
-        catch (ScriptException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String expandLanguageName(String language)
-    {
-        //TODO
-        return language;
-    }
-
-    private ScriptEngineManager getScriptEngineManager()
-    {
-        return ScriptEngineManagerProvider.getScriptEngineManagerInstance();
     }
 }
