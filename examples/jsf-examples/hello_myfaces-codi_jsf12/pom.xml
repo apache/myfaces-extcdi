@@ -81,6 +81,18 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-scripting-module-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-scripting-module-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- optional -->
         <dependency>
             <groupId>org.apache.myfaces.extensions.validator</groupId>
