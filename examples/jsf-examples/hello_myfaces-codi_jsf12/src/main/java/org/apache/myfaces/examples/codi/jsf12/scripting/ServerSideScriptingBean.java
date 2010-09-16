@@ -20,6 +20,7 @@ package org.apache.myfaces.examples.codi.jsf12.scripting;
 
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptLanguage;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptExecutor;
+import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.JavaScript;
 
 import javax.enterprise.context.RequestScoped;
@@ -42,6 +43,10 @@ public class ServerSideScriptingBean
     @ScriptLanguage(JavaScript.class)
     private ScriptExecutor scriptExecutor;
 
+    @Inject
+    @ScriptLanguage(JavaScript.class)
+    private ScriptBuilder scriptBuilder;
+
     //or manually
     @Inject
     @ScriptLanguage(JavaScript.class)
@@ -50,22 +55,29 @@ public class ServerSideScriptingBean
     Double result1;
     Double result2;
     Double result3;
+    Double manualResult;
 
     @PostConstruct
     protected void init()
     {
-        result1 = this.scriptExecutor.eval("10 + 4", Double.class);
+        this.result1 = this.scriptExecutor.eval("10 + 4", Double.class);
 
         Map<String, Object> arguments = new HashMap<String, Object>();
         arguments.put("a", 10);
         arguments.put("b", 4);
 
-        result2 = this.scriptExecutor.eval("a + b", arguments, Double.class);
+        this.result2 = this.scriptExecutor.eval("a + b", arguments, Double.class);
+
+        this.result3 = this.scriptBuilder
+                .script("x + y")
+                .namedArgument("x", 3)
+                .namedArgument("y", 4)
+                .eval(Double.class);
 
         //or manually
         try
         {
-            result3 = (Double)this.scriptEngine.eval("3 + 4");
+            manualResult = (Double)this.scriptEngine.eval("3 + 4");
         }
         catch (ScriptException e)
         {
@@ -86,5 +98,10 @@ public class ServerSideScriptingBean
     public Double getResult3()
     {
         return result3;
+    }
+
+    public Double getManualResult()
+    {
+        return manualResult;
     }
 }

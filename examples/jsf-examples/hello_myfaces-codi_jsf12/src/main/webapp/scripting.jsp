@@ -25,9 +25,10 @@
         <f:view>
             <h1>Scripting-Demo</h1>
             <h:panelGrid>
-                <h:outputText value="result1: #{serverSideScriptingBean.result1}"/>
-                <h:outputText value="result2: #{serverSideScriptingBean.result2}"/>
-                <h:outputText value="result3: #{serverSideScriptingBean.result3}"/>
+                <h:outputText value="result via injected ScriptExecutor: #{serverSideScriptingBean.result1}"/>
+                <h:outputText value="result via injected ScriptExecutor (parameterized script): #{serverSideScriptingBean.result2}"/>
+                <h:outputText value="result via injected ScriptBuilder (parameterized  script): #{serverSideScriptingBean.result3}"/>
+                <h:outputText value="result via injected ScriptEngine: #{serverSideScriptingBean.manualResult}"/>
                 <h:outputText value="inline: #{sExec.js['2 * 7']}"/>
             </h:panelGrid>
         </f:view>
