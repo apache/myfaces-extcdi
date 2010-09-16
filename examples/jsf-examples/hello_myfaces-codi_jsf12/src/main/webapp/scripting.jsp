@@ -26,7 +26,8 @@
             <h1>Scripting-Demo</h1>
             <h:panelGrid>
                 <h:outputText value="result1: #{serverSideScriptingBean.result1}"/>
-                <h:outputText value="result2: #{serverSideScriptingBean.result1}"/>
+                <h:outputText value="result2: #{serverSideScriptingBean.result2}"/>
+                <h:outputText value="result3: #{serverSideScriptingBean.result3}"/>
                 <h:outputText value="inline: #{sExec.js['2 * 7']}"/>
             </h:panelGrid>
         </f:view>

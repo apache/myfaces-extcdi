@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import javax.annotation.PostConstruct;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -47,16 +49,23 @@ public class ServerSideScriptingBean
 
     Double result1;
     Double result2;
+    Double result3;
 
     @PostConstruct
     protected void init()
     {
         result1 = this.scriptExecutor.eval("10 + 4", Double.class);
 
+        Map<String, Object> arguments = new HashMap<String, Object>();
+        arguments.put("a", 10);
+        arguments.put("b", 4);
+
+        result2 = this.scriptExecutor.eval("a + b", arguments, Double.class);
+
         //or manually
         try
         {
-            result2 = (Double)this.scriptEngine.eval("3 + 4");
+            result3 = (Double)this.scriptEngine.eval("3 + 4");
         }
         catch (ScriptException e)
         {
@@ -72,5 +81,10 @@ public class ServerSideScriptingBean
     public Double getResult2()
     {
         return result2;
+    }
+
+    public Double getResult3()
+    {
+        return result3;
     }
 }
