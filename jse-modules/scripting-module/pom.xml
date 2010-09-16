@@ -25,20 +25,19 @@
     <packaging>pom</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
-    <artifactId>jse-modules-project</artifactId>
+    <artifactId>scripting-module-project</artifactId>
 
-    <name>MyFaces Extensions-CDI Java-SE-Modules</name>
+    <name>MyFaces Extensions-CDI Scripting Module</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>myfaces-extcdi-parent</artifactId>
+        <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+        <artifactId>jse-modules-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modules>
-        <module>message-module</module>
-        <module>scripting-module</module>
+        <module>api</module>
+        <module>impl</module>
     </modules>
-
 </project>
