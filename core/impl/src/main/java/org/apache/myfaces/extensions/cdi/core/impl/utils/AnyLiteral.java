@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import javax.enterprise.inject.Default;
+import javax.enterprise.inject.Any;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * Literal for the {@link Default} annotation.
+ * Literal for the {@link javax.enterprise.inject.Any} annotation.
  */
-public class DefaultLiteral extends AnnotationLiteral<Default> implements Default
+public class AnyLiteral extends AnnotationLiteral<Any> implements Any
 {
-    private static final long serialVersionUID = 6389134118609481323L;
+    private static final long serialVersionUID = -8623640277155878656L;
 }

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.message;
 
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.Jsf;
 import static org.apache.myfaces.extensions.cdi.javaee.jsf.api.JsfModuleBeanNames.MESSAGE_CONTEXT;
 import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;

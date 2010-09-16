@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.Jsf;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.spi.WindowHandler;
@@ -72,7 +72,7 @@ public class ConversationUtils
     /**
      * @return the descriptor of a custom
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
-     * with the qualifier {@link org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier.Jsf} or
+     * with the qualifier {@link org.apache.myfaces.extensions.cdi.javaee.jsf.api.Jsf} or
      *         the descriptor of the default implementation provided by this module
      */
     public static Bean<WindowContextManager> resolveConversationManagerBean()

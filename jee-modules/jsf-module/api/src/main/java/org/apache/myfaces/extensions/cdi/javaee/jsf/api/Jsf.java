@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.qualifier;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
