@@ -21,9 +21,11 @@ package org.apache.myfaces.extensions.cdi.scripting.impl;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptLanguage;
 import org.apache.myfaces.extensions.cdi.scripting.api.LanguageManager;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptExecutor;
+import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import static org.apache.myfaces.extensions.cdi.scripting.api.ScriptingModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.unknownScriptingLanguage;
+import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.overrideBuilderState;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -121,8 +123,13 @@ public class ScriptEngineManagerProducer
     @Deprecated
     public ScriptExecutor createScriptExecutor(InjectionPoint injectionPoint, LanguageManager languageManager)
     {
-        final ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
+        ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
 
+        return createScriptExecutor(scriptEngine);
+    }
+
+    private ScriptExecutor createScriptExecutor(final ScriptEngine scriptEngine)
+    {
         return new ScriptExecutor()
         {
             public Object eval(String script)
@@ -133,6 +140,11 @@ public class ScriptEngineManagerProducer
             public Object eval(String script, Map<String, Object> arguments)
             {
                 return eval(script, arguments, Object.class);
+            }
+
+            public Object eval(String script, Bindings bindings)
+            {
+                return eval(script, bindings, Object.class);
             }
 
             public <T> T eval(String script, Class<T> returnType)
@@ -153,6 +165,99 @@ public class ScriptEngineManagerProducer
                 {
                     Bindings bindings = new SimpleBindings(arguments);
                     return (T)scriptEngine.eval(script, bindings);
+                }
+                catch (ScriptException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            public <T> T eval(String script, Bindings bindings, Class<T> returnType)
+            {
+                try
+                {
+                    return (T)scriptEngine.eval(script, bindings);
+                }
+                catch (ScriptException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+    }
+
+    @Produces
+    @ScriptLanguage(PlaceHolderLanguage.class)
+    @Deprecated
+    public ScriptBuilder createScriptBuilder(InjectionPoint injectionPoint, LanguageManager languageManager)
+    {
+        ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
+
+        return createScriptBuilder(scriptEngine);
+    }
+
+    private ScriptBuilder createScriptBuilder(final ScriptEngine scriptEngine)
+    {
+        return new ScriptBuilder()
+        {
+            private Map<String, Object> arguments;
+            private String script;
+            private Bindings bindings;
+
+            public ScriptBuilder script(String script)
+            {
+                this.script = script;
+                return this;
+            }
+
+            public ScriptBuilder namedArgument(String name, Object value)
+            {
+                if(this.bindings != null)
+                {
+                    throw overrideBuilderState("(named) argument/s");
+                }
+
+                if(this.arguments == null)
+                {
+                    this.arguments = new HashMap<String, Object>();
+                }
+                this.arguments.put(name, value);
+                return this;
+            }
+
+            public ScriptBuilder bindings(Bindings bindings)
+            {
+                if(this.arguments != null)
+                {
+                    throw overrideBuilderState("bindings");
+                }
+
+                this.bindings = bindings;
+                return this;
+            }
+
+            public Object eval()
+            {
+                return eval(Object.class);
+            }
+
+            public <T> T eval(Class<T> returnType)
+            {
+                try
+                {
+                    if(this.bindings == null && this.arguments == null)
+                    {
+                        return (T)scriptEngine.eval(this.script);
+                    }
+
+                    Bindings scriptBindings = this.bindings;
+
+                    if(scriptBindings == null)
+                    {
+                        scriptBindings = new SimpleBindings(this.arguments);
+                    }
+
+                    return (T)scriptEngine.eval(this.script, scriptBindings);
                 }
                 catch (ScriptException e)
                 {

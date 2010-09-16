@@ -19,22 +19,19 @@
 package org.apache.myfaces.extensions.cdi.scripting.api;
 
 import javax.script.Bindings;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ScriptExecutor
+public interface ScriptBuilder
 {
-    Object eval(String script);
+    ScriptBuilder script(String script);
 
-    Object eval(String script, Map<String, Object> arguments);
+    ScriptBuilder namedArgument(String name, Object value);
 
-    Object eval(String script, Bindings bindings);
+    ScriptBuilder bindings(Bindings bindings);
 
-    <T> T eval(String script, Class<T> returnType);
-
-    <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType);
-
-    <T> T eval(String script, Bindings bindings, Class<T> returnType);
+    Object eval();
+    
+    <T> T eval(Class<T> returnType);
 }

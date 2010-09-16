@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.LanguageBean;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
+import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 
 /**
  * @author Gerhard Petracek
@@ -46,5 +47,12 @@ public class ExceptionUtils
     {
         return new RuntimeException("Invalid approach detected to replace " + id.getName() + ". Can't replace " +
             foundLanguage.getClass().getName() + " with " + newLanguage.getClass().getName());
+    }
+
+    public static RuntimeException overrideBuilderState(String newValueHint)
+    {
+        return new RuntimeException("Invalid script builder (" + ScriptBuilder.class.getName() + ") state. " +
+            "It isn't allowed to override the existing state of the builder with new " + newValueHint);
+
     }
 }
