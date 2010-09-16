@@ -28,6 +28,8 @@ import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUti
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
+import javax.script.Bindings;
+import javax.script.SimpleBindings;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.Dependent;
@@ -56,6 +58,7 @@ public class ScriptEngineManagerProducer
     @Produces
     @Dependent
     @Named(SCRIPT_EXECUTOR)
+    //TODO add support for args
     public Map<String, Object> createScriptExecutorBean()
     {
         return new HashMap<String, Object>() {
@@ -127,11 +130,29 @@ public class ScriptEngineManagerProducer
                 return eval(script, Object.class);
             }
 
+            public Object eval(String script, Map<String, Object> arguments)
+            {
+                return eval(script, arguments, Object.class);
+            }
+
             public <T> T eval(String script, Class<T> returnType)
             {
                 try
                 {
                     return (T)scriptEngine.eval(script);
+                }
+                catch (ScriptException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            public <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType)
+            {
+                try
+                {
+                    Bindings bindings = new SimpleBindings(arguments);
+                    return (T)scriptEngine.eval(script, bindings);
                 }
                 catch (ScriptException e)
                 {

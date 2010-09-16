@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.api;
 
+import java.util.Map;
+
 /**
  * @author Gerhard Petracek
  */
@@ -25,5 +27,9 @@ public interface ScriptExecutor
 {
     Object eval(String script);
 
+    Object eval(String script, Map<String, Object> arguments);
+
     <T> T eval(String script, Class<T> returnType);
+
+    <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType);
 }
