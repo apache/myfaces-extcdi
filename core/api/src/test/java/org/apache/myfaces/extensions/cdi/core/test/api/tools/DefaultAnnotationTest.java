@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.test.api.tools;
 
 import java.lang.annotation.Annotation;
-import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
+import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

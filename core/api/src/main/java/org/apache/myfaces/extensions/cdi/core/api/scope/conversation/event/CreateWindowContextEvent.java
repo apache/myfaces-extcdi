@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config.view;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
 /**
  * @author Gerhard Petracek
  */
-public final class AnyView implements ViewConfig
+public final class CreateWindowContextEvent extends WindowContextEvent
 {
+    public CreateWindowContextEvent(String windowContextId)
+    {
+        super(windowContextId);
+    }
 }

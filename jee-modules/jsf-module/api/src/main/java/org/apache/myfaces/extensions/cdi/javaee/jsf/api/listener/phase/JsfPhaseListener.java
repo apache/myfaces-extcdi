@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.listener.phase.ApplicationPhaseListener;
-
 import javax.enterprise.inject.Stereotype;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.TYPE;
@@ -36,7 +34,6 @@ import java.lang.annotation.Target;
 @Documented
 
 @Stereotype
-@ApplicationPhaseListener
 public @interface JsfPhaseListener
 {
 }

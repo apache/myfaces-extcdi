@@ -16,24 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.listener.phase;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
-import javax.enterprise.inject.Stereotype;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-
-@Stereotype
-
-@Target(TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface ApplicationPhaseListener
+public final class UnscopeBeanEvent extends BeanEvent
 {
+    public UnscopeBeanEvent(Serializable bean)
+    {
+        super(bean);
+    }
 }

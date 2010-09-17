@@ -16,22 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
+
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class WindowContextEvent
+public final class BeanAccessEvent extends BeanEvent
 {
-    private final String windowContextId;
-
-    public WindowContextEvent(String windowContextId)
+    public BeanAccessEvent(Serializable bean)
     {
-        this.windowContextId = windowContextId;
-    }
-
-    public final String getWindowContextId()
-    {
-        return windowContextId;
+        super(bean);
     }
 }

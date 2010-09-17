@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
+
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
  * @author Gerhard Petracek

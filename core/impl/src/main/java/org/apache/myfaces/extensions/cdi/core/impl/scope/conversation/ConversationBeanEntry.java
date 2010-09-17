@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ScopeBeanEvent;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.BeanAccessEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.BeanAccessEvent;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;

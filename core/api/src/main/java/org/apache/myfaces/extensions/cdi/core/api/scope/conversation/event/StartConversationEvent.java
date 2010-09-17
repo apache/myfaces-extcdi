@@ -16,15 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.util;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
+
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
  * @author Gerhard Petracek
  */
-public class StringUtils
+public final class StartConversationEvent extends ConversationEvent
 {
-    public static boolean isEmpty(String string)
+    public StartConversationEvent(Conversation conversation)
     {
-        return string == null || "".equals(string);
+        super(conversation);
     }
 }

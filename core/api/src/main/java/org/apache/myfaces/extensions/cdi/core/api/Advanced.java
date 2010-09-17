@@ -29,6 +29,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 
 /**
+ * For injection of advanced implementations provided by CODI, if JEE supports the injection of the default impl.
+ *
  * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR})

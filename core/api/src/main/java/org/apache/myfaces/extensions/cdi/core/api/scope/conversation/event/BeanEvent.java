@@ -16,17 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public final class UnscopeBeanEvent extends BeanEvent
+public abstract class BeanEvent
 {
-    public UnscopeBeanEvent(Serializable bean)
+    private final Serializable bean;
+
+    public BeanEvent(Serializable bean)
     {
-        super(bean);
+        this.bean = bean;
+    }
+
+    public final Serializable getBeanInstance()
+    {
+        return bean;
     }
 }

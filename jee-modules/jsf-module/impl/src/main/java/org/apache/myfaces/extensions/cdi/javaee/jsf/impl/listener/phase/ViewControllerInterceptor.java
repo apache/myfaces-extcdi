@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.AnyView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
@@ -36,10 +35,12 @@ import java.lang.reflect.Method;
  * @author Gerhard Petracek
  */
 
-@View(AnyView.class)
+@View(ViewControllerInterceptor.PlaceHolderConfig.class)
 @Interceptor
 public class ViewControllerInterceptor
 {
+    interface PlaceHolderConfig extends ViewConfig {}
+
     @AroundInvoke
     public Object filterPhaseListenerMethods(InvocationContext invocationContext) throws Exception
     {

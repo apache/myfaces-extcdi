@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.tools.annotate.DefaultAnnotation;
+import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.api.Jsf;
