@@ -20,10 +20,12 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.getCurrentScriptEngineManager;
+import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
+import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
 import javax.script.ScriptException;
-import javax.script.Bindings;
 import javax.script.SimpleBindings;
+import javax.script.Bindings;
 import java.util.Map;
 
 /**
@@ -69,6 +71,8 @@ class ScriptHelperMap extends UnmodifiableMap<String, Object>
     {
         try
         {
+            script = interpreteScript(script);
+
             Bindings bindings = null;
             if(arguments != null)
             {
@@ -85,5 +89,11 @@ class ScriptHelperMap extends UnmodifiableMap<String, Object>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    private String interpreteScript(String script)
+    {
+        ExternalExpressionInterpreter externalExpressionInterpreter = resolveExternalExpressionInterpreter();
+        return externalExpressionInterpreter.transform(script);
     }
 }

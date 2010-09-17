@@ -27,10 +27,12 @@
             <h:panelGrid>
                 <h:outputText value="result via injected ScriptExecutor: #{serverSideScriptingBean.result1}"/>
                 <h:outputText value="result via injected ScriptExecutor (parameterized script): #{serverSideScriptingBean.result2}"/>
-                <h:outputText value="result via injected ScriptBuilder (parameterized  script): #{serverSideScriptingBean.result3}"/>
+                <h:outputText value="result via injected ScriptBuilder (parameterized script): #{serverSideScriptingBean.result3}"/>
+                <h:outputText value="result via injected ScriptBuilder (script with value-bindings): #{serverSideScriptingBean.dynResult}"/>
                 <h:outputText value="result via injected ScriptEngine: #{serverSideScriptingBean.manualResult}"/>
                 <h:outputText value="inline: #{sExec.js['2 * 7']}"/>
-                <h:outputText value="inline: #{sExec.js['[a:3,b:4]']['a + b']}"/>
+                <h:outputText value="inline (parameterized  script): #{sExec.js['[a:3,b:4]']['a + b']}"/>
+                <h:outputText value="inline (parameterized  script - via value-binding): #{sExec.js['[a:#{serverSideScriptingBean.result1},b:#{serverSideScriptingBean.result2}]']['a + b']}"/>
             </h:panelGrid>
         </f:view>
     </body>

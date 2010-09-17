@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.scripting.impl;
 
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.overrideBuilderState;
+import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
+import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -45,8 +47,9 @@ class DefaultScriptBuilder implements ScriptBuilder
 
     public ScriptBuilder script(String script)
     {
-        this.script = script;
-        return this;
+        DefaultScriptBuilder newScriptBuilder = new DefaultScriptBuilder(this.scriptEngine);
+        newScriptBuilder.script = script;
+        return newScriptBuilder;
     }
 
     public ScriptBuilder namedArgument(String name, Object value)
@@ -84,6 +87,8 @@ class DefaultScriptBuilder implements ScriptBuilder
     {
         try
         {
+            this.script = interpreteScript(this.script);
+
             if(this.bindings == null && this.arguments == null)
             {
                 return (T)scriptEngine.eval(this.script);
@@ -102,5 +107,11 @@ class DefaultScriptBuilder implements ScriptBuilder
         {
             throw new RuntimeException(e);
         }
+    }
+
+    private String interpreteScript(String script)
+    {
+        ExternalExpressionInterpreter externalExpressionInterpreter = resolveExternalExpressionInterpreter();
+        return externalExpressionInterpreter.transform(script);
     }
 }

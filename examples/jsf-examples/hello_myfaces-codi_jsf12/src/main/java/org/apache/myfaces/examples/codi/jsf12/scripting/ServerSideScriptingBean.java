@@ -55,6 +55,7 @@ public class ServerSideScriptingBean
     Double result1;
     Double result2;
     Double result3;
+    Double dynResult;
     Double manualResult;
 
     @PostConstruct
@@ -83,6 +84,17 @@ public class ServerSideScriptingBean
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public Double getDynResult()
+    {
+        if(this.dynResult == null)
+        {
+            this.dynResult = this.scriptBuilder
+                    .script("#{serverSideScriptingBean.result1} + #{serverSideScriptingBean.result2}")
+                    .eval(Double.class);
+        }
+        return this.dynResult;
     }
 
     public Double getResult1()

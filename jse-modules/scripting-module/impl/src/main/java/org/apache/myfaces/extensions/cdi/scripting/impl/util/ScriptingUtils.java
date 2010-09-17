@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
 import javax.script.ScriptEngineManager;
 
@@ -49,5 +51,15 @@ public class ScriptingUtils
     public static UnmodifiableMap<String, Object> createExpressionLanguageHelper()
     {
         return new ExpressionLanguageSelectionMap();
+    }
+
+    public static ExternalExpressionInterpreter resolveExternalExpressionInterpreter()
+    {
+        ExternalExpressionInterpreter externalExpressionInterpreter =
+                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ExternalExpressionInterpreter.class);
+
+        return externalExpressionInterpreter != null ?
+                externalExpressionInterpreter :
+                new DefaultExternalExpressionInterpreter();
     }
 }

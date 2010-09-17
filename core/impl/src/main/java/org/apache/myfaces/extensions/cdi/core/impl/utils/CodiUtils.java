@@ -66,16 +66,38 @@ public class CodiUtils
 
     public static <T> T getOrCreateScopedInstanceOfBeanByClass(Class<T> targetClass, Annotation... qualifier)
     {
+        return getOrCreateScopedInstanceOfBeanByClass(targetClass, false, qualifier);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+            Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
+    {
         Set<? extends Bean> foundBeans = BeanManagerProvider.getInstance().getBeanManager()
                 .getBeans(targetClass, qualifier);
 
-        if(foundBeans.size() != 1)
+        if(foundBeans.size() > 1)
         {
-            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName());
+            StringBuffer detailsOfBeans = new StringBuffer();
+
+            for(Bean bean : foundBeans)
+            {
+                detailsOfBeans.append(bean.toString());
+            }
+            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName() +
+                    " the found beans are: " + detailsOfBeans.toString());
         }
 
-        //noinspection unchecked
-        return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
+        if(foundBeans.size() == 1)
+        {
+            //noinspection unchecked
+            return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
+        }
+
+        if(!optionalBeanAllowed)
+        {
+            throw new IllegalStateException("No bean found for type: " + targetClass.getName());
+        }
+        return null;
     }
 
     public static <T> T getOrCreateScopedInstanceOfBean(Bean<T> bean)

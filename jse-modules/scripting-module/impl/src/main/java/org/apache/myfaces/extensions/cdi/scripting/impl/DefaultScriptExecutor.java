@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl;
 
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptExecutor;
+import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
+import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
@@ -57,6 +59,7 @@ public class DefaultScriptExecutor implements ScriptExecutor
     {
         try
         {
+            script = interpreteScript(script);
             return (T)scriptEngine.eval(script);
         }
         catch (ScriptException e)
@@ -67,9 +70,14 @@ public class DefaultScriptExecutor implements ScriptExecutor
 
     public <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType)
     {
+        return eval(script, new SimpleBindings(arguments), returnType);
+    }
+
+    public <T> T eval(String script, Bindings bindings, Class<T> returnType)
+    {
         try
         {
-            Bindings bindings = new SimpleBindings(arguments);
+            script = interpreteScript(script);
             return (T)scriptEngine.eval(script, bindings);
         }
         catch (ScriptException e)
@@ -78,15 +86,9 @@ public class DefaultScriptExecutor implements ScriptExecutor
         }
     }
 
-    public <T> T eval(String script, Bindings bindings, Class<T> returnType)
+    private String interpreteScript(String script)
     {
-        try
-        {
-            return (T)scriptEngine.eval(script, bindings);
-        }
-        catch (ScriptException e)
-        {
-            throw new RuntimeException(e);
-        }
+        ExternalExpressionInterpreter externalExpressionInterpreter = resolveExternalExpressionInterpreter();
+        return externalExpressionInterpreter.transform(script);
     }
 }
