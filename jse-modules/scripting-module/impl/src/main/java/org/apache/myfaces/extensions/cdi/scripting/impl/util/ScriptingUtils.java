@@ -56,7 +56,7 @@ public class ScriptingUtils
     public static ExternalExpressionInterpreter resolveExternalExpressionInterpreter()
     {
         ExternalExpressionInterpreter externalExpressionInterpreter =
-                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ExternalExpressionInterpreter.class);
+                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ExternalExpressionInterpreter.class, true);
 
         return externalExpressionInterpreter != null ?
                 externalExpressionInterpreter :

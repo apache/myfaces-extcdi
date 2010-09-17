@@ -52,11 +52,11 @@ public class ServerSideScriptingBean
     @ScriptLanguage(JavaScript.class)
     private ScriptEngine scriptEngine;
 
-    Double result1;
-    Double result2;
-    Double result3;
-    Double dynResult;
-    Double manualResult;
+    private Double result1;
+    private Double result2;
+    private Double result3;
+    private Double dynResult;
+    private Double manualResult;
 
     @PostConstruct
     protected void init()
