@@ -24,15 +24,15 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
     <application>
-        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.navigation.AccessScopeAwareNavigationHandler</navigation-handler>
-        <navigation-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.navigation.FlowNavigationHandler</navigation-handler>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.AccessScopeAwareNavigationHandler</navigation-handler>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.FlowNavigationHandler</navigation-handler>
 
-        <view-handler>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>
+        <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>
     </application>
 
     <factory>
-        <lifecycle-factory>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.phase.CodiLifecycleFactoryWrapper</lifecycle-factory>
-        <faces-context-factory>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.listener.request.CodiFacesContextFactory</faces-context-factory>
-        <render-kit-factory>org.apache.myfaces.extensions.cdi.javaee.jsf.impl.scope.conversation.CodiRenderKitFactory</render-kit-factory>
+        <lifecycle-factory>org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.CodiLifecycleFactoryWrapper</lifecycle-factory>
+        <faces-context-factory>org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.CodiFacesContextFactory</faces-context-factory>
+        <render-kit-factory>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CodiRenderKitFactory</render-kit-factory>
     </factory>
 </faces-config>

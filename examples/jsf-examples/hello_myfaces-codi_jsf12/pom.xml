@@ -58,37 +58,37 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-scripting-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-scripting-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>

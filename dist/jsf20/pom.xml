@@ -50,49 +50,49 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-message-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
         
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-message-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-scripting-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-scripting-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
@@ -119,14 +119,14 @@
                         <includes>
                             <include>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-api</include>
                             <include>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-jsf20-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-jsf20-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-bv1-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-bv1-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-message-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-message-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-scripting-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-scripting-module-impl</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-api</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-bv1-module-api</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-bv1-module-impl</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-api</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-scripting-module-api</include>
+                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-scripting-module-impl</include>
                         </includes>
                     </artifactSet>
                 </configuration>

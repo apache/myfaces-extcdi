@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.validator.core.renderkit.ExtValRendererProx
 import org.apache.myfaces.extensions.validator.core.interceptor.ValidationInterceptor;
 import org.apache.myfaces.extensions.validator.beanval.validation.ModelValidationPhaseListener;
 import org.apache.myfaces.extensions.validator.util.JsfUtils;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfPhaseListener;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 
 /**
  * Performance tuning based on http://wiki.apache.org/myfaces/Extensions/Validator/JSR303/Advanced

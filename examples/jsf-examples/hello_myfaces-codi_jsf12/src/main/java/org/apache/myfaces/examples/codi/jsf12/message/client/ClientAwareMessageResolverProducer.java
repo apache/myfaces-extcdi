@@ -20,7 +20,7 @@ package org.apache.myfaces.examples.codi.jsf12.message.client;
 
 import org.apache.myfaces.examples.codi.jsf12.message.client.model.Client;
 import org.apache.myfaces.examples.codi.jsf12.message.client.qualifier.ClientQualifier;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.Jsf;
+import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;

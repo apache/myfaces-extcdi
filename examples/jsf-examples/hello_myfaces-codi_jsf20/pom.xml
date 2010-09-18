@@ -53,13 +53,13 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.jee-modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
             <scope>runtime</scope>
         </dependency>

@@ -21,11 +21,11 @@ package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
 import org.apache.myfaces.examples.codi.jsf12.view.InvalidPage;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.PhaseId;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.request.RequestTypeResolver;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Model;

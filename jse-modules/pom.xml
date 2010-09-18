@@ -24,7 +24,7 @@
 
     <packaging>pom</packaging>
 
-    <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+    <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
     <artifactId>jse-modules-project</artifactId>
 
     <name>MyFaces Extensions-CDI Java-SE-Modules</name>

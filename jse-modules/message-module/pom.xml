@@ -24,14 +24,14 @@
 
     <packaging>pom</packaging>
 
-    <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+    <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
     <artifactId>message-module-project</artifactId>
 
     <name>MyFaces Extensions-CDI I18N-Message 1.0 Module</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+        <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jse-modules-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>

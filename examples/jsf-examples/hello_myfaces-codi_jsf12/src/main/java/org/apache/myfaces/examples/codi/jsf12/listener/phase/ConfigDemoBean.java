@@ -20,7 +20,7 @@ package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.CodiWebConfig12;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.CodiWebConfig12;
 
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Typed;
