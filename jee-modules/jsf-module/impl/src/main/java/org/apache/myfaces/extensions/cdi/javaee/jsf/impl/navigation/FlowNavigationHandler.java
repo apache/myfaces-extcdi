@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view.ViewConfigEntry;
 

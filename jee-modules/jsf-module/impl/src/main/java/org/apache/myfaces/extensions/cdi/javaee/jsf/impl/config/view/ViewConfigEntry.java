@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.PageBean;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.PageBean;
 
 import javax.inject.Named;
 import java.util.List;

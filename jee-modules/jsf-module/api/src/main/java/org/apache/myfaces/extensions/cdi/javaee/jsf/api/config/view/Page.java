@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view;
 
 import javax.enterprise.inject.Stereotype;
 import java.lang.annotation.Documented;

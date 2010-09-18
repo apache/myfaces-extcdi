@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view;
 
 /**
  * @author Gerhard Petracek

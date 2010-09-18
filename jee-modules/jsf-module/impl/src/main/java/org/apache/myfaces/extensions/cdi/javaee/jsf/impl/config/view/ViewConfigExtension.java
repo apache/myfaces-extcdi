@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.cdi.javaee.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.JsfViewExtension;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.JsfViewExtension;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.NavigationMode;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;

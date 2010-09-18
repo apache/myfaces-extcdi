@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.Page;
 
 /**
  * @author Gerhard Petracek

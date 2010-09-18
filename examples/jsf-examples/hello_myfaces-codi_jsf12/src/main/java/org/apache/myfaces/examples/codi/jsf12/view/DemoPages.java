@@ -19,10 +19,10 @@
 package org.apache.myfaces.examples.codi.jsf12.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.JsfViewExtension;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.NavigationMode;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.Page;
-import org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition.PageBean;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.PageBean;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.JsfViewExtension;
+import org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.ConversationDemoBean1;
 
 /**

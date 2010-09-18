@@ -25,7 +25,7 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
-    <artifactId>dist-jsf20</artifactId>
+    <artifactId>myfaces-extcdi-dist-jsf20</artifactId>
 
     <name>MyFaces Extensions-CDI Distribution for JSF 2.0</name>
     <version>1.0.0-SNAPSHOT</version>
@@ -84,6 +84,18 @@
             <artifactId>myfaces-extcdi-message-module-impl</artifactId>
             <scope>compile</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-scripting-module-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.jse-modules</groupId>
+            <artifactId>myfaces-extcdi-scripting-module-impl</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     
     <build>
@@ -113,6 +125,8 @@
                             <include>org.apache.myfaces.extensions.cdi.jee-modules:myfaces-extcdi-bv1-module-impl</include>
                             <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-message-module-api</include>
                             <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-message-module-impl</include>
+                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-scripting-module-api</include>
+                            <include>org.apache.myfaces.extensions.cdi.jse-modules:myfaces-extcdi-scripting-module-impl</include>
                         </includes>
                     </artifactSet>
                 </configuration>

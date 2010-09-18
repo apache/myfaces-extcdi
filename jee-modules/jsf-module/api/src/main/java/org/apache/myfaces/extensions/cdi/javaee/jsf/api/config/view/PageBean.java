@@ -16,15 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.javaee.jsf.api.view.definition;
+package org.apache.myfaces.extensions.cdi.javaee.jsf.api.config.view;
+
+import javax.enterprise.inject.Stereotype;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * @author Gerhard Petracek
  */
-public interface JsfViewExtension
+@Stereotype
+
+//don't use @Inherited
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
+public @interface PageBean
 {
-    String XHTML = "xhtml";
-    String JSF = "jsf";
-    String FACES = "faces";
-    String JSP = "jsp";
+    Class value();
+
+    String name() default "";
+
+    @Target(TYPE)
+    @Retention(RUNTIME)
+    @Documented
+    public static @interface List
+    {
+        PageBean[] value();
+    }
 }
