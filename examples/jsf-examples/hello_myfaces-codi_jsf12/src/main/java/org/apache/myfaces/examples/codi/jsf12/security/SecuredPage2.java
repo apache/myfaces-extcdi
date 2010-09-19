@@ -18,10 +18,6 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.security;
 
-import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
-import org.apache.myfaces.examples.codi.jsf12.view.DeniedPage;
-import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
-
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
@@ -30,22 +26,10 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named
 @RequestScoped
-public class SecuredPage1
+public class SecuredPage2
 {
-    public String nextPage1()
+    public String getValue()
     {
-        return DemoPages.HelloMyFacesCodi1.class.getName();
-    }
-
-    @Secured(ForcedViolationVoter.class)
-    public String nextPage2()
-    {
-        return DemoPages.HelloMyFacesCodi2.class.getName();
-    }
-
-    //nav. secured via view config
-    public String nextPage3()
-    {
-        return DeniedPage.class.getName();
+        throw new RuntimeException("this shouldn't be invoked due to the forced security violation");
     }
 }

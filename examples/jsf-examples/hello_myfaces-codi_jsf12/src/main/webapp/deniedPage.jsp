@@ -23,14 +23,7 @@
     </head>
     <body>
         <f:view>
-            <h1>Security-Demo</h1>
-            <h:form>
-                <h:panelGrid>
-                    <h:commandButton value="next" action="#{securedPage1.nextPage1}"/>
-                    <h:commandButton value="next - forced violation" action="#{securedPage1.nextPage2}"/>
-                    <h:commandButton value="navigate to denied page" action="#{securedPage1.nextPage3}"/>
-                </h:panelGrid>
-            </h:form>
+            <h:outputText value="#{securedPage2.value}"/>
         </f:view>
     </body>
 </html>

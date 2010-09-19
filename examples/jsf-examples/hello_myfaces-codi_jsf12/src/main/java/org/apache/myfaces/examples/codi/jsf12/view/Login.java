@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorPage;
+import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension.JSP;
 
@@ -26,6 +26,6 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExten
  * @author Gerhard Petracek
  */
 @Page(extension = JSP)
-public final class Login implements DefaultErrorPage
+public final class Login implements DefaultErrorView
 {
 }

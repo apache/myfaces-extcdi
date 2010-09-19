@@ -16,36 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.security;
+package org.apache.myfaces.examples.codi.jsf12.view;
 
-import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
-import org.apache.myfaces.examples.codi.jsf12.view.DeniedPage;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
-
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension.JSP;
+import org.apache.myfaces.examples.codi.jsf12.security.ForcedViolationVoter;
 
 /**
  * @author Gerhard Petracek
  */
-@Named
-@RequestScoped
-public class SecuredPage1
+@Page(extension = JSP)
+@Secured(ForcedViolationVoter.class)
+public final class DeniedPage implements ViewConfig
 {
-    public String nextPage1()
-    {
-        return DemoPages.HelloMyFacesCodi1.class.getName();
-    }
-
-    @Secured(ForcedViolationVoter.class)
-    public String nextPage2()
-    {
-        return DemoPages.HelloMyFacesCodi2.class.getName();
-    }
-
-    //nav. secured via view config
-    public String nextPage3()
-    {
-        return DeniedPage.class.getName();
-    }
 }
