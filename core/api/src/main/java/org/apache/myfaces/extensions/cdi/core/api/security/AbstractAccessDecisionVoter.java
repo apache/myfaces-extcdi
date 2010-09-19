@@ -18,13 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
-import javax.interceptor.InvocationContext;
-import java.util.Set;
-
 /**
  * @author Gerhard Petracek
  */
-public interface AccessDecisionVoter
+public abstract class AbstractAccessDecisionVoter implements AccessDecisionVoter
 {
-    void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations);
+    protected SecurityViolation newSecurityViolation(final String reason)
+    {
+        return new SecurityViolation()
+        {
+            public String getReason()
+            {
+                return reason;
+            }
+        };
+    }
 }

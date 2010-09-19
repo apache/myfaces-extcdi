@@ -18,31 +18,29 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.security;
 
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
+import org.apache.myfaces.extensions.cdi.core.api.security.AbstractAccessDecisionVoter;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 
 import javax.interceptor.InvocationContext;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * @author Gerhard Petracek
  */
 @ApplicationScoped
-public class ForcedViolationVoter implements AccessDecisionVoter
+public class ForcedViolationVoter extends AbstractAccessDecisionVoter
 {
-    public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
-    {
-        Set<SecurityViolation> securityViolations = new HashSet<SecurityViolation>();
-        securityViolations.add(new SecurityViolation()
-        {
-            public String getReason()
-            {
-                return "forced security violation";
-            }
-        });
+    @Inject
+    @Jsf
+    private MessageContext messageContext;
 
-        return securityViolations;
+    public void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations)
+    {
+        String reason = this.messageContext.message().text("{inactive_user_violation}").toText();
+        violations.add(newSecurityViolation(reason));
     }
 }
