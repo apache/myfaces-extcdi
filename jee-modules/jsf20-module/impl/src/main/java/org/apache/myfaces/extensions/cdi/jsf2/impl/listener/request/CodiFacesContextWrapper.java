@@ -28,6 +28,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
+import javax.faces.application.Application;
 import java.util.Set;
 
 /**
@@ -62,6 +63,12 @@ class CodiFacesContextWrapper extends FacesContextWrapper
         initBroadcaster();
 
         broadcastBeforeFacesRequestEvent();
+    }
+
+    @Override
+    public Application getApplication()
+    {
+        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication());
     }
 
     private void broadcastBeforeFacesRequestEvent()

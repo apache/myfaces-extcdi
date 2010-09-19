@@ -23,17 +23,17 @@ import java.lang.annotation.Target;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.CONSTRUCTOR;
+import static java.lang.annotation.ElementType.*;
 
 /**
  * For injection of advanced implementations provided by CODI, if JEE supports the injection of the default impl.
  *
+ * Furthermore, it's a marker for classes to signal the framework that
+ * it's allowed to perform dependency injection on instances of supported types.
+ *
  * @author Gerhard Petracek
  */
-@Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR})
+@Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)
 @Documented
 

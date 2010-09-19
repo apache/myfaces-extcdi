@@ -72,6 +72,11 @@ class CodiFacesContextWrapper extends FacesContext
         broadcastBeforeFacesRequestEvent();
     }
 
+    public Application getApplication()
+    {
+        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication());
+    }
+
     private void broadcastBeforeFacesRequestEvent()
     {
         this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(this);
@@ -85,11 +90,6 @@ class CodiFacesContextWrapper extends FacesContext
     public ELContext getELContext()
     {
         return wrappedFacesContext.getELContext();
-    }
-
-    public Application getApplication()
-    {
-        return wrappedFacesContext.getApplication();
     }
 
     public Iterator<String> getClientIdsWithMessages()

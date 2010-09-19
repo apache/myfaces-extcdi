@@ -21,11 +21,14 @@ package org.apache.myfaces.extensions.cdi.core.impl.utils;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.spi.AnnotatedType;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -169,5 +172,52 @@ public class CodiUtils
     public static ProjectStage getCurrentProjectStage()
     {
         return getOrCreateScopedInstanceOfBeanByClass(ProjectStage.class);
+    }
+
+    public static <T> T tryToInjectDependencies(T instance)
+    {
+        if(instance == null)
+        {
+            return null;
+        }
+
+        if(instance.getClass().isAnnotationPresent(Advanced.class))
+        {
+            injectFields(instance);
+        }
+        return instance;
+    }
+
+    /**
+     * Performes dependency injection for objects which aren't know as bean
+     *
+     * @param instance the target instance
+     * @param <T> generic type
+     * @return an instance produced by the {@link javax.enterprise.inject.spi.BeanManager} or
+     * a manually injected instance (or null if the given instance is null)
+     */
+    @SuppressWarnings({"unchecked"})
+    public static <T> T injectFields(T instance)
+    {
+        if(instance == null)
+        {
+            return null;
+        }
+
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        
+        T foundBean = (T)getOrCreateScopedInstanceOfBeanByClass(instance.getClass(), true);
+
+        if(foundBean != null)
+        {
+            return foundBean;
+        }
+
+        CreationalContext creationalContext = beanManager.createCreationalContext(null);
+
+        AnnotatedType annotatedType = beanManager.createAnnotatedType(instance.getClass());
+        InjectionTarget injectionTarget = beanManager.createInjectionTarget(annotatedType);
+        injectionTarget.inject(instance, creationalContext);
+        return instance;
     }
 }
