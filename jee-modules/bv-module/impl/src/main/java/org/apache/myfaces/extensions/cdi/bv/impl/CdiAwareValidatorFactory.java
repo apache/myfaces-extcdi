@@ -18,12 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.injectFields;
 
-import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Typed;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.validation.ValidatorFactory;
 import javax.validation.Validator;
 import javax.validation.ValidatorContext;
@@ -31,7 +28,6 @@ import javax.validation.MessageInterpolator;
 import javax.validation.TraversableResolver;
 import javax.validation.ConstraintValidatorFactory;
 import javax.validation.ConstraintValidator;
-import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -79,25 +75,9 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
             @SuppressWarnings({"unchecked"})
             public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> targetClass)
             {
-                BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+                T validator = wrappedValidatorFactory.getConstraintValidatorFactory().getInstance(targetClass);
 
-                Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass);
-
-                if (foundBeans.isEmpty())
-                {
-                    return wrappedValidatorFactory.getConstraintValidatorFactory().getInstance(targetClass);
-                }
-                else if (foundBeans.size() > 1)
-                {
-                    throw new IllegalStateException(
-                            foundBeans.size() + " beans are available for the class: " + targetClass);
-                }
-
-                Bean<ConstraintValidator> constraintValidatorBean = foundBeans.iterator().next();
-                CreationalContext<ConstraintValidator> creationalContext =
-                        beanManager.createCreationalContext(constraintValidatorBean);
-
-                return (T) constraintValidatorBean.create(creationalContext);
+                return injectFields(validator);
             }
         };
     }
