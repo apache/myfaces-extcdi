@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
@@ -101,7 +102,12 @@ public class PhaseListenerExtension implements Extension
         if(foundPhaseListeners != null && ! foundPhaseListeners.isEmpty())
         {
             List<PhaseListener> result = new ArrayList<PhaseListener>(foundPhaseListeners.size());
-            result.addAll(foundPhaseListeners);
+
+            for(PhaseListener phaseListener : foundPhaseListeners)
+            {
+                result.add(tryToInjectDependencies(phaseListener));
+            }
+
             foundPhaseListeners.clear();
 
             Collections.sort(result, new InvocationOrderComparator<PhaseListener>());
