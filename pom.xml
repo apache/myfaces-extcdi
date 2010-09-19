@@ -67,7 +67,7 @@
         </notifiers>
     </ciManagement>
 
-    <inceptionYear>2008</inceptionYear>
+    <inceptionYear>2010</inceptionYear>
 
     <modules>
         <module>site</module>
@@ -191,6 +191,18 @@
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- CODI JPA-1.0 Module -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <artifactId>myfaces-extcdi-jpa1-module-api</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <artifactId>myfaces-extcdi-jpa1-module-impl</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
