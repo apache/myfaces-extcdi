@@ -16,33 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
+package org.apache.myfaces.extensions.cdi.core.api.security;
 
-import javax.enterprise.inject.Stereotype;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+
+import javax.interceptor.InterceptorBinding;
+import javax.enterprise.util.Nonbinding;
 import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
 
 /**
  * @author Gerhard Petracek
  */
-@Stereotype
-
-//don't use @Inherited
-@Target(TYPE)
+@InterceptorBinding
+@Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
-public @interface Page
+public @interface Secured
 {
-    String basePath() default ".";
+    @Nonbinding
+    Class<? extends AccessDecisionVoter>[] value();
 
-    String name() default "";
-
-    //TODO config for default extension
-    String extension() default JsfViewExtension.XHTML;
-
-    NavigationMode navigation() default NavigationMode.FORWARD;
+    @Nonbinding
+    Class<? extends ViewConfig> errorPage() default DefaultErrorPage.class;
 }

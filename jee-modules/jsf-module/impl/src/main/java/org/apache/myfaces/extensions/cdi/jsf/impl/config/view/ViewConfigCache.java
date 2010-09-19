@@ -19,11 +19,14 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorPage;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * TODO move exceptions to util class
+ *
  * @author Gerhard Petracek
  */
 public class ViewConfigCache
@@ -35,8 +38,12 @@ public class ViewConfigCache
     private static Map<Class<? extends ViewConfig>, ViewConfigEntry> viewDefinitionToViewDefinitionEntryMapping
             = new HashMap<Class<? extends ViewConfig>, ViewConfigEntry>();
 
+    private static ViewConfigEntry defaultErrorPage;
+
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
+        tryToStorePageAsDefaultErrorPage(viewDefinitionEntry);
+
         if(viewIdToViewDefinitionEntryMapping.containsKey(viewId))
         {
             throw new IllegalArgumentException(viewId + " is already mapped to "
@@ -48,6 +55,21 @@ public class ViewConfigCache
                 .put(viewDefinitionEntry.getViewDefinitionClass(), viewDefinitionEntry);
     }
 
+    private static void tryToStorePageAsDefaultErrorPage(ViewConfigEntry viewDefinitionEntry)
+    {
+        if(DefaultErrorPage.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
+        {
+            if(defaultErrorPage != null)
+            {
+                throw new IllegalStateException("multiple error pages found " +
+                        defaultErrorPage.getViewDefinitionClass().getClass().getName() + " and " +
+                        viewDefinitionEntry.getViewDefinitionClass().getName());
+            }
+
+            defaultErrorPage = viewDefinitionEntry;
+        }
+    }
+
     public static ViewConfigEntry getViewDefinition(String viewId)
     {
         return viewIdToViewDefinitionEntryMapping.get(viewId);
@@ -56,5 +78,10 @@ public class ViewConfigCache
     public static ViewConfigEntry getViewDefinition(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return viewDefinitionToViewDefinitionEntryMapping.get(viewDefinitionClass);
+    }
+
+    public static ViewConfigEntry getDefaultErrorPage()
+    {
+        return defaultErrorPage;
     }
 }

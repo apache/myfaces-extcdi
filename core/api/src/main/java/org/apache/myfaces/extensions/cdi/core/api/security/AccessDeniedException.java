@@ -16,33 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
+package org.apache.myfaces.extensions.cdi.core.api.security;
 
-import javax.enterprise.inject.Stereotype;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
  */
-@Stereotype
-
-//don't use @Inherited
-@Target(TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface Page
+public class AccessDeniedException extends SecurityException
 {
-    String basePath() default ".";
+    private static final long serialVersionUID = -4066763895951237969L;
 
-    String name() default "";
+    private Set<SecurityViolation> violations;
+    private Class<? extends ViewConfig> errorPage;
 
-    //TODO config for default extension
-    String extension() default JsfViewExtension.XHTML;
+    public AccessDeniedException(Set<SecurityViolation> violations, Class<? extends ViewConfig> errorPage)
+    {
+        this.violations = violations;
+        this.errorPage = errorPage;
+    }
 
-    NavigationMode navigation() default NavigationMode.FORWARD;
+    public Set<SecurityViolation> getViolations()
+    {
+        return violations;
+    }
+
+    public Class<? extends ViewConfig> getErrorPage()
+    {
+        return errorPage;
+    }
 }

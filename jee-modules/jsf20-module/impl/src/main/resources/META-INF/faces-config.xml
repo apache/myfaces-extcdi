@@ -23,6 +23,7 @@
               version="2.0">
 
     <application>
+        <action-listener>org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityViolationAwareActionListener</action-listener>
         <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.FlowNavigationHandler</navigation-handler>
         <navigation-handler>org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
 

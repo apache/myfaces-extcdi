@@ -16,33 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
-
-import javax.enterprise.inject.Stereotype;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+package org.apache.myfaces.extensions.cdi.core.api.security;
 
 /**
  * @author Gerhard Petracek
  */
-@Stereotype
-
-//don't use @Inherited
-@Target(TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface Page
+public interface SecurityViolation
 {
-    String basePath() default ".";
-
-    String name() default "";
-
-    //TODO config for default extension
-    String extension() default JsfViewExtension.XHTML;
-
-    NavigationMode navigation() default NavigationMode.FORWARD;
+    String getReason();
 }
