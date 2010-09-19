@@ -20,9 +20,12 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
@@ -83,6 +86,17 @@ public class FlowNavigationHandler extends NavigationHandler
 
                 if(entry != null)
                 {
+                    //security
+                    try
+                    {
+                        invokeVoters(null, entry.getAccessDecisionVoters(), entry.getErrorView());
+                    }
+                    catch (AccessDeniedException accessDeniedException)
+                    {
+                        tryToHandleSecurityViolation(accessDeniedException);
+                        return;
+                    }
+
                     processViewDefinitionEntry(facesContext, entry);
                     viewConfigs.put(outcome, entry);
                     //just to invoke all other nav handlers if they have to perform special tasks...

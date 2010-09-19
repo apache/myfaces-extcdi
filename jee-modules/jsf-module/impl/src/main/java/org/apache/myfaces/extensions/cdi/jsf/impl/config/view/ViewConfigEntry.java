@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
+import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
 
@@ -38,9 +40,15 @@ public class ViewConfigEntry
     private final NavigationMode navigationMode;
     private final List<PageBeanConfigEntry> beanDefinition;
 
+    //security
+    private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
+    private final Class<? extends ViewConfig> customErrorView;
+
     public ViewConfigEntry(String viewId,
-                               Class<? extends ViewConfig> viewDefinitionClass,
-                               NavigationMode navigationMode)
+                           Class<? extends ViewConfig> viewDefinitionClass,
+                           NavigationMode navigationMode,
+                           List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
+                           Class<? extends ViewConfig> errorView)
     {
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;
@@ -48,6 +56,18 @@ public class ViewConfigEntry
 
         beanDefinition = Collections.unmodifiableList(findPageBeanDefinitions(viewDefinitionClass));
         //TODO validate view-id
+
+        //noinspection unchecked
+        this.accessDecisionVoters = accessDecisionVoters.toArray(new Class[accessDecisionVoters.size()]);
+
+        if(errorView != null)
+        {
+            this.customErrorView = errorView;
+        }
+        else
+        {
+            this.customErrorView = DefaultErrorView.class;
+        }
     }
 
     public String getViewId()
@@ -68,6 +88,16 @@ public class ViewConfigEntry
     List<PageBeanConfigEntry> getBeanDefinitions()
     {
         return beanDefinition;
+    }
+
+    public Class<? extends AccessDecisionVoter>[] getAccessDecisionVoters()
+    {
+        return accessDecisionVoters;
+    }
+
+    public Class<? extends ViewConfig> getErrorView()
+    {
+        return customErrorView;
     }
 
     private List<PageBeanConfigEntry> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)

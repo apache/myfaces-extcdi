@@ -20,15 +20,12 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
-import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.invokeVoters;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.interceptor.Interceptor;
 import java.lang.reflect.Method;
-import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -38,7 +35,8 @@ import java.util.Set;
 public class SecurityInterceptor
 {
     interface PlaceHolderVoter extends AccessDecisionVoter
-    {}
+    {
+    }
 
     @AroundInvoke
     public Object filterDeniedInvocations(InvocationContext invocationContext) throws Exception
@@ -47,18 +45,7 @@ public class SecurityInterceptor
 
         Class<? extends AccessDecisionVoter>[] voterClasses = secured.value();
 
-        AccessDecisionVoter voter;
-        Set<SecurityViolation> violations;
-        for(Class<? extends AccessDecisionVoter> voterClass : voterClasses)
-        {
-            voter = getOrCreateScopedInstanceOfBeanByClass(voterClass);
-
-            violations = voter.checkPermission(invocationContext);
-            if(violations.size() > 0)
-            {
-                throw new AccessDeniedException(violations, secured.errorPage());
-            }
-        }
+        invokeVoters(invocationContext, voterClasses, secured.errorView());
 
         return invocationContext.proceed();
     }

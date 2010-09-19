@@ -34,7 +34,6 @@ import java.lang.annotation.Target;
 @Target({TYPE, METHOD, FIELD, PARAMETER, CONSTRUCTOR})
 @Retention(RUNTIME)
 @Documented
-//TODO
 public @interface Jsf
 {
 }

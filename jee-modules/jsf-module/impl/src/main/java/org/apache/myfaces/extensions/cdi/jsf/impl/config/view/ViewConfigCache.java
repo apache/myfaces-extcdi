@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorPage;
+import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class ViewConfigCache
     private static Map<Class<? extends ViewConfig>, ViewConfigEntry> viewDefinitionToViewDefinitionEntryMapping
             = new HashMap<Class<? extends ViewConfig>, ViewConfigEntry>();
 
-    private static ViewConfigEntry defaultErrorPage;
+    private static ViewConfigEntry defaultErrorView;
 
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
@@ -57,16 +57,16 @@ public class ViewConfigCache
 
     private static void tryToStorePageAsDefaultErrorPage(ViewConfigEntry viewDefinitionEntry)
     {
-        if(DefaultErrorPage.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
+        if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
         {
-            if(defaultErrorPage != null)
+            if(defaultErrorView != null)
             {
                 throw new IllegalStateException("multiple error pages found " +
-                        defaultErrorPage.getViewDefinitionClass().getClass().getName() + " and " +
+                        defaultErrorView.getViewDefinitionClass().getClass().getName() + " and " +
                         viewDefinitionEntry.getViewDefinitionClass().getName());
             }
 
-            defaultErrorPage = viewDefinitionEntry;
+            defaultErrorView = viewDefinitionEntry;
         }
     }
 
@@ -80,8 +80,8 @@ public class ViewConfigCache
         return viewDefinitionToViewDefinitionEntryMapping.get(viewDefinitionClass);
     }
 
-    public static ViewConfigEntry getDefaultErrorPage()
+    public static ViewConfigEntry getDefaultErrorView()
     {
-        return defaultErrorPage;
+        return defaultErrorView;
     }
 }

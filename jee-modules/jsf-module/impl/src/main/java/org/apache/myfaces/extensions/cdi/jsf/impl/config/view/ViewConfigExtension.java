@@ -19,6 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
+import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
+import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
@@ -29,6 +32,9 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @author Gerhard Petracek
@@ -78,10 +84,27 @@ public class ViewConfigExtension implements Extension
         NavigationMode defaultNavigationMode = NavigationMode.FORWARD;
         NavigationMode navigationMode = defaultNavigationMode;
 
+        //security
+        List<Class<? extends AccessDecisionVoter>> foundVoters = new ArrayList<Class<? extends AccessDecisionVoter>>();
+        Class<? extends ViewConfig> errorView = null;
+
         //TODO
         Page pageAnnotation;
+        Secured securedAnnotation;
         while(!Object.class.getName().equals(currentClass.getName()))
         {
+            //security
+            if(currentClass.isAnnotationPresent(Secured.class))
+            {
+                securedAnnotation = currentClass.getAnnotation(Secured.class);
+                Collections.addAll(foundVoters, securedAnnotation.value());
+
+                if(!DefaultErrorView.class.getName().equals(securedAnnotation.errorView().getName()))
+                {
+                    errorView = securedAnnotation.errorView();
+                }
+            }
+
             if(currentClass.isAnnotationPresent(Page.class))
             {
                 pageAnnotation = currentClass.getAnnotation(Page.class);
@@ -163,7 +186,7 @@ public class ViewConfigExtension implements Extension
             }
         }
         ViewConfigCache.addViewDefinition(
-                result, new ViewConfigEntry(result, viewDefinitionClass, navigationMode));
+                result, new ViewConfigEntry(result, viewDefinitionClass, navigationMode, foundVoters, errorView));
     }
 
     private String convertToPathSyntax(String className, Map<String, String> simpleClassNameToPathMapping)

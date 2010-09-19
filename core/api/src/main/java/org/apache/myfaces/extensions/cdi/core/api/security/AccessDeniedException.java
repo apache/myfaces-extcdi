@@ -30,12 +30,12 @@ public class AccessDeniedException extends SecurityException
     private static final long serialVersionUID = -4066763895951237969L;
 
     private Set<SecurityViolation> violations;
-    private Class<? extends ViewConfig> errorPage;
+    private Class<? extends ViewConfig> errorView;
 
-    public AccessDeniedException(Set<SecurityViolation> violations, Class<? extends ViewConfig> errorPage)
+    public AccessDeniedException(Set<SecurityViolation> violations, Class<? extends ViewConfig> errorView)
     {
         this.violations = violations;
-        this.errorPage = errorPage;
+        this.errorView = errorView;
     }
 
     public Set<SecurityViolation> getViolations()
@@ -43,8 +43,8 @@ public class AccessDeniedException extends SecurityException
         return violations;
     }
 
-    public Class<? extends ViewConfig> getErrorPage()
+    public Class<? extends ViewConfig> getErrorView()
     {
-        return errorPage;
+        return errorView;
     }
 }

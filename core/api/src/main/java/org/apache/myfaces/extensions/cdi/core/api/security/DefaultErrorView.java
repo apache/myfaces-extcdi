@@ -23,6 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 /**
  * @author Gerhard Petracek
  */
-public interface DefaultErrorPage extends ViewConfig
+public interface DefaultErrorView extends ViewConfig
 {
 }

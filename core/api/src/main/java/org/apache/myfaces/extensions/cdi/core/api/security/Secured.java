@@ -42,5 +42,5 @@ public @interface Secured
     Class<? extends AccessDecisionVoter>[] value();
 
     @Nonbinding
-    Class<? extends ViewConfig> errorPage() default DefaultErrorPage.class;
+    Class<? extends ViewConfig> errorView() default DefaultErrorView.class;
 }
