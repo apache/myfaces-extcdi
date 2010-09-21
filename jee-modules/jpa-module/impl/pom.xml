@@ -35,6 +35,18 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+            <artifactId>myfaces-extcdi-jpa1-module-api</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-jpa_1.0_spec</artifactId>
+            <version>1.1.2</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
