@@ -269,7 +269,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         removeExistingWindowId(externalContext, windowContext.getId());
         externalContext.getRequestMap().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
-        windowContext.endConversations();
+        windowContext.closeConversations();
     }
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
@@ -312,7 +312,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             for (Conversation conversation :
                     ((EditableWindowContext)windowContext).getConversations().values())
             {
-                conversation.end();
+                conversation.close();
             }
 
             ((EditableWindowContext)windowContext).removeInactiveConversations();

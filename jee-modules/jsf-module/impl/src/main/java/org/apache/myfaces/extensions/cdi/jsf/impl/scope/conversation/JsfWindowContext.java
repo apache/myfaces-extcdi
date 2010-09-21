@@ -74,12 +74,12 @@ public class JsfWindowContext implements EditableWindowContext
         return this.id;
     }
 
-    public void endConversations()
+    public void closeConversations()
     {
         endConversations(false);
     }
 
-    public void end()
+    public void close()
     {
         endConversations(true);
         this.attributes.clear();
@@ -125,7 +125,7 @@ public class JsfWindowContext implements EditableWindowContext
         return conversation;
     }
 
-    public Conversation endConversation(Class conversationGroupKey, Annotation... qualifiers)
+    public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
 
@@ -141,7 +141,7 @@ public class JsfWindowContext implements EditableWindowContext
         return endAndRemoveConversation(conversationKey, (EditableConversation)conversation, true);
     }
 
-    public Set<Conversation> endConversationGroup(Class conversationGroupKey)
+    public Set<Conversation> closeConversationGroup(Class conversationGroupKey)
     {
         Set<Conversation> removedConversations = new HashSet<Conversation>();
         for(Map.Entry<ConversationKey, EditableConversation> conversationEntry : this.groupedConversations.entrySet())
@@ -161,7 +161,7 @@ public class JsfWindowContext implements EditableWindowContext
     {
         if (forceEnd)
         {
-            conversation.end();
+            conversation.close();
             return this.groupedConversations.remove(conversationKey);
         }
         else if(conversation instanceof EditableConversation)
@@ -170,7 +170,7 @@ public class JsfWindowContext implements EditableWindowContext
 
             if(!conversation.isActive())
             {
-                conversation.end();
+                conversation.close();
                 return this.groupedConversations.remove(conversationKey);
             }
         }

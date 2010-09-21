@@ -154,7 +154,7 @@ final class WindowContextManagerObserver
         {
             if (!conversation.isActive())
             {
-                conversation.end();
+                conversation.close();
             }
         }
 

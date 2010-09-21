@@ -68,7 +68,7 @@ public class DefaultConversation implements EditableConversation
         }
     }
 
-    public void end()
+    public void close()
     {
         if(this.active)
         {

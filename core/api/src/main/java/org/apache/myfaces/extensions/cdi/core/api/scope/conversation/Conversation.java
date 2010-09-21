@@ -37,7 +37,7 @@ public interface Conversation extends Serializable
      * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} has to destroy it.
      * -> A new conversation will be created immediately.
      */
-    void end();
+    void close();
 
     /**
      * Un-scopes all bean instances immediately.

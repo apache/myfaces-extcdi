@@ -127,9 +127,9 @@ final class InstanceProducer
         {
             private static final long serialVersionUID = 7754789230388003028L;
 
-            public void end()
+            public void close()
             {
-                findConversation().end();
+                findConversation().close();
             }
 
             public void restart()

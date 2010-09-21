@@ -39,28 +39,28 @@ public interface WindowContext extends AttributeAware, Serializable
      * @param qualifiers optional qualifiers for the conversation
      * @return the removed conversation - null otherwise
      */
-    Conversation endConversation(Class conversationGroup, Annotation... qualifiers);
+    Conversation closeConversation(Class conversationGroup, Annotation... qualifiers);
 
     /**
      * destroys all conversation of a group independent of the qualifiers
      * @param conversationGroup group of the conversation in question
      * @return the removed conversation - null otherwise
      */
-    Set<Conversation> endConversationGroup(Class conversationGroup);
+    Set<Conversation> closeConversationGroup(Class conversationGroup);
 
     /**
      * invalidate all conversations immediately
      * attention: window scoped beans won't get destroyed.
-     * if you would like to reset the whole context including window scoped beans, use {@link #end} or
-     * {@link #endConversation} + WindowScoped.class as argument
+     * if you would like to reset the whole context including window scoped beans, use {@link #close} or
+     * {@link #closeConversation} + WindowScoped.class as argument
      */
-    void endConversations();
+    void closeConversations();
 
     /**
      * invalidate the whole {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
      * it also invalidates all <i>Codi</i> conversations immediately.
      */
-    void end();
+    void close();
 
     /**
      * @return configuration of the current context
