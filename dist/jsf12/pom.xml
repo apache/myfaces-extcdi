@@ -127,20 +127,12 @@
                 <configuration>
                     <createDependencyReducedPom>true</createDependencyReducedPom>
                     <createSourcesJar>true</createSourcesJar>
-                    <artifactSet>
-                        <includes>
-                            <include>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf12-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf12-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-bv1-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-bv1-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-scripting-module-api</include>
-                            <include>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-scripting-module-impl</include>
-                        </includes>
-                    </artifactSet>
+                    <transformers>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        <transformer implementation="org.apache.maven.plugins.shade.resource.XmlAppendingTransformer">
+                            <resource>META-INF/beans.xml</resource>
+                        </transformer>
+                    </transformers>
                 </configuration>
             </plugin>
         </plugins>
