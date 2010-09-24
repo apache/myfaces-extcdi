@@ -110,6 +110,10 @@ class DefaultConversationKey implements ConversationKey
         {
             return false;
         }
+        if (!scopeType.equals(that.scopeType))
+        {
+            return false;
+        }
         if (qualifiers == null && that.qualifiers == null)
         {
             return true;
@@ -119,7 +123,7 @@ class DefaultConversationKey implements ConversationKey
             return false;
         }
 
-        if (!qualifiers.equals(that.qualifiers))
+        if (!that.qualifiers.equals(qualifiers))
         {
             return false;
         }
@@ -130,11 +134,40 @@ class DefaultConversationKey implements ConversationKey
     @Override
     public int hashCode()
     {
-        int result = groupKey.hashCode();
-        if (qualifiers != null)
-        {
-            result = 31 * result + qualifiers.hashCode();
-        }
+        int result = scopeType.hashCode();
+        result = 31 * result + groupKey.hashCode();
+        result = 31 * result + (qualifiers != null ? qualifiers.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder("conversation-key\n");
+
+        result.append("\tscope:\t\t");
+        result.append(this.scopeType.getName());
+
+        result.append("\n");
+        result.append("\tgroup:\t\t");
+        result.append(this.groupKey.getName());
+
+        result.append("\n");
+        result.append("\tqualifiers:\t");
+
+        if(qualifiers != null)
+        {
+            for(Annotation qualifier : this.qualifiers)
+            {
+                result.append(qualifier.annotationType().getName());
+                result.append(" ");
+            }
+        }
+        else
+        {
+            result.append("---");
+        }
+
+        return result.toString();
     }
 }

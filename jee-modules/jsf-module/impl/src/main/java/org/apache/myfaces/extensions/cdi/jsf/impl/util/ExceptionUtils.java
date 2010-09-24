@@ -83,4 +83,9 @@ public class ExceptionUtils
                 "If you really need it, use an phases-observer-method e.g.: " +
                 "protected void preRestoreView(@Observes @BeforePhase(PhaseId.RESTORE_VIEW) PhaseEvent event) ");
     }
+
+    public static IllegalArgumentException conversationNotFoundException(String conversationKey)
+    {
+        return new IllegalArgumentException("Cannot find conversation with key: " + conversationKey);
+    }
 }

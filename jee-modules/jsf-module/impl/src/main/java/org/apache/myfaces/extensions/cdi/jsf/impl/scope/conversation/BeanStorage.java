@@ -20,13 +20,19 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.destroyBean;
 
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -82,5 +88,53 @@ class BeanStorage implements Serializable
         }
 
         return this.beanManager;
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append(this.beanMap.size());
+        result.append(" beans:\n");
+        Bean<Serializable> bean;
+        Class<? extends Annotation> qualifierType;
+        for(BeanEntry<Serializable> beanEntry  : this.beanMap.values())
+        {
+            bean = beanEntry.getBean();
+
+            result.append("\t[bean]\n");
+            result.append("\tbean-class:\t\t\t\t");
+            result.append(bean.getBeanClass());
+            
+            result.append("\n\tcustom qualifier types: ");
+
+            boolean customQualifierFound = false;
+            for(Annotation qualifier : bean.getQualifiers())
+            {
+                qualifierType = qualifier.annotationType();
+
+                if(!
+                        (ConversationGroup.class.equals(qualifierType) ||
+                         Any.class.equals(qualifierType) ||
+                         Default.class.equals(qualifierType) ||
+                         Named.class.equals(qualifierType)))
+                {
+                    result.append("\t");
+                    result.append(qualifier.annotationType().getName());
+                    result.append("\n");
+                    customQualifierFound = true;
+                }
+            }
+
+            if(!customQualifierFound)
+            {
+                result.append("---\n");
+            }
+        }
+
+        result.append("\n*******");
+
+        return result.toString();
     }
 }

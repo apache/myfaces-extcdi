@@ -131,4 +131,27 @@ public class DefaultConversation implements EditableConversation
     {
         return expirationEvaluator;
     }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append("\n*** conversation - start ***\n");
+        result.append(this.conversationKey);
+
+        result.append("\n");
+        result.append("active state: ");
+        result.append(getActiveState());
+        result.append("\n");
+
+        result.append(this.beanStorage);
+
+        result.append("\n");
+        result.append("expiration-evaluator: ");
+        result.append(this.expirationEvaluator.getClass().getName());
+        result.append("\n*** conversation - end ***");
+
+        return result.toString();
+    }
 }

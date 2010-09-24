@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.api.listener.phase;
 
 /**
+ * It isn't possible to use the original implementation of JSF in combination with annotations
+ * 
  * @author Gerhard Petracek
  */
 public enum PhaseId

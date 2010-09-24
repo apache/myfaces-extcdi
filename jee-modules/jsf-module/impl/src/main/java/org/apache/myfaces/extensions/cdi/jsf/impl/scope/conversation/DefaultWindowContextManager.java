@@ -180,7 +180,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             return windowContextFactory.createWindowContext(windowContextId, this.jsfAwareWindowContextConfig);
         }
         
-        return new JsfWindowContext(windowContextId, this.jsfAwareWindowContextConfig);
+        return new JsfWindowContext(windowContextId, this.jsfAwareWindowContextConfig, this.projectStageDevelopment);
     }
 
     public boolean activateWindowContext(String windowContextId)

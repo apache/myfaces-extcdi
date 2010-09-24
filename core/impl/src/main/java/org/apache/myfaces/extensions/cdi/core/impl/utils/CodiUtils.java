@@ -29,11 +29,16 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.util.Nonbinding;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -219,5 +224,98 @@ public class CodiUtils
         InjectionTarget injectionTarget = beanManager.createInjectionTarget(annotatedType);
         injectionTarget.inject(instance, creationalContext);
         return instance;
+    }
+
+    /*
+     * source cod from OWB
+     */
+    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
+    public static boolean isQualifierEqual(Annotation sourceAnnotation, Annotation targetAnnotation)
+    {
+        Class<? extends Annotation> sourceAnnotationType = sourceAnnotation.annotationType();
+
+        if (!sourceAnnotation.annotationType().equals(targetAnnotation.annotationType()))
+        {
+            return false;
+        }
+
+        Method[] methods = sourceAnnotationType.getDeclaredMethods();
+
+        List<String> list = new ArrayList<String>();
+
+        for (Method method : methods)
+        {
+            Annotation[] annots = method.getDeclaredAnnotations();
+
+            if (annots.length > 0)
+            {
+                for (Annotation annot : annots)
+                {
+                    if (!annot.annotationType().equals(Nonbinding.class))
+                    {
+                        list.add(method.getName());
+                    }
+                }
+            }
+            else
+            {
+                list.add(method.getName());
+            }
+        }
+
+        return checkEquality(sourceAnnotation.toString(), targetAnnotation.toString(), list);
+    }
+    
+    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
+    private static boolean checkEquality(String src, String member, List<String> arguments)
+    {
+        if ((checkEquBuffer(src, arguments).toString().trim()
+                .equals(checkEquBuffer(member, arguments).toString().trim())))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
+    private static StringBuffer checkEquBuffer(String src, List<String> arguments)
+    {
+        int index = src.indexOf('(');
+
+        String sbstr = src.substring(index + 1, src.length() - 1);
+
+        StringBuffer srcBuf = new StringBuffer();
+
+        StringTokenizer tok = new StringTokenizer(sbstr, ",");
+        while (tok.hasMoreTokens())
+        {
+            String token = tok.nextToken();
+
+            StringTokenizer tok2 = new StringTokenizer(token, "=");
+            while (tok2.hasMoreElements())
+            {
+                String tt = tok2.nextToken();
+                if (arguments.contains(tt.trim()))
+                {
+                    srcBuf.append(tt);
+                    srcBuf.append("=");
+
+                    if (tok2.hasMoreElements())
+                    {
+                        String str = tok2.nextToken();
+                        if(str.charAt(0) == '"' && str.charAt(str.length() -1) == '"')
+                        {
+                            str = str.substring(1,str.length()-1);
+                        }
+
+                        srcBuf.append(str);
+                    }
+                }
+            }
+
+        }
+
+        return srcBuf;
     }
 }

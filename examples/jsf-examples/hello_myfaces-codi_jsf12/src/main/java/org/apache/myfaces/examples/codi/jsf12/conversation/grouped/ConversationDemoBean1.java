@@ -22,7 +22,9 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
+import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qualifier3;
 
 import javax.inject.Named;
 import javax.inject.Inject;
@@ -62,6 +64,12 @@ public class ConversationDemoBean1 implements Serializable
     public String endGroup1()
     {
         this.windowContext.closeConversationGroup(ConversationGroup1.class);
+        return null;
+    }
+
+    public String endGroup1WithQualifiers()
+    {
+        this.windowContext.closeConversation(ConversationGroup1.class, DefaultAnnotation.of(Qualifier3.class));
         return null;
     }
 

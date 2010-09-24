@@ -133,4 +133,10 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
     {
         return BeanManagerProvider.getInstance().getBeanManager();
     }
+
+    @Override
+    public String toString()
+    {
+        return this.bean.toString();
+    }
 }
