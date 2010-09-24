@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import javax.enterprise.event.Observes;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 final class PreRenderViewBeanLoader
 {
-    protected void initBeans(@Observes @BeforePhase(PhaseId.RENDER_RESPONSE) PhaseEvent event)
+    protected void initBeans(@Observes @BeforePhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent event)
     {
         String viewId = event.getFacesContext().getViewRoot().getViewId();
 

@@ -290,10 +290,12 @@ public class JsfWindowContext implements EditableWindowContext
 
         if(conversationKey.getQualifiers() != null)
         {
-            //we have to manually recalculate the the conversation keys due to the restrictions of annotations
-            //we don't do that per default because in most use-cases you don't need qualifiers
-            //that means most use-cases will have a better performance and only very few will have an overhead as soon
-            //as a conversation gets closed manually
+            /*
+             * we have to manually recalculate the conversation keys due to the restrictions of annotations.
+             * we don't do that per default because in most use-cases you don't need to create manual qualifiers.
+             * that means most use-cases will have a better performance and only very few will have an overhead as soon
+             * as a conversation gets closed manually.
+             */
             editableConversation = getConversationForDynamicKey(conversationKey);
         }
 

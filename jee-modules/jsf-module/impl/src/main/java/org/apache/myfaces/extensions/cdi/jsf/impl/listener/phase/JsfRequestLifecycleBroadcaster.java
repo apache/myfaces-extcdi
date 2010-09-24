@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
@@ -46,11 +46,11 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
     private Event<PhaseEvent> phaseEvent;
 
     @Inject
-    @BeforePhase(PhaseId.ANY_PHASE)
+    @BeforePhase(JsfPhaseId.ANY_PHASE)
     private Event<PhaseEvent> beforeAnyPhaseEvent;
 
     @Inject
-    @AfterPhase(PhaseId.ANY_PHASE)
+    @AfterPhase(JsfPhaseId.ANY_PHASE)
     private Event<PhaseEvent> afterAnyPhaseEvent;
 
     void broadcastBeforeEvent(PhaseEvent phaseEvent)
@@ -82,9 +82,9 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
         {
             private static final long serialVersionUID = 849645435335842723L;
 
-            public PhaseId value()
+            public JsfPhaseId value()
             {
-                return PhaseId.convertFromFacesClass(phaseId);
+                return JsfPhaseId.convertFromFacesClass(phaseId);
             }
         };
     }
@@ -95,9 +95,9 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
         {
             private static final long serialVersionUID = 490037768660184656L;
 
-            public PhaseId value()
+            public JsfPhaseId value()
             {
-                return PhaseId.convertFromFacesClass(phaseId);
+                return JsfPhaseId.convertFromFacesClass(phaseId);
             }
         };
     }

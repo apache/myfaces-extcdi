@@ -23,7 +23,7 @@ package org.apache.myfaces.extensions.cdi.jsf.api.listener.phase;
  * 
  * @author Gerhard Petracek
  */
-public enum PhaseId
+public enum JsfPhaseId
 {
     RESTORE_VIEW(javax.faces.event.PhaseId.RESTORE_VIEW),
     APPLY_REQUEST_VALUES(javax.faces.event.PhaseId.APPLY_REQUEST_VALUES),
@@ -35,17 +35,17 @@ public enum PhaseId
 
     javax.faces.event.PhaseId phaseId;
 
-    PhaseId(javax.faces.event.PhaseId phaseId)
+    JsfPhaseId(javax.faces.event.PhaseId phaseId)
     {
         this.phaseId = phaseId;
     }
 
-    public static javax.faces.event.PhaseId convertToFacesClass(PhaseId phaseId)
+    public static javax.faces.event.PhaseId convertToFacesClass(JsfPhaseId phaseId)
     {
         return phaseId.getPhaseId();
     }
 
-    public static PhaseId convertFromFacesClass(javax.faces.event.PhaseId phaseId)
+    public static JsfPhaseId convertFromFacesClass(javax.faces.event.PhaseId phaseId)
     {
         if(RESTORE_VIEW.getPhaseId().equals(phaseId))
         {

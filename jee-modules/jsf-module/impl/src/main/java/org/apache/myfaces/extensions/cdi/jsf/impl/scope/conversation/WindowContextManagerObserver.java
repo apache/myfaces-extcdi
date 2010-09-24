@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
@@ -45,7 +45,7 @@ import java.io.IOException;
 final class WindowContextManagerObserver
 {
     //don't change/optimize this observer!!!
-    protected void cleanup(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
+    protected void cleanup(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
                            EditableWindowContextManager windowContextManager,
                            ConfigResolver configResolver)
@@ -79,7 +79,7 @@ final class WindowContextManagerObserver
     }
 
     protected void cleanupAndRecordCurrentViewAsOldViewId(
-            @Observes @AfterPhase(PhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent,
+            @Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent,
             EditableWindowContextManager windowContextManager)
     {
         storeCurrentViewIdAsOldViewId(phaseEvent.getFacesContext());

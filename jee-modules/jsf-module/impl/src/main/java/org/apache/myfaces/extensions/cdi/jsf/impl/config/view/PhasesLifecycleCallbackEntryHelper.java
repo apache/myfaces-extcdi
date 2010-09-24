@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
-import static org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId.convertToFacesClass;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
+import static org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId.convertToFacesClass;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -35,7 +35,7 @@ class PhasesLifecycleCallbackEntryHelper
     private Map<javax.faces.event.PhaseId, List<Method>> methods
             = new HashMap<javax.faces.event.PhaseId, List<Method>>();
 
-    void add(PhaseId phaseId, Method method)
+    void add(JsfPhaseId phaseId, Method method)
     {
         javax.faces.event.PhaseId id = convertToFacesClass(phaseId);
         List<Method> methodList = this.methods.get(id);

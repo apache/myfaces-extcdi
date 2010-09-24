@@ -43,5 +43,5 @@ import java.lang.annotation.Target;
  */
 public @interface BeforePhase
 {
-    PhaseId value();
+    JsfPhaseId value();
 }

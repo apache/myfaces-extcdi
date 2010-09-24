@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.PhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
@@ -35,7 +35,7 @@ import javax.faces.context.FacesContext;
  */
 public class SecurityViewListener
 {
-    public void checkPermission(@Observes @AfterPhase(PhaseId.RESTORE_VIEW) PhaseEvent event)
+    public void checkPermission(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent event)
     {
         FacesContext facesContext = event.getFacesContext();
         ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
