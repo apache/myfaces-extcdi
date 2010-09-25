@@ -20,28 +20,29 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.isQualifierEqual;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotEditableException;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotFoundException;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Typed;
-import java.util.Date;
+import java.lang.annotation.Annotation;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.HashSet;
-import java.util.logging.Logger;
 import java.util.concurrent.ConcurrentHashMap;
-import java.lang.annotation.Annotation;
+import java.util.logging.Logger;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.isQualifierEqual;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotEditableException;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotFoundException;
 
 /**
  * TODO
@@ -341,6 +342,7 @@ public class JsfWindowContext implements EditableWindowContext
         Annotation sourceAnnotation;
         Annotation targetAnnotation;
 
+        outer:
         while(sourceAnnotationIterator.hasNext())
         {
             sourceAnnotation = sourceAnnotationIterator.next();
@@ -353,6 +355,8 @@ public class JsfWindowContext implements EditableWindowContext
                 {
                     sourceAnnotationIterator.remove();
                     targetAnnotationIterator.remove();
+
+                    continue outer;
                 }
             }
         }

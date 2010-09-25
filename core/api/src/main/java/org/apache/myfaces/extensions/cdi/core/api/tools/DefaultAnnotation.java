@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.tools;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.io.Serializable;
 
 /**
  * <p>A small helper class to create an Annotation instance of the given annotation class
@@ -37,9 +37,11 @@ import java.io.Serializable;
  * </pre>
  *
  */
-public class DefaultAnnotation implements InvocationHandler, Serializable
+public class DefaultAnnotation implements Annotation, InvocationHandler, Serializable
 {
     private static final long serialVersionUID = -2345068201195886173L;
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
     private Class<? extends Annotation> annotationClass;
 
     /**
@@ -93,14 +95,61 @@ public class DefaultAnnotation implements InvocationHandler, Serializable
         }
         else if ("annotationType".equals(method.getName()))
         {
-            return this.annotationClass;
+            return annotationType();
         }
         else if ("toString".equals(method.getName()))
         {
-            return "Proxy for " + this.annotationClass.getName() + " (" + getClass().getName() + ")";
+            return toString();
         }
 
         return method.getDefaultValue();
+    }
+
+    public Class<? extends Annotation> annotationType()
+    {
+        return annotationClass;
+    }
+
+    /**
+     * Copied from javax.enterprise.util.AnnotationLiteral#toString()
+     * with minor changes. 
+     *
+     * @return
+     */
+    @Override
+    public String toString()
+    {
+        Method[] methods = this.annotationClass.getDeclaredMethods();
+
+        StringBuilder sb = new StringBuilder("@" + annotationType().getName() + "(");
+        int lenght = methods.length;
+
+        for (int i = 0; i < lenght; i++)
+        {
+            // Member name
+            sb.append(methods[i].getName()).append("=");
+
+            // Member value
+            Object memberValue;
+            try
+            {
+                memberValue = invoke(this, methods[i], EMPTY_OBJECT_ARRAY);
+            }
+            catch (Throwable throwable)
+            {
+                memberValue = "";
+            }
+            sb.append(memberValue);
+
+            if (i < lenght - 1)
+            {
+                sb.append(",");
+            }
+        }
+
+        sb.append(")");
+
+        return sb.toString();
     }
 
     //don't change these methods!
@@ -132,4 +181,5 @@ public class DefaultAnnotation implements InvocationHandler, Serializable
     {
         return annotationClass.hashCode();
     }
+
 }

@@ -18,27 +18,27 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
+import org.apache.myfaces.extensions.cdi.core.api.Advanced;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
-import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.util.Nonbinding;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Properties;
-import java.util.Set;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -227,7 +227,11 @@ public class CodiUtils
     }
 
     /*
-     * source cod from OWB
+     * source code from OWB
+     *
+     * TODO -=jakobk=- these methods rely on the String representation of the
+     * Qualifiers, which is IMHO the wrong way. I think this should be changed
+     * here and also in OWB!
      */
     //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
     public static boolean isQualifierEqual(Annotation sourceAnnotation, Annotation targetAnnotation)
