@@ -337,7 +337,6 @@ public class JsfWindowContext implements EditableWindowContext
         Set<Annotation> targetAnnotations = new HashSet<Annotation>(target);
 
         Iterator<Annotation> sourceAnnotationIterator = sourceAnnotations.iterator();
-        Iterator<Annotation> targetAnnotationIterator = targetAnnotations.iterator();
 
         Annotation sourceAnnotation;
         Annotation targetAnnotation;
@@ -346,7 +345,8 @@ public class JsfWindowContext implements EditableWindowContext
         while(sourceAnnotationIterator.hasNext())
         {
             sourceAnnotation = sourceAnnotationIterator.next();
-
+            
+            Iterator<Annotation> targetAnnotationIterator = targetAnnotations.iterator();
             while (targetAnnotationIterator.hasNext())
             {
                 targetAnnotation = targetAnnotationIterator.next();
