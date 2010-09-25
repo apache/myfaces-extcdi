@@ -302,7 +302,7 @@ public class CodiUtils
                 String tt = tok2.nextToken();
                 if (arguments.contains(tt.trim()))
                 {
-                    srcBuf.append(tt);
+                    srcBuf.append(tt.trim());
                     srcBuf.append("=");
 
                     if (tok2.hasMoreElements())
