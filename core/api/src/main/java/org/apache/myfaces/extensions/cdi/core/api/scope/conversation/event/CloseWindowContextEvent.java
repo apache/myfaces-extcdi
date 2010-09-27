@@ -18,15 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-
 /**
  * @author Gerhard Petracek
  */
-public final class EndConversationEvent extends ConversationEvent
+public final class CloseWindowContextEvent extends WindowContextEvent
 {
-    public EndConversationEvent(Conversation conversation)
+    public CloseWindowContextEvent(String windowContextId)
     {
-        super(conversation);
+        super(windowContextId);
     }
 }
