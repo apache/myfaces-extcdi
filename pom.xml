@@ -83,7 +83,7 @@
         <owb.version>1.0.0-alpha-2</owb.version>
 
         <!-- JSF-2.0 implementations-->
-        <myfaces2.version>2.0.1</myfaces2.version>
+        <myfaces2.version>2.0.2</myfaces2.version>
         <mojarra2.version>2.0.3-b03</mojarra2.version>
 
         <!-- JSF-1.2 implementations-->
