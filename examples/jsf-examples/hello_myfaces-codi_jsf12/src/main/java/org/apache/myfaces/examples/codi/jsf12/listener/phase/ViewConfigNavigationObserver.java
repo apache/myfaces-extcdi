@@ -42,7 +42,9 @@ public class ViewConfigNavigationObserver
         if(DemoPages.HelloMyFacesCodi1.class.equals(navigateEvent.getFromView()) &&
                 !DemoPages.HelloMyFacesCodi2.class.equals(navigateEvent.getToView()) )
         {
+            navigateEvent.navigateTo(DemoPages.HelloMyFacesCodi2.class);
         }
+
         this.messageContext.message()
                                 .text("navigate from {oldViewId} to {newViewId} view.")
                                 .namedArgument("oldViewId", navigateEvent.getFromView())

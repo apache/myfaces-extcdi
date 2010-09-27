@@ -65,6 +65,11 @@ public class ConversationDemoBean1 implements Serializable
         return DemoPages.HelloMyFacesCodi2.class.getName();
     }
 
+    public String next3()
+    {
+        return DemoPages.HelloMyFacesCodi3.class.getName();
+    }
+
     public String endGroup1()
     {
         this.windowContext.closeConversationGroup(ConversationGroup1.class);

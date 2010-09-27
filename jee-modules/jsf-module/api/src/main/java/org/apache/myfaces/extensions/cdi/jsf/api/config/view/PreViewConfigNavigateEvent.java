@@ -43,4 +43,9 @@ public class PreViewConfigNavigateEvent
     {
         return toView;
     }
+
+    public void navigateTo(Class<? extends ViewConfig> toView)
+    {
+        this.toView = toView;
+    }
 }

@@ -24,7 +24,10 @@
     <body>
         <f:view>
             <h:form>
-                <h:commandLink value="next" action="#{conversationDemoBean1.next2}"/>
+                <h:panelGrid>
+                    <h:commandLink value="next" action="#{conversationDemoBean1.next2}"/>
+                    <h:commandLink value="invalid next" action="#{conversationDemoBean1.next3}"/>
+                </h:panelGrid>
             </h:form>
 
             <h:panelGrid>

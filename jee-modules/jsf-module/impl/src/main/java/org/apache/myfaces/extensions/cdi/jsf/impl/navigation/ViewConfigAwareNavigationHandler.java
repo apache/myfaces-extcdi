@@ -103,13 +103,20 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                         return;
                     }
 
-                    firePreViewConfigNavigateEvent(oldViewId, entry);
-                    processViewDefinitionEntry(facesContext, entry);
                     this.viewConfigs.put(outcome, entry);
 
-                    //just to invoke all other nav handlers if they have to perform special tasks...
-                    this.navigationHandler.handleNavigation(facesContext, null, null);
-                    return;
+                    PreViewConfigNavigateEvent navigateEvent = firePreViewConfigNavigateEvent(oldViewId, entry);
+
+                    entry = tryToUpdateEntry(entry, navigateEvent);
+
+                    if(entry != null) //entry might be null after the update
+                    {
+                        processViewDefinitionEntry(facesContext, entry);
+
+                        //just to invoke all other nav handlers if they have to perform special tasks...
+                        this.navigationHandler.handleNavigation(facesContext, null, null);
+                        return;
+                    }
                 }
             }
         }
@@ -117,16 +124,41 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
     }
 
-    private void firePreViewConfigNavigateEvent(String oldViewId, ViewConfigEntry newViewConfigEntry)
+    private ViewConfigEntry tryToUpdateEntry(ViewConfigEntry viewConfigEntry, PreViewConfigNavigateEvent navigateEvent)
+    {
+        if(navigateEvent == null)
+        {
+            return viewConfigEntry;
+        }
+
+        if(navigateEvent.getToView() == null)
+        {
+            return null;
+        }
+
+        if(navigateEvent.getToView().equals(viewConfigEntry.getViewDefinitionClass()))
+        {
+            return viewConfigEntry;
+        }
+
+        return ViewConfigCache.getViewDefinition(navigateEvent.getToView());
+    }
+
+    private PreViewConfigNavigateEvent firePreViewConfigNavigateEvent(
+            String oldViewId, ViewConfigEntry newViewConfigEntry)
     {
         ViewConfigEntry oldViewConfigEntry = ViewConfigCache.getViewDefinition(oldViewId);
 
         if(oldViewConfigEntry != null)
         {
             initBeanManager();
-            this.beanManager.fireEvent(new PreViewConfigNavigateEvent(
-                    oldViewConfigEntry.getViewDefinitionClass(), newViewConfigEntry.getViewDefinitionClass()));
+            PreViewConfigNavigateEvent navigateEvent = new PreViewConfigNavigateEvent(
+                    oldViewConfigEntry.getViewDefinitionClass(), newViewConfigEntry.getViewDefinitionClass());
+
+            this.beanManager.fireEvent(navigateEvent);
+            return navigateEvent;
         }
+        return null;
     }
 
     private void initBeanManager()
