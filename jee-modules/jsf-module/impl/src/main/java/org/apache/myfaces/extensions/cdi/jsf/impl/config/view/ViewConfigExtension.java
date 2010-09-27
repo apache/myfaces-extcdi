@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
@@ -30,10 +31,12 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import java.lang.reflect.Modifier;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -88,6 +91,9 @@ public class ViewConfigExtension implements Extension
         List<Class<? extends AccessDecisionVoter>> foundVoters = new ArrayList<Class<? extends AccessDecisionVoter>>();
         Class<? extends ViewConfig> errorView = null;
 
+        List<Annotation> viewMetaDataList = new ArrayList<Annotation>();
+        List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes = new ArrayList<Class<? extends Annotation>>();
+
         //TODO
         Page pageAnnotation;
         Secured securedAnnotation;
@@ -105,6 +111,10 @@ public class ViewConfigExtension implements Extension
                 }
             }
 
+            //meta-data
+            viewMetaDataList.addAll(extractViewMetaData(currentClass, foundAndBlockedMetaDataTypes));
+
+            //page definition
             if(currentClass.isAnnotationPresent(Page.class))
             {
                 pageAnnotation = currentClass.getAnnotation(Page.class);
@@ -191,7 +201,8 @@ public class ViewConfigExtension implements Extension
             }
         }
         ViewConfigCache.addViewDefinition(
-                result, new ViewConfigEntry(result, viewDefinitionClass, navigationMode, foundVoters, errorView));
+                result, new ViewConfigEntry(
+                        result, viewDefinitionClass, navigationMode, foundVoters, errorView, viewMetaDataList));
     }
 
     private String convertToPathSyntax(String className, Map<String, String> simpleClassNameToPathMapping)
@@ -214,5 +225,31 @@ public class ViewConfigExtension implements Extension
         }
         String result = path.toString();
         return result.substring(0, result.length() - 1);
+    }
+
+    private Collection<Annotation> extractViewMetaData(
+            Class<?> targetClass, List<Class<? extends Annotation>> blockedMetaDataTypes)
+    {
+        List<Annotation> result = new ArrayList<Annotation>();
+
+        for(Annotation annotation : targetClass.getAnnotations())
+        {
+            if(annotation.annotationType().isAnnotationPresent(ViewMetaData.class))
+            {
+                ViewMetaData metaData = annotation.annotationType().getAnnotation(ViewMetaData.class);
+
+                if(metaData.override())
+                {
+                    blockedMetaDataTypes.add(annotation.annotationType());
+                }
+
+                if(!blockedMetaDataTypes.contains(annotation.annotationType()))
+                {
+                    result.add(annotation);
+                }
+            }
+        }
+
+        return result;
     }
 }

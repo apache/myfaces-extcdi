@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
 import java.beans.Introspector;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Gerhard Petracek
@@ -44,15 +45,21 @@ public class ViewConfigEntry
     private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
     private final Class<? extends ViewConfig> customErrorView;
 
+    //meta-data
+    private List<Annotation> metaDataList;
+
     public ViewConfigEntry(String viewId,
                            Class<? extends ViewConfig> viewDefinitionClass,
                            NavigationMode navigationMode,
                            List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
-                           Class<? extends ViewConfig> errorView)
+                           Class<? extends ViewConfig> errorView,
+                           List<Annotation> metaDataList)
     {
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;
         this.navigationMode = navigationMode;
+
+        this.metaDataList = metaDataList;
 
         beanDefinition = Collections.unmodifiableList(findPageBeanDefinitions(viewDefinitionClass));
         //TODO validate view-id
@@ -100,6 +107,28 @@ public class ViewConfigEntry
         return customErrorView;
     }
 
+    public List<Annotation> getMetaData()
+    {
+        return metaDataList;
+    }
+
+    public synchronized void addMetaData(Annotation annotation)
+    {
+        this.metaDataList.add(annotation);
+    }
+
+    public synchronized List<Annotation> resetMetaData()
+    {
+        try
+        {
+            return new ArrayList<Annotation>(this.metaDataList);
+        }
+        finally
+        {
+            this.metaDataList.clear();
+        }
+    }
+    
     private List<PageBeanConfigEntry> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)
     {
         if(!viewDefinitionClass.isAnnotationPresent(PageBean.class) &&

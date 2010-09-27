@@ -45,6 +45,7 @@ public abstract class DemoPages implements ViewConfig
     {
     }
 
+    @ViewMode(readOnly = true) //custom view meta-data
     @Page(basePath = ".", navigation = NavigationMode.FORWARD)
     public final class HelloMyFacesCodi2 extends DemoPages
     {
