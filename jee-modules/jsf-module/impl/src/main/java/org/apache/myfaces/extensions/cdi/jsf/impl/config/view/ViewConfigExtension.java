@@ -81,8 +81,8 @@ public class ViewConfigExtension implements Extension
         String defaultExtension = JsfViewExtension.XHTML;
         String extension = defaultExtension;
 
-        NavigationMode defaultNavigationMode = NavigationMode.FORWARD;
-        NavigationMode navigationMode = defaultNavigationMode;
+        NavigationMode defaultNavigationMode = NavigationMode.DEFAULT;
+        NavigationMode navigationMode = null;
 
         //security
         List<Class<? extends AccessDecisionVoter>> foundVoters = new ArrayList<Class<? extends AccessDecisionVoter>>();
@@ -129,7 +129,7 @@ public class ViewConfigExtension implements Extension
                     }
                 }
 
-                if(!pageAnnotation.navigation().equals(defaultNavigationMode))
+                if(navigationMode == null && !pageAnnotation.navigation().equals(defaultNavigationMode))
                 {
                     navigationMode = pageAnnotation.navigation();
                 }
@@ -143,6 +143,11 @@ public class ViewConfigExtension implements Extension
             currentClass = currentClass.getSuperclass();
         }
 
+        if(navigationMode == null)
+        {
+            navigationMode = defaultNavigationMode;
+        }
+        
         StringBuilder viewId = new StringBuilder(basePath);
         if(pageName.equals(""))
         {

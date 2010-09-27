@@ -45,7 +45,7 @@ public abstract class DemoPages implements ViewConfig
     {
     }
 
-    @Page(basePath = ".")
+    @Page(basePath = ".", navigation = NavigationMode.FORWARD)
     public final class HelloMyFacesCodi2 extends DemoPages
     {
     }

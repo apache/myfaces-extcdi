@@ -50,13 +50,6 @@
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>/helloMyFacesCodi1.jsp</from-view-id>
-        <navigation-case>
-            <from-outcome>next</from-outcome>
-            <to-view-id>/helloMyFacesCodi2.jsp</to-view-id>
-        </navigation-case>
-    </navigation-rule>
-    <navigation-rule>
         <from-view-id>/helloMyFacesCodi2.jsp</from-view-id>
         <navigation-case>
             <from-outcome>next</from-outcome>

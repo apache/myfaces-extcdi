@@ -18,32 +18,29 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
-import javax.enterprise.inject.Stereotype;
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
  * @author Gerhard Petracek
  */
-@Stereotype
-
-//don't use @Inherited
-@Target(TYPE)
-@Retention(RUNTIME)
-@Documented
-public @interface Page
+public class PreViewConfigNavigateEvent
 {
-    String basePath() default ".";
+    private final Class<? extends ViewConfig> fromView;
+    private Class<? extends ViewConfig> toView;
 
-    String name() default "";
+    public PreViewConfigNavigateEvent(Class<? extends ViewConfig> fromView, Class<? extends ViewConfig> toView)
+    {
+        this.fromView = fromView;
+        this.toView = toView;
+    }
 
-    //TODO config for default extension
-    String extension() default JsfViewExtension.XHTML;
+    public Class<? extends ViewConfig> getFromView()
+    {
+        return fromView;
+    }
 
-    //TODO config for default navigation mode
-    NavigationMode navigation() default NavigationMode.DEFAULT;
+    public Class<? extends ViewConfig> getToView()
+    {
+        return toView;
+    }
 }

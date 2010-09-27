@@ -18,11 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
@@ -33,6 +35,7 @@ import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.enterprise.inject.spi.BeanManager;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -42,14 +45,16 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * @author Gerhard Petracek
  */
-public class FlowNavigationHandler extends NavigationHandler
+public class ViewConfigAwareNavigationHandler extends NavigationHandler
 {
     private Set<String> otherOutcomes = new CopyOnWriteArraySet<String>();
     private Map<String, ViewConfigEntry> viewConfigs = new ConcurrentHashMap<String, ViewConfigEntry>();
 
     private NavigationHandler navigationHandler;
 
-    public FlowNavigationHandler(NavigationHandler navigationHandler)
+    private BeanManager beanManager;
+
+    public ViewConfigAwareNavigationHandler(NavigationHandler navigationHandler)
     {
         this.navigationHandler = navigationHandler;
     }
@@ -60,22 +65,23 @@ public class FlowNavigationHandler extends NavigationHandler
         if(outcome != null && outcome.contains("."))
         {
             String originalOutcome = outcome;
+            String oldViewId = facesContext.getViewRoot().getViewId();
 
-            if(!otherOutcomes.contains(outcome))
+            if(!this.otherOutcomes.contains(outcome))
             {
                 if(outcome.startsWith("class "))
                 {
                     outcome = outcome.substring(6);
                 }
-                ViewConfigEntry entry = viewConfigs.get(outcome);
+                ViewConfigEntry entry = this.viewConfigs.get(outcome);
 
                 if(entry == null)
                 {
-                    Object loadedClass = ClassUtils.tryToLoadClassForName(outcome);
+                    Object loadedClass = tryToLoadClassForName(outcome);
 
                     if(loadedClass == null)
                     {
-                        otherOutcomes.add(originalOutcome);
+                        this.otherOutcomes.add(originalOutcome);
                     }
                     else if(loadedClass instanceof Class && ViewConfig.class.isAssignableFrom((Class)loadedClass))
                     {
@@ -97,22 +103,53 @@ public class FlowNavigationHandler extends NavigationHandler
                         return;
                     }
 
+                    firePreViewConfigNavigateEvent(oldViewId, entry);
                     processViewDefinitionEntry(facesContext, entry);
-                    viewConfigs.put(outcome, entry);
+                    this.viewConfigs.put(outcome, entry);
+
                     //just to invoke all other nav handlers if they have to perform special tasks...
-                    navigationHandler.handleNavigation(facesContext, fromAction, null);
+                    this.navigationHandler.handleNavigation(facesContext, null, null);
                     return;
                 }
             }
         }
 
-        navigationHandler.handleNavigation(facesContext, fromAction, outcome);
+        this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
+    }
+
+    private void firePreViewConfigNavigateEvent(String oldViewId, ViewConfigEntry newViewConfigEntry)
+    {
+        ViewConfigEntry oldViewConfigEntry = ViewConfigCache.getViewDefinition(oldViewId);
+
+        if(oldViewConfigEntry != null)
+        {
+            initBeanManager();
+            this.beanManager.fireEvent(new PreViewConfigNavigateEvent(
+                    oldViewConfigEntry.getViewDefinitionClass(), newViewConfigEntry.getViewDefinitionClass()));
+        }
+    }
+
+    private void initBeanManager()
+    {
+        if(this.beanManager == null)
+        {
+            this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        }
     }
 
     private void processViewDefinitionEntry(FacesContext facesContext, ViewConfigEntry entry)
     {
         String targetViewId = entry.getViewId();
-        if(NavigationMode.REDIRECT.equals(entry.getNavigationMode()))
+
+        NavigationMode currentNavigationMode = entry.getNavigationMode();
+
+        if(NavigationMode.DEFAULT.equals(currentNavigationMode))
+        {
+            //TODO use value of the config
+            currentNavigationMode = NavigationMode.FORWARD;
+        }
+
+        if(NavigationMode.REDIRECT.equals(currentNavigationMode))
         {
             ExternalContext externalContext = facesContext.getExternalContext();
             ViewHandler viewHandler = facesContext.getApplication().getViewHandler();

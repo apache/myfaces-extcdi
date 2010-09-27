@@ -23,5 +23,5 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
  */
 public enum NavigationMode
 {
-    FORWARD, REDIRECT
+    DEFAULT, FORWARD, REDIRECT
 }
