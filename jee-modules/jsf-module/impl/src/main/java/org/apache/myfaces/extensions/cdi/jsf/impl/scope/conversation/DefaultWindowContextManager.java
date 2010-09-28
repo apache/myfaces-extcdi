@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
@@ -339,9 +340,15 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     public void closeAllWindowContexts()
     {
-        for (EditableWindowContext editableWindowContext : this.windowContextMap.values())
+        for (WindowContext windowContext : this.windowContextMap.values())
         {
-            closeWindowContext(editableWindowContext);
+            for (Conversation conversation :
+                    ((EditableWindowContext) windowContext).getConversations().values())
+            {
+                conversation.close();
+            }
+
+            ((EditableWindowContext) windowContext).removeInactiveConversations();
         }
     }
 
