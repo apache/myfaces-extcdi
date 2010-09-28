@@ -30,6 +30,7 @@ import javax.interceptor.InvocationContext;
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
@@ -37,8 +38,10 @@ import java.lang.reflect.Method;
 
 @View(ViewControllerInterceptor.PlaceHolderConfig.class)
 @Interceptor
-public class ViewControllerInterceptor
+public class ViewControllerInterceptor implements Serializable
 {
+    private static final long serialVersionUID = -1562171889458823736L;
+
     interface PlaceHolderConfig extends ViewConfig {}
 
     @AroundInvoke

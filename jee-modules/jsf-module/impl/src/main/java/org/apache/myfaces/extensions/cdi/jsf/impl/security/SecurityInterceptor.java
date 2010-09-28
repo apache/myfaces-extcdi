@@ -26,14 +26,17 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.interceptor.Interceptor;
 import java.lang.reflect.Method;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
 @Secured(SecurityInterceptor.PlaceHolderVoter.class)
 @Interceptor
-public class SecurityInterceptor
+public class SecurityInterceptor implements Serializable
 {
+    private static final long serialVersionUID = -7094673146532371976L;
+
     interface PlaceHolderVoter extends AccessDecisionVoter
     {
     }
