@@ -50,9 +50,12 @@
             <h:form id="conversationForm">
                 <h:panelGrid>
                     <h:commandLink value="next" action="#{conversationDemoBean1.next}"/>
-                    <h:commandLink value="end conversation group 1" action="#{conversationDemoBean1.endGroup1}"/>
-                    <h:commandLink value="end conversation group 1 with qualifier" action="#{conversationDemoBean1.endGroup1WithQualifiers}"/>
-                    <h:commandLink value="end conversation of bean" action="#{conversationDemoBean1.endConversation}"/>
+                    <h:commandLink value="close conversation group 1" action="#{conversationDemoBean1.endGroup1}"/>
+                    <h:commandLink value="close conversation group 1 with qualifier" action="#{conversationDemoBean1.endGroup1WithQualifiers}"/>
+                    <h:commandLink value="close conversation of bean" action="#{conversationDemoBean1.endConversation}"/>
+                    <h:panelGroup/>
+                    <h:commandLink value="close conversation of g1" action="#{conversationControllerDemoBean.closeGroup1}"/>
+                    <h:commandLink value="close conversation on exception of g1" action="#{conversationControllerDemoBean.closeGroup1OnException}"/>
                 </h:panelGrid>
             </h:form>
             

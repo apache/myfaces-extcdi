@@ -24,5 +24,6 @@
     <interceptors>
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityInterceptor</class>
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor</class>
+        <class>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CloseConversationGroupInterceptor</class>
     </interceptors>
 </beans>
