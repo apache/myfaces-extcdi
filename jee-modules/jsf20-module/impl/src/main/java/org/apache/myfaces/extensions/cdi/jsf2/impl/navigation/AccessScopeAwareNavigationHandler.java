@@ -16,12 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
+package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.CodiFacesContextFactory;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request.CodiFacesContextFactory;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
@@ -29,30 +26,15 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-public class AccessScopeAwareNavigationHandler extends NavigationHandler
+public class AccessScopeAwareNavigationHandler extends
+        org.apache.myfaces.extensions.cdi.jsf.impl.navigation.AccessScopeAwareNavigationHandler
 {
-    private final NavigationHandler navigationHandler;
-
     public AccessScopeAwareNavigationHandler(NavigationHandler navigationHandler)
     {
-        this.navigationHandler = navigationHandler;
+        super(navigationHandler);
     }
 
-    public void handleNavigation(FacesContext facesContext, String s, String s1)
-    {
-        //we have to reset it due to possible redirects
-        JsfUtils.resetCaches();
-
-        //TODO check myfaces core - issue? facesContext is not wrapped here
-        facesContext = wrapFacesContext(facesContext);
-
-        storeCurrentViewIdAsOldViewId(facesContext); //don't change the order
-
-        this.navigationHandler.handleNavigation(facesContext, s, s1);
-
-        storeCurrentViewIdAsNewViewId(facesContext);
-    }
-
+    @Override
     protected FacesContext wrapFacesContext(FacesContext facesContext)
     {
         return CodiFacesContextFactory.wrapFacesContext(facesContext);

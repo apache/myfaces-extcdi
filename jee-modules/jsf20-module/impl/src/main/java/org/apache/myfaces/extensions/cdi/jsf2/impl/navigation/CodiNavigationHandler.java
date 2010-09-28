@@ -52,8 +52,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler
         ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
                 new ViewConfigAwareNavigationHandler(this.navigationHandler);
 
-        return new org.apache.myfaces.extensions.cdi.jsf.impl.navigation
-                .AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
+        return new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
     }
 
     public NavigationCase getNavigationCase(FacesContext context, String action, String outcome)
