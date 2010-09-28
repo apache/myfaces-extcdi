@@ -35,10 +35,11 @@ import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -48,6 +49,8 @@ public class CodiUtils
 {
     //TODO change source
     public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
+
+    private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
     {
@@ -226,100 +229,217 @@ public class CodiUtils
         return instance;
     }
 
-    /*
-     * source code from OWB
+    /**
+     * Checks if the given qualifiers are equal.
      *
-     * TODO -=jakobk=- these methods rely on the String representation of the
-     * Qualifiers, which is IMHO the wrong way. I think this should be changed
-     * here and also in OWB!
+     * Qualifiers are equal if they have the same annotationType and all their
+     * methods, except those annotated with @Nonbinding, return the same value.
+     *
+     * @param qualifier1
+     * @param qualifier2
+     * @return
      */
-    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
-    public static boolean isQualifierEqual(Annotation sourceAnnotation, Annotation targetAnnotation)
+    public static boolean isQualifierEqual(Annotation qualifier1, Annotation qualifier2)
     {
-        Class<? extends Annotation> sourceAnnotationType = sourceAnnotation.annotationType();
+        Class<? extends Annotation> qualifier1AnnotationType
+                = qualifier1.annotationType();
 
-        if (!sourceAnnotation.annotationType().equals(targetAnnotation.annotationType()))
+        // check if the annotationTypes are equal
+        if (qualifier1AnnotationType == null
+                || !qualifier1AnnotationType.equals(qualifier2.annotationType()))
         {
             return false;
         }
 
-        Method[] methods = sourceAnnotationType.getDeclaredMethods();
+        // check the values of all qualifier-methods
+        // except those annotated with @Nonbinding
+        List<Method> bindingQualifierMethods 
+                = _getBindingQualifierMethods(qualifier1AnnotationType);
 
-        List<String> list = new ArrayList<String>();
-
-        for (Method method : methods)
+        for (Method method : bindingQualifierMethods)
         {
-            Annotation[] annots = method.getDeclaredAnnotations();
+            Object value1 = _callMethod(qualifier1, method);
+            Object value2 = _callMethod(qualifier2, method);
 
-            if (annots.length > 0)
+            if (!_checkEquality(value1, value2))
             {
-                for (Annotation annot : annots)
-                {
-                    if (!annot.annotationType().equals(Nonbinding.class))
-                    {
-                        list.add(method.getName());
-                    }
-                }
-            }
-            else
-            {
-                list.add(method.getName());
+                return false;
             }
         }
 
-        return checkEquality(sourceAnnotation.toString(), targetAnnotation.toString(), list);
+        return true;
     }
-    
-    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
-    private static boolean checkEquality(String src, String member, List<String> arguments)
+
+    /**
+     * Quecks if the two values are equal.
+     *
+     * @param value1
+     * @param value2
+     * @return
+     */
+    private static boolean _checkEquality(Object value1, Object value2)
     {
-        if ((checkEquBuffer(src, arguments).toString().trim()
-                .equals(checkEquBuffer(member, arguments).toString().trim())))
+        if ((value1 == null && value2 != null)
+                || (value1 != null && value2 == null))
+        {
+            return false;
+        }
+
+        if (value1 == null && value2 == null)
         {
             return true;
         }
 
-        return false;
+        // now both values are != null
+
+        Class<?> valueClass = value1.getClass();
+        
+        if (!valueClass.equals(value2.getClass()))
+        {
+            return false;
+        }
+
+        if (valueClass.isPrimitive())
+        {
+            // primitive types can be checked with ==
+            return value1 == value2;
+        }
+        else if (valueClass.isArray())
+        {
+            Class<?> arrayType = valueClass.getComponentType();
+
+            if (arrayType.isPrimitive())
+            {
+                if (Long.TYPE == arrayType)
+                {
+                    return Arrays.equals(((long[]) value1), (long[]) value2);
+                }
+                else if (Integer.TYPE == arrayType)
+                {
+                    return Arrays.equals(((int[]) value1), (int[]) value2);
+                }
+                else if (Short.TYPE == arrayType)
+                {
+                    return Arrays.equals(((short[]) value1), (short[]) value2);
+                }
+                else if (Double.TYPE == arrayType)
+                {
+                    return Arrays.equals(((double[]) value1), (double[]) value2);
+                }
+                else if (Float.TYPE == arrayType)
+                {
+                    return Arrays.equals(((float[]) value1), (float[]) value2);
+                }
+                else if (Boolean.TYPE == arrayType)
+                {
+                    return Arrays.equals(((boolean[]) value1), (boolean[]) value2);
+                }
+                else if (Byte.TYPE == arrayType)
+                {
+                    return Arrays.equals(((byte[]) value1), (byte[]) value2);
+                }
+                else if (Character.TYPE == arrayType)
+                {
+                    return Arrays.equals(((char[]) value1), (char[]) value2);
+                }
+                return false;
+            }
+            else
+            {
+                return Arrays.equals(((Object[]) value1), (Object[]) value2);
+            }
+        }
+        else
+        {
+            return value1.equals(value2);
+        }
     }
 
-    //method from OWB AnnotationUtil#hasAnnotationMember - TODO test & refactor it
-    private static StringBuffer checkEquBuffer(String src, List<String> arguments)
+    /**
+     * Calls the given method on the given instance.
+     * Used to determine the values of annotation instances.
+     *
+     * @param instance
+     * @param method
+     * @return
+     */
+    private static Object _callMethod(Object instance, Method method)
     {
-        int index = src.indexOf('(');
+        boolean accessible = method.isAccessible();
 
-        String sbstr = src.substring(index + 1, src.length() - 1);
-
-        StringBuffer srcBuf = new StringBuffer();
-
-        StringTokenizer tok = new StringTokenizer(sbstr, ",");
-        while (tok.hasMoreTokens())
+        try
         {
-            String token = tok.nextToken();
-
-            StringTokenizer tok2 = new StringTokenizer(token, "=");
-            while (tok2.hasMoreElements())
+            if (!accessible)
             {
-                String tt = tok2.nextToken();
-                if (arguments.contains(tt.trim()))
+                method.setAccessible(true);
+            }
+
+            return method.invoke(instance, EMPTY_OBJECT_ARRAY);
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Exception in method call : " + method.getName());
+        }
+        finally
+        {
+            // reset accessible value
+            method.setAccessible(accessible);
+        }
+    }
+
+    /**
+     * Return a List of all methods of the qualifier,
+     * which are not annotated with @Nonbinding.
+     * 
+     * @param qualifierAnnotationType
+     * @return
+     */
+    private static List<Method> _getBindingQualifierMethods(
+            Class<? extends Annotation> qualifierAnnotationType)
+    {
+        Method[] qualifierMethods = qualifierAnnotationType.getDeclaredMethods();
+        if (qualifierMethods.length > 0)
+        {
+            List<Method> bindingMethods = new ArrayList<Method>();
+
+            for (Method qualifierMethod : qualifierMethods)
+            {
+                Annotation[] qualifierMethodAnnotations
+                        = qualifierMethod.getDeclaredAnnotations();
+
+                if (qualifierMethodAnnotations.length > 0)
                 {
-                    srcBuf.append(tt.trim());
-                    srcBuf.append("=");
+                    // look for @Nonbinding
+                    boolean nonbinding = false;
 
-                    if (tok2.hasMoreElements())
+                    for (Annotation qualifierMethodAnnotation : qualifierMethodAnnotations)
                     {
-                        String str = tok2.nextToken();
-                        if(str.charAt(0) == '"' && str.charAt(str.length() -1) == '"')
+                        if (Nonbinding.class.equals(
+                                qualifierMethodAnnotation.annotationType()))
                         {
-                            str = str.substring(1,str.length()-1);
+                            nonbinding = true;
+                            break;
                         }
-
-                        srcBuf.append(str);
                     }
+
+                    if (!nonbinding)
+                    {
+                        // no @Nonbinding found - add to list
+                        bindingMethods.add(qualifierMethod);
+                    }
+                }
+                else
+                {
+                    // no method-annotations - add to list
+                    bindingMethods.add(qualifierMethod);
                 }
             }
 
+            return bindingMethods;
         }
 
-        return srcBuf;
+        // annotation has no methods
+        return Collections.emptyList();
     }
+    
 }
