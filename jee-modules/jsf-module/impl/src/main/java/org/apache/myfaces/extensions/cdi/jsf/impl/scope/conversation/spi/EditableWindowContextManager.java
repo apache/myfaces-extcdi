@@ -31,25 +31,27 @@ public interface EditableWindowContextManager extends WindowContextManager
 
     boolean activateWindowContext(EditableWindowContext windowContext);
 
+    /*
     void resetCurrentWindowContext();
 
     void resetWindowContext(String windowContextId);
 
     void resetWindowContext(EditableWindowContext windowContext);
+    */
 
-    void resetConversations();
+    void restartConversations();
 
-    void resetConversations(String windowContextId);
+    void restartConversations(String windowContextId);
 
-    void resetConversations(EditableWindowContext windowContext);
+    void restartConversations(EditableWindowContext windowContext);
 
-    void removeCurrentWindowContext();
+    void closeCurrentWindowContext();
 
-    void removeWindowContext(String windowContextId);
+    void closeWindowContext(String windowContextId);
 
-    void removeWindowContext(EditableWindowContext windowContext);
+    void closeWindowContext(EditableWindowContext windowContext);
 
     Collection<EditableWindowContext> getWindowContexts();
 
-    void destroy();
+    void closeAllWindowContexts();
 }

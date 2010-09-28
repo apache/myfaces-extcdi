@@ -24,13 +24,18 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.StartConversationEvent;
+
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
  */
-public class JsfAwareConversationFactory implements ConversationFactory
+public class JsfAwareConversationFactory implements ConversationFactory, BeanManagerAware
 {
     private static final long serialVersionUID = 2329113439978807663L;
+
+    private BeanManager beanManager;
 
     enum ConversationPropertyKeys
     {
@@ -51,18 +56,49 @@ public class JsfAwareConversationFactory implements ConversationFactory
     
     public EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
     {
+        EditableConversation conversation;
+
         if(WindowScoped.class.isAssignableFrom(conversationKey.getScope()))
         {
-            return new DefaultConversation(conversationKey, new WindowConversationExpirationEvaluator());
+            conversation = new DefaultConversation(conversationKey,
+                                                   new WindowConversationExpirationEvaluator(),
+                                                   configuration,
+                                                   this.beanManager);
+
+            return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
         }
 
         if(ViewAccessScoped.class.isAssignableFrom(conversationKey.getScope()))
         {
-            return new DefaultConversation(conversationKey, new ViewAccessConversationExpirationEvaluator());
+            conversation = new DefaultConversation(conversationKey,
+                                                   new ViewAccessConversationExpirationEvaluator(),
+                                                   configuration,
+                                                   this.beanManager);
+
+            return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
         }
 
-        return new DefaultConversation(
-                conversationKey,
-                new TimeoutConversationExpirationEvaluator(configuration.getConversationTimeoutInMinutes()));
+        conversation = new DefaultConversation(conversationKey,
+                                               new TimeoutConversationExpirationEvaluator(
+                                                       configuration.getConversationTimeoutInMinutes()),
+                                               configuration,
+                                               this.beanManager);
+
+        return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
+    }
+
+    private EditableConversation processCreatedConversation(EditableConversation conversation,
+                                                            boolean startConversationEventEnable)
+    {
+        if(startConversationEventEnable)
+        {
+            this.beanManager.fireEvent(new StartConversationEvent(conversation));
+        }
+        return conversation;
+    }
+
+    public void setBeanManager(BeanManager beanManager)
+    {
+        this.beanManager = beanManager;
     }
 }

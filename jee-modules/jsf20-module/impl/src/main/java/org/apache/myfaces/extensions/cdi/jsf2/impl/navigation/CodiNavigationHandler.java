@@ -1,0 +1,76 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
+
+import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
+
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.NavigationHandler;
+import javax.faces.application.NavigationCase;
+import javax.faces.context.FacesContext;
+import java.util.Set;
+import java.util.Map;
+
+/**
+ * We have to ensure the invocation order for the type-safe navigation feature/s.
+ * 
+ * @author Gerhard Petracek
+ */
+public class CodiNavigationHandler extends ConfigurableNavigationHandler
+{
+    private final NavigationHandler navigationHandler;
+
+    public CodiNavigationHandler(NavigationHandler navigationHandler)
+    {
+        this.navigationHandler = navigationHandler;
+    }
+
+    //TODO
+    public void handleNavigation(FacesContext context, String fromAction, String outcome)
+    {
+        getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
+    }
+
+    private NavigationHandler getWrappedNavigationHandler()
+    {
+        ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
+                new ViewConfigAwareNavigationHandler(this.navigationHandler);
+
+        return new org.apache.myfaces.extensions.cdi.jsf.impl.navigation
+                .AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
+    }
+
+    public NavigationCase getNavigationCase(FacesContext context, String action, String outcome)
+    {
+        if (this.navigationHandler instanceof ConfigurableNavigationHandler)
+        {
+            return ((ConfigurableNavigationHandler) this.navigationHandler).getNavigationCase(context, action, outcome);
+        }
+        return null;
+    }
+
+    public Map<String, Set<NavigationCase>> getNavigationCases()
+    {
+        if (this.navigationHandler instanceof ConfigurableNavigationHandler)
+        {
+            return ((ConfigurableNavigationHandler) this.navigationHandler).getNavigationCases();
+        }
+        return null;
+    }
+}

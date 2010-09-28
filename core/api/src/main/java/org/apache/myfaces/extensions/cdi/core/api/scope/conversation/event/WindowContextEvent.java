@@ -18,20 +18,22 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+
 /**
  * @author Gerhard Petracek
  */
 public abstract class WindowContextEvent
 {
-    private final String windowContextId;
+    private final WindowContext windowContext;
 
-    public WindowContextEvent(String windowContextId)
+    public WindowContextEvent(WindowContext windowContext)
     {
-        this.windowContextId = windowContextId;
+        this.windowContext = windowContext;
     }
 
-    public final String getWindowContextId()
+    public final WindowContext getWindowContext()
     {
-        return windowContextId;
+        return windowContext;
     }
 }

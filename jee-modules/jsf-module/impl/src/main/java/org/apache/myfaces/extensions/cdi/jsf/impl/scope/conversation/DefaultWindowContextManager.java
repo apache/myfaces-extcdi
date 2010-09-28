@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
@@ -35,6 +36,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowC
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.enterprise.inject.Typed;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -58,6 +60,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private ProjectStage projectStage;
 
+    private BeanManager beanManager;
+
     private JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
 
     private boolean allowUnknownWindowIds = false;
@@ -70,14 +74,24 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private WindowContextQuotaHandler windowContextQuotaHandler;
 
+    private boolean createWindowContextEventEnable;
+
+    private boolean closeWindowContextEventEnable;
+
     //TODO add config + refactor DefaultWindowContextManager
     private static final int DEFAULT_WINDOW_KEY_LENGTH = 3;
 
     protected DefaultWindowContextManager(JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
-                                          ProjectStage projectStage)
+                                          ProjectStage projectStage,
+                                          BeanManager beanManager)
     {
         this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
         this.projectStage = projectStage;
+        this.beanManager = beanManager;
+
+        this.createWindowContextEventEnable = jsfAwareWindowContextConfig.isCreateWindowContextEventEnable();
+        this.closeWindowContextEventEnable = jsfAwareWindowContextConfig.isCloseWindowContextEventEnable();
+
         init();
     }
 
@@ -155,7 +169,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if(result != null && !result.isActive())
         {
-            removeWindowContext(result);
+            closeWindowContext(result);
             result = null;
         }
 
@@ -179,8 +193,18 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         {
             return windowContextFactory.createWindowContext(windowContextId, this.jsfAwareWindowContextConfig);
         }
-        
-        return new JsfWindowContext(windowContextId, this.jsfAwareWindowContextConfig, this.projectStageDevelopment);
+
+        EditableWindowContext windowContext = new JsfWindowContext(windowContextId,
+                                                                   this.jsfAwareWindowContextConfig,
+                                                                   this.projectStageDevelopment,
+                                                                   this.beanManager);
+
+        if(this.createWindowContextEventEnable)
+        {
+            this.beanManager.fireEvent(new CreateWindowContextEvent(windowContext));
+        }
+
+        return windowContext;
     }
 
     public boolean activateWindowContext(String windowContextId)
@@ -203,6 +227,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return cacheWindowId(facesContext.getExternalContext(), windowContext.getId(), this.allowUnknownWindowIds);
     }
 
+    /*
     public void resetCurrentWindowContext()
     {
         resetWindowContext(convert(getCurrentWindowContext()));
@@ -221,18 +246,19 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
             conversation.restart();
         }
     }
+    */
 
-    public void resetConversations()
+    public void restartConversations()
     {
-        resetConversations(convert(getCurrentWindowContext()));
+        restartConversations(convert(getCurrentWindowContext()));
     }
 
-    public void resetConversations(String windowContextId)
+    public void restartConversations(String windowContextId)
     {
-        resetConversations(convert(getWindowContext(windowContextId)));
+        restartConversations(convert(getWindowContext(windowContextId)));
     }
 
-    public void resetConversations(EditableWindowContext windowContext)
+    public void restartConversations(EditableWindowContext windowContext)
     {
         JsfUtils.resetCaches();
         for (EditableConversation conversation : windowContext.getConversations().values())
@@ -246,30 +272,36 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
     }
 
-    public void removeCurrentWindowContext()
+    public void closeCurrentWindowContext()
     {
-        removeWindowContext(convert(getCurrentWindowContext()));
+        closeWindowContext(convert(getCurrentWindowContext()));
     }
 
-    public void removeWindowContext(String windowContextId)
+    public void closeWindowContext(String windowContextId)
     {
-        removeWindowContext(convert(getWindowContext(windowContextId)));
+        closeWindowContext(convert(getWindowContext(windowContextId)));
     }
 
-    public void removeWindowContext(EditableWindowContext windowContext)
+    public void closeWindowContext(EditableWindowContext editableWindowContext)
     {
+        if(this.closeWindowContextEventEnable)
+        {
+            this.beanManager.fireEvent(new CloseWindowContextEvent(editableWindowContext));
+        }
+
         JsfUtils.resetCaches();
-        this.windowContextMap.remove(windowContext.getId());
+        this.windowContextMap.remove(editableWindowContext.getId());
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
         removeWindowContextIdHolderComponent(facesContext);
 
         //reset existing information
-        removeExistingWindowId(externalContext, windowContext.getId());
+        removeExistingWindowId(externalContext, editableWindowContext.getId());
         externalContext.getRequestMap().remove(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
-        windowContext.closeConversations();
+        editableWindowContext.closeConversations();
+        editableWindowContext.removeInactiveConversations();
     }
 
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
@@ -305,17 +337,11 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return Collections.unmodifiableCollection(this.windowContextMap.values());
     }
 
-    public void destroy()
+    public void closeAllWindowContexts()
     {
-        for (WindowContext windowContext : this.windowContextMap.values())
+        for (EditableWindowContext editableWindowContext : this.windowContextMap.values())
         {
-            for (Conversation conversation :
-                    ((EditableWindowContext)windowContext).getConversations().values())
-            {
-                conversation.close();
-            }
-
-            ((EditableWindowContext)windowContext).removeInactiveConversations();
+            closeWindowContext(editableWindowContext);
         }
     }
 

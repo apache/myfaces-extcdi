@@ -422,7 +422,7 @@ public class ConversationUtils
         {
             if(isEligibleForCleanup(windowContext))
             {
-                windowContextManager.removeWindowContext(windowContext);
+                windowContextManager.closeWindowContext(windowContext);
             }
         }
 

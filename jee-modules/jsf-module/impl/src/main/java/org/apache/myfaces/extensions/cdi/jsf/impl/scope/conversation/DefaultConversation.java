@@ -19,11 +19,15 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseConversationEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.RestartConversationEvent;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Typed;
+import javax.enterprise.inject.spi.BeanManager;
 import java.io.Serializable;
 
 /**
@@ -38,12 +42,24 @@ public class DefaultConversation implements EditableConversation
     private final ConversationKey conversationKey;
     private ConversationExpirationEvaluator expirationEvaluator;
 
+    private BeanManager beanManager;
+
     private final BeanStorage beanStorage = new BeanStorage();
 
-    public DefaultConversation(ConversationKey conversationKey, ConversationExpirationEvaluator expirationEvaluator)
+    private final boolean closeConversationEventEnable;
+    private final boolean restartConversationEventEnable;
+
+    public DefaultConversation(ConversationKey conversationKey,
+                               ConversationExpirationEvaluator expirationEvaluator,
+                               ConversationConfig conversationConfig,
+                               BeanManager beanManager)
     {
         this.conversationKey = conversationKey;
         this.expirationEvaluator = expirationEvaluator;
+        this.beanManager = beanManager;
+
+        this.closeConversationEventEnable = conversationConfig.isCloseConversationEventEnable();
+        this.restartConversationEventEnable = conversationConfig.isRestartConversationEventEnable();
     }
 
     //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}
@@ -72,6 +88,8 @@ public class DefaultConversation implements EditableConversation
     {
         if(this.active)
         {
+            fireCloseConversationEvent();
+
             this.active = false;
             this.beanStorage.resetStorage();
             RequestCache.resetConversationCache();
@@ -80,6 +98,7 @@ public class DefaultConversation implements EditableConversation
 
     public void restart()
     {
+        fireRestartConversationEvent();
         touchConversation();
         this.beanStorage.resetStorage();
     }
@@ -130,6 +149,22 @@ public class DefaultConversation implements EditableConversation
     public ConversationExpirationEvaluator getExpirationEvaluator()
     {
         return expirationEvaluator;
+    }
+
+    private void fireCloseConversationEvent()
+    {
+        if(this.closeConversationEventEnable)
+        {
+            this.beanManager.fireEvent(new CloseConversationEvent(this));
+        }
+    }
+
+    private void fireRestartConversationEvent()
+    {
+        if(this.restartConversationEventEnable)
+        {
+            this.beanManager.fireEvent(new RestartConversationEvent(this));
+        }
     }
 
     @Override

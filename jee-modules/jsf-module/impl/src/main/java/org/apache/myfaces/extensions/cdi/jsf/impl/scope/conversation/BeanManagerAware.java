@@ -16,17 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
+package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
  */
-public final class CloseWindowContextEvent extends WindowContextEvent
+interface BeanManagerAware
 {
-    public CloseWindowContextEvent(WindowContext windowContext)
-    {
-        super(windowContext);
-    }
+    void setBeanManager(BeanManager beanManager);
 }

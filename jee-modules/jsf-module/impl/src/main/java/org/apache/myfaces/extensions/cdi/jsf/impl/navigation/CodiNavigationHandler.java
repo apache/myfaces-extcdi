@@ -16,17 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
+package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import javax.faces.application.NavigationHandler;
+import javax.faces.context.FacesContext;
 
 /**
+ * We have to ensure the invocation order for the type-safe navigation feature/s.
+ *
  * @author Gerhard Petracek
  */
-public final class CloseWindowContextEvent extends WindowContextEvent
+public class CodiNavigationHandler extends NavigationHandler
 {
-    public CloseWindowContextEvent(WindowContext windowContext)
+    private final NavigationHandler navigationHandler;
+
+    public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
-        super(windowContext);
+        ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
+                new ViewConfigAwareNavigationHandler(navigationHandler);
+
+        this.navigationHandler = new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
+    }
+
+    public void handleNavigation(FacesContext context, String fromAction, String outcome)
+    {
+        this.navigationHandler.handleNavigation(context, fromAction, outcome);
     }
 }

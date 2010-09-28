@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Typed;
+import javax.enterprise.inject.spi.BeanManager;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Date;
@@ -59,6 +60,8 @@ public class JsfWindowContext implements EditableWindowContext
     private final JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
     private final boolean projectStageDevelopment;
 
+    private BeanManager beanManager;
+
     private Map<ConversationKey, EditableConversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, EditableConversation>();
 
@@ -68,11 +71,13 @@ public class JsfWindowContext implements EditableWindowContext
 
     JsfWindowContext(String windowContextId,
                      JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
-                     boolean projectStageDevelopment)
+                     boolean projectStageDevelopment,
+                     BeanManager beanManager)
     {
         this.id = windowContextId;
         this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
         this.projectStageDevelopment = projectStageDevelopment;
+        this.beanManager = beanManager;
 
         this.expirationEvaluator = new TimeoutExpirationEvaluator(
                 this.jsfAwareWindowContextConfig.getWindowContextTimeoutInMinutes());
@@ -98,7 +103,7 @@ public class JsfWindowContext implements EditableWindowContext
     {
         for (Map.Entry<ConversationKey, EditableConversation> conversationEntry : this.groupedConversations.entrySet())
         {
-            endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), forceEnd);
+            closeAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), forceEnd);
         }
         JsfUtils.resetConversationCache();
     }
@@ -119,7 +124,7 @@ public class JsfWindowContext implements EditableWindowContext
             //TODO
             if (conversation != null && !conversation.isActive())
             {
-                endAndRemoveConversation(conversationKey, conversation, true);
+                closeAndRemoveConversation(conversationKey, conversation, true);
                 conversation = null;
             }
 
@@ -147,7 +152,7 @@ public class JsfWindowContext implements EditableWindowContext
         {
             throw conversationNotEditableException(conversation);
         }
-        return endAndRemoveConversation(conversationKey, (EditableConversation)conversation, true);
+        return closeAndRemoveConversation(conversationKey, (EditableConversation)conversation, true);
     }
 
     public Set<Conversation> closeConversationGroup(Class conversationGroupKey)
@@ -158,15 +163,15 @@ public class JsfWindowContext implements EditableWindowContext
             if(conversationGroupKey.isAssignableFrom(conversationEntry.getKey().getConversationGroup()))
             {
                 removedConversations.add(
-                        endAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), true));
+                        closeAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), true));
             }
         }
         return removedConversations;
     }
 
-    private EditableConversation endAndRemoveConversation(ConversationKey conversationKey,
-                                                          EditableConversation conversation,
-                                                          boolean forceEnd)
+    private EditableConversation closeAndRemoveConversation(ConversationKey conversationKey,
+                                                            EditableConversation conversation,
+                                                            boolean forceEnd)
     {
         logInformationAboutConversations("before JsfWindowContext#endAndRemoveConversation");
 
@@ -205,6 +210,10 @@ public class JsfWindowContext implements EditableWindowContext
 
         ConversationFactory conversationFactory = this.jsfAwareWindowContextConfig.getConversationFactory();
 
+        if(conversationFactory instanceof BeanManagerAware)
+        {
+            ((BeanManagerAware)conversationFactory).setBeanManager(this.beanManager);
+        }
         return conversationFactory.createConversation(conversationKey, this.jsfAwareWindowContextConfig);
     }
 

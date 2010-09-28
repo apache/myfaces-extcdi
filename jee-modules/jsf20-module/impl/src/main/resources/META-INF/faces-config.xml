@@ -26,8 +26,7 @@
 
     <application>
         <action-listener>org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityViolationAwareActionListener</action-listener>
-        <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler</navigation-handler>
-        <navigation-handler>org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.AccessScopeAwareNavigationHandler</navigation-handler>
+        <navigation-handler>org.apache.myfaces.extensions.cdi.jsf2.impl.navigation.CodiNavigationHandler</navigation-handler>
 
         <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>
 

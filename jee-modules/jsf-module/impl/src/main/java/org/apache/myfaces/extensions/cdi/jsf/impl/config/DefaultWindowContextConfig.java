@@ -92,10 +92,40 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(ENABLE_UNSCOPE_BEAN_EVENT, Boolean.class);
     }
 
+    public boolean isStartConversationEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_START_CONVERSATION_EVENT, Boolean.class);
+    }
+
+    public boolean isCloseConversationEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_CLOSE_CONVERSATION_EVENT, Boolean.class);
+    }
+
+    public boolean isRestartConversationEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_RESTART_CONVERSATION_EVENT, Boolean.class);
+    }
+
     public int getMaxWindowContextCount()
     {
         lazyInit();
         return getAttribute(MAX_WINDOW_CONTEXT_COUNT, Integer.class);
+    }
+
+    public boolean isCreateWindowContextEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_CREATE_WINDOW_CONTEXT_EVENT, Boolean.class);
+    }
+
+    public boolean isCloseWindowContextEventEnable()
+    {
+        lazyInit();
+        return getAttribute(ENABLE_CLOSE_WINDOW_CONTEXT_EVENT, Boolean.class);
     }
 
     public boolean isInitialRedirectDisable()
@@ -213,6 +243,48 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initScopeBeanEvent(facesContext);
         initBeanAccessEvent(facesContext);
         initUnscopeBeanEvent(facesContext);
+
+        initStartConversationEvent(facesContext);
+        initCloseConversationEvent(facesContext);
+        initRestartConversationEvent(facesContext);
+
+        initCreateWindowContextEvent(facesContext);
+        initCloseWindowContextEvent(facesContext);
+    }
+
+    private void initStartConversationEvent(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ENABLE_START_CONVERSATION_EVENT, new BooleanConfigValueParser(),
+                ENABLE_START_CONVERSATION_EVENT_DEFAULT);
+    }
+
+    private void initCloseConversationEvent(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ENABLE_CLOSE_CONVERSATION_EVENT, new BooleanConfigValueParser(),
+                ENABLE_CLOSE_CONVERSATION_EVENT_DEFAULT);
+    }
+
+    private void initRestartConversationEvent(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ENABLE_RESTART_CONVERSATION_EVENT, new BooleanConfigValueParser(),
+                ENABLE_RESTART_CONVERSATION_EVENT_DEFAULT);
+    }
+
+    private void initCreateWindowContextEvent(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ENABLE_CREATE_WINDOW_CONTEXT_EVENT, new BooleanConfigValueParser(),
+                ENABLE_CREATE_WINDOW_CONTEXT_EVENT_DEFAULT);
+    }
+
+    private void initCloseWindowContextEvent(FacesContext facesContext)
+    {
+        initConfig(facesContext,
+                ENABLE_CLOSE_WINDOW_CONTEXT_EVENT, new BooleanConfigValueParser(),
+                ENABLE_CLOSE_WINDOW_CONTEXT_EVENT_DEFAULT);
     }
 
     private void initScopeBeanEvent(FacesContext facesContext)

@@ -18,13 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+
 /**
  * @author Gerhard Petracek
  */
 public final class CreateWindowContextEvent extends WindowContextEvent
 {
-    public CreateWindowContextEvent(String windowContextId)
+    public CreateWindowContextEvent(WindowContext windowContext)
     {
-        super(windowContextId);
+        super(windowContext);
     }
 }

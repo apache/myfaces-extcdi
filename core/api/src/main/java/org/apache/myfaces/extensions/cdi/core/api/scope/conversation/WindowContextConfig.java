@@ -36,4 +36,10 @@ public interface WindowContextConfig extends Serializable
     int getWindowContextTimeoutInMinutes();
 
     int getMaxWindowContextCount();
+
+    boolean isCreateWindowContextEventEnable();
+
+    boolean isCloseWindowContextEventEnable();
+
+    //boolean isResetWindowContextEventEnable();
 }

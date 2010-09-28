@@ -79,4 +79,29 @@ public interface ConfigParameter
             CoreCodiConfigParameter.BASE_NAME + "ENABLE_UNSCOPE_BEAN_EVENT";
 
     static final boolean ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT = false;
+
+    static final String ENABLE_START_CONVERSATION_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_START_CONVERSATION_EVENT";
+
+    static final boolean ENABLE_START_CONVERSATION_EVENT_DEFAULT = false;
+
+    static final String ENABLE_CLOSE_CONVERSATION_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_CLOSE_CONVERSATION_EVENT";
+
+    static final boolean ENABLE_CLOSE_CONVERSATION_EVENT_DEFAULT = false;
+
+    static final String ENABLE_RESTART_CONVERSATION_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_RESTART_CONVERSATION_EVENT";
+
+    static final boolean ENABLE_RESTART_CONVERSATION_EVENT_DEFAULT = false;
+
+    static final String ENABLE_CREATE_WINDOW_CONTEXT_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_CREATE_WINDOW_CONTEXT_EVENT";
+
+    static final boolean ENABLE_CREATE_WINDOW_CONTEXT_EVENT_DEFAULT = false;
+
+    static final String ENABLE_CLOSE_WINDOW_CONTEXT_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_CLOSE_WINDOW_CONTEXT_EVENT";
+
+    static final boolean ENABLE_CLOSE_WINDOW_CONTEXT_EVENT_DEFAULT = false;
 }

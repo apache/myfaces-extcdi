@@ -35,6 +35,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
@@ -53,7 +54,8 @@ final class InstanceProducer
     @SessionScoped
     @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
     protected EditableWindowContextManager createWindowContextManager(ConfigResolver configResolver,
-                                                                      ProjectStage projectStage)
+                                                                      ProjectStage projectStage,
+                                                                      BeanManager beanManager)
     {
         JsfAwareWindowContextConfig jsfAwareWindowContextConfig =
                 configResolver.resolve(JsfAwareWindowContextConfig.class);
@@ -65,7 +67,7 @@ final class InstanceProducer
         {
             return windowContextManagerFactory.createWindowContextManager(jsfAwareWindowContextConfig);
         }
-        return new DefaultWindowContextManager(jsfAwareWindowContextConfig, projectStage);
+        return new DefaultWindowContextManager(jsfAwareWindowContextConfig, projectStage, beanManager);
     }
 
     protected void destroyAllConversations(
@@ -73,7 +75,7 @@ final class InstanceProducer
     {
         if(windowContextManager instanceof EditableWindowContextManager)
         {
-            ((EditableWindowContextManager)windowContextManager).destroy();
+            ((EditableWindowContextManager)windowContextManager).closeAllWindowContexts();
         }
     }
 

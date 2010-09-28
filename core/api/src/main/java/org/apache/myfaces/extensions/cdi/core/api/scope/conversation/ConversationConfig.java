@@ -32,4 +32,10 @@ public interface ConversationConfig extends Serializable
     boolean isBeanAccessEventEnable();
 
     boolean isUnscopeBeanEventEnable();
+
+    boolean isStartConversationEventEnable();
+
+    boolean isCloseConversationEventEnable();
+    
+    boolean isRestartConversationEventEnable();
 }

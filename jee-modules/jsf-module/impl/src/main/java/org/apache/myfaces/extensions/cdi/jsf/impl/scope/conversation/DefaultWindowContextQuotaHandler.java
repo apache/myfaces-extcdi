@@ -85,7 +85,7 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
 
         if(windowContextToRemove != null)
         {
-            editableWindowContextManager.removeWindowContext(windowContextToRemove);
+            editableWindowContextManager.closeWindowContext(windowContextToRemove);
         }
     }
 
