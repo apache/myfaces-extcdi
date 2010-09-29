@@ -22,8 +22,8 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.faces.event.SystemEvent;
 import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.PreDestroyApplicationEvent;
 import javax.enterprise.event.Event;
 import javax.enterprise.context.Dependent;
 import java.util.logging.Logger;
@@ -40,7 +40,10 @@ public class SystemEventBroadcaster
     private final Logger logger = Logger.getLogger(SystemEventBroadcaster.class.getName());
 
     @Inject
-    private Event<PostConstructApplicationEvent> postConstructApplicationEventEvent;
+    private Event<PostConstructApplicationEvent> postConstructApplicationEvent;
+
+    @Inject
+    private Event<PreDestroyApplicationEvent> preDestroyApplicationEvent;
 
     @Inject
     private ProjectStage projectStage;
@@ -51,23 +54,11 @@ public class SystemEventBroadcaster
 
     void broadcastApplicationStartupEvent(PostConstructApplicationEvent postConstructApplicationEvent)
     {
-        this.postConstructApplicationEventEvent.fire(postConstructApplicationEvent);
+        this.postConstructApplicationEvent.fire(postConstructApplicationEvent);
     }
 
-    void logError(SystemEvent systemEvent)
+    void broadcastShutdownApplicationEvent(PreDestroyApplicationEvent preDestroyApplicationEvent)
     {
-        if(ProjectStage.Development.equals(this.projectStage))
-        {
-            String messageText = "failed to fire " + PostConstructApplicationEvent.class.getName();
-
-            if(systemEvent == null)
-            {
-                this.logger.severe(messageText + " - the event is null.");
-            }
-            else
-            {
-                this.logger.severe(messageText + " - the event is of type: " + systemEvent.getClass().getName());
-            }
-        }
+        this.preDestroyApplicationEvent.fire(preDestroyApplicationEvent);
     }
 }

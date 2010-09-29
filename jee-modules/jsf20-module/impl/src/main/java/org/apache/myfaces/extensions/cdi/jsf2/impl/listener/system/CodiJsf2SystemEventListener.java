@@ -25,16 +25,17 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
 import javax.faces.event.PostConstructApplicationEvent;
+import javax.faces.event.PreDestroyApplicationEvent;
 import javax.faces.application.Application;
 
 /**
  * @author Gerhard Petracek
  */
-public class CodiStartupListener implements SystemEventListener, Deactivatable
+public class CodiJsf2SystemEventListener implements SystemEventListener, Deactivatable
 {
     private final boolean deactivated;
 
-    public CodiStartupListener()
+    public CodiJsf2SystemEventListener()
     {
         this.deactivated = !isActivated();
     }
@@ -50,9 +51,9 @@ public class CodiStartupListener implements SystemEventListener, Deactivatable
         {
             resolveBroadcaster().broadcastApplicationStartupEvent((PostConstructApplicationEvent)systemEvent);
         }
-        else
+        else if(systemEvent instanceof PreDestroyApplicationEvent)
         {
-            resolveBroadcaster().logError(systemEvent);
+            resolveBroadcaster().broadcastShutdownApplicationEvent((PreDestroyApplicationEvent)systemEvent);
         }
     }
 
