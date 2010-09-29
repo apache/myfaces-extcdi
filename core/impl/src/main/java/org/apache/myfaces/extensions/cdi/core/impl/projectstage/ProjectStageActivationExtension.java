@@ -24,6 +24,8 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 
 /**
@@ -35,9 +37,8 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActiv
  * veto that bean.</p>
  *
  */
-public class ProjectStageActivationExtension implements Extension
+public class ProjectStageActivationExtension implements Extension, Deactivatable
 {
-
     private ProjectStage projectStage = null;
 
     protected ProjectStage getProjectStage()
@@ -60,6 +61,11 @@ public class ProjectStageActivationExtension implements Extension
      */
     protected void vetoAlternativeTypes(@Observes ProcessAnnotatedType<Object> pat)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         if (pat.getAnnotatedType().getJavaClass().isAnnotationPresent(ProjectStageActivated.class))
         {
             Class<? extends ProjectStage>[] activatedIn =
@@ -91,5 +97,8 @@ public class ProjectStageActivationExtension implements Extension
         return false;
     }
 
-
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
+    }
 }

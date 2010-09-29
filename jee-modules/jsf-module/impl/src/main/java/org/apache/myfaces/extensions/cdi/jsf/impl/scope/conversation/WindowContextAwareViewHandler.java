@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.application.ViewHandler;
@@ -28,15 +30,18 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-public class WindowContextAwareViewHandler extends ViewHandlerWrapper
+public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements Deactivatable
 {
     private ViewHandler wrapped;
 
     private WindowHandler windowHandler;
 
+    private final boolean deactivated;
+
     public WindowContextAwareViewHandler(ViewHandler wrapped)
     {
         this.wrapped = wrapped;
+        this.deactivated = !isActivated();
     }
 
     public ViewHandler getWrapped()
@@ -50,6 +55,12 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper
         lazyInit();
 
         String url = this.wrapped.getActionURL(context, viewId);
+
+        if(this.deactivated)
+        {
+            return url;
+        }
+
         url = this.windowHandler.encodeURL(url);
         return url;
     }
@@ -60,5 +71,10 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper
         {
             this.windowHandler = ConversationUtils.getWindowHandler();
         }
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

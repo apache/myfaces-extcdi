@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
@@ -26,13 +29,16 @@ import javax.faces.FacesException;
 /**
  * @author Gerhard Petracek
  */
-public class CodiFacesContextFactory extends FacesContextFactory
+public class CodiFacesContextFactory extends FacesContextFactory implements Deactivatable
 {
     protected final FacesContextFactory wrappedFacesContextFactory;
+
+    private final boolean deactivated;
 
     public CodiFacesContextFactory(FacesContextFactory wrappedFacesContextFactory)
     {
         this.wrappedFacesContextFactory = wrappedFacesContextFactory;
+        this.deactivated = !isActivated();
     }
 
     @Override
@@ -47,6 +53,11 @@ public class CodiFacesContextFactory extends FacesContextFactory
         if (facesContext == null)
         {
             return null;
+        }
+
+        if(this.deactivated)
+        {
+            return facesContext;
         }
 
         return new CodiFacesContextWrapper(facesContext);
@@ -65,5 +76,10 @@ public class CodiFacesContextFactory extends FacesContextFactory
             return facesContext;
         }
         return new CodiFacesContextWrapper(facesContext);
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

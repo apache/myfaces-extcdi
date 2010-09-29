@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 
@@ -26,20 +29,32 @@ import javax.faces.context.FacesContext;
  *
  * @author Gerhard Petracek
  */
-public class CodiNavigationHandler extends NavigationHandler
+public class CodiNavigationHandler extends NavigationHandler implements Deactivatable
 {
-    private final NavigationHandler navigationHandler;
+    private final NavigationHandler wrapped;
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
-        ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
-                new ViewConfigAwareNavigationHandler(navigationHandler);
+        if(isActivated())
+        {
+            ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
+                    new ViewConfigAwareNavigationHandler(navigationHandler);
 
-        this.navigationHandler = new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
+            this.wrapped = new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
+        }
+        else
+        {
+            this.wrapped = navigationHandler;
+        }
     }
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        this.navigationHandler.handleNavigation(context, fromAction, outcome);
+        this.wrapped.handleNavigation(context, fromAction, outcome);
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

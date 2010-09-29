@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
@@ -28,11 +30,18 @@ import javax.faces.application.Application;
 /**
  * @author Gerhard Petracek
  */
-public class CodiStartupListener implements SystemEventListener
+public class CodiStartupListener implements SystemEventListener, Deactivatable
 {
+    private final boolean deactivated;
+
+    public CodiStartupListener()
+    {
+        this.deactivated = !isActivated();
+    }
+
     public boolean isListenerForSource(Object source)
     {
-        return source instanceof Application;
+        return !this.deactivated && source instanceof Application;
     }
 
     public void processEvent(SystemEvent systemEvent)
@@ -51,5 +60,10 @@ public class CodiStartupListener implements SystemEventListener
     {
         //cdi has to inject the event
         return getOrCreateScopedInstanceOfBeanByName(SystemEventBroadcaster.BEAN_NAME, SystemEventBroadcaster.class);
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

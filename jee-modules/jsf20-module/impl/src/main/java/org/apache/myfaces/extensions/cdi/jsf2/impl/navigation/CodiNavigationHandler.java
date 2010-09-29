@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;
@@ -32,44 +34,58 @@ import java.util.Map;
  * 
  * @author Gerhard Petracek
  */
-public class CodiNavigationHandler extends ConfigurableNavigationHandler
+public class CodiNavigationHandler extends ConfigurableNavigationHandler implements Deactivatable
 {
-    private final NavigationHandler navigationHandler;
+    private final NavigationHandler wrapped;
+    private final boolean deactivated;
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
-        this.navigationHandler = navigationHandler;
+        this.wrapped = navigationHandler;
+        this.deactivated = !isActivated();
     }
 
     //TODO
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
+        if(this.deactivated)
+        {
+            this.wrapped.handleNavigation(context, fromAction, outcome);
+        }
+        else
+        {
+            getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
+        }
     }
 
     private NavigationHandler getWrappedNavigationHandler()
     {
         ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
-                new ViewConfigAwareNavigationHandler(this.navigationHandler);
+                new ViewConfigAwareNavigationHandler(this.wrapped);
 
         return new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
     }
 
     public NavigationCase getNavigationCase(FacesContext context, String action, String outcome)
     {
-        if (this.navigationHandler instanceof ConfigurableNavigationHandler)
+        if (this.wrapped instanceof ConfigurableNavigationHandler)
         {
-            return ((ConfigurableNavigationHandler) this.navigationHandler).getNavigationCase(context, action, outcome);
+            return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCase(context, action, outcome);
         }
         return null;
     }
 
     public Map<String, Set<NavigationCase>> getNavigationCases()
     {
-        if (this.navigationHandler instanceof ConfigurableNavigationHandler)
+        if (this.wrapped instanceof ConfigurableNavigationHandler)
         {
-            return ((ConfigurableNavigationHandler) this.navigationHandler).getNavigationCases();
+            return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCases();
         }
         return null;
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

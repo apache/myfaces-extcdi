@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
@@ -26,13 +29,15 @@ import java.util.Iterator;
 /**
  * @author Gerhard Petracek
  */
-public class CodiRenderKitFactory extends RenderKitFactory
+public class CodiRenderKitFactory extends RenderKitFactory implements Deactivatable
 {
     private RenderKitFactory wrapped;
+    private final boolean deactivated;
 
     public CodiRenderKitFactory(RenderKitFactory wrapped)
     {
         this.wrapped = wrapped;
+        this.deactivated = !isActivated();
     }
 
     public void addRenderKit(String s, RenderKit renderKit)
@@ -48,11 +53,21 @@ public class CodiRenderKitFactory extends RenderKitFactory
         {
             return null;
         }
+
+        if(this.deactivated)
+        {
+            return renderKit;
+        }
         return new InterceptedRenderKit(renderKit);
     }
 
     public Iterator<String> getRenderKitIds()
     {
         return wrapped.getRenderKitIds();
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

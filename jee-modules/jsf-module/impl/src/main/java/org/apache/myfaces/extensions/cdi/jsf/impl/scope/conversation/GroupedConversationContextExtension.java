@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.ConversationContextAdapter;
 
@@ -43,6 +44,11 @@ public class GroupedConversationContextExtension implements Extension
 {
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery event, BeanManager manager)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         AbstractGroupedConversationContext codiConversationContext = new GroupedConversationContext(manager);
         event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext));
         event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext));
@@ -52,6 +58,11 @@ public class GroupedConversationContextExtension implements Extension
     @SuppressWarnings({"ThrowableInstanceNeverThrown"})
     public void validateScopes(@Observes ProcessBean processBean)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         Bean<?> bean = processBean.getBean();
         Set<Annotation> qualifiers = bean.getQualifiers();
 
@@ -73,5 +84,10 @@ public class GroupedConversationContextExtension implements Extension
                 return;
             }
         }
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

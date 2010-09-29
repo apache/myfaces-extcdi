@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
@@ -43,10 +45,15 @@ import java.util.Collections;
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class ViewConfigExtension implements Extension
+public class ViewConfigExtension implements Extension, Deactivatable
 {
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(Page.class))
         {
             addPageDefinition(processAnnotatedType.getAnnotatedType().getJavaClass());
@@ -251,5 +258,10 @@ public class ViewConfigExtension implements Extension
         }
 
         return result;
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.request.DefaultRequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
@@ -32,10 +34,15 @@ import javax.enterprise.event.Observes;
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
-public class Jsf12AwareFilterExtension implements Extension
+public class Jsf12AwareFilterExtension implements Extension, Deactivatable
 {
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         Class beanClass = processAnnotatedType.getAnnotatedType().getJavaClass();
         if(DefaultRequestTypeResolver.class.isAssignableFrom(beanClass))
         {
@@ -47,5 +54,10 @@ public class Jsf12AwareFilterExtension implements Extension
             //veto the config for jsf 1.2
             processAnnotatedType.veto();
         }
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.isClassActivated;
 import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
 
@@ -51,8 +52,10 @@ public class PhaseListenerExtension implements Extension
     {
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(JsfPhaseListener.class))
         {
-            //TODO check config if phase-listener is deactivated
-            addPhaseListener(processAnnotatedType);
+            if(isClassActivated(processAnnotatedType.getAnnotatedType().getJavaClass()))
+            {
+                addPhaseListener(processAnnotatedType);
+            }
 
             processAnnotatedType.veto();
         }

@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
@@ -28,13 +30,16 @@ import javax.faces.FacesException;
 /**
  * @author Gerhard Petracek
  */
-public class SecurityViolationAwareActionListener implements ActionListener
+public class SecurityViolationAwareActionListener implements ActionListener, Deactivatable
 {
     private ActionListener wrapped;
+
+    private final boolean deactivated;
 
     public SecurityViolationAwareActionListener(ActionListener wrapped)
     {
         this.wrapped = wrapped;
+        this.deactivated = !isActivated();
     }
 
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException
@@ -45,7 +50,17 @@ public class SecurityViolationAwareActionListener implements ActionListener
         }
         catch (FacesException facesException)
         {
+            if(this.deactivated)
+            {
+                throw facesException;
+            }
+
             tryToHandleSecurityViolation(facesException);
         }
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

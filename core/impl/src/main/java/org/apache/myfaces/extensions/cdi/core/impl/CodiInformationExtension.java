@@ -16,7 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api;
+package org.apache.myfaces.extensions.cdi.core.impl;
+
+import org.apache.myfaces.extensions.cdi.core.api.CodiInformation;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
@@ -26,13 +30,18 @@ import java.util.logging.Logger;
 /**
  * @author Gerhard Petracek
  */
-public class CodiInformationExtension implements Extension
+public class CodiInformationExtension implements Extension, Deactivatable
 {
     protected final Logger logger = Logger.getLogger(CodiInformationExtension.class.getName());
 
     @SuppressWarnings({"UnusedDeclaration"})
     public void setBeanManager(@Observes AfterDeploymentValidation afterDeploymentValidation)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         if(CodiInformation.VERSION != null && !CodiInformation.VERSION.startsWith("null"))
         {
             this.logger.info("starting up MyFaces CODI (Extensions CDI) v" + CodiInformation.VERSION);
@@ -41,5 +50,10 @@ public class CodiInformationExtension implements Extension
         {
             this.logger.info("starting up MyFaces CODI (Extensions CDI)");
         }
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

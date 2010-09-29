@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.view;
 
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.isClassActivated;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
 import javax.enterprise.event.Observes;
@@ -49,16 +52,25 @@ import javax.faces.bean.ViewScoped;
  * {@link ProjectStage#UnitTest} and uses
  * </p>
  */
-public class ViewScopedExtension implements Extension
+public class ViewScopedExtension implements Extension, Deactivatable
 {
-
     public void addViewScoped(@Observes BeforeBeanDiscovery beforeBeanDiscovery)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         beforeBeanDiscovery.addScope(ViewScoped.class, true, true);
     }
 
     public void registerViewContext(@Observes AfterBeanDiscovery afterBeanDiscovery)
     {
+        if(!isClassActivated(getClass()))
+        {
+            return;
+        }
+
         // we need to do this manually because there is no dependency injection in place
         // at this time
         ProjectStageProducer psp = null;
@@ -88,4 +100,8 @@ public class ViewScopedExtension implements Extension
         }
     }
 
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
+    }
 }

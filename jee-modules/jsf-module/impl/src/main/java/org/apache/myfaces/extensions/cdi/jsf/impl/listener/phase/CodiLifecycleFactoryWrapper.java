@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
 import java.util.Iterator;
@@ -25,13 +28,15 @@ import java.util.Iterator;
 /**
  * @author Gerhard Petracek
  */
-public class CodiLifecycleFactoryWrapper extends LifecycleFactory
+public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Deactivatable
 {
     private final LifecycleFactory wrapped;
+    private final boolean deactivated;
 
     public CodiLifecycleFactoryWrapper(LifecycleFactory wrapped)
     {
         this.wrapped = wrapped;
+        this.deactivated = !isActivated();
     }
 
     public void addLifecycle(String s, Lifecycle lifecycle)
@@ -41,11 +46,22 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory
 
     public Lifecycle getLifecycle(String s)
     {
-        return new CodiLifecycleWrapper(this.wrapped.getLifecycle(s), PhaseListenerExtension.consumePhaseListeners());
+        Lifecycle result = this.wrapped.getLifecycle(s);
+
+        if(this.deactivated)
+        {
+            return result;
+        }
+        return new CodiLifecycleWrapper(result, PhaseListenerExtension.consumePhaseListeners());
     }
 
     public Iterator<String> getLifecycleIds()
     {
         return wrapped.getLifecycleIds();
+    }
+
+    public boolean isActivated()
+    {
+        return ClassUtils.isClassActivated(getClass());
     }
 }

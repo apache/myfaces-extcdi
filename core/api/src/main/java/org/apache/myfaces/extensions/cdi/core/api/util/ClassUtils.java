@@ -18,10 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
+
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.jar.Manifest;
 import java.util.jar.Attributes;
+import java.util.logging.Logger;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.net.URL;
 
 /**
@@ -29,7 +35,72 @@ import java.net.URL;
  */
 public class ClassUtils
 {
-        /**
+    private static final String DEFAULT_CLASS_DEACTIVATOR = "org.apache.myfaces.extensions.cdi.ClassDeactivator";
+
+    private static Logger logger = Logger.getLogger(ClassUtils.class.getName());
+
+    private static Map<ClassLoader, ClassDeactivator> classDeactivators =
+            new ConcurrentHashMap<ClassLoader, ClassDeactivator>();
+
+    public static boolean isClassActivated(Class targetClass)
+    {
+        ClassLoader classLoader = ClassUtils.getClassLoader(null);
+
+        ClassDeactivator classDeactivator = classDeactivators.get(classLoader);
+
+        if(classDeactivator == null)
+        {
+            classDeactivator = addClassDeactivator(classLoader);
+        }
+
+        boolean classDeactivated = classDeactivator.getDeactivatedClasses().contains(targetClass);
+        
+        if(classDeactivated)
+        {
+            logger.info("deactivate: " + targetClass);
+        }
+
+        return !classDeactivated;
+    }
+
+    private static ClassDeactivator addClassDeactivator(ClassLoader classLoader)
+    {
+        ClassDeactivator classDeactivator = tryToInstantiateClassForName(
+                DEFAULT_CLASS_DEACTIVATOR , ClassDeactivator.class);
+
+        //overrule with vm param
+        String classDeactivatorName = System.getProperty(DEFAULT_CLASS_DEACTIVATOR);
+
+        if (classDeactivatorName != null)
+        {
+            classDeactivator = tryToInstantiateClassForName(classDeactivatorName, ClassDeactivator.class);
+        }
+
+        if(classDeactivator == null)
+        {
+            classDeactivator = createClassDeactivatorPlaceholder();
+        }
+        else
+        {
+            logger.info("used class deactivator: " + classDeactivator.getClass().getName());
+        }
+
+        classDeactivators.put(classLoader, classDeactivator);
+        return classDeactivator;
+    }
+
+    private static AbstractClassDeactivator createClassDeactivatorPlaceholder()
+    {
+        return new AbstractClassDeactivator()
+        {
+            protected void deactivateClasses()
+            {
+                //do nothing
+            }
+        };
+    }
+
+    /**
      * Detect the right ClassLoader.
      * The lookup order is determined by:
      * <ol>
