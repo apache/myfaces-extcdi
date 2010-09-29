@@ -18,47 +18,54 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-public class SecurityViolationAwareActionListener implements ActionListener, Deactivatable
+public class ViewControllerActionListener implements ActionListener, Deactivatable
 {
     private ActionListener wrapped;
 
     private final boolean deactivated;
 
-    public SecurityViolationAwareActionListener(ActionListener wrapped)
+    ViewControllerActionListener()
     {
-        this.wrapped = wrapped;
         this.deactivated = !isActivated();
+    }
+
+    public ViewControllerActionListener(ActionListener wrapped)
+    {
+        this();
+        this.wrapped = wrapped;
     }
 
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException
     {
-        try
+        if(this.deactivated)
         {
-            //TODO
-            new ViewControllerActionListener().processAction(actionEvent);
-
-            this.wrapped.processAction(actionEvent);
+            return;
         }
-        catch (FacesException facesException)
-        {
-            if(this.deactivated)
-            {
-                throw facesException;
-            }
+        
+        ViewConfigEntry viewConfigEntry =
+                ViewConfigCache.getViewDefinition(FacesContext.getCurrentInstance().getViewRoot().getViewId());
 
-            tryToHandleSecurityViolation(facesException);
+        if(viewConfigEntry != null)
+        {
+            viewConfigEntry.invokePreViewActionMethods();
+        }
+
+        if(this.wrapped != null)
+        {
+            this.wrapped.processAction(actionEvent);
         }
     }
 

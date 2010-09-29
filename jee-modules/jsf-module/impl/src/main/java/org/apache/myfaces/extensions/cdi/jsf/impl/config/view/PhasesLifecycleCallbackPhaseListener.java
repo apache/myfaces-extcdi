@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
+import javax.faces.event.PhaseId;
 import javax.faces.component.UIViewRoot;
 import java.util.List;
 import java.lang.reflect.Method;
@@ -57,6 +58,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     {
         try
         {
+            processPreRenderView(event);
             processPhaseCallbacks(event, true);
         }
         catch (Exception e)
@@ -66,6 +68,24 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
                 throw new IllegalStateException(e);
             }
             throw (RuntimeException)e;
+        }
+    }
+
+    private void processPreRenderView(PhaseEvent event)
+    {
+        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE))
+        {
+            processPreRenderView(event.getFacesContext().getViewRoot().getViewId());
+        }
+    }
+
+    private void processPreRenderView(String viewId)
+    {
+        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+
+        if (viewDefinitionEntry != null)
+        {
+            viewDefinitionEntry.invokePreRenderViewMethods();
         }
     }
 

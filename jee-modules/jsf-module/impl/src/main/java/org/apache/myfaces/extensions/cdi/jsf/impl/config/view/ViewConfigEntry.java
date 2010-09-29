@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
 
@@ -30,6 +31,7 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.beans.Introspector;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
@@ -95,6 +97,55 @@ public class ViewConfigEntry
     List<PageBeanConfigEntry> getBeanDefinitions()
     {
         return beanDefinition;
+    }
+
+    public void invokePreViewActionMethods()
+    {
+        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        {
+            processCallbacks(beanEntry, beanEntry.getPreViewActionMethods());
+        }
+    }
+
+    void invokePreRenderViewMethods()
+    {
+        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        {
+            processCallbacks(beanEntry, beanEntry.getPreRenderViewMethods());
+        }
+    }
+
+    private void processCallbacks(PageBeanConfigEntry beanEntry, List<Method> methodList)
+    {
+        Object bean;
+        if (!methodList.isEmpty())
+        {
+            //TODO provide a detailed error message in case of a missing bean
+            bean = CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);
+
+            if (bean == null)
+            {
+                return;
+            }
+
+            for (Method callbackMethod : methodList)
+            {
+                invokeMethod(bean, callbackMethod);
+            }
+        }
+    }
+
+    private void invokeMethod(Object bean, Method preProcessMethod)
+    {
+        try
+        {
+            preProcessMethod.setAccessible(true);
+            preProcessMethod.invoke(bean);
+        }
+        catch (Exception e)
+        {
+            throw new IllegalStateException(e);
+        }
     }
 
     public Class<? extends AccessDecisionVoter>[] getAccessDecisionVoters()

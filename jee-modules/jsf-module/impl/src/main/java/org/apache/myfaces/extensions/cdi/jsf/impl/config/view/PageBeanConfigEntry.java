@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewAction;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.unsupportedPhasesLifecycleCallback;
 
 import javax.faces.event.PhaseId;
@@ -29,6 +31,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -40,6 +43,9 @@ class PageBeanConfigEntry
     private final Class beanClass;
 
     private final Map<PhaseId, PhasesLifecycleCallbackEntry> phasesLifecycleCallbacks;
+
+    private List<Method> preViewActionMethods = new ArrayList<Method>();
+    private List<Method> preRenderViewMethods = new ArrayList<Method>();
 
     PageBeanConfigEntry(String beanName, Class beanClass)
     {
@@ -63,6 +69,17 @@ class PageBeanConfigEntry
         return phasesLifecycleCallbacks.get(phaseId);
     }
 
+
+    List<Method> getPreViewActionMethods()
+    {
+        return this.preViewActionMethods;
+    }
+
+    List<Method> getPreRenderViewMethods()
+    {
+        return this.preRenderViewMethods;
+    }
+
     private Map<PhaseId, PhasesLifecycleCallbackEntry> findCallbackDefinitions(Class beanClass)
     {
         Class currentClass = beanClass;
@@ -83,6 +100,14 @@ class PageBeanConfigEntry
                 {
                     afterCallbackEntryHelper.add(
                             currentMethod.getAnnotation(AfterPhase.class).value(), currentMethod);
+                }
+                else if(currentMethod.isAnnotationPresent(PreViewAction.class))
+                {
+                    this.preViewActionMethods.add(currentMethod);
+                }
+                else if(currentMethod.isAnnotationPresent(PreRenderView.class))
+                {
+                    this.preRenderViewMethods.add(currentMethod);
                 }
             }
 
