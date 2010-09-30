@@ -99,11 +99,11 @@ public class ViewConfigEntry
         return beanDefinition;
     }
 
-    public void invokePreViewActionMethods()
+    public void invokePrePageActionMethods()
     {
         for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
         {
-            processCallbacks(beanEntry, beanEntry.getPreViewActionMethods());
+            processCallbacks(beanEntry, beanEntry.getPrePageActionMethods());
         }
     }
 

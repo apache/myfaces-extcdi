@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewAction;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.unsupportedPhasesLifecycleCallback;
 
@@ -44,7 +44,7 @@ class PageBeanConfigEntry
 
     private final Map<PhaseId, PhasesLifecycleCallbackEntry> phasesLifecycleCallbacks;
 
-    private List<Method> preViewActionMethods = new ArrayList<Method>();
+    private List<Method> prePageActionMethods = new ArrayList<Method>();
     private List<Method> preRenderViewMethods = new ArrayList<Method>();
 
     PageBeanConfigEntry(String beanName, Class beanClass)
@@ -70,9 +70,9 @@ class PageBeanConfigEntry
     }
 
 
-    List<Method> getPreViewActionMethods()
+    List<Method> getPrePageActionMethods()
     {
-        return this.preViewActionMethods;
+        return this.prePageActionMethods;
     }
 
     List<Method> getPreRenderViewMethods()
@@ -101,9 +101,9 @@ class PageBeanConfigEntry
                     afterCallbackEntryHelper.add(
                             currentMethod.getAnnotation(AfterPhase.class).value(), currentMethod);
                 }
-                else if(currentMethod.isAnnotationPresent(PreViewAction.class))
+                else if(currentMethod.isAnnotationPresent(PrePageAction.class))
                 {
-                    this.preViewActionMethods.add(currentMethod);
+                    this.prePageActionMethods.add(currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(PreRenderView.class))
                 {

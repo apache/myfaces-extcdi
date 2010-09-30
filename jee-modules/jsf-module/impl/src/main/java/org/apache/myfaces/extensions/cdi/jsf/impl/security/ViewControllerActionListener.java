@@ -60,7 +60,7 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
 
         if(viewConfigEntry != null)
         {
-            viewConfigEntry.invokePreViewActionMethods();
+            viewConfigEntry.invokePrePageActionMethods();
         }
 
         if(this.wrapped != null)

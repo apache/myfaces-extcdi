@@ -30,6 +30,6 @@ import static java.lang.annotation.ElementType.METHOD;
 @Target(METHOD)
 @Retention(RUNTIME)
 @Documented
-public @interface PreViewAction
+public @interface PrePageAction
 {
 }
