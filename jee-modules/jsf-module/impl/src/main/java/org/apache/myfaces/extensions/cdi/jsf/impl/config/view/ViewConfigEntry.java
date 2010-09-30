@@ -99,6 +99,14 @@ public class ViewConfigEntry
         return beanDefinition;
     }
 
+    public void invokeInitViewMethods()
+    {
+        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        {
+            processCallbacks(beanEntry, beanEntry.getInitViewMethods());
+        }
+    }
+
     public void invokePrePageActionMethods()
     {
         for(PageBeanConfigEntry beanEntry : getBeanDefinitions())

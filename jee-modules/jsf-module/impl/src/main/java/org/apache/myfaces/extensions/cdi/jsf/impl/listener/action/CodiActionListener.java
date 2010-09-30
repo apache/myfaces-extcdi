@@ -16,57 +16,49 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.security;
+package org.apache.myfaces.extensions.cdi.jsf.impl.listener.action;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityViolationAwareActionListener;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewControllerActionListener;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-public class ViewControllerActionListener implements ActionListener, Deactivatable
+public class CodiActionListener implements ActionListener, Deactivatable
 {
-    private ActionListener wrapped;
-
+    private final ActionListener wrapped;
     private final boolean deactivated;
 
-    ViewControllerActionListener()
+    public CodiActionListener(ActionListener wrapped)
     {
-        this.deactivated = !isActivated();
-    }
-
-    public ViewControllerActionListener(ActionListener wrapped)
-    {
-        this();
         this.wrapped = wrapped;
+        this.deactivated = !isActivated();
     }
 
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException
     {
         if(this.deactivated)
         {
-            return;
-        }
-        
-        ViewConfigEntry viewConfigEntry =
-                ViewConfigCache.getViewDefinition(FacesContext.getCurrentInstance().getViewRoot().getViewId());
-
-        if(viewConfigEntry != null)
-        {
-            viewConfigEntry.invokePrePageActionMethods();
-        }
-
-        if(this.wrapped != null)
-        {
             this.wrapped.processAction(actionEvent);
         }
+        else
+        {
+            getWrappedActionListener().processAction(actionEvent);
+        }
+    }
+
+    private ActionListener getWrappedActionListener()
+    {
+        SecurityViolationAwareActionListener viewConfigAwareNavigationHandler =
+                new SecurityViolationAwareActionListener(this.wrapped);
+
+        return new ViewControllerActionListener(viewConfigAwareNavigationHandler);
     }
 
     public boolean isActivated()

@@ -24,7 +24,7 @@
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
 
     <application>
-        <action-listener>org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityViolationAwareActionListener</action-listener>
+        <action-listener>org.apache.myfaces.extensions.cdi.jsf.impl.listener.action.CodiActionListener</action-listener>
         <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.CodiNavigationHandler</navigation-handler>
 
         <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>

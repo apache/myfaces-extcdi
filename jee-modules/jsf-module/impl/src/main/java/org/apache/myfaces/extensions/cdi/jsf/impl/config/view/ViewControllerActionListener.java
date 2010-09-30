@@ -16,27 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.security;
+package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.AbortProcessingException;
-import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-public class SecurityViolationAwareActionListener implements ActionListener, Deactivatable
+public class ViewControllerActionListener implements ActionListener, Deactivatable
 {
-    private ActionListener wrapped;
+    private final ActionListener wrapped;
 
     private final boolean deactivated;
 
-    public SecurityViolationAwareActionListener(ActionListener wrapped)
+    public ViewControllerActionListener(ActionListener wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
@@ -44,19 +43,20 @@ public class SecurityViolationAwareActionListener implements ActionListener, Dea
 
     public void processAction(ActionEvent actionEvent) throws AbortProcessingException
     {
-        try
+        if(this.deactivated)
         {
-            this.wrapped.processAction(actionEvent);
+            return;
         }
-        catch (FacesException facesException)
-        {
-            if(this.deactivated)
-            {
-                throw facesException;
-            }
+        
+        ViewConfigEntry viewConfigEntry =
+                ViewConfigCache.getViewDefinition(FacesContext.getCurrentInstance().getViewRoot().getViewId());
 
-            tryToHandleSecurityViolation(facesException);
+        if(viewConfigEntry != null)
+        {
+            viewConfigEntry.invokePrePageActionMethods();
         }
+
+        this.wrapped.processAction(actionEvent);
     }
 
     public boolean isActivated()

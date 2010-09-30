@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 
@@ -26,6 +28,8 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
 import javax.faces.event.PhaseId;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import java.util.List;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -33,15 +37,22 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author Gerhard Petracek
  */
+@Advanced
 @JsfPhaseListener
 public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = 6893021853444122202L;
 
+    private static final String INITIALIZED_VIEW_ID_MARKER_KEY = PhasesLifecycleCallbackPhaseListener.class.getName();
+
+    @Inject
+    private WindowContext windowContext;
+
     public void afterPhase(PhaseEvent event)
     {
         try
         {
+            processInitView(event);
             processPhaseCallbacks(event, false);
         }
         catch (Exception e)
@@ -58,6 +69,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     {
         try
         {
+            processInitView(event);
             processPreRenderView(event);
             processPhaseCallbacks(event, true);
         }
@@ -68,6 +80,37 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
                 throw new IllegalStateException(e);
             }
             throw (RuntimeException)e;
+        }
+    }
+
+    private void processInitView(PhaseEvent event)
+    {
+        if(event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !isRedirectRequest(event.getFacesContext()))
+        {
+            return;
+        }
+
+        if (isValidView(event.getFacesContext()))
+        {
+            processInitView(event.getFacesContext().getViewRoot().getViewId());
+        }
+    }
+
+    private void processInitView(String viewId)
+    {
+        //view already initialized
+        if(viewId.equals(this.windowContext.getAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, String.class)))
+        {
+            return;
+        }
+
+        this.windowContext.setAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, viewId);
+
+        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+
+        if (viewDefinitionEntry != null)
+        {
+            viewDefinitionEntry.invokeInitViewMethods();
         }
     }
 
@@ -170,5 +213,15 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
                 throw invalidPhasesCallbackMethod(bean.getClass(), currentMethod);
             }
         }
+    }
+
+    private boolean isValidView(FacesContext facesContext)
+    {
+        return facesContext.getViewRoot() != null && facesContext.getViewRoot().getViewId() != null;
+    }
+
+    private boolean isRedirectRequest(FacesContext facesContext)
+    {
+        return facesContext.getResponseComplete();
     }
 }
