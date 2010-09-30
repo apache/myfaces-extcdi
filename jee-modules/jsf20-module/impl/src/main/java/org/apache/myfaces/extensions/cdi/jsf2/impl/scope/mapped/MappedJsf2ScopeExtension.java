@@ -51,6 +51,10 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
                                  javax.enterprise.context.SessionScoped.class);
         this.mappedJsfScopes.put(javax.faces.bean.RequestScoped.class,
                                  javax.enterprise.context.RequestScoped.class);
+
+        //there is no cdi scope for it - we just need it for @ManagedBean
+        this.mappedJsfScopes.put(javax.faces.bean.ViewScoped.class,
+                                 javax.faces.bean.ViewScoped.class);
     }
 
     protected void convertJsf2Scopes(@Observes ProcessAnnotatedType processAnnotatedType)
