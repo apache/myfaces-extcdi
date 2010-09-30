@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
@@ -30,6 +30,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.enterprise.inject.spi.BeanManager;
 import java.util.List;
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -39,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 @Advanced
 @JsfPhaseListener
+@SuppressWarnings({"UnusedDeclaration"})
 public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = 6893021853444122202L;
@@ -47,6 +49,9 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     @Inject
     private WindowContext windowContext;
+
+    @Inject
+    private BeanManager beanManager;
 
     public void afterPhase(PhaseEvent event)
     {
@@ -186,7 +191,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
             }
 
             //TODO provide a detailed error message in case of a missing bean
-            bean = CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);
+            bean = getOrCreateScopedInstanceOfBeanByName(this.beanManager, beanEntry.getBeanName(), Object.class);
             invokePhasesLifecycleCallbacks(bean, lifecycleCallbacks, phaseEvent);
         }
     }

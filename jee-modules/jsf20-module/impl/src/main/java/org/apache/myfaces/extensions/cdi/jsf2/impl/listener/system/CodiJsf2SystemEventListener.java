@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.event.SystemEventListener;
@@ -27,6 +28,7 @@ import javax.faces.event.SystemEvent;
 import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.PreDestroyApplicationEvent;
 import javax.faces.application.Application;
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
@@ -59,8 +61,10 @@ public class CodiJsf2SystemEventListener implements SystemEventListener, Deactiv
 
     private SystemEventBroadcaster resolveBroadcaster()
     {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
         //cdi has to inject the event
-        return getOrCreateScopedInstanceOfBeanByName(SystemEventBroadcaster.BEAN_NAME, SystemEventBroadcaster.class);
+        return getOrCreateScopedInstanceOfBeanByName(
+                beanManager, SystemEventBroadcaster.BEAN_NAME, SystemEventBroadcaster.class);
     }
 
     public boolean isActivated()

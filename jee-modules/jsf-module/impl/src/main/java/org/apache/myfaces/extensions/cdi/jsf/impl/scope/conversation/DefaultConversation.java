@@ -44,7 +44,7 @@ public class DefaultConversation implements EditableConversation
 
     private BeanManager beanManager;
 
-    private final BeanStorage beanStorage = new BeanStorage();
+    private final BeanStorage beanStorage;
 
     private final boolean closeConversationEventEnable;
     private final boolean restartConversationEventEnable;
@@ -57,6 +57,7 @@ public class DefaultConversation implements EditableConversation
         this.conversationKey = conversationKey;
         this.expirationEvaluator = expirationEvaluator;
         this.beanManager = beanManager;
+        this.beanStorage = new BeanStorage(this.beanManager);
 
         this.closeConversationEventEnable = conversationConfig.isCloseConversationEventEnable();
         this.restartConversationEventEnable = conversationConfig.isRestartConversationEventEnable();

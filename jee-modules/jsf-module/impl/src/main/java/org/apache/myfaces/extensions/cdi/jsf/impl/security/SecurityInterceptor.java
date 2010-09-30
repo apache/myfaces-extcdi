@@ -25,6 +25,8 @@ import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.in
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.interceptor.Interceptor;
+import javax.inject.Inject;
+import javax.enterprise.inject.spi.BeanManager;
 import java.lang.reflect.Method;
 import java.io.Serializable;
 
@@ -37,6 +39,9 @@ public class SecurityInterceptor implements Serializable
 {
     private static final long serialVersionUID = -7094673146532371976L;
 
+    @Inject
+    private BeanManager beanManager;
+
     interface PlaceHolderVoter extends AccessDecisionVoter
     {
     }
@@ -48,7 +53,7 @@ public class SecurityInterceptor implements Serializable
 
         Class<? extends AccessDecisionVoter>[] voterClasses = secured.value();
 
-        invokeVoters(invocationContext, voterClasses, secured.errorView());
+        invokeVoters(invocationContext, this.beanManager, voterClasses, secured.errorView());
 
         return invocationContext.proceed();
     }

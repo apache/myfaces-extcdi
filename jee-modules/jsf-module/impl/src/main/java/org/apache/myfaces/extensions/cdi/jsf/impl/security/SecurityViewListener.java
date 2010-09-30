@@ -27,6 +27,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.in
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.event.PhaseEvent;
 import javax.faces.context.FacesContext;
 
@@ -35,7 +36,8 @@ import javax.faces.context.FacesContext;
  */
 public class SecurityViewListener
 {
-    public void checkPermission(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent event)
+    public void checkPermission(
+            @Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent event, BeanManager beanManager)
     {
         FacesContext facesContext = event.getFacesContext();
         ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
@@ -47,7 +49,7 @@ public class SecurityViewListener
 
         try
         {
-            invokeVoters(null, entry.getAccessDecisionVoters(), entry.getErrorView());
+            invokeVoters(null, beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
         }
         catch (AccessDeniedException accessDeniedException)
         {

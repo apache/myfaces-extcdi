@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.DeactivatedCodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.ApplicationCache;
 
@@ -29,6 +28,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Collections;
@@ -45,6 +45,9 @@ public class ConfigProducer
     private static Set<CodiConfig> configSet;
 
     private static Set<Class<? extends CodiConfig>> configFilter;
+
+    @Inject
+    private BeanManager beanManager;
 
     @Produces
     @ApplicationScoped
@@ -64,11 +67,9 @@ public class ConfigProducer
             return; //paranoid mode
         }
 
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        createConfigFilter();
 
-        createConfigFilter(beanManager);
-
-        createConfig(beanManager);
+        createConfig();
 
         configInitialized = true;
     }
@@ -116,9 +117,9 @@ public class ConfigProducer
         };
     }
 
-    private void createConfigFilter(BeanManager beanManager)
+    private void createConfigFilter()
     {
-        Set<? extends Bean> deactivatedConfigBeans = beanManager.getBeans(DeactivatedCodiConfig.class);
+        Set<? extends Bean> deactivatedConfigBeans = this.beanManager.getBeans(DeactivatedCodiConfig.class);
 
         configFilter = new HashSet<Class<? extends CodiConfig>>(deactivatedConfigBeans.size());
 
@@ -126,7 +127,7 @@ public class ConfigProducer
         Class<? extends CodiConfig>[] filteredCodiConfigClasses;
         for(Bean<DeactivatedCodiConfig> deactivatedConfigBean : deactivatedConfigBeans)
         {
-            creationalContext = beanManager.createCreationalContext(deactivatedConfigBean);
+            creationalContext = this.beanManager.createCreationalContext(deactivatedConfigBean);
 
             filteredCodiConfigClasses = deactivatedConfigBean.create(creationalContext).getDeactivatedConfigs();
 
@@ -134,9 +135,9 @@ public class ConfigProducer
         }
     }
 
-    private void createConfig(BeanManager beanManager)
+    private void createConfig()
     {
-        Set<? extends Bean> configBeans = beanManager.getBeans(CodiConfig.class);
+        Set<? extends Bean> configBeans = this.beanManager.getBeans(CodiConfig.class);
 
         configSet = new HashSet<CodiConfig>(configBeans.size());
 
@@ -144,7 +145,7 @@ public class ConfigProducer
         CodiConfig currentCodiConfig;
         for(Bean<CodiConfig> codiConfigBean : configBeans)
         {
-            creationalContext = beanManager.createCreationalContext(codiConfigBean);
+            creationalContext = this.beanManager.createCreationalContext(codiConfigBean);
 
             currentCodiConfig = codiConfigBean.create(creationalContext);
 

@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
@@ -44,6 +43,11 @@ class BeanStorage implements Serializable
     private transient BeanManager beanManager;
 
     private Map<Class, BeanEntry<Serializable>> beanMap = new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
+
+    public BeanStorage(BeanManager beanManager)
+    {
+        this.beanManager = beanManager;
+    }
 
     BeanEntry getBean(Class beanClass)
     {
@@ -77,17 +81,7 @@ class BeanStorage implements Serializable
 
     private <T extends Serializable> void fireUnscopeBeanEvent(T instance)
     {
-        getOrCreateBeanManager().fireEvent(new UnscopeBeanEvent(instance));
-    }
-
-    private BeanManager getOrCreateBeanManager()
-    {
-        if (this.beanManager == null)
-        {
-            this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
-        }
-
-        return this.beanManager;
+        this.beanManager.fireEvent(new UnscopeBeanEvent(instance));
     }
 
     @Override

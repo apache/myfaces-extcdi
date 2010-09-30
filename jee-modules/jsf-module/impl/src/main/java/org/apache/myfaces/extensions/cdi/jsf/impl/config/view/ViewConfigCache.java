@@ -20,9 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
-
-import java.util.HashMap;
-import java.util.Map;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.*;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.setDefaultErrorView;
 
 /**
  * TODO move exceptions to util class
@@ -31,27 +30,18 @@ import java.util.Map;
  */
 public class ViewConfigCache
 {
-    //we don't need a ConcurrentHashMap - write access is only allowed during the startup (by one thread)
-    private static Map<String, ViewConfigEntry> viewIdToViewDefinitionEntryMapping
-            = new HashMap<String, ViewConfigEntry>();
-
-    private static Map<Class<? extends ViewConfig>, ViewConfigEntry> viewDefinitionToViewDefinitionEntryMapping
-            = new HashMap<Class<? extends ViewConfig>, ViewConfigEntry>();
-
-    private static ViewConfigEntry defaultErrorView;
-
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
         tryToStorePageAsDefaultErrorPage(viewDefinitionEntry);
 
-        if(viewIdToViewDefinitionEntryMapping.containsKey(viewId))
+        if(getViewIdToViewDefinitionEntryMapping().containsKey(viewId))
         {
             throw new IllegalArgumentException(viewId + " is already mapped to "
                     + viewId + " -> a further view definition (" +
                     viewDefinitionEntry.getViewDefinitionClass().getName() + ") is invalid");
         }
-        viewIdToViewDefinitionEntryMapping.put(viewId, viewDefinitionEntry);
-        viewDefinitionToViewDefinitionEntryMapping
+        getViewIdToViewDefinitionEntryMapping().put(viewId, viewDefinitionEntry);
+        getViewDefinitionToViewDefinitionEntryMapping()
                 .put(viewDefinitionEntry.getViewDefinitionClass(), viewDefinitionEntry);
     }
 
@@ -59,29 +49,29 @@ public class ViewConfigCache
     {
         if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
         {
-            if(defaultErrorView != null)
+            if(getDefaultErrorViewForApplication() != null)
             {
                 throw new IllegalStateException("multiple error pages found " +
-                        defaultErrorView.getViewDefinitionClass().getClass().getName() + " and " +
+                        getDefaultErrorViewForApplication().getViewDefinitionClass().getClass().getName() + " and " +
                         viewDefinitionEntry.getViewDefinitionClass().getName());
             }
 
-            defaultErrorView = viewDefinitionEntry;
+            setDefaultErrorView(viewDefinitionEntry);
         }
     }
 
     public static ViewConfigEntry getViewDefinition(String viewId)
     {
-        return viewIdToViewDefinitionEntryMapping.get(viewId);
+        return getViewIdToViewDefinitionEntryMapping().get(viewId);
     }
 
     public static ViewConfigEntry getViewDefinition(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        return viewDefinitionToViewDefinitionEntryMapping.get(viewDefinitionClass);
+        return getViewDefinitionToViewDefinitionEntryMapping().get(viewDefinitionClass);
     }
 
     public static ViewConfigEntry getDefaultErrorView()
     {
-        return defaultErrorView;
+        return getDefaultErrorViewForApplication();
     }
 }

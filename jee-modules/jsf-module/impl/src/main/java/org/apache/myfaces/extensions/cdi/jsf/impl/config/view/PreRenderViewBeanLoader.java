@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.event.PhaseEvent;
 import java.util.List;
 
@@ -31,7 +32,8 @@ import java.util.List;
  */
 final class PreRenderViewBeanLoader
 {
-    protected void initBeans(@Observes @BeforePhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent event)
+    protected void initBeans(
+            @Observes @BeforePhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent event, BeanManager beanManager)
     {
         String viewId = event.getFacesContext().getViewRoot().getViewId();
 
@@ -47,7 +49,7 @@ final class PreRenderViewBeanLoader
         for(PageBeanConfigEntry beanEntry : beanEntries)
         {
             //resolve bean to trigger @PostConstruct if it isn't scoped
-            CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);
+            CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanManager, beanEntry.getBeanName(), Object.class);
         }
     }
 }

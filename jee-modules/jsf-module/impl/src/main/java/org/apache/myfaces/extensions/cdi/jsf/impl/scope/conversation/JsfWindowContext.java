@@ -110,7 +110,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     public EditableConversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+        Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
@@ -141,7 +141,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+        Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
@@ -203,7 +203,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     public EditableConversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
-        Class<? extends Annotation> scopeType = convertToScope(conversationGroupKey, qualifiers);
+        Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);

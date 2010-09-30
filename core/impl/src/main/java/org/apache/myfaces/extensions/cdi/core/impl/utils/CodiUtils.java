@@ -62,9 +62,10 @@ public class CodiUtils
         return bean.create(creationalContext);
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByName(String beanName, Class<T> targetClass)
+    public static <T> T getOrCreateScopedInstanceOfBeanByName(
+            BeanManager beanManager, String beanName, Class<T> targetClass)
     {
-        Set<Bean<?>> foundBeans = BeanManagerProvider.getInstance().getBeanManager().getBeans(beanName);
+        Set<Bean<?>> foundBeans = beanManager.getBeans(beanName);
 
         if(foundBeans.size() != 1)
         {
@@ -72,19 +73,32 @@ public class CodiUtils
         }
 
         //noinspection unchecked
-        return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
+        return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBeans.iterator().next());
     }
 
     public static <T> T getOrCreateScopedInstanceOfBeanByClass(Class<T> targetClass, Annotation... qualifier)
     {
-        return getOrCreateScopedInstanceOfBeanByClass(targetClass, false, qualifier);
+        return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
+                targetClass, qualifier);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+            BeanManager beanManager, Class<T> targetClass, Annotation... qualifier)
+    {
+        return getOrCreateScopedInstanceOfBeanByClass(beanManager, targetClass, false, qualifier);
     }
 
     public static <T> T getOrCreateScopedInstanceOfBeanByClass(
             Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
     {
-        Set<? extends Bean> foundBeans = BeanManagerProvider.getInstance().getBeanManager()
-                .getBeans(targetClass, qualifier);
+        return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
+                targetClass, optionalBeanAllowed, qualifier);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+            BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
+    {
+        Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass, qualifier);
 
         if(foundBeans.size() > 1)
         {
@@ -101,7 +115,7 @@ public class CodiUtils
         if(foundBeans.size() == 1)
         {
             //noinspection unchecked
-            return (T)getOrCreateScopedInstanceOfBean(foundBeans.iterator().next());
+            return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBeans.iterator().next());
         }
 
         if(!optionalBeanAllowed)
@@ -113,7 +127,11 @@ public class CodiUtils
 
     public static <T> T getOrCreateScopedInstanceOfBean(Bean<T> bean)
     {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        return getOrCreateScopedInstanceOfBean(BeanManagerProvider.getInstance().getBeanManager(), bean);
+    }
+
+    public static <T> T getOrCreateScopedInstanceOfBean(BeanManager beanManager, Bean<T> bean)
+    {
         Context context = beanManager.getContext(bean.getScope());
 
         T result = context.get(bean);
@@ -213,8 +231,8 @@ public class CodiUtils
         }
 
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-        
-        T foundBean = (T)getOrCreateScopedInstanceOfBeanByClass(instance.getClass(), true);
+
+        T foundBean = (T)getOrCreateScopedInstanceOfBeanByClass(beanManager, instance.getClass(), true);
 
         if(foundBean != null)
         {

@@ -69,6 +69,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
             if(!this.otherOutcomes.contains(outcome))
             {
+                initBeanManager();
                 if(outcome.startsWith("class "))
                 {
                     outcome = outcome.substring(6);
@@ -95,7 +96,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     //security
                     try
                     {
-                        invokeVoters(null, entry.getAccessDecisionVoters(), entry.getErrorView());
+                        invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
                     }
                     catch (AccessDeniedException accessDeniedException)
                     {
@@ -151,7 +152,6 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
         if(oldViewConfigEntry != null)
         {
-            initBeanManager();
             PreViewConfigNavigateEvent navigateEvent = new PreViewConfigNavigateEvent(
                     oldViewConfigEntry.getViewDefinitionClass(), newViewConfigEntry.getViewDefinitionClass());
 

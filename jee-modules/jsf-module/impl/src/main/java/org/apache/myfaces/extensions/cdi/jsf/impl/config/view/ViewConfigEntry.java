@@ -21,11 +21,13 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
 
 import javax.inject.Named;
+import javax.enterprise.inject.spi.BeanManager;
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -49,6 +51,8 @@ public class ViewConfigEntry
 
     //meta-data
     private List<Annotation> metaDataList;
+
+    private BeanManager beanManager;
 
     public ViewConfigEntry(String viewId,
                            Class<? extends ViewConfig> viewDefinitionClass,
@@ -129,7 +133,7 @@ public class ViewConfigEntry
         if (!methodList.isEmpty())
         {
             //TODO provide a detailed error message in case of a missing bean
-            bean = CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanEntry.getBeanName(), Object.class);
+            bean = getOrCreateScopedInstanceOfBeanByName(getBeanManager(), beanEntry.getBeanName(), Object.class);
 
             if (bean == null)
             {
@@ -248,6 +252,16 @@ public class ViewConfigEntry
         }
 
         return new PageBeanConfigEntry(pageBeanName, pageBeanClass);
+    }
+
+    private BeanManager getBeanManager()
+    {
+        if(this.beanManager == null)
+        {
+            this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
+        }
+
+        return this.beanManager;
     }
 
     @Override

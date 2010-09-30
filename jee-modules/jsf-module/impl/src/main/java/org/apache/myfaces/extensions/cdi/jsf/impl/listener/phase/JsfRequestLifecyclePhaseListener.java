@@ -20,19 +20,26 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.inject.Inject;
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
  */
 
+@Advanced
 @JsfPhaseListener
 public class JsfRequestLifecyclePhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -4351903831660165998L;
+
+    @Inject
+    private BeanManager beanManager;
 
     public void beforePhase(PhaseEvent phaseEvent)
     {
@@ -47,7 +54,7 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
     private JsfRequestLifecycleBroadcaster resolveBroadcaster()
     {
         //cdi has to inject the event
-        return getOrCreateScopedInstanceOfBeanByName(
+        return getOrCreateScopedInstanceOfBeanByName(this.beanManager,
                 JsfRequestLifecycleBroadcaster.BEAN_NAME, JsfRequestLifecycleBroadcaster.class);
     }
 

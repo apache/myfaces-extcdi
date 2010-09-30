@@ -429,7 +429,8 @@ public class ConversationUtils
         return windowContexts.size() < count;
     }
 
-    public static Class<? extends Annotation> convertToScope(Class conversationGroupKey, Annotation... qualifiers)
+    public static Class<? extends Annotation> convertToScope(
+            BeanManager beanManager, Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = conversationGroupToScopeCache.get(conversationGroupKey);
 
@@ -444,8 +445,6 @@ public class ConversationUtils
         }
         else
         {
-            BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
             //we just find a bean if the class name is used as implicit group-key
             //explicit group-keys are only supported for @ConversationScoped
             Set<Bean<?>> beans = beanManager.getBeans(conversationGroupKey, qualifiers);

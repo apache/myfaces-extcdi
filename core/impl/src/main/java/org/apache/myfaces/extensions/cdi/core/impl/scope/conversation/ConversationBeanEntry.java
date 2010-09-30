@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.BeanAccessEvent;
 
@@ -42,6 +41,8 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 
     private CreationalContext<T> creationalContext;
 
+    private BeanManager beanManager;
+
     private final boolean scopeBeanEventEnable;
 
     private final boolean beanAccessEventEnable;
@@ -50,12 +51,14 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 
     ConversationBeanEntry(CreationalContext<T> creationalContext,
                           Bean<T> bean,
+                          BeanManager beanManager,
                           boolean scopeBeanEventEnable,
                           boolean beanAccessEventEnable,
                           boolean unscopeBeanEventEnable)
     {
         this.bean = bean;
         this.creationalContext = creationalContext;
+        this.beanManager = beanManager;
 
         this.scopeBeanEventEnable = scopeBeanEventEnable;
         this.beanAccessEventEnable = beanAccessEventEnable;
@@ -83,7 +86,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         if(this.beanAccessEventEnable)
         {
             //we don't have to check the implementation of Serializable - cdi already checked it
-            getBeanManager().fireEvent(new BeanAccessEvent((Serializable)this.currentBeanInstance));
+            this.beanManager.fireEvent(new BeanAccessEvent((Serializable)this.currentBeanInstance));
         }
 
         return this.currentBeanInstance;
@@ -125,13 +128,8 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         if(this.scopeBeanEventEnable)
         {
             //we don't have to check the implementation of Serializable - cdi already checked it
-            getBeanManager().fireEvent(new ScopeBeanEvent((Serializable)this.currentBeanInstance));
+            this.beanManager.fireEvent(new ScopeBeanEvent((Serializable)this.currentBeanInstance));
         }
-    }
-
-    private BeanManager getBeanManager()
-    {
-        return BeanManagerProvider.getInstance().getBeanManager();
     }
 
     @Override

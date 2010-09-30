@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 
 import javax.interceptor.InvocationContext;
+import javax.enterprise.inject.spi.BeanManager;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -34,6 +35,7 @@ import java.util.HashSet;
 public class SecurityUtils
 {
     public static void invokeVoters(InvocationContext invocationContext,
+                                    BeanManager beanManager,
                                     Class<? extends AccessDecisionVoter>[] accessDecisionVoters,
                                     Class<? extends ViewConfig> errorView)
     {
@@ -47,7 +49,7 @@ public class SecurityUtils
         AccessDecisionVoter voter;
         for(Class<? extends AccessDecisionVoter> voterClass : accessDecisionVoters)
         {
-            voter = getOrCreateScopedInstanceOfBeanByClass(voterClass);
+            voter = getOrCreateScopedInstanceOfBeanByClass(beanManager, voterClass);
 
             voter.checkPermission(invocationContext, violations);
             if(violations.size() > 0)

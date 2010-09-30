@@ -81,7 +81,7 @@ public abstract class AbstractGroupedConversationContext
 
         WindowContextManager windowContextManager = resolveWindowContextManager();
 
-        BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean,
+        BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean, this.beanManager,
                 this.scopeBeanEventEnable, this.beanAccessEventEnable, this.unscopeBeanEventEnable);
 
         scopeBeanEntry(windowContextManager, beanEntry);

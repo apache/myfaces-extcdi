@@ -105,7 +105,8 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
     protected ConversationConfig getConversationConfig()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(ConfigResolver.class).resolve(JsfAwareWindowContextConfig.class);
+        return getOrCreateScopedInstanceOfBeanByClass(this.beanManager,ConfigResolver.class)
+                .resolve(JsfAwareWindowContextConfig.class);
     }
 
     private EditableConversation getConversation(EditableWindowContextManager windowContextManager, Bean<?> bean)
