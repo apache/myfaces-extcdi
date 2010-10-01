@@ -24,7 +24,7 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 
@@ -99,6 +99,6 @@ public class ProjectStageActivationExtension implements Extension, Deactivatable
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

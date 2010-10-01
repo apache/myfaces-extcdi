@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.application.ViewHandler;
@@ -75,6 +75,6 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

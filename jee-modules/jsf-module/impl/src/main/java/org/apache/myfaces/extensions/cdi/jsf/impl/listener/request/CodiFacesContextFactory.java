@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
@@ -76,6 +76,6 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

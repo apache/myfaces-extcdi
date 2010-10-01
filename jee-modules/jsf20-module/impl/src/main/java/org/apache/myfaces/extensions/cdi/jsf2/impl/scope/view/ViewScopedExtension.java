@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
 import javax.enterprise.event.Observes;
@@ -101,6 +101,6 @@ public class ViewScopedExtension implements Extension, Deactivatable
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

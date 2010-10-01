@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
@@ -61,6 +61,6 @@ public class SecurityViolationAwareActionListener implements ActionListener, Dea
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

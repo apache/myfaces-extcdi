@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
@@ -55,6 +55,6 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.PhaseListenerExtension;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.lifecycle.LifecycleFactory;
 import javax.faces.lifecycle.Lifecycle;
@@ -69,6 +69,6 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Dea
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

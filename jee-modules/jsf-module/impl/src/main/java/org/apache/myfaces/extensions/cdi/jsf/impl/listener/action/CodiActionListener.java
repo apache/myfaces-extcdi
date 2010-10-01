@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.action;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityViolationAwareActionListener;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewControllerActionListener;
 
@@ -63,6 +63,6 @@ public class CodiActionListener implements ActionListener, Deactivatable
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }

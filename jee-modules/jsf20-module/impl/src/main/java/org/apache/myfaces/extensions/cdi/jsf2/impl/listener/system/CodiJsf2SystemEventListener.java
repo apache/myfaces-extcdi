@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
 
 import javax.faces.event.SystemEventListener;
 import javax.faces.event.SystemEvent;
@@ -69,6 +69,6 @@ public class CodiJsf2SystemEventListener implements SystemEventListener, Deactiv
 
     public boolean isActivated()
     {
-        return ClassUtils.isClassActivated(getClass());
+        return ClassDeactivation.isClassActivated(getClass());
     }
 }
