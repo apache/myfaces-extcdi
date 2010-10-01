@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl;
 
-import static org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation.isClassActivated;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation.isClassActivated;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;

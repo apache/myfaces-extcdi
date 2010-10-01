@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.util;
+package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
 import java.util.logging.Logger;
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;

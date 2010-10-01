@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 
 import javax.faces.context.FacesContext;
 import javax.faces.render.RenderKit;

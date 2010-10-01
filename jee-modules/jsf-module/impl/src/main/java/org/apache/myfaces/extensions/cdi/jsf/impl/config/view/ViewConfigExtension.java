@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension;

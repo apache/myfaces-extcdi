@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.mapped;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
 import javax.enterprise.inject.spi.Extension;

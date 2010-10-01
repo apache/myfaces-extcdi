@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;

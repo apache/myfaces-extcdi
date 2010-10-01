@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;

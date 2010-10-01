@@ -24,7 +24,7 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 

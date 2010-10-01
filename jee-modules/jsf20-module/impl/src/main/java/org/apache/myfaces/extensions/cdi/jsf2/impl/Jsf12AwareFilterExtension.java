@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.request.DefaultRequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 import javax.enterprise.inject.spi.Extension;
