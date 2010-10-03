@@ -19,9 +19,11 @@
 package org.apache.myfaces.extensions.cdi.core.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.DeactivatedCodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.ApplicationCache;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
+import static org.apache.myfaces.extensions.cdi.core.impl.config.ConfigStorage.*;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
@@ -30,9 +32,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
-import java.util.Arrays;
 
 /**
  * @author Gerhard Petracek
@@ -40,12 +40,6 @@ import java.util.Arrays;
 @SuppressWarnings({"UnusedDeclaration"})
 public class ConfigProducer
 {
-    private static Boolean configInitialized;
-
-    private static Set<CodiConfig> configSet;
-
-    private static Set<Class<? extends CodiConfig>> configFilter;
-
     @Inject
     private BeanManager beanManager;
 
@@ -53,25 +47,25 @@ public class ConfigProducer
     @ApplicationScoped
     public Set<CodiConfig> createCodiConfig()
     {
-        if(configInitialized == null)
+        ClassLoader classLoader = getClassLoader();
+
+        if(!isConfigInitialized(classLoader))
         {
-            initConfig();
+            initConfig(classLoader);
         }
-        return Collections.unmodifiableSet(configSet);
+        return Collections.unmodifiableSet(getCodiConfig(classLoader));
     }
 
-    private synchronized void initConfig()
+    private synchronized void initConfig(ClassLoader classLoader)
     {
-        if(configInitialized != null)
+        if(isConfigInitialized(classLoader))
         {
             return; //paranoid mode
         }
 
-        createConfigFilter();
+        createConfig(classLoader);
 
-        createConfig();
-
-        configInitialized = true;
+        setConfigInitialized(classLoader);
     }
 
     @Produces
@@ -117,29 +111,11 @@ public class ConfigProducer
         };
     }
 
-    private void createConfigFilter()
-    {
-        Set<? extends Bean> deactivatedConfigBeans = this.beanManager.getBeans(DeactivatedCodiConfig.class);
-
-        configFilter = new HashSet<Class<? extends CodiConfig>>(deactivatedConfigBeans.size());
-
-        CreationalContext<DeactivatedCodiConfig> creationalContext;
-        Class<? extends CodiConfig>[] filteredCodiConfigClasses;
-        for(Bean<DeactivatedCodiConfig> deactivatedConfigBean : deactivatedConfigBeans)
-        {
-            creationalContext = this.beanManager.createCreationalContext(deactivatedConfigBean);
-
-            filteredCodiConfigClasses = deactivatedConfigBean.create(creationalContext).getDeactivatedConfigs();
-
-            configFilter.addAll(Arrays.asList(filteredCodiConfigClasses));
-        }
-    }
-
-    private void createConfig()
+    private void createConfig(ClassLoader classLoader)
     {
         Set<? extends Bean> configBeans = this.beanManager.getBeans(CodiConfig.class);
 
-        configSet = new HashSet<CodiConfig>(configBeans.size());
+        initConfigCache(configBeans.size(), classLoader);
 
         CreationalContext<CodiConfig> creationalContext;
         CodiConfig currentCodiConfig;
@@ -149,10 +125,15 @@ public class ConfigProducer
 
             currentCodiConfig = codiConfigBean.create(creationalContext);
 
-            if(!configFilter.contains(currentCodiConfig.getClass()))
+            if(ClassDeactivation.isClassActivated(currentCodiConfig.getClass()))
             {
-                configSet.add(currentCodiConfig);
+                addCodiConfig(currentCodiConfig, classLoader);
             }
         }
+    }
+
+    private static ClassLoader getClassLoader()
+    {
+        return ClassUtils.getClassLoader(null);
     }
 }

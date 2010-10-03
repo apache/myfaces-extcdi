@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,22 +29,45 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ApplicationCache
 {
-    private static Map<Class<? extends CodiConfig>, CodiConfig> configCache
-            = new ConcurrentHashMap<Class<? extends CodiConfig>, CodiConfig>();
+    private static Map<ClassLoader, Map<Class<? extends CodiConfig>, CodiConfig>> configCache
+            = new ConcurrentHashMap<ClassLoader, Map<Class<? extends CodiConfig>, CodiConfig>>();
 
-    public static CodiConfig getConfig(Class<? extends CodiConfig> config)
+    public static CodiConfig getConfig(Class<? extends CodiConfig> configKey)
     {
-        return configCache.get(config);
+        Map<Class<? extends CodiConfig>, CodiConfig> config = configCache.get(getClassLoader());
+
+        if(config == null)
+        {
+            return null;
+        }
+        return config.get(configKey);
     }
 
     public static void setConfig(Class<? extends CodiConfig> configKey, CodiConfig config)
     {
-        configCache.put(configKey, config);
+        Map<Class<? extends CodiConfig>, CodiConfig> configMap = configCache.get(getClassLoader());
+
+        if(configMap == null)
+        {
+            configMap = new ConcurrentHashMap<Class<? extends CodiConfig>, CodiConfig>();
+            configCache.put(getClassLoader(), configMap);
+        }
+        configMap.put(configKey, config);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
     public static void resetConfigs()
     {
-        configCache.clear();
+        Map<Class<? extends CodiConfig>, CodiConfig> configMap = configCache.get(getClassLoader());
+
+        if(configMap != null)
+        {
+            configMap.clear();
+        }
+    }
+
+    private static ClassLoader getClassLoader()
+    {
+        return ClassUtils.getClassLoader(null);
     }
 }

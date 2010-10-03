@@ -26,7 +26,6 @@ import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanN
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.validation.ConstraintValidatorFactory;
-import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.MessageInterpolator;
@@ -37,8 +36,6 @@ import javax.inject.Named;
  */
 public class CdiAwareBeanValidationProducer
 {
-    private static ValidatorFactory defaultValidatorFactory;
-
     protected CdiAwareBeanValidationProducer()
     {
     }
@@ -53,11 +50,7 @@ public class CdiAwareBeanValidationProducer
         ValidatorFactory validatorFactory = validatorFactoryResolver.resolve();
         if (validatorFactory == null)
         {
-            if (defaultValidatorFactory == null)
-            {
-                defaultValidatorFactory = Validation.buildDefaultValidatorFactory();
-            }
-            validatorFactory = defaultValidatorFactory;
+            validatorFactory = ValidatorFactoryStorage.getOrCreateValidatorFactory();
         }
 
         return new CdiAwareValidatorFactory(validatorFactory);
