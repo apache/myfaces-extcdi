@@ -28,20 +28,15 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
-import java.lang.annotation.Annotation;
-import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -121,34 +116,10 @@ final class InstanceProducer
 
     @Produces
     @Dependent
-    protected Conversation currentConversation(final InjectionPoint injectionPoint,
-                                               final WindowContextManager windowContextManager)
+    protected Conversation currentConversation(InjectionPoint injectionPoint,
+                                               WindowContextManager windowContextManager)
     {
         //for @Inject Conversation conversation;
-        return new Conversation()
-        {
-            private static final long serialVersionUID = 7754789230388003028L;
-
-            public void close()
-            {
-                findConversation().close();
-            }
-
-            public void restart()
-            {
-                findConversation().restart();
-            }
-
-            private Conversation findConversation()
-            {
-                Bean<?> bean = injectionPoint.getBean();
-                Class conversationGroup = ConversationUtils.getConversationGroup(bean);
-
-                Set<Annotation> qualifiers = bean.getQualifiers();
-
-                return ((EditableWindowContext)windowContextManager.getCurrentWindowContext())
-                        .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
-            }
-        };
+        return new InjectableConversation(injectionPoint.getBean(), windowContextManager);
     }
 }
