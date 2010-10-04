@@ -22,9 +22,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Helper for the JSF-Map trick in case of expressions which are read-only.
+ *
  * @author Gerhard Petracek
  */
-public class UnmodifiableMap<K, V> extends HashMap<K, V>
+public abstract class UnmodifiableMap<K, V> extends HashMap<K, V>
 {
     private static final long serialVersionUID = -7117422976009229722L;
 

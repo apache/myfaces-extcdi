@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -38,7 +39,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.Map;
-import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
@@ -87,7 +87,7 @@ final class InstanceProducer
     @RequestScoped
     protected Map<String, Object> currentWindow(final WindowContextManager windowContextManager)
     {
-        return new HashMap<String, Object>() {
+        return new UnmodifiableMap<String, Object>() {
             private static final long serialVersionUID = 2356468240049980467L;
 
             @Override
