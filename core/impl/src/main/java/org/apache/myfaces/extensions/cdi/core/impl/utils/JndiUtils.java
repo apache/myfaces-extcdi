@@ -22,12 +22,16 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This is the internal helper class for low level access to JNDI
  */
 public final class JndiUtils
 {
+
+    private final static Logger log = Logger.getLogger(JndiUtils.class.getName());
 
     private static InitialContext initialContext = null;
 
@@ -99,7 +103,25 @@ public final class JndiUtils
     {
         try
         {
-            return (T) initialContext.lookup(name);
+            Object lookedUp = initialContext.lookup(name);
+
+            if (lookedUp != null)
+            {
+                if (expectedClass.isAssignableFrom(lookedUp.getClass()))
+                {
+                    // we have a value and the type fits
+                    return (T) lookedUp;
+                }
+                else
+                {
+                    // we have a value, but the value does not fit
+                    log.log(Level.SEVERE,
+                            "JNDI lookup for key " + name
+                            + " should return a value of " + expectedClass);
+                }
+            }
+
+            return null;
         }
         catch (NamingException e)
         {

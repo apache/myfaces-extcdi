@@ -21,17 +21,14 @@ package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.JndiUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -200,30 +197,14 @@ public class ProjectStageProducer
 
     protected ProjectStage getProjectStageFromJNDI()
     {
-        // TODO use JndiUtils
-
         ProjectStage ps = null;
         String stageName = null;
+
         try
         {
-            Context ctx = new InitialContext();
-            Object temp = ctx.lookup(PROJECT_STAGE_JNDI_NAME);
-            if (temp != null)
-            {
-                if (temp instanceof String)
-                {
-                    stageName = (String) temp;
-                }
-                else
-                {
-                    log.log(Level.SEVERE,
-                            "JNDI lookup for key " + PROJECT_STAGE_JNDI_NAME
-                            + " should return a java.lang.String value");
-                    return null;
-                }
-            }
+            stageName = JndiUtils.lookup(PROJECT_STAGE_JNDI_NAME, String.class);
         }
-        catch (NamingException e)
+        catch (RuntimeException jndiException)
         {
             // no-op
         }
