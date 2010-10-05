@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import java.util.logging.Logger;
-import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+
+import java.util.logging.Logger;
+
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
 
 /**
  * @author Gerhard Petracek
@@ -30,7 +32,9 @@ public class ClassDeactivation
 {
     private static Logger logger = Logger.getLogger(ClassDeactivation.class.getName());
 
-    private static final String DEFAULT_CLASS_DEACTIVATOR = "org.apache.myfaces.extensions.cdi.ClassDeactivator";
+    private static final String CLASS_DEACTIVATOR_PROPERTY_NAME = "org.apache.myfaces.extensions.cdi.ClassDeactivator";
+
+    private static final String CLASS_DEACTIVATOR_JNDI_NAME = "java:comp/env/myfaces-codi/ClassDeactivator";
 
     public static boolean isClassActivated(Class targetClass)
     {
@@ -38,15 +42,10 @@ public class ClassDeactivation
 
         if(classDeactivator == null)
         {
-            classDeactivator = addClassDeactivator();
+            classDeactivator = getClassDeactivator();
         }
 
         boolean classDeactivated = classDeactivator.getDeactivatedClasses().contains(targetClass);
-
-        if(classDeactivated)
-        {
-            logger.info("deactivate: " + targetClass);
-        }
 
         return !classDeactivated;
     }
@@ -56,26 +55,49 @@ public class ClassDeactivation
         ClassDeactivatorStorage.setClassDeactivator(classDeactivator);
     }
 
-    private static ClassDeactivator addClassDeactivator()
+    private static ClassDeactivator getClassDeactivator()
     {
-        ClassDeactivator classDeactivator = tryToInstantiateClassForName(
-                DEFAULT_CLASS_DEACTIVATOR , ClassDeactivator.class);
+        ClassDeactivator classDeactivator = null;
 
-        //overrule with vm param
-        String classDeactivatorName = System.getProperty(DEFAULT_CLASS_DEACTIVATOR);
-
+        // check system property
+        String classDeactivatorName = System.getProperty(CLASS_DEACTIVATOR_PROPERTY_NAME);
         if (classDeactivatorName != null)
         {
             classDeactivator = tryToInstantiateClassForName(classDeactivatorName, ClassDeactivator.class);
         }
 
-        if(classDeactivator == null)
+        // check JNDI param
+        if (classDeactivator == null)
+        {
+            try
+            {
+                classDeactivatorName = JndiUtils.lookup(CLASS_DEACTIVATOR_JNDI_NAME, String.class);
+                if (classDeactivatorName != null)
+                {
+                    classDeactivator = tryToInstantiateClassForName(classDeactivatorName, ClassDeactivator.class);
+                }
+            }
+            catch (RuntimeException re)
+            {
+                // noop - lookup did not work
+            }
+        }
+
+        // use default deactivator
+        if (classDeactivator == null)
         {
             classDeactivator = createClassDeactivatorPlaceholder();
         }
         else
         {
             logger.info("used class deactivator: " + classDeactivator.getClass().getName());
+
+            // display deactivated classes here once
+            // NOTE that isClassActivated() will be called many times for the same class
+            for (Class<?> deactivatedClass : classDeactivator.getDeactivatedClasses())
+            {
+                logger.info("deactivate: " + deactivatedClass);
+            }
         }
 
         ClassDeactivatorStorage.setClassDeactivator(classDeactivator);

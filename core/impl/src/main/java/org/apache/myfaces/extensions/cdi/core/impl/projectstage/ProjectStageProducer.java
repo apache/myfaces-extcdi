@@ -19,18 +19,17 @@
 package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 
-import javax.enterprise.context.Dependent;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -201,6 +200,8 @@ public class ProjectStageProducer
 
     protected ProjectStage getProjectStageFromJNDI()
     {
+        // TODO use JndiUtils
+
         ProjectStage ps = null;
         String stageName = null;
         try
