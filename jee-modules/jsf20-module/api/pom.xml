@@ -100,6 +100,20 @@
                         </includes>
                     </artifactSet>
                 </configuration>
+
+                <!--
+                    Not used here, but maven needs to have the same dependencies
+                    for the same plugin across the whole project, otherwise
+                    the class loading (in this case for transformer implementations)
+                    will not work properly (why ever...)
+                -->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.myfaces.extensions.cdi</groupId>
+                        <artifactId>myfaces-extcdi-maven-utils</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             
         </plugins>
