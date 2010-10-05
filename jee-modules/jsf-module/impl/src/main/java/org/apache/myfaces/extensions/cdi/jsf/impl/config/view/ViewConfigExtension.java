@@ -73,6 +73,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
         @SuppressWarnings({"unchecked"})
         Class<? extends ViewConfig> viewDefinitionClass = (Class<? extends ViewConfig>)pageDefinitionClass;
 
+        //we use abstract classes for nesting definitions
+        //TODO log a warning in case of project-stage dev
         if(Modifier.isAbstract(viewDefinitionClass.getModifiers()))
         {
             return;

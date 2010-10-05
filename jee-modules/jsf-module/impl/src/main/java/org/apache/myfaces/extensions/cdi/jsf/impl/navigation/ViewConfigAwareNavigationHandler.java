@@ -70,7 +70,8 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             if(!this.otherOutcomes.contains(outcome))
             {
                 initBeanManager();
-                if(outcome.startsWith("class ") || outcome.startsWith("interface "))
+                //it isn't possible to support interfaces due to cdi restrictions
+                if(outcome.startsWith("class "))
                 {
                     outcome = outcome.substring(6);
                 }
