@@ -160,7 +160,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
             return;
         }
 
-        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getBeanDefinitions();
+        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getPageBeanDefinitions();
 
         Object bean;
         PhasesLifecycleCallbackEntry phasesLifecycleCallbackEntry;

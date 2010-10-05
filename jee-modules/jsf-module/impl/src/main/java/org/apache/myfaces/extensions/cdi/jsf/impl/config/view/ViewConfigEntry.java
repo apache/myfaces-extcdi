@@ -98,14 +98,14 @@ public class ViewConfigEntry
         return navigationMode;
     }
 
-    List<PageBeanConfigEntry> getBeanDefinitions()
+    List<PageBeanConfigEntry> getPageBeanDefinitions()
     {
         return beanDefinition;
     }
 
     public void invokeInitViewMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
         {
             processCallbacks(beanEntry, beanEntry.getInitViewMethods());
         }
@@ -113,7 +113,7 @@ public class ViewConfigEntry
 
     public void invokePrePageActionMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
         {
             processCallbacks(beanEntry, beanEntry.getPrePageActionMethods());
         }
@@ -121,7 +121,7 @@ public class ViewConfigEntry
 
     void invokePreRenderViewMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getBeanDefinitions())
+        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
         {
             processCallbacks(beanEntry, beanEntry.getPreRenderViewMethods());
         }

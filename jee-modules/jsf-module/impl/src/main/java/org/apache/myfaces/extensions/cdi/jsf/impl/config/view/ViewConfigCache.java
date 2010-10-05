@@ -37,7 +37,8 @@ public class ViewConfigCache
         if(getViewIdToViewDefinitionEntryMapping().containsKey(viewId))
         {
             throw new IllegalArgumentException(viewId + " is already mapped to "
-                    + viewId + " -> a further view definition (" +
+                    + viewId + " via " + getViewIdToViewDefinitionEntryMapping().get(viewId).getViewDefinitionClass()
+                    + " -> a further view definition (" +
                     viewDefinitionEntry.getViewDefinitionClass().getName() + ") is invalid");
         }
         getViewIdToViewDefinitionEntryMapping().put(viewId, viewDefinitionEntry);
