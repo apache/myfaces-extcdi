@@ -43,10 +43,6 @@
             <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
-            <artifactId>myfaces-extcdi-message-module-impl</artifactId>
-        </dependency>
         
 
         <dependency>
