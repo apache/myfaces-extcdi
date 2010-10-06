@@ -61,7 +61,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
         }
     }
 
-    private void addPageDefinition(Class pageDefinitionClass)
+    protected void addPageDefinition(Class pageDefinitionClass)
     {
         if(!ViewConfig.class.isAssignableFrom(pageDefinitionClass))
         {
@@ -190,6 +190,19 @@ public class ViewConfigExtension implements Extension, Deactivatable
             className = className.substring(0, 1).toLowerCase() + className.substring(1);
             viewId.append(className);
         }
+        //nested classes with manually defined page name and shared basePath
+        else if(!simpleClassNameToPathMapping.isEmpty())
+        {
+            String className = viewDefinitionClass.getName();
+
+            basePath = "";
+            className = className.substring(className.lastIndexOf(".") + 1);
+            className = convertToPathSyntax(className, simpleClassNameToPathMapping);
+            className = className.substring(0, 1).toLowerCase() + className.substring(1);
+            className = className.substring(0, className.lastIndexOf("/") + 1);
+            className += pageName;
+            viewId.append(className);
+        }
         else
         {
             viewId.append(pageName);
@@ -209,9 +222,23 @@ public class ViewConfigExtension implements Extension, Deactivatable
                 result = rootPath + result.substring(1);
             }
         }
+
+        result = ensureValidViewIds(result);
+
         ViewConfigCache.addViewDefinition(
                 result, new ViewConfigEntry(
                         result, viewDefinitionClass, navigationMode, foundVoters, errorView, viewMetaDataList));
+    }
+
+    private String ensureValidViewIds(String result)
+    {
+        if(!result.startsWith("/"))
+        {
+            result = "/" + result;
+        }
+
+        //TODO
+        return result.replace("///", "/").replace("//", "/");
     }
 
     private String convertToPathSyntax(String className, Map<String, String> simpleClassNameToPathMapping)
