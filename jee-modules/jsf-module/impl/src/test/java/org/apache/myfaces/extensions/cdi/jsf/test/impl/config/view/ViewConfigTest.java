@@ -23,6 +23,11 @@ import static org.testng.Assert.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils;
+import static org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils.*;
+
+import java.util.List;
+import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
@@ -37,6 +42,9 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(SimpleView.class);
 
         assertEquals(ViewConfigCache.getViewDefinition(SimpleView.class).getViewId(), "/simpleView.xhtml");
+
+        assertEquals(ViewConfigCache.getViewDefinition(SimpleView.class).getViewDefinitionClass(),
+                                                       SimpleView.class);
     }
 
     @Test
@@ -150,5 +158,76 @@ public class ViewConfigTest
         viewConfigEntry = ViewConfigCache.getViewDefinition(NavigationOverriding2.ForwardedPage2.class);
 
         assertEquals(NavigationMode.FORWARD, viewConfigEntry.getNavigationMode());
+    }
+
+    @Test
+    public void testViewConfigWithAccessDecisionVoters()
+    {
+        viewConfigExtension.addPageDefinition(ViewConfigWithAccessDecisionVoters.Page1.class);
+        viewConfigExtension.addPageDefinition(ViewConfigWithAccessDecisionVoters.Page2.class);
+
+        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
+                ViewConfigWithAccessDecisionVoters.Page1.class);
+
+        assertEquals(viewConfigEntry.getAccessDecisionVoters().length, 1);
+
+        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithAccessDecisionVoters.Page2.class);
+
+        assertEquals(viewConfigEntry.getAccessDecisionVoters().length, 2);
+        assertTrue(viewConfigEntry.getAccessDecisionVoters()[0].equals(TestAccessDecisionVoter2.class));
+        assertTrue(viewConfigEntry.getAccessDecisionVoters()[1].equals(TestAccessDecisionVoter1.class));
+    }
+
+    @Test
+    public void testViewConfigWithSecurityErrorPages()
+    {
+        viewConfigExtension.addPageDefinition(ViewConfigWithSecurityErrorPages.Page1.class);
+        viewConfigExtension.addPageDefinition(ViewConfigWithSecurityErrorPages.Page2.class);
+
+        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
+                ViewConfigWithSecurityErrorPages.Page1.class);
+
+        assertEquals(viewConfigEntry.getErrorView(), SimpleView.class);
+
+        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithSecurityErrorPages.Page2.class);
+        assertEquals(viewConfigEntry.getErrorView(), SimpleViewWithManualName.class);
+    }
+
+    @Test
+    public void testViewConfigWithViewMetaData()
+    {
+        viewConfigExtension.addPageDefinition(ViewConfigWithViewMetaData.Page1.class);
+        viewConfigExtension.addPageDefinition(ViewConfigWithViewMetaData.Page2.class);
+
+        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
+                ViewConfigWithViewMetaData.Page1.class);
+
+        assertEquals(viewConfigEntry.getMetaData().size(), 2);
+
+        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithViewMetaData.Page2.class);
+        assertEquals(viewConfigEntry.getMetaData().size(), 3);
+    }
+
+    @Test
+    public void testViewConfigWithViewController()
+    {
+        viewConfigExtension.addPageDefinition(ViewConfigWithViewController.Page1.class);
+        viewConfigExtension.addPageDefinition(ViewConfigWithViewController.Page2.class);
+
+        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
+                ViewConfigWithViewController.Page1.class);
+
+        Method getPageBeanClassesMethod = ReflectionUtils.tryToGetMethod(ViewConfigEntry.class, "getPageBeanClasses");
+        List<Class> pageBeanClasses = (List<Class>) tryToInvokeMethod(viewConfigEntry, getPageBeanClassesMethod);
+        assertEquals(pageBeanClasses.size(), 1);
+        assertTrue(pageBeanClasses.contains(TestPageBean2.class));
+
+        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithViewController.Page2.class);
+
+        getPageBeanClassesMethod = ReflectionUtils.tryToGetMethod(ViewConfigEntry.class, "getPageBeanClasses");
+        pageBeanClasses = (List<Class>) tryToInvokeMethod(viewConfigEntry, getPageBeanClassesMethod);
+        assertEquals(pageBeanClasses.size(), 2);
+        assertTrue(pageBeanClasses.contains(TestPageBean2.class));
+        assertTrue(pageBeanClasses.contains(TestPageBean3.class));
     }
 }

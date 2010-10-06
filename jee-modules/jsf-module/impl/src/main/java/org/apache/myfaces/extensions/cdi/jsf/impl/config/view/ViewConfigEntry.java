@@ -103,6 +103,17 @@ public class ViewConfigEntry
         return beanDefinition;
     }
 
+    //we just need it for testing
+    protected final List<Class> getPageBeanClasses()
+    {
+        List<Class> result = new ArrayList<Class>();
+        for(PageBeanConfigEntry pageBeanConfigEntry : getPageBeanDefinitions())
+        {
+            result.add(pageBeanConfigEntry.getBeanClass());
+        }
+        return result;
+    }
+    
     public void invokeInitViewMethods()
     {
         for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())

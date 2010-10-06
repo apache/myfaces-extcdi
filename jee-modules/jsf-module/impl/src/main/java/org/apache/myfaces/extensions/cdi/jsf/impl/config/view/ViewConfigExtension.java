@@ -114,7 +114,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
                 securedAnnotation = currentClass.getAnnotation(Secured.class);
                 Collections.addAll(foundVoters, securedAnnotation.value());
 
-                if(!DefaultErrorView.class.getName().equals(securedAnnotation.errorView().getName()))
+                if(errorView == null &&
+                        !DefaultErrorView.class.getName().equals(securedAnnotation.errorView().getName()))
                 {
                     errorView = securedAnnotation.errorView();
                 }
@@ -274,14 +275,14 @@ public class ViewConfigExtension implements Extension, Deactivatable
             {
                 ViewMetaData metaData = annotation.annotationType().getAnnotation(ViewMetaData.class);
 
-                if(metaData.override())
-                {
-                    blockedMetaDataTypes.add(annotation.annotationType());
-                }
-
                 if(!blockedMetaDataTypes.contains(annotation.annotationType()))
                 {
                     result.add(annotation);
+
+                    if(metaData.override())
+                    {
+                        blockedMetaDataTypes.add(annotation.annotationType());
+                    }
                 }
             }
         }
