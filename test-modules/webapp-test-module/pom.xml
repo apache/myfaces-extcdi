@@ -143,6 +143,35 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Arquillian Tomcat dependencies -->
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-embedded-6</artifactId>
+            <version>${arquillian.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>catalina</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>coyote</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jasper</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -164,127 +193,109 @@
                             <skip>true</skip>
                         </configuration>
                     </execution>
-
-                    <!-- run webapp-tests with myfaces and owb -->
-                    <execution>
-                        <id>test-tomcat-myfaces-owb</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <skip>false</skip>
-
-                            <testNGArtifactName>none:none</testNGArtifactName>
-                            <classpathDependencyExcludes>
-                                <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-impl</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-spi</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-jsf</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-resource</classpathDependencyExclude>
-                                <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-web</classpathDependencyExclude>
-                            </classpathDependencyExcludes>
-                        </configuration>
-                    </execution>
+                    
                 </executions>
-
-                <!--
-                  The following dependencies need to be in the local repo in order to
-                  make the tests work properly.
-                -->
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
-                        <artifactId>myfaces-extcdi-core-impl</artifactId>
-                        <version>${project.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
-                        <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
-                        <version>${project.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.openwebbeans</groupId>
-                        <artifactId>openwebbeans-impl</artifactId>
-                        <version>${owb.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.openwebbeans</groupId>
-                        <artifactId>openwebbeans-spi</artifactId>
-                        <version>${owb.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.openwebbeans</groupId>
-                        <artifactId>openwebbeans-jsf</artifactId>
-                        <version>${owb.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.openwebbeans</groupId>
-                        <artifactId>openwebbeans-resource</artifactId>
-                        <version>${owb.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.apache.openwebbeans</groupId>
-                        <artifactId>openwebbeans-web</artifactId>
-                        <version>${owb.version}</version>
-                        <scope>test</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
 
    <profiles>
-        <profile>
-            <id>tomcat-embedded</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            
-            <dependencies>
-                <dependency>
-                    <groupId>org.jboss.arquillian.container</groupId>
-                    <artifactId>arquillian-tomcat-embedded-6</artifactId>
-                    <version>${arquillian.version}</version>
-                    <scope>test</scope>
-                </dependency>
 
-                <dependency>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>catalina</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>coyote</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>test</scope>
-                </dependency>
-
-                <dependency>
-                    <groupId>org.apache.tomcat</groupId>
-                    <artifactId>jasper</artifactId>
-                    <version>${tomcat.version}</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
+       <!-- use mvn clean install -Pwebapptest to run the tests of this module -->
        <profile>
+           <id>webapptest</id>
+
+           <build>
+               <plugins>
+                   <plugin>
+                       <groupId>org.apache.maven.plugins</groupId>
+                       <artifactId>maven-surefire-plugin</artifactId>
+                       <version>2.6</version>
+                       <executions>
+
+                           <!-- run webapp-tests with myfaces and owb -->
+                           <execution>
+                               <id>test-tomcat-myfaces-owb</id>
+                               <phase>test</phase>
+                               <goals>
+                                   <goal>test</goal>
+                               </goals>
+                               <configuration>
+                                   <skip>false</skip>
+
+                                   <testNGArtifactName>none:none</testNGArtifactName>
+                                   <classpathDependencyExcludes>
+                                       <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-impl</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-spi</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-jsf</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-resource</classpathDependencyExclude>
+                                       <classpathDependencyExclude>org.apache.openwebbeans:openwebbeans-web</classpathDependencyExclude>
+                                   </classpathDependencyExcludes>
+                               </configuration>
+                           </execution>
+                       </executions>
+
+                       <!--
+                         The following dependencies need to be in the local repo in order to
+                         make the tests work properly.
+                       -->
+                       <dependencies>
+                           <!-- CODI impl dependencies -->
+                           <dependency>
+                               <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+                               <artifactId>myfaces-extcdi-core-impl</artifactId>
+                               <version>${project.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                           <dependency>
+                               <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                               <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
+                               <version>${project.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+
+                           <!-- OWB impl dependencies -->
+                           <dependency>
+                               <groupId>org.apache.openwebbeans</groupId>
+                               <artifactId>openwebbeans-impl</artifactId>
+                               <version>${owb.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                           <dependency>
+                               <groupId>org.apache.openwebbeans</groupId>
+                               <artifactId>openwebbeans-spi</artifactId>
+                               <version>${owb.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                           <dependency>
+                               <groupId>org.apache.openwebbeans</groupId>
+                               <artifactId>openwebbeans-jsf</artifactId>
+                               <version>${owb.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                           <dependency>
+                               <groupId>org.apache.openwebbeans</groupId>
+                               <artifactId>openwebbeans-resource</artifactId>
+                               <version>${owb.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                           <dependency>
+                               <groupId>org.apache.openwebbeans</groupId>
+                               <artifactId>openwebbeans-web</artifactId>
+                               <version>${owb.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+                       </dependencies>
+                   </plugin>
+               </plugins>
+           </build>
+       </profile>
+
+       <!--profile>
            <id>jetty-embedded</id>
-           <!--activation>
-               <activeByDefault>true</activeByDefault>
-           </activation-->
 
            <dependencies>
                <dependency>
@@ -315,7 +326,7 @@
                    <scope>test</scope>
                </dependency>
            </dependencies>
-       </profile>
+       </profile-->
     </profiles>
 
     <repositories>
