@@ -22,19 +22,29 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
-    <title>MyFaces CODI ScopeMapping Test 2</title>
+    <title>MyFaces CODI ScopeBeanEvent Test 2</title>
 </h:head>
 <h:body>
     <h:form id="test2Form">
 
-        <!-- THERE MUST BE NO BEAN REFERENCES ON THIS SITE -->
+        <!-- there MUST NOT be any bean value references here -->
 
         <!-- general commands -->
         <h:commandButton id="emptyCommand"/>
-        
-        <h:commandButton id="navigateToTest3" action="test3.xhtml"/>
-        <h:commandButton id="redirectToTest3" action="test3.xhtml?faces-redirect=true"/>
-        <h:button id="getToTest3" outcome="test3.xhtml" />
+
+        <!-- bean commands -->
+        <h:commandButton id="eventsBean_closeStartedConversationAndNavigateToTest2"
+                         action="#{eventsBean.closeStartedConversationAndNavigateToTest2}" />
+        <h:commandButton id="conversationBean_closeConversation"
+                         action="#{conversationBean.closeConversation}" />
+        <h:commandButton id="conversationBean_closeWindowContext"
+                         action="#{conversationBean.closeWindowContext}" />
+        <h:commandButton id="conversationBean_restartConversation"
+                         action="#{conversationBean.restartConversation}" />
+        <h:commandButton id="windowBean_closeWindowContext"
+                         action="#{windowBean.closeWindowContext}" />
+        <h:commandButton id="viewAccessBean_closeWindowContext"
+                         action="#{viewAccessBean.closeWindowContext}" />
 
     </h:form>
 </h:body>

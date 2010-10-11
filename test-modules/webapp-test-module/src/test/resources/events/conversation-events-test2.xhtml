@@ -22,19 +22,30 @@
       xmlns:f="http://java.sun.com/jsf/core">
 
 <h:head>
-    <title>MyFaces CODI ScopeMapping Test 2</title>
+    <title>MyFaces CODI Conversation Events test page</title>
 </h:head>
 <h:body>
-    <h:form id="test2Form">
+    <h:form id="testForm">
 
-        <!-- THERE MUST BE NO BEAN REFERENCES ON THIS SITE -->
+        <!-- inputs -->
+        <h:inputText id="conversationBean_input" value="#{conversationBean.input}" />
+
+        <!-- There must not be any further bean references (e.g. viewacces, window) -->
 
         <!-- general commands -->
         <h:commandButton id="emptyCommand"/>
-        
-        <h:commandButton id="navigateToTest3" action="test3.xhtml"/>
-        <h:commandButton id="redirectToTest3" action="test3.xhtml?faces-redirect=true"/>
-        <h:button id="getToTest3" outcome="test3.xhtml" />
+
+        <!-- bean commands -->
+        <h:commandButton id="eventsBean_closeStartedConversationAndNavigateToTest1"
+                         action="#{eventsBean.closeStartedConversationAndNavigateToTest1}" />
+        <h:commandButton id="conversationBean_closeConversation"
+                         action="#{conversationBean.closeConversation}" />
+        <h:commandButton id="conversationBean_closeWindowContext"
+                         action="#{conversationBean.closeWindowContext}" />
+        <h:commandButton id="conversationBean_restartConversation"
+                         action="#{conversationBean.restartConversation}" />
+        <h:commandButton id="windowBean_closeWindowContext"
+                         action="#{windowBean.closeWindowContext}" />
 
     </h:form>
 </h:body>
