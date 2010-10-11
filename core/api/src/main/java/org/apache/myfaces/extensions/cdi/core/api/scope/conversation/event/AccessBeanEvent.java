@@ -23,9 +23,9 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public final class BeanAccessEvent extends BeanEvent
+public final class AccessBeanEvent extends BeanEvent
 {
-    public BeanAccessEvent(Serializable bean)
+    public AccessBeanEvent(Serializable bean)
     {
         super(bean);
     }

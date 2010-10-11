@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.BeanAccessEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -86,7 +86,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         if(this.beanAccessEventEnable)
         {
             //we don't have to check the implementation of Serializable - cdi already checked it
-            this.beanManager.fireEvent(new BeanAccessEvent((Serializable)this.currentBeanInstance));
+            this.beanManager.fireEvent(new AccessBeanEvent((Serializable)this.currentBeanInstance));
         }
 
         return this.currentBeanInstance;
