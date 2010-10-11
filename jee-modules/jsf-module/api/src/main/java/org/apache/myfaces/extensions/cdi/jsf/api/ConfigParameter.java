@@ -70,10 +70,10 @@ public interface ConfigParameter
 
     static final boolean ENABLE_SCOPE_BEAN_EVENT_DEFAULT = false;
 
-    static final String ENABLE_BEAN_ACCESS_EVENT =
-            CoreCodiConfigParameter.BASE_NAME + "ENABLE_BEAN_ACCESS_EVENT";
+    static final String ENABLE_ACCESS_BEAN_EVENT =
+            CoreCodiConfigParameter.BASE_NAME + "ENABLE_ACCESS_BEAN_EVENT";
 
-    static final boolean ENABLE_BEAN_ACCESS_EVENT_DEFAULT = false;
+    static final boolean ENABLE_ACCESS_BEAN_EVENT_DEFAULT = false;
 
     static final String ENABLE_UNSCOPE_BEAN_EVENT =
             CoreCodiConfigParameter.BASE_NAME + "ENABLE_UNSCOPE_BEAN_EVENT";

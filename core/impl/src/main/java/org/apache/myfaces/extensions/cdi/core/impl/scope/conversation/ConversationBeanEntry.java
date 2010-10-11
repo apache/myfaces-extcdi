@@ -18,15 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import java.io.Serializable;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
 
 /**
  * @author Gerhard Petracek
@@ -45,7 +46,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 
     private final boolean scopeBeanEventEnable;
 
-    private final boolean beanAccessEventEnable;
+    private final boolean accessBeanEventEnable;
 
     private final boolean unscopeBeanEventEnable;
 
@@ -53,7 +54,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
                           Bean<T> bean,
                           BeanManager beanManager,
                           boolean scopeBeanEventEnable,
-                          boolean beanAccessEventEnable,
+                          boolean accessBeanEventEnable,
                           boolean unscopeBeanEventEnable)
     {
         this.bean = bean;
@@ -61,7 +62,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         this.beanManager = beanManager;
 
         this.scopeBeanEventEnable = scopeBeanEventEnable;
-        this.beanAccessEventEnable = beanAccessEventEnable;
+        this.accessBeanEventEnable = accessBeanEventEnable;
         this.unscopeBeanEventEnable = unscopeBeanEventEnable;
     }
 
@@ -83,7 +84,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
             createNewBeanInstance();
         }
 
-        if(this.beanAccessEventEnable)
+        if(this.accessBeanEventEnable)
         {
             //we don't have to check the implementation of Serializable - cdi already checked it
             this.beanManager.fireEvent(new AccessBeanEvent((Serializable)this.currentBeanInstance));
@@ -106,9 +107,9 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         return this.scopeBeanEventEnable;
     }
 
-    public boolean isBeanAccessEventEnabled()
+    public boolean isAccessBeanEventEnabled()
     {
-        return this.beanAccessEventEnable;
+        return this.accessBeanEventEnable;
     }
 
     public boolean isUnscopeBeanEventEnabled()

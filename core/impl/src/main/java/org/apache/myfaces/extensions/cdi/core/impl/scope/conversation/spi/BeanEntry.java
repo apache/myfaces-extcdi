@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi;
 
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
 import java.io.Serializable;
 
 /**
@@ -40,7 +40,7 @@ public interface BeanEntry<T> extends Serializable
 
     boolean isScopeBeanEventEnabled();
 
-    boolean isBeanAccessEventEnabled();
+    boolean isAccessBeanEventEnabled();
 
     boolean isUnscopeBeanEventEnabled();
 }

@@ -19,12 +19,12 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
@@ -37,7 +37,7 @@ public abstract class AbstractGroupedConversationContext
 
     private boolean scopeBeanEventEnable = false;
 
-    private boolean beanAccessEventEnable = false;
+    private boolean accessBeanEventEnable = false;
 
     private boolean unscopeBeanEventEnable = false;
 
@@ -82,7 +82,7 @@ public abstract class AbstractGroupedConversationContext
         WindowContextManager windowContextManager = resolveWindowContextManager();
 
         BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean, this.beanManager,
-                this.scopeBeanEventEnable, this.beanAccessEventEnable, this.unscopeBeanEventEnable);
+                this.scopeBeanEventEnable, this.accessBeanEventEnable, this.unscopeBeanEventEnable);
 
         scopeBeanEntry(windowContextManager, beanEntry);
 
@@ -136,7 +136,7 @@ public abstract class AbstractGroupedConversationContext
             this.conversationConfig = getConversationConfig();
 
             this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnable();
-            this.beanAccessEventEnable = this.conversationConfig.isBeanAccessEventEnable();
+            this.accessBeanEventEnable = this.conversationConfig.isAccessBeanEventEnable();
             this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnable();
         }
     }

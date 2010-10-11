@@ -29,7 +29,7 @@ public interface ConversationConfig extends Serializable
 
     boolean isScopeBeanEventEnable();
 
-    boolean isBeanAccessEventEnable();
+    boolean isAccessBeanEventEnable();
 
     boolean isUnscopeBeanEventEnable();
 

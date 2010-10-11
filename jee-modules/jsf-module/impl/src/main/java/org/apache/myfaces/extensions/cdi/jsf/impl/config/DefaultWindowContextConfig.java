@@ -20,19 +20,49 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.*;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowContextQuotaHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.JsfAwareConversationFactory;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.JsfAwareConversationFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowContextQuotaHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
+
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ADD_WINDOW_ID_TO_ACTION_URL_ENABLED;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ALLOW_UNKNOWN_WINDOW_IDS;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.CONVERSATION_TIMEOUT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.CONVERSATION_TIMEOUT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.DISABLE_INITIAL_REDIRECT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.DISABLE_INITIAL_REDIRECT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_ACCESS_BEAN_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_ACCESS_BEAN_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CLOSE_CONVERSATION_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CLOSE_CONVERSATION_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CLOSE_WINDOW_CONTEXT_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CLOSE_WINDOW_CONTEXT_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CREATE_WINDOW_CONTEXT_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_CREATE_WINDOW_CONTEXT_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_RESTART_CONVERSATION_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_RESTART_CONVERSATION_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_SCOPE_BEAN_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_SCOPE_BEAN_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_START_CONVERSATION_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_START_CONVERSATION_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_UNSCOPE_BEAN_EVENT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.ENABLE_UNSCOPE_BEAN_EVENT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.MAX_WINDOW_CONTEXT_COUNT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.MAX_WINDOW_CONTEXT_COUNT_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.URL_PARAMETER_ENABLED;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.URL_PARAMETER_ENABLED_DEFAULT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.WINDOW_CONTEXT_TIMEOUT;
+import static org.apache.myfaces.extensions.cdi.jsf.api.ConfigParameter.WINDOW_CONTEXT_TIMEOUT_DEFAULT;
 
 /**
  * @author Gerhard Petracek
@@ -80,10 +110,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(ENABLE_SCOPE_BEAN_EVENT, Boolean.class);
     }
 
-    public boolean isBeanAccessEventEnable()
+    public boolean isAccessBeanEventEnable()
     {
         lazyInit();
-        return getAttribute(ENABLE_BEAN_ACCESS_EVENT, Boolean.class);
+        return getAttribute(ENABLE_ACCESS_BEAN_EVENT, Boolean.class);
     }
 
     public boolean isUnscopeBeanEventEnable()
@@ -241,7 +271,7 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
     private void initConversatonEvents(FacesContext facesContext)
     {
         initScopeBeanEvent(facesContext);
-        initBeanAccessEvent(facesContext);
+        initAccessBeanEvent(facesContext);
         initUnscopeBeanEvent(facesContext);
 
         initStartConversationEvent(facesContext);
@@ -293,10 +323,10 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
                 ENABLE_SCOPE_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_SCOPE_BEAN_EVENT_DEFAULT);
     }
 
-    private void initBeanAccessEvent(FacesContext facesContext)
+    private void initAccessBeanEvent(FacesContext facesContext)
     {
         initConfig(facesContext,
-                ENABLE_BEAN_ACCESS_EVENT, new BooleanConfigValueParser(), ENABLE_BEAN_ACCESS_EVENT_DEFAULT);
+                ENABLE_ACCESS_BEAN_EVENT, new BooleanConfigValueParser(), ENABLE_ACCESS_BEAN_EVENT_DEFAULT);
     }
 
     private void initUnscopeBeanEvent(FacesContext facesContext)
