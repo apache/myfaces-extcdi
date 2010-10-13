@@ -38,6 +38,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
@@ -286,7 +287,14 @@ public class ConversationUtils
 
     public static WindowContextIdHolderComponent getWindowContextIdHolderComponent(FacesContext facesContext)
     {
-        List<UIComponent> uiComponents = facesContext.getViewRoot().getChildren();
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot == null)
+        {
+            return null;
+        }
+
+        List<UIComponent> uiComponents = uiViewRoot.getChildren();
         for (UIComponent uiComponent : uiComponents)
         {
             if (uiComponent instanceof WindowContextIdHolderComponent)
@@ -301,7 +309,14 @@ public class ConversationUtils
     public static void addWindowContextIdHolderComponent()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        List<UIComponent> uiComponents = facesContext.getViewRoot().getChildren();
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot == null)
+        {
+            return;
+        }
+
+        List<UIComponent> uiComponents = uiViewRoot.getChildren();
         for (UIComponent uiComponent : uiComponents)
         {
             if (uiComponent instanceof WindowContextIdHolderComponent)
@@ -311,7 +326,7 @@ public class ConversationUtils
             }
         }
 
-        facesContext.getViewRoot().getChildren().add(createComponentWithCurrentWindowContextId());
+        uiViewRoot.getChildren().add(createComponentWithCurrentWindowContextId());
     }
 
     private static WindowContextIdHolderComponent createComponentWithCurrentWindowContextId()

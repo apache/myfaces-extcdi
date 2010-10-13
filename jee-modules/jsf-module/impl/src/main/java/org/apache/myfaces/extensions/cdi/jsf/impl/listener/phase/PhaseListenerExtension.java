@@ -66,32 +66,25 @@ public class PhaseListenerExtension implements Extension
 
     private void addPhaseListener(Class<? extends PhaseListener> newPhaseListener)
     {
-        ClassLoader cl = ClassUtils.getClassLoader(null);
+        ClassLoader classLoader = getClassLoader();
 
-        List<Class<? extends PhaseListener>> plList = phaseListeners.get(cl);
+        List<Class<? extends PhaseListener>> phaseListenerClass = phaseListeners.get(classLoader);
 
-        if (plList == null)
+        if (phaseListenerClass == null)
         {
-            plList = new CopyOnWriteArrayList<Class<? extends PhaseListener>>();
-            phaseListeners.put(cl, plList);
+            phaseListenerClass = new CopyOnWriteArrayList<Class<? extends PhaseListener>>();
+            phaseListeners.put(classLoader, phaseListenerClass);
         }
 
         // just add the Class of the PhaseListener and do not instantiate it now,
         // because there is no FacesContext available at this point and the
         // constructor of the PhaseListener could use it (possible in JSF 2.0)
-        plList.add(newPhaseListener);
-    }
-
-    private static PhaseListener createPhaseListenerInstance(
-            Class<? extends PhaseListener> phaseListenerClass)
-    {
-        return ClassUtils.tryToInstantiateClass(
-                phaseListenerClass, PhaseListener.class);
+        phaseListenerClass.add(newPhaseListener);
     }
 
     public static List<PhaseListener> consumePhaseListeners()
     {
-        ClassLoader classLoader = ClassUtils.getClassLoader(null);
+        ClassLoader classLoader = getClassLoader();
         List<Class<? extends PhaseListener>> foundPhaseListeners = phaseListeners.get(classLoader);
 
         if(foundPhaseListeners != null && ! foundPhaseListeners.isEmpty())
@@ -110,5 +103,15 @@ public class PhaseListenerExtension implements Extension
             return result;
         }
         return Collections.emptyList();
+    }
+
+    private static PhaseListener createPhaseListenerInstance(Class<? extends PhaseListener> phaseListenerClass)
+    {
+        return ClassUtils.tryToInstantiateClass(phaseListenerClass, PhaseListener.class);
+    }
+
+    private static ClassLoader getClassLoader()
+    {
+        return ClassUtils.getClassLoader(null);
     }
 }

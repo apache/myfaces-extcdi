@@ -324,6 +324,7 @@ public class TransactionalInterceptor implements Serializable
 
     private Field findEntityManagerField(Class target)
     {
+        //TODO support other injection types
         Class currentParamClass = target;
         while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
         {
