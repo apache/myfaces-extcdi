@@ -18,23 +18,23 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation.isClassActivated;
 import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.faces.event.PhaseListener;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation.isClassActivated;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
 
 /**
  * The PhaseListenerExtension picks up all {@link JsfPhaseListener} annotated
@@ -45,69 +45,62 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class PhaseListenerExtension implements Extension
 {
-    private static Map<ClassLoader, List<PhaseListener>> phaseListeners = 
-            new ConcurrentHashMap<ClassLoader,List<PhaseListener>>();
+    private static Map<ClassLoader, List<Class<? extends PhaseListener>>> phaseListeners = 
+            new ConcurrentHashMap<ClassLoader,List<Class<? extends PhaseListener>>>();
 
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(JsfPhaseListener.class))
         {
-            if(isClassActivated(processAnnotatedType.getAnnotatedType().getJavaClass()))
+            Class<? extends PhaseListener> phaseListenerClass
+                    = processAnnotatedType.getAnnotatedType().getJavaClass();
+
+            if(isClassActivated(phaseListenerClass))
             {
-                addPhaseListener(processAnnotatedType);
+                addPhaseListener(phaseListenerClass);
             }
 
             processAnnotatedType.veto();
         }
     }
 
-    private void addPhaseListener(ProcessAnnotatedType processAnnotatedType)
-    {
-        PhaseListener newPhaseListener = createPhaseListenerInstance(processAnnotatedType);
-
-        try
-        {
-            JsfUtils.registerPhaseListener(newPhaseListener);
-        }
-        catch (IllegalStateException e)
-        {
-            // current workaround some servers
-            addPhaseListener(newPhaseListener);
-        }
-    }
-
-    private void addPhaseListener(PhaseListener newPhaseListener)
+    private void addPhaseListener(Class<? extends PhaseListener> newPhaseListener)
     {
         ClassLoader cl = ClassUtils.getClassLoader(null);
 
-        List<PhaseListener> plList = phaseListeners.get(cl);
+        List<Class<? extends PhaseListener>> plList = phaseListeners.get(cl);
 
         if (plList == null)
         {
-            plList = new CopyOnWriteArrayList<PhaseListener>();
+            plList = new CopyOnWriteArrayList<Class<? extends PhaseListener>>();
             phaseListeners.put(cl, plList);
         }
+
+        // just add the Class of the PhaseListener and do not instantiate it now,
+        // because there is no FacesContext available at this point and the
+        // constructor of the PhaseListener could use it (possible in JSF 2.0)
         plList.add(newPhaseListener);
     }
 
-    private PhaseListener createPhaseListenerInstance(ProcessAnnotatedType processAnnotatedType)
+    private static PhaseListener createPhaseListenerInstance(
+            Class<? extends PhaseListener> phaseListenerClass)
     {
         return ClassUtils.tryToInstantiateClass(
-                processAnnotatedType.getAnnotatedType().getJavaClass(), PhaseListener.class);
+                phaseListenerClass, PhaseListener.class);
     }
 
-    //current workaround some servers
     public static List<PhaseListener> consumePhaseListeners()
     {
         ClassLoader classLoader = ClassUtils.getClassLoader(null);
-        List<PhaseListener> foundPhaseListeners = phaseListeners.get(classLoader);
+        List<Class<? extends PhaseListener>> foundPhaseListeners = phaseListeners.get(classLoader);
 
         if(foundPhaseListeners != null && ! foundPhaseListeners.isEmpty())
         {
             List<PhaseListener> result = new ArrayList<PhaseListener>(foundPhaseListeners.size());
 
-            for(PhaseListener phaseListener : foundPhaseListeners)
+            for(Class<? extends PhaseListener> phaseListenerClass : foundPhaseListeners)
             {
+                PhaseListener phaseListener = createPhaseListenerInstance(phaseListenerClass);
                 result.add(tryToInjectDependencies(phaseListener));
             }
 
