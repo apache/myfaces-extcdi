@@ -30,10 +30,11 @@
 
         <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>
 
-        <system-event-listener>
+        <!-- currently not activated by default due to issues with specific jsf version -->
+        <!--system-event-listener>
             <system-event-class>javax.faces.event.PostConstructApplicationEvent</system-event-class>
             <system-event-listener-class>org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system.CodiJsf2SystemEventListener</system-event-listener-class>
-        </system-event-listener>
+        </system-event-listener-->
     </application>
 
     <factory>
