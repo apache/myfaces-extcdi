@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jpa.impl;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
@@ -31,11 +32,15 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,6 +53,8 @@ import java.util.logging.Logger;
 @Transactional
 public class TransactionalInterceptor implements Serializable
 {
+    //don't use final in interceptors
+    private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
 
     private @Inject BeanManager bm;
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
@@ -57,6 +64,9 @@ public class TransactionalInterceptor implements Serializable
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> ems =
             new ThreadLocal<HashMap<String, EntityManager>>();
+
+    private static transient Map<ClassLoader, Map<String, String>> entityManagerFields =
+            new ConcurrentHashMap<ClassLoader, Map<String, String>>();
 
     public class AnyLiteral extends AnnotationLiteral<Any> implements Any
     {
@@ -74,24 +84,24 @@ public class TransactionalInterceptor implements Serializable
         {
             t = context.getTarget().getClass().getAnnotation(Transactional.class);
         }
-        
+
         Class q = Default.class;
         if (t != null)
         {
             q = t.qualifier();
         }
-        
+
         Set<Bean<?>> emBeans = bm.getBeans(EntityManager.class, new AnyLiteral());
         if (emBeans == null)
         {
             throw new IllegalArgumentException("cannot find EntityManager");
         }
         Bean<EntityManager> bean = null;
-        
+
         it:
         for (Bean<?> emBean : emBeans)
         {
-            
+
             Set<Annotation> anns = emBean.getQualifiers();
             for (Annotation a : anns)
             {
@@ -102,14 +112,25 @@ public class TransactionalInterceptor implements Serializable
                 }
             }
         }
-        
+
+        EntityManager entityManager;
+
         if (bean == null)
         {
-            throw new IllegalArgumentException("cannot find EntityManager with Qualifier " + q.getName());
-        }
+            entityManager = tryToFindEntityManagerOfTarget(context.getTarget());
 
-        EntityManager entityManager = (EntityManager) bm.getReference(bean, EntityManager.class,
-                                                                      bm.createCreationalContext(bean));
+            //might happen due to special add-ons - don't change it!
+            if(entityManager == null)
+            {
+                //TODO log warning in project stage dev.
+                return context.proceed();
+            }
+        }
+        else
+        {
+            entityManager = (EntityManager) bm.getReference(bean, EntityManager.class,
+                    bm.createCreationalContext(bean));
+        }
 
         if (ems.get() == null)
         {
@@ -122,7 +143,7 @@ public class TransactionalInterceptor implements Serializable
         {
             refCount.set(new AtomicInteger(0));
         }
-         
+
         EntityTransaction transaction = entityManager.getTransaction();
 
         // used to store any exception we get from the services
@@ -135,9 +156,9 @@ public class TransactionalInterceptor implements Serializable
                 transaction.begin();
             }
             refCount.get().incrementAndGet();
-            
+
             return context.proceed();
-            
+
         }
         catch(Exception e)
         {
@@ -235,4 +256,92 @@ public class TransactionalInterceptor implements Serializable
 
     }
 
+    /*
+     * needed for special add-ons - don't change it!
+     */
+    private EntityManager tryToFindEntityManagerOfTarget(Object target)
+    {
+        Map<String, String> mapping = entityManagerFields.get(getClassLoader());
+
+        mapping = initMapping(mapping);
+
+        String key = target.getClass().getName();
+        String targetFieldName = mapping.get(key);
+
+        if(noFieldMarker.equals(targetFieldName))
+        {
+            return null;
+        }
+
+        Field entityManagerField = null;
+        if(targetFieldName == null)
+        {
+            entityManagerField = findEntityManagerField(target.getClass());
+
+            if(entityManagerField == null)
+            {
+                mapping.put(key, noFieldMarker);
+                return null;
+            }
+
+            mapping.put(key, entityManagerField.getName());
+        }
+
+        if(entityManagerField == null)
+        {
+            try
+            {
+                entityManagerField = target.getClass().getDeclaredField(targetFieldName);
+            }
+            catch (NoSuchFieldException e)
+            {
+                //TODO add logging in case of project stage dev.
+                return null;
+            }
+        }
+
+        entityManagerField.setAccessible(true);
+        try
+        {
+            return (EntityManager)entityManagerField.get(target);
+        }
+        catch (IllegalAccessException e)
+        {
+            //TODO add logging in case of project stage dev.
+            return null;
+        }
+    }
+
+    private synchronized Map<String, String> initMapping(Map<String, String> mapping)
+    {
+        if(mapping == null)
+        {
+            mapping = new ConcurrentHashMap<String, String>();
+            entityManagerFields.put(getClassLoader(), mapping);
+        }
+        return mapping;
+    }
+
+    private Field findEntityManagerField(Class target)
+    {
+        Class currentParamClass = target;
+        while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
+        {
+            for(Field currentField : target.getDeclaredFields())
+            {
+                if(currentField.isAnnotationPresent(PersistenceContext.class))
+                {
+                    return currentField;
+                }
+            }
+            currentParamClass = currentParamClass.getSuperclass();
+        }
+
+        return null;
+    }
+
+    private ClassLoader getClassLoader()
+    {
+        return ClassUtils.getClassLoader(null);
+    }
 }
