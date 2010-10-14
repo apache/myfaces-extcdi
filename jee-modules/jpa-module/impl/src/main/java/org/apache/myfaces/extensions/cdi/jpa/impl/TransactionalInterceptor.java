@@ -33,6 +33,7 @@ import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -53,6 +54,8 @@ import java.util.logging.Logger;
 @Transactional
 public class TransactionalInterceptor implements Serializable
 {
+    private static final long serialVersionUID = -812054233068559930L;
+
     //don't use final in interceptors
     private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
 
@@ -65,8 +68,8 @@ public class TransactionalInterceptor implements Serializable
     private static transient ThreadLocal<HashMap<String, EntityManager>> ems =
             new ThreadLocal<HashMap<String, EntityManager>>();
 
-    private static transient Map<ClassLoader, Map<String, String>> entityManagerFields =
-            new ConcurrentHashMap<ClassLoader, Map<String, String>>();
+    private static transient Map<ClassLoader, Map<String, PersistenceContextMetaEntry>> entityManagerFields =
+            new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     public class AnyLiteral extends AnnotationLiteral<Any> implements Any
     {
@@ -113,11 +116,13 @@ public class TransactionalInterceptor implements Serializable
             }
         }
 
+        EntityManagerEntry entityManagerEntry = null;
         EntityManager entityManager;
 
         if (bean == null)
         {
-            entityManager = tryToFindEntityManagerOfTarget(context.getTarget());
+            entityManagerEntry = tryToFindEntityManagerEntryInTarget(context.getTarget());
+            entityManager = entityManagerEntry.getEntityManager();
 
             //might happen due to special add-ons - don't change it!
             if(entityManager == null)
@@ -144,166 +149,175 @@ public class TransactionalInterceptor implements Serializable
             refCount.set(new AtomicInteger(0));
         }
 
-        EntityTransaction transaction = entityManager.getTransaction();
-
-        // used to store any exception we get from the services
-        Exception firstException = null;
-
-        try
+        synchronized (entityManager)
         {
-            if(!transaction.isActive())
+            EntityTransaction transaction = entityManager.getTransaction();
+
+            // used to store any exception we get from the services
+            Exception firstException = null;
+
+            try
             {
-                transaction.begin();
-            }
-            refCount.get().incrementAndGet();
-
-            return context.proceed();
-
-        }
-        catch(Exception e)
-        {
-            firstException = e;
-
-            // we only cleanup and rollback all open transactions in the outermost interceptor!
-            // this way, we allow inner functions to catch and handle exceptions properly.
-            if (refCount.get().intValue() == 1)
-            {
-                for (EntityManager em: ems.get().values())
+                if(!transaction.isActive())
                 {
-                    transaction = em.getTransaction();
-                    if (transaction != null && transaction.isActive())
-                    {
-                        try
-                        {
-                            transaction.rollback();
-                        }
-                        catch (Exception eRollback)
-                        {
-                            logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
-                                       "rolling back other SQL transactions", eRollback);
-                        }
+                    transaction.begin();
+                }
+                refCount.get().incrementAndGet();
 
+                return context.proceed();
+
+            }
+            catch(Exception e)
+            {
+                firstException = e;
+
+                // we only cleanup and rollback all open transactions in the outermost interceptor!
+                // this way, we allow inner functions to catch and handle exceptions properly.
+                if (refCount.get().intValue() == 1)
+                {
+                    for (EntityManager em: ems.get().values())
+                    {
+                        transaction = em.getTransaction();
+                        if (transaction != null && transaction.isActive())
+                        {
+                            try
+                            {
+                                transaction.rollback();
+                            }
+                            catch (Exception eRollback)
+                            {
+                                logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
+                                        "rolling back other SQL transactions", eRollback);
+                            }
+
+                        }
                     }
+
+                    refCount.remove();
+
+                    // drop all EntityManagers from the ThreadLocal
+                    ems.remove();
                 }
 
-                refCount.remove();
+                // rethrow the exception
+                throw e;
 
-                // drop all EntityManagers from the ThreadLocal
-                ems.remove();
             }
-
-            // rethrow the exception
-            throw e;
-
-        }
-        finally
-        {
-            if (refCount.get() != null)
+            finally
             {
-                refCount.get().decrementAndGet();
-
-
-                // will get set if we got an Exception while committing
-                // in this case, we rollback all later transactions too.
-                boolean commitFailed = false;
-
-                // commit all open transactions in the outermost interceptor!
-                // this is a 'JTA for poor men' only, and will not guaranty
-                // commit stability over various databases!
-                if (refCount.get().intValue() == 0)
+                if (refCount.get() != null)
                 {
+                    refCount.get().decrementAndGet();
 
-                    // only commit all transactions if we didn't rollback
-                    // them already
-                    if (firstException == null)
+
+                    // will get set if we got an Exception while committing
+                    // in this case, we rollback all later transactions too.
+                    boolean commitFailed = false;
+
+                    // commit all open transactions in the outermost interceptor!
+                    // this is a 'JTA for poor men' only, and will not guaranty
+                    // commit stability over various databases!
+                    if (refCount.get().intValue() == 0)
                     {
-                        for (EntityManager em: ems.get().values())
+
+                        // only commit all transactions if we didn't rollback
+                        // them already
+                        if (firstException == null)
                         {
-                            transaction = em.getTransaction();
-                            if(transaction != null && transaction.isActive())
+                            for (EntityManager em: ems.get().values())
                             {
-                                try
+                                transaction = em.getTransaction();
+                                if(transaction != null && transaction.isActive())
                                 {
-                                    if (!commitFailed)
+                                    try
                                     {
-                                        transaction.commit();
+                                        if (!commitFailed)
+                                        {
+                                            transaction.commit();
+                                        }
+                                        else
+                                        {
+                                            transaction.rollback();
+                                        }
                                     }
-                                    else
+                                    catch (Exception e)
                                     {
-                                        transaction.rollback();
+                                        firstException = e;
+                                        commitFailed = true;
                                     }
-                                }
-                                catch (Exception e)
-                                {
-                                    firstException = e;
-                                    commitFailed = true;
                                 }
                             }
                         }
-                    }
 
-                    // finally remove all ThreadLocals
-                    refCount.remove();
-                    ems.remove();
-                    if (commitFailed)
-                    {
-                        throw firstException;
+                        // finally remove all ThreadLocals
+                        refCount.remove();
+                        ems.remove();
+                        if (commitFailed)
+                        {
+                            throw firstException;
+                        }
+                        else
+                        {
+                            //commit was successful and entity manager of bean was used
+                            //(and not an entity manager of a producer) which isn't of type extended
+                            if(entityManagerEntry != null && entityManager != null && entityManager.isOpen() &&
+                                    !entityManagerEntry.getPersistenceContextEntry().isExtended())
+                            {
+                                entityManager.clear();
+                            }
+                        }
                     }
                 }
-
             }
         }
-
     }
 
     /*
      * needed for special add-ons - don't change it!
      */
-    private EntityManager tryToFindEntityManagerOfTarget(Object target)
+    private EntityManagerEntry tryToFindEntityManagerEntryInTarget(Object target)
     {
-        Map<String, String> mapping = entityManagerFields.get(getClassLoader());
+        Map<String, PersistenceContextMetaEntry> mapping = entityManagerFields.get(getClassLoader());
 
         mapping = initMapping(mapping);
 
         String key = target.getClass().getName();
-        String targetFieldName = mapping.get(key);
+        PersistenceContextMetaEntry persistenceContextEntry = mapping.get(key);
 
-        if(noFieldMarker.equals(targetFieldName))
+        if( persistenceContextEntry != null && noFieldMarker.equals(persistenceContextEntry.getFieldName()))
         {
             return null;
         }
 
-        Field entityManagerField = null;
-        if(targetFieldName == null)
+        if(persistenceContextEntry == null)
         {
-            entityManagerField = findEntityManagerField(target.getClass());
+            persistenceContextEntry = findPersistenceContextEntry(target.getClass());
 
-            if(entityManagerField == null)
+            if(persistenceContextEntry == null)
             {
-                mapping.put(key, noFieldMarker);
+                mapping.put(key, new PersistenceContextMetaEntry(noFieldMarker, false));
                 return null;
             }
 
-            mapping.put(key, entityManagerField.getName());
+            mapping.put(key, persistenceContextEntry);
         }
 
-        if(entityManagerField == null)
+        Field entityManagerField;
+        try
         {
-            try
-            {
-                entityManagerField = target.getClass().getDeclaredField(targetFieldName);
-            }
-            catch (NoSuchFieldException e)
-            {
-                //TODO add logging in case of project stage dev.
-                return null;
-            }
+            entityManagerField = target.getClass().getDeclaredField(persistenceContextEntry.getFieldName());
+        }
+        catch (NoSuchFieldException e)
+        {
+            //TODO add logging in case of project stage dev.
+            return null;
         }
 
         entityManagerField.setAccessible(true);
         try
         {
-            return (EntityManager)entityManagerField.get(target);
+            EntityManager entityManager = (EntityManager)entityManagerField.get(target);
+            return new EntityManagerEntry(entityManager, persistenceContextEntry);
         }
         catch (IllegalAccessException e)
         {
@@ -312,27 +326,31 @@ public class TransactionalInterceptor implements Serializable
         }
     }
 
-    private synchronized Map<String, String> initMapping(Map<String, String> mapping)
+    private synchronized Map<String, PersistenceContextMetaEntry> initMapping(
+            Map<String, PersistenceContextMetaEntry> mapping)
     {
         if(mapping == null)
         {
-            mapping = new ConcurrentHashMap<String, String>();
+            mapping = new ConcurrentHashMap<String, PersistenceContextMetaEntry>();
             entityManagerFields.put(getClassLoader(), mapping);
         }
         return mapping;
     }
 
-    private Field findEntityManagerField(Class target)
+    private PersistenceContextMetaEntry findPersistenceContextEntry(Class target)
     {
         //TODO support other injection types
         Class currentParamClass = target;
+        PersistenceContext persistenceContext;
         while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
         {
             for(Field currentField : target.getDeclaredFields())
             {
-                if(currentField.isAnnotationPresent(PersistenceContext.class))
+                persistenceContext = currentField.getAnnotation(PersistenceContext.class);
+                if(persistenceContext != null)
                 {
-                    return currentField;
+                    return new PersistenceContextMetaEntry(
+                            currentField.getName(), PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
                 }
             }
             currentParamClass = currentParamClass.getSuperclass();
