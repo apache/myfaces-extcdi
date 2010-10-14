@@ -223,6 +223,12 @@
                                <configuration>
                                    <skip>false</skip>
 
+                                   <!--
+                                       fork for every test to circumvent OutOfMemoryError: PermGen space
+                                       (which occurs if there is too much classloading)
+                                    -->
+                                   <forkMode>always</forkMode>
+
                                    <testNGArtifactName>none:none</testNGArtifactName>
                                    <classpathDependencyExcludes>
                                        <classpathDependencyExclude>org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl</classpathDependencyExclude>
