@@ -28,6 +28,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
+import java.util.HashMap;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
@@ -38,6 +39,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 {
     private final NavigationHandler wrapped;
     private final boolean deactivated;
+    private Map<String, Set<NavigationCase>> navigationCases;
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
@@ -72,6 +74,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         {
             return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCase(context, action, outcome);
         }
+        //TODO add support for implicit navigation in combination with view-config based typesafe navigation
         return null;
     }
 
@@ -81,7 +84,13 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         {
             return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCases();
         }
-        return null;
+
+        //workaround for mojarra
+        if(this.navigationCases == null)
+        {
+            this.navigationCases = new HashMap<String, Set<NavigationCase>>();
+        }
+        return this.navigationCases;
     }
 
     public boolean isActivated()
