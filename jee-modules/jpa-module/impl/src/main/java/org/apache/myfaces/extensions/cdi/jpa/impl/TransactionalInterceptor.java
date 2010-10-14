@@ -320,7 +320,7 @@ public class TransactionalInterceptor implements Serializable
 
             if(persistenceContextEntry == null)
             {
-                mapping.put(key, new PersistenceContextMetaEntry(noFieldMarker, false));
+                mapping.put(key, new PersistenceContextMetaEntry(Object.class, noFieldMarker, false));
                 return null;
             }
 
@@ -330,7 +330,8 @@ public class TransactionalInterceptor implements Serializable
         Field entityManagerField;
         try
         {
-            entityManagerField = target.getClass().getDeclaredField(persistenceContextEntry.getFieldName());
+            entityManagerField = persistenceContextEntry.getSourceClass()
+                    .getDeclaredField(persistenceContextEntry.getFieldName());
         }
         catch (NoSuchFieldException e)
         {
@@ -369,13 +370,15 @@ public class TransactionalInterceptor implements Serializable
         PersistenceContext persistenceContext;
         while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
         {
-            for(Field currentField : target.getDeclaredFields())
+            for(Field currentField : currentParamClass.getDeclaredFields())
             {
                 persistenceContext = currentField.getAnnotation(PersistenceContext.class);
                 if(persistenceContext != null)
                 {
                     return new PersistenceContextMetaEntry(
-                            currentField.getName(), PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
+                            currentParamClass,
+                            currentField.getName(),
+                            PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
                 }
             }
             currentParamClass = currentParamClass.getSuperclass();

@@ -23,22 +23,30 @@ package org.apache.myfaces.extensions.cdi.jpa.impl;
  */
 class PersistenceContextMetaEntry
 {
+    private Class sourceClass;
+
     private String fieldName;
 
     private boolean extended;
 
-    PersistenceContextMetaEntry(String fieldName, boolean extended)
+    PersistenceContextMetaEntry(Class sourceClass, String fieldName, boolean extended)
     {
+        this.sourceClass = sourceClass;
         this.fieldName = fieldName;
         this.extended = extended;
     }
 
-    String getFieldName()
+    public Class getSourceClass()
+    {
+        return sourceClass;
+    }
+
+    public String getFieldName()
     {
         return fieldName;
     }
 
-    boolean isExtended()
+    public boolean isExtended()
     {
         return extended;
     }
