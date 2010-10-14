@@ -149,122 +149,147 @@ public class TransactionalInterceptor implements Serializable
             refCount.set(new AtomicInteger(0));
         }
 
-        synchronized (entityManager)
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        // used to store any exception we get from the services
+        Exception firstException = null;
+
+        if(entityManagerEntry != null)
         {
-            EntityTransaction transaction = entityManager.getTransaction();
-
-            // used to store any exception we get from the services
-            Exception firstException = null;
-
-            try
+            //only in case of add-ons synchronize
+            //-> nested calls (across beans) which share the same entity manager aren't supported
+            synchronized (entityManager)
             {
-                if(!transaction.isActive())
-                {
-                    transaction.begin();
-                }
-                refCount.get().incrementAndGet();
-
-                return context.proceed();
-
+                return proceedMethodInTransaction(context,
+                                                  entityManagerEntry,
+                                                  entityManager,
+                                                  transaction,
+                                                  firstException);
             }
-            catch(Exception e)
+        }
+        //we don't have a shared entity manager
+        return proceedMethodInTransaction(context,
+                                          entityManagerEntry,
+                                          entityManager,
+                                          transaction,
+                                          firstException);
+    }
+
+    private Object proceedMethodInTransaction(InvocationContext context,
+                                              EntityManagerEntry entityManagerEntry,
+                                              EntityManager entityManager,
+                                              EntityTransaction transaction,
+                                              Exception firstException)
+            throws Exception
+    {
+        try
+        {
+            if(!transaction.isActive())
             {
-                firstException = e;
+                transaction.begin();
+            }
+            refCount.get().incrementAndGet();
 
-                // we only cleanup and rollback all open transactions in the outermost interceptor!
-                // this way, we allow inner functions to catch and handle exceptions properly.
-                if (refCount.get().intValue() == 1)
+            return context.proceed();
+
+        }
+        catch(Exception e)
+        {
+            firstException = e;
+
+            // we only cleanup and rollback all open transactions in the outermost interceptor!
+            // this way, we allow inner functions to catch and handle exceptions properly.
+            if (refCount.get().intValue() == 1)
+            {
+                for (EntityManager em: ems.get().values())
                 {
-                    for (EntityManager em: ems.get().values())
+                    transaction = em.getTransaction();
+                    if (transaction != null && transaction.isActive())
                     {
-                        transaction = em.getTransaction();
-                        if (transaction != null && transaction.isActive())
+                        try
                         {
-                            try
-                            {
-                                transaction.rollback();
-                            }
-                            catch (Exception eRollback)
-                            {
-                                logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
-                                        "rolling back other SQL transactions", eRollback);
-                            }
-
+                            transaction.rollback();
                         }
+                        catch (Exception eRollback)
+                        {
+                            logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
+                                    "rolling back other SQL transactions", eRollback);
+                        }
+
                     }
-
-                    refCount.remove();
-
-                    // drop all EntityManagers from the ThreadLocal
-                    ems.remove();
                 }
 
-                // rethrow the exception
-                throw e;
+                refCount.remove();
 
+                // drop all EntityManagers from the ThreadLocal
+                ems.remove();
             }
-            finally
+
+            // rethrow the exception
+            throw e;
+
+        }
+        finally
+        {
+            if (refCount.get() != null)
             {
-                if (refCount.get() != null)
+                refCount.get().decrementAndGet();
+
+
+                // will get set if we got an Exception while committing
+                // in this case, we rollback all later transactions too.
+                boolean commitFailed = false;
+
+                // commit all open transactions in the outermost interceptor!
+                // this is a 'JTA for poor men' only, and will not guaranty
+                // commit stability over various databases!
+                if (refCount.get().intValue() == 0)
                 {
-                    refCount.get().decrementAndGet();
 
-
-                    // will get set if we got an Exception while committing
-                    // in this case, we rollback all later transactions too.
-                    boolean commitFailed = false;
-
-                    // commit all open transactions in the outermost interceptor!
-                    // this is a 'JTA for poor men' only, and will not guaranty
-                    // commit stability over various databases!
-                    if (refCount.get().intValue() == 0)
+                    // only commit all transactions if we didn't rollback
+                    // them already
+                    if (firstException == null)
                     {
-
-                        // only commit all transactions if we didn't rollback
-                        // them already
-                        if (firstException == null)
+                        for (EntityManager em: ems.get().values())
                         {
-                            for (EntityManager em: ems.get().values())
+                            transaction = em.getTransaction();
+                            if(transaction != null && transaction.isActive())
                             {
-                                transaction = em.getTransaction();
-                                if(transaction != null && transaction.isActive())
+                                try
                                 {
-                                    try
+                                    if (!commitFailed)
                                     {
-                                        if (!commitFailed)
-                                        {
-                                            transaction.commit();
-                                        }
-                                        else
-                                        {
-                                            transaction.rollback();
-                                        }
+                                        transaction.commit();
                                     }
-                                    catch (Exception e)
+                                    else
                                     {
-                                        firstException = e;
-                                        commitFailed = true;
+                                        transaction.rollback();
                                     }
+                                }
+                                catch (Exception e)
+                                {
+                                    firstException = e;
+                                    commitFailed = true;
                                 }
                             }
                         }
+                    }
 
-                        // finally remove all ThreadLocals
-                        refCount.remove();
-                        ems.remove();
-                        if (commitFailed)
+                    // finally remove all ThreadLocals
+                    refCount.remove();
+                    ems.remove();
+                    if (commitFailed)
+                    {
+                        throw firstException;
+                    }
+                    else
+                    {
+                        //commit was successful and entity manager of bean was used
+                        //(and not an entity manager of a producer) which isn't of type extended
+                        if(entityManagerEntry != null && entityManager != null && entityManager.isOpen() &&
+                                !entityManagerEntry.getPersistenceContextEntry().isExtended())
                         {
-                            throw firstException;
-                        }
-                        else
-                        {
-                            //commit was successful and entity manager of bean was used
-                            //(and not an entity manager of a producer) which isn't of type extended
-                            if(entityManagerEntry != null && entityManager != null && entityManager.isOpen() &&
-                                    !entityManagerEntry.getPersistenceContextEntry().isExtended())
-                            {
-                                entityManager.clear();
-                            }
+                            entityManager.clear();
                         }
                     }
                 }
