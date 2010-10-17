@@ -27,26 +27,33 @@ class PersistenceContextMetaEntry
 
     private String fieldName;
 
+    private String unitName;
     private boolean extended;
 
-    PersistenceContextMetaEntry(Class sourceClass, String fieldName, boolean extended)
+    PersistenceContextMetaEntry(Class sourceClass, String fieldName, String unitName, boolean extended)
     {
         this.sourceClass = sourceClass;
         this.fieldName = fieldName;
+        this.unitName = unitName;
         this.extended = extended;
     }
 
-    public Class getSourceClass()
+    Class getSourceClass()
     {
         return sourceClass;
     }
 
-    public String getFieldName()
+    String getFieldName()
     {
         return fieldName;
     }
 
-    public boolean isExtended()
+    String getUnitName()
+    {
+        return unitName;
+    }
+
+    boolean isExtended()
     {
         return extended;
     }

@@ -119,10 +119,12 @@ public class TransactionalInterceptor implements Serializable
         EntityManagerEntry entityManagerEntry = null;
         EntityManager entityManager;
 
+        String entityManagerId = q.getName();
         if (bean == null)
         {
             entityManagerEntry = tryToFindEntityManagerEntryInTarget(context.getTarget());
             entityManager = entityManagerEntry.getEntityManager();
+            entityManagerId = entityManagerEntry.getPersistenceContextEntry().getUnitName();
 
             //might happen due to special add-ons - don't change it!
             if(entityManager == null)
@@ -141,7 +143,7 @@ public class TransactionalInterceptor implements Serializable
         {
             ems.set(new HashMap<String, EntityManager>());
         }
-        ems.get().put(q.getName(), entityManager);
+        ems.get().put(entityManagerId, entityManager);
         // log.info("growing: " + ems.get().size());
 
         if (refCount.get() == null)
@@ -320,7 +322,8 @@ public class TransactionalInterceptor implements Serializable
 
             if(persistenceContextEntry == null)
             {
-                mapping.put(key, new PersistenceContextMetaEntry(Object.class, noFieldMarker, false));
+                mapping.put(key, new PersistenceContextMetaEntry(
+                        Object.class, noFieldMarker, Default.class.getName(), false));
                 return null;
             }
 
@@ -378,6 +381,7 @@ public class TransactionalInterceptor implements Serializable
                     return new PersistenceContextMetaEntry(
                             currentParamClass,
                             currentField.getName(),
+                            persistenceContext.unitName(),
                             PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
                 }
             }
