@@ -259,27 +259,24 @@ public class CodiUtils
      */
     public static boolean isQualifierEqual(Annotation qualifier1, Annotation qualifier2)
     {
-        Class<? extends Annotation> qualifier1AnnotationType
-                = qualifier1.annotationType();
+        Class<? extends Annotation> qualifier1AnnotationType = qualifier1.annotationType();
 
         // check if the annotationTypes are equal
-        if (qualifier1AnnotationType == null
-                || !qualifier1AnnotationType.equals(qualifier2.annotationType()))
+        if (qualifier1AnnotationType == null || !qualifier1AnnotationType.equals(qualifier2.annotationType()))
         {
             return false;
         }
 
         // check the values of all qualifier-methods
         // except those annotated with @Nonbinding
-        List<Method> bindingQualifierMethods 
-                = _getBindingQualifierMethods(qualifier1AnnotationType);
+        List<Method> bindingQualifierMethods = getBindingQualifierMethods(qualifier1AnnotationType);
 
         for (Method method : bindingQualifierMethods)
         {
-            Object value1 = _callMethod(qualifier1, method);
-            Object value2 = _callMethod(qualifier2, method);
+            Object value1 = callMethod(qualifier1, method);
+            Object value2 = callMethod(qualifier2, method);
 
-            if (!_checkEquality(value1, value2))
+            if (!checkEquality(value1, value2))
             {
                 return false;
             }
@@ -295,10 +292,9 @@ public class CodiUtils
      * @param value2
      * @return
      */
-    private static boolean _checkEquality(Object value1, Object value2)
+    private static boolean checkEquality(Object value1, Object value2)
     {
-        if ((value1 == null && value2 != null)
-                || (value1 != null && value2 == null))
+        if ((value1 == null && value2 != null) || (value1 != null && value2 == null))
         {
             return false;
         }
@@ -381,7 +377,7 @@ public class CodiUtils
      * @param method
      * @return
      */
-    private static Object _callMethod(Object instance, Method method)
+    private static Object callMethod(Object instance, Method method)
     {
         boolean accessible = method.isAccessible();
 
@@ -412,8 +408,7 @@ public class CodiUtils
      * @param qualifierAnnotationType
      * @return
      */
-    private static List<Method> _getBindingQualifierMethods(
-            Class<? extends Annotation> qualifierAnnotationType)
+    private static List<Method> getBindingQualifierMethods(Class<? extends Annotation> qualifierAnnotationType)
     {
         Method[] qualifierMethods = qualifierAnnotationType.getDeclaredMethods();
         if (qualifierMethods.length > 0)
@@ -422,8 +417,7 @@ public class CodiUtils
 
             for (Method qualifierMethod : qualifierMethods)
             {
-                Annotation[] qualifierMethodAnnotations
-                        = qualifierMethod.getDeclaredAnnotations();
+                Annotation[] qualifierMethodAnnotations = qualifierMethod.getDeclaredAnnotations();
 
                 if (qualifierMethodAnnotations.length > 0)
                 {
@@ -432,8 +426,7 @@ public class CodiUtils
 
                     for (Annotation qualifierMethodAnnotation : qualifierMethodAnnotations)
                     {
-                        if (Nonbinding.class.equals(
-                                qualifierMethodAnnotation.annotationType()))
+                        if (Nonbinding.class.equals(qualifierMethodAnnotation.annotationType()))
                         {
                             nonbinding = true;
                             break;
@@ -459,5 +452,4 @@ public class CodiUtils
         // annotation has no methods
         return Collections.emptyList();
     }
-    
 }
