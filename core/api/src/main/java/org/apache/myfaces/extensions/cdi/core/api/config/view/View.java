@@ -28,6 +28,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
+ * Allows to restrict e.g. phase-listener methods to specific views.
+ * Use an existing view-config OR ManualView.class + the view-id string/s.
+ *
  * @author Gerhard Petracek
  */
 

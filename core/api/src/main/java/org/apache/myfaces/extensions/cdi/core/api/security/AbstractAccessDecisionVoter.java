@@ -18,11 +18,47 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
+import javax.interceptor.InvocationContext;
+import java.util.Set;
+import java.util.HashSet;
+
 /**
+ * Base implementation which provides helper methods.
+ *
  * @author Gerhard Petracek
  */
 public abstract class AbstractAccessDecisionVoter implements AccessDecisionVoter
 {
+    /**
+     * It should be final - but proxy-libs won't support it.
+     *
+     * {@inheritDoc}
+     */
+    public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
+    {
+        Set<SecurityViolation> result = new HashSet<SecurityViolation>();
+
+        checkPermission(invocationContext, result);
+
+        return result;
+    }
+
+    /**
+     * Allows an easier implementation in combination with {@link #newSecurityViolation(String)}.
+     *
+     * @param invocationContext current invocationContext
+     * @param violations set for adding violations
+     */
+    protected abstract void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations);
+
+    /**
+     * Creates an instance of {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation} for a given
+     * string which will be used as reason to describe the violation.
+     * 
+     * @param reason description of the violation
+     * @return A new instance of {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation}
+     * which provides details about the found restriction.
+     */
     protected SecurityViolation newSecurityViolation(final String reason)
     {
         return new SecurityViolation()

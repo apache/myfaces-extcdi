@@ -21,9 +21,16 @@ package org.apache.myfaces.extensions.cdi.core.api;
 import java.util.Set;
 
 /**
+ * Interface for an implementation which provides classes of default implementations which should be deactivated.
+ *
  * @author Gerhard Petracek
  */
 public interface ClassDeactivator
 {
+    /**
+     * Provides classes which should be deactivated.
+     *
+     * @return classes which should be deactivated
+     */
     public Set<Class> getDeactivatedClasses();
 }

@@ -29,8 +29,9 @@ import java.util.Set;
  */
 class TestAccessDecisionVoter2 implements AccessDecisionVoter
 {
-    public void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations)
+    public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
     {
         //do nothing
+        return null;
     }
 }

@@ -21,11 +21,23 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 import java.io.Serializable;
 
 /**
+ * TODO check if we should implement CodiConfig
+ *
  * @author Gerhard Petracek
  */
 public interface ConversationConfig extends Serializable
 {
+    /**
+     * Timeout for {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} beans,
+     * which will be used if the conversation doesn't get closed manually.
+     * 
+     * @return timeout in minutes
+     */
     int getConversationTimeoutInMinutes();
+
+    /*
+     * event config
+     */
 
     boolean isScopeBeanEventEnable();
 

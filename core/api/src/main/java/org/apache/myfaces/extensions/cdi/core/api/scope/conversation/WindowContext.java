@@ -25,6 +25,8 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
+ * Interface for handling the current window context as well as the conversations of the current window.
+ *
  * @author Gerhard Petracek
  */
 public interface WindowContext extends AttributeAware, Serializable

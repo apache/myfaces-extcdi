@@ -22,9 +22,21 @@ import javax.interceptor.InvocationContext;
 import java.util.Set;
 
 /**
+ * Interface for implementing concrete voters.
+ * A voter has to add an instance of
+ * {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation} to the given result-set,
+ * if a restriction is detected.
+ * 
  * @author Gerhard Petracek
  */
 public interface AccessDecisionVoter
 {
-    void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations);
+    /**
+     * Checks the permission for the given {@link javax.interceptor.InvocationContext}.
+     * If a violation is detected, it should be added to a set which gets returned by the method.
+     *
+     * @param invocationContext current invocationContext
+     * @return a set which contains violations which have been detected
+     */
+    Set<SecurityViolation> checkPermission(InvocationContext invocationContext);
 }

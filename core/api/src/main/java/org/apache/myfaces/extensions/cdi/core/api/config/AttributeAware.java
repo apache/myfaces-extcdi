@@ -21,6 +21,10 @@ package org.apache.myfaces.extensions.cdi.core.api.config;
 import java.io.Serializable;
 
 /**
+ * This interface is just for internal use.
+ * It should ensure that refactorings don't lead to different method-names for the same purpose.
+ * Furthermore, it allows to easily find all artifacts which allow generic attributes.
+ *
  * @author Gerhard Petracek
  */
 public interface AttributeAware extends Serializable

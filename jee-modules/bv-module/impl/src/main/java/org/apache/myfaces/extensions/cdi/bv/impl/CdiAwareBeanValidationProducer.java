@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.BeanValidation;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 

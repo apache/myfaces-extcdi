@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
- * Marker interface
+ * Interface which marks all interfaces which provide bean-names. 
  *
  * @author Gerhard Petracek
  */

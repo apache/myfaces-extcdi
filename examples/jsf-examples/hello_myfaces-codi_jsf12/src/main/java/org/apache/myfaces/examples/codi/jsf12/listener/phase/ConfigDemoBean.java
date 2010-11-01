@@ -20,7 +20,8 @@ package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.CodiWebConfig12;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Typed;
@@ -30,7 +31,7 @@ import java.util.Set;
 //just an internal demo
 @Model
 @Typed(ConfigDemoBean.class)
-public class ConfigDemoBean extends CodiWebConfig12
+public class ConfigDemoBean extends DefaultWindowContextConfig
 {
     private static final long serialVersionUID = -6915243682321970384L;
 
@@ -50,14 +51,15 @@ public class ConfigDemoBean extends CodiWebConfig12
         this.codiConfig = codiConfig;
         this.configResolver = configResolver;
 
-        if(this.codiConfig.isEmpty() || this.configResolver.resolve(CodiWebConfig12.class) == null)
+        if(this.codiConfig.isEmpty() || this.configResolver.resolve(JsfAwareWindowContextConfig.class) == null)
         {
             throw new IllegalStateException("invalid config");
         }
     }
 
-    public boolean isTransactionTokenEnabled()
+    @Override
+    public boolean isInitialRedirectDisable()
     {
-        return this.configResolver.resolve(CodiWebConfig12.class).isTransactionTokenEnabled();
+        return this.configResolver.resolve(JsfAwareWindowContextConfig.class).isInitialRedirectDisable();
     }
 }

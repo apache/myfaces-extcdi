@@ -56,7 +56,7 @@ public class FacesDemoBean
     @PostConstruct
     public void triggerInternalDemos()
     {
-        this.configDemoBean.isTransactionTokenEnabled();
+        this.configDemoBean.isInitialRedirectDisable();
     }
 
     //no restriction via @View -> invoked before rendering any view

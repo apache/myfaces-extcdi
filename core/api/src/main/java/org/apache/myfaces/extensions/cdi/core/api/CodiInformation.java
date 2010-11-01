@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 /**
+ * Allows to get the version of the active CODI-Core.
+ *
  * @author Gerhard Petracek
  */
 public interface CodiInformation

@@ -19,9 +19,17 @@
 package org.apache.myfaces.extensions.cdi.core.api.resolver;
 
 /**
+ * Generic resolver to decouple different modules.
+ *
  * @author Gerhard Petracek
  */
 public interface GenericResolver<T>
 {
+    /**
+     * Provides the artifact specified by a qualifier.
+     * The artifact might be produced by a different module.
+     *
+     * @return the artifact for the specified qualifier.
+     */
     T resolve();
 }

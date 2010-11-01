@@ -19,8 +19,10 @@
 package org.apache.myfaces.extensions.cdi.core.api.config;
 
 /**
+ * Marker interface for all type-safe framework configs.
+ * 
  * @author Gerhard Petracek
  */
-public interface CodiConfig extends AttributeAware
+public interface CodiConfig
 {
 }

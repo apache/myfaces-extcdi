@@ -22,12 +22,17 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
+ * Base implementation which allows an easier class-deactivator implementation
+ *
  * @author Gerhard Petracek
  */
 public abstract class AbstractClassDeactivator implements ClassDeactivator
 {
     private Set<Class> deactivatedClasses;
 
+    /**
+     * {@inheritDoc}
+     */
     public final Set<Class> getDeactivatedClasses()
     {
         if(this.deactivatedClasses == null)
@@ -38,10 +43,19 @@ public abstract class AbstractClassDeactivator implements ClassDeactivator
         return this.deactivatedClasses;
     }
 
+    /**
+     * Can be used by sub-classes to add deactivated classes easily.
+     *
+     * @param deactivatedClass class to deactivate
+     */
     protected final void addDeactivatedClass(Class deactivatedClass)
     {
         this.deactivatedClasses.add(deactivatedClass);
     }
 
+    /**
+     * An implementation has to add classes which shouldn't be used by CODI.
+     * (use {@link #addDeactivatedClass(Class)} for adding classes)
+     */
     protected abstract void deactivateClasses();
 }

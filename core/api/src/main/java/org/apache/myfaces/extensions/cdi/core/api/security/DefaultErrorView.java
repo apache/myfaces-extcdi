@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.security;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
+ * Interface which marks an error view.
+ *
  * @author Gerhard Petracek
  */
 public interface DefaultErrorView extends ViewConfig

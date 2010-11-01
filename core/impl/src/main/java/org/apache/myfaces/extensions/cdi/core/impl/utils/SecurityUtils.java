@@ -27,7 +27,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrC
 import javax.interceptor.InvocationContext;
 import javax.enterprise.inject.spi.BeanManager;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * @author Gerhard Petracek
@@ -44,15 +43,16 @@ public class SecurityUtils
             return;
         }
 
-        Set<SecurityViolation> violations = new HashSet<SecurityViolation>();
+        Set<SecurityViolation> violations;
 
         AccessDecisionVoter voter;
         for(Class<? extends AccessDecisionVoter> voterClass : accessDecisionVoters)
         {
             voter = getOrCreateScopedInstanceOfBeanByClass(beanManager, voterClass);
 
-            voter.checkPermission(invocationContext, violations);
-            if(violations.size() > 0)
+            violations = voter.checkPermission(invocationContext);
+
+            if(violations != null && violations.size() > 0)
             {
                 throw new AccessDeniedException(violations, errorView);
             }

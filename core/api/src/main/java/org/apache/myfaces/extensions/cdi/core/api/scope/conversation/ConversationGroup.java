@@ -30,6 +30,15 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 
 /**
+ * CODI uses {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped} for providing a global
+ * conversation per window. {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} is
+ * a fine-grained version of std. CDI conversations. Per default a
+ * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} bean exists in an isolated
+ * conversation which just contains this bean. If multiple beans belong to the same logical conversations,
+ * it's possible to use this special qualifier for grouping such beans.
+ *
+ * Operations like {@link Conversation#close()} will be performed on the whole group.
+ * 
  * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})

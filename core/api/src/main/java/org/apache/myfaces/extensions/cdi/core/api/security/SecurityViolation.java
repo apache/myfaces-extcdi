@@ -19,9 +19,16 @@
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
 /**
+ * Provides the concrete reason for the restriction.
+ *
  * @author Gerhard Petracek
  */
 public interface SecurityViolation
 {
+    /**
+     * Provides a description of the violation.
+     *
+     * @return description of the violation
+     */
     String getReason();
 }

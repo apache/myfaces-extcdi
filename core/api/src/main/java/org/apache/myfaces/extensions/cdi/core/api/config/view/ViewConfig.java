@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
+ * Marker interface for type-safe view-config classes.
+ *
  * @author Gerhard Petracek
  */
 public interface ViewConfig

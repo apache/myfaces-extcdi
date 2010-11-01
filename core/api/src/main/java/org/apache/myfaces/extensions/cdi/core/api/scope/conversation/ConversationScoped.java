@@ -30,6 +30,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
+ * A fine-grained conversation scope.
+ * (It isn't required to start the scope manually.)
+ * 
  * @author Gerhard Petracek
  */
 @Target({METHOD,TYPE,FIELD})

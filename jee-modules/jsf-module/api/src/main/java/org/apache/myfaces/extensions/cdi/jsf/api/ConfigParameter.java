@@ -25,10 +25,12 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CoreCodiConfigParameter
  */
 public interface ConfigParameter
 {
+    /*
     static final String TRANSACTION_TOKEN_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "TRANSACTION_TOKEN_ENABLED";
 
     static final Boolean TRANSACTION_TOKEN_ENABLED_DEFAULT = Boolean.FALSE;
+    */
 
     static final String URL_PARAMETER_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "URL_PARAMETER_ENABLED";

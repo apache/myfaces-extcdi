@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.api.config;
 /**
  * @author Gerhard Petracek
  */
-public interface CoreCodiConfigParameter extends AttributeAware
+public interface CoreCodiConfigParameter
 {
     static final String BASE_NAME = "org.apache.myfaces.extensions.cdi.";
 }
