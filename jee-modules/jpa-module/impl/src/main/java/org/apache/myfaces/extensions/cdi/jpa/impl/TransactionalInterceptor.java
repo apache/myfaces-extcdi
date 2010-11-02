@@ -20,12 +20,11 @@ package org.apache.myfaces.extensions.cdi.jpa.impl;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.AnyLiteral;
 
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.util.AnnotationLiteral;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -40,6 +39,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
@@ -59,21 +59,19 @@ public class TransactionalInterceptor implements Serializable
     //don't use final in interceptors
     private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
 
-    private @Inject BeanManager bm;
+    @Inject
+    private BeanManager beanManager;
+
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
     protected final Logger logger = Logger.getLogger(TransactionalInterceptor.class.getName());
 
     /** key=qualifier name, value= EntityManager */
-    private static transient ThreadLocal<HashMap<String, EntityManager>> ems =
+    private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
             new ThreadLocal<HashMap<String, EntityManager>>();
 
     private static transient Map<ClassLoader, Map<String, PersistenceContextMetaEntry>> entityManagerFields =
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
-
-    public class AnyLiteral extends AnnotationLiteral<Any> implements Any
-    {
-    }
 
     /** 1 ms  in nanoTime ticks */
     final static long LONG_MILLISECOND = 1000000L;
@@ -82,35 +80,36 @@ public class TransactionalInterceptor implements Serializable
     @AroundInvoke
     public Object invoke(InvocationContext context) throws Exception
     {
-        Transactional t = context.getMethod().getAnnotation(Transactional.class);
-        if (t == null)
+        Transactional transactionalAnnotation = context.getMethod().getAnnotation(Transactional.class);
+
+        if (transactionalAnnotation == null)
         {
-            t = context.getTarget().getClass().getAnnotation(Transactional.class);
+            transactionalAnnotation = context.getTarget().getClass().getAnnotation(Transactional.class);
         }
 
-        Class q = Default.class;
-        if (t != null)
+        Class<? extends Annotation> qualifierClass = Default.class;
+        if (transactionalAnnotation != null)
         {
-            q = t.qualifier();
+            qualifierClass = transactionalAnnotation.qualifier();
         }
 
-        Set<Bean<?>> emBeans = bm.getBeans(EntityManager.class, new AnyLiteral());
-        if (emBeans == null)
+        Set<Bean<?>> entityManagerBeans = beanManager.getBeans(EntityManager.class, new AnyLiteral());
+        if (entityManagerBeans == null)
         {
-            throw new IllegalArgumentException("cannot find EntityManager");
+            entityManagerBeans = new HashSet<Bean<?>>();
         }
-        Bean<EntityManager> bean = null;
+        Bean<EntityManager> entityManagerBean = null;
 
         it:
-        for (Bean<?> emBean : emBeans)
+        for (Bean<?> currentEntityManagerBean : entityManagerBeans)
         {
+            Set<Annotation> foundQualifierAnnotations = currentEntityManagerBean.getQualifiers();
 
-            Set<Annotation> anns = emBean.getQualifiers();
-            for (Annotation a : anns)
+            for (Annotation currentQualifierAnnotation : foundQualifierAnnotations)
             {
-                if (a.annotationType().equals(q))
+                if (currentQualifierAnnotation.annotationType().equals(qualifierClass))
                 {
-                    bean = (Bean<EntityManager>) emBean;
+                    entityManagerBean = (Bean<EntityManager>) currentEntityManagerBean;
                     break it;
                 }
             }
@@ -119,8 +118,8 @@ public class TransactionalInterceptor implements Serializable
         EntityManagerEntry entityManagerEntry = null;
         EntityManager entityManager;
 
-        String entityManagerId = q.getName();
-        if (bean == null)
+        String entityManagerId = qualifierClass.getName();
+        if (entityManagerBean == null)
         {
             entityManagerEntry = tryToFindEntityManagerEntryInTarget(context.getTarget());
             entityManager = entityManagerEntry.getEntityManager();
@@ -135,15 +134,15 @@ public class TransactionalInterceptor implements Serializable
         }
         else
         {
-            entityManager = (EntityManager) bm.getReference(bean, EntityManager.class,
-                    bm.createCreationalContext(bean));
+            entityManager = (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
+                    beanManager.createCreationalContext(entityManagerBean));
         }
 
-        if (ems.get() == null)
+        if (entityManagerMap.get() == null)
         {
-            ems.set(new HashMap<String, EntityManager>());
+            entityManagerMap.set(new HashMap<String, EntityManager>());
         }
-        ems.get().put(entityManagerId, entityManager);
+        entityManagerMap.get().put(entityManagerId, entityManager);
         // log.info("growing: " + ems.get().size());
 
         if (refCount.get() == null)
@@ -203,9 +202,9 @@ public class TransactionalInterceptor implements Serializable
             // this way, we allow inner functions to catch and handle exceptions properly.
             if (refCount.get().intValue() == 1)
             {
-                for (EntityManager em: ems.get().values())
+                for (EntityManager currentEntityManager : entityManagerMap.get().values())
                 {
-                    transaction = em.getTransaction();
+                    transaction = currentEntityManager.getTransaction();
                     if (transaction != null && transaction.isActive())
                     {
                         try
@@ -224,7 +223,7 @@ public class TransactionalInterceptor implements Serializable
                 refCount.remove();
 
                 // drop all EntityManagers from the ThreadLocal
-                ems.remove();
+                entityManagerMap.remove();
             }
 
             // rethrow the exception
@@ -252,9 +251,9 @@ public class TransactionalInterceptor implements Serializable
                     // them already
                     if (firstException == null)
                     {
-                        for (EntityManager em: ems.get().values())
+                        for (EntityManager currentEntityManager : entityManagerMap.get().values())
                         {
-                            transaction = em.getTransaction();
+                            transaction = currentEntityManager.getTransaction();
                             if(transaction != null && transaction.isActive())
                             {
                                 try
@@ -279,9 +278,10 @@ public class TransactionalInterceptor implements Serializable
 
                     // finally remove all ThreadLocals
                     refCount.remove();
-                    ems.remove();
+                    entityManagerMap.remove();
                     if (commitFailed)
                     {
+                        //noinspection ThrowFromFinallyBlock
                         throw firstException;
                     }
                     else
@@ -379,10 +379,10 @@ public class TransactionalInterceptor implements Serializable
                 if(persistenceContext != null)
                 {
                     return new PersistenceContextMetaEntry(
-                            currentParamClass,
-                            currentField.getName(),
-                            persistenceContext.unitName(),
-                            PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
+                                   currentParamClass,
+                                   currentField.getName(),
+                                   persistenceContext.unitName(),
+                                   PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
                 }
             }
             currentParamClass = currentParamClass.getSuperclass();

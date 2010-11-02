@@ -27,6 +27,7 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.lang.annotation.Annotation;
 
 /**
  * If it isn't possible to use EJBs, this interceptor adds transaction support to methods or a class.
@@ -40,5 +41,5 @@ import java.lang.annotation.Target;
 @Target( { ElementType.TYPE, ElementType.METHOD })
 public @interface Transactional
 {
-    @Nonbinding Class qualifier() default Default.class;
+    @Nonbinding Class<? extends Annotation> qualifier() default Default.class;
 }
