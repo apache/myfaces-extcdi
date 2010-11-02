@@ -22,7 +22,8 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils;
 import static org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils.*;
 

@@ -28,6 +28,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * If it isn't possible to use EJBs, this interceptor adds transaction support to methods or a class.
+ * The optional qualifier can be used to specify different entity managers.
+ */
+
 @InterceptorBinding
 @Documented
 @Inherited

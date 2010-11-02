@@ -20,7 +20,7 @@ package org.apache.myfaces.examples.codi.jsf12.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension.JSP;
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
 
 /**
  * @author Gerhard Petracek

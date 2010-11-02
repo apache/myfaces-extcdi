@@ -27,6 +27,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
+ * Qualifier for observers which should be invoked before the current {@link javax.faces.context.FacesContext} gets
+ * destroyed.
+ *
+ * Parameter-type of the observer: {@link javax.faces.context.FacesContext}
+ * 
  * @author Gerhard Petracek
  */
 

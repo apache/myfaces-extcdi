@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import javax.inject.Inject;
 
 /**
+ * Base implementation which adds the possibility to provide a custom implementation.
+ *
  * @author Gerhard Petracek
  */
 public abstract class AbstractRequestTypeResolver implements RequestTypeResolver

@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
+ * Event will be fired before the navigation (from and to a view-config based page) occurs.
+ * With {@link #navigateTo(Class)} it's possible to change the navigation target.
+ * 
  * @author Gerhard Petracek
  */
 public class PreViewConfigNavigateEvent
@@ -34,16 +37,31 @@ public class PreViewConfigNavigateEvent
         this.toView = toView;
     }
 
+    /**
+     * Provides the navigation source.
+     *
+     * @return source of the navigation
+     */
     public Class<? extends ViewConfig> getFromView()
     {
         return fromView;
     }
 
+    /**
+     * Provides the navigation target.
+     *
+     * @return target of the navigation
+     */
     public Class<? extends ViewConfig> getToView()
     {
         return toView;
     }
 
+    /**
+     * Allows to change the navigation target.
+     *
+     * @param toView new navigation target
+     */
     public void navigateTo(Class<? extends ViewConfig> toView)
     {
         this.toView = toView;

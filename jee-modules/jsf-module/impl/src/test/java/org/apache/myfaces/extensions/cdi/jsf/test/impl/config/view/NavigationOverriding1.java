@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 
 /**
  * @author Gerhard Petracek
@@ -33,7 +33,7 @@ abstract class NavigationOverriding1 implements ViewConfig
     {
     }
 
-    @Page(navigation = NavigationMode.FORWARD)
+    @Page(navigation = Page.NavigationMode.FORWARD)
     public final class ForwardedPage1 extends NavigationOverriding1
     {
     }

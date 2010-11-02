@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 
 /**
  * @author Gerhard Petracek

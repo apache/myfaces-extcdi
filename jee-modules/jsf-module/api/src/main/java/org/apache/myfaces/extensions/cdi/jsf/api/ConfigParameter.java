@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.jsf.api;
 import org.apache.myfaces.extensions.cdi.core.api.config.CoreCodiConfigParameter;
 
 /**
+ * (web.xml) config params and the default values for the parameters.
+ *
  * @author Gerhard Petracek
  */
 public interface ConfigParameter
@@ -42,9 +44,11 @@ public interface ConfigParameter
 
     static final boolean ALLOW_UNKNOWN_WINDOW_IDS_DEFAULT = false;
 
+    @Deprecated
     static final String ADD_WINDOW_ID_TO_ACTION_URL_ENABLED =
             CoreCodiConfigParameter.BASE_NAME + "ADD_WINDOW_ID_TO_ACTION_URL_ENABLED";
 
+    @Deprecated
     static final boolean ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT = false;
 
     static final String DISABLE_INITIAL_REDIRECT =
@@ -67,6 +71,9 @@ public interface ConfigParameter
 
     static final int MAX_WINDOW_CONTEXT_COUNT_DEFAULT = 64;
 
+    /*
+     * event config
+     */
     static final String ENABLE_SCOPE_BEAN_EVENT =
             CoreCodiConfigParameter.BASE_NAME + "ENABLE_SCOPE_BEAN_EVENT";
 

@@ -27,6 +27,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Stereotype for marking a class as page for type-safe view-configs.
+ *
  * @author Gerhard Petracek
  */
 @Stereotype
@@ -42,8 +44,21 @@ public @interface Page
     String name() default "";
 
     //TODO config for default extension
-    String extension() default JsfViewExtension.XHTML;
+    String extension() default Extension.XHTML;
 
     //TODO config for default navigation mode
     NavigationMode navigation() default NavigationMode.DEFAULT;
+
+    public interface Extension
+    {
+        String XHTML = "xhtml";
+        String JSF = "jsf";
+        String FACES = "faces";
+        String JSP = "jsp";
+    }
+
+    public enum NavigationMode
+    {
+        DEFAULT, FORWARD, REDIRECT
+    }
 }

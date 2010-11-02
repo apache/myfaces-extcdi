@@ -26,8 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
@@ -90,7 +89,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
         String defaultPageName = "";
         String pageName = defaultPageName;
 
-        String defaultExtension = JsfViewExtension.XHTML;
+        String defaultExtension = Page.Extension.XHTML;
         String extension = defaultExtension;
 
         NavigationMode defaultNavigationMode = NavigationMode.DEFAULT;

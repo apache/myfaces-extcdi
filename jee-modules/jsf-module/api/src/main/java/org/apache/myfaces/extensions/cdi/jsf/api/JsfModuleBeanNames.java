@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.jsf.api;
 import org.apache.myfaces.extensions.cdi.core.api.BeanNames;
 
 /**
+ * Contains all bean names provided by this module
+ * 
  * @author Gerhard Petracek
  */
 public interface JsfModuleBeanNames extends BeanNames

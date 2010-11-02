@@ -27,6 +27,9 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Specifies one or more page-beans via the type-safe view-config.
+ * Such page beans support e.g. the view-controller annotations.
+ *
  * @author Gerhard Petracek
  */
 @Stereotype

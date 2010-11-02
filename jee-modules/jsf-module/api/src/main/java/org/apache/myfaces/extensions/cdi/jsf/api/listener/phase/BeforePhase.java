@@ -40,6 +40,8 @@ import java.lang.annotation.Target;
 /**
  * - for phase-observer-methods
  * - for lifecycle callbacks in view-definitions
+ *
+ * Parameter-type of the observer: {@link javax.faces.event.PhaseEvent}
  */
 public @interface BeforePhase
 {

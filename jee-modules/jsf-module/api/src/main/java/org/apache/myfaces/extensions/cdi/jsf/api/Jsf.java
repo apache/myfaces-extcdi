@@ -26,6 +26,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
+ * Qualifier for producing artifacts which are improved for the usage in combination with JSF
+ *
  * @author Gerhard Petracek
  */
 

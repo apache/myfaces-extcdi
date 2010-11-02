@@ -21,7 +21,7 @@ package org.apache.myfaces.examples.codi.jsf12.view;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension.JSP;
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
 import org.apache.myfaces.examples.codi.jsf12.security.ForcedViolationVoter;
 
 /**

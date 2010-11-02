@@ -21,15 +21,14 @@ package org.apache.myfaces.examples.codi.jsf12.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.JsfViewExtension;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.NavigationMode;
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode.FORWARD;
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.ConversationDemoBean1;
 
 /**
  * @author Gerhard Petracek
  */
 @Page(basePath = "" /*override default to ignore path level*/,
-      navigation = NavigationMode.REDIRECT, extension = JsfViewExtension.JSP)
+      navigation = Page.NavigationMode.REDIRECT, extension = Page.Extension.JSP)
 public abstract class DemoPages implements ViewConfig
 {
     @PageBean(ConversationDemoBean1.class) //triggers e.g. @PostConstruct before the rendering process (if needed)
@@ -46,7 +45,7 @@ public abstract class DemoPages implements ViewConfig
     }
 
     @ViewMode(readOnly = true) //custom view meta-data
-    @Page(basePath = ".", navigation = NavigationMode.FORWARD)
+    @Page(basePath = ".", navigation = FORWARD)
     public final class HelloMyFacesCodi2 extends DemoPages
     {
     }

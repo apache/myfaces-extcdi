@@ -19,6 +19,11 @@
 package org.apache.myfaces.extensions.cdi.jsf.api.request;
 
 /**
+ * Pluggable (internal) helper for resolving the type of the current request.
+ * For JSF 1.2 it allows to call the functionality
+ * e.g. of a component lib for detecting the type of the current request.
+ * For JSF 2+ it delegates the detection to JSF itself.
+ * 
  * @author Gerhard Petracek
  */
 public interface RequestTypeResolver
