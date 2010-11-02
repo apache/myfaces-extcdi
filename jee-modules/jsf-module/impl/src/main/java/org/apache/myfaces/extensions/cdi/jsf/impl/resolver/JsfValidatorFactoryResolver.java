@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.resolver;
 
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.BeanValidation;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
 
 import javax.faces.context.FacesContext;
 import javax.validation.Validation;
