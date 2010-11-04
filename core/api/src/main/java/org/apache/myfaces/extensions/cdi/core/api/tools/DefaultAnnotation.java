@@ -42,20 +42,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
     private static final long serialVersionUID = -2345068201195886173L;
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
-    private Class<? extends Annotation> annotationClass;
-
-    /**
-     * Required to use the result of the factory instead of a default implementation
-     * of {@link javax.enterprise.util.AnnotationLiteral}.
-     *
-     * @param annotationClass class of the target annotation
-     */
-    private DefaultAnnotation(Class<? extends Annotation> annotationClass)
-    {
-        this.annotationClass = annotationClass;
-    }
-
-    static volatile Map<Class<? extends Annotation>, Annotation> annotationCache
+    private static volatile Map<Class<? extends Annotation>, Annotation> annotationCache
             = new ConcurrentHashMap<Class<? extends Annotation>, Annotation>();
 
     public static <T extends Annotation> T of(Class<T> annotationClass)
@@ -81,6 +68,19 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         }
 
         return (T)annotation;
+    }
+
+    private Class<? extends Annotation> annotationClass;
+
+    /**
+     * Required to use the result of the factory instead of a default implementation
+     * of {@link javax.enterprise.util.AnnotationLiteral}.
+     *
+     * @param annotationClass class of the target annotation
+     */
+    private DefaultAnnotation(Class<? extends Annotation> annotationClass)
+    {
+        this.annotationClass = annotationClass;
     }
 
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
@@ -122,9 +122,9 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         Method[] methods = this.annotationClass.getDeclaredMethods();
 
         StringBuilder sb = new StringBuilder("@" + annotationType().getName() + "(");
-        int lenght = methods.length;
+        int length = methods.length;
 
-        for (int i = 0; i < lenght; i++)
+        for (int i = 0; i < length; i++)
         {
             // Member name
             sb.append(methods[i].getName()).append("=");
@@ -141,7 +141,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
             }
             sb.append(memberValue);
 
-            if (i < lenght - 1)
+            if (i < length - 1)
             {
                 sb.append(",");
             }
