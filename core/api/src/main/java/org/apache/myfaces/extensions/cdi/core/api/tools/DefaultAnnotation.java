@@ -18,12 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.tools;
 
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -42,19 +45,24 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
     private static final long serialVersionUID = -2345068201195886173L;
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
-    private static volatile Map<Class<? extends Annotation>, Annotation> annotationCache
-            = new ConcurrentHashMap<Class<? extends Annotation>, Annotation>();
+    // NOTE that this cache needs to be a WeakHashMap in order to prevent a memory leak
+    // (the garbage collector should be able to remove the ClassLoader).
+    private static final Map<ClassLoader, Map<String, Annotation>> annotationCachePerClassLoader
+            = new WeakHashMap<ClassLoader, Map<String, Annotation>>();
 
     public static <T extends Annotation> T of(Class<T> annotationClass)
     {
-        Annotation annotation = annotationCache.get(annotationClass);
+        Map<String, Annotation> annotationCache = getAnnotationCache();
+        final String key = annotationClass.getName();
 
+        Annotation annotation = annotationCache.get(key);
+        
         if (annotation == null)
         {
             // switch into paranoia mode
             synchronized (annotationCache)
             {
-                annotation = annotationCache.get(annotationClass);
+                annotation = annotationCache.get(key);
                 if (annotation == null)
                 {
                     annotation = (Annotation) Proxy.newProxyInstance(
@@ -62,12 +70,33 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
                             new Class[]{annotationClass},
                             new DefaultAnnotation(annotationClass));
                     
-                    annotationCache.put(annotationClass, annotation);
+                    annotationCache.put(key, annotation);
                 }
             }
         }
 
-        return (T)annotation;
+        return (T) annotation;
+    }
+
+    private static Map<String, Annotation> getAnnotationCache()
+    {
+        ClassLoader classLoader = ClassUtils.getClassLoader(null);
+        Map<String, Annotation> annotationCache = annotationCachePerClassLoader.get(classLoader);
+        if (annotationCache == null)
+        {
+            // switch into paranoia mode
+            synchronized (annotationCachePerClassLoader)
+            {
+                annotationCache = annotationCachePerClassLoader.get(classLoader);
+                if (annotationCache == null)
+                {
+                    annotationCache = new ConcurrentHashMap<String, Annotation>();
+                    annotationCachePerClassLoader.put(classLoader, annotationCache);
+                }
+            }
+        }
+
+        return annotationCache;
     }
 
     private Class<? extends Annotation> annotationClass;
