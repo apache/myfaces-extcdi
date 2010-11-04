@@ -152,9 +152,6 @@ public class TransactionalInterceptor implements Serializable
 
         EntityTransaction transaction = entityManager.getTransaction();
 
-        // used to store any exception we get from the services
-        Exception firstException = null;
-
         if(entityManagerEntry != null)
         {
             //only in case of add-ons synchronize
@@ -164,25 +161,25 @@ public class TransactionalInterceptor implements Serializable
                 return proceedMethodInTransaction(context,
                                                   entityManagerEntry,
                                                   entityManager,
-                                                  transaction,
-                                                  firstException);
+                                                  transaction);
             }
         }
         //we don't have a shared entity manager
         return proceedMethodInTransaction(context,
                                           entityManagerEntry,
                                           entityManager,
-                                          transaction,
-                                          firstException);
+                                          transaction);
     }
 
     private Object proceedMethodInTransaction(InvocationContext context,
                                               EntityManagerEntry entityManagerEntry,
                                               EntityManager entityManager,
-                                              EntityTransaction transaction,
-                                              Exception firstException)
+                                              EntityTransaction transaction)
             throws Exception
     {
+        // used to store any exception we get from the services
+        Exception firstException = null;
+
         try
         {
             if(!transaction.isActive())

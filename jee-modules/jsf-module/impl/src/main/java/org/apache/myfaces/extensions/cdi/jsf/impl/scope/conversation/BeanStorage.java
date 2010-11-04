@@ -29,7 +29,6 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
@@ -42,7 +41,8 @@ class BeanStorage implements Serializable
 
     private transient BeanManager beanManager;
 
-    private Map<Class, BeanEntry<Serializable>> beanMap = new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
+    private ConcurrentHashMap<Class, BeanEntry<Serializable>> beanMap =
+            new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
 
     public BeanStorage(BeanManager beanManager)
     {

@@ -42,8 +42,7 @@ import java.util.logging.Logger;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.isQualifierEqual;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotEditableException;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.conversationNotFoundException;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 
 /**
  * TODO
@@ -62,10 +61,10 @@ public class JsfWindowContext implements EditableWindowContext
 
     private BeanManager beanManager;
 
-    private Map<ConversationKey, EditableConversation> groupedConversations
+    private ConcurrentHashMap<ConversationKey, EditableConversation> groupedConversations
             = new ConcurrentHashMap<ConversationKey, EditableConversation>();
 
-    private Map<String, Object> attributes = new ConcurrentHashMap<String, Object>();
+    private ConcurrentHashMap<String, Object> attributes = new ConcurrentHashMap<String, Object>();
 
     private final TimeoutExpirationEvaluator expirationEvaluator;
 
@@ -146,13 +145,9 @@ public class JsfWindowContext implements EditableWindowContext
         ConversationKey conversationKey =
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
-        Conversation conversation = getConversationForKey(conversationKey, true);
+        EditableConversation conversation = getConversationForKey(conversationKey, true);
 
-        if(!(conversation instanceof EditableConversation))
-        {
-            throw conversationNotEditableException(conversation);
-        }
-        return closeAndRemoveConversation(conversationKey, (EditableConversation)conversation, true);
+        return closeAndRemoveConversation(conversationKey, conversation, true);
     }
 
     public Set<Conversation> closeConversationGroup(Class conversationGroupKey)

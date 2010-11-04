@@ -37,7 +37,6 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.ArgumentDescriptor;
 import java.io.Serializable;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Set;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
@@ -49,11 +48,12 @@ class DefaultMessageBuilder implements MessageBuilder
 {
     private static final long serialVersionUID = 892218539314030675L;
 
-    private List<Serializable> argumentList;
+    private ArrayList<Serializable> argumentList;
 
-    private Set<NamedArgument> namedArguments;
+    private HashSet<NamedArgument> namedArguments;
+    
     private MessageContext messageContext;
-    private Map<Class, MessagePayload> messagePayload;
+    private HashMap<Class, MessagePayload> messagePayload;
     private String messageDescriptor;
 
     private MessageFactory messageFactory;

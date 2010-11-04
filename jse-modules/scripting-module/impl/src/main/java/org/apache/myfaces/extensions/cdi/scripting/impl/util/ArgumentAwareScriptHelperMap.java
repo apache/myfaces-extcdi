@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
-import java.util.Map;
 import java.util.HashMap;
 
 /**
@@ -27,8 +26,9 @@ import java.util.HashMap;
 class ArgumentAwareScriptHelperMap extends ScriptHelperMap
 {
     private static final long serialVersionUID = 393871900655666197L;
+
     private String language;
-    private Map<String, Object> arguments = new HashMap<String, Object>();
+    private HashMap<String, Object> arguments = new HashMap<String, Object>();
 
     public ArgumentAwareScriptHelperMap(String language, String arguments)
     {

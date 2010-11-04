@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
  */
 public class DefaultArgumentFilter implements ArgumentFilter
 {
+    private static final long serialVersionUID = -2599667995355691782L;
+
     public boolean isArgumentAllowed(String expression, Object value)
     {
         return value != null && !isUnresolvedArgument(expression, value);

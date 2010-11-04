@@ -42,7 +42,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
@@ -56,7 +55,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 {
     private static final long serialVersionUID = 2872151847183166424L;
 
-    private Map<String, EditableWindowContext> windowContextMap =
+    private ConcurrentHashMap<String, EditableWindowContext> windowContextMap =
             new ConcurrentHashMap<String, EditableWindowContext>();
 
     private ProjectStage projectStage;

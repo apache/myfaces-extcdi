@@ -21,12 +21,15 @@ package org.apache.myfaces.extensions.cdi.core.impl;
 import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 
 import java.util.Comparator;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public class InvocationOrderComparator<T> implements Comparator<T>
+public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
 {
+    private static final long serialVersionUID = -7492852803631628400L;
+
     public int compare(T t1, T t2)
     {
         if (hasPriority(t1) && hasPriority(t2))

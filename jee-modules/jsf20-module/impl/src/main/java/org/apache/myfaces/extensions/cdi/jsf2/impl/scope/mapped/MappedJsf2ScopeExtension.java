@@ -132,10 +132,13 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
 
     private ProjectStage getCurrentProjectStage()
     {
-        ProjectStageProducer projectStageProducer = null;
         try
         {
-            projectStageProducer = ProjectStageProducer.getInstance();
+            ProjectStageProducer projectStageProducer = ProjectStageProducer.getInstance();
+
+            //noinspection ConstantConditions
+            projectStageProducer.determineProjectStage();
+            return projectStageProducer.getProjectStage();
         }
         catch (Exception e)
         {
@@ -143,11 +146,8 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
             {
                 throw new RuntimeException(e);
             }
+            throw (RuntimeException)e;
         }
-        //noinspection ConstantConditions
-        projectStageProducer.determineProjectStage();
-        ProjectStage projectStage = projectStageProducer.getProjectStage();
-        return projectStage;
     }
 
     public boolean isActivated()

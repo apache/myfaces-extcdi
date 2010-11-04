@@ -40,7 +40,7 @@ class DefaultConversationKey implements ConversationKey
 
     private Class<?> groupKey;
 
-    private Set<Annotation> qualifiers;
+    private HashSet<Annotation> qualifiers;
 
     DefaultConversationKey(Class<? extends Annotation> scopeType,
                            Class<?> groupKey,

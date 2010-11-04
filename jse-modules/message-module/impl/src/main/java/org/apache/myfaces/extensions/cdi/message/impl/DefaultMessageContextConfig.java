@@ -30,7 +30,6 @@ import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 import org.apache.myfaces.extensions.cdi.message.api.GenericConfig;
 
 import java.util.Locale;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -42,7 +41,7 @@ class DefaultMessageContextConfig implements MessageContextConfig
 
     private MessageInterpolator messageInterpolator;
     private MessageResolver messageResolver;
-    private Set<MessageHandler> messageHandlers;
+    private CopyOnWriteArraySet<MessageHandler> messageHandlers;
     private LocaleResolver localeResolver;
     private FormatterFactory formatterFactory;
 

@@ -43,7 +43,7 @@ public class DefaultWindowHandler implements WindowHandler
     private static final long serialVersionUID = -103516988654873089L;
     private static final int DEFAULT_WINDOW_KEY_LENGTH = 3;
 
-    private final String windowIdParameter = WINDOW_CONTEXT_ID_PARAMETER_KEY + "=";
+    private static final String WINDOW_ID_PARAMETER_KEY = WINDOW_CONTEXT_ID_PARAMETER_KEY + "=";
 
     protected final boolean useWindowAwareUrlEncoding;
 
@@ -75,6 +75,8 @@ public class DefaultWindowHandler implements WindowHandler
 
     protected String addRequestParameter(ExternalContext externalContext, String url)
     {
+        StringBuilder finalUrl = new StringBuilder(url);
+
         Map<String, String> requestParms = externalContext.getRequestParameterMap();
         for(Map.Entry<String, String> requestParam : requestParms.entrySet())
         {
@@ -82,10 +84,13 @@ public class DefaultWindowHandler implements WindowHandler
 
             if(!url.contains(key + "="))
             {
-                url += "&" + key + "=" + requestParam.getValue();
+                finalUrl.append("&");
+                finalUrl.append(key);
+                finalUrl.append("=");
+                finalUrl.append(requestParam.getValue());
             }
         }
-        return url;
+        return finalUrl.toString();
     }
 
     //TODO add a counter in case of project stage dev
@@ -159,7 +164,7 @@ public class DefaultWindowHandler implements WindowHandler
 
     private String encodeActionURL(String url, String windowId)
     {
-        if(url.contains(this.windowIdParameter))
+        if(url.contains(WINDOW_ID_PARAMETER_KEY))
         {
             return url;
         }

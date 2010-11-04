@@ -85,7 +85,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     {
                         this.otherOutcomes.add(originalOutcome);
                     }
-                    else if(loadedClass instanceof Class && ViewConfig.class.isAssignableFrom((Class)loadedClass))
+                    else if(ViewConfig.class.isAssignableFrom((Class)loadedClass))
                     {
                         //noinspection unchecked
                         entry = ViewConfigCache.getViewDefinition((Class<? extends ViewConfig>)loadedClass);

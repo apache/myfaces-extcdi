@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,7 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DefaultLanguageManager implements LanguageManager
 {
-    private Map<Class<? extends Language>, Language> languageCache;
+    private ConcurrentHashMap<Class<? extends Language>, Language> languageCache;
 
     protected DefaultLanguageManager()
     {

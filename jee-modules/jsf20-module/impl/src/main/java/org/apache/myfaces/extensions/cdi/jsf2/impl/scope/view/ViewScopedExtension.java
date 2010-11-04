@@ -70,12 +70,25 @@ public class ViewScopedExtension implements Extension, Deactivatable
             return;
         }
 
-        // we need to do this manually because there is no dependency injection in place
-        // at this time
-        ProjectStageProducer psp = null;
         try
         {
-            psp = ProjectStageProducer.getInstance();
+            // we need to do this manually because there is no dependency injection in place
+            // at this time
+            ProjectStageProducer psp = ProjectStageProducer.getInstance();
+
+            psp.determineProjectStage();
+            ProjectStage projectStage = psp.getProjectStage();
+
+            if (projectStage == ProjectStage.UnitTest)
+            {
+                // for unit tests, we use the mock context
+                afterBeanDiscovery.addContext(new MockViewScopedContext());
+            }
+            else
+            {
+                // otherwise we use the real JSF ViewMap context
+                afterBeanDiscovery.addContext(new ViewScopedContext());
+            }
         }
         catch (Exception e)
         {
@@ -83,19 +96,7 @@ public class ViewScopedExtension implements Extension, Deactivatable
             {
                 throw new RuntimeException(e);
             }
-        }
-        psp.determineProjectStage();
-        ProjectStage projectStage = psp.getProjectStage();
-
-        if (projectStage == ProjectStage.UnitTest)
-        {
-            // for unit tests, we use the mock context
-            afterBeanDiscovery.addContext(new MockViewScopedContext());
-        }
-        else
-        {
-            // otherwise we use the real JSF ViewMap context
-            afterBeanDiscovery.addContext(new ViewScopedContext());
+            throw (RuntimeException)e;
         }
     }
 
