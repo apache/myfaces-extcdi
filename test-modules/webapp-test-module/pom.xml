@@ -144,12 +144,12 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>org.os890.codi.addon</groupId>
             <artifactId>web-xml-config</artifactId>
             <version>${config.addon.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
 
         <!-- Arquillian Tomcat dependencies -->
         <dependency>
@@ -272,12 +272,12 @@
                            </dependency>
 
                            <!-- config-test dependencies-->
-                           <dependency>
+                           <!--dependency>
                                <groupId>org.os890.codi.addon</groupId>
                                <artifactId>web-xml-config</artifactId>
                                <version>${config.addon.version}</version>
                                <scope>test</scope>
-                           </dependency>
+                           </dependency-->
 
                            <!-- OWB impl dependencies -->
                            <dependency>
