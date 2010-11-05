@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
@@ -49,21 +48,18 @@ final class InstanceProducer
     @Produces
     @SessionScoped
     @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
-    protected EditableWindowContextManager createWindowContextManager(ConfigResolver configResolver,
+    protected EditableWindowContextManager createWindowContextManager(JsfAwareWindowContextConfig config,
                                                                       ProjectStage projectStage,
                                                                       BeanManager beanManager)
     {
-        JsfAwareWindowContextConfig jsfAwareWindowContextConfig =
-                configResolver.resolve(JsfAwareWindowContextConfig.class);
-
         WindowContextManagerFactory windowContextManagerFactory =
                 getOrCreateScopedInstanceOfBeanByClass(beanManager, WindowContextManagerFactory.class, true);
 
         if(windowContextManagerFactory != null)
         {
-            return windowContextManagerFactory.createWindowContextManager(jsfAwareWindowContextConfig);
+            return windowContextManagerFactory.createWindowContextManager(config);
         }
-        return new DefaultWindowContextManager(jsfAwareWindowContextConfig, projectStage, beanManager);
+        return new DefaultWindowContextManager(config, projectStage, beanManager);
     }
 
     protected void destroyAllConversations(

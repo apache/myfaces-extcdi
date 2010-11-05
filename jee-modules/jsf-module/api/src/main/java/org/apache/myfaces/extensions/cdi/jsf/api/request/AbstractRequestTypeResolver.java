@@ -18,10 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.request;
 
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
-
-import javax.inject.Inject;
-
 /**
  * Base implementation which adds the possibility to provide a custom implementation.
  *
@@ -29,10 +25,6 @@ import javax.inject.Inject;
  */
 public abstract class AbstractRequestTypeResolver implements RequestTypeResolver
 {
-    @Inject
-    @SuppressWarnings({"UnusedDeclaration"})
-    private ConfigResolver configResolver;
-
     private RequestTypeResolver defaultRequestTypeResolver;
 
     public boolean isPartialRequest()
@@ -49,23 +41,10 @@ public abstract class AbstractRequestTypeResolver implements RequestTypeResolver
 
     private RequestTypeResolver getCurrentRequestTypeResolver()
     {
-        RequestTypeResolver requestTypeResolver = getCustomRequestTypeResolver();
-
-        if (requestTypeResolver != null)
-        {
-            return requestTypeResolver;
-        }
-
         if (this.defaultRequestTypeResolver == null)
         {
             this.defaultRequestTypeResolver = createDefaultRequestTypeResolver();
         }
         return this.defaultRequestTypeResolver;
-    }
-
-    private RequestTypeResolver getCustomRequestTypeResolver()
-    {
-        //TODO use the config resolver to get the custom RequestTypeResolver
-        return null;
     }
 }

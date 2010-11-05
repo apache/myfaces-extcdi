@@ -18,17 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
-import static org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider.getInstance;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -333,17 +329,6 @@ public class ConversationUtils
     private static void redirectPerformed(ExternalContext externalContext)
     {
         externalContext.getRequestMap().put(REDIRECT_PERFORMED_KEY, Boolean.TRUE);
-    }
-
-    public static JsfAwareWindowContextConfig getJsfAwareWindowContextConfig()
-    {
-        Set<Bean<?>> configResolvers = getInstance().getBeanManager().getBeans(ConfigResolver.class);
-
-        //TODO
-        ConfigResolver configResolver = (ConfigResolver) CodiUtils
-                .getOrCreateScopedInstanceOfBean(configResolvers.iterator().next());
-
-        return configResolver.resolve(JsfAwareWindowContextConfig.class);
     }
 
     public static WindowHandler getWindowHandler()

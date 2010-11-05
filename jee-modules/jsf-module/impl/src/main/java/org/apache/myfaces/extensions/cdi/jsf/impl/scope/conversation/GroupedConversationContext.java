@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -111,8 +110,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
     protected ConversationConfig getConversationConfig()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(this.beanManager,ConfigResolver.class)
-                .resolve(JsfAwareWindowContextConfig.class);
+        return getOrCreateScopedInstanceOfBeanByClass(JsfAwareWindowContextConfig.class);
     }
 
     private EditableConversation getConversation(EditableWindowContextManager windowContextManager, Bean<?> bean)

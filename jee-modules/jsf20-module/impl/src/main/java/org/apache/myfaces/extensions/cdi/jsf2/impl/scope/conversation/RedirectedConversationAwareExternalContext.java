@@ -22,7 +22,6 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
@@ -75,8 +74,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         {
             this.windowHandler = getWindowHandler();
             this.encodeActionURLs = CodiUtils
-                    .getOrCreateScopedInstanceOfBeanByClass(ConfigResolver.class)
-                    .resolve(JsfAwareWindowContextConfig.class).isAddWindowIdToActionUrlsEnabled();
+                    .getOrCreateScopedInstanceOfBeanByClass(JsfAwareWindowContextConfig.class)
+                    .isAddWindowIdToActionUrlsEnabled();
         }
     }
 

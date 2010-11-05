@@ -31,7 +31,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.enterprise.event.Observes;
 import javax.faces.event.PhaseEvent;
@@ -48,13 +47,12 @@ final class WindowContextManagerObserver
     protected void cleanup(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
                            EditableWindowContextManager windowContextManager,
-                           ConfigResolver configResolver)
+                           JsfAwareWindowContextConfig config)
     {
         if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
         {
             //don't use the config of the current window context - it would trigger a touch
-            boolean continueRequest = processGetRequest(
-                    phaseEvent.getFacesContext(), configResolver.resolve(JsfAwareWindowContextConfig.class));
+            boolean continueRequest = processGetRequest(phaseEvent.getFacesContext(), config);
             
             if (!continueRequest)
             {

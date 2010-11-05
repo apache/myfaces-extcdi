@@ -18,42 +18,20 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 
 import javax.enterprise.inject.Model;
-import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 
 //just an internal demo
 @Model
-@Typed(ConfigDemoBean.class)
-public class ConfigDemoBean extends DefaultWindowContextConfig
+public class ConfigDemoBean
 {
-    private static final long serialVersionUID = -6915243682321970384L;
-
     @Inject
-    private ConfigResolver configResolver;
+    private JsfAwareWindowContextConfig config;
 
-    public ConfigDemoBean()
-    {
-    }
-
-    @Inject
-    public ConfigDemoBean(ConfigResolver configResolver)
-    {
-        this.configResolver = configResolver;
-
-        if(this.configResolver.resolve(JsfAwareWindowContextConfig.class) == null)
-        {
-            throw new IllegalStateException("invalid config");
-        }
-    }
-
-    @Override
     public boolean isInitialRedirectDisable()
     {
-        return this.configResolver.resolve(JsfAwareWindowContextConfig.class).isInitialRedirectDisable();
+        return this.config.isInitialRedirectDisable();
     }
 }

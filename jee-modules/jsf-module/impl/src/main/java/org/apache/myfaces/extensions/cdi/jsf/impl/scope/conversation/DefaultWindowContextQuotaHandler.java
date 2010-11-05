@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwar
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -47,10 +46,9 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
     }
 
     @Inject
-    public DefaultWindowContextQuotaHandler(ConfigResolver configResolver)
+    public DefaultWindowContextQuotaHandler(JsfAwareWindowContextConfig config)
     {
-        this.maxWindowContextCount = configResolver.resolve(JsfAwareWindowContextConfig.class)
-                .getMaxWindowContextCount();
+        this.maxWindowContextCount = config.getMaxWindowContextCount();
     }
 
     public boolean checkQuota(int activeWindowContextCount)
