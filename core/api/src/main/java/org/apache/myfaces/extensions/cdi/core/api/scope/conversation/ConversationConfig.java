@@ -21,8 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 import java.io.Serializable;
 
 /**
- * TODO check if we should implement CodiConfig
- *
  * @author Gerhard Petracek
  */
 public interface ConversationConfig extends Serializable
@@ -39,15 +37,15 @@ public interface ConversationConfig extends Serializable
      * event config
      */
 
-    boolean isScopeBeanEventEnable();
+    boolean isScopeBeanEventEnabled();
 
-    boolean isAccessBeanEventEnable();
+    boolean isAccessBeanEventEnabled();
 
-    boolean isUnscopeBeanEventEnable();
+    boolean isUnscopeBeanEventEnabled();
 
-    boolean isStartConversationEventEnable();
+    boolean isStartConversationEventEnabled();
 
-    boolean isCloseConversationEventEnable();
+    boolean isCloseConversationEventEnabled();
     
-    boolean isRestartConversationEventEnable();
+    boolean isRestartConversationEventEnabled();
 }

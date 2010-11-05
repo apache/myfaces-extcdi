@@ -67,7 +67,7 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
                                                    configuration,
                                                    this.beanManager);
 
-            return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
+            return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
         }
 
         if(ViewAccessScoped.class.isAssignableFrom(conversationKey.getScope()))
@@ -77,7 +77,7 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
                                                    configuration,
                                                    this.beanManager);
 
-            return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
+            return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
         }
 
         conversation = new DefaultConversation(conversationKey,
@@ -86,7 +86,7 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
                                                configuration,
                                                this.beanManager);
 
-        return processCreatedConversation(conversation, configuration.isStartConversationEventEnable());
+        return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
     }
 
     private EditableConversation processCreatedConversation(EditableConversation conversation,

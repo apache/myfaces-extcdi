@@ -145,9 +145,9 @@ public abstract class AbstractGroupedConversationContext
         {
             this.conversationConfig = getConversationConfig();
 
-            this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnable();
-            this.accessBeanEventEnable = this.conversationConfig.isAccessBeanEventEnable();
-            this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnable();
+            this.scopeBeanEventEnable = this.conversationConfig.isScopeBeanEventEnabled();
+            this.accessBeanEventEnable = this.conversationConfig.isAccessBeanEventEnabled();
+            this.unscopeBeanEventEnable = this.conversationConfig.isUnscopeBeanEventEnabled();
         }
     }
 }

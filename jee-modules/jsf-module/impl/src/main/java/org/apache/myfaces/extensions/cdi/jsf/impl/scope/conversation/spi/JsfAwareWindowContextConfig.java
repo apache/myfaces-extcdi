@@ -27,5 +27,5 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
  */
 public interface JsfAwareWindowContextConfig extends CodiConfig, WindowContextConfig, ConversationConfig
 {
-    boolean isInitialRedirectDisable();
+    boolean isInitialRedirectDisabled();
 }

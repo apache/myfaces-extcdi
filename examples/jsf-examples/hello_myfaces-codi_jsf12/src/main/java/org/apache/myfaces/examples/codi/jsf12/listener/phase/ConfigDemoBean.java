@@ -32,6 +32,6 @@ public class ConfigDemoBean
 
     public boolean isInitialRedirectDisable()
     {
-        return this.config.isInitialRedirectDisable();
+        return this.config.isInitialRedirectDisabled();
     }
 }

@@ -63,9 +63,9 @@ public interface WindowContextConfig extends Serializable
      * event config
      */
 
-    boolean isCreateWindowContextEventEnable();
+    boolean isCreateWindowContextEventEnabled();
 
-    boolean isCloseWindowContextEventEnable();
+    boolean isCloseWindowContextEventEnabled();
 
     //boolean isResetWindowContextEventEnable();
 }

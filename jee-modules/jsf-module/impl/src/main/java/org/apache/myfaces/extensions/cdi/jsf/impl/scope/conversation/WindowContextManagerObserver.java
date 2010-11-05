@@ -100,7 +100,7 @@ final class WindowContextManagerObserver
     private boolean processGetRequest(FacesContext facesContext, JsfAwareWindowContextConfig config)
     {
         boolean urlParameterSupported = config.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = !config.isInitialRedirectDisable();
+        boolean useWindowIdForFirstPage = !config.isInitialRedirectDisabled();
 
         if(!urlParameterSupported)
         {

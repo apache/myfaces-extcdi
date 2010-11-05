@@ -59,8 +59,8 @@ public class DefaultConversation implements EditableConversation
         this.beanManager = beanManager;
         this.beanStorage = new BeanStorage(this.beanManager);
 
-        this.closeConversationEventEnable = conversationConfig.isCloseConversationEventEnable();
-        this.restartConversationEventEnable = conversationConfig.isRestartConversationEventEnable();
+        this.closeConversationEventEnable = conversationConfig.isCloseConversationEventEnabled();
+        this.restartConversationEventEnable = conversationConfig.isRestartConversationEventEnabled();
     }
 
     //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}

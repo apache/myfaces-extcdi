@@ -90,8 +90,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         this.projectStage = projectStage;
         this.beanManager = beanManager;
 
-        this.createWindowContextEventEnable = jsfAwareWindowContextConfig.isCreateWindowContextEventEnable();
-        this.closeWindowContextEventEnable = jsfAwareWindowContextConfig.isCloseWindowContextEventEnable();
+        this.createWindowContextEventEnable = jsfAwareWindowContextConfig.isCreateWindowContextEventEnabled();
+        this.closeWindowContextEventEnable = jsfAwareWindowContextConfig.isCloseWindowContextEventEnabled();
 
         init();
     }
