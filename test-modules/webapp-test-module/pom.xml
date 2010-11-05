@@ -41,6 +41,7 @@
         <arquillian.version>1.0.0-SNAPSHOT</arquillian.version>
         <junit.version>4.8.1</junit.version>
         <tomcat.version>6.0.26</tomcat.version>
+        <config.addon.version>1.0.0-alpha</config.addon.version>
     </properties>
 
     <dependencies>
@@ -140,6 +141,13 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.os890.codi.addon</groupId>
+            <artifactId>web-xml-config</artifactId>
+            <version>${config.addon.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -263,6 +271,14 @@
                                <scope>test</scope>
                            </dependency>
 
+                           <!-- config-test dependencies-->
+                           <dependency>
+                               <groupId>org.os890.codi.addon</groupId>
+                               <artifactId>web-xml-config</artifactId>
+                               <version>${config.addon.version}</version>
+                               <scope>test</scope>
+                           </dependency>
+
                            <!-- OWB impl dependencies -->
                            <dependency>
                                <groupId>org.apache.openwebbeans</groupId>
@@ -349,6 +365,12 @@
                 <enabled>true</enabled>
                 <updatePolicy>never</updatePolicy>
             </snapshots>
+        </repository>
+        <repository>
+            <id>os890</id>
+            <name>Public Maven Repository for CODI Add-ons</name>
+            <url>https://os890-m2-repository.googlecode.com/svn/trunk/os890</url>
+            <layout>default</layout>
         </repository>
     </repositories>
 
