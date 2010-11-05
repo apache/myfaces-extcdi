@@ -64,7 +64,8 @@ import javax.faces.event.PhaseId;
     @WebappDependency("org.apache.openwebbeans:openwebbeans-resource:jar:1.0.0-alpha-2"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-web:jar:1.0.0-alpha-2"),
     @WebappDependency("javassist:javassist:jar:3.12.0.GA"),
-    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")
+    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2"),
+    @WebappDependency("org.os890.codi.addon:web-xml-config:jar:1.0.0-alpha")
 })
 
 @RunWith(WebappTestRunner.class)
