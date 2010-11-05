@@ -27,10 +27,12 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessS
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.StartConversationEvent;
 
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author Gerhard Petracek
  */
+@ApplicationScoped
 public class JsfAwareConversationFactory implements ConversationFactory, BeanManagerAware
 {
     private static final long serialVersionUID = 2329113439978807663L;

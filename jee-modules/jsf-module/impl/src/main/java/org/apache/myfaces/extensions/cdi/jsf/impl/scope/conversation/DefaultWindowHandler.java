@@ -20,8 +20,10 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
         .getExistingWindowIdSet;
@@ -30,6 +32,8 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
@@ -38,18 +42,26 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@ApplicationScoped
 public class DefaultWindowHandler implements WindowHandler
 {
     private static final long serialVersionUID = -103516988654873089L;
+
     private static final int DEFAULT_WINDOW_KEY_LENGTH = 3;
 
     private static final String WINDOW_ID_PARAMETER_KEY = WINDOW_CONTEXT_ID_PARAMETER_KEY + "=";
 
-    protected final boolean useWindowAwareUrlEncoding;
+    protected boolean useWindowAwareUrlEncoding;
 
-    protected DefaultWindowHandler(boolean useWindowAwareUrlEncoding)
+    protected DefaultWindowHandler()
     {
-        this.useWindowAwareUrlEncoding = useWindowAwareUrlEncoding;
+    }
+
+    @Inject
+    protected DefaultWindowHandler(ConfigResolver configResolver)
+    {
+        this.useWindowAwareUrlEncoding = configResolver.resolve(JsfAwareWindowContextConfig.class)
+                .isUrlParameterSupported();
     }
 
     public String encodeURL(String url)

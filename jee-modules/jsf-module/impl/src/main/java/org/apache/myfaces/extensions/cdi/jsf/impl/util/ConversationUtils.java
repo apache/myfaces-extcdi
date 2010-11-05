@@ -18,18 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider.getInstance;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
-import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
@@ -61,8 +58,6 @@ public class ConversationUtils
     public static final String EXISTING_WINDOW_ID_SET_KEY =
             WindowContext.class.getName() + ":EXISTING_WINDOW_ID_LIST";
 
-    private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
-
     private static final String OLD_VIEW_ID_KEY = "oldViewId";
     private static final String NEW_VIEW_ID_KEY = "newViewId";
 
@@ -71,50 +66,6 @@ public class ConversationUtils
 
     private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
     
-    /**
-     * @return the descriptor of a custom
-     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
-     * with the qualifier {@link org.apache.myfaces.extensions.cdi.jsf.api.Jsf} or
-     *         the descriptor of the default implementation provided by this module
-     */
-    public static Bean<WindowContextManager> resolveConversationManagerBean()
-    {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        Set<?> conversationManagerBeans = beanManager.getBeans(WindowContextManager.class, JSF_QUALIFIER);
-
-        if (conversationManagerBeans.isEmpty())
-        {
-            conversationManagerBeans = getDefaultConversationManager(beanManager);
-        }
-
-        if (conversationManagerBeans.size() != 1)
-        {
-            throw new IllegalStateException(conversationManagerBeans.size() + " conversation-managers were found");
-        }
-        //noinspection unchecked
-        return (Bean<WindowContextManager>) conversationManagerBeans.iterator().next();
-    }
-
-    public static Bean<BeanEntryFactory> resolveBeanEntryFactoryBean()
-    {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        Set<?> beanEntryFactoryBeans = beanManager.getBeans(BeanEntryFactory.class, JSF_QUALIFIER);
-
-        if (beanEntryFactoryBeans.isEmpty())
-        {
-            beanEntryFactoryBeans = getDefaultBeanEntryFactory(beanManager);
-        }
-
-        if (beanEntryFactoryBeans.size() != 1)
-        {
-            throw new IllegalStateException(beanEntryFactoryBeans.size() + " BeanEntry-Factories were found");
-        }
-        //noinspection unchecked
-        return (Bean<BeanEntryFactory>) beanEntryFactoryBeans.iterator().next();
-    }
-
     public static Class getConversationGroup(Bean<?> bean)
     {
         Class<? extends Annotation> scopeType = bean.getScope();
@@ -147,26 +98,6 @@ public class ConversationUtils
             }
         }
         return null;
-    }
-
-    /**
-     * @param beanManager current {@link javax.enterprise.inject.spi.BeanManager}
-     * @return the descriptor of the default
-     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
-     */
-    private static Set<Bean<?>> getDefaultConversationManager(BeanManager beanManager)
-    {
-        return beanManager.getBeans(WindowContextManager.class);
-    }
-
-    /**
-     * @param beanManager current {@link javax.enterprise.inject.spi.BeanManager}
-     * @return the descriptor of the default
-     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory}
-     */
-    private static Set<Bean<?>> getDefaultBeanEntryFactory(BeanManager beanManager)
-    {
-        return beanManager.getBeans(BeanEntryFactory.class);
     }
 
     //TODO
@@ -361,9 +292,7 @@ public class ConversationUtils
 
     private static WindowContextIdHolderComponent createComponentWithCurrentWindowContextId()
     {
-        Bean<WindowContextManager> conversationManagerBean = resolveConversationManagerBean();
-
-        WindowContextManager conversationManager = CodiUtils.getOrCreateScopedInstanceOfBean(conversationManagerBean);
+        WindowContextManager conversationManager = resolveCustomizableImplementation(WindowContextManager.class);
 
         return new WindowContextIdHolderComponent(conversationManager.getCurrentWindowContext().getId());
     }
@@ -419,7 +348,7 @@ public class ConversationUtils
 
     public static WindowHandler getWindowHandler()
     {
-        return getJsfAwareWindowContextConfig().getWindowHandler();
+        return resolveCustomizableImplementation(WindowHandler.class);
     }
 
     public static WindowContextManager getWindowContextManager()

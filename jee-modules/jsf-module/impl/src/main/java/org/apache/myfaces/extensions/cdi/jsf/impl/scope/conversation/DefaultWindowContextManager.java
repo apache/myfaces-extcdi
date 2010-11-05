@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
@@ -97,8 +98,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     protected void init()
     {
-        this.windowHandler = this.jsfAwareWindowContextConfig.getWindowHandler();
-        this.windowContextQuotaHandler = this.jsfAwareWindowContextConfig.getWindowContextQuotaHandler();
+        this.windowHandler = resolveCustomizableImplementation(WindowHandler.class);
+        this.windowContextQuotaHandler = resolveCustomizableImplementation(WindowContextQuotaHandler.class);
         this.allowUnknownWindowIds = this.jsfAwareWindowContextConfig.isUnknownWindowIdsAllowed();
         this.urlParameterSupported = this.jsfAwareWindowContextConfig.isUrlParameterSupported();
 
@@ -187,7 +188,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private EditableWindowContext createWindowContext(String windowContextId)
     {
-        WindowContextFactory windowContextFactory = this.jsfAwareWindowContextConfig.getWindowContextFactory();
+        WindowContextFactory windowContextFactory = resolveCustomizableImplementation(WindowContextFactory.class);
 
         if(windowContextFactory != null)
         {

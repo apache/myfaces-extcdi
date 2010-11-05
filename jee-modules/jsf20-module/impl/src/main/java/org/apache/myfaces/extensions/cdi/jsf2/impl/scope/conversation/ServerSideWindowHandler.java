@@ -21,11 +21,13 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.enterprise.inject.Typed;
 import java.io.IOException;
 
 /**
@@ -34,17 +36,18 @@ import java.io.IOException;
  *
  * @author Gerhard Petracek
  */
+@Typed()
 @SuppressWarnings({"UnusedDeclaration"})
-public class ServerSideWindowHandler extends DefaultWindowHandler
+public abstract class ServerSideWindowHandler extends DefaultWindowHandler
 {
     private static final long serialVersionUID = 4040116087475343221L;
 
     //workaround for mojarra
     private final boolean useFallback;
 
-    protected ServerSideWindowHandler(boolean useWindowAwareUrlEncoding)
+    protected ServerSideWindowHandler(ConfigResolver configResolver)
     {
-        super(useWindowAwareUrlEncoding);
+        super(configResolver);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;
     }
 

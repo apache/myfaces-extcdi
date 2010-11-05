@@ -16,17 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.api;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.AbstractCodiConfig;
+import javax.inject.Qualifier;
+import java.lang.annotation.Target;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.*;
 
 /**
+ * Qualifier which is used for custom implementations which should be used by CODI
+ *
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends AbstractCodiConfig
-        implements WindowContextConfig, ConversationConfig
+@Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
+@Retention(RUNTIME)
+@Documented
+
+@Qualifier
+public @interface Custom
 {
-    public abstract boolean isInitialRedirectDisable();
 }

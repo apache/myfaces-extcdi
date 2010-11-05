@@ -16,18 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config;
+package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.Custom;
+
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
+ * Literal for the {@link org.apache.myfaces.extensions.cdi.core.api.Custom} annotation.
+ *
  * @author Gerhard Petracek
  */
-class CustomImplementationParser<T> implements ConfigValueParser<T>
+public class CustomLiteral extends AnnotationLiteral<Custom> implements Custom
 {
-    public T parse(String value)
-    {
-        //TODO throw an invalid config exception if the result is null
-        return (T)ClassUtils.tryToInstantiateClassForName(value);
-    }
+    private static final long serialVersionUID = -2986588961156398003L;
 }

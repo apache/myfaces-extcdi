@@ -21,10 +21,10 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.resolveCustomizableBean;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 
 import javax.enterprise.inject.spi.Bean;
 import java.util.Map;
@@ -72,7 +72,7 @@ public class RequestCache
 
         if(windowContextManager == null)
         {
-            return resolveWindowContextManager(resolveConversationManagerBean());
+            return resolveWindowContextManager(resolveCustomizableBean(WindowContextManager.class));
         }
 
         return windowContextManager;
@@ -97,7 +97,7 @@ public class RequestCache
 
         if(beanEntryFactory == null)
         {
-            return resolveBeanEntryFactory(resolveBeanEntryFactoryBean());
+            return resolveBeanEntryFactory(resolveCustomizableBean(BeanEntryFactory.class));
         }
 
         return beanEntryFactory;

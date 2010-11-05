@@ -16,17 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.impl.resolver;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.AbstractCodiConfig;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.*;
+
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author Gerhard Petracek
  */
-public abstract class JsfAwareWindowContextConfig extends AbstractCodiConfig
-        implements WindowContextConfig, ConversationConfig
+@ApplicationScoped
+public class DefaultConfigResolver implements ConfigResolver
 {
-    public abstract boolean isInitialRedirectDisable();
+    private static final long serialVersionUID = -4410313406799415118L;
+
+    public <T extends CodiConfig> T resolve(Class<T> targetType)
+    {
+        return resolveCustomizableImplementation(targetType);
+    }
 }

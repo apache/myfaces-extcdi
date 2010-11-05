@@ -20,15 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowContextQuotaHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.JsfAwareConversationFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
@@ -164,36 +156,6 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         return getAttribute(DISABLE_INITIAL_REDIRECT, Boolean.class);
     }
 
-    public ConversationFactory getConversationFactory()
-    {
-        lazyInit();
-        return getAttribute(ConversationFactory.class.getName(), ConversationFactory.class);
-    }
-
-    public WindowContextFactory getWindowContextFactory()
-    {
-        lazyInit();
-        return getAttribute(WindowContextFactory.class.getName(), WindowContextFactory.class);
-    }
-
-    public WindowContextManagerFactory getWindowContextManagerFactory()
-    {
-        lazyInit();
-        return getAttribute(WindowContextManagerFactory.class.getName(), WindowContextManagerFactory.class);
-    }
-
-    public WindowContextQuotaHandler getWindowContextQuotaHandler()
-    {
-        lazyInit();
-        return getAttribute(WindowContextQuotaHandler.class.getName(), WindowContextQuotaHandler.class);
-    }
-
-    public WindowHandler getWindowHandler()
-    {
-        lazyInit();
-        return getAttribute(WindowHandler.class.getName(), WindowHandler.class);
-    }
-
     private void lazyInit()
     {
         if (configInitialized == null)
@@ -219,13 +181,6 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
         initDisableInitialRedirect(facesContext);
         initConversatonEvents(facesContext);
         initActionUrlEncoding(facesContext);
-
-        //init custom implementations
-        initWindowContextManagerFactory(facesContext);
-        initWindowContextFactory(facesContext);
-        initConversationFactory(facesContext);
-        initWindowContextQuotaHandler(facesContext);
-        initWindowHandler(facesContext);
     }
 
     private void initUrlParameterEnabled(FacesContext facesContext)
@@ -341,52 +296,6 @@ public class DefaultWindowContextConfig extends JsfAwareWindowContextConfig
                 ADD_WINDOW_ID_TO_ACTION_URL_ENABLED,
                 new BooleanConfigValueParser(),
                 ADD_WINDOW_ID_TO_ACTION_URL_ENABLED_DEFAULT);
-    }
-
-    /*
-     * custom implementations
-     */
-    private void initWindowContextManagerFactory(FacesContext facesContext)
-    {
-        initConfig(facesContext,
-                   WindowContextManagerFactory.class.getName(),
-                   new CustomImplementationParser<WindowContextManagerFactory>(),
-                   null);
-    }
-
-    private void initWindowContextFactory(FacesContext facesContext)
-    {
-        initConfig(facesContext,
-                   WindowContextFactory.class.getName(),
-                   new CustomImplementationParser<WindowContextFactory>(),
-                   null);
-    }
-
-    private void initConversationFactory(FacesContext facesContext)
-    {
-        initConfig(facesContext,
-                   ConversationFactory.class.getName(),
-                   new CustomImplementationParser<ConversationFactory>(),
-                   new JsfAwareConversationFactory());
-    }
-
-    private void initWindowContextQuotaHandler(FacesContext facesContext)
-    {
-        initConfig(facesContext,
-                   WindowContextQuotaHandler.class.getName(),
-                   new CustomImplementationParser<WindowContextQuotaHandler>(),
-                   new DefaultWindowContextQuotaHandler(getMaxWindowContextCount()));
-    }
-
-    private void initWindowHandler(FacesContext facesContext)
-    {
-        initConfig(facesContext,
-                   WindowHandler.class.getName(),
-                   new CustomImplementationParser<WindowHandler>(),
-                   new DefaultWindowHandler(isUrlParameterSupported())
-                   {
-                       private static final long serialVersionUID = 7376499174252256735L;
-                   });
     }
 
     protected <T> void initConfig(FacesContext facesContext,

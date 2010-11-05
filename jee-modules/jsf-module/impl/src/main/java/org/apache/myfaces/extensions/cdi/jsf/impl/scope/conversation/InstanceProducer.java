@@ -26,6 +26,7 @@ import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
+import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -56,7 +57,7 @@ final class InstanceProducer
                 configResolver.resolve(JsfAwareWindowContextConfig.class);
 
         WindowContextManagerFactory windowContextManagerFactory =
-                jsfAwareWindowContextConfig.getWindowContextManagerFactory();
+                resolveCustomizableImplementation(WindowContextManagerFactory.class);
 
         if(windowContextManagerFactory != null)
         {

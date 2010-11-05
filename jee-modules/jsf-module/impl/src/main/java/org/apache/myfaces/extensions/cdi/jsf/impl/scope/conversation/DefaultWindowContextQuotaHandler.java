@@ -21,25 +21,36 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Date;
 
 /**
  * @author Gerhard Petracek
  */
+@ApplicationScoped
 public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandler
 {
     private static final long serialVersionUID = 4354405166761604711L;
 
-    private final int maxWindowContextCount;
+    private int maxWindowContextCount;
 
-    public DefaultWindowContextQuotaHandler(int maxWindowContextCount)
+    public DefaultWindowContextQuotaHandler()
     {
-        this.maxWindowContextCount = maxWindowContextCount;
+    }
+
+    @Inject
+    public DefaultWindowContextQuotaHandler(ConfigResolver configResolver)
+    {
+        this.maxWindowContextCount = configResolver.resolve(JsfAwareWindowContextConfig.class)
+                .getMaxWindowContextCount();
     }
 
     public boolean checkQuota(int activeWindowContextCount)

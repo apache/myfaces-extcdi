@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
@@ -26,7 +25,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwar
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
-import java.util.Set;
 
 //just an internal demo
 @Model
@@ -36,9 +34,6 @@ public class ConfigDemoBean extends DefaultWindowContextConfig
     private static final long serialVersionUID = -6915243682321970384L;
 
     @Inject
-    private Set<CodiConfig> codiConfig;
-
-    @Inject
     private ConfigResolver configResolver;
 
     public ConfigDemoBean()
@@ -46,12 +41,11 @@ public class ConfigDemoBean extends DefaultWindowContextConfig
     }
 
     @Inject
-    public ConfigDemoBean(Set<CodiConfig> codiConfig, ConfigResolver configResolver)
+    public ConfigDemoBean(ConfigResolver configResolver)
     {
-        this.codiConfig = codiConfig;
         this.configResolver = configResolver;
 
-        if(this.codiConfig.isEmpty() || this.configResolver.resolve(JsfAwareWindowContextConfig.class) == null)
+        if(this.configResolver.resolve(JsfAwareWindowContextConfig.class) == null)
         {
             throw new IllegalStateException("invalid config");
         }
