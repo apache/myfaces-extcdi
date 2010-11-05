@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;
@@ -28,7 +28,7 @@ import javax.inject.Inject;
 public class ConfigDemoBean
 {
     @Inject
-    private JsfAwareWindowContextConfig config;
+    private JsfModuleConfig config;
 
     public boolean isInitialRedirectDisable()
     {

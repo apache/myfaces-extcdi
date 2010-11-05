@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -29,7 +29,7 @@ import javax.enterprise.context.ApplicationScoped;
  * @author Gerhard Petracek
  */
 @ApplicationScoped
-public class DefaultWindowContextConfig extends AbstractAttributeAware implements JsfAwareWindowContextConfig
+public class DefaultWindowContextConfig extends AbstractAttributeAware implements JsfModuleConfig
 {
     private static final long serialVersionUID = -1065123725125153533L;
 

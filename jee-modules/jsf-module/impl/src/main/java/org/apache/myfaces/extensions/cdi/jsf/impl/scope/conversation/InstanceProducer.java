@@ -26,7 +26,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
@@ -48,7 +48,7 @@ final class InstanceProducer
     @Produces
     @SessionScoped
     @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
-    protected EditableWindowContextManager createWindowContextManager(JsfAwareWindowContextConfig config,
+    protected EditableWindowContextManager createWindowContextManager(JsfModuleConfig config,
                                                                       ProjectStage projectStage,
                                                                       BeanManager beanManager)
     {

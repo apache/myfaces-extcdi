@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils
         .windowContextManagerNotEditableException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
 import javax.enterprise.inject.spi.Bean;
@@ -110,7 +110,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
     protected ConversationConfig getConversationConfig()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(JsfAwareWindowContextConfig.class);
+        return getOrCreateScopedInstanceOfBeanByClass(JsfModuleConfig.class);
     }
 
     private EditableConversation getConversation(EditableWindowContextManager windowContextManager, Bean<?> bean)

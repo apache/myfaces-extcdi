@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Convers
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
@@ -57,7 +57,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     private final String id;
 
-    private final JsfAwareWindowContextConfig jsfAwareWindowContextConfig;
+    private final JsfModuleConfig jsfModuleConfig;
     private final boolean projectStageDevelopment;
 
     private BeanManager beanManager;
@@ -70,17 +70,17 @@ public class JsfWindowContext implements EditableWindowContext
     private final TimeoutExpirationEvaluator expirationEvaluator;
 
     JsfWindowContext(String windowContextId,
-                     JsfAwareWindowContextConfig jsfAwareWindowContextConfig,
+                     JsfModuleConfig jsfModuleConfig,
                      boolean projectStageDevelopment,
                      BeanManager beanManager)
     {
         this.id = windowContextId;
-        this.jsfAwareWindowContextConfig = jsfAwareWindowContextConfig;
+        this.jsfModuleConfig = jsfModuleConfig;
         this.projectStageDevelopment = projectStageDevelopment;
         this.beanManager = beanManager;
 
         this.expirationEvaluator = new TimeoutExpirationEvaluator(
-                this.jsfAwareWindowContextConfig.getWindowContextTimeoutInMinutes());
+                this.jsfModuleConfig.getWindowContextTimeoutInMinutes());
     }
 
     public String getId()
@@ -210,7 +210,7 @@ public class JsfWindowContext implements EditableWindowContext
         {
             ((BeanManagerAware)conversationFactory).setBeanManager(this.beanManager);
         }
-        return conversationFactory.createConversation(conversationKey, this.jsfAwareWindowContextConfig);
+        return conversationFactory.createConversation(conversationKey, this.jsfModuleConfig);
     }
 
     public Map<ConversationKey /*conversation group*/, EditableConversation> getConversations()
@@ -220,7 +220,7 @@ public class JsfWindowContext implements EditableWindowContext
 
     public WindowContextConfig getConfig()
     {
-        return this.jsfAwareWindowContextConfig;
+        return this.jsfModuleConfig;
     }
 
     public boolean isActive()

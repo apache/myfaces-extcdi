@@ -23,5 +23,5 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
  */
 public interface WindowContextFactory
 {
-    EditableWindowContext createWindowContext(String windowContextId, JsfAwareWindowContextConfig windowContextConfig);
+    EditableWindowContext createWindowContext(String windowContextId, JsfModuleConfig windowContextConfig);
 }

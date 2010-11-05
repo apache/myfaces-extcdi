@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
@@ -45,7 +45,7 @@ public abstract class ServerSideWindowHandler extends DefaultWindowHandler
     //workaround for mojarra
     private final boolean useFallback;
 
-    protected ServerSideWindowHandler(JsfAwareWindowContextConfig config)
+    protected ServerSideWindowHandler(JsfModuleConfig config)
     {
         super(config);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;

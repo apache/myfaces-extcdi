@@ -23,5 +23,5 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
  */
 public interface WindowContextManagerFactory
 {
-    EditableWindowContextManager createWindowContextManager(JsfAwareWindowContextConfig windowContextConfig);
+    EditableWindowContextManager createWindowContextManager(JsfModuleConfig windowContextConfig);
 }

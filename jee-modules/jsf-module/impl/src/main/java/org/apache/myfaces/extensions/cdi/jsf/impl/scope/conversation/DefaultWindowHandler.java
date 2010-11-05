@@ -22,7 +22,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
         .getExistingWindowIdSet;
@@ -57,7 +57,7 @@ public class DefaultWindowHandler implements WindowHandler
     }
 
     @Inject
-    protected DefaultWindowHandler(JsfAwareWindowContextConfig config)
+    protected DefaultWindowHandler(JsfModuleConfig config)
     {
         this.useWindowAwareUrlEncoding = config.isUrlParameterSupported();
     }

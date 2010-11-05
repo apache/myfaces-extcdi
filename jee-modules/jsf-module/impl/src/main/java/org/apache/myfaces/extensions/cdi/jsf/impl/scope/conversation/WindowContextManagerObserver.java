@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
@@ -47,7 +47,7 @@ final class WindowContextManagerObserver
     protected void cleanup(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
                            EditableWindowContextManager windowContextManager,
-                           JsfAwareWindowContextConfig config)
+                           JsfModuleConfig config)
     {
         if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
         {
@@ -97,7 +97,7 @@ final class WindowContextManagerObserver
      * @param config window config
      * @return true if the current request should be continued
      */
-    private boolean processGetRequest(FacesContext facesContext, JsfAwareWindowContextConfig config)
+    private boolean processGetRequest(FacesContext facesContext, JsfModuleConfig config)
     {
         boolean urlParameterSupported = config.isUrlParameterSupported();
         boolean useWindowIdForFirstPage = !config.isInitialRedirectDisabled();

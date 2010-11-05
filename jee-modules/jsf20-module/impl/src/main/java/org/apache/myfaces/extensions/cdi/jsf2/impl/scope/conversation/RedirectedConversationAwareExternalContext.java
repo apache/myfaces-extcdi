@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfAwareWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import javax.faces.context.ExternalContext;
@@ -74,7 +74,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         {
             this.windowHandler = getWindowHandler();
             this.encodeActionURLs = CodiUtils
-                    .getOrCreateScopedInstanceOfBeanByClass(JsfAwareWindowContextConfig.class)
+                    .getOrCreateScopedInstanceOfBeanByClass(JsfModuleConfig.class)
                     .isAddWindowIdToActionUrlsEnabled();
         }
     }
