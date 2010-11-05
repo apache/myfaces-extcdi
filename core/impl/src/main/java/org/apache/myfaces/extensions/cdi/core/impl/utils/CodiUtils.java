@@ -76,6 +76,47 @@ public class CodiUtils
         return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBeans.iterator().next());
     }
 
+    public static <T> Bean<T> getOrCreateBeanByClass(Class<T> targetClass, Annotation... qualifier)
+    {
+        return getOrCreateBeanByClass(BeanManagerProvider.getInstance().getBeanManager(), targetClass, qualifier);
+    }
+
+    public static <T> Bean<T> getOrCreateBeanByClass(
+            BeanManager beanManager, Class<T> targetClass, Annotation... qualifier)
+    {
+        return getOrCreateBeanByClass(beanManager, targetClass, false, qualifier);
+    }
+
+    public static <T> Bean<T> getOrCreateBeanByClass(
+            BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
+    {
+        Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass, qualifier);
+
+        if(foundBeans.size() > 1)
+        {
+            StringBuffer detailsOfBeans = new StringBuffer();
+
+            for(Bean bean : foundBeans)
+            {
+                detailsOfBeans.append(bean.toString());
+            }
+            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName() +
+                    " the found beans are: " + detailsOfBeans.toString());
+        }
+
+        if(foundBeans.size() == 1)
+        {
+            //noinspection unchecked
+            return foundBeans.iterator().next();
+        }
+
+        if(!optionalBeanAllowed)
+        {
+            throw new IllegalStateException("No bean found for type: " + targetClass.getName());
+        }
+        return null;
+    }
+
     public static <T> T getOrCreateScopedInstanceOfBeanByClass(Class<T> targetClass, Annotation... qualifier)
     {
         return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
@@ -98,29 +139,12 @@ public class CodiUtils
     public static <T> T getOrCreateScopedInstanceOfBeanByClass(
             BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
     {
-        Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass, qualifier);
+        Bean<?> foundBean = getOrCreateBeanByClass(beanManager, targetClass, optionalBeanAllowed, qualifier);
 
-        if(foundBeans.size() > 1)
-        {
-            StringBuffer detailsOfBeans = new StringBuffer();
-
-            for(Bean bean : foundBeans)
-            {
-                detailsOfBeans.append(bean.toString());
-            }
-            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName() +
-                    " the found beans are: " + detailsOfBeans.toString());
-        }
-
-        if(foundBeans.size() == 1)
+        if(foundBean != null)
         {
             //noinspection unchecked
-            return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBeans.iterator().next());
-        }
-
-        if(!optionalBeanAllowed)
-        {
-            throw new IllegalStateException("No bean found for type: " + targetClass.getName());
+            return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBean);
         }
         return null;
     }

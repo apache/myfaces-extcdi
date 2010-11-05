@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.resolver;
 
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CustomizableImplementationUtils.*;
+import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -34,6 +34,6 @@ public class DefaultConfigResolver implements ConfigResolver
 
     public <T extends CodiConfig> T resolve(Class<T> targetType)
     {
-        return resolveCustomizableImplementation(targetType);
+        return CodiUtils.getOrCreateScopedInstanceOfBeanByClass(targetType);
     }
 }
