@@ -16,16 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.core.impl.utils;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+import org.apache.myfaces.extensions.cdi.core.api.Enhanced;
+
+import javax.enterprise.util.AnnotationLiteral;
 
 /**
+ * Literal for the {@link org.apache.myfaces.extensions.cdi.core.api.Enhanced} annotation.
+ *
  * @author Gerhard Petracek
  */
-public interface JsfAwareWindowContextConfig extends CodiConfig, WindowContextConfig, ConversationConfig
+public class EnhancedLiteral extends AnnotationLiteral<Enhanced> implements Enhanced
 {
-    boolean isInitialRedirectDisable();
+    private static final long serialVersionUID = -7550852235532736821L;
 }

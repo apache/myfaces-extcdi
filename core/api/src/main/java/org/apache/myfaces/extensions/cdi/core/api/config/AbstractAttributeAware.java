@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * Base config implementation which implements {@link org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware}
- * to support custom attributes for existing configs.
+ * Base implementation which implements {@link org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware}
+ * to support custom attributes.
  *  
  * @author Gerhard Petracek
  */
-public abstract class AbstractCodiConfig implements CodiConfig, AttributeAware
+public abstract class AbstractAttributeAware implements AttributeAware
 {
     private Map<String, Object> configAttributes;
 
