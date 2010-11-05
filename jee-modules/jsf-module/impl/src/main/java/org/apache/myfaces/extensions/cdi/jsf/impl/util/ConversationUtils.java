@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScope
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
@@ -95,6 +96,25 @@ public class ConversationUtils
         return (Bean<WindowContextManager>) conversationManagerBeans.iterator().next();
     }
 
+    public static Bean<BeanEntryFactory> resolveBeanEntryFactoryBean()
+    {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+        Set<?> beanEntryFactoryBeans = beanManager.getBeans(BeanEntryFactory.class, JSF_QUALIFIER);
+
+        if (beanEntryFactoryBeans.isEmpty())
+        {
+            beanEntryFactoryBeans = getDefaultBeanEntryFactory(beanManager);
+        }
+
+        if (beanEntryFactoryBeans.size() != 1)
+        {
+            throw new IllegalStateException(beanEntryFactoryBeans.size() + " BeanEntry-Factories were found");
+        }
+        //noinspection unchecked
+        return (Bean<BeanEntryFactory>) beanEntryFactoryBeans.iterator().next();
+    }
+
     public static Class getConversationGroup(Bean<?> bean)
     {
         Class<? extends Annotation> scopeType = bean.getScope();
@@ -137,6 +157,16 @@ public class ConversationUtils
     private static Set<Bean<?>> getDefaultConversationManager(BeanManager beanManager)
     {
         return beanManager.getBeans(WindowContextManager.class);
+    }
+
+    /**
+     * @param beanManager current {@link javax.enterprise.inject.spi.BeanManager}
+     * @return the descriptor of the default
+     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory}
+     */
+    private static Set<Bean<?>> getDefaultBeanEntryFactory(BeanManager beanManager)
+    {
+        return beanManager.getBeans(BeanEntryFactory.class);
     }
 
     //TODO

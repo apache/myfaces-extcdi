@@ -18,13 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.ConfigResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
@@ -67,6 +67,11 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         return RequestCache.getWindowContextManager();
     }
 
+    protected BeanEntryFactory resolveBeanEntryFactory()
+    {
+        return RequestCache.getBeanEntryFactory();
+    }
+
     /**
      * @param windowContextManager the current
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
@@ -98,9 +103,10 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         }
 
         Bean<?> bean = beanEntry.getBean();
-        Conversation foundConversation = getConversation((EditableWindowContextManager)windowContextManager, bean);
+        EditableConversation foundConversation =
+                getConversation((EditableWindowContextManager)windowContextManager, bean);
 
-        ((EditableConversation) foundConversation).addBean(beanEntry);
+        foundConversation.addBean(beanEntry);
     }
 
     protected ConversationConfig getConversationConfig()

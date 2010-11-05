@@ -57,7 +57,7 @@ public class ClassDeactivation
 
     private static ClassDeactivator getClassDeactivator()
     {
-        ClassDeactivator classDeactivator = null;
+        ClassDeactivator classDeactivator;
 
         // check system property
         classDeactivator = getClassDeactivatorFromEnvironment();

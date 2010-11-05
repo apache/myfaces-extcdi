@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent;

@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
@@ -81,8 +82,11 @@ public abstract class AbstractGroupedConversationContext
 
         WindowContextManager windowContextManager = resolveWindowContextManager();
 
-        BeanEntry<T> beanEntry = new ConversationBeanEntry<T>(creationalContext, bean, this.beanManager,
-                this.scopeBeanEventEnable, this.accessBeanEventEnable, this.unscopeBeanEventEnable);
+        BeanEntry<T> beanEntry = resolveBeanEntryFactory().createBeanEntry(bean,
+                                                                           creationalContext,
+                                                                           this.scopeBeanEventEnable,
+                                                                           this.accessBeanEventEnable,
+                                                                           this.unscopeBeanEventEnable);
 
         scopeBeanEntry(windowContextManager, beanEntry);
 
@@ -100,10 +104,16 @@ public abstract class AbstractGroupedConversationContext
     }
 
     /**
-     * @return an instance of a custom (the default)
+     * @return an instance of a custom or the default
      * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager}
      */
     protected abstract WindowContextManager resolveWindowContextManager();
+
+    /**
+     * @return an instance of a custom or the default
+     * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory}
+     */
+    protected abstract BeanEntryFactory resolveBeanEntryFactory();
 
     /**
      * @param windowContextManager the current

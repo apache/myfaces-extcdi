@@ -19,10 +19,12 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 
 import javax.enterprise.inject.spi.Bean;
 import java.util.Map;
@@ -38,8 +40,8 @@ public class RequestCache
     private static ThreadLocal<WindowContextManager> windowContextManagerCache
             = new ThreadLocal<WindowContextManager>();
 
-    private static ThreadLocal<Bean<WindowContextManager>> windowContextManagerBeanCache
-            = new ThreadLocal<Bean<WindowContextManager>>();
+    private static ThreadLocal<BeanEntryFactory> beanEntryFactoryCache
+            = new ThreadLocal<BeanEntryFactory>();
 
     private static ThreadLocal<Map<ConversationKey, EditableConversation>> conversationCache
             = new ThreadLocal<Map<ConversationKey, EditableConversation>>();
@@ -49,8 +51,8 @@ public class RequestCache
         windowContextManagerCache.set(null);
         windowContextManagerCache.remove();
 
-        windowContextManagerBeanCache.set(null);
-        windowContextManagerBeanCache.remove();
+        beanEntryFactoryCache.set(null);
+        beanEntryFactoryCache.remove();
 
         windowContextCache.set(null);
         windowContextCache.remove();
@@ -70,18 +72,8 @@ public class RequestCache
 
         if(windowContextManager == null)
         {
-            return resolveWindowContextManager(resolveWindowContextManagerBean());
+            return resolveWindowContextManager(resolveConversationManagerBean());
         }
-
-        /* TODO remove it after tests
-        if(windowContextManager == null)
-        {
-            windowContextManager = CodiUtils.getOrCreateScopedInstanceOfBeanByName(
-                WindowContextManager.WINDOW_CONTEXT_MANAGER_BEAN_NAME, WindowContextManager.class);
-
-            windowContextManagerCache.set(windowContextManager);
-        }
-        */
 
         return windowContextManager;
     }
@@ -99,17 +91,29 @@ public class RequestCache
         return windowContextManager;
     }
 
-    private static Bean<WindowContextManager> resolveWindowContextManagerBean()
+    public static BeanEntryFactory getBeanEntryFactory()
     {
-        Bean<WindowContextManager> windowContextManagerBean = windowContextManagerBeanCache.get();
+        BeanEntryFactory beanEntryFactory = beanEntryFactoryCache.get();
 
-        if(windowContextManagerBean == null)
+        if(beanEntryFactory == null)
         {
-            windowContextManagerBean = ConversationUtils.resolveConversationManagerBean();
-            windowContextManagerBeanCache.set(windowContextManagerBean);
+            return resolveBeanEntryFactory(resolveBeanEntryFactoryBean());
         }
 
-        return windowContextManagerBean;
+        return beanEntryFactory;
+    }
+
+    private static BeanEntryFactory resolveBeanEntryFactory(Bean<BeanEntryFactory> beanEntryFactoryBean)
+    {
+        BeanEntryFactory beanEntryFactory = beanEntryFactoryCache.get();
+
+        if(beanEntryFactory == null)
+        {
+            beanEntryFactory = CodiUtils.getOrCreateScopedInstanceOfBean(beanEntryFactoryBean);
+            beanEntryFactoryCache.set(beanEntryFactory);
+        }
+
+        return beanEntryFactory;
     }
 
     public static WindowContext getCurrentWindowContext()
