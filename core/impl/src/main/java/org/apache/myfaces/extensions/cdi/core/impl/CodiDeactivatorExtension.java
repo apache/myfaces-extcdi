@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation.isClassActivated;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
@@ -30,11 +31,11 @@ import javax.interceptor.Interceptor;
  * 
  * @author Gerhard Petracek
  */
-public class CodiDeactivatorExtension implements Extension
+public class CodiDeactivatorExtension implements Extension, Deactivatable
 {
     public void filterInterceptors(@Observes ProcessAnnotatedType processAnnotatedType)
     {
-        if(!isClassActivated(getClass()))
+        if(!isActivated())
         {
             return;
         }
@@ -46,5 +47,10 @@ public class CodiDeactivatorExtension implements Extension
                 processAnnotatedType.veto();
             }
         }
+    }
+
+    public boolean isActivated()
+    {
+        return isClassActivated(getClass());
     }
 }
