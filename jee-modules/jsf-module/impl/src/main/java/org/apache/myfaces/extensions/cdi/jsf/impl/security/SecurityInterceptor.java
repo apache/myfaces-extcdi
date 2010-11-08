@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.invokeVoters;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;

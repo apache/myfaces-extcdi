@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
+import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 
 /**
  * @author Gerhard Petracek

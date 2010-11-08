@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.mapped;
 
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.NamedLiteral;
+import org.apache.myfaces.extensions.cdi.core.impl.util.NamedLiteral;
 
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.faces.bean.ManagedBean;

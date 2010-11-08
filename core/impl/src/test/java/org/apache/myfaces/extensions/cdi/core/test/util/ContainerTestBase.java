@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.utils;
+package org.apache.myfaces.extensions.cdi.core.test.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
@@ -27,14 +27,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
 import java.lang.annotation.Annotation;
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
  */
 public class ContainerTestBase
 {
-
     protected Logger log;
     protected static volatile CdiTestContainer containerStarter;
     protected static volatile int containerRefCount = 0;

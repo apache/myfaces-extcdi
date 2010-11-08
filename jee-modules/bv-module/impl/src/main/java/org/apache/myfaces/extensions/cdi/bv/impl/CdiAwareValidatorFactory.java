@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.injectFields;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 import javax.enterprise.inject.Typed;
 import javax.validation.ValidatorFactory;

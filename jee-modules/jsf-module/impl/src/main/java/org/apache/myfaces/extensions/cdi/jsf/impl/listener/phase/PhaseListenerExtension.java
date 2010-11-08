@@ -33,8 +33,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation.isClassActivated;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation.isClassActivated;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.tryToInjectDependencies;
 
 /**
  * The PhaseListenerExtension picks up all {@link JsfPhaseListener} annotated

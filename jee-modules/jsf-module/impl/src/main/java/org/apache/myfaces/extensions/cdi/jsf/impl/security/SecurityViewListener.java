@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.SecurityUtils.invokeVoters;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 
 import javax.enterprise.event.Observes;

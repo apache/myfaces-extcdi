@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans.MyMailService;
 import org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans.MyMailServiceMockImpl;
-import org.apache.myfaces.extensions.cdi.core.test.utils.ContainerTestBase;
+import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

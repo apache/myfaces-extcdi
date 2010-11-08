@@ -40,8 +40,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.isQualifierEqual;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.isQualifierEqual;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 

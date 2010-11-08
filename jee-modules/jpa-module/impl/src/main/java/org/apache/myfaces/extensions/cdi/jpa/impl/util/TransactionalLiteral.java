@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 
 import javax.enterprise.util.AnnotationLiteral;
 import javax.enterprise.inject.Default;
+import java.lang.annotation.Annotation;
 
 /**
  * can be used by add-ons
@@ -34,7 +35,7 @@ public class TransactionalLiteral extends AnnotationLiteral<Transactional> imple
 {
     private static final long serialVersionUID = -275279485237713614L;
 
-    public Class qualifier()
+    public Class<? extends Annotation> qualifier()
     {
         return Default.class;
     }

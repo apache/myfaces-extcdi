@@ -22,7 +22,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;

@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.impl.utils.UnmodifiableMap;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
 import javax.script.ScriptEngineManager;

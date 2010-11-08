@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.faces.event.PhaseEvent;

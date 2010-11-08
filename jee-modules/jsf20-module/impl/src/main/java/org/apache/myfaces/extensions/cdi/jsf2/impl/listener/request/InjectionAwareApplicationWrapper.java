@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.tryToInjectDependencies;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.tryToInjectDependencies;
 
 import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;

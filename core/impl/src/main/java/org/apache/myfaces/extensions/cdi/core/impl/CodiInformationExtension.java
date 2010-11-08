@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.CodiInformation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;

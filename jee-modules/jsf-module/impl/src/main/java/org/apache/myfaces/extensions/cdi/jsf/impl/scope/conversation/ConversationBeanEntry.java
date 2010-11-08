@@ -27,7 +27,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import java.io.Serializable;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils.createNewInstanceOfBean;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.createNewInstanceOfBean;
 
 /**
  * @author Gerhard Petracek

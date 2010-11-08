@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jpa.impl;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.AnyLiteral;
+import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
 
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;

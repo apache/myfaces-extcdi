@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.CodiUtils;
-import org.apache.myfaces.extensions.cdi.core.impl.utils.JndiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.JndiUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
