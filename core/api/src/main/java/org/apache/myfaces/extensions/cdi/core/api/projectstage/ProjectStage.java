@@ -57,9 +57,7 @@ import java.util.logging.Logger;
  *
  * <p>Adding a new ProjectStage is done via the
  * {@link java.util.ServiceLoader} mechanism. A class deriving from {@link ProjectStage}
- * must be provided and used for creating a single static instance of it. The name of 
- * the class should be the name of the ProjectStage prefixed with 'C', 
- * e.g. &quot;CUnitTest&quot;</p>
+ * must be provided and used for creating a single static instance of it.
  *
  * <p>Custom ProjectStages can be implemented by writing anonymous ProjectStage
  * members into a registered {@link ProjectStageHolder} as shown in the following
@@ -67,11 +65,11 @@ import java.util.logging.Logger;
  * <pre>
  * package org.apache.myfaces.extensions.cdi.test.api.projectstage;
  * public class MyProjectStages implements ProjectStageHolder {
- *     public static final class CMyOwnProjectStage extends ProjectStage {};
- *     public static final CMyOwnProjectStage MyOwnProjectStage = new CMyOwnProjectStage();
- *    
- *     public static final class CMyOtherProjectStage extends ProjectStage {};
- *     public static final CMyOtherProjectStage MyOtherProjectStage = new CMyOtherProjectStage();
+ *     public static final class MyOwnProjectStage extends ProjectStage {};
+ *     public static final MyOwnProjectStage MyOwnProjectStage = new MyOwnProjectStage();
+ *
+ *     public static final class MyOtherProjectStage extends ProjectStage {};
+ *     public static final MyOtherProjectStage MyOtherProjectStage = new MyOtherProjectStage();
  * }
  * </pre>
  * <p>For activating those projectstages, you have to register this ProjectStageHolder class
@@ -89,7 +87,7 @@ import java.util.logging.Logger;
  * by the system:
  * <pre>
  * ProjectStage myOwnPs = ProjectStage.valueOf("MyOwnProjectStage");
-   if (myOwnPs.equals(MyOwnProjectStage.MyOwnProjectStage)) ... 
+   if (myOwnPs.equals(MyOwnProjectStage.MyOwnProjectStage)) ...
  * </pre>
  *
  */
@@ -103,14 +101,14 @@ public abstract class ProjectStage implements Serializable
      *
      * We don't need to use a ConcurrentHashMap because writing to it will
      * only be performed in the static initializer block which is guaranteed
-     * to be atomic by the VM spec. 
+     * to be atomic by the VM spec.
      */
     private static Map<String, ProjectStage> projectStages = new HashMap<String, ProjectStage>();
 
     /**
      * All the registered ProjectStage values.
      * We don't need to make this volatile because of the classloader guarantees of
-     * the VM.  
+     * the VM.
      */
     private static ProjectStage[] values = null;
 
@@ -119,7 +117,7 @@ public abstract class ProjectStage implements Serializable
      */
     private static final Logger log = Logger.getLogger(ProjectStage.class.getName());
 
-    
+
     /**
      * The static initializer block will register all custom ProjectStages
      * by simply touching their classes due loding it with the
@@ -136,7 +134,7 @@ public abstract class ProjectStage implements Serializable
         }
     }
 
-    
+
     /** the name of the ProjectStage*/
     private String psName;
 
@@ -176,7 +174,7 @@ public abstract class ProjectStage implements Serializable
     {
         return values;
     }
-    
+
     public String toString()
     {
         return psName;
