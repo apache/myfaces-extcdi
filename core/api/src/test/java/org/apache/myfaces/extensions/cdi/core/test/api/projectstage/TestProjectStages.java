@@ -25,8 +25,10 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageHolde
  */
 public class TestProjectStages implements ProjectStageHolder
 {
-    public static final class CAnotherProjectStage extends ProjectStage
+    public static final class CustomProjectStage extends ProjectStage
     {
-    };
-    public static final CAnotherProjectStage AnotherProjectStage = new CAnotherProjectStage();
+        private static final long serialVersionUID = 1029094387976167179L;
+    }
+
+    public static final CustomProjectStage CustomProjectStage = new CustomProjectStage();
 }

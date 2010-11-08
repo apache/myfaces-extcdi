@@ -33,7 +33,7 @@ import java.lang.annotation.Target;
  * <p>Example Usage:</p>
  * <pre>
  * &#064;Alternative
- * &#064;ProjectStageActivated({ProjectStage.CDevelopment.class, ProjectStage.CUnitTest.class})
+ * &#064;ProjectStageActivated({ProjectStage.Development.class, ProjectStage.UnitTest.class})
  * &#064;ApplicationScoped
  * public class MockMailServiceImpl implements MailService {...}
  * </pre>

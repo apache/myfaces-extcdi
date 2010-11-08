@@ -34,7 +34,10 @@ public class ProjectStageTest {
         ProjectStage ps = ProjectStage.Development;
         Assert.assertNotNull(ps);
 
-        ProjectStage psOther = ProjectStage.valueOf("AnotherProjectStage");
+        ProjectStage psOther = ProjectStage.valueOf("CustomProjectStage");
+        Assert.assertNotNull(psOther);
+
+        psOther = TestProjectStages.CustomProjectStage;
         Assert.assertNotNull(psOther);
 
         ProjectStage psProd = ProjectStage.valueOf("Production");

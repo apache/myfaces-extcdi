@@ -26,7 +26,7 @@ import javax.enterprise.inject.Alternative;
 /**
  */
 @Alternative
-@ProjectStageActivated({ProjectStage.CUnitTest.class, ProjectStage.CDevelopment.class})
+@ProjectStageActivated({ProjectStage.UnitTest.class, ProjectStage.Development.class})
 public class MyMailServiceMockImpl implements MyMailService
 {
 

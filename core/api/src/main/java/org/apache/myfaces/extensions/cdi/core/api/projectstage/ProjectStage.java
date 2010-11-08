@@ -146,16 +146,16 @@ public abstract class ProjectStage implements Serializable
      */
     protected ProjectStage()
     {
-        String psNameIn = this.getClass().getSimpleName(); 
-        psName = psNameIn.substring(1);
+        String projectStageClassName = this.getClass().getSimpleName();
+        psName = projectStageClassName;
 
-        if (!projectStages.containsKey(psNameIn))
+        if (!projectStages.containsKey(projectStageClassName))
         {
-            projectStages.put(psName, this);
+            projectStages.put(projectStageClassName, this);
         }
         else
         {
-            throw new IllegalArgumentException("ProjectStage with name " + psNameIn + " already exists!");
+            throw new IllegalArgumentException("ProjectStage with name " + projectStageClassName + " already exists!");
         }
 
         // we cannot do this in the static block since it's not really deterministic
@@ -164,12 +164,12 @@ public abstract class ProjectStage implements Serializable
     }
 
     /**
-     * @param psName the name of the ProjectStage
+     * @param projectStageClassName the name of the ProjectStage
      * @return the ProjectStage which is identified by it's name
      */
-    public static ProjectStage valueOf(String psName)
+    public static ProjectStage valueOf(String projectStageClassName)
     {
-        return projectStages.get(psName);
+        return projectStages.get(projectStageClassName);
     }
 
     public static ProjectStage[] values()
@@ -184,39 +184,44 @@ public abstract class ProjectStage implements Serializable
 
 
     @Typed()
-    public static final class CUnitTest extends ProjectStage
+    public static final class UnitTest extends ProjectStage
     {
-    };
-    public static final CUnitTest UnitTest = new CUnitTest();
-
-
-    @Typed()
-    public static final class CDevelopment extends ProjectStage
-    {
-    };
-    public static final CDevelopment Development = new CDevelopment();
+        private static final long serialVersionUID = -7910349894182034559L;
+    }
+    public static final UnitTest UnitTest = new UnitTest();
 
     @Typed()
-    public static final class CSystemTest extends ProjectStage
+    public static final class Development extends ProjectStage
     {
-    };
-    public static final CSystemTest SystemTest = new CSystemTest();
+        private static final long serialVersionUID = 1977308277341527250L;
+    }
+    public static final Development Development = new Development();
 
     @Typed()
-    public static final class CIntegrationTest extends ProjectStage
+    public static final class SystemTest extends ProjectStage
     {
-    };
-    public static final CIntegrationTest IntegrationTest = new CIntegrationTest();
+        private static final long serialVersionUID = -7444003351466372539L;
+    }
+    public static final SystemTest SystemTest = new SystemTest();
 
     @Typed()
-    public static final class CStaging extends ProjectStage
+    public static final class IntegrationTest extends ProjectStage
     {
-    };
-    public static final CStaging Staging = new CStaging();
+        private static final long serialVersionUID = 2034474361615347127L;
+    }
+    public static final IntegrationTest IntegrationTest = new IntegrationTest();
 
     @Typed()
-    public static final class CProduction extends ProjectStage
+    public static final class Staging extends ProjectStage
     {
-    };
-    public static final CProduction Production = new CProduction();
+        private static final long serialVersionUID = -8426149532860809553L;
+    }
+    public static final Staging Staging = new Staging();
+
+    @Typed()
+    public static final class Production extends ProjectStage
+    {
+        private static final long serialVersionUID = -4030601958667812084L;
+    }
+    public static final Production Production = new Production();
 }
