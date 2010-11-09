@@ -70,7 +70,6 @@
     <inceptionYear>2010</inceptionYear>
 
     <modules>
-        <module>site</module>
         <module>maven-utils</module>
         <module>core</module>
         <module>jee-modules</module>
