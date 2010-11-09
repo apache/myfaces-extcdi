@@ -10,7 +10,7 @@ Description
   and Dependency Injection (CDI - JSR 299) for the Java-Platform (SE and EE). CODI is a toolbox
   for your CDI application (it provides advanced and convenient features e.g. for JSF and Bean-Validation).
   Like CDI itself CODI is focused on type-safety. It is a modularized and extensible framework.
-  So it’s easy to choose the needed parts to facilitate the daily work in your project.
+  So it's easy to choose the needed parts to facilitate the daily work in your project.
 
   The main focus is to provide superior tools which will support you on solving your daily needs of software
   development with CDI, JSF, BV and JPA. However, you will also find modules which are independent of JSF as

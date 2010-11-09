@@ -42,7 +42,6 @@
         <links>
             <item name="Apache" href="http://www.apache.org"/>
             <item name="MyFaces" href="http://myfaces.apache.org/index.html"/>
-            <item name="Download Myfaces ExtVal" href="http://myfaces.apache.org/extensions/validator/download.html"/>
         </links>
 
         <menu name="Apache MyFaces" inherit="top">
