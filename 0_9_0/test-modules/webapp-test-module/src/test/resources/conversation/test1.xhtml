@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+    KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>MyFaces CODI Conversation Test</title>
+</h:head>
+<h:body>
+    <h:form id="testForm">
+
+        <!-- inputs -->
+        <h:inputText id="inputConversationBean1" value="#{conversationBean1.input}" />
+        <h:inputText id="inputConversationGroupBean1" value="#{conversationGroupBean1.input}" />
+        <h:inputText id="inputConversationGroupBean2" value="#{conversationGroupBean2.input}" />
+        <h:inputText id="inputConversationBeanWithQualifier1"
+                     value="#{conversationBeanWithInjectedQualifierBeans.beanWithQualifier1.input}" />
+        <h:inputText id="inputConversationBeanWithQualifier2DefaultValues"
+                     value="#{conversationBeanWithInjectedQualifierBeans.beanWithQualifier2DefaultValues.input}" />
+        <h:inputText id="inputConversationBeanWithQualifier2NonDefaultValues"
+                     value="#{conversationBeanWithInjectedQualifierBeans.beanWithQualifier2NonDefaultValues.input}" />
+        <h:inputText id="inputConversationBeanWithQualifier3"
+                     value="#{conversationBeanWithInjectedQualifierBeans.beanWithQualifier3.input}" />
+        <h:inputText id="inputConversationBeanWithQualifier4And5"
+                     value="#{conversationBeanWithInjectedQualifierBeans.beanWithQualifier4And5.input}" />
+
+        <!-- general commands -->
+        <h:commandButton id="emptyCommand"/>
+        <h:commandButton id="navigateToTest2" action="test2.xhtml" />
+        <h:commandButton id="redirectToTest2" action="test2.xhtml?faces-redirect=true" />
+        <h:button id="getToTest2" outcome="test2.xhtml" />
+
+        <!-- bean commands -->
+        <!-- ConversationBean1 -->
+        <h:commandButton id="conversationBean1_closeConversation"
+                         action="#{conversationBean1.closeConversation}" />
+        <h:commandButton id="conversationBean1_closeConversationGroup1"
+                         action="#{conversationBean1.closeConversationGroup1}" />
+        <h:commandButton id="conversationBean1_closeWindowContext"
+                         action="#{conversationBean1.closeWindowContext}" />
+        <h:commandButton id="conversationBean1_closeConversationsWindowContext"
+                         action="#{conversationBean1.closeConversationsWindowContext}" />
+
+        <!-- ConversationGroupBean1 -->
+        <h:commandButton id="conversationGroupBean1_closeConversation"
+                         action="#{conversationGroupBean1.closeConversation}" />
+        <h:commandButton id="conversationGroupBean1_restartConversation"
+                         action="#{conversationGroupBean1.restartConversation}" />
+
+        <!-- ConversationBeanWithInjectedQualifierBeans -->
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier1"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier1}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier2DefaultValues"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier2DefaultValues}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier2NonDefaultValuesMatching"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier2NonDefaultValuesMatching}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier2NonDefaultValuesNonMatching"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier2NonDefaultValuesNonMatching}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier3"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier3}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier4"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier4}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier5"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier5}" />
+        <h:commandButton id="conversationBeanWithInjectedQualifierBeans_closeConversationWithQualifier4And5"
+                         action="#{conversationBeanWithInjectedQualifierBeans.closeConversationWithQualifier4And5}" />
+
+    </h:form>
+</h:body>
+</html>
