@@ -74,8 +74,8 @@
         <module>core</module>
         <module>jee-modules</module>
         <module>jse-modules</module>
-        <module>test-modules</module>
-        <module>examples</module>
+        <!--module>test-modules</module>
+        <module>examples</module-->
         <module>dist</module>
     </modules>
 
