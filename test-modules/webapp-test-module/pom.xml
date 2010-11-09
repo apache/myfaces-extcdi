@@ -26,19 +26,19 @@
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
     <artifactId>myfaces-extcdi-webapp-test</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Webapp-Test</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.0-SNAPSHOT</version>
     </parent>
 
     <properties>
-        <webapptest.version>1.0.0-SNAPSHOT</webapptest.version>
-        <arquillian.version>1.0.0-SNAPSHOT</arquillian.version>
+        <webapptest.version>0.9.0-SNAPSHOT</webapptest.version>
+        <arquillian.version>0.9.0-SNAPSHOT</arquillian.version>
         <junit.version>4.8.1</junit.version>
         <tomcat.version>6.0.26</tomcat.version>
         <config.addon.version>1.0.0-alpha</config.addon.version>

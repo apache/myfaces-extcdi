@@ -28,12 +28,12 @@
     <artifactId>jpa1-module-project</artifactId>
 
     <name>MyFaces Extensions-CDI JPA 1.0 Module</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jee-modules-project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.0-SNAPSHOT</version>
     </parent>
 
     <modules>

@@ -28,12 +28,12 @@
     <artifactId>myfaces-extcdi-maven-utils</artifactId>
 
     <name>MyFaces Extensions-CDI Maven Utils</name>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>0.9.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>myfaces-extcdi-parent</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>0.9.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
