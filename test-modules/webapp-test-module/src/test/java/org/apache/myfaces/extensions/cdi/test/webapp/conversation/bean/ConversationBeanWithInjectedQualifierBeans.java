@@ -61,10 +61,6 @@ public class ConversationBeanWithInjectedQualifierBeans implements Serializable
     @ConversationQualifier5
     private ConversationBeanWithQualifier _beanWithQualifier4And5;
 
-    //@Inject
-    //@ConversationQualifier4
-    //private ConversationBeanWithQualifier _beanWithQualifier4; //TODO ambiguous?
-
     @Inject
     private WindowContext _windowContext;
 
