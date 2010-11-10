@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
@@ -73,12 +74,18 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     private void broadcastBeforeFacesRequestEvent()
     {
-        this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(this);
+        if(this.beforeAfterFacesRequestBroadcaster != null)
+        {
+            this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(this);
+        }
     }
 
     private void broadcastAfterFacesRequestEvent()
     {
-        this.beforeAfterFacesRequestBroadcaster.broadcastAfterFacesRequestEvent(this);
+        if(this.beforeAfterFacesRequestBroadcaster != null)
+        {
+            this.beforeAfterFacesRequestBroadcaster.broadcastAfterFacesRequestEvent(this);
+        }
     }
 
     public FacesContext getWrapped()
@@ -99,6 +106,11 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     private void initBroadcaster()
     {
+        if(!ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
+        {
+            return;
+        }
+
         Set<? extends Bean> broadcasterBeans = this.beanManager.getBeans(BeforeAfterFacesRequestBroadcaster.class);
 
         if(broadcasterBeans.size() != 1)
