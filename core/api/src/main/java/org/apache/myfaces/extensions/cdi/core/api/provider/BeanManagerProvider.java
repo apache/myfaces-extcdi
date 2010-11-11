@@ -24,6 +24,8 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -64,7 +66,40 @@ public class BeanManagerProvider implements Extension
     {
         ClassLoader cl = ClassUtils.getClassLoader(null);
 
-        return bms.get(cl);
+        BeanManager result = bms.get(cl);
+
+        if (result == null)
+        {
+            result = resolveBeanManagerViaJndi();
+
+            if(result != null)
+            {
+                bms.put(cl, result);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Get the BeanManager from the JNDI registry.
+     *
+     * Workaround for jboss 6 (EXTCDI-74)
+     * {@link #setBeanManager(javax.enterprise.inject.spi.AfterBeanDiscovery, javax.enterprise.inject.spi.BeanManager)}
+     * is called in context of a different classloader
+     *
+     * @return current {@link javax.enterprise.inject.spi.BeanManager} which is provided via jndi
+     */
+    private BeanManager resolveBeanManagerViaJndi()
+    {
+        try
+        {
+            return (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
+        }
+        catch (NamingException e)
+        {
+            //workaround didn't work -> force NPE
+            return null;
+        }
     }
 
     /**
