@@ -105,6 +105,6 @@ public class DefaultWindowContextConfig extends AbstractAttributeAware implement
 
     public boolean isInitialRedirectDisabled()
     {
-        return true;
+        return false;
     }
 }
