@@ -17,17 +17,11 @@
     under the License.
 -->
 <assembly>
-  <id>corebin</id>
+  <id>codi12src</id>
   <formats>
     <format>tar.gz</format>
     <format>zip</format>
-  </formats>
-  <dependencySets>
-    <dependencySet>
-      <outputDirectory>lib</outputDirectory>
-      <scope>runtime</scope>
-    </dependencySet>
-  </dependencySets>
+  </formats>  
   <fileSets>
     <fileSet>
     	<directory>src/main/resources</directory>
@@ -38,13 +32,14 @@
         <include>NOTICE*</include>
         <include>RELEASE*</include>
       </includes>
-    </fileSet>
+    </fileSet>   
     <fileSet>
-      <directory>target/javadoc</directory>
-      <outputDirectory>javadoc</outputDirectory>
+      <directory>target/src</directory>
+      <outputDirectory>src</outputDirectory>
       <includes>
         <include>*.jar</include>
       </includes>
     </fileSet>
   </fileSets>
 </assembly>
+ 
