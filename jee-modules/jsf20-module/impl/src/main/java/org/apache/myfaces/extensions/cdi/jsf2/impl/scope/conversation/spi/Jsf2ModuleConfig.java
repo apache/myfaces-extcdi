@@ -16,23 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.config;
+package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.Jsf2ModuleConfig;
-
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 
 /**
- * @author Gerhard Petracek
+ * JSF2 specific configuration
  */
-@SuppressWarnings({"UnusedDeclaration"})
-public class DefaultWindowContextConfig
-        extends org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig
-        implements Jsf2ModuleConfig
+public interface Jsf2ModuleConfig extends JsfModuleConfig
 {
-    private static final long serialVersionUID = 5184658265260290647L;
-
-    public boolean isClientSideWindowHandler()
-    {
-        return true;
-    }
+    boolean isClientSideWindowHandler();
 }

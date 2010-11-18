@@ -18,16 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.Jsf2ModuleConfig;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
+import javax.enterprise.inject.Alternative;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.enterprise.inject.Typed;
+import javax.inject.Inject;
 import java.io.IOException;
 
 /**
@@ -36,16 +36,17 @@ import java.io.IOException;
  *
  * @author Gerhard Petracek
  */
-@Typed()
 @SuppressWarnings({"UnusedDeclaration"})
-public abstract class ServerSideWindowHandler extends DefaultWindowHandler
+@Alternative
+public abstract class ServerSideWindowHandler extends Jsf2WindowHandler
 {
     private static final long serialVersionUID = 4040116087475343221L;
 
     //workaround for mojarra
     private final boolean useFallback;
 
-    protected ServerSideWindowHandler(JsfModuleConfig config)
+    @Inject
+    protected ServerSideWindowHandler(Jsf2ModuleConfig config)
     {
         super(config);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;

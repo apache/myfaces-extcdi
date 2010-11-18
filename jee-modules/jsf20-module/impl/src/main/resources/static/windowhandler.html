@@ -1,0 +1,81 @@
+<html>
+    <head>
+<script type="text/javascript" >
+    function getQueryVariable(query, variable) {
+        var vars = query.split("&amp;");
+        for (var i=0; vars != null && i < vars.length; i++) {
+          var pair = vars[i].split("=");
+          if (pair[0] == variable) {
+              return pair[1];
+          }
+        }
+        return "";
+    }
+
+    function fixWindowId(query) {
+        var vars = query.split(/&|\?/g);
+        var newQuery = "";
+        var iParam = 0;
+
+        var freshWindow = window.name.length < 1;
+        var windowIdFound = false;
+
+        for (var i=0; vars != null && i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair.length == 1) {
+                newQuery = pair[0];
+            }
+            else {
+                if (pair[0] == "windowId") {
+                    windowIdFound = true;
+                    if (freshWindow) {
+                        window.name = 'xxx';
+                    }
+                    else {
+                        // correct the windowId
+                        if (window.name == 'xxx'){
+                            window.name = pair[1];
+                        }
+
+                        var amp = iParam++ > 0 ? "&" : "?";
+                        newQuery =  newQuery + amp + "windowId=" + pair[1];
+                    }
+                }
+                else {
+                    var amp = iParam++ > 0 ? "&" : "?";
+                    newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
+                }
+            }
+        }
+
+        if (!windowIdFound && ! freshWindow && window.name != 'xxx') {
+            // propagate the windowId manually!
+            var amp = iParam++ > 0 ? "&" : "?";
+            newQuery =  newQuery + amp + "windowId=" + window.name;
+        }
+
+        return newQuery;
+    }
+
+    window.onload=function(){
+        document.getElementById('message').textContent = "Ihre Seite wird geladen!";
+        var urlParam = getQueryVariable(window.location.search.substring(1), "url");
+        var url = decodeURIComponent(urlParam);
+
+        if (url == '') {
+            return;
+        }
+
+        url = fixWindowId(url);
+
+        window.location = url;
+    }
+</script>
+
+    </head>
+    <body bgcolor="#0f4865">
+        <div id="message" style="position:absolute;left:40%;top:40%;" >
+            Please enable JavaScript!
+        </div>
+    </body>
+</html>
