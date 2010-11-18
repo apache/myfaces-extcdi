@@ -21,12 +21,10 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateBeanByClass;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 
-import javax.enterprise.inject.spi.Bean;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -72,19 +70,7 @@ public class RequestCache
 
         if(windowContextManager == null)
         {
-            return resolveWindowContextManager(getOrCreateBeanByClass(WindowContextManager.class));
-        }
-
-        return windowContextManager;
-    }
-
-    private static WindowContextManager resolveWindowContextManager(Bean<WindowContextManager> windowContextManagerBean)
-    {
-        WindowContextManager windowContextManager = windowContextManagerCache.get();
-
-        if(windowContextManager == null)
-        {
-            windowContextManager = CodiUtils.getOrCreateScopedInstanceOfBean(windowContextManagerBean);
+            windowContextManager = CodiUtils.getContextualReferenceByClass(WindowContextManager.class);
             windowContextManagerCache.set(windowContextManager);
         }
 
@@ -97,19 +83,7 @@ public class RequestCache
 
         if(beanEntryFactory == null)
         {
-            return resolveBeanEntryFactory(getOrCreateBeanByClass(BeanEntryFactory.class));
-        }
-
-        return beanEntryFactory;
-    }
-
-    private static BeanEntryFactory resolveBeanEntryFactory(Bean<BeanEntryFactory> beanEntryFactoryBean)
-    {
-        BeanEntryFactory beanEntryFactory = beanEntryFactoryCache.get();
-
-        if(beanEntryFactory == null)
-        {
-            beanEntryFactory = CodiUtils.getOrCreateScopedInstanceOfBean(beanEntryFactoryBean);
+            beanEntryFactory = CodiUtils.getContextualReferenceByClass(BeanEntryFactory.class);
             beanEntryFactoryCache.set(beanEntryFactory);
         }
 

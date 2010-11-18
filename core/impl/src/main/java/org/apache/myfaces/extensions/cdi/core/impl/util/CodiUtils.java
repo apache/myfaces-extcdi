@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
-import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
@@ -34,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -67,13 +67,10 @@ public class CodiUtils
     {
         Set<Bean<?>> foundBeans = beanManager.getBeans(beanName);
 
-        if(foundBeans.size() != 1)
-        {
-            throw new IllegalStateException(foundBeans.size() + " beans found with name: " + beanName);
-        }
+        Bean<?> bean = beanManager.resolve(foundBeans); 
 
         //noinspection unchecked
-        return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBeans.iterator().next());
+        return (T) getContextualReference(beanManager, targetClass, bean);
     }
 
     public static <T> Bean<T> getOrCreateBeanByClass(Class<T> targetClass, Annotation... qualifier)
@@ -87,27 +84,14 @@ public class CodiUtils
         return getOrCreateBeanByClass(beanManager, targetClass, false, qualifier);
     }
 
-    public static <T> Bean<T> getOrCreateBeanByClass(
-            BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
+    public static <T> Bean<T> getOrCreateBeanByClass(BeanManager beanManager, Class<T> targetClass,
+                                                     boolean optionalBeanAllowed, Annotation... qualifier)
     {
         Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass, qualifier);
 
-        if(foundBeans.size() > 1)
+        if(foundBeans.size() >= 1)
         {
-            StringBuffer detailsOfBeans = new StringBuffer();
-
-            for(Bean bean : foundBeans)
-            {
-                detailsOfBeans.append(bean.toString());
-            }
-            throw new IllegalStateException(foundBeans.size() + " beans found for type: " + targetClass.getName() +
-                    " the found beans are: " + detailsOfBeans.toString());
-        }
-
-        if(foundBeans.size() == 1)
-        {
-            //noinspection unchecked
-            return foundBeans.iterator().next();
+            return (Bean<T>) beanManager.resolve((Set<Bean<? extends Object>>) foundBeans);
         }
 
         if(!optionalBeanAllowed)
@@ -117,7 +101,7 @@ public class CodiUtils
         return null;
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByClass(Class<T> targetClass, Annotation... qualifier)
+    public static <T> T getContextualReferenceByClass(Class<T> targetClass, Annotation... qualifier)
     {
         return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
                 targetClass, qualifier);
@@ -144,32 +128,15 @@ public class CodiUtils
         if(foundBean != null)
         {
             //noinspection unchecked
-            return (T)getOrCreateScopedInstanceOfBean(beanManager, foundBean);
+            return (T) getContextualReference(beanManager, targetClass, foundBean);
         }
         return null;
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBean(Bean<T> bean)
+    public static <T> T getContextualReference(BeanManager beanManager, Type t, Bean<T> bean)
     {
-        return getOrCreateScopedInstanceOfBean(BeanManagerProvider.getInstance().getBeanManager(), bean);
-    }
-
-    public static <T> T getOrCreateScopedInstanceOfBean(BeanManager beanManager, Bean<T> bean)
-    {
-        Context context = beanManager.getContext(bean.getScope());
-
-        T result = context.get(bean);
-
-        if (result == null)
-        {
-            result = context.get(bean, getCreationalContextFor(beanManager, bean));
-        }
-        return result;
-    }
-
-    public static <T> void destroyBean(CreationalContext<T> creationalContext, Bean<T> bean, T beanInstance)
-    {
-        bean.destroy(beanInstance, creationalContext);
+        CreationalContext<T> cc = beanManager.createCreationalContext(bean);
+        return  (T) beanManager.getReference(bean, t, cc);
     }
 
     private static <T> CreationalContext<T> getCreationalContextFor(BeanManager beanManager, Bean<T> bean)
@@ -221,7 +188,7 @@ public class CodiUtils
 
     public static ProjectStage getCurrentProjectStage()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(ProjectStage.class);
+        return getContextualReferenceByClass(ProjectStage.class);
     }
 
     public static <T> T tryToInjectDependencies(T instance)

@@ -23,7 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
+
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -288,7 +289,7 @@ public class ConversationUtils
 
     private static WindowContextIdHolderComponent createComponentWithCurrentWindowContextId()
     {
-        WindowContextManager conversationManager = getOrCreateScopedInstanceOfBeanByClass(WindowContextManager.class);
+        WindowContextManager conversationManager = CodiUtils.getContextualReferenceByClass(WindowContextManager.class);
 
         return new WindowContextIdHolderComponent(conversationManager.getCurrentWindowContext().getId());
     }
@@ -333,7 +334,7 @@ public class ConversationUtils
 
     public static WindowHandler getWindowHandler()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(WindowHandler.class);
+        return CodiUtils.getContextualReferenceByClass(WindowHandler.class);
     }
 
     public static WindowContextManager getWindowContextManager()

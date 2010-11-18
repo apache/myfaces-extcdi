@@ -20,15 +20,14 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils
-        .windowContextManagerNotEditableException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
@@ -83,7 +82,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
     {
         if(!(windowContextManager instanceof EditableWindowContextManager))
         {
-            throw windowContextManagerNotEditableException(windowContextManager);
+            throw ExceptionUtils.windowContextManagerNotEditableException(windowContextManager);
         }
 
         Class<?> beanClass = beanDescriptor.getBeanClass();
@@ -98,7 +97,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
     {
         if(!(windowContextManager instanceof EditableWindowContextManager))
         {
-            throw windowContextManagerNotEditableException(windowContextManager);
+            throw ExceptionUtils.windowContextManagerNotEditableException(windowContextManager);
         }
 
         Bean<?> bean = beanEntry.getBean();
@@ -110,7 +109,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
     protected ConversationConfig getConversationConfig()
     {
-        return getOrCreateScopedInstanceOfBeanByClass(JsfModuleConfig.class);
+        return CodiUtils.getContextualReferenceByClass(JsfModuleConfig.class);
     }
 
     private EditableConversation getConversation(EditableWindowContextManager windowContextManager, Bean<?> bean)

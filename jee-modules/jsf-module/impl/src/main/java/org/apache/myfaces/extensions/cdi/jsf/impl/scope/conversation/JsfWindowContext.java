@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
@@ -41,7 +42,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.isQualifierEqual;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 
@@ -204,7 +204,7 @@ public class JsfWindowContext implements EditableWindowContext
         ConversationKey conversationKey =
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
-        ConversationFactory conversationFactory = getOrCreateScopedInstanceOfBeanByClass(ConversationFactory.class);
+        ConversationFactory conversationFactory = CodiUtils.getContextualReferenceByClass(ConversationFactory.class);
 
         if(conversationFactory instanceof BeanManagerAware)
         {

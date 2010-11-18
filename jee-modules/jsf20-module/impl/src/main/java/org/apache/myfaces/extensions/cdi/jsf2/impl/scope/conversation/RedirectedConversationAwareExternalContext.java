@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
 import java.io.IOException;
-
+               svn st
 /**
  * @author Gerhard Petracek
  */
@@ -74,7 +74,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         {
             this.windowHandler = getWindowHandler();
             this.encodeActionURLs = CodiUtils
-                    .getOrCreateScopedInstanceOfBeanByClass(JsfModuleConfig.class)
+                    .getContextualReferenceByClass(JsfModuleConfig.class)
                     .isAddWindowIdToActionUrlsEnabled();
         }
     }

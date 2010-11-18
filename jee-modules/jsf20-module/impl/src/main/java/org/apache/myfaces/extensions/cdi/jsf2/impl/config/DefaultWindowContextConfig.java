@@ -35,7 +35,7 @@ public class DefaultWindowContextConfig extends
     }
 
     @Override
-    public WindowHandler getWindowHandler()
+    public Jsf2WindowHandlerServlet getWindowHandler()
     {
         return new ServerSideWindowHandler(isUrlParameterSupported())
         {

@@ -77,7 +77,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         {
             this.windowHandler = getWindowHandler();
             this.encodeActionURLs = CodiUtils
-                    .getOrCreateScopedInstanceOfBeanByClass(JsfModuleConfig.class)
+                    .getContextualReferenceByClass(JsfModuleConfig.class)
                     .isAddWindowIdToActionUrlsEnabled();
         }
     }

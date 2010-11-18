@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.destroyBean;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
@@ -75,7 +74,7 @@ class BeanStorage implements Serializable
                 fireUnscopeBeanEvent(oldBeanInstance);
             }
 
-            destroyBean(beanHolder.getCreationalContext(), beanHolder.getBean(), oldBeanInstance);
+            beanHolder.getBean().destroy(oldBeanInstance, beanHolder.getCreationalContext());
         }
     }
 

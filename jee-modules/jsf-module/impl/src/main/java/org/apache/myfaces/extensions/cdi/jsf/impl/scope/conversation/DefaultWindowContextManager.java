@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.Creat
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
+
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
@@ -98,8 +100,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     protected void init()
     {
-        this.windowHandler = getOrCreateScopedInstanceOfBeanByClass(WindowHandler.class);
-        this.windowContextQuotaHandler = getOrCreateScopedInstanceOfBeanByClass(WindowContextQuotaHandler.class);
+        this.windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
+        this.windowContextQuotaHandler = CodiUtils.getContextualReferenceByClass(WindowContextQuotaHandler.class);
         this.allowUnknownWindowIds = this.jsfModuleConfig.isUnknownWindowIdsAllowed();
         this.urlParameterSupported = this.jsfModuleConfig.isUrlParameterSupported();
 
