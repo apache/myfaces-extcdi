@@ -36,8 +36,15 @@
         <version>0.9.1-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>webapp-test-module</module>
-    </modules>
+    <profiles>
+
+        <!-- use mvn clean install -Pwebapptest to run the webapp-tests -->
+        <profile>
+            <id>webapptest</id>
+            <modules>
+                <module>webapp-test-module</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>
