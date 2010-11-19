@@ -21,13 +21,11 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,8 +42,6 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     private WindowHandler windowHandler;
 
     private boolean encodeActionURLs;
-
-    private boolean clientSideWindowHandlerUsed = false;
 
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
@@ -83,16 +79,12 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     {
         lazyInit();
 
-        if(!this.clientSideWindowHandlerUsed)
+        if(this.windowHandler instanceof BookmarkAwareWindowHandler)
         {
-            return super.encodeBookmarkableURL(baseUrl, parameters);
+            return ((BookmarkAwareWindowHandler)getWrapped()).encodeBookmarkableURL(this, baseUrl, parameters);
         }
-        
-        Map<String, List<String>> newparms = new HashMap<String, List<String>>();
-        List<String> urlParam= new ArrayList<String>();
-        urlParam.add(wrapped.encodeBookmarkableURL(baseUrl, parameters));
-        newparms.put(Jsf2WindowHandlerServlet.URL_PARAM, urlParam);
-        return wrapped.encodeBookmarkableURL(getWindowHandlerPath(), newparms);
+
+        return super.encodeBookmarkableURL(baseUrl, parameters);
     }
 
     private synchronized void lazyInit()
@@ -100,11 +92,6 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         if(this.windowHandler == null)
         {
             this.windowHandler = getWindowHandler();
-
-            if(this.windowHandler instanceof Jsf2WindowHandler)
-            {
-                this.clientSideWindowHandlerUsed = true;
-            }
 
             this.encodeActionURLs = CodiUtils
                     .getContextualReferenceByClass(JsfModuleConfig.class)
@@ -116,19 +103,4 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     {
         return this.windowHandler.encodeURL(url);
     }
-
-    private String getWindowHandlerPath()
-    {
-        String contextPath = getRequestContextPath();
-
-        if (contextPath == null)
-        {
-            return Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
-        }
-        else
-        {
-            return contextPath + Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
-        }
-    }
-
 }

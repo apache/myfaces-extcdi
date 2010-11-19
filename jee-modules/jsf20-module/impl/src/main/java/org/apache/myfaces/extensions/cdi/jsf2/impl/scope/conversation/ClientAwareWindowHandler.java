@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -29,23 +30,27 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * WindowHandler with JSF2 features
  */
 @Alternative
 @ApplicationScoped
-public class Jsf2WindowHandler extends DefaultWindowHandler
+public class ClientAwareWindowHandler extends DefaultWindowHandler implements BookmarkAwareWindowHandler
 {
     private static final long serialVersionUID = 5293942986187078113L;
 
-    protected Jsf2WindowHandler()
+    protected ClientAwareWindowHandler()
     {
         // default ct is needed for proxying 
     }
 
     @Inject
-    protected Jsf2WindowHandler(JsfModuleConfig config)
+    protected ClientAwareWindowHandler(JsfModuleConfig config)
     {
         super(config);
     }
@@ -69,5 +74,28 @@ public class Jsf2WindowHandler extends DefaultWindowHandler
         }
 
         super.sendRedirect(externalContext, url, addRequestParameter);
+    }
+
+    public String encodeBookmarkableURL(ExternalContext externalContext, String url, Map<String, List<String>> params)
+    {
+        Map<String, List<String>> newparms = new HashMap<String, List<String>>();
+        List<String> urlParam= new ArrayList<String>();
+        urlParam.add(externalContext.encodeBookmarkableURL(url, params));
+        newparms.put(Jsf2WindowHandlerServlet.URL_PARAM, urlParam);
+        return externalContext.encodeBookmarkableURL(getWindowHandlerPath(externalContext), newparms);
+    }
+
+    private String getWindowHandlerPath(ExternalContext externalContext)
+    {
+        String contextPath = externalContext.getRequestContextPath();
+
+        if (contextPath == null)
+        {
+            return Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
+        }
+        else
+        {
+            return contextPath + Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
+        }
     }
 }
