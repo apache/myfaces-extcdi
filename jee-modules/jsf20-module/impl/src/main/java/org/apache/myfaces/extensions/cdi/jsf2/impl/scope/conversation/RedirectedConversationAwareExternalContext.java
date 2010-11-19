@@ -18,10 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet;
 
 import javax.faces.context.ExternalContext;
@@ -31,6 +30,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getWindowHandler;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.sendRedirect;
 
 /**
  * @author Gerhard Petracek
@@ -81,7 +83,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         List<String> urlParam= new ArrayList<String>();
         urlParam.add(wrapped.encodeBookmarkableURL(baseUrl, parameters));
         newparms.put(Jsf2WindowHandlerServlet.URL_PARAM, urlParam);
-        return wrapped.encodeBookmarkableURL(Jsf2WindowHandlerServlet.WINDOWHANDLER_URL, newparms);
+        return wrapped.encodeBookmarkableURL(getWindowHandlerPath(), newparms);
     }
 
     private synchronized void lazyInit()
@@ -99,4 +101,19 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     {
         return this.windowHandler.encodeURL(url);
     }
+
+    private String getWindowHandlerPath()
+    {
+        String contextPath = getRequestContextPath();
+
+        if (contextPath == null)
+        {
+            return Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
+        }
+        else
+        {
+            return contextPath + Jsf2WindowHandlerServlet.WINDOWHANDLER_URL;
+        }
+    }
+
 }

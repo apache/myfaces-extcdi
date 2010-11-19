@@ -44,7 +44,7 @@ public class Jsf2WindowHandlerServlet extends HttpServlet
     private static final long serialVersionUID = 6109043260242858474L;
 
     public final static String URL_PARAM = "url";
-    public final static String WINDOWHANDLER_URL = "windowhandler";
+    public final static String WINDOWHANDLER_URL = "/windowhandler";
 
     private ClientInformation clientInformation;
 
