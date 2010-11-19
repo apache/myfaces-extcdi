@@ -26,15 +26,16 @@ import java.io.Serializable;
  * JavaScript enabled on his client, etc.
  */
 @SessionScoped
-public class WindowUser implements Serializable
+public class ClientInformation implements Serializable
 {
+    private static final long serialVersionUID = -3264016646002116064L;
 
-    boolean javaScriptEnabled = true;
+    private boolean javaScriptEnabled = true;
 
 
     public boolean isJavaScriptEnabled()
     {
-        return javaScriptEnabled;
+        return this.javaScriptEnabled;
     }
 
     public void setJavaScriptEnabled(boolean javaScriptEnabled)

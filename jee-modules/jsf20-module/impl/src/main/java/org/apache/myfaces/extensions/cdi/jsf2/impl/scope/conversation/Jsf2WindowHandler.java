@@ -37,7 +37,9 @@ import java.io.IOException;
 @Specializes
 public class Jsf2WindowHandler extends DefaultWindowHandler
 {
-    boolean isClientSideWindowHandler;
+    private static final long serialVersionUID = 5293942986187078113L;
+
+    private boolean isClientSideWindowHandler;
 
     protected Jsf2WindowHandler()
     {
@@ -48,25 +50,26 @@ public class Jsf2WindowHandler extends DefaultWindowHandler
     protected Jsf2WindowHandler(Jsf2ModuleConfig config)
     {
         super(config);
-        this.isClientSideWindowHandler = config.isClientSideWindowHandler();
+        this.isClientSideWindowHandler = config.isClientSideWindowHandlerEnabled();
     }
 
     @Override
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
-    throws IOException
+            throws IOException
     {
-        PartialViewContext pvc = FacesContext.getCurrentInstance().getPartialViewContext();
-        if (pvc != null && pvc.isPartialRequest())
+        PartialViewContext partialViewContext = FacesContext.getCurrentInstance().getPartialViewContext();
+
+        if (partialViewContext != null && partialViewContext.isPartialRequest())
         {
             super.sendRedirect(externalContext, url, addRequestParameter);
             return;
         }
 
-         if (url != null && url.startsWith(Jsf2WindowHandlerServlet.WINDOWHANDLER_URL))
-         {
-             externalContext.redirect(url);
-             return;
-         }
+        if (url != null && url.startsWith(Jsf2WindowHandlerServlet.WINDOWHANDLER_URL))
+        {
+            externalContext.redirect(url);
+            return;
+        }
 
         super.sendRedirect(externalContext, url, addRequestParameter);
     }

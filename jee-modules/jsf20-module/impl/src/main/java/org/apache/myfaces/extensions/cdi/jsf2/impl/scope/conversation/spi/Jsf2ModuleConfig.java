@@ -25,5 +25,5 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModu
  */
 public interface Jsf2ModuleConfig extends JsfModuleConfig
 {
-    boolean isClientSideWindowHandler();
+    boolean isClientSideWindowHandlerEnabled();
 }

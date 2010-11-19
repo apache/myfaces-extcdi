@@ -38,17 +38,19 @@ import java.util.Set;
 /**
  * Serves the windowhandler.html from the resource path
  */
-@WebServlet(urlPatterns={Jsf2WindowHandlerServlet.WINDOWHANDLER_URL})
+@WebServlet(urlPatterns = {Jsf2WindowHandlerServlet.WINDOWHANDLER_URL})
 public class Jsf2WindowHandlerServlet extends HttpServlet
 {
+    private static final long serialVersionUID = 6109043260242858474L;
+
     public final static String URL_PARAM = "url";
     public final static String WINDOWHANDLER_URL = "windowhandler";
 
-    private WindowUser windowUser;
+    private ClientInformation clientInformation;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-    throws ServletException, IOException
+            throws ServletException, IOException
     {
         if (!isJavaScriptEnabled())
         {
@@ -66,7 +68,7 @@ public class Jsf2WindowHandlerServlet extends HttpServlet
     }
 
     private void sendWindowHandler(HttpServletRequest req, HttpServletResponse resp)
-    throws ServletException, IOException
+            throws ServletException, IOException
     {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType("text/html");
@@ -75,14 +77,14 @@ public class Jsf2WindowHandlerServlet extends HttpServlet
         OutputStream os = resp.getOutputStream();
         try
         {
-            byte[] buf = new byte[16*4096];
+            byte[] buf = new byte[16 * 4096];
             int bytesRead;
             while ((bytesRead = is.read(buf)) != -1)
             {
                 os.write(buf, 0, bytesRead);
             }
         }
-        finally 
+        finally
         {
             is.close();
             os.close();
@@ -91,15 +93,17 @@ public class Jsf2WindowHandlerServlet extends HttpServlet
 
     private boolean isJavaScriptEnabled()
     {
-        if (windowUser == null)
+        if (clientInformation == null)
         {
-            BeanManager bm = BeanManagerProvider.getInstance().getBeanManager();
-            Set<Bean<?>> beans = bm.getBeans(WindowUser.class);
-            Bean<?> wuBean = bm.resolve(beans);
-            CreationalContext<?> cc = bm.createCreationalContext(wuBean);
-            windowUser = (WindowUser) bm.getReference(wuBean, WindowUser.class, cc);
+            //TODO use CodiUtils
+            BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+            Set<Bean<?>> beans = beanManager.getBeans(ClientInformation.class);
+            Bean<?> clientInformationBean = beanManager.resolve(beans);
+            CreationalContext<?> cc = beanManager.createCreationalContext(clientInformationBean);
+            clientInformation = (ClientInformation) beanManager
+                    .getReference(clientInformationBean, ClientInformation.class, cc);
         }
 
-        return windowUser.isJavaScriptEnabled();
+        return clientInformation.isJavaScriptEnabled();
     }
 }

@@ -31,7 +31,7 @@ public class DefaultWindowContextConfig
 {
     private static final long serialVersionUID = 5184658265260290647L;
 
-    public boolean isClientSideWindowHandler()
+    public boolean isClientSideWindowHandlerEnabled()
     {
         return true;
     }
