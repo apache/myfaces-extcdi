@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.request.DefaultRequestTypeResolver;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
+//import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
@@ -49,11 +49,11 @@ public class Jsf12AwareFilterExtension implements Extension, Deactivatable
             //veto the RequestTypeResolver for jsf 1.2
             processAnnotatedType.veto();
         }
-        else if(DefaultWindowContextConfig.class.getName().equals(beanClass.getName()))
+        /*else if(DefaultWindowContextConfig.class.getName().equals(beanClass.getName()))
         {
             //veto the config for jsf 1.2
             processAnnotatedType.veto();
-        }
+        }*/
     }
 
     public boolean isActivated()
