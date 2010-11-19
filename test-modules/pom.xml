@@ -45,6 +45,14 @@
                 <module>webapp-test-module</module>
             </modules>
         </profile>
+
+        <!-- use mvn clean install -Pcargo to run the cargo-htmlunit-tests -->
+        <profile>
+            <id>cargo</id>
+            <modules>
+                <module>cargo-test-module</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>
