@@ -19,11 +19,11 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.Jsf2ModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Specializes;
+import javax.enterprise.inject.Alternative;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.PartialViewContext;
@@ -33,13 +33,11 @@ import java.io.IOException;
 /**
  * WindowHandler with JSF2 features
  */
+@Alternative
 @ApplicationScoped
-@Specializes
 public class Jsf2WindowHandler extends DefaultWindowHandler
 {
     private static final long serialVersionUID = 5293942986187078113L;
-
-    private boolean isClientSideWindowHandler;
 
     protected Jsf2WindowHandler()
     {
@@ -47,10 +45,9 @@ public class Jsf2WindowHandler extends DefaultWindowHandler
     }
 
     @Inject
-    protected Jsf2WindowHandler(Jsf2ModuleConfig config)
+    protected Jsf2WindowHandler(JsfModuleConfig config)
     {
         super(config);
-        this.isClientSideWindowHandler = config.isClientSideWindowHandlerEnabled();
     }
 
     @Override
