@@ -21,6 +21,5 @@
 org.apache.myfaces.extensions.cdi.jsf2.impl.scope.view.ViewScopedExtension
 
 # we have to activate this extension in any case!
-org.apache.myfaces.extensions.cdi.jsf2.impl.Jsf12AwareFilterExtension
 
 org.apache.myfaces.extensions.cdi.jsf2.impl.scope.mapped.MappedJsf2ScopeExtension

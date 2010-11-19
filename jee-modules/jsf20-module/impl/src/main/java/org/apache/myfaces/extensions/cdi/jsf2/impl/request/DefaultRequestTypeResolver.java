@@ -18,18 +18,21 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.request;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.request.AbstractRequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Specializes;
 import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
+@Specializes
 @RequestScoped
-public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
+public class DefaultRequestTypeResolver
+        extends org.apache.myfaces.extensions.cdi.jsf.impl.request.DefaultRequestTypeResolver
 {
+    @Override
     protected RequestTypeResolver createDefaultRequestTypeResolver()
     {
         return new RequestTypeResolver()
