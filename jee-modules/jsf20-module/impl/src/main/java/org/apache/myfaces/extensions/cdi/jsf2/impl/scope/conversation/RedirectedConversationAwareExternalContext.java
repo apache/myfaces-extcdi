@@ -45,6 +45,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 
     private boolean encodeActionURLs;
 
+    private boolean clientSideWindowHandlerUsed = false;
+
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;
@@ -79,6 +81,13 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     @Override
     public String encodeBookmarkableURL(String baseUrl, Map<String, List<String>> parameters)
     {
+        lazyInit();
+
+        if(!this.clientSideWindowHandlerUsed)
+        {
+            return super.encodeBookmarkableURL(baseUrl, parameters);
+        }
+        
         Map<String, List<String>> newparms = new HashMap<String, List<String>>();
         List<String> urlParam= new ArrayList<String>();
         urlParam.add(wrapped.encodeBookmarkableURL(baseUrl, parameters));
@@ -91,6 +100,12 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         if(this.windowHandler == null)
         {
             this.windowHandler = getWindowHandler();
+
+            if(this.windowHandler instanceof Jsf2WindowHandler)
+            {
+                this.clientSideWindowHandlerUsed = true;
+            }
+
             this.encodeActionURLs = CodiUtils
                     .getContextualReferenceByClass(JsfModuleConfig.class)
                     .isAddWindowIdToActionUrlsEnabled();
