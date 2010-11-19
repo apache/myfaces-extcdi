@@ -22,6 +22,7 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 
 import javax.enterprise.inject.Alternative;
 import javax.faces.context.ExternalContext;
@@ -37,7 +38,7 @@ import java.io.IOException;
  */
 @SuppressWarnings({"UnusedDeclaration"})
 @Alternative
-public abstract class ServerSideWindowHandler extends Jsf2WindowHandler
+public abstract class ServerSideWindowHandler extends DefaultWindowHandler
 {
     private static final long serialVersionUID = 4040116087475343221L;
 
