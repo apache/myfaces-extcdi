@@ -81,7 +81,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 
         if(this.windowHandler instanceof BookmarkAwareWindowHandler)
         {
-            return ((BookmarkAwareWindowHandler) this.windowHandler).encodeBookmarkableURL(this, baseUrl, parameters);
+            return ((BookmarkAwareWindowHandler) this.windowHandler)
+                    .encodeBookmarkableURL(getWrapped(), baseUrl, parameters);
         }
 
         return super.encodeBookmarkableURL(baseUrl, parameters);
