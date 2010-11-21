@@ -21,10 +21,10 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -46,9 +46,9 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
     }
 
     @Inject
-    public DefaultWindowContextQuotaHandler(JsfModuleConfig config)
+    public DefaultWindowContextQuotaHandler(WindowContextConfig windowContextConfig)
     {
-        this.maxWindowContextCount = config.getMaxWindowContextCount();
+        this.maxWindowContextCount = windowContextConfig.getMaxWindowContextCount();
     }
 
     public boolean checkQuota(int activeWindowContextCount)

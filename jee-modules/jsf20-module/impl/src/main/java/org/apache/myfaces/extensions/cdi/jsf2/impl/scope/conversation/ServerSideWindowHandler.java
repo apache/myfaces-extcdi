@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 
 import javax.enterprise.inject.Alternative;
@@ -46,7 +46,7 @@ public abstract class ServerSideWindowHandler extends DefaultWindowHandler
     private final boolean useFallback;
 
     @Inject
-    protected ServerSideWindowHandler(JsfModuleConfig config)
+    protected ServerSideWindowHandler(WindowContextConfig config)
     {
         super(config);
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;

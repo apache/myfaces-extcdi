@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
 import javax.enterprise.inject.spi.Bean;
@@ -109,7 +108,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
     protected ConversationConfig getConversationConfig()
     {
-        return CodiUtils.getContextualReferenceByClass(JsfModuleConfig.class);
+        return CodiUtils.getContextualReferenceByClass(ConversationConfig.class);
     }
 
     private EditableConversation getConversation(EditableWindowContextManager windowContextManager, Bean<?> bean)

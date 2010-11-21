@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 
 import javax.faces.context.ExternalContext;
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         {
             this.windowHandler = getWindowHandler();
             this.encodeActionURLs = CodiUtils
-                    .getContextualReferenceByClass(JsfModuleConfig.class)
+                    .getContextualReferenceByClass(WindowContextConfig.class)
                     .isAddWindowIdToActionUrlsEnabled();
         }
     }

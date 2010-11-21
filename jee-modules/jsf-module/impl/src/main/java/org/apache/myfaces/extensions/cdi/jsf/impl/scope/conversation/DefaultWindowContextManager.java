@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
@@ -33,7 +35,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.windowContextNotEditableException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextQuotaHandler;
@@ -65,7 +66,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private BeanManager beanManager;
 
-    private JsfModuleConfig jsfModuleConfig;
+    private WindowContextConfig windowContextConfig;
+
+    private ConversationConfig conversationConfig;
 
     private boolean allowUnknownWindowIds = false;
 
@@ -84,16 +87,18 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     //TODO add config + refactor DefaultWindowContextManager
     private static final int DEFAULT_WINDOW_KEY_LENGTH = 3;
 
-    protected DefaultWindowContextManager(JsfModuleConfig jsfModuleConfig,
+    protected DefaultWindowContextManager(WindowContextConfig windowContextConfig,
+                                          ConversationConfig conversationConfig,
                                           ProjectStage projectStage,
                                           BeanManager beanManager)
     {
-        this.jsfModuleConfig = jsfModuleConfig;
+        this.windowContextConfig = windowContextConfig;
+        this.conversationConfig = conversationConfig;
         this.projectStage = projectStage;
         this.beanManager = beanManager;
 
-        this.createWindowContextEventEnable = jsfModuleConfig.isCreateWindowContextEventEnabled();
-        this.closeWindowContextEventEnable = jsfModuleConfig.isCloseWindowContextEventEnabled();
+        this.createWindowContextEventEnable = windowContextConfig.isCreateWindowContextEventEnabled();
+        this.closeWindowContextEventEnable = windowContextConfig.isCloseWindowContextEventEnabled();
 
         init();
     }
@@ -102,8 +107,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     {
         this.windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
         this.windowContextQuotaHandler = CodiUtils.getContextualReferenceByClass(WindowContextQuotaHandler.class);
-        this.allowUnknownWindowIds = this.jsfModuleConfig.isUnknownWindowIdsAllowed();
-        this.urlParameterSupported = this.jsfModuleConfig.isUrlParameterSupported();
+        this.allowUnknownWindowIds = this.windowContextConfig.isUnknownWindowIdsAllowed();
+        this.urlParameterSupported = this.windowContextConfig.isUrlParameterSupported();
 
         this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
     }
@@ -195,11 +200,13 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if(windowContextFactory != null)
         {
-            return windowContextFactory.createWindowContext(windowContextId, this.jsfModuleConfig);
+            return windowContextFactory.createWindowContext(
+                    windowContextId, this.windowContextConfig, this.conversationConfig);
         }
 
         EditableWindowContext windowContext = new JsfWindowContext(windowContextId,
-                                                                   this.jsfModuleConfig,
+                                                                   this.windowContextConfig,
+                                                                   this.conversationConfig,
                                                                    this.projectStageDevelopment,
                                                                    this.beanManager);
 

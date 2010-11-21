@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 
 import javax.enterprise.event.Observes;
@@ -47,12 +48,14 @@ final class WindowContextManagerObserver
     protected void cleanup(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,
                            EditableWindowContextManager windowContextManager,
-                           JsfModuleConfig config)
+                           WindowContextConfig windowContextConfig,
+                           JsfModuleConfig jsfModuleConfig)
     {
         if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
         {
             //don't use the config of the current window context - it would trigger a touch
-            boolean continueRequest = processGetRequest(phaseEvent.getFacesContext(), config);
+            boolean continueRequest =
+                    processGetRequest(phaseEvent.getFacesContext(), windowContextConfig, jsfModuleConfig);
             
             if (!continueRequest)
             {
@@ -94,13 +97,16 @@ final class WindowContextManagerObserver
      *  - disable the initial redirect
      *  - use windowId=automatedEntryPoint as url parameter to force a new window context
      * @param facesContext current facesContext
-     * @param config window config
+     * @param windowContextConfig window config
+     * @param jsfModuleConfig jsf module config
      * @return true if the current request should be continued
      */
-    private boolean processGetRequest(FacesContext facesContext, JsfModuleConfig config)
+    private boolean processGetRequest(FacesContext facesContext,
+                                      WindowContextConfig windowContextConfig,
+                                      JsfModuleConfig jsfModuleConfig)
     {
-        boolean urlParameterSupported = config.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = !config.isInitialRedirectDisabled();
+        boolean urlParameterSupported = windowContextConfig.isUrlParameterSupported();
+        boolean useWindowIdForFirstPage = !jsfModuleConfig.isInitialRedirectDisabled();
 
         if(!urlParameterSupported)
         {
@@ -118,7 +124,8 @@ final class WindowContextManagerObserver
             }
 
             WindowHandler windowHandler = ConversationUtils.getWindowHandler();
-            windowId = resolveWindowContextId(windowHandler, urlParameterSupported, config.isUnknownWindowIdsAllowed());
+            windowId = resolveWindowContextId(
+                    windowHandler, urlParameterSupported, windowContextConfig.isUnknownWindowIdsAllowed());
 
             if(windowId == null)
             {

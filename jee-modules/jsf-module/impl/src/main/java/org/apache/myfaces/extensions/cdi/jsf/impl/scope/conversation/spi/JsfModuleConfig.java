@@ -18,14 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-
 /**
  * @author Gerhard Petracek
  */
-public interface JsfModuleConfig extends CodiConfig, WindowContextConfig, ConversationConfig
+public interface JsfModuleConfig
 {
     boolean isInitialRedirectDisabled();
 }

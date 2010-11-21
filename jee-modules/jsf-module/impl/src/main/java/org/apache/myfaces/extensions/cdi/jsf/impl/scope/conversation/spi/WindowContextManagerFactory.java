@@ -18,10 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+
 /**
  * @author Gerhard Petracek
  */
 public interface WindowContextManagerFactory
 {
-    EditableWindowContextManager createWindowContextManager(JsfModuleConfig windowContextConfig);
+    EditableWindowContextManager createWindowContextManager(WindowContextConfig windowContextConfig,
+                                                            ConversationConfig conversationConfig);
 }

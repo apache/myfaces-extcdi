@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
@@ -50,7 +50,7 @@ public class ClientAwareWindowHandler extends DefaultWindowHandler implements Bo
     }
 
     @Inject
-    protected ClientAwareWindowHandler(JsfModuleConfig config)
+    protected ClientAwareWindowHandler(WindowContextConfig config)
     {
         super(config);
     }

@@ -20,13 +20,14 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
@@ -48,7 +49,8 @@ final class InstanceProducer
     @Produces
     @SessionScoped
     @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
-    protected EditableWindowContextManager createWindowContextManager(JsfModuleConfig config,
+    protected EditableWindowContextManager createWindowContextManager(WindowContextConfig windowContextConfig,
+                                                                      ConversationConfig conversationConfig,
                                                                       ProjectStage projectStage,
                                                                       BeanManager beanManager)
     {
@@ -57,9 +59,9 @@ final class InstanceProducer
 
         if(windowContextManagerFactory != null)
         {
-            return windowContextManagerFactory.createWindowContextManager(config);
+            return windowContextManagerFactory.createWindowContextManager(windowContextConfig, conversationConfig);
         }
-        return new DefaultWindowContextManager(config, projectStage, beanManager);
+        return new DefaultWindowContextManager(windowContextConfig, conversationConfig, projectStage, beanManager);
     }
 
     protected void destroyAllConversations(
