@@ -19,9 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
@@ -81,7 +81,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 
         if(this.windowHandler instanceof BookmarkAwareWindowHandler)
         {
-            return ((BookmarkAwareWindowHandler)getWrapped()).encodeBookmarkableURL(this, baseUrl, parameters);
+            return ((BookmarkAwareWindowHandler) this.windowHandler).encodeBookmarkableURL(this, baseUrl, parameters);
         }
 
         return super.encodeBookmarkableURL(baseUrl, parameters);
