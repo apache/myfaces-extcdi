@@ -19,9 +19,16 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 
 /**
+ * Config for all JSF specific configurations.
+ *
  * @author Gerhard Petracek
  */
 public interface JsfModuleConfig
 {
-    boolean isInitialRedirectDisabled();
+    /**
+     * If the initial redirect is enabled, a redirect will be performed for adding the current window-id to the url.
+     *
+     * @return true for activating it, false otherwise
+     */
+    boolean isInitialRedirectEnabled();
 }

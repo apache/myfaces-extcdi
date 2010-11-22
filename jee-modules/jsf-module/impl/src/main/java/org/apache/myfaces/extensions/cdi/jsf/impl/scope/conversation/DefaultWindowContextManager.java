@@ -145,7 +145,8 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         if(this.windowContextQuotaHandler.checkQuota(getNumberOfNextWindowContext()))
         {
-            if(!cleanupInactiveWindowContexts(this))
+            //handle violation if cleanup is deactivated or the cleanup wasn't successful
+            if(!this.windowContextConfig.isCloseEmptyWindowContextsEnabled() || !cleanupInactiveWindowContexts(this))
             {
                 this.windowContextQuotaHandler.handleQuotaViolation();
             }

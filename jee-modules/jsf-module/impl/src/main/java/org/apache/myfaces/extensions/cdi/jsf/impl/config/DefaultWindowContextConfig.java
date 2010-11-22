@@ -97,6 +97,11 @@ public class DefaultWindowContextConfig extends AbstractAttributeAware
         return 64;
     }
 
+    public boolean isCloseEmptyWindowContextsEnabled()
+    {
+        return false;
+    }
+
     public boolean isCreateWindowContextEventEnabled()
     {
         return false;
@@ -107,8 +112,8 @@ public class DefaultWindowContextConfig extends AbstractAttributeAware
         return false;
     }
 
-    public boolean isInitialRedirectDisabled()
+    public boolean isInitialRedirectEnabled()
     {
-        return false;
+        return true;
     }
 }

@@ -81,11 +81,16 @@ final class WindowContextManagerObserver
 
     protected void cleanupAndRecordCurrentViewAsOldViewId(
             @Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent,
-            EditableWindowContextManager windowContextManager)
+            EditableWindowContextManager windowContextManager,
+            WindowContextConfig windowContextConfig)
     {
         storeCurrentViewIdAsOldViewId(phaseEvent.getFacesContext());
 
-        cleanupInactiveWindowContexts(windowContextManager);
+        if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
+        {
+            cleanupInactiveWindowContexts(windowContextManager);
+        }
+        
         RequestCache.resetCache();
     }
 
@@ -106,7 +111,7 @@ final class WindowContextManagerObserver
                                       JsfModuleConfig jsfModuleConfig)
     {
         boolean urlParameterSupported = windowContextConfig.isUrlParameterSupported();
-        boolean useWindowIdForFirstPage = !jsfModuleConfig.isInitialRedirectDisabled();
+        boolean useWindowIdForFirstPage = jsfModuleConfig.isInitialRedirectEnabled();
 
         if(!urlParameterSupported)
         {

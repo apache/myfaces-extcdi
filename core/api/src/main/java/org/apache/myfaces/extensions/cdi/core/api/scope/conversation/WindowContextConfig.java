@@ -59,6 +59,14 @@ public interface WindowContextConfig extends Serializable
      */
     int getMaxWindowContextCount();
 
+    /**
+     * Allows to activate the cleanup of empty window contexts to avoid cleanup e.g.
+     * of the eldest window context instances if the max. count is reached.
+     *
+     * @return true for activating it, false otherwise
+     */
+    boolean isCloseEmptyWindowContextsEnabled();
+    
     /*
      * event config
      */
