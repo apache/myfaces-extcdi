@@ -34,6 +34,8 @@ import javax.faces.context.FacesContext;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Map;
@@ -84,6 +86,7 @@ public class DefaultWindowHandler implements WindowHandler
     }
 
     protected String addRequestParameter(ExternalContext externalContext, String url)
+            throws UnsupportedEncodingException
     {
         StringBuilder finalUrl = new StringBuilder(url);
 
@@ -97,7 +100,7 @@ public class DefaultWindowHandler implements WindowHandler
                 finalUrl.append("&");
                 finalUrl.append(key);
                 finalUrl.append("=");
-                finalUrl.append(requestParam.getValue());
+                finalUrl.append(URLEncoder.encode(requestParam.getValue(), "UTF-8"));
             }
         }
         return finalUrl.toString();
