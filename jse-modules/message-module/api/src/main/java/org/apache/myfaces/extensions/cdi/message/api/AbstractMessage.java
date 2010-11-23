@@ -80,8 +80,10 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
 
     public void addArgument(Serializable... arguments)
     {
-        for (Serializable argument : arguments)
+        for (Serializable currentArgument : arguments)
         {
+            Serializable argument = currentArgument;
+
             if(argument == null)
             {
                 argument = "null";
