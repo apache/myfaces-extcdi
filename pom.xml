@@ -496,31 +496,19 @@
             </repositories>
         </profile>
 
+        <!--
+            Add the assembly module when performing an apache-release
+            
+            NOTE: that this profile will automatically be added to the release
+            process by the maven-release-plugin.
+        -->
         <profile>
-            <id>generate-assembly</id>
-            <activation>
-                <property>
-                    <name>performRelease</name>
-                    <value>true</value>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.7</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>        
+            <id>apache-release</id>
+
+            <modules>
+                <module>assembly</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>
