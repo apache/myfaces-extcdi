@@ -20,6 +20,8 @@ package org.apache.myfaces.extensions.cdi.test.webapp.events;
 
 import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.ConversationBean;
 import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.EventsBean;
+import org.apache.myfaces.extensions.cdi.test.webapp.events.config.DefaultWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.test.webapp.events.config.WindowContextEventEnabledConfig;
 import org.apache.myfaces.test.webapp.api.annotation.BeansXml;
 import org.apache.myfaces.test.webapp.api.annotation.PageBean;
 import org.apache.myfaces.test.webapp.api.annotation.Tester;
@@ -36,13 +38,15 @@ import javax.faces.event.PhaseId;
 @View(id = "events/windowcontext-events-test1.xhtml",
       pageBeans = {
               @PageBean(clazz = ConversationBean.class),
-              @PageBean(clazz = EventsBean.class)
+              @PageBean(clazz = EventsBean.class),
+              @PageBean(clazz = DefaultWindowContextConfig.class),
+              @PageBean(clazz = WindowContextEventEnabledConfig.class)
       }
 )
 
-@BeansXml
+@BeansXml("events/windowcontext-events-enabled-beans.xml")
 
-@WebXml("events/windowcontext-events-enabled-web.xml")
+@WebXml("web.xml")
 
 @WebappDependency.List
 ({
@@ -58,8 +62,7 @@ import javax.faces.event.PhaseId;
     @WebappDependency("org.apache.openwebbeans:openwebbeans-resource:jar:1.0.0"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-web:jar:1.0.0"),
     @WebappDependency("javassist:javassist:jar:3.12.0.GA"),
-    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")/*,
-    @WebappDependency("org.os890.codi.addon:web-xml-config:jar:1.0.0-alpha")*/
+    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")
 })
 
 @RunWith(WebappTestRunner.class)
@@ -72,17 +75,14 @@ import javax.faces.event.PhaseId;
 public class WindowContextEventTest
 {
 
+    // TODO testForm:closeWindowContext must also fire
+
     @Tester
     private static WebappTester tester;
 
     @Test
     public void createWindowContextEvent_closeWindowContextEvent() throws Exception
     {
-        // a WindowContext is created for every request
-        // NOTE that the closing can only be asserted on the next request,
-        // because the WindowContext still needs to be open in RENDER_RESPONSE
-        // after-PhaseListeners.
-
         tester.assertThat("#{eventsBean.windowContextCreated}").is(1).after(PhaseId.RENDER_RESPONSE);
         tester.assertThat("#{eventsBean.windowContextClosed}").is(0).after(PhaseId.RENDER_RESPONSE);
 
@@ -92,11 +92,11 @@ public class WindowContextEventTest
         tester.assertThat("#{eventsBean.windowContextCreated}").is(2).after(PhaseId.RENDER_RESPONSE);
         tester.assertThat("#{eventsBean.windowContextClosed}").is(1).after(PhaseId.RENDER_RESPONSE);
 
-        // new request
-        tester.click("testForm:emptyCommand");
+        // manually close WindowContext - must also fire CloseWindowContextEvent
+        tester.click("testForm:closeWindowContext");
 
         tester.assertThat("#{eventsBean.windowContextCreated}").is(3).after(PhaseId.RENDER_RESPONSE);
-        tester.assertThat("#{eventsBean.windowContextClosed}").is(2).after(PhaseId.RENDER_RESPONSE);
+        tester.assertThat("#{eventsBean.windowContextClosed}").is(3).after(PhaseId.RENDER_RESPONSE);
     }
 
 }

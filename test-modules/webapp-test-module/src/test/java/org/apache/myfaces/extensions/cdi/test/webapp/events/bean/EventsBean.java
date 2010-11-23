@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.webapp.events.bean;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseConversationEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
@@ -31,6 +32,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.Unsco
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -57,6 +59,9 @@ public class EventsBean implements Serializable
     private int windowBeanAccessed;
     private int windowContextCreated;
     private int windowContextClosed;
+
+    @Inject
+    private WindowContext windowContext;
 
     @PostConstruct
     public void initialize()
@@ -176,6 +181,13 @@ public class EventsBean implements Serializable
         initialize();
 
         return "scope-bean-event-test2.xhtml";
+    }
+
+    public String closeWindowContext()
+    {
+        windowContext.close();
+
+        return null;
     }
 
     // Getter and Setter

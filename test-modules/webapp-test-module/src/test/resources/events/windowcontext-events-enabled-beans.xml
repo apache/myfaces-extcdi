@@ -17,21 +17,13 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core">
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
-<h:head>
-    <title>MyFaces CODI WindowContextEvent Test - Start page</title>
-</h:head>
-<h:body>
-    <h:form id="testForm">
+    <alternatives>
+        <class>org.apache.myfaces.extensions.cdi.test.webapp.events.config.WindowContextEventEnabledConfig</class>
+    </alternatives>
 
-        <!-- general commands -->
-        <h:commandButton id="emptyCommand"/>
-
-        <h:commandButton id="closeWindowContext" action="#{eventsBean.closeWindowContext}" />
-
-    </h:form>
-</h:body>
-</html>
+</beans>
+        

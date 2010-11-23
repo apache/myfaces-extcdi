@@ -22,6 +22,8 @@ import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.ConversationBea
 import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.EventsBean;
 import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.ViewAccessBean;
 import org.apache.myfaces.extensions.cdi.test.webapp.events.bean.WindowBean;
+import org.apache.myfaces.extensions.cdi.test.webapp.events.config.DefaultConversationConfig;
+import org.apache.myfaces.extensions.cdi.test.webapp.events.config.UnscopeBeanEventEnabledConfig;
 import org.apache.myfaces.test.webapp.api.annotation.BeansXml;
 import org.apache.myfaces.test.webapp.api.annotation.PageBean;
 import org.apache.myfaces.test.webapp.api.annotation.Tester;
@@ -41,13 +43,15 @@ import javax.faces.event.PhaseId;
               @PageBean(clazz = ConversationBean.class),
               @PageBean(clazz = ViewAccessBean.class),
               @PageBean(clazz = WindowBean.class),
-              @PageBean(clazz = EventsBean.class)
+              @PageBean(clazz = EventsBean.class),
+              @PageBean(clazz = DefaultConversationConfig.class),
+              @PageBean(clazz = UnscopeBeanEventEnabledConfig.class)
       }
 )
 
-@BeansXml
+@BeansXml("events/unscope-bean-event-enabled-beans.xml")
 
-@WebXml("events/unscopebeanevent-enabled-web.xml")
+@WebXml("web.xml")
 
 @WebappResource.List
 ({
@@ -68,8 +72,7 @@ import javax.faces.event.PhaseId;
     @WebappDependency("org.apache.openwebbeans:openwebbeans-resource:jar:1.0.0"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-web:jar:1.0.0"),
     @WebappDependency("javassist:javassist:jar:3.12.0.GA"),
-    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")/*,
-    @WebappDependency("org.os890.codi.addon:web-xml-config:jar:1.0.0-alpha")*/
+    @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")
 })
 
 @RunWith(WebappTestRunner.class)
