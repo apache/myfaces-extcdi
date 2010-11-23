@@ -35,7 +35,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Set;
 import java.util.UUID;
 import java.util.Map;
@@ -100,7 +99,7 @@ public class DefaultWindowHandler implements WindowHandler
                 finalUrl.append("&");
                 finalUrl.append(key);
                 finalUrl.append("=");
-                finalUrl.append(URLEncoder.encode(requestParam.getValue(), "UTF-8"));
+                finalUrl.append(externalContext.encodeActionURL(requestParam.getValue()));
             }
         }
         return finalUrl.toString();
