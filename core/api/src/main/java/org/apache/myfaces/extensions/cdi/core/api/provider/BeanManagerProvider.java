@@ -55,6 +55,11 @@ public class BeanManagerProvider implements Extension
      */
     public static BeanManagerProvider getInstance()
     {
+        if(bmp == null)
+        {
+            throw new IllegalStateException("no " + BeanManagerProvider.class.getName() + " in place! " +
+                "Please ensure that you configured the CDI implementation of your choice properly.");
+        }
         return bmp;
     }
 
