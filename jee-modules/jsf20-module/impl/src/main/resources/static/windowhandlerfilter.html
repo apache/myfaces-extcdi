@@ -21,6 +21,9 @@
 -->
 <html>
     <head>
+        <meta name="author" content="Mark Struberg">
+        <meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="pragma" content="no-cache">
         <script type="text/javascript" >
             window.onload=function(){
                 var origUrl = window.location.href;
@@ -29,16 +32,17 @@
                     // this will be replaced in the servletfilter
                     windowId ='automatedEntryPoint';
                 }
+                window.name=windowId;
 
-                // 1 minute expiry time
+                // 3 seconds expiry time
                 var expdt = new Date();
-                expdt.setTime(expdt.getTime()+(1*60*1000));
+                expdt.setTime(expdt.getTime()+(3*1000));
                 var expires = "; expires="+expdt.toGMTString();
 
                 document.cookie = 'codiWindowId=' + windowId + expires;
 
                 // resubmit the page but now with the cookie
-                window.location.replace(url + ' '); // add space to force reload 
+                window.location.reload();
             }
         </script>
     </head>
