@@ -20,15 +20,14 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
 import javax.faces.application.ResourceHandler;
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
+import javax.faces.event.PhaseId;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,26 +35,44 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * TODO
+ * JSF Phase Listener to track windowId creation.
  *
- * @author Jakob Korherr
  * @author Mark Struberg
- * @Deprecated use {@link WindowHandlerPhaseListener} instead
+ * @author Jakob Korherr
  */
-public class ClientsideWindowHandlerFilter implements Filter
+@JsfPhaseListener
+public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListener
 {
+    private Boolean isClientHandlerEnabled = null;
 
-    public void init(FilterConfig filterConfig) throws ServletException
+    public PhaseId getPhaseId()
     {
+        return PhaseId.RESTORE_VIEW;
     }
 
-    public void doFilter(ServletRequest servletRequest,
-                         ServletResponse servletResponse,
-                         FilterChain filterChain) throws IOException, ServletException
+    public void beforePhase(PhaseEvent phaseEvent)
     {
+        FacesContext facesContext = phaseEvent.getFacesContext();
+        if (facesContext.isPostback())
+        {
+            return;
+        }
+        if (isClientHandlerEnabled == null)
+        {
+            //X TODO gerhard, where got this config moved to?
+            //X isClientHandlerEnabled = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(
+            isClientHandlerEnabled = Boolean.TRUE; //X TODO get from codi config!
+        }
+
+        if (!isClientHandlerEnabled)
+        {
+            return;
+        }
+        
         // request/response have to support http
-        HttpServletRequest httpRequest = (HttpServletRequest) servletRequest;
-        HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletRequest httpRequest = (HttpServletRequest) externalContext.getRequest();
+        HttpServletResponse httpResponse = (HttpServletResponse) externalContext.getResponse();
 
         if ("GET".equals(httpRequest.getMethod()) && !isResourceRequest(httpRequest))
         {
@@ -71,11 +88,10 @@ public class ClientsideWindowHandlerFilter implements Filter
             if (!clientInfo.isJavaScriptEnabled())
             {
                 // no handling possible
-                filterChain.doFilter(servletRequest, servletResponse);
                 return;
             }
 
-            Cookie[] cookies = ((HttpServletRequest) servletRequest).getCookies();
+            Cookie[] cookies = httpRequest.getCookies();
 
             if (cookies != null)
             {
@@ -94,6 +110,7 @@ public class ClientsideWindowHandlerFilter implements Filter
             {
                 // GET request without windowId - send windowhandlerfilter.html
                 sendWindowHandler(httpRequest, httpResponse, clientInfo, null);
+                facesContext.responseComplete();
             }
             else if ("automatedEntryPoint".equals(windowId))
             {
@@ -102,23 +119,12 @@ public class ClientsideWindowHandlerFilter implements Filter
 
                 // GET request with NEW windowId - send windowhandlerfilter.html
                 sendWindowHandler(httpRequest, httpResponse, clientInfo, windowId);
+                facesContext.responseComplete();
             }
             else
             {
-                // GET request with windowId from Cookie
-
-                // pass through with WindowIdServletRequestWrapper
-                //X TODO don't think this is the best way to do it!
-                //X TODO we should tell the requests WindowManager the id directly!
-                //X otherwise we might get the windowId = xxxx in a link somewhere...
-                WindowIdServletRequestWrapper requestWrapper = new WindowIdServletRequestWrapper(httpRequest, windowId);
-                filterChain.doFilter(requestWrapper, servletResponse);
+                httpRequest.setAttribute("windowId", windowId);
             }
-        }
-        else
-        {
-            // POST or resource request - no handling necessary
-            filterChain.doFilter(servletRequest, servletResponse);
         }
     }
 
@@ -137,28 +143,40 @@ public class ClientsideWindowHandlerFilter implements Filter
 
     private void sendWindowHandler(HttpServletRequest req, HttpServletResponse resp,
                                    ClientInformation clientInfo, String windowId)
-            throws ServletException, IOException
     {
-        resp.setStatus(HttpServletResponse.SC_OK);
-        resp.setContentType("text/html");
-
-        String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
-
-        if (windowId != null)
-        {
-            // we send the _real_ windowId
-            windowHandlerHtml = windowHandlerHtml.replace("automatedEntryPoint", windowId);
-        }
-
-        OutputStream os = resp.getOutputStream();
         try
         {
-                os.write(windowHandlerHtml.getBytes());
+            resp.setStatus(HttpServletResponse.SC_OK);
+            resp.setContentType("text/html");
+
+            String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
+
+            if (windowId != null)
+            {
+                // we send the _real_ windowId
+                windowHandlerHtml = windowHandlerHtml.replace("automatedEntryPoint", windowId);
+            }
+
+            OutputStream os = resp.getOutputStream();
+            try
+            {
+                    os.write(windowHandlerHtml.getBytes());
+            }
+            finally
+            {
+                os.close();
+            }
         }
-        finally
+        catch (IOException ioe)
         {
-            os.close();
+            throw new RuntimeException(ioe);
         }
     }
+
+    public void afterPhase(PhaseEvent phaseEvent)
+    {
+       // do nothing
+    }
+
 
 }

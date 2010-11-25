@@ -67,7 +67,7 @@ public class ClientInformation implements Serializable
             return windowHandlerHtml;
         }
 
-        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream("static/windowhandlerfilter.html");
+        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream("static/windowhandler.html");
         StringBuffer sb = new StringBuffer();
         try
         {

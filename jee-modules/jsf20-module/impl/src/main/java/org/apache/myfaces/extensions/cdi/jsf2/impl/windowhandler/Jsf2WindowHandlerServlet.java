@@ -37,6 +37,7 @@ import java.util.Set;
 
 /**
  * Serves the windowhandler.html from the resource path
+ * @Deprecated use {@link WindowHandlerPhaseListener} instead
  */
 @WebServlet(urlPatterns = {Jsf2WindowHandlerServlet.WINDOWHANDLER_URL})
 public class Jsf2WindowHandlerServlet extends HttpServlet

@@ -29,6 +29,7 @@ import java.util.Map;
 
 /**
  * @author Jakob Korherr
+ * @Deprecated use {@link WindowHandlerPhaseListener}
  */
 public class WindowIdServletRequestWrapper extends HttpServletRequestWrapper
 {

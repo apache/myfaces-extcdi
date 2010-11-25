@@ -39,6 +39,7 @@
     <modules>
         <module>hello_myfaces-codi_jsf12</module>
         <module>hello_myfaces-codi_jsf20</module>
+        <module>windowhandler_jsf20</module>
         <module>hello_myfaces-codi_trinidad12</module>
     </modules>
 
