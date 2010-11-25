@@ -21,22 +21,23 @@
 -->
 <html>
     <head>
-        <meta name="author" content="Mark Struberg">
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="pragma" content="no-cache">
         <script type="text/javascript" >
             window.onload=function(){
-                var origUrl = window.location.href;
-                var windowId = window.name
-                if (!windowId || windowId.length < 3 || windowId == ('automated' + 'EntryPoint')) {
+                var windowId = 'uninitializedWindowId';
+                if (windowId == ('uninitialized' + 'WindowId')) {
+                    windowId = window.name
+                }
+                if (!windowId || windowId.length < 3) {
                     // this will be replaced in the servletfilter
                     windowId ='automatedEntryPoint';
                 }
                 window.name=windowId;
 
-                // 3 seconds expiry time
+                // 2 seconds expiry time
                 var expdt = new Date();
-                expdt.setTime(expdt.getTime()+(3*1000));
+                expdt.setTime(expdt.getTime()+(2*1000));
                 var expires = "; expires="+expdt.toGMTString();
 
                 document.cookie = 'codiWindowId=' + windowId + expires;

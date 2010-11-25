@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
 import javax.faces.application.ResourceHandler;
@@ -112,18 +112,31 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
                 sendWindowHandler(httpRequest, httpResponse, clientInfo, null);
                 facesContext.responseComplete();
             }
-            else if ("automatedEntryPoint".equals(windowId))
-            {
-                WindowContext windowContext = windowContextManager.getCurrentWindowContext();
-                windowId = windowContext.getId();
-
-                // GET request with NEW windowId - send windowhandlerfilter.html
-                sendWindowHandler(httpRequest, httpResponse, clientInfo, windowId);
-                facesContext.responseComplete();
-            }
             else
             {
-                httpRequest.setAttribute("windowId", windowId);
+                boolean windowIdAlive = false;
+                for (EditableWindowContext wc : windowContextManager.getWindowContexts())
+                {
+                    if (windowId.equals(wc.getId()))
+                    {
+                        windowIdAlive = true;
+                        break;
+                    }
+                }
+
+
+                if ("automatedEntryPoint".equals(windowId) || !windowIdAlive)
+                {
+                    windowId = windowContextManager.getCurrentWindowContext().getId();
+
+                    // GET request with NEW windowId - send windowhandlerfilter.html
+                    sendWindowHandler(httpRequest, httpResponse, clientInfo, windowId);
+                    facesContext.responseComplete();
+                }
+                else
+                {
+                    httpRequest.setAttribute("windowId", windowId);
+                }
             }
         }
     }
@@ -154,7 +167,7 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
             if (windowId != null)
             {
                 // we send the _real_ windowId
-                windowHandlerHtml = windowHandlerHtml.replace("automatedEntryPoint", windowId);
+                windowHandlerHtml = windowHandlerHtml.replace("uninitializedWindowId", windowId);
             }
 
             OutputStream os = resp.getOutputStream();
