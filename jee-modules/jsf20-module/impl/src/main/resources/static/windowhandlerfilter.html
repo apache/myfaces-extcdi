@@ -22,61 +22,26 @@
 <html>
     <head>
         <script type="text/javascript" >
-            var http_request;
-
-            function createHttpRequest(){
-                var http_request2;
-                if (window.XMLHttpRequest) { // IE7, Mozilla, Safari,...
-                    http_request2 = new XMLHttpRequest();
-                    if (http_request2.overrideMimeType) {
-                        http_request2.overrideMimeType('text/xml');
-                    }
-                } else if (window.ActiveXObject) { // IE
-                    try {
-                        http_request2 = new ActiveXObject("Msxml2.XMLHTTP");
-                    } catch (e) {
-                        try {
-                            http_request2 = new ActiveXObject("Microsoft.XMLHTTP");
-                        } catch (e) {}
-                    }
+            window.onload=function(){
+                var origUrl = window.location.href;
+                var windowId = window.name
+                if (!windowId || windowId.length < 3) {
+                    // this will be replaced in the servletfilter
+                    windowId ='automatedEntryPoint';
                 }
 
-                if (!http_request2) {
-                    alert('Not possible to get HttpRequest object!');
-                    return false;
-                }
-                return http_request2;
-            }
+                // 1 minute expiry time
+                var expdt = new Date();
+                expdt.setTime(expdt.getTime()+(1*60*1000));
+                var expires = "; expires="+expdt.toGMTString();
 
-            function doRequest(url){
-                http_request.open('GET', url, true);
-                http_request.onreadystatechange = replaceContent;
-                http_request.send(null);
-            }
+                document.cookie = 'codiWindowId=' + windowId + expires;
 
-            function replaceContent(){
-                if (http_request.readyState == 4) {
-                    if (http_request.status == 200){
-                        if(http_request.responseText!=""){
-                            document.innerHTML=http_request.responseText;
-                            
-                            window.name= http_request.getResponseHeader("myfaces-codi-windowId");
-                        }
-                    }
-                }
+                // resubmit the page but now with the cookie
+                window.location.replace(url + ' '); // add space to force reload 
             }
-            var origUrl = window.location.href;
-            if (!window.name || window.name.length < 1) {
-                window.name = 'automatedEntryPoint';
-            }
-
-            var amp = origUrl.contains('?') ? "&" : "?";
-            var newUrl = origUrl + amp + "windowId=" + window.name;
-            http_request = createHttpRequest();
-            doRequest(newUrl);
         </script>
     </head>
 <body>
-
 </body>
 </html>

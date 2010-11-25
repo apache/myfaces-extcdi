@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
 
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
 import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
@@ -27,17 +29,17 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.UUID;
 
 /**
  * TODO
  *
  * @author Jakob Korherr
+ * @author Mark Struberg
  */
 public class ClientsideWindowHandlerFilter implements Filter
 {
@@ -57,26 +59,57 @@ public class ClientsideWindowHandlerFilter implements Filter
         if ("GET".equals(httpRequest.getMethod()) && !isResourceRequest(httpRequest))
         {
             // only for GET requests
-            String windowIdParam = servletRequest.getParameter("windowId");
 
-            if (windowIdParam == null)
+            ClientInformation clientInfo =
+                    CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ClientInformation.class, false);
+
+            EditableWindowContextManager windowContextManager =
+                    CodiUtils.getOrCreateScopedInstanceOfBeanByClass(EditableWindowContextManager.class, false);
+
+            String windowId = null;
+            if (!clientInfo.isJavaScriptEnabled())
             {
-                // GET request without windowId - send windowhandler.html
-                sendWindowHandler(httpRequest, httpResponse);
+                // no handling possible
+                filterChain.doFilter(servletRequest, servletResponse);
+                return;
+            }
+
+            Cookie[] cookies = ((HttpServletRequest) servletRequest).getCookies();
+
+            if (cookies != null)
+            {
+                for (Cookie cookie : cookies)
+                {
+                    if ("codiWindowId".equals(cookie.getName()))
+                    {
+                        windowId = cookie.getValue();
+                        cookie.setMaxAge(0);
+                        break;
+                    }
+                }
+            }
+
+            if (windowId == null)
+            {
+                // GET request without windowId - send windowhandlerfilter.html
+                sendWindowHandler(httpRequest, httpResponse, clientInfo, null);
+            }
+            else if ("automatedEntryPoint".equals(windowId))
+            {
+                WindowContext windowContext = windowContextManager.getCurrentWindowContext();
+                windowId = windowContext.getId();
+
+                // GET request with NEW windowId - send windowhandlerfilter.html
+                sendWindowHandler(httpRequest, httpResponse, clientInfo, windowId);
             }
             else
             {
-                // GET request with windowId (from AJAX)
-
-                // generate new windowId and set it as response header
-                String windowId; //X TODO get new windowId from CODI algorithm
-                //X TODO temp - random windowId
-                windowId = UUID.randomUUID().toString().replace("-", "");
-
-                // set response header for JavaScript
-                httpResponse.setHeader("myfaces-codi-windowId", windowId);
+                // GET request with windowId from Cookie
 
                 // pass through with WindowIdServletRequestWrapper
+                //X TODO don't think this is the best way to do it!
+                //X TODO we should tell the requests WindowManager the id directly!
+                //X otherwise we might get the windowId = xxxx in a link somewhere...
                 WindowIdServletRequestWrapper requestWrapper = new WindowIdServletRequestWrapper(httpRequest, windowId);
                 filterChain.doFilter(requestWrapper, servletResponse);
             }
@@ -101,26 +134,28 @@ public class ClientsideWindowHandlerFilter implements Filter
         return requestURL.contains(ResourceHandler.RESOURCE_IDENTIFIER);
     }
 
-    private void sendWindowHandler(HttpServletRequest req, HttpServletResponse resp)
+    private void sendWindowHandler(HttpServletRequest req, HttpServletResponse resp,
+                                   ClientInformation clientInfo, String windowId)
             throws ServletException, IOException
     {
         resp.setStatus(HttpServletResponse.SC_OK);
         resp.setContentType("text/html");
 
-        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream("static/windowhandlerfilter.html");
+        String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
+
+        if (windowId != null)
+        {
+            // we send the _real_ windowId
+            windowHandlerHtml = windowHandlerHtml.replace("automatedEntryPoint", windowId);
+        }
+
         OutputStream os = resp.getOutputStream();
         try
         {
-            byte[] buf = new byte[16 * 4096];
-            int bytesRead;
-            while ((bytesRead = is.read(buf)) != -1)
-            {
-                os.write(buf, 0, bytesRead);
-            }
+                os.write(windowHandlerHtml.getBytes());
         }
         finally
         {
-            is.close();
             os.close();
         }
     }

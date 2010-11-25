@@ -18,12 +18,23 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
 
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 
 /**
  * Contains information about whether the user has
  * JavaScript enabled on his client, etc.
+ * It also contains the windowhandler html which gets sent to
+ * the browser to detect the current windowId.
+ *
+ * This allows the 'customisation' of this html file to e.g.
+ * adopt the background colour to avoid screen flickering.
  */
 @SessionScoped
 public class ClientInformation implements Serializable
@@ -31,6 +42,10 @@ public class ClientInformation implements Serializable
     private static final long serialVersionUID = -3264016646002116064L;
 
     private boolean javaScriptEnabled = true;
+
+    protected String windowHandlerHtml;
+
+    private @Inject ProjectStage projectStage;
 
 
     public boolean isJavaScriptEnabled()
@@ -42,4 +57,35 @@ public class ClientInformation implements Serializable
     {
         this.javaScriptEnabled = javaScriptEnabled;
     }
+
+    public String getWindowHandlerHtml()
+            throws IOException
+    {
+        if (projectStage != ProjectStage.Development && windowHandlerHtml != null)
+        {
+            // use cached windowHandlerHtml except in Development
+            return windowHandlerHtml;
+        }
+
+        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream("static/windowhandlerfilter.html");
+        StringBuffer sb = new StringBuffer();
+        try
+        {
+            byte[] buf = new byte[32 * 1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buf)) != -1)
+            {
+                String sbuf = new String(buf);
+                sb.append(sbuf);
+            }
+        }
+        finally
+        {
+            is.close();
+        }
+
+        windowHandlerHtml = sb.toString();
+        return windowHandlerHtml;
+    }
+
 }
