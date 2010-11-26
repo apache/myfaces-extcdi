@@ -16,19 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config;
+
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+
+import java.io.Serializable;
 
 /**
- * Config for all JSF specific configurations.
- *
  * @author Gerhard Petracek
  */
-public interface JsfModuleConfig
+public interface ConversationConfig extends CodiConfig, Serializable
 {
     /**
-     * If the initial redirect is enabled, a redirect will be performed for adding the current window-id to the url.
-     *
-     * @return true for activating it, false otherwise
+     * Timeout for {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} beans,
+     * which will be used if the conversation doesn't get closed manually.
+     * 
+     * @return timeout in minutes
      */
-    boolean isInitialRedirectEnabled();
+    int getConversationTimeoutInMinutes();
+
+    /*
+     * event config
+     */
+
+    boolean isScopeBeanEventEnabled();
+
+    boolean isAccessBeanEventEnabled();
+
+    boolean isUnscopeBeanEventEnabled();
+
+    boolean isStartConversationEventEnabled();
+
+    boolean isCloseConversationEventEnabled();
+    
+    boolean isRestartConversationEventEnabled();
 }

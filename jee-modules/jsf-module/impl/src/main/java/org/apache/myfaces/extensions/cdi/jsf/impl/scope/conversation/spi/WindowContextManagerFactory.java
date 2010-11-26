@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 
 /**
  * @author Gerhard Petracek

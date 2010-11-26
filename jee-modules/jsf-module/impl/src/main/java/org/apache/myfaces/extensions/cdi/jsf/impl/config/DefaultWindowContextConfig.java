@@ -19,10 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -33,7 +32,7 @@ import javax.enterprise.context.ApplicationScoped;
  */
 @ApplicationScoped
 public class DefaultWindowContextConfig extends AbstractAttributeAware
-        implements CodiConfig, WindowContextConfig, ConversationConfig, JsfModuleConfig
+        implements WindowContextConfig, ConversationConfig, JsfModuleConfig
 {
     private static final long serialVersionUID = -1065123725125153533L;
 

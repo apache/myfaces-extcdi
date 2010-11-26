@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
 import javax.enterprise.inject.Model;
 import javax.inject.Inject;

@@ -16,14 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
+package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config;
+
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface WindowContextConfig extends Serializable
+public interface WindowContextConfig extends CodiConfig, Serializable
 {
     /**
      * Specifies if it is allowed to use URL params for forwarding the current window-id.

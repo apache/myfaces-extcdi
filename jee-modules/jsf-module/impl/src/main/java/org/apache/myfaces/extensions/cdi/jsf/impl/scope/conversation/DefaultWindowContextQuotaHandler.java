@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.tooManyOpenWindowException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

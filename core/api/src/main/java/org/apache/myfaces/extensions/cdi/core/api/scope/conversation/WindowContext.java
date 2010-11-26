@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
