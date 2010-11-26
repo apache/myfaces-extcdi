@@ -23,16 +23,20 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 
-import javax.faces.application.ResourceHandler;
+import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .CREATE_NEW_WINDOW_CONTEXT_ID_VALUE;
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 /**
  * JSF Phase Listener to track windowId creation.
@@ -43,6 +47,9 @@ import java.io.OutputStream;
 @JsfPhaseListener
 public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListener
 {
+
+    private static final String WINDOW_ID_COOKIE_NAME = "codiWindowId";
+
     private Boolean isClientHandlerEnabled = null;
 
     public PhaseId getPhaseId()
@@ -53,114 +60,65 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
     public void beforePhase(PhaseEvent phaseEvent)
     {
         FacesContext facesContext = phaseEvent.getFacesContext();
-        if (facesContext.isPostback())
+
+        if (facesContext.isPostback() || !isClientHandlerEnabled())
         {
+            // POST request or not enabled
             return;
         }
-        if (isClientHandlerEnabled == null)
-        {
-            //X TODO gerhard, where got this config moved to?
-            //X isClientHandlerEnabled = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(
-            isClientHandlerEnabled = Boolean.TRUE; //X TODO get from codi config!
-        }
 
-        if (!isClientHandlerEnabled)
+        ClientInformation clientInfo =
+                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ClientInformation.class, false);
+        if (!clientInfo.isJavaScriptEnabled())
         {
+            // no handling possible
             return;
         }
         
-        // request/response have to support http
         ExternalContext externalContext = facesContext.getExternalContext();
-        HttpServletRequest httpRequest = (HttpServletRequest) externalContext.getRequest();
-        HttpServletResponse httpResponse = (HttpServletResponse) externalContext.getResponse();
 
-        if ("GET".equals(httpRequest.getMethod()) && !isResourceRequest(httpRequest))
+        String windowId = getWindowIdFromCookie(externalContext);
+        if (windowId == null)
         {
-            // only for GET requests
-
-            ClientInformation clientInfo =
-                    CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ClientInformation.class, false);
-
+            // GET request without windowId - send windowhandlerfilter.html
+            sendWindowHandler(externalContext, clientInfo, null);
+            facesContext.responseComplete();
+        }
+        else
+        {
             EditableWindowContextManager windowContextManager =
                     CodiUtils.getOrCreateScopedInstanceOfBeanByClass(EditableWindowContextManager.class, false);
 
-            String windowId = null;
-            if (!clientInfo.isJavaScriptEnabled())
+            if (CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId) || !isWindowIdAlive(windowId, windowContextManager))
             {
-                // no handling possible
-                return;
-            }
+                // no or invalid windowId --> create new one
+                windowId = windowContextManager.getCurrentWindowContext().getId();
 
-            Cookie[] cookies = httpRequest.getCookies();
-
-            if (cookies != null)
-            {
-                for (Cookie cookie : cookies)
-                {
-                    if ("codiWindowId".equals(cookie.getName()))
-                    {
-                        windowId = cookie.getValue();
-                        cookie.setMaxAge(0);
-                        break;
-                    }
-                }
-            }
-
-            if (windowId == null)
-            {
-                // GET request without windowId - send windowhandlerfilter.html
-                sendWindowHandler(httpRequest, httpResponse, clientInfo, null);
+                // GET request with NEW windowId - send windowhandlerfilter.html
+                sendWindowHandler(externalContext, clientInfo, windowId);
                 facesContext.responseComplete();
             }
             else
             {
-                boolean windowIdAlive = false;
-                for (EditableWindowContext wc : windowContextManager.getWindowContexts())
-                {
-                    if (windowId.equals(wc.getId()))
-                    {
-                        windowIdAlive = true;
-                        break;
-                    }
-                }
+                // we have a valid windowId - set it an continue with the request
 
-
-                if ("automatedEntryPoint".equals(windowId) || !windowIdAlive)
-                {
-                    windowId = windowContextManager.getCurrentWindowContext().getId();
-
-                    // GET request with NEW windowId - send windowhandlerfilter.html
-                    sendWindowHandler(httpRequest, httpResponse, clientInfo, windowId);
-                    facesContext.responseComplete();
-                }
-                else
-                {
-                    httpRequest.setAttribute("windowId", windowId);
-                }
+                //X TODO find better way to provide the windowId, because this approach assumes
+                // that the windowId will be cached on the RequestMap and the cache is the only
+                // point to get it #HACK
+                externalContext.getRequestMap().put(WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
             }
         }
     }
 
-    public void destroy()
-    {
-    }
-
-    private boolean isResourceRequest(HttpServletRequest httpRequest)
-    {
-        // TODO more detail: copy algorithm from ResourceHandlerImpl
-
-        String requestURL = httpRequest.getRequestURL().toString();
-
-        return requestURL.contains(ResourceHandler.RESOURCE_IDENTIFIER);
-    }
-
-    private void sendWindowHandler(HttpServletRequest req, HttpServletResponse resp,
+    private void sendWindowHandler(ExternalContext externalContext,
                                    ClientInformation clientInfo, String windowId)
     {
+        HttpServletResponse httpResponse = (HttpServletResponse) externalContext.getResponse();
+
         try
         {
-            resp.setStatus(HttpServletResponse.SC_OK);
-            resp.setContentType("text/html");
+            httpResponse.setStatus(HttpServletResponse.SC_OK);
+            httpResponse.setContentType("text/html");
 
             String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
 
@@ -170,7 +128,7 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
                 windowHandlerHtml = windowHandlerHtml.replace("uninitializedWindowId", windowId);
             }
 
-            OutputStream os = resp.getOutputStream();
+            OutputStream os = httpResponse.getOutputStream();
             try
             {
                     os.write(windowHandlerHtml.getBytes());
@@ -182,14 +140,50 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         }
         catch (IOException ioe)
         {
-            throw new RuntimeException(ioe);
+            throw new FacesException(ioe);
         }
+    }
+
+    private boolean isClientHandlerEnabled()
+    {
+        if (isClientHandlerEnabled == null)
+        {
+            //X TODO gerhard, where got this config moved to?
+            //X isClientHandlerEnabled = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(
+            isClientHandlerEnabled = Boolean.TRUE; //X TODO get from codi config!
+        }
+
+        return isClientHandlerEnabled; 
+    }
+
+    private String getWindowIdFromCookie(ExternalContext externalContext)
+    {
+        Cookie cookie = (Cookie) externalContext.getRequestCookieMap().get(WINDOW_ID_COOKIE_NAME);
+
+        if (cookie != null)
+        {
+            return cookie.getValue();
+        }
+
+        return null;
+    }
+
+    private boolean isWindowIdAlive(String windowId, EditableWindowContextManager windowContextManager)
+    {
+        for (EditableWindowContext wc : windowContextManager.getWindowContexts())
+        {
+            if (windowId.equals(wc.getId()))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void afterPhase(PhaseEvent phaseEvent)
     {
        // do nothing
     }
-
 
 }

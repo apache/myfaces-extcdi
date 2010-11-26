@@ -18,25 +18,31 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.event.Observes;
-import javax.faces.event.PhaseEvent;
 import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
 import java.io.IOException;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .CREATE_NEW_WINDOW_CONTEXT_ID_VALUE;
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.cleanupInactiveWindowContexts;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
 
 /**
  * @author Gerhard Petracek
@@ -123,7 +129,7 @@ final class WindowContextManagerObserver
             String windowId = facesContext.getExternalContext()
                     .getRequestParameterMap().get(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
-            if("automatedEntryPoint".equalsIgnoreCase(windowId))
+            if(CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equalsIgnoreCase(windowId))
             {
                 return true;
             }

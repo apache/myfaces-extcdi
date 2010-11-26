@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
-import javax.faces.lifecycle.Lifecycle;
-import javax.faces.event.PhaseListener;
-import javax.faces.context.FacesContext;
 import javax.faces.FacesException;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseListener;
+import javax.faces.lifecycle.Lifecycle;
 import java.util.List;
 
 /**
@@ -52,6 +52,8 @@ class CodiLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
+        // TODO move WindowHandlerPhaseListener invocation here (as early as possible, before any other PhaseListener) ?
+
         wrapped.execute(facesContext);
     }
 
