@@ -18,16 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.BookmarkAwareWindowHandler;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.ExternalContextWrapper;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getWindowHandler;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.sendRedirect;
@@ -71,21 +68,6 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
             return this.wrapped.encodeActionURL(url);
         }
         return this.wrapped.encodeActionURL(s);
-    }
-
-
-    @Override
-    public String encodeBookmarkableURL(String baseUrl, Map<String, List<String>> parameters)
-    {
-        lazyInit();
-
-        if(this.windowHandler instanceof BookmarkAwareWindowHandler)
-        {
-            return ((BookmarkAwareWindowHandler) this.windowHandler)
-                    .encodeBookmarkableURL(getWrapped(), baseUrl, parameters);
-        }
-
-        return super.encodeBookmarkableURL(baseUrl, parameters);
     }
 
     private synchronized void lazyInit()
