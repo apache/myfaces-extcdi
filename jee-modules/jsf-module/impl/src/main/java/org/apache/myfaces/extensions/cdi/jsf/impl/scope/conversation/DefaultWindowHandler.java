@@ -52,6 +52,8 @@ public class DefaultWindowHandler implements WindowHandler
     private static final String WINDOW_ID_PARAMETER_KEY = WINDOW_CONTEXT_ID_PARAMETER_KEY + "=";
 
     protected boolean useWindowAwareUrlEncoding;
+    protected boolean encodeActionURLs;
+
 
     protected DefaultWindowHandler()
     {
@@ -61,11 +63,12 @@ public class DefaultWindowHandler implements WindowHandler
     protected DefaultWindowHandler(WindowContextConfig config)
     {
         this.useWindowAwareUrlEncoding = config.isUrlParameterSupported();
+        this.encodeActionURLs = config.isAddWindowIdToActionUrlsEnabled();
     }
 
     public String encodeURL(String url)
     {
-        if(this.useWindowAwareUrlEncoding)
+        if(this.encodeActionURLs)
         {
             return encodeActionURL(url, getCurrentWindowId());
         }

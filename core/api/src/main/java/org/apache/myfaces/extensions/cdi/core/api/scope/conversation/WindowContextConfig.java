@@ -41,7 +41,10 @@ public interface WindowContextConfig extends Serializable
      */
     boolean isUnknownWindowIdsAllowed();
 
-    @Deprecated
+    /**
+     * if set to <code>true</code> CODI will add a windowId=xxx parameter
+     * while encoding each action URL.
+     */
     boolean isAddWindowIdToActionUrlsEnabled();
 
     /**
