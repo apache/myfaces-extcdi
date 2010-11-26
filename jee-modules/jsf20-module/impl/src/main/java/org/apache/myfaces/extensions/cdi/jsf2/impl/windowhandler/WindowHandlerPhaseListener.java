@@ -32,6 +32,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .CREATE_NEW_WINDOW_CONTEXT_ID_VALUE;
@@ -48,7 +50,9 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListener
 {
 
-    private static final String WINDOW_ID_COOKIE_NAME = "codiWindowId";
+    private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
+    private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
+    private static final String WINDOW_ID_REPLACE_PATTERN = "$$windowIdValue$$";
 
     private Boolean isClientHandlerEnabled = null;
 
@@ -122,11 +126,13 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
 
             String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
 
-            if (windowId != null)
+            if (windowId == null)
             {
-                // we send the _real_ windowId
-                windowHandlerHtml = windowHandlerHtml.replace("uninitializedWindowId", windowId);
+                windowId = UNINITIALIZED_WINDOW_ID_VALUE;
             }
+
+            // set the windowId value in the javascript code
+            windowHandlerHtml = windowHandlerHtml.replace(WINDOW_ID_REPLACE_PATTERN, windowId);
 
             OutputStream os = httpResponse.getOutputStream();
             try
@@ -158,7 +164,15 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
 
     private String getWindowIdFromCookie(ExternalContext externalContext)
     {
-        Cookie cookie = (Cookie) externalContext.getRequestCookieMap().get(WINDOW_ID_COOKIE_NAME);
+        String cookieName = getEncodedPathName(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
+        Cookie cookie = (Cookie) externalContext.getRequestCookieMap().get(cookieName);
+
+        if (cookie == null)
+        {
+            // if the current request went to a welcome page, we should only consider the contextPath
+            cookieName = getEncodedContextPath(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
+            cookie = (Cookie) externalContext.getRequestCookieMap().get(cookieName);
+        }
 
         if (cookie != null)
         {
@@ -166,6 +180,69 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         }
 
         return null;
+    }
+
+    private String getEncodedPathName(ExternalContext externalContext)
+    {
+        StringBuilder sb = new StringBuilder();
+
+        String contextPath = externalContext.getRequestContextPath();
+        if (contextPath != null)
+        {
+            sb.append(contextPath);
+        }
+
+        String servletPath = externalContext.getRequestServletPath();
+        if (servletPath != null)
+        {
+            sb.append(servletPath);
+        }
+
+        String pathInfo = externalContext.getRequestPathInfo();
+        if (pathInfo != null)
+        {
+            sb.append(pathInfo);
+        }
+
+        // remove all "/", because they can be different in JavaScript
+        String pathName = sb.toString().replace("/", "");
+
+        return encodeURIComponent(pathName, externalContext);
+    }
+
+    private String getEncodedContextPath(ExternalContext externalContext)
+    {
+        String contextPath = externalContext.getRequestContextPath();
+        if (contextPath != null)
+        {
+            // remove all "/", because they can be different in JavaScript
+            contextPath = contextPath.replace("/", "");
+
+            return encodeURIComponent(contextPath, externalContext);
+        }
+
+        return "";
+    }
+
+    /**
+     * JavaScript equivalent method.
+     *
+     * This is how the ExternalContext impl encodes URL parameter values.
+     *
+     * @param component
+     * @return
+     */
+    private String encodeURIComponent(String component, ExternalContext externalContext)
+    {
+        try
+        {
+            return URLEncoder.encode(component, externalContext.getResponseCharacterEncoding());
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new UnsupportedOperationException("Encoding type="
+                    + externalContext.getResponseCharacterEncoding() + " not supported", e);
+        }
     }
 
     private boolean isWindowIdAlive(String windowId, EditableWindowContextManager windowContextManager)

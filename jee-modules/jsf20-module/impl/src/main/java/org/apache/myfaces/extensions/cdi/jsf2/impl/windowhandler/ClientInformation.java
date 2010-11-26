@@ -41,6 +41,8 @@ public class ClientInformation implements Serializable
 {
     private static final long serialVersionUID = -3264016646002116064L;
 
+    private static final String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
+
     private boolean javaScriptEnabled = true;
 
     protected String windowHandlerHtml;
@@ -67,7 +69,7 @@ public class ClientInformation implements Serializable
             return windowHandlerHtml;
         }
 
-        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream("static/windowhandler.html");
+        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream(DEFAULT_WINDOW_HANDLER_HTML_FILE);
         StringBuffer sb = new StringBuffer();
         try
         {

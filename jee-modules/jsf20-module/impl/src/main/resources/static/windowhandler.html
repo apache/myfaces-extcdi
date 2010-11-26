@@ -24,23 +24,33 @@
         <meta http-equiv="cache-control" content="no-cache">
         <meta http-equiv="pragma" content="no-cache">
         <script type="text/javascript" >
-            window.onload=function(){
-                var windowId = 'uninitializedWindowId';
-                if (windowId == ('uninitialized' + 'WindowId')) {
+            window.onload = function()
+            {
+                // this will be replaced in the phase listener
+                var windowId = '$$windowIdValue$$';
+
+                if (windowId == 'uninitializedWindowId')
+                {
                     windowId = window.name
                 }
-                if (!windowId || windowId.length < 3) {
-                    // this will be replaced in the servletfilter
-                    windowId ='automatedEntryPoint';
+
+                if (!windowId || windowId.length < 3)
+                {
+                    // request a new windowId
+                    windowId = 'automatedEntryPoint';
                 }
-                window.name=windowId;
+                
+                window.name = windowId;
 
                 // 2 seconds expiry time
                 var expdt = new Date();
                 expdt.setTime(expdt.getTime()+(2*1000));
                 var expires = "; expires="+expdt.toGMTString();
 
-                document.cookie = 'codiWindowId=' + windowId + expires;
+                // include pathName (without "/"s) in cookie name
+                var pathName = encodeURIComponent(window.location.pathname.replace(/\//g, ""));
+
+                document.cookie = pathName + '-codiWindowId=' + windowId + expires;
 
                 // resubmit the page but now with the cookie
                 window.location.reload();
