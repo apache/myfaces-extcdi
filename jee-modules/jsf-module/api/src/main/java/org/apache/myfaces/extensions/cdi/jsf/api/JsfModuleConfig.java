@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
+package org.apache.myfaces.extensions.cdi.jsf.api;
 
 /**
  * Config for all JSF specific configurations.
