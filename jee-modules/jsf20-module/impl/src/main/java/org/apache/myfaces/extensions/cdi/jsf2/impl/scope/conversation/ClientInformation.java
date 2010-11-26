@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
+package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;

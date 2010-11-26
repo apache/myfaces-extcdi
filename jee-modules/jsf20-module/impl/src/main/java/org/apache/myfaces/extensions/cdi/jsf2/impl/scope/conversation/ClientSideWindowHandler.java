@@ -16,18 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler;
+package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
 import javax.faces.FacesException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,70 +43,79 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 /**
- * JSF Phase Listener to track windowId creation.
- *
- * @author Mark Struberg
- * @author Jakob Korherr
+ * WindowHandler which uses JavaScript to store the windowId.
  */
-@JsfPhaseListener
-public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListener
+@Alternative
+@ApplicationScoped
+public class ClientSideWindowHandler extends DefaultWindowHandler implements LifecycleAwareWindowHandler
 {
+    private static final long serialVersionUID = 5293942986187078113L;
 
     private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
     private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
     private static final String WINDOW_ID_REPLACE_PATTERN = "$$windowIdValue$$";
 
-    private Boolean isClientHandlerEnabled = null;
+    @Inject
+    private ClientInformation clientInformation;
 
-    public PhaseId getPhaseId()
+    @Inject
+    private EditableWindowContextManager windowContextManager;
+
+    protected ClientSideWindowHandler()
     {
-        return PhaseId.RESTORE_VIEW;
+        // needed for proxying
     }
 
-    public void beforePhase(PhaseEvent phaseEvent)
+    @Inject
+    protected ClientSideWindowHandler(WindowContextConfig config)
     {
-        FacesContext facesContext = phaseEvent.getFacesContext();
+        super(config);
+    }
 
-        if (facesContext.isPostback() || !isClientHandlerEnabled())
+    @Override
+    public String encodeURL(String url)
+    {
+        // do NOT add the windowId to the URL in any case
+        // TODO what if javascript is disabled? fallback to default algorithm?
+        return url;
+    }
+
+    @Override
+    public String restoreWindowId(ExternalContext externalContext)
+    {
+        return null;
+    }
+
+    public void beforeLifecycleExecute(FacesContext facesContext)
+    {
+        if (!shouldHandleRequest(facesContext))
         {
-            // POST request or not enabled
             return;
         }
 
-        ClientInformation clientInfo =
-                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(ClientInformation.class, false);
-        if (!clientInfo.isJavaScriptEnabled())
-        {
-            // no handling possible
-            return;
-        }
-        
         ExternalContext externalContext = facesContext.getExternalContext();
 
         String windowId = getWindowIdFromCookie(externalContext);
         if (windowId == null)
         {
             // GET request without windowId - send windowhandlerfilter.html
-            sendWindowHandler(externalContext, clientInfo, null);
+            sendWindowHandlerHtml(externalContext, null);
             facesContext.responseComplete();
         }
         else
         {
-            EditableWindowContextManager windowContextManager =
-                    CodiUtils.getOrCreateScopedInstanceOfBeanByClass(EditableWindowContextManager.class, false);
-
-            if (CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId) || !isWindowIdAlive(windowId, windowContextManager))
+            if (CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId) || !isWindowIdAlive(windowId))
             {
                 // no or invalid windowId --> create new one
                 windowId = windowContextManager.getCurrentWindowContext().getId();
 
                 // GET request with NEW windowId - send windowhandlerfilter.html
-                sendWindowHandler(externalContext, clientInfo, windowId);
+                sendWindowHandlerHtml(externalContext, windowId);
                 facesContext.responseComplete();
             }
             else
             {
-                // we have a valid windowId - set it an continue with the request
+                // we have a valid windowId - set it and continue with the request
 
                 //X TODO find better way to provide the windowId, because this approach assumes
                 // that the windowId will be cached on the RequestMap and the cache is the only
@@ -114,8 +125,14 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         }
     }
 
-    private void sendWindowHandler(ExternalContext externalContext,
-                                   ClientInformation clientInfo, String windowId)
+    private boolean shouldHandleRequest(FacesContext facesContext)
+    {
+        // no POST request and javascript enabled
+        // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
+        return !facesContext.isPostback() && clientInformation.isJavaScriptEnabled();
+    }
+
+    private void sendWindowHandlerHtml(ExternalContext externalContext, String windowId)
     {
         HttpServletResponse httpResponse = (HttpServletResponse) externalContext.getResponse();
 
@@ -124,7 +141,7 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
             httpResponse.setStatus(HttpServletResponse.SC_OK);
             httpResponse.setContentType("text/html");
 
-            String windowHandlerHtml = clientInfo.getWindowHandlerHtml();
+            String windowHandlerHtml = clientInformation.getWindowHandlerHtml();
 
             if (windowId == null)
             {
@@ -148,18 +165,6 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         {
             throw new FacesException(ioe);
         }
-    }
-
-    private boolean isClientHandlerEnabled()
-    {
-        if (isClientHandlerEnabled == null)
-        {
-            //X TODO gerhard, where got this config moved to?
-            //X isClientHandlerEnabled = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(
-            isClientHandlerEnabled = Boolean.TRUE; //X TODO get from codi config!
-        }
-
-        return isClientHandlerEnabled; 
     }
 
     private String getWindowIdFromCookie(ExternalContext externalContext)
@@ -229,7 +234,10 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
      *
      * This is how the ExternalContext impl encodes URL parameter values.
      *
+     * TODO move to Utils class - also needed in DefaultWindowHandler
+     *
      * @param component
+     * @param externalContext
      * @return
      */
     private String encodeURIComponent(String component, ExternalContext externalContext)
@@ -245,7 +253,7 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         }
     }
 
-    private boolean isWindowIdAlive(String windowId, EditableWindowContextManager windowContextManager)
+    private boolean isWindowIdAlive(String windowId)
     {
         for (EditableWindowContext wc : windowContextManager.getWindowContexts())
         {
@@ -256,11 +264,6 @@ public class WindowHandlerPhaseListener implements javax.faces.event.PhaseListen
         }
 
         return false;
-    }
-
-    public void afterPhase(PhaseEvent phaseEvent)
-    {
-       // do nothing
     }
 
 }

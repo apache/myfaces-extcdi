@@ -99,6 +99,9 @@ public class DefaultWindowHandler implements WindowHandler
                 finalUrl.append("&");
                 finalUrl.append(key);
                 finalUrl.append("=");
+                // TODO encodeActionURL does NOT correctly encode URL parameter values
+                // see MyFaces ServletExternalContextImpl.encodeURL() for detail!
+                // TODO use ClientSideWindowHandler.encodeURIComponent() instead
                 finalUrl.append(externalContext.encodeActionURL(requestParam.getValue()));
             }
         }
