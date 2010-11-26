@@ -24,6 +24,7 @@
     <body>
         <f:view>
             <h:form>
+                <h:outputText value="simple view controller example - result: #{pageBean3.value}"/>
                 <h:commandLink value="back to start" action="home"/>
             </h:form>
 

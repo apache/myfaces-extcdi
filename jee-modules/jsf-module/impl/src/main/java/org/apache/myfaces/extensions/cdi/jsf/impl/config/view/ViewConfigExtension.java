@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
@@ -27,10 +28,12 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
+import javax.enterprise.inject.spi.AnnotatedType;
 import java.lang.reflect.Modifier;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
@@ -58,9 +61,85 @@ public class ViewConfigExtension implements Extension, Deactivatable
             addPageDefinition(processAnnotatedType.getAnnotatedType().getJavaClass());
             processAnnotatedType.veto();
         }
+
+        if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(View.class) &&
+                !processAnnotatedType.getAnnotatedType().getJavaClass().equals(ViewControllerInterceptor.class))
+        {
+            addPageBean(processAnnotatedType.getAnnotatedType());
+
+            processAnnotatedType.setAnnotatedType(
+                                new ViewControllerWrapper(processAnnotatedType.getAnnotatedType()));
+        }
     }
 
     protected void addPageDefinition(Class pageDefinitionClass)
+    {
+        ViewConfigEntry entry = createViewConfigEntry(pageDefinitionClass);
+
+        if(entry != null)
+        {
+            ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(entry.getViewDefinitionClass());
+
+            if(viewConfigEntry != null && viewConfigEntry.isSimpleEntryMode())
+            {
+                //in this case the alternative view-controller approach which just adds page-beans was invoked before
+                //-> we just have to use the page bean of the existing entry
+
+                for(Class pageBeanClass : viewConfigEntry.getPageBeanClasses())
+                {
+                    entry.addPageBean(pageBeanClass);
+                }
+                ViewConfigCache.replaceViewDefinition(entry.getViewId(), entry);
+                return;
+            }
+
+            //add created entry
+            //if there is already an normal (not simple!) entry force an exception
+            ViewConfigCache.addViewDefinition(entry.getViewId(), entry);
+        }
+    }
+
+    /**
+     * important: {@link org.apache.myfaces.extensions.cdi.core.api.config.view.View#inline()} isn't supported!
+     *
+     * @param annotatedType current annotated type
+     */
+    private void addPageBean(AnnotatedType annotatedType)
+    {
+        View view = annotatedType.getAnnotation(View.class);
+
+        if(!"".equals(view.inline()[0]))
+        {
+            //TODO move exceptions to util class
+            throw new IllegalStateException("Definition error at: " + annotatedType.getJavaClass().getName() +
+                    " it isn't allowed to define a class level @" + View.class.getName() +
+                    " without a typesafe view config. Please don't use @View(inline=\"...\") for this use-case!");
+        }
+
+        String viewId;
+        for(Class<? extends ViewConfig> viewConfigClass : view.value())
+        {
+            ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(viewConfigClass);
+
+            if(viewConfigEntry == null)
+            {
+                ViewConfigEntry entry = createViewConfigEntry(viewConfigClass);
+
+                if(entry != null)
+                {
+                    entry.addPageBean(annotatedType.getJavaClass());
+                    entry.activateSimpleEntryMode();
+                    ViewConfigCache.addViewDefinition(entry.getViewId(), entry);
+                }
+            }
+            else
+            {
+                viewConfigEntry.addPageBean(annotatedType.getJavaClass());
+            }
+        }
+    }
+
+    protected ViewConfigEntry createViewConfigEntry(Class pageDefinitionClass)
     {
         if(!ViewConfig.class.isAssignableFrom(pageDefinitionClass))
         {
@@ -76,7 +155,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
         //TODO log a warning in case of project-stage dev
         if(Modifier.isAbstract(viewDefinitionClass.getModifiers()))
         {
-            return;
+            return null;
         }
 
         Class<?> currentClass = viewDefinitionClass;
@@ -225,9 +304,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         result = ensureValidViewIds(result);
 
-        ViewConfigCache.addViewDefinition(
-                result, new ViewConfigEntry(
-                        result, viewDefinitionClass, navigationMode, foundVoters, errorView, viewMetaDataList));
+        return new ViewConfigEntry(
+                result, viewDefinitionClass, navigationMode, foundVoters, errorView, viewMetaDataList);
     }
 
     private String ensureValidViewIds(String result)

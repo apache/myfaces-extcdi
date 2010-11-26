@@ -43,7 +43,8 @@ public class ViewConfigEntry
     private final String viewId;
     private final Class<? extends ViewConfig> viewDefinitionClass;
     private final NavigationMode navigationMode;
-    private final List<PageBeanConfigEntry> beanDefinition;
+
+    private List<PageBeanConfigEntry> beanDefinition;
 
     //security
     private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
@@ -51,6 +52,8 @@ public class ViewConfigEntry
 
     //meta-data
     private List<Annotation> metaDataList;
+
+    private boolean simpleEntryMode = false;
 
     private BeanManager beanManager;
 
@@ -203,6 +206,27 @@ public class ViewConfigEntry
         }
     }
     
+    void addPageBean(Class pageBeanClass)
+    {
+        List<PageBeanConfigEntry> newList = new ArrayList<PageBeanConfigEntry>(this.beanDefinition);
+
+        PageBeanConfigEntry newEntry = new PageBeanConfigEntry(getBeanName(pageBeanClass) , pageBeanClass);
+
+        newList.add(newEntry);
+
+        this.beanDefinition = Collections.unmodifiableList(newList);
+    }
+
+    void activateSimpleEntryMode()
+    {
+        this.simpleEntryMode = true;
+    }
+
+    boolean isSimpleEntryMode()
+    {
+        return simpleEntryMode;
+    }
+
     private List<PageBeanConfigEntry> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)
     {
         if(!viewDefinitionClass.isAnnotationPresent(PageBean.class) &&
@@ -247,22 +271,24 @@ public class ViewConfigEntry
         String pageBeanName = null;
 
         //TODO allow indirect usage of @Named
+        pageBeanName = getBeanName(pageBeanClass);
+
+        return new PageBeanConfigEntry(pageBeanName, pageBeanClass);
+    }
+
+    private String getBeanName(Class<?> pageBeanClass)
+    {
         if(pageBeanClass.isAnnotationPresent(Named.class))
         {
             String beanName = pageBeanClass.getAnnotation(Named.class).value();
 
             if(!"".equals(beanName))
             {
-                pageBeanName = beanName;
+                return beanName;
             }
         }
 
-        if(pageBeanName == null)
-        {
-            pageBeanName = Introspector.decapitalize(pageBeanClass.getSimpleName());
-        }
-
-        return new PageBeanConfigEntry(pageBeanName, pageBeanClass);
+        return Introspector.decapitalize(pageBeanClass.getSimpleName());
     }
 
     private BeanManager getBeanManager()

@@ -32,9 +32,19 @@ public class ViewConfigCache
 {
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
+        storeViewDefinition(viewId, viewDefinitionEntry, false);
+    }
+
+    static void replaceViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
+    {
+        storeViewDefinition(viewId, viewDefinitionEntry, true);
+    }
+
+    private static void storeViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry, boolean allowReplace)
+    {
         tryToStorePageAsDefaultErrorPage(viewDefinitionEntry);
 
-        if(getViewIdToViewDefinitionEntryMapping().containsKey(viewId))
+        if(getViewIdToViewDefinitionEntryMapping().containsKey(viewId) && !allowReplace)
         {
             throw new IllegalArgumentException(viewId + " is already mapped to "
                     + viewId + " via " + getViewIdToViewDefinitionEntryMapping().get(viewId).getViewDefinitionClass()
