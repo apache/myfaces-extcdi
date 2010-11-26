@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.webapp.events.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 
 /**
  * Custom WindowContextConfig to enable/disable certain events for the test cases.

@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.webapp.events.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 
 /**
  * Custom ConversationConfig to enable/disable certain events for the test cases.
