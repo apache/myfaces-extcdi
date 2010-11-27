@@ -18,26 +18,25 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
-
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
-        .getExistingWindowIdSet;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
-        .getWindowContextIdHolderComponent;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.Map;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
+        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getExistingWindowIdSet;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getWindowContextIdHolderComponent;
 
 /**
  * @author Gerhard Petracek
@@ -67,7 +66,7 @@ public class DefaultWindowHandler implements WindowHandler
     {
         if(this.useWindowAwareUrlEncoding)
         {
-            return encodeActionURL(url, getCurrentWindowId());
+            return addWindowIdIfNecessary(url, getCurrentWindowId());
         }
         return url;
     }
@@ -75,12 +74,20 @@ public class DefaultWindowHandler implements WindowHandler
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
             throws IOException
     {
-        url = externalContext.encodeActionURL(encodeURL(url));
+        //X TODO windowId is added "twice" here, once in encodeURL() and once in externalContext.encodeActionURL()
+        // see RedirectedConversationAwareExternalContext.encodeActionURL().
+
+        // add windowId if necessary
+        url = encodeURL(url);
 
         if(addRequestParameter)
         {
             url = addRequestParameter(externalContext, url);
         }
+
+        // call encodeActionURL() after all parameters have been added
+        url = externalContext.encodeActionURL(url);
+
         externalContext.redirect(url);
     }
 
@@ -99,10 +106,7 @@ public class DefaultWindowHandler implements WindowHandler
                 finalUrl.append("&");
                 finalUrl.append(key);
                 finalUrl.append("=");
-                // TODO encodeActionURL does NOT correctly encode URL parameter values
-                // see MyFaces ServletExternalContextImpl.encodeURL() for detail!
-                // TODO use ClientSideWindowHandler.encodeURIComponent() instead
-                finalUrl.append(externalContext.encodeActionURL(requestParam.getValue()));
+                finalUrl.append(JsfUtils.encodeURLParameterValue(requestParam.getValue(), externalContext));
             }
         }
         return finalUrl.toString();
@@ -177,7 +181,7 @@ public class DefaultWindowHandler implements WindowHandler
         return RequestCache.getWindowContextManager().getCurrentWindowContext().getId();
     }
 
-    private String encodeActionURL(String url, String windowId)
+    private String addWindowIdIfNecessary(String url, String windowId)
     {
         if(url.contains(WINDOW_ID_PARAMETER_KEY))
         {

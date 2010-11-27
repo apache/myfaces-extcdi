@@ -21,11 +21,14 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.faces.FactoryFinder;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Locale;
@@ -97,4 +100,28 @@ public class JsfUtils
     {
         return FacesContext.getCurrentInstance().getExternalContext().getInitParameter(parameterKey);
     }
+
+    /**
+     * Encodes the given value using URLEncoder.encode() with the charset returned
+     * from ExternalContext.getResponseCharacterEncoding().
+     * This is exactly how the ExternalContext impl encodes URL parameter values.
+     *
+     * @param value
+     * @param externalContext
+     * @return
+     */
+    public static String encodeURLParameterValue(String value, ExternalContext externalContext)
+    {
+        // copied from MyFaces ServletExternalContextImpl.encodeURL()
+        try
+        {
+            return URLEncoder.encode(value, externalContext.getResponseCharacterEncoding());
+        }
+        catch (UnsupportedEncodingException e)
+        {
+            throw new UnsupportedOperationException("Encoding type="
+                    + externalContext.getResponseCharacterEncoding() + " not supported", e);
+        }
+    }
+
 }

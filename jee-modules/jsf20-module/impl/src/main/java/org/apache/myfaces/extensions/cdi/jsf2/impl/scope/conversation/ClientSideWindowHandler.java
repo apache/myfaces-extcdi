@@ -19,9 +19,11 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -34,16 +36,12 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .CREATE_NEW_WINDOW_CONTEXT_ID_VALUE;
-import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 
 /**
  * WindowHandler which uses JavaScript to store the windowId.
+ *
+ * @author Mark Struberg
+ * @author Jakob Korherr
  */
 @Alternative
 @ApplicationScoped
@@ -104,7 +102,8 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
         else
         {
-            if (CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId) || !isWindowIdAlive(windowId))
+            if (WindowContextManager.CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId)
+                    || !isWindowIdAlive(windowId))
             {
                 // no or invalid windowId --> create new one
                 windowId = windowContextManager.getCurrentWindowContext().getId();
@@ -120,7 +119,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
                 //X TODO find better way to provide the windowId, because this approach assumes
                 // that the windowId will be cached on the RequestMap and the cache is the only
                 // point to get it #HACK
-                externalContext.getRequestMap().put(WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
+                externalContext.getRequestMap().put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
             }
         }
     }
@@ -212,7 +211,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         // remove all "/", because they can be different in JavaScript
         String pathName = sb.toString().replace("/", "");
 
-        return encodeURIComponent(pathName, externalContext);
+        return JsfUtils.encodeURLParameterValue(pathName, externalContext);
     }
 
     private String getEncodedContextPath(ExternalContext externalContext)
@@ -223,34 +222,10 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             // remove all "/", because they can be different in JavaScript
             contextPath = contextPath.replace("/", "");
 
-            return encodeURIComponent(contextPath, externalContext);
+            return JsfUtils.encodeURLParameterValue(contextPath, externalContext);
         }
 
         return "";
-    }
-
-    /**
-     * JavaScript equivalent method.
-     *
-     * This is how the ExternalContext impl encodes URL parameter values.
-     *
-     * TODO move to Utils class - also needed in DefaultWindowHandler
-     *
-     * @param component
-     * @param externalContext
-     * @return
-     */
-    private String encodeURIComponent(String component, ExternalContext externalContext)
-    {
-        try
-        {
-            return URLEncoder.encode(component, externalContext.getResponseCharacterEncoding());
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            throw new UnsupportedOperationException("Encoding type="
-                    + externalContext.getResponseCharacterEncoding() + " not supported", e);
-        }
     }
 
     private boolean isWindowIdAlive(String windowId)
