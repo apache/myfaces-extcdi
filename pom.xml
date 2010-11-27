@@ -499,8 +499,12 @@
         <!--
             Add the assembly module when performing an apache-release
             
-            NOTE: that this profile will automatically be added to the release
-            process by the maven-release-plugin.
+            USAGE:
+             - mvn release:prepare -Papache-release
+             - mvn release:perform -Papache-release
+
+            NOTE that for the maven lifecycle invoked by the release plugin, -Papache-release will
+            be added automatically because of the config in apache-parent-7.
         -->
         <profile>
             <id>apache-release</id>
