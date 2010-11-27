@@ -16,29 +16,9 @@
     KIND, either express or implied.  See the License for the
     specific language governing permissions and limitations
     under the License.
-
 -->
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-<h:head>
-    <title>Apache MyFaces CODI Integration Tests for JSF 2.0</title>
-</h:head>
-<h:body>
+<beans xmlns="http://java.sun.com/xml/ns/javaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
-    <h1>Apache MyFaces CODI Integration Tests for JSF 2.0</h1>
-
-    <h:link value="Test Utils" outcome="utils.xhtml" />
-
-    <h2>Scope Tests</h2>
-
-    <ul>
-        <li><h:link value="Conversation Test" outcome="conversation/conversation1.xhtml" /></li>
-    </ul>
-
-</h:body>
-</html>
-        
+</beans>

@@ -25,20 +25,27 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Apache MyFaces CODI Integration Tests for JSF 2.0</title>
+    <title>Apache MyFaces CODI - Conversation Result</title>
 </h:head>
 <h:body>
 
-    <h1>Apache MyFaces CODI Integration Tests for JSF 2.0</h1>
+    <h2>Conversation Result</h2>
 
-    <h:link value="Test Utils" outcome="utils.xhtml" />
+    <p>
+        Value1: <h:outputText id="value1" value="#{conversationBean.value1}" /><br/>
+        Value2: <h:outputText id="value2" value="#{conversationBean.value2}" /><br/>
+        Value3: <h:outputText id="value3" value="#{conversationBean.value3}" />
+    </p>
 
-    <h2>Scope Tests</h2>
+    <h:button id="refresh" value="Refresh (GET)" outcome="result.xhtml" />
+    <h:button id="back" value="Back (GET)" outcome="conversation3.xhtml" />
 
-    <ul>
-        <li><h:link value="Conversation Test" outcome="conversation/conversation1.xhtml" /></li>
-    </ul>
+    <h:form id="form">
+        <h:commandButton id="closeConversation" value="Close conversation"
+                actionListener="#{conversationBean.closeConversation}" />
+        <h:commandButton id="restartConversation" value="Restart conversation"
+                actionListener="#{conversationBean.restartConversation}" />
+    </h:form>
 
 </h:body>
 </html>
-        

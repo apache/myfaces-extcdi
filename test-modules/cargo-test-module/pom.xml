@@ -36,15 +36,20 @@
         <version>0.9.1-SNAPSHOT</version>
     </parent>
 
+    <properties>
+        <cargo.context>myfaces-extcdi-cargo-test</cargo.context>
+        <cargo.port>8787</cargo.port> <!-- use port 8787 in order to prevent port-already-in-use on hudson -->
+    </properties>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.0</version>
+                <version>1.0.4</version>
                 <configuration>
                     <container>
-                        <containerId>jetty6x</containerId>
+                        <containerId>jetty7x</containerId>
                         <type>embedded</type>
                     </container>
 
@@ -53,11 +58,15 @@
                     <wait>false</wait>
 
                     <configuration>
+                        <properties>
+                            <cargo.servlet.port>${cargo.port}</cargo.servlet.port>
+                        </properties>
+                        
                         <deployables>
                             <deployable>
                                 <!-- default deployable - this artifact -->
                                 <properties>
-                                    <context>myfaces-extcdi-cargo-test</context>
+                                    <context>${cargo.context}</context>
                                 </properties>
                             </deployable>
                         </deployables>
@@ -95,6 +104,11 @@
                        <configuration>
                            <skip>false</skip>
                            <testNGArtifactName>none:none</testNGArtifactName>
+                           <systemPropertyVariables>
+                               <!-- pass properties to JUnit -->
+                               <cargo.context>${cargo.context}</cargo.context>
+                               <cargo.port>${cargo.port}</cargo.port>
+                           </systemPropertyVariables>
                        </configuration>
                    </execution>
                </executions>

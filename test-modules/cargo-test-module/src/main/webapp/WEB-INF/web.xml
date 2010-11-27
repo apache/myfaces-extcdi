@@ -34,17 +34,6 @@
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
-    <!-- CODI window-handler servlet -->
-    <servlet>
-        <servlet-name>WindowHandler</servlet-name>
-        <servlet-class>org.apache.myfaces.extensions.cdi.jsf2.impl.windowhandler.Jsf2WindowHandlerServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>WindowHandler</servlet-name>
-        <url-pattern>/windowhandler</url-pattern>
-    </servlet-mapping>
-
     <listener>
         <listener-class>org.apache.webbeans.servlet.WebBeansConfigurationListener</listener-class>
     </listener>
@@ -62,6 +51,10 @@
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
+
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
 
 </web-app>
         

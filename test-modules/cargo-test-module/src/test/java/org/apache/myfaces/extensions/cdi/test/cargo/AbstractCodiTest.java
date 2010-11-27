@@ -18,34 +18,75 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo;
 
+import com.gargoylesoftware.htmlunit.BrowserVersion;
+import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 /**
+ * Base class for all CODI integration tests using Cargo and HtmlUnit.
+ *
  * @author Jakob Korherr
  */
-@RunWith(JUnit4.class)
-public class AbstractCodiTest
+public abstract class AbstractCodiTest
 {
 
-    // TODO provide initialisation for CODI tests here
+    private static final String CARGO_CONTEXT_PROPERTY = "cargo.context";
+    private static final String CARGO_PORT_PROPERTY = "cargo.port";
 
-    @Test
-    public void homePage() throws Exception
+    private static final String DEFAULT_CONTEXT = "myfaces-extcdi-cargo-test";
+    private static final String DEFAULT_PORT = "8787";
+
+    public static final String BASE_URL;
+    static
     {
-        WebClient webClient = new WebClient();
+        String port = System.getProperty(CARGO_PORT_PROPERTY);
+        if (port == null)
+        {
+            port = DEFAULT_PORT;
+        }
 
-        HtmlPage page = webClient.getPage("http://localhost:8080/myfaces-extcdi-cargo-test/index.xhtml");
+        String context = System.getProperty(CARGO_CONTEXT_PROPERTY);
+        if (context == null)
+        {
+            context = DEFAULT_CONTEXT;
+        }
 
-        final String pageAsText = page.asText();
-
-        Assert.assertTrue(pageAsText.contains("jakobk - test"));
-
-        webClient.closeAllWindows();
+        BASE_URL = "http://localhost:" + port + "/" + context + "/";
     }
 
+
+    protected WebClient webClient;
+
+    @Before
+    public void setUp() throws Exception
+    {
+        webClient = new WebClient(getBrowserVersion());
+        webClient.setAjaxController(new NicelyResynchronizingAjaxController());
+    }
+
+    @After
+    public void tearDown() throws Exception
+    {
+        webClient.closeAllWindows();
+        webClient = null;
+    }
+
+    /**
+     * Returns the Browser to use.
+     * Default is Firefox 3.6, override to change this.
+     *
+     * @return
+     */
+    public BrowserVersion getBrowserVersion()
+    {
+        return BrowserVersion.FIREFOX_3_6;
+    }
+    
 }

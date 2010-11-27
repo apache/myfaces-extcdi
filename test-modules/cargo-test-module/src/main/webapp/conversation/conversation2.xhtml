@@ -25,20 +25,20 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Apache MyFaces CODI Integration Tests for JSF 2.0</title>
+    <title>Apache MyFaces CODI - Conversation2</title>
 </h:head>
 <h:body>
 
-    <h1>Apache MyFaces CODI Integration Tests for JSF 2.0</h1>
+    <h2>Conversation2</h2>
 
-    <h:link value="Test Utils" outcome="utils.xhtml" />
+    <h:form id="conversation2">
+        <p>
+            Value2: <h:inputText id="value2" value="#{conversationBean.value2}" />
+        </p>
 
-    <h2>Scope Tests</h2>
-
-    <ul>
-        <li><h:link value="Conversation Test" outcome="conversation/conversation1.xhtml" /></li>
-    </ul>
+        <h:commandButton id="nextPage" value="Next Page" action="conversation3.xhtml" />
+        <h:commandButton id="back" value="Back" action="conversation1.xhtml" />
+    </h:form>
 
 </h:body>
 </html>
-        
