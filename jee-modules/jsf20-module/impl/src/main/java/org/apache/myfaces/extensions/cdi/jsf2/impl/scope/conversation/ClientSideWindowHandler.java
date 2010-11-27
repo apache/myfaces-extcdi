@@ -73,15 +73,30 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Override
     public String encodeURL(String url)
     {
-        // do NOT add the windowId to the URL in any case
-        // TODO what if javascript is disabled? fallback to default algorithm?
-        return url;
+        if (clientInformation.isJavaScriptEnabled())
+        {
+            // do not add the windowId
+            return url;
+        }
+        else
+        {
+            // fallback
+            return super.encodeURL(url);
+        }
     }
 
     @Override
     public String restoreWindowId(ExternalContext externalContext)
     {
-        return null;
+        if (clientInformation.isJavaScriptEnabled())
+        {
+            return (String) externalContext.getRequestMap().get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
+        }
+        else
+        {
+            // fallback
+            return super.restoreWindowId(externalContext);
+        }
     }
 
     public void beforeLifecycleExecute(FacesContext facesContext)
@@ -96,7 +111,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         String windowId = getWindowIdFromCookie(externalContext);
         if (windowId == null)
         {
-            // GET request without windowId - send windowhandlerfilter.html
+            // GET request without windowId - send windowhandlerfilter.html to get the windowId
             sendWindowHandlerHtml(externalContext, null);
             facesContext.responseComplete();
         }
@@ -108,17 +123,14 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
                 // no or invalid windowId --> create new one
                 windowId = windowContextManager.getCurrentWindowContext().getId();
 
-                // GET request with NEW windowId - send windowhandlerfilter.html
+                // GET request with NEW windowId - send windowhandlerfilter.html to set and re-get the windowId
                 sendWindowHandlerHtml(externalContext, windowId);
                 facesContext.responseComplete();
             }
             else
             {
                 // we have a valid windowId - set it and continue with the request
-
-                //X TODO find better way to provide the windowId, because this approach assumes
-                // that the windowId will be cached on the RequestMap and the cache is the only
-                // point to get it #HACK
+                // TODO only set internally and provide via restoreWindowId()? 
                 externalContext.getRequestMap().put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
             }
         }
