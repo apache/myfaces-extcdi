@@ -64,7 +64,9 @@
                         
                         <deployables>
                             <deployable>
-                                <!-- default deployable - this artifact -->
+                                <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+                                <artifactId>myfaces-extcdi-cargo-test</artifactId>
+                                <type>war</type>
                                 <properties>
                                     <context>${cargo.context}</context>
                                 </properties>
