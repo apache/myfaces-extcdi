@@ -40,6 +40,13 @@ public class SecurityViewListener
             @Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent event, BeanManager beanManager)
     {
         FacesContext facesContext = event.getFacesContext();
+
+        if(facesContext.getViewRoot() == null)
+        {
+            //TODO log warning
+            return;
+        }
+
         ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
 
         if(entry == null)
