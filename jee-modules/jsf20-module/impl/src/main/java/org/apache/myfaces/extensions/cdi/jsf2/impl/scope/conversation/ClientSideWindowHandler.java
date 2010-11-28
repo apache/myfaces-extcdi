@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWind
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
+import org.apache.myfaces.extensions.cdi.jsf2.api.config.ClientInformation;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -165,7 +166,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             OutputStream os = httpResponse.getOutputStream();
             try
             {
-                    os.write(windowHandlerHtml.getBytes());
+                os.write(windowHandlerHtml.getBytes());
             }
             finally
             {

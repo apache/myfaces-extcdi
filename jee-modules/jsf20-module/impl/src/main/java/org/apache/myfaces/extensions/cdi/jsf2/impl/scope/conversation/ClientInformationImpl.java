@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.jsf2.api.config.ClientInformation;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 
 /**
  * Contains information about whether the user has
@@ -37,11 +37,9 @@ import java.io.Serializable;
  * adopt the background colour to avoid screen flickering.
  */
 @SessionScoped
-public class ClientInformation implements Serializable
+public class ClientInformationImpl implements ClientInformation
 {
     private static final long serialVersionUID = -3264016646002116064L;
-
-    private static final String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
 
     private boolean javaScriptEnabled = true;
 
@@ -60,6 +58,12 @@ public class ClientInformation implements Serializable
         this.javaScriptEnabled = javaScriptEnabled;
     }
 
+
+    public String getWindowHandlerResourceLocation()
+    {
+        return DEFAULT_WINDOW_HANDLER_HTML_FILE;
+    }
+
     public String getWindowHandlerHtml()
             throws IOException
     {
@@ -69,7 +73,7 @@ public class ClientInformation implements Serializable
             return windowHandlerHtml;
         }
 
-        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream(DEFAULT_WINDOW_HANDLER_HTML_FILE);
+        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream(getWindowHandlerResourceLocation());
         StringBuffer sb = new StringBuffer();
         try
         {
