@@ -118,7 +118,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
         else
         {
-            if (WindowContextManager.CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equals(windowId)
+            if (WindowContextManager.AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equals(windowId)
                     || !isWindowIdAlive(windowId))
             {
                 // no or invalid windowId --> create new one

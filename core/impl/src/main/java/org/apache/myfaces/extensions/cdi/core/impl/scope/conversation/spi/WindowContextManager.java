@@ -29,7 +29,7 @@ public interface WindowContextManager extends Serializable
 {
     String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowId";
 
-    String CREATE_NEW_WINDOW_CONTEXT_ID_VALUE = "automatedEntryPoint";
+    String AUTOMATED_ENTRY_POINT_PARAMETER_KEY = "automatedEntryPoint";
 
     WindowContext getCurrentWindowContext();
 

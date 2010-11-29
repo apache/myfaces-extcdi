@@ -36,7 +36,7 @@ import javax.faces.event.PhaseEvent;
 import java.io.IOException;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
-        .CREATE_NEW_WINDOW_CONTEXT_ID_VALUE;
+        .AUTOMATED_ENTRY_POINT_PARAMETER_KEY;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.cleanupInactiveWindowContexts;
@@ -129,7 +129,7 @@ final class WindowContextManagerObserver
             String windowId = facesContext.getExternalContext()
                     .getRequestParameterMap().get(WINDOW_CONTEXT_ID_PARAMETER_KEY);
 
-            if(CREATE_NEW_WINDOW_CONTEXT_ID_VALUE.equalsIgnoreCase(windowId))
+            if(AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equalsIgnoreCase(windowId))
             {
                 return true;
             }
