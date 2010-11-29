@@ -16,28 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.trinidad12;
+package org.apache.myfaces.extensions.cdi.trinidad.impl;
 
-import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.trinidad.context.RenderingContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.RenderKitWrapperFactory;
 
-import javax.faces.event.PhaseEvent;
-import javax.enterprise.event.Observes;
+import javax.inject.Singleton;
+import javax.faces.render.RenderKit;
 
 /**
- * Workaround for initializing the RenderingContext of Trinidad
- *
  * @author Gerhard Petracek
  */
-public class InitTrinidad
+@Singleton
+public class TrinidadRenderKitWrapperFactory implements RenderKitWrapperFactory
 {
-    protected void initTrinidad(@Observes @BeforePhase(JsfPhaseId.ANY_PHASE) PhaseEvent phaseEvent)
+    public RenderKit create(RenderKit renderKit)
     {
-        if (RenderingContext.getCurrentInstance() == null)
-        {
-            tryToInstantiateClassForName("org.apache.myfaces.trinidadinternal.renderkit.core.CoreRenderingContext");
-        }
+        return new TrinidadRenderKitWrapper(renderKit);
     }
 }

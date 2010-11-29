@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
 
 import java.util.logging.Logger;
 
-import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
-
 /**
  * @author Gerhard Petracek
  */
@@ -57,16 +55,10 @@ public class ClassDeactivation
 
     private static ClassDeactivator getClassDeactivator()
     {
-        ClassDeactivator classDeactivator;
-
-        // check system property
-        classDeactivator = getClassDeactivatorFromEnvironment();
-
-        // check JNDI param
-        if (classDeactivator == null)
-        {
-            classDeactivator = getClassDeactivatorFromJNDI();
-        }
+        ClassDeactivator classDeactivator = CodiUtils
+                .lookupFromEnvironment(CLASS_DEACTIVATOR_PROPERTY_NAME,
+                                       CLASS_DEACTIVATOR_JNDI_NAME,
+                                       ClassDeactivator.class);
 
         // use default deactivator
         if (classDeactivator == null)
@@ -87,38 +79,6 @@ public class ClassDeactivation
 
         ClassDeactivatorStorage.setClassDeactivator(classDeactivator);
         return classDeactivator;
-    }
-
-    private static ClassDeactivator getClassDeactivatorFromEnvironment()
-    {
-        String classDeactivatorName = System.getProperty(CLASS_DEACTIVATOR_PROPERTY_NAME);
-        if (classDeactivatorName != null)
-        {
-            return tryToInstantiateClassForName(classDeactivatorName, ClassDeactivator.class);
-        }
-
-        return null;
-    }
-
-    private static ClassDeactivator getClassDeactivatorFromJNDI()
-    {
-        String classDeactivatorName = null;
-
-        try
-        {
-            classDeactivatorName = JndiUtils.lookup(CLASS_DEACTIVATOR_JNDI_NAME, String.class);
-        }
-        catch (RuntimeException jndiException)
-        {
-            // noop - lookup did not work
-        }
-
-        if (classDeactivatorName != null)
-        {
-            return tryToInstantiateClassForName(classDeactivatorName, ClassDeactivator.class);
-        }
-
-        return null;
     }
 
     private static AbstractClassDeactivator createClassDeactivatorPlaceholder()

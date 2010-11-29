@@ -32,11 +32,11 @@ import java.io.IOException;
  *
  * @author Gerhard Petracek
  */
-class InterceptedResponseWriter extends ResponseWriterWrapper
+public class InterceptedResponseWriter extends ResponseWriterWrapper
 {
     private ResponseWriter wrapped;
 
-    InterceptedResponseWriter(ResponseWriter wrapped)
+    public InterceptedResponseWriter(ResponseWriter wrapped)
     {
         this.wrapped = wrapped;
     }

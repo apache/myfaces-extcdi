@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
@@ -442,5 +443,37 @@ public class CodiUtils
 
         // annotation has no methods
         return Collections.emptyList();
+    }
+
+    public static <T> T lookupFromEnvironment(String systemPropertyName, String jndiName , Class<T> targetType)
+    {
+        String className = System.getProperty(systemPropertyName);
+        if (className != null)
+        {
+            return tryToInstantiateClassForName(className, targetType);
+        }
+
+        String classDeactivatorName = null;
+
+        try
+        {
+            classDeactivatorName = JndiUtils.lookup(jndiName, String.class);
+        }
+        catch (RuntimeException jndiException)
+        {
+            // noop - lookup did not work
+        }
+
+        if (classDeactivatorName != null)
+        {
+            return tryToInstantiateClassForName(classDeactivatorName, targetType);
+        }
+
+        return null;
+    }
+
+    public static boolean isCdiInitialized()
+    {
+        return BeanManagerProvider.getInstance() != null;
     }
 }
