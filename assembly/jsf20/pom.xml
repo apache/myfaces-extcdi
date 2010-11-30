@@ -240,6 +240,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
+                            <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>
                         <phase>package</phase>
                         <goals>
@@ -256,6 +257,7 @@
                             <appendAssemblyId>false</appendAssemblyId>
                             <outputDirectory>target/assembly/out</outputDirectory>
                             <workDirectory>target/assembly/work</workDirectory>
+                            <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>
                         <phase>package</phase>
                         <goals>
