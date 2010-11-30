@@ -25,9 +25,11 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewConfigNavigateEvent;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
@@ -37,6 +39,7 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.enterprise.inject.spi.BeanManager;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -51,12 +54,14 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
     private Map<String, ViewConfigEntry> viewConfigs = new ConcurrentHashMap<String, ViewConfigEntry>();
 
     private NavigationHandler navigationHandler;
+    private boolean delegateCall;
 
     private BeanManager beanManager;
 
-    public ViewConfigAwareNavigationHandler(NavigationHandler navigationHandler)
+    public ViewConfigAwareNavigationHandler(NavigationHandler navigationHandler, boolean delegateCall)
     {
         this.navigationHandler = navigationHandler;
+        this.delegateCall = delegateCall;
     }
 
     @Override
@@ -111,7 +116,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
                     entry = tryToUpdateEntry(entry, navigateEvent);
 
-                    if(entry != null) //entry might be null after the update
+                    if(entry != null && !this.delegateCall) //entry might be null after the update
                     {
                         processViewDefinitionEntry(facesContext, entry);
 
@@ -119,11 +124,51 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                         this.navigationHandler.handleNavigation(facesContext, null, null);
                         return;
                     }
+                    else if(entry != null)
+                    {
+                        outcome = convertEntryToOutcome(facesContext.getExternalContext(), entry);
+                    }
                 }
             }
         }
 
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
+    }
+
+    private String convertEntryToOutcome(ExternalContext externalContext, ViewConfigEntry entry)
+    {
+        boolean performRedirect = Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode());
+        boolean includeViewParameters = Page.ViewParameter.INCLUDE.equals(entry.getViewParameter());
+
+        StringBuilder result = new StringBuilder(entry.getViewId());
+
+        if(performRedirect)
+        {
+            result.append("?faces-redirect=true");
+        }
+        if(includeViewParameters)
+        {
+            if(performRedirect)
+            {
+                result.append("&");
+            }
+            else
+            {
+                result.append("?");
+            }
+            result.append("includeViewParams=true");
+
+            try
+            {
+                return JsfUtils.addRequestParameter(externalContext, result.toString());
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return result.toString();
     }
 
     private ViewConfigEntry tryToUpdateEntry(ViewConfigEntry viewConfigEntry, PreViewConfigNavigateEvent navigateEvent)

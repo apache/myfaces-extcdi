@@ -23,6 +23,9 @@ import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.setDefaultErrorView;
 
+import java.util.Map;
+import java.util.Collection;
+
 /**
  * TODO move exceptions to util class
  *
@@ -74,6 +77,13 @@ public class ViewConfigCache
     public static ViewConfigEntry getViewDefinition(String viewId)
     {
         return getViewIdToViewDefinitionEntryMapping().get(viewId);
+    }
+
+    public static Collection<ViewConfigEntry> getViewConfigEntries()
+    {
+        Map<String, ViewConfigEntry> entryMap = getViewIdToViewDefinitionEntryMapping();
+
+        return entryMap.values();
     }
 
     public static ViewConfigEntry getViewDefinition(Class<? extends ViewConfig> viewDefinitionClass)

@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
+//import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+
 import javax.enterprise.inject.Stereotype;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -49,6 +51,11 @@ public @interface Page
     //TODO config for default navigation mode
     NavigationMode navigation() default NavigationMode.DEFAULT;
 
+    ViewParameter viewParams() default ViewParameter.DEFAULT;
+
+    //TODO
+    //Class<? extends ViewConfig> sharedViewConfig() default ViewConfig.class;
+
     public interface Extension
     {
         String XHTML = "xhtml";
@@ -60,5 +67,10 @@ public @interface Page
     public enum NavigationMode
     {
         DEFAULT, FORWARD, REDIRECT
+    }
+
+    public enum ViewParameter
+    {
+        DEFAULT, INCLUDE, EXCLUDE
     }
 }

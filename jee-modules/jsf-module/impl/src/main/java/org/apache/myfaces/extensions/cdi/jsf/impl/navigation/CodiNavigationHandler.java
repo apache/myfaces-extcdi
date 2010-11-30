@@ -38,7 +38,7 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
         if(isActivated())
         {
             ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
-                    new ViewConfigAwareNavigationHandler(navigationHandler);
+                    new ViewConfigAwareNavigationHandler(navigationHandler, false);
 
             this.wrapped = new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
         }

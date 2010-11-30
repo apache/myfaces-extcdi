@@ -28,8 +28,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -82,34 +80,13 @@ public class DefaultWindowHandler implements WindowHandler
 
         if(addRequestParameter)
         {
-            url = addRequestParameter(externalContext, url);
+            url = JsfUtils.addRequestParameter(externalContext, url);
         }
 
         // call encodeActionURL() after all parameters have been added
         url = externalContext.encodeActionURL(url);
 
         externalContext.redirect(url);
-    }
-
-    protected String addRequestParameter(ExternalContext externalContext, String url)
-            throws UnsupportedEncodingException
-    {
-        StringBuilder finalUrl = new StringBuilder(url);
-
-        Map<String, String> requestParms = externalContext.getRequestParameterMap();
-        for(Map.Entry<String, String> requestParam : requestParms.entrySet())
-        {
-            String key = requestParam.getKey();
-
-            if(!url.contains(key + "="))
-            {
-                finalUrl.append("&");
-                finalUrl.append(key);
-                finalUrl.append("=");
-                finalUrl.append(JsfUtils.encodeURLParameterValue(requestParam.getValue(), externalContext));
-            }
-        }
-        return finalUrl.toString();
     }
 
     //TODO add a counter in case of project stage dev

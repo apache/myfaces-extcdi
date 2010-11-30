@@ -32,6 +32,7 @@ import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * keep in sync with extval!
@@ -124,4 +125,38 @@ public class JsfUtils
         }
     }
 
+    public static String addRequestParameter(ExternalContext externalContext, String url)
+            throws UnsupportedEncodingException
+    {
+        StringBuilder finalUrl = new StringBuilder(url);
+        boolean existingParameters = url.contains("?");
+
+        Map<String, String> requestParms = externalContext.getRequestParameterMap();
+        for(Map.Entry<String, String> requestParam : requestParms.entrySet())
+        {
+            String key = requestParam.getKey();
+
+            if("javax.faces.ViewState".equals(key))
+            {
+                continue;
+            }
+            
+            if(!url.contains(key + "="))
+            {
+                if(!existingParameters)
+                {
+                    finalUrl.append("?");
+                    existingParameters = true;
+                }
+                else
+                {
+                    finalUrl.append("&");
+                }
+                finalUrl.append(key);
+                finalUrl.append("=");
+                finalUrl.append(JsfUtils.encodeURLParameterValue(requestParam.getValue(), externalContext));
+            }
+        }
+        return finalUrl.toString();
+    }
 }

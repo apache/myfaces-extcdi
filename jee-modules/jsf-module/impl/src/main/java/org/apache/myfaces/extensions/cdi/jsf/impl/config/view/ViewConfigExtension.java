@@ -28,6 +28,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameter;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor;
 
 import javax.enterprise.event.Observes;
@@ -174,6 +175,9 @@ public class ViewConfigExtension implements Extension, Deactivatable
         NavigationMode defaultNavigationMode = NavigationMode.DEFAULT;
         NavigationMode navigationMode = null;
 
+        ViewParameter defaultViewParameter = ViewParameter.DEFAULT;
+        ViewParameter viewParameter = null;
+
         //security
         List<Class<? extends AccessDecisionVoter>> foundVoters = new ArrayList<Class<? extends AccessDecisionVoter>>();
         Class<? extends ViewConfig> errorView = null;
@@ -232,6 +236,11 @@ public class ViewConfigExtension implements Extension, Deactivatable
                     navigationMode = pageAnnotation.navigation();
                 }
 
+                if(viewParameter == null && !pageAnnotation.viewParams().equals(defaultViewParameter))
+                {
+                    viewParameter = pageAnnotation.viewParams();
+                }
+
                 if(!pageAnnotation.name().equals(defaultPageName))
                 {
                     pageName = pageAnnotation.name();
@@ -245,7 +254,12 @@ public class ViewConfigExtension implements Extension, Deactivatable
         {
             navigationMode = defaultNavigationMode;
         }
-        
+
+        if(viewParameter == null)
+        {
+            viewParameter = defaultViewParameter;
+        }
+
         StringBuilder viewId = new StringBuilder(basePath);
         if(pageName.equals(""))
         {
@@ -305,7 +319,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
         result = ensureValidViewIds(result);
 
         return new ViewConfigEntry(
-                result, viewDefinitionClass, navigationMode, foundVoters, errorView, viewMetaDataList);
+                result, viewDefinitionClass, navigationMode, viewParameter, foundVoters, errorView, viewMetaDataList);
     }
 
     private String ensureValidViewIds(String result)

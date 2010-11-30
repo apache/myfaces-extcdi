@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Wind
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.enterprise.inject.Alternative;
 import javax.faces.context.ExternalContext;
@@ -73,7 +74,7 @@ public abstract class ServerSideWindowHandler extends DefaultWindowHandler
 
         if(addRequestParameter)
         {
-            url = addRequestParameter(externalContext, url);
+            url = JsfUtils.addRequestParameter(externalContext, url);
         }
 
         externalContext.redirect(url);

@@ -19,6 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
@@ -29,6 +32,8 @@ import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
@@ -39,7 +44,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 {
     private final NavigationHandler wrapped;
     private final boolean deactivated;
-    private Map<String, Set<NavigationCase>> navigationCases;
+    private final boolean addViewConfigsAsNavigationCase = false; //TODO add config
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
@@ -63,7 +68,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
     private NavigationHandler getWrappedNavigationHandler()
     {
         ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
-                new ViewConfigAwareNavigationHandler(this.wrapped);
+                new ViewConfigAwareNavigationHandler(this.wrapped, true);
 
         return new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
     }
@@ -80,17 +85,38 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
     public Map<String, Set<NavigationCase>> getNavigationCases()
     {
+        Map<String, Set<NavigationCase>> result = new HashMap<String, Set<NavigationCase>>();
+
         if (this.wrapped instanceof ConfigurableNavigationHandler)
         {
-            return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCases();
+            result.putAll(((ConfigurableNavigationHandler) this.wrapped).getNavigationCases());
         }
 
-        //workaround for mojarra
-        if(this.navigationCases == null)
+        if(!this.addViewConfigsAsNavigationCase || this.deactivated)
         {
-            this.navigationCases = new HashMap<String, Set<NavigationCase>>();
+            return result;
         }
-        return this.navigationCases;
+
+        Collection<ViewConfigEntry> viewConfigEntries = ViewConfigCache.getViewConfigEntries();
+
+        if(!viewConfigEntries.isEmpty())
+        {
+            Set<NavigationCase> navigationCase = new HashSet<NavigationCase>();
+            for(ViewConfigEntry entry : viewConfigEntries)
+            {
+                navigationCase.add(new NavigationCase("*",
+                                                      null,
+                                                      null,
+                                                      null,
+                                                      entry.getViewId(),
+                                                      null,
+                                                      Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
+                                                      Page.ViewParameter.INCLUDE.equals(entry.getViewParameter())));
+
+                result.put(entry.getViewId(), navigationCase);
+            }
+        }
+        return result;
     }
 
     public boolean isActivated()

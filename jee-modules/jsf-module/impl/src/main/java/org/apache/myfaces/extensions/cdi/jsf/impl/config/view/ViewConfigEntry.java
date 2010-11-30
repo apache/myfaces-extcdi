@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
 
 import javax.inject.Named;
@@ -50,6 +51,7 @@ public class ViewConfigEntry
     private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
     private final Class<? extends ViewConfig> customErrorView;
 
+    private ViewParameter viewParameter;
     //meta-data
     private List<Annotation> metaDataList;
 
@@ -60,6 +62,7 @@ public class ViewConfigEntry
     public ViewConfigEntry(String viewId,
                            Class<? extends ViewConfig> viewDefinitionClass,
                            NavigationMode navigationMode,
+                           ViewParameter viewParameter,
                            List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
                            Class<? extends ViewConfig> errorView,
                            List<Annotation> metaDataList)
@@ -67,6 +70,7 @@ public class ViewConfigEntry
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;
         this.navigationMode = navigationMode;
+        this.viewParameter = viewParameter;
 
         this.metaDataList = metaDataList;
 
@@ -99,6 +103,11 @@ public class ViewConfigEntry
     public NavigationMode getNavigationMode()
     {
         return navigationMode;
+    }
+
+    public ViewParameter getViewParameter()
+    {
+        return viewParameter;
     }
 
     List<PageBeanConfigEntry> getPageBeanDefinitions()
