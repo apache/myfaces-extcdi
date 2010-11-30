@@ -115,4 +115,9 @@ public class DefaultWindowContextConfig extends AbstractAttributeAware
     {
         return true;
     }
+
+    public boolean isUseViewConfigsAsNavigationCasesEnabled()
+    {
+        return false;
+    }
 }

@@ -21,9 +21,13 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestParameter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.application.NavigationHandler;
@@ -31,9 +35,11 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Collection;
 import java.util.HashSet;
+import javax.faces.context.ExternalContext;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
@@ -44,15 +50,23 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 {
     private final NavigationHandler wrapped;
     private final boolean deactivated;
-    private final boolean addViewConfigsAsNavigationCase = false; //TODO add config
+    private final boolean addViewConfigsAsNavigationCase;
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
         this.wrapped = navigationHandler;
         this.deactivated = !isActivated();
+
+        if(!this.deactivated)
+        {
+            this.addViewConfigsAsNavigationCase = isAddViewConfigsAsNavigationCaseActivated();
+        }
+        else
+        {
+            this.addViewConfigsAsNavigationCase = false;
+        }
     }
 
-    //TODO
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
         if(this.deactivated)
@@ -102,6 +116,9 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         if(!viewConfigEntries.isEmpty())
         {
             Set<NavigationCase> navigationCase = new HashSet<NavigationCase>();
+
+            Map<String, List<String>> parameters = resolveParameters();
+
             for(ViewConfigEntry entry : viewConfigEntries)
             {
                 navigationCase.add(new NavigationCase("*",
@@ -109,7 +126,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
                                                       null,
                                                       null,
                                                       entry.getViewId(),
-                                                      null,
+                                                      parameters,
                                                       Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
                                                       Page.ViewParameter.INCLUDE.equals(entry.getViewParameter())));
 
@@ -119,8 +136,29 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         return result;
     }
 
+    private Map<String, List<String>> resolveParameters()
+    {
+        Map<String, List<String>> parameters = new HashMap<String, List<String>>();
+
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+
+        for(RequestParameter parameter : JsfUtils.getRequestParameters(externalContext, true))
+        {
+            parameters.put(parameter.getKey(), parameter.getValueList());
+        }
+
+        return parameters;
+    }
+
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());
+    }
+
+    private boolean isAddViewConfigsAsNavigationCaseActivated()
+    {
+        JsfModuleConfig config = CodiUtils.getContextualReferenceByClass(JsfModuleConfig.class);
+
+        return config.isUseViewConfigsAsNavigationCasesEnabled();
     }
 }

@@ -33,6 +33,8 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * keep in sync with extval!
@@ -131,32 +133,48 @@ public class JsfUtils
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
 
-        Map<String, String> requestParms = externalContext.getRequestParameterMap();
-        for(Map.Entry<String, String> requestParam : requestParms.entrySet())
+        for(RequestParameter requestParam : getRequestParameters(externalContext, true))
         {
             String key = requestParam.getKey();
 
-            if("javax.faces.ViewState".equals(key))
+            for(String parameterValue : requestParam.getValues())
             {
-                continue;
-            }
-            
-            if(!url.contains(key + "="))
-            {
-                if(!existingParameters)
+                if(!url.contains(key + "=" + parameterValue))
                 {
-                    finalUrl.append("?");
-                    existingParameters = true;
+                    if(!existingParameters)
+                    {
+                        finalUrl.append("?");
+                        existingParameters = true;
+                    }
+                    else
+                    {
+                        finalUrl.append("&");
+                    }
+                    finalUrl.append(key);
+                    finalUrl.append("=");
+                    finalUrl.append(JsfUtils.encodeURLParameterValue(parameterValue, externalContext));
                 }
-                else
-                {
-                    finalUrl.append("&");
-                }
-                finalUrl.append(key);
-                finalUrl.append("=");
-                finalUrl.append(JsfUtils.encodeURLParameterValue(requestParam.getValue(), externalContext));
             }
         }
         return finalUrl.toString();
+    }
+
+    public static Set<RequestParameter> getRequestParameters(ExternalContext externalContext, boolean filterViewState)
+    {
+        Set<RequestParameter> result = new HashSet<RequestParameter>();
+
+        String key;
+        for(Map.Entry<String, String[]> entry : externalContext.getRequestParameterValuesMap().entrySet())
+        {
+            key = entry.getKey();
+            if(filterViewState && "javax.faces.ViewState".equals(key))
+            {
+                continue;
+            }
+
+            result.add(new RequestParameter(key, entry.getValue()));
+        }
+
+        return result;
     }
 }

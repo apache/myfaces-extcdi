@@ -16,28 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api.config;
+package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+import java.util.List;
+import java.util.Arrays;
 
 /**
- * Config for all JSF specific configurations.
- *
  * @author Gerhard Petracek
  */
-public interface JsfModuleConfig extends CodiConfig
+public class RequestParameter
 {
-    /**
-     * If the initial redirect is enabled, a redirect will be performed for adding the current window-id to the url.
-     *
-     * @return true for activating it, false otherwise
-     */
-    boolean isInitialRedirectEnabled();
+    private final String key;
+    private final String[] values;
 
-    /**
-     * esp useful for JSF 2.0
-     * @return true for creating additional navigation-cases based on view configs for
-     * ConfigurableNavigationHandler#getNavigationCases
-     */
-    boolean isUseViewConfigsAsNavigationCasesEnabled();
+    public RequestParameter(String key, String[] values)
+    {
+        this.key = key;
+        this.values = values;
+    }
+
+    public String getKey()
+    {
+        return key;
+    }
+
+    public List<String> getValueList()
+    {
+        return Arrays.asList(this.values);
+    }
+
+    public String[] getValues()
+    {
+        return values;
+    }
 }
