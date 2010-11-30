@@ -154,14 +154,14 @@
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
-            <version>2.0.2</version>
+            <version>${myfaces2.version}</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-impl</artifactId>
-            <version>2.0.2</version>
+            <version>${myfaces2.version}</version>
             <scope>runtime</scope>
         </dependency>
 
