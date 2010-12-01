@@ -118,17 +118,19 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
             Set<NavigationCase> navigationCase = new HashSet<NavigationCase>();
 
             Map<String, List<String>> parameters = resolveParameters();
+            boolean includeParameters;
 
             for(ViewConfigEntry entry : viewConfigEntries)
             {
+                includeParameters = Page.ViewParameter.INCLUDE.equals(entry.getViewParameter());
                 navigationCase.add(new NavigationCase("*",
                                                       null,
                                                       null,
                                                       null,
                                                       entry.getViewId(),
-                                                      parameters,
+                                                      includeParameters ? parameters : null,
                                                       Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
-                                                      Page.ViewParameter.INCLUDE.equals(entry.getViewParameter())));
+                                                      includeParameters));
 
                 result.put(entry.getViewId(), navigationCase);
             }
