@@ -128,7 +128,6 @@ public class JsfUtils
     }
 
     public static String addRequestParameter(ExternalContext externalContext, String url)
-            throws UnsupportedEncodingException
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");

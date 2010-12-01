@@ -35,6 +35,8 @@ import javax.enterprise.context.SessionScoped;
 @Named
 public class SampleList implements Serializable
 {
+    private static final long serialVersionUID = 5655240534902984821L;
+    
     private Logger log = Logger.getLogger(SampleList.class.getName());
 
     /**

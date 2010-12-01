@@ -30,6 +30,7 @@ public class QualifierInstances
 {
     private static class QualifierAnnotation extends AnnotationLiteral<Qualifier3> implements Qualifier3
     {
+        private static final long serialVersionUID = 6638619823102047921L;
     }
 
     public static Qualifier3 qualifier3()

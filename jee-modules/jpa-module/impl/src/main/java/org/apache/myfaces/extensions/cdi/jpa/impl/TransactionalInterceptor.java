@@ -156,6 +156,7 @@ public class TransactionalInterceptor implements Serializable
         {
             //only in case of add-ons synchronize
             //-> nested calls (across beans) which share the same entity manager aren't supported
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (entityManager)
             {
                 return proceedMethodInTransaction(context,

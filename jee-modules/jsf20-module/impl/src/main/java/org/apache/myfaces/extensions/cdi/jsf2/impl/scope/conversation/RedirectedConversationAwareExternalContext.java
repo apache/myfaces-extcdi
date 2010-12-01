@@ -50,14 +50,6 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         return this.wrapped;
     }
 
-    @Override
-    public void redirect(String url)
-            throws IOException
-    {
-        lazyInit();
-        sendRedirect(this.wrapped, url, this.windowHandler);
-    }
-
     public String encodeActionURL(String s)
     {
         lazyInit();
@@ -70,6 +62,13 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         return this.wrapped.encodeActionURL(s);
     }
 
+    @Override
+    public void redirect(String url)
+            throws IOException
+    {
+        lazyInit();
+        sendRedirect(this.wrapped, url, this.windowHandler);
+    }
     private synchronized void lazyInit()
     {
         if(this.windowHandler == null)

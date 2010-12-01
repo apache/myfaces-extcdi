@@ -115,6 +115,7 @@ public class ViewScopedContext implements Context, SystemEventListener
             return null;
         }
 
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (componentInstanceMap)
         {
             // just to make sure...

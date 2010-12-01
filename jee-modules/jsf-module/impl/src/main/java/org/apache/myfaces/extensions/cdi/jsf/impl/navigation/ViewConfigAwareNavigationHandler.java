@@ -39,7 +39,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.enterprise.inject.spi.BeanManager;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -158,14 +157,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             }
             result.append("includeViewParams=true");
 
-            try
-            {
-                return JsfUtils.addRequestParameter(externalContext, result.toString());
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                throw new RuntimeException(e);
-            }
+            return JsfUtils.addRequestParameter(externalContext, result.toString());
         }
 
         return result.toString();

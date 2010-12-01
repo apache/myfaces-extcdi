@@ -41,7 +41,7 @@ import java.util.Set;
  */
 public class RedirectedConversationAwareExternalContext extends ExternalContext
 {
-    private ExternalContext wrapped;
+    private final ExternalContext wrapped;
 
     private WindowHandler windowHandler;
 
@@ -68,7 +68,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
             throws IOException
     {
         lazyInit();
-        sendRedirect(this.wrapped, url, windowHandler);
+        sendRedirect(this.wrapped, url, this.windowHandler);
     }
 
     private synchronized void lazyInit()

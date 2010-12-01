@@ -48,16 +48,10 @@ public class ViewControllerInterceptor implements Serializable
     public Object filterPhaseListenerMethods(InvocationContext invocationContext) throws Exception
     {
         Object result = null;
-        try
+
+        if(invokeListenerMethod(invocationContext))
         {
-            if(invokeListenerMethod(invocationContext))
-            {
-                result = invocationContext.proceed();
-            }
-        }
-        catch (Exception e)
-        {
-            throw e;
+            result = invocationContext.proceed();
         }
 
         return result;

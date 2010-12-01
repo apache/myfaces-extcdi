@@ -32,6 +32,8 @@ import java.util.logging.Logger;
 @Named
 public class SampleListEntry implements Serializable
 {
+    private static final long serialVersionUID = 723390662860977802L;
+    
     private Logger log = Logger.getLogger(SampleListEntry.class.getName());
 
     private Integer id;

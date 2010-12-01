@@ -60,6 +60,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         if (annotation == null)
         {
             // switch into paranoia mode
+            //noinspection SynchronizationOnLocalVariableOrMethodParameter
             synchronized (annotationCache)
             {
                 annotation = annotationCache.get(key);

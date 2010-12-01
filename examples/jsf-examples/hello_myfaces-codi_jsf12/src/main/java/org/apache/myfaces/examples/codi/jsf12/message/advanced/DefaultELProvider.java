@@ -33,6 +33,8 @@ import javax.el.ExpressionFactory;
  */
 public class DefaultELProvider implements ELProvider
 {
+    private static final long serialVersionUID = 2641255245468004320L;
+
     public ExpressionFactory createExpressionFactory()
     {
         return new ExpressionFactoryImpl();

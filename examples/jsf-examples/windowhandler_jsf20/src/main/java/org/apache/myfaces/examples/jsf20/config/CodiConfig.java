@@ -30,6 +30,8 @@ import javax.enterprise.inject.Specializes;
 @Specializes
 public class CodiConfig extends DefaultWindowContextConfig
 {
+    private static final long serialVersionUID = -4094949435815088068L;
+
     @Override
     public boolean isInitialRedirectEnabled()
     {
