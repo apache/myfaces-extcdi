@@ -298,7 +298,7 @@ public class ConversationUtils
                                     String url,
                                     WindowHandler windowHandler) throws IOException
     {
-        if(isMultipleRedirectDetected(externalContext))
+        if(isMultipleRedirectDetected(externalContext) || FacesContext.getCurrentInstance().getResponseComplete())
         {
             return;
         }

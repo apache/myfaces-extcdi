@@ -57,6 +57,11 @@ public abstract class ServerSideWindowHandler extends DefaultWindowHandler
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
             throws IOException
     {
+        if(FacesContext.getCurrentInstance().getResponseComplete())
+        {
+            return;
+        }
+
         String windowId = getCurrentWindowId();
         if(this.useWindowAwareUrlEncoding || this.useFallback ||
                 //here we have an ajax nav. - currently it doesn't work in combination with the flash scope

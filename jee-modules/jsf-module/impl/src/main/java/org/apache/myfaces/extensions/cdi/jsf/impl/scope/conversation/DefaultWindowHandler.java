@@ -72,6 +72,11 @@ public class DefaultWindowHandler implements WindowHandler
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
             throws IOException
     {
+        if(FacesContext.getCurrentInstance().getResponseComplete())
+        {
+            return;
+        }
+
         //X TODO windowId is added "twice" here, once in encodeURL() and once in externalContext.encodeActionURL()
         // see RedirectedConversationAwareExternalContext.encodeActionURL().
 

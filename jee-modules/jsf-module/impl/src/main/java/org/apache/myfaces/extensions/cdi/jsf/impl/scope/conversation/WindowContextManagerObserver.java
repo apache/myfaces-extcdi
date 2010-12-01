@@ -149,6 +149,11 @@ final class WindowContextManagerObserver
 
     private void redirect(FacesContext facesContext, WindowHandler windowHandler)
     {
+        if(facesContext.getResponseComplete())
+        {
+            return;
+        }
+
         try
         {
             String targetURL = facesContext.getApplication()
