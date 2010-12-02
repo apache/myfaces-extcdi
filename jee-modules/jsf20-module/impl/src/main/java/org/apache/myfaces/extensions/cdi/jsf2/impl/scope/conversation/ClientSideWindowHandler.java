@@ -21,9 +21,9 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf2.api.config.ClientInformation;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
@@ -74,7 +74,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Override
     public String encodeURL(String url)
     {
-        if (clientInformation.isJavaScriptEnabled())
+        if (this.clientInformation.isJavaScriptEnabled())
         {
             // do not add the windowId
             return url;
@@ -89,7 +89,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Override
     public String restoreWindowId(ExternalContext externalContext)
     {
-        if (clientInformation.isJavaScriptEnabled())
+        if (this.clientInformation.isJavaScriptEnabled())
         {
             return (String) externalContext.getRequestMap().get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
         }
@@ -119,10 +119,11 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         else
         {
             if (WindowContextManager.AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equals(windowId)
-                    || !isWindowIdAlive(windowId))
+                    || !ConversationUtils.isWindowActive(this.windowContextManager, windowId))
             {
                 // no or invalid windowId --> create new one
-                windowId = windowContextManager.getCurrentWindowContext().getId();
+                // don't use createWindowId() the following call will ensure the max. window context count,...
+                windowId = this.windowContextManager.getCurrentWindowContext().getId();
 
                 // GET request with NEW windowId - send windowhandlerfilter.html to set and re-get the windowId
                 sendWindowHandlerHtml(externalContext, windowId);
@@ -141,7 +142,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     {
         // no POST request and javascript enabled
         // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
-        return !facesContext.isPostback() && clientInformation.isJavaScriptEnabled();
+        return !facesContext.isPostback() && this.clientInformation.isJavaScriptEnabled();
     }
 
     private void sendWindowHandlerHtml(ExternalContext externalContext, String windowId)
@@ -153,7 +154,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             httpResponse.setStatus(HttpServletResponse.SC_OK);
             httpResponse.setContentType("text/html");
 
-            String windowHandlerHtml = clientInformation.getWindowHandlerHtml();
+            String windowHandlerHtml = this.clientInformation.getWindowHandlerHtml();
 
             if (windowId == null)
             {
@@ -239,18 +240,5 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
 
         return "";
-    }
-
-    private boolean isWindowIdAlive(String windowId)
-    {
-        for (EditableWindowContext wc : windowContextManager.getWindowContexts())
-        {
-            if (windowId.equals(wc.getId()))
-            {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

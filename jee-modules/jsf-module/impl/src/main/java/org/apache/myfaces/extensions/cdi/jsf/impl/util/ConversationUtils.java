@@ -264,6 +264,9 @@ public class ConversationUtils
         return null;
     }
 
+    /**
+     * Needed for server-side window-handler and client-side window handler for supporting postbacks
+     */
     public static void addWindowContextIdHolderComponent()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -427,5 +430,25 @@ public class ConversationUtils
     private static boolean isEligibleForCleanup(EditableWindowContext editableWindowContext)
     {
         return !editableWindowContext.isActive() || editableWindowContext.getConversations().isEmpty();
+    }
+
+    /**
+     * alternative to {@link ConversationUtils#getExistingWindowIdSet} because it might be deactivated...
+     *
+     * @param windowContextManager current windowContextManager
+     * @param windowId windowId in question
+     * @return true if the window is known and active, false otherwise
+     */
+    public static boolean isWindowActive(EditableWindowContextManager windowContextManager, String windowId)
+    {
+        for (EditableWindowContext editableWindowContext : windowContextManager.getWindowContexts())
+        {
+            if (windowId.equals(editableWindowContext.getId()) && editableWindowContext.isActive())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
