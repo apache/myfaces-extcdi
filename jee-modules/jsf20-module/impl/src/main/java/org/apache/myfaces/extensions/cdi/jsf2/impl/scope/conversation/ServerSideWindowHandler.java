@@ -39,7 +39,7 @@ import java.io.IOException;
  */
 @SuppressWarnings({"UnusedDeclaration"})
 @Alternative
-public abstract class ServerSideWindowHandler extends DefaultWindowHandler
+public class ServerSideWindowHandler extends DefaultWindowHandler
 {
     private static final long serialVersionUID = 4040116087475343221L;
 

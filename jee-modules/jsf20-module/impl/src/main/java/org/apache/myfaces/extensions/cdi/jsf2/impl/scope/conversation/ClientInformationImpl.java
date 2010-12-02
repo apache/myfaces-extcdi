@@ -45,7 +45,8 @@ public class ClientInformationImpl implements ClientInformation
 
     protected String windowHandlerHtml;
 
-    private @Inject ProjectStage projectStage;
+    @Inject
+    private ProjectStage projectStage;
 
 
     public boolean isJavaScriptEnabled()

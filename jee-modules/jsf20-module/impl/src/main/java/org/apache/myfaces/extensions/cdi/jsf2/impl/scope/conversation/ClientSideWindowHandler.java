@@ -102,7 +102,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
     public void beforeLifecycleExecute(FacesContext facesContext)
     {
-        if (!shouldHandleRequest(facesContext))
+        if (!isClientSideWindowHandlerRequest(facesContext))
         {
             return;
         }
@@ -137,7 +137,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
     }
 
-    private boolean shouldHandleRequest(FacesContext facesContext)
+    private boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
     {
         // no POST request and javascript enabled
         // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
@@ -253,5 +253,4 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
         return false;
     }
-
 }
