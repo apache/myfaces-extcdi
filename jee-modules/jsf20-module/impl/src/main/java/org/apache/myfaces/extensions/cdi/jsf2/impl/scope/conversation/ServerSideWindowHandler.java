@@ -44,7 +44,11 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
     private static final long serialVersionUID = 4040116087475343221L;
 
     //workaround for mojarra
-    private final boolean useFallback;
+    private boolean useFallback;
+
+    protected ServerSideWindowHandler()
+    {
+    }
 
     @Inject
     protected ServerSideWindowHandler(WindowContextConfig config)

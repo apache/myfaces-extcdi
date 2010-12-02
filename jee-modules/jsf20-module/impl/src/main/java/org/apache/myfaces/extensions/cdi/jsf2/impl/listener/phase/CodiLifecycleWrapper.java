@@ -56,7 +56,8 @@ class CodiLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
-        WindowHandler windowHandler = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(WindowHandler.class, false);
+        WindowHandler windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
+
         if (windowHandler instanceof LifecycleAwareWindowHandler)
         {
             ((LifecycleAwareWindowHandler) windowHandler).beforeLifecycleExecute(facesContext);
