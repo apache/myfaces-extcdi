@@ -29,6 +29,10 @@
     <body>
         <f:view>
 
+            <p>
+                The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
+            </p>
+            
             <h:form>
                 <h3>A sample List </h3>
                 <h:dataTable value="#{sampleList.entryIds}" id="list" var="entryId">
