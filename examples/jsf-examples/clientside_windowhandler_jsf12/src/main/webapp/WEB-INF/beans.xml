@@ -23,6 +23,5 @@
 
     <alternatives>
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.ClientSideWindowHandler</class>
-        <class>org.apache.myfaces.examples.codi.jsf12.config.CodiConfigForClientSideWindowHandler</class>
     </alternatives>
 </beans>

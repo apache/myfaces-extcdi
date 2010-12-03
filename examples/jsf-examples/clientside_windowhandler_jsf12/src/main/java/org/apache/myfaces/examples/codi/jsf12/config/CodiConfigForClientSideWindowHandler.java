@@ -21,7 +21,7 @@ package org.apache.myfaces.examples.codi.jsf12.config;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Specializes;
 
 /**
  * You also have to activate
@@ -31,7 +31,7 @@ import javax.enterprise.inject.Alternative;
  * @author Gerhard Petracek
  */
 @ApplicationScoped
-@Alternative
+@Specializes
 public class CodiConfigForClientSideWindowHandler extends DefaultWindowContextConfig
 {
     private static final long serialVersionUID = -4094949435815088068L;
