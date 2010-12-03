@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.DefaultWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.jsf2.api.config.ClientInformation;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientInformation;
+import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Alternative;
@@ -59,6 +59,9 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
     @Inject
     private EditableWindowContextManager windowContextManager;
+
+    @Inject
+    private RequestTypeResolver requestTypeResolver;
 
     protected ClientSideWindowHandler()
     {
@@ -102,7 +105,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
     public void beforeLifecycleExecute(FacesContext facesContext)
     {
-        if (!isClientSideWindowHandlerRequest(facesContext))
+        if (!isClientSideWindowHandlerRequest())
         {
             return;
         }
@@ -138,11 +141,11 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
     }
 
-    private boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
+    private boolean isClientSideWindowHandlerRequest()
     {
         // no POST request and javascript enabled
         // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
-        return !facesContext.isPostback() && this.clientInformation.isJavaScriptEnabled();
+        return !this.requestTypeResolver.isPostRequest() && this.clientInformation.isJavaScriptEnabled();
     }
 
     private void sendWindowHandlerHtml(ExternalContext externalContext, String windowId)

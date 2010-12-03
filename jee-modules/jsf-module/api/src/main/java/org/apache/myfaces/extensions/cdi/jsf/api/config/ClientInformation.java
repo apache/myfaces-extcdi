@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.api.config;
+package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
 import java.io.IOException;
 import java.io.Serializable;

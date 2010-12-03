@@ -18,6 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseListener;
 import javax.faces.context.FacesContext;
@@ -52,6 +56,18 @@ class CodiLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
+        WindowHandler windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
+
+        if (windowHandler instanceof LifecycleAwareWindowHandler)
+        {
+            ((LifecycleAwareWindowHandler) windowHandler).beforeLifecycleExecute(facesContext);
+            if (facesContext.getResponseComplete())
+            {
+                // no further processing
+                return;
+            }
+        }
+
         wrapped.execute(facesContext);
     }
 

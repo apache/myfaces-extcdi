@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
+package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.jsf2.api.config.ClientInformation;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientInformation;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;

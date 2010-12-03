@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
