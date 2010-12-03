@@ -53,6 +53,8 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
     private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
     private static final String WINDOW_ID_REPLACE_PATTERN = "$$windowIdValue$$";
+    private static final String NOSCRIPT_URL_REPLACE_PATTERN = "$$noscriptUrl$$";
+    private static final String NOSCRIPT_PARAMETER = "noscript";
 
     @Inject
     private ClientInformation clientInformation;
@@ -84,8 +86,8 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
         else
         {
-            // fallback
-            return super.encodeURL(url);
+            // fallback - we have to add the windowId to the URL if JavaScript is disabled
+            return addWindowIdIfNecessary(url, getCurrentWindowId());
         }
     }
 
@@ -111,6 +113,13 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
 
         ExternalContext externalContext = facesContext.getExternalContext();
+
+        if (isNoscriptRequest(externalContext))
+        {
+            // the client has JavaScript disabled
+            clientInformation.setJavaScriptEnabled(false);
+            return;
+        }
 
         String windowId = getWindowIdFromCookie(externalContext);
         if (windowId == null)
@@ -148,6 +157,13 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         return !this.requestTypeResolver.isPostRequest() && this.clientInformation.isJavaScriptEnabled();
     }
 
+    private boolean isNoscriptRequest(ExternalContext externalContext)
+    {
+        String noscript = externalContext.getRequestParameterMap().get(NOSCRIPT_PARAMETER);
+
+        return (noscript != null && "true".equals(noscript));
+    }
+
     private void sendWindowHandlerHtml(ExternalContext externalContext, String windowId)
     {
         HttpServletResponse httpResponse = (HttpServletResponse) externalContext.getResponse();
@@ -167,6 +183,10 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             // set the windowId value in the javascript code
             windowHandlerHtml = windowHandlerHtml.replace(WINDOW_ID_REPLACE_PATTERN, windowId);
 
+            // set the noscript-URL for users with no JavaScript
+            windowHandlerHtml = windowHandlerHtml.replace(
+                    NOSCRIPT_URL_REPLACE_PATTERN, getNoscriptUrl(externalContext));
+
             OutputStream os = httpResponse.getOutputStream();
             try
             {
@@ -181,6 +201,44 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         {
             throw new FacesException(ioe);
         }
+    }
+
+    private String getNoscriptUrl(ExternalContext externalContext)
+    {
+        String url = externalContext.getRequestPathInfo();
+        if (url == null)
+        {
+            url = "";
+        }
+
+        // only use the very last part of the url
+        int lastSlash = url.lastIndexOf('/');
+        if (lastSlash != -1)
+        {
+            url = url.substring(lastSlash + 1);
+        }
+
+        // add request parameter
+        url = JsfUtils.addRequestParameter(externalContext, url);
+
+        // add noscript parameter
+        if (url.contains("?"))
+        {
+            url = url + "&";
+        }
+        else
+        {
+            url = url + "?";
+        }
+        url = url + NOSCRIPT_PARAMETER + "=true";
+
+        // NOTE that the url could contain data for an XSS attack
+        // like e.g. ?"></a><a href%3D"http://hacker.org/attack.html?a
+        // DO NOT REMOVE THE FOLLOWING LINES!
+        url = url.replace("\"", "");
+        url = url.replace("\'", "");
+
+        return url;
     }
 
     private String getWindowIdFromCookie(ExternalContext externalContext)

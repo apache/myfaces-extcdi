@@ -163,7 +163,7 @@ public class DefaultWindowHandler implements WindowHandler
         return RequestCache.getWindowContextManager().getCurrentWindowContext().getId();
     }
 
-    private String addWindowIdIfNecessary(String url, String windowId)
+    protected String addWindowIdIfNecessary(String url, String windowId)
     {
         if(url.contains(WINDOW_ID_PARAMETER_KEY))
         {
