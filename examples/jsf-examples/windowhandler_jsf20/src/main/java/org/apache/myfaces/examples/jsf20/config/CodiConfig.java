@@ -43,10 +43,4 @@ public class CodiConfig extends DefaultWindowContextConfig
     {
         return false;
     }
-
-    @Override
-    public boolean isUnknownWindowIdsAllowed()
-    {
-        return true;
-    }
 }

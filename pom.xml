@@ -83,6 +83,7 @@
 
         <!-- JSF-2.0 implementations-->
         <myfaces2.version>2.0.2</myfaces2.version>
+        <myfaces2.version.current>2.0.3-SNAPSHOT</myfaces2.version.current>
         <mojarra2.version>2.0.3-b03</mojarra2.version>
 
         <!-- JSF-1.2 implementations-->
