@@ -21,19 +21,23 @@ package org.apache.myfaces.examples.codi.jsf12.config.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
+import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode.REDIRECT;
+
 /**
  * Allows implicit and typesafe navigaton
  * @author Gerhard Petracek
  */
-public interface Pages extends ViewConfig
+@Page(navigation = REDIRECT, extension = JSP)
+public class Pages implements ViewConfig
 {
     @Page
-    public final class Page1 implements Pages
+    public final class Page1 extends Pages
     {
     }
 
     @Page
-    public final class Page2 implements Pages
+    public final class Page2 extends Pages
     {
     }
 }
