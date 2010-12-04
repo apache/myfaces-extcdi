@@ -27,5 +27,5 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
  */
 public interface CodiInformation
 {
-    static final String VERSION = ClassUtils.getJarVersion(CodiInformation.class) + "_pre_alpha-1";
+    static final String VERSION = ClassUtils.getJarVersion(CodiInformation.class);
 }
