@@ -73,9 +73,10 @@
         <module>jee-modules</module>
         <module>jse-modules</module>
         <module>component-support-modules</module>
-        <module>test-modules</module>
-        <module>examples</module>
         <module>dist</module>
+
+        <!--module>test-modules</module>
+        <module>examples</module-->
     </modules>
 
     <properties>
