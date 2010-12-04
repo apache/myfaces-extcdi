@@ -30,7 +30,7 @@ import java.io.Serializable;
  * This allows the 'customisation' of this html file to e.g.
  * adopt the background colour to avoid screen flickering.
  */
-public interface ClientInformation extends Serializable
+public interface ClientConfig extends Serializable
 {
     /**
      * The location of the default windowhandler resource

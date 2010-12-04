@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientInformation;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -57,7 +57,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     private static final String NOSCRIPT_PARAMETER = "noscript";
 
     @Inject
-    private ClientInformation clientInformation;
+    private ClientConfig clientConfig;
 
     @Inject
     private EditableWindowContextManager windowContextManager;
@@ -79,7 +79,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Override
     public String encodeURL(String url)
     {
-        if (this.clientInformation.isJavaScriptEnabled())
+        if (this.clientConfig.isJavaScriptEnabled())
         {
             // do not add the windowId
             return url;
@@ -94,7 +94,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Override
     public String restoreWindowId(ExternalContext externalContext)
     {
-        if (this.clientInformation.isJavaScriptEnabled())
+        if (this.clientConfig.isJavaScriptEnabled())
         {
             return (String) externalContext.getRequestMap().get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
         }
@@ -117,7 +117,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         if (isNoscriptRequest(externalContext))
         {
             // the client has JavaScript disabled
-            clientInformation.setJavaScriptEnabled(false);
+            clientConfig.setJavaScriptEnabled(false);
             return;
         }
 
@@ -154,7 +154,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     {
         // no POST request and javascript enabled
         // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
-        return !this.requestTypeResolver.isPostRequest() && this.clientInformation.isJavaScriptEnabled();
+        return !this.requestTypeResolver.isPostRequest() && this.clientConfig.isJavaScriptEnabled();
     }
 
     private boolean isNoscriptRequest(ExternalContext externalContext)
@@ -173,7 +173,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             httpResponse.setStatus(HttpServletResponse.SC_OK);
             httpResponse.setContentType("text/html");
 
-            String windowHandlerHtml = this.clientInformation.getWindowHandlerHtml();
+            String windowHandlerHtml = this.clientConfig.getWindowHandlerHtml();
 
             if (windowId == null)
             {

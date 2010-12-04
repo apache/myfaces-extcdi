@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientInformation;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientConfig;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
@@ -37,7 +37,7 @@ import java.io.InputStream;
  * adopt the background colour to avoid screen flickering.
  */
 @SessionScoped
-public class ClientInformationImpl implements ClientInformation
+public class DefaultClientConfig implements ClientConfig
 {
     private static final long serialVersionUID = -3264016646002116064L;
 
