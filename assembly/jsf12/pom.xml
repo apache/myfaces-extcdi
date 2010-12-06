@@ -226,37 +226,18 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>make_assembly_codi12_src</id>
+                        <id>make_assembly_codi12</id>
                         <configuration>
                             <descriptors>
                                 <descriptor>src/main/assembly/codi12src.xml</descriptor>
-                            </descriptors>
-                            <finalName>myfaces-extcdi-jsf12-${version}-src</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <outputDirectory>target/assembly/out</outputDirectory>
-                            <workDirectory>target/assembly/work</workDirectory>
-                            <tarLongFileMode>gnu</tarLongFileMode>
-                        </configuration>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>attached</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>make_assembly_codi12_bin</id>
-                        <configuration>
-                            <descriptors>
                                 <descriptor>src/main/assembly/codi12bin.xml</descriptor>
                             </descriptors>
-                            <finalName>myfaces-extcdi-jsf12-${version}-bin</finalName>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <outputDirectory>target/assembly/out</outputDirectory>
-                            <workDirectory>target/assembly/work</workDirectory>
+                            <appendAssemblyId>true</appendAssemblyId>   <!-- adds "-bin" and "-src" -->
                             <tarLongFileMode>gnu</tarLongFileMode>
                         </configuration>
                         <phase>package</phase>
                         <goals>
-                            <goal>attached</goal>
+                            <goal>single</goal>
                         </goals>
                     </execution>
                 </executions>

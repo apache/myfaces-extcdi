@@ -17,7 +17,7 @@
     under the License.
 -->
 <assembly>
-  <id>codi12src</id>
+  <id>src</id> <!-- appended as classifier to the assembly files -->
   <formats>
     <format>tar.gz</format>
     <format>zip</format>
@@ -25,7 +25,7 @@
   <fileSets>
     <fileSet>
     	<directory>src/main/resources</directory>
-    	<outputDirectory></outputDirectory>
+    	<outputDirectory>.</outputDirectory>
       <includes>
         <include>README*</include>
         <include>LICENSE*</include>
@@ -42,4 +42,3 @@
     </fileSet>
   </fileSets>
 </assembly>
- 
