@@ -68,15 +68,15 @@
     <inceptionYear>2010</inceptionYear>
 
     <modules>
-        <!--module>maven-utils</module>
+        <module>maven-utils</module>
         <module>core</module>
         <module>jee-modules</module>
         <module>jse-modules</module>
         <module>component-support-modules</module>
-        <module>dist</module-->
+        <module>dist</module>
 
-        <!--module>test-modules</module>
-        <module>examples</module-->
+        <module>test-modules</module>
+        <module>examples</module>
     </modules>
 
     <properties>
