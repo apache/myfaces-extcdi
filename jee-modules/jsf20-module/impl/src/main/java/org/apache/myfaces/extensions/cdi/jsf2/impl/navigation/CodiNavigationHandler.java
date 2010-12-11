@@ -69,7 +69,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(this.deactivated)
+        if(this.deactivated || isUnhandledExceptionQueued(context))
         {
             this.wrapped.handleNavigation(context, fromAction, outcome);
         }
@@ -77,6 +77,12 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         {
             getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
         }
+    }
+
+    private boolean isUnhandledExceptionQueued(FacesContext context)
+    {
+        return context.getExceptionHandler().getUnhandledExceptionQueuedEvents() != null &&
+                context.getExceptionHandler().getUnhandledExceptionQueuedEvents().iterator().hasNext();
     }
 
     private NavigationHandler getWrappedNavigationHandler()
