@@ -151,6 +151,14 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         }
     }
 
+    public void invokePostRenderViewMethods()
+    {
+        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
+        {
+            processCallbacks(beanEntry, beanEntry.getPostRenderViewMethods());
+        }
+    }
+
     private void processCallbacks(PageBeanConfigEntry beanEntry, List<Method> methodList)
     {
         Object bean;

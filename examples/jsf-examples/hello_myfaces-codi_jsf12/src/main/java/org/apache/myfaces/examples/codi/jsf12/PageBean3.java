@@ -18,25 +18,48 @@
  */
 package org.apache.myfaces.examples.codi.jsf12;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PostRenderView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
 
-import javax.enterprise.inject.Model;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
 @View(DemoPages.HelloMyFacesCodi3.class)
-@Model
-public class PageBean3
+@Named
+@ConversationScoped
+public class PageBean3 implements Serializable
 {
+    private static final long serialVersionUID = -7695924054621194150L;
+
+    @Inject
+    private Conversation conversation;
+
     private String value = "";
+
+    private boolean beanAccessed = false;
 
     @PreRenderView
     protected void preRenderView()
     {
         this.value += "preRenderView() called";
+        this.beanAccessed = true;
+    }
+
+    @PostRenderView
+    protected void postRenderView()
+    {
+        if(this.beanAccessed)
+        {
+            this.conversation.close();
+        }
     }
 
     public String getValue()

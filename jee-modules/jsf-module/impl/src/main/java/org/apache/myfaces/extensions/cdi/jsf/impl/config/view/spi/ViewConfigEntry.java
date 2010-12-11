@@ -54,5 +54,7 @@ public interface ViewConfigEntry
 
     void invokePreRenderViewMethods();
 
+    void invokePostRenderViewMethods();
+
     List<PageBeanConfigEntry> getPageBeanDefinitions();
 }

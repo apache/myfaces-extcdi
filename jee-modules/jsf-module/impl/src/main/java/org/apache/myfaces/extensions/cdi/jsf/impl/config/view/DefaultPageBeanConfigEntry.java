@@ -19,12 +19,13 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PostRenderView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PhasesLifecycleCallbackEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
 
 import javax.faces.event.PhaseId;
 import java.lang.reflect.Method;
@@ -46,11 +47,12 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
 
     private final Class beanClass;
 
-    private final Map<PhaseId, PhasesLifecycleCallbackEntry> phasesLifecycleCallbacks;
+    private final Map<PhaseId, RequestLifecycleCallbackEntry> phasesLifecycleCallbacks;
 
     private List<Method> initViewMethods = new ArrayList<Method>();
     private List<Method> prePageActionMethods = new ArrayList<Method>();
     private List<Method> preRenderViewMethods = new ArrayList<Method>();
+    private List<Method> postRenderViewMethods = new ArrayList<Method>();
 
     DefaultPageBeanConfigEntry(String beanName, Class beanClass)
     {
@@ -69,7 +71,7 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
         return beanClass;
     }
 
-    public PhasesLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId)
+    public RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId)
     {
         return phasesLifecycleCallbacks.get(phaseId);
     }
@@ -90,7 +92,12 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
         return Collections.unmodifiableList(this.preRenderViewMethods);
     }
 
-    private Map<PhaseId, PhasesLifecycleCallbackEntry> findCallbackDefinitions(Class beanClass)
+    public List<Method> getPostRenderViewMethods()
+    {
+        return Collections.unmodifiableList(this.postRenderViewMethods);
+    }
+
+    private Map<PhaseId, RequestLifecycleCallbackEntry> findCallbackDefinitions(Class beanClass)
     {
         Class currentClass = beanClass;
 
@@ -123,6 +130,10 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
                 {
                     this.preRenderViewMethods.add(currentMethod);
                 }
+                else if(currentMethod.isAnnotationPresent(PostRenderView.class))
+                {
+                    this.postRenderViewMethods.add(currentMethod);
+                }
             }
 
             currentClass = currentClass.getSuperclass();
@@ -131,11 +142,11 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
         return createPhasesLifecycleCallbackMap(beforeCallbackEntryHelper, afterCallbackEntryHelper);
     }
 
-    private Map<PhaseId, PhasesLifecycleCallbackEntry> createPhasesLifecycleCallbackMap(
+    private Map<PhaseId, RequestLifecycleCallbackEntry> createPhasesLifecycleCallbackMap(
             PhasesLifecycleCallbackEntryHelper beforeCallbackEntryHelper,
             PhasesLifecycleCallbackEntryHelper afterCallbackEntryHelper)
     {
-        Map<PhaseId, PhasesLifecycleCallbackEntry> result = new HashMap<PhaseId, PhasesLifecycleCallbackEntry>(6);
+        Map<PhaseId, RequestLifecycleCallbackEntry> result = new HashMap<PhaseId, RequestLifecycleCallbackEntry>(6);
 
         result.put(RESTORE_VIEW,
                 createCallbackEntry(RESTORE_VIEW, beforeCallbackEntryHelper, afterCallbackEntryHelper));
@@ -158,7 +169,7 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
         return result;
     }
 
-    private PhasesLifecycleCallbackEntry createCallbackEntry(
+    private RequestLifecycleCallbackEntry createCallbackEntry(
             PhaseId phaseId,
             PhasesLifecycleCallbackEntryHelper beforeCallbackEntryHelper,
             PhasesLifecycleCallbackEntryHelper afterCallbackEntryHelper)
@@ -172,6 +183,6 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
             throw unsupportedPhasesLifecycleCallback();
         }
 
-        return new DefaultPhasesLifecycleCallbackEntry(beforePhaseCallbacks, afterPhaseCallbacks);
+        return new DefaultRequestLifecycleCallbackEntry(beforePhaseCallbacks, afterPhaseCallbacks);
     }
 }

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public interface PhasesLifecycleCallbackEntry
+public interface RequestLifecycleCallbackEntry
 {
     List<Method> getBeforePhaseCallbacks();
 

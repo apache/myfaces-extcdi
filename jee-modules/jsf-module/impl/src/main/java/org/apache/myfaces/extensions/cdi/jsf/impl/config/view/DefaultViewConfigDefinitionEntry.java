@@ -289,6 +289,11 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
         throw new IllegalStateException("not implemented");
     }
 
+    public void invokePostRenderViewMethods()
+    {
+        throw new IllegalStateException("not implemented");
+    }
+
     public List<PageBeanConfigEntry> getPageBeanDefinitions()
     {
         throw new IllegalStateException("not implemented");

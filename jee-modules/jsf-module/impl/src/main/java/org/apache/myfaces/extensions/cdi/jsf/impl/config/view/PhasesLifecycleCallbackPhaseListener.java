@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PhasesLifecycleCallbackEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 
 import javax.faces.event.PhaseEvent;
@@ -61,6 +61,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         try
         {
             processInitView(event);
+            processPostRenderView(event);
             processPhaseCallbacks(event, false);
         }
         catch (Exception e)
@@ -130,6 +131,14 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         }
     }
 
+    private void processPostRenderView(PhaseEvent event)
+    {
+        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE))
+        {
+            processPostRenderView(event.getFacesContext().getViewRoot().getViewId());
+        }
+    }
+
     private void processPreRenderView(String viewId)
     {
         ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
@@ -137,6 +146,16 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         if (viewDefinitionEntry != null)
         {
             viewDefinitionEntry.invokePreRenderViewMethods();
+        }
+    }
+
+    private void processPostRenderView(String viewId)
+    {
+        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+
+        if (viewDefinitionEntry != null)
+        {
+            viewDefinitionEntry.invokePostRenderViewMethods();
         }
     }
 
@@ -166,7 +185,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getPageBeanDefinitions();
 
         Object bean;
-        PhasesLifecycleCallbackEntry phasesLifecycleCallbackEntry;
+        RequestLifecycleCallbackEntry phasesLifecycleCallbackEntry;
         List<Method> lifecycleCallbacks;
 
         for(PageBeanConfigEntry beanEntry : beanEntries)

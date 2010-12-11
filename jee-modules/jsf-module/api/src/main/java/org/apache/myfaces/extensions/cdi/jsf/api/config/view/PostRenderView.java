@@ -16,28 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
-import javax.faces.event.PhaseId;
-import java.lang.reflect.Method;
-import java.util.List;
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * View-controller annotation for page-beans.
+ * Methods annotated with this annotation will be invoked after the view gets rendered.
+ * 
  * @author Gerhard Petracek
  */
-public interface PageBeanConfigEntry
+@Target(METHOD)
+@Retention(RUNTIME)
+@Documented
+public @interface PostRenderView
 {
-    Class getBeanClass();
-
-    String getBeanName();
-
-    List<Method> getInitViewMethods();
-
-    List<Method> getPrePageActionMethods();
-
-    List<Method> getPreRenderViewMethods();
-
-    List<Method> getPostRenderViewMethods();
-
-    RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId);
 }

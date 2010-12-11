@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PhasesLifecycleCallbackEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -27,13 +27,13 @@ import java.util.List;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultPhasesLifecycleCallbackEntry implements PhasesLifecycleCallbackEntry
+public class DefaultRequestLifecycleCallbackEntry implements RequestLifecycleCallbackEntry
 {
     private final List<Method> beforePhaseCallbacks;
 
     private final List<Method> afterPhaseCallbacks;
 
-    DefaultPhasesLifecycleCallbackEntry(List<Method> beforePhaseCallbacks, List<Method> afterPhaseCallbacks)
+    DefaultRequestLifecycleCallbackEntry(List<Method> beforePhaseCallbacks, List<Method> afterPhaseCallbacks)
     {
         if(beforePhaseCallbacks != null)
         {
