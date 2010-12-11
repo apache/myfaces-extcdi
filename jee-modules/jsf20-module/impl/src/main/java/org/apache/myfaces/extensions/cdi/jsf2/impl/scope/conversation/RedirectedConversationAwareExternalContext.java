@@ -40,6 +40,8 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 
     private boolean encodeActionURLs;
 
+    private boolean sessionInvalidated = false;
+
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;
@@ -66,8 +68,15 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     public void redirect(String url)
             throws IOException
     {
-        lazyInit();
-        sendRedirect(this.wrapped, url, this.windowHandler);
+        if(this.sessionInvalidated)
+        {
+            this.wrapped.redirect(url);
+        }
+        else
+        {
+            lazyInit();
+            sendRedirect(this.wrapped, url, this.windowHandler);
+        }
     }
     private synchronized void lazyInit()
     {
@@ -84,5 +93,12 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
     private String addWindowIdToUrl(String url)
     {
         return this.windowHandler.encodeURL(url);
+    }
+
+    @Override
+    public void invalidateSession()
+    {
+        super.invalidateSession();
+        this.sessionInvalidated = true;
     }
 }

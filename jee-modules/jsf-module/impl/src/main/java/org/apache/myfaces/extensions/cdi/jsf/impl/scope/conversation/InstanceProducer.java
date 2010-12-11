@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Disposes;
@@ -71,6 +72,7 @@ final class InstanceProducer
         {
             ((EditableWindowContextManager)windowContextManager).closeAllWindowContexts();
         }
+        RequestCache.resetCache();
     }
 
     @Produces
