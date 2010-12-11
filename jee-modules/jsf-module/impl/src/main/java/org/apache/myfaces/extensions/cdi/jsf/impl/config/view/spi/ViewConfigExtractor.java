@@ -16,24 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.config.view;
+package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
 /**
- * Allows implicit and typesafe navigaton
  * @author Gerhard Petracek
  */
-public interface Pages extends ViewConfig
+public interface ViewConfigExtractor
 {
-    @Page
-    public final class Page1 implements Pages
-    {
-    }
-
-    @Page
-    public final class Page2 implements Pages
-    {
-    }
+    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

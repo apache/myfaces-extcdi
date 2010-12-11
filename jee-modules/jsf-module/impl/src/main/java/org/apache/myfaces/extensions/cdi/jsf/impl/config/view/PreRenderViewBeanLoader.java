@@ -21,15 +21,19 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.event.PhaseEvent;
+import javax.inject.Singleton;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
+@Singleton
 final class PreRenderViewBeanLoader
 {
     protected void initBeans(

@@ -18,20 +18,22 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PhasesLifecycleCallbackEntry;
+
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-class PhasesLifecycleCallbackEntry
+public class DefaultPhasesLifecycleCallbackEntry implements PhasesLifecycleCallbackEntry
 {
     private final List<Method> beforePhaseCallbacks;
 
     private final List<Method> afterPhaseCallbacks;
 
-    PhasesLifecycleCallbackEntry(List<Method> beforePhaseCallbacks, List<Method> afterPhaseCallbacks)
+    DefaultPhasesLifecycleCallbackEntry(List<Method> beforePhaseCallbacks, List<Method> afterPhaseCallbacks)
     {
         if(beforePhaseCallbacks != null)
         {
@@ -52,12 +54,12 @@ class PhasesLifecycleCallbackEntry
         }
     }
 
-    List<Method> getBeforePhaseCallbacks()
+    public List<Method> getBeforePhaseCallbacks()
     {
         return beforePhaseCallbacks;
     }
 
-    List<Method> getAfterPhaseCallbacks()
+    public List<Method> getAfterPhaseCallbacks()
     {
         return afterPhaseCallbacks;
     }

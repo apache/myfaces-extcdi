@@ -19,31 +19,33 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.core.api.security.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameter;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 
-import javax.inject.Named;
 import javax.enterprise.inject.spi.BeanManager;
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
+import javax.inject.Named;
 import java.beans.Introspector;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 
 /**
  * @author Gerhard Petracek
  */
-public class ViewConfigEntry
+public class DefaultViewConfigEntry implements ViewConfigEntry
 {
-    private final String viewId;
+        private final String viewId;
     private final Class<? extends ViewConfig> viewDefinitionClass;
-    private final NavigationMode navigationMode;
+    private final Page.NavigationMode navigationMode;
 
     private List<PageBeanConfigEntry> beanDefinition;
 
@@ -51,7 +53,7 @@ public class ViewConfigEntry
     private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
     private final Class<? extends ViewConfig> customErrorView;
 
-    private ViewParameter viewParameter;
+    private Page.ViewParameter viewParameter;
     //meta-data
     private List<Annotation> metaDataList;
 
@@ -59,11 +61,11 @@ public class ViewConfigEntry
 
     private BeanManager beanManager;
 
-    public ViewConfigEntry(String viewId,
+    public DefaultViewConfigEntry(String viewId,
                            Class<? extends ViewConfig> viewDefinitionClass,
-                           NavigationMode navigationMode,
-                           ViewParameter viewParameter,
-                           List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
+                           Page.NavigationMode navigationMode,
+                           Page.ViewParameter viewParameter,
+                           Class<? extends AccessDecisionVoter>[] accessDecisionVoters,
                            Class<? extends ViewConfig> errorView,
                            List<Annotation> metaDataList)
     {
@@ -78,7 +80,7 @@ public class ViewConfigEntry
         //TODO validate view-id
 
         //noinspection unchecked
-        this.accessDecisionVoters = accessDecisionVoters.toArray(new Class[accessDecisionVoters.size()]);
+        this.accessDecisionVoters = accessDecisionVoters;
 
         if(errorView != null)
         {
@@ -100,23 +102,22 @@ public class ViewConfigEntry
         return viewDefinitionClass;
     }
 
-    public NavigationMode getNavigationMode()
+    public Page.NavigationMode getNavigationMode()
     {
         return navigationMode;
     }
 
-    public ViewParameter getViewParameter()
+    public Page.ViewParameter getViewParameter()
     {
         return viewParameter;
     }
 
-    List<PageBeanConfigEntry> getPageBeanDefinitions()
+    public List<PageBeanConfigEntry> getPageBeanDefinitions()
     {
         return beanDefinition;
     }
 
-    //we just need it for testing
-    protected final List<Class> getPageBeanClasses()
+    public final List<Class> getPageBeanClasses()
     {
         List<Class> result = new ArrayList<Class>();
         for(PageBeanConfigEntry pageBeanConfigEntry : getPageBeanDefinitions())
@@ -125,7 +126,7 @@ public class ViewConfigEntry
         }
         return result;
     }
-    
+
     public void invokeInitViewMethods()
     {
         for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
@@ -142,7 +143,7 @@ public class ViewConfigEntry
         }
     }
 
-    void invokePreRenderViewMethods()
+    public void invokePreRenderViewMethods()
     {
         for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
         {
@@ -214,12 +215,12 @@ public class ViewConfigEntry
             this.metaDataList.clear();
         }
     }
-    
-    void addPageBean(Class pageBeanClass)
+
+    public void addPageBean(Class pageBeanClass)
     {
         List<PageBeanConfigEntry> newList = new ArrayList<PageBeanConfigEntry>(this.beanDefinition);
 
-        PageBeanConfigEntry newEntry = new PageBeanConfigEntry(getBeanName(pageBeanClass) , pageBeanClass);
+        PageBeanConfigEntry newEntry = new DefaultPageBeanConfigEntry(getBeanName(pageBeanClass) , pageBeanClass);
 
         newList.add(newEntry);
 
@@ -273,7 +274,7 @@ public class ViewConfigEntry
     {
         if(!"".equals(pageBean.name()))
         {
-            return new PageBeanConfigEntry(pageBean.name(), pageBean.value());
+            return new DefaultPageBeanConfigEntry(pageBean.name(), pageBean.value());
         }
 
         Class<?> pageBeanClass = pageBean.value();
@@ -282,7 +283,7 @@ public class ViewConfigEntry
         //TODO allow indirect usage of @Named
         pageBeanName = getBeanName(pageBeanClass);
 
-        return new PageBeanConfigEntry(pageBeanName, pageBeanClass);
+        return new DefaultPageBeanConfigEntry(pageBeanName, pageBeanClass);
     }
 
     private String getBeanName(Class<?> pageBeanClass)
@@ -324,7 +325,7 @@ public class ViewConfigEntry
 
         ViewConfigEntry that = (ViewConfigEntry) o;
 
-        if (!viewId.equals(that.viewId))
+        if (!viewId.equals(that.getViewId()))
         {
             return false;
         }

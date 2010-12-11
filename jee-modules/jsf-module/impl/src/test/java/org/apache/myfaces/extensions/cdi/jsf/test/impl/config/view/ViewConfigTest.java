@@ -18,12 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils;
 import static org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils.*;
 
@@ -124,6 +125,28 @@ public class ViewConfigTest
     }
 
     @Test
+    public void testSimpleInterfaceBasedConfigs()
+    {
+        viewConfigExtension.addPageDefinition(SimpleInterfaceBasedConfigs.Wizards.Registration.Step1.class);
+        viewConfigExtension.addPageDefinition(SimpleInterfaceBasedConfigs.Wizards.Order.Step1.class);
+
+        ViewConfigEntry registrationConfigEntry = ViewConfigCache.getViewDefinition(SimpleInterfaceBasedConfigs.Wizards.Registration.Step1.class);
+        ViewConfigEntry orderConfigEntry = ViewConfigCache.getViewDefinition(SimpleInterfaceBasedConfigs.Wizards.Order.Step1.class);
+
+        assertEquals(registrationConfigEntry.getViewId(),
+                "/pages/wizards/registration/step1.xhtml");
+        assertEquals(orderConfigEntry.getViewId(),
+                "/pages/wizards/order/step1.xhtml");
+
+        assertEquals(registrationConfigEntry.getNavigationMode(), Page.NavigationMode.DEFAULT);
+        assertEquals(orderConfigEntry.getNavigationMode(), Page.NavigationMode.REDIRECT);
+
+        assertTrue(registrationConfigEntry.getAccessDecisionVoters().length == 0);
+        assertEquals(orderConfigEntry.getAccessDecisionVoters().length, 1);
+        assertEquals(orderConfigEntry.getAccessDecisionVoters()[0], TestAccessDecisionVoter1.class);
+    }
+
+    @Test
     public void testNavigationOverriding1()
     {
         viewConfigExtension.addPageDefinition(NavigationOverriding1.RedirectedPage1.class);
@@ -135,11 +158,11 @@ public class ViewConfigTest
                                                        "/forwardedPage1.xhtml");
 
         ViewConfigEntry viewConfigEntry =ViewConfigCache.getViewDefinition(NavigationOverriding1.RedirectedPage1.class);
-        assertEquals(NavigationMode.REDIRECT, viewConfigEntry.getNavigationMode());
+        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.REDIRECT);
 
         viewConfigEntry = ViewConfigCache.getViewDefinition(NavigationOverriding1.ForwardedPage1.class);
 
-        assertEquals(NavigationMode.FORWARD, viewConfigEntry.getNavigationMode());
+        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.FORWARD);
     }
 
     @Test
@@ -154,11 +177,11 @@ public class ViewConfigTest
                                                        "/forwardedPage2.xhtml");
 
         ViewConfigEntry viewConfigEntry =ViewConfigCache.getViewDefinition(NavigationOverriding2.RedirectedPage2.class);
-        assertEquals(NavigationMode.REDIRECT, viewConfigEntry.getNavigationMode());
+        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.REDIRECT);
 
         viewConfigEntry = ViewConfigCache.getViewDefinition(NavigationOverriding2.ForwardedPage2.class);
 
-        assertEquals(NavigationMode.FORWARD, viewConfigEntry.getNavigationMode());
+        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.FORWARD);
     }
 
     @Test

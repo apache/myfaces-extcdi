@@ -18,26 +18,29 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.unsupportedPhasesLifecycleCallback;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PhasesLifecycleCallbackEntry;
 
 import javax.faces.event.PhaseId;
-import static javax.faces.event.PhaseId.*;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+
+import static javax.faces.event.PhaseId.*;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.unsupportedPhasesLifecycleCallback;
 
 /**
  * @author Gerhard Petracek
  */
-class PageBeanConfigEntry
+class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
 {
     private final String beanName;
 
@@ -49,40 +52,40 @@ class PageBeanConfigEntry
     private List<Method> prePageActionMethods = new ArrayList<Method>();
     private List<Method> preRenderViewMethods = new ArrayList<Method>();
 
-    PageBeanConfigEntry(String beanName, Class beanClass)
+    DefaultPageBeanConfigEntry(String beanName, Class beanClass)
     {
         this.beanName = beanName;
         this.beanClass = beanClass;
         this.phasesLifecycleCallbacks = Collections.unmodifiableMap(findCallbackDefinitions(beanClass));
     }
 
-    String getBeanName()
+    public String getBeanName()
     {
         return beanName;
     }
 
-    Class getBeanClass()
+    public Class getBeanClass()
     {
         return beanClass;
     }
 
-    PhasesLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId)
+    public PhasesLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId)
     {
         return phasesLifecycleCallbacks.get(phaseId);
     }
 
 
-    List<Method> getInitViewMethods()
+    public List<Method> getInitViewMethods()
     {
         return Collections.unmodifiableList(this.initViewMethods);
     }
 
-    List<Method> getPrePageActionMethods()
+    public List<Method> getPrePageActionMethods()
     {
         return Collections.unmodifiableList(this.prePageActionMethods);
     }
 
-    List<Method> getPreRenderViewMethods()
+    public List<Method> getPreRenderViewMethods()
     {
         return Collections.unmodifiableList(this.preRenderViewMethods);
     }
@@ -169,6 +172,6 @@ class PageBeanConfigEntry
             throw unsupportedPhasesLifecycleCallback();
         }
 
-        return new PhasesLifecycleCallbackEntry(beforePhaseCallbacks, afterPhaseCallbacks);
+        return new DefaultPhasesLifecycleCallbackEntry(beforePhaseCallbacks, afterPhaseCallbacks);
     }
 }

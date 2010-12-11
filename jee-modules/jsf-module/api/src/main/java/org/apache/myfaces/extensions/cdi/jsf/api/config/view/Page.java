@@ -49,6 +49,10 @@ public @interface Page
     //TODO config for default navigation mode
     NavigationMode navigation() default NavigationMode.DEFAULT;
 
+    /**
+     * for including view params in jsf2
+     * @return
+     */
     ViewParameter viewParams() default ViewParameter.DEFAULT;
 
     public interface Extension

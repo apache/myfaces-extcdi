@@ -16,24 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.config.view;
+package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
-/**
- * Allows implicit and typesafe navigaton
- * @author Gerhard Petracek
- */
-public interface Pages extends ViewConfig
-{
-    @Page
-    public final class Page1 implements Pages
-    {
-    }
+import java.lang.annotation.Annotation;
+import java.util.List;
 
-    @Page
-    public final class Page2 implements Pages
-    {
-    }
+/**
+ * Contract which shows which information has to be used for the
+ * {@link org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry}.
+ * The rest can be refactored as needed.
+ */
+interface ViewConfigDefinitionEntry
+{
+    String getViewId();
+
+    Page.NavigationMode getNavigationMode();
+
+    Page.ViewParameter getViewParameter();
+
+    Class<? extends ViewConfig> getErrorView();
+
+    List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters();
+
+    List<Annotation> getViewMetaData();
 }
