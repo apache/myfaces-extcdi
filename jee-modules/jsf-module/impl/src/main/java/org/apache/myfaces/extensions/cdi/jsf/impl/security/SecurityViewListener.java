@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import static org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
@@ -56,7 +57,7 @@ public class SecurityViewListener
     }
 
     public void checkPermissionBeforeRendering(
-            @Observes @AfterPhase(RENDER_RESPONSE) PhaseEvent event, BeanManager beanManager)
+            @Observes @BeforePhase(RENDER_RESPONSE) PhaseEvent event, BeanManager beanManager)
     {
         FacesContext facesContext = event.getFacesContext();
 
