@@ -108,12 +108,11 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- TODO -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-impl</artifactId>
             <version>${owb.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -122,7 +121,8 @@
             <version>${owb.version}</version>
             <scope>runtime</scope>
         </dependency>
-        
+
+        <!-- TODO jakobk: should be openwebbeans-jsf12, but this one does not support el 2.2 (owb bug) -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-jsf</artifactId>
@@ -220,7 +220,7 @@
             <version>2.1.0</version>
             <scope>compile</scope>
         </dependency>
-        
+
         <!--dependency>
             <groupId>de.odysseus.juel</groupId>
             <artifactId>juel-impl</artifactId>

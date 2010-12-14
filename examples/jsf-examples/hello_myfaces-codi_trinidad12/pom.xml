@@ -91,12 +91,11 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- TODO -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-impl</artifactId>
             <version>${owb.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -108,7 +107,7 @@
         
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-jsf</artifactId>
+            <artifactId>openwebbeans-jsf12</artifactId>
             <version>${owb.version}</version>
             <scope>runtime</scope>
         </dependency>

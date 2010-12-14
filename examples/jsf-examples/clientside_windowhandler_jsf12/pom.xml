@@ -80,12 +80,11 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- TODO -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-impl</artifactId>
             <version>${owb.version}</version>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -100,14 +99,6 @@
             <artifactId>openwebbeans-jsf12</artifactId>
             <version>${owb.version}</version>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- needed due to an owb bug in combination with jsf12 in v1 -->
-        <dependency>
-            <groupId>juel</groupId>
-            <artifactId>juel-impl</artifactId>
-            <version>2.1.0</version>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
