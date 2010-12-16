@@ -65,6 +65,10 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     @Inject
     private RequestTypeResolver requestTypeResolver;
 
+    @Inject
+    private WindowContextConfig windowContextConfig;
+
+
     protected ClientSideWindowHandler()
     {
         // needed for proxying
@@ -130,8 +134,9 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
         else
         {
-            if (WindowContextManager.AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equals(windowId)
-                    || !ConversationUtils.isWindowActive(this.windowContextManager, windowId))
+            if (WindowContextManager.AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equals(windowId) ||
+                (!windowContextConfig.isUnknownWindowIdsAllowed() &&
+                 !ConversationUtils.isWindowActive(this.windowContextManager, windowId)))
             {
                 // no or invalid windowId --> create new one
                 // don't use createWindowId() the following call will ensure the max. window context count,...
