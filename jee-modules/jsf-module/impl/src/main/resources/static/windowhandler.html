@@ -26,6 +26,8 @@
         <script type="text/javascript" >
             window.onload = function()
             {
+                document.getElementById('message').textContent = "Loading...";
+
                 // this will be replaced in the phase listener
                 var windowId = '$$windowIdValue$$';
 
@@ -58,9 +60,9 @@
         </script>
     </head>
 <body>
-    <noscript>
-        Your browser does not support JavaScript.
-        Click <a href="$$noscriptUrl$$">here</a> to continue without JavaScript.
-    </noscript>
+    <div id="message" style="position:absolute;left:40%;top:40%;" >
+        Your browser does not support JavaScript!<br/><br/>
+        Click <a href="$$noscriptUrl$$">here to continue without JavaScript</a>.
+    </div>
 </body>
 </html>
