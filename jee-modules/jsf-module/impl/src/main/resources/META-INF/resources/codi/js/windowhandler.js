@@ -48,7 +48,7 @@ myfaces.codi.addWindowCookie = function(url) {
         return;
     }
 
-    // 2 seconds expiry time
+    // 1 second expiry time
     var expdt = new Date();
     expdt.setTime(expdt.getTime()+(1*1000));
     var expires = "; expires="+expdt.toGMTString();
