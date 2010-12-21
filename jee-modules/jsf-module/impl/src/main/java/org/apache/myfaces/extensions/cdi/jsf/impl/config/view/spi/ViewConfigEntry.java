@@ -34,8 +34,6 @@ public interface ViewConfigEntry
 
     Class<? extends ViewConfig> getViewDefinitionClass();
 
-    List<Class> getPageBeanClasses();
-
     Class<? extends ViewConfig> getErrorView();
 
     Page.NavigationMode getNavigationMode();

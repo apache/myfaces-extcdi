@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor;
@@ -72,30 +73,32 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
     protected void addPageDefinition(Class pageDefinitionClass)
     {
-        ViewConfigEntry entry = createViewConfigEntry(pageDefinitionClass);
+        ViewConfigEntry newEntry = createViewConfigEntry(pageDefinitionClass);
 
-        if(entry != null)
+        if(newEntry != null)
         {
-            ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(entry.getViewDefinitionClass());
+            ViewConfigEntry existingEntry = ViewConfigCache.getViewDefinition(newEntry.getViewDefinitionClass());
 
             //TODO introduce an SPI with a better name
-            if(/*viewConfigEntry != null*/viewConfigEntry instanceof DefaultViewConfigEntry
-                    && ((DefaultViewConfigEntry)viewConfigEntry).isSimpleEntryMode())
+            if(/*viewConfigEntry != null*/existingEntry instanceof DefaultViewConfigEntry
+                    && ((DefaultViewConfigEntry)existingEntry).isSimpleEntryMode())
             {
                 //in this case the alternative view-controller approach which just adds page-beans was invoked before
                 //-> we just have to use the page bean of the existing entry
 
-                for(Class pageBeanClass : viewConfigEntry.getPageBeanClasses())
+                //here we have a simple-entry!   (which just contains page-bean definitions)
+                for(PageBeanConfigEntry pageBeanConfigEntry : existingEntry.getPageBeanDefinitions())
                 {
-                    entry.addPageBean(pageBeanClass);
+                    //add page-beans to the real entry
+                    newEntry.addPageBean(pageBeanConfigEntry.getBeanClass());
                 }
-                ViewConfigCache.replaceViewDefinition(entry.getViewId(), entry);
+                ViewConfigCache.replaceViewDefinition(newEntry.getViewId(), newEntry);
                 return;
             }
 
             //add created entry
             //if there is already an normal (not simple!) entry force an exception
-            ViewConfigCache.addViewDefinition(entry.getViewId(), entry);
+            ViewConfigCache.addViewDefinition(newEntry.getViewId(), newEntry);
         }
     }
 

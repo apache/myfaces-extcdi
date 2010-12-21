@@ -59,4 +59,11 @@ public interface EditableWindowContext extends WindowContext
      * @return a new conversation for the given group
      */
     EditableConversation getConversation(Class conversationGroup, Annotation... qualifiers);
+
+    /**
+     * @param conversationGroup group of the conversation in question
+     * @param qualifiers optional qualifiers for the conversation
+     * @return true if the conversation exists and is active, false otherwise
+     */
+    boolean isConversationActive(Class conversationGroup, Annotation... qualifiers);
 }

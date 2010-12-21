@@ -18,18 +18,15 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
-import org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils;
-import static org.apache.myfaces.extensions.cdi.jsf.test.impl.util.ReflectionUtils.*;
 
 import java.util.List;
-import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
@@ -241,17 +238,19 @@ public class ViewConfigTest
         ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
                 ViewConfigWithViewController.Page1.class);
 
-        Method getPageBeanClassesMethod = ReflectionUtils.tryToGetMethod(ViewConfigEntry.class, "getPageBeanClasses");
-        List<Class> pageBeanClasses = (List<Class>) tryToInvokeMethod(viewConfigEntry, getPageBeanClassesMethod);
-        assertEquals(pageBeanClasses.size(), 1);
-        assertTrue(pageBeanClasses.contains(TestPageBean2.class));
+        List<PageBeanConfigEntry> pageBeanConfigEntries = viewConfigEntry.getPageBeanDefinitions();
+        assertEquals(pageBeanConfigEntries.size(), 1);
+        assertTrue(pageBeanConfigEntries.iterator().next().getBeanClass().equals(TestPageBean2.class));
 
         viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithViewController.Page2.class);
 
-        getPageBeanClassesMethod = ReflectionUtils.tryToGetMethod(ViewConfigEntry.class, "getPageBeanClasses");
-        pageBeanClasses = (List<Class>) tryToInvokeMethod(viewConfigEntry, getPageBeanClassesMethod);
-        assertEquals(pageBeanClasses.size(), 2);
-        assertTrue(pageBeanClasses.contains(TestPageBean2.class));
-        assertTrue(pageBeanClasses.contains(TestPageBean3.class));
+        pageBeanConfigEntries = viewConfigEntry.getPageBeanDefinitions();
+        assertEquals(pageBeanConfigEntries.size(), 2);
+
+        for(PageBeanConfigEntry pageBeanConfigEntry : pageBeanConfigEntries)
+        {
+            assertTrue(pageBeanConfigEntry.getBeanClass().equals(TestPageBean2.class) ||
+                       pageBeanConfigEntry.getBeanClass().equals(TestPageBean3.class));
+        }
     }
 }

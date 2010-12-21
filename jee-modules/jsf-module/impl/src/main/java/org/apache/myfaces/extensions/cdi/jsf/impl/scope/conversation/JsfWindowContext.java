@@ -148,6 +148,27 @@ public class JsfWindowContext implements EditableWindowContext
         return conversation;
     }
 
+    public boolean isConversationActive(Class conversationGroupKey, Annotation... qualifiers)
+    {
+        Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
+
+        ConversationKey conversationKey =
+                new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
+
+        EditableConversation conversation = RequestCache.getConversation(conversationKey);
+
+        if(conversation == null)
+        {
+            conversation = getConversationForKey(conversationKey, false);
+
+            if (conversation == null)
+            {
+                return false;
+            }
+        }
+        return conversation.isActive();
+    }
+
     public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
@@ -289,7 +310,7 @@ public class JsfWindowContext implements EditableWindowContext
         return (T)this.attributes.get(name);
     }
 
-    private EditableConversation getConversationForKey(ConversationKey conversationKey, boolean existingConversation)
+    private EditableConversation getConversationForKey(ConversationKey conversationKey, boolean forceNewConversation)
     {
         EditableConversation editableConversation = this.groupedConversations.get(conversationKey);
 
@@ -298,7 +319,7 @@ public class JsfWindowContext implements EditableWindowContext
             return editableConversation;
         }
 
-        if(!existingConversation)
+        if(!forceNewConversation)
         {
             return null;
         }

@@ -225,11 +225,6 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
         throw new IllegalStateException("not implemented");
     }
 
-    public List<Class> getPageBeanClasses()
-    {
-        throw new IllegalStateException("not implemented");
-    }
-
     private String ensureValidViewIds(String result)
     {
         if(!result.startsWith("/"))

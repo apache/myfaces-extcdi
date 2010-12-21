@@ -117,16 +117,6 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return beanDefinition;
     }
 
-    public final List<Class> getPageBeanClasses()
-    {
-        List<Class> result = new ArrayList<Class>();
-        for(PageBeanConfigEntry pageBeanConfigEntry : getPageBeanDefinitions())
-        {
-            result.add(pageBeanConfigEntry.getBeanClass());
-        }
-        return result;
-    }
-
     public void invokeInitViewMethods()
     {
         for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
