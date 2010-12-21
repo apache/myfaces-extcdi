@@ -18,8 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
@@ -32,7 +33,7 @@ import java.util.Set;
  * @author Gerhard Petracek
  */
 @Typed()
-public class InjectableConversation implements Conversation
+public class InjectableConversation implements EditableConversation
 {
     private static final long serialVersionUID = 7754789230388003028L;
 
@@ -55,7 +56,32 @@ public class InjectableConversation implements Conversation
         findConversation().restart();
     }
 
-    protected Conversation findConversation()
+    public boolean isActive()
+    {
+        return findConversation().isActive();
+    }
+
+    public boolean getActiveState()
+    {
+        return findConversation().getActiveState();
+    }
+
+    public void deactivate()
+    {
+        findConversation().deactivate();
+    }
+
+    public <T> void addBean(BeanEntry<T> beanInstance)
+    {
+        findConversation().addBean(beanInstance);
+    }
+
+    public <T> T getBean(Class<T> key)
+    {
+        return findConversation().getBean(key);
+    }
+
+    protected EditableConversation findConversation()
     {
         Class conversationGroup = ConversationUtils.getConversationGroup(this.bean);
 

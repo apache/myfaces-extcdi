@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
@@ -30,6 +29,9 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Produces;
@@ -78,9 +80,16 @@ final class InstanceProducer
     @Produces
     @Named(CURRENT_WINDOW_CONTEXT_BEAN_NAME)
     @RequestScoped
-    protected WindowContext currentWindowContext(WindowContextManager windowContextManager)
+    protected EditableWindowContext currentWindowContext(WindowContextManager windowContextManager)
     {
-        return windowContextManager.getCurrentWindowContext();
+        WindowContext windowContext = windowContextManager.getCurrentWindowContext();
+
+        if(windowContext instanceof EditableWindowContext)
+        {
+            return (EditableWindowContext)windowContext;
+        }
+
+        throw windowContextNotEditableException(windowContext);
     }
 
     @Produces
@@ -117,7 +126,7 @@ final class InstanceProducer
 
     @Produces
     @Dependent
-    protected Conversation currentConversation(InjectionPoint injectionPoint,
+    protected EditableConversation currentConversation(InjectionPoint injectionPoint,
                                                WindowContextManager windowContextManager)
     {
         //for @Inject Conversation conversation;
