@@ -50,7 +50,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
     private List<PageBeanConfigEntry> beanDefinition;
 
     //security
-    private final Class<? extends AccessDecisionVoter>[] accessDecisionVoters;
+    private final List<Class<? extends AccessDecisionVoter>> accessDecisionVoters;
     private final Class<? extends ViewConfig> customErrorView;
 
     private Page.ViewParameter viewParameter;
@@ -65,7 +65,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
                            Class<? extends ViewConfig> viewDefinitionClass,
                            Page.NavigationMode navigationMode,
                            Page.ViewParameter viewParameter,
-                           Class<? extends AccessDecisionVoter>[] accessDecisionVoters,
+                           List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
                            Class<? extends ViewConfig> errorView,
                            List<Annotation> metaDataList)
     {
@@ -182,9 +182,9 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         }
     }
 
-    public Class<? extends AccessDecisionVoter>[] getAccessDecisionVoters()
+    public List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters()
     {
-        return accessDecisionVoters;
+        return Collections.unmodifiableList(this.accessDecisionVoters);
     }
 
     public Class<? extends ViewConfig> getErrorView()

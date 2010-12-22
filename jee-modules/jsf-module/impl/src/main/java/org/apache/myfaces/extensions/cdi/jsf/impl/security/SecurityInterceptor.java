@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import javax.enterprise.inject.spi.BeanManager;
 import java.lang.reflect.Method;
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author Gerhard Petracek
@@ -53,7 +54,7 @@ public class SecurityInterceptor implements Serializable
 
         Class<? extends AccessDecisionVoter>[] voterClasses = secured.value();
 
-        invokeVoters(invocationContext, this.beanManager, voterClasses, secured.errorView());
+        invokeVoters(invocationContext, this.beanManager, Arrays.asList(voterClasses), secured.errorView());
 
         return invocationContext.proceed();
     }

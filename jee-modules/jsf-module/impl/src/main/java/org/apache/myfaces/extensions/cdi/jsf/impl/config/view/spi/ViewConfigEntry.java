@@ -42,7 +42,7 @@ public interface ViewConfigEntry
 
     List<Annotation> getMetaData();
 
-    Class<? extends AccessDecisionVoter>[] getAccessDecisionVoters();
+    List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters();
 
     void addPageBean(Class pageBeanClass);
 

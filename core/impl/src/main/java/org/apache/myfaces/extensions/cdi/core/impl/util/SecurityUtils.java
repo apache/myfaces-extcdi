@@ -26,6 +26,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCr
 
 import javax.interceptor.InvocationContext;
 import javax.enterprise.inject.spi.BeanManager;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,7 +36,7 @@ public class SecurityUtils
 {
     public static void invokeVoters(InvocationContext invocationContext,
                                     BeanManager beanManager,
-                                    Class<? extends AccessDecisionVoter>[] accessDecisionVoters,
+                                    List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
                                     Class<? extends ViewConfig> errorView)
     {
         if(accessDecisionVoters == null)

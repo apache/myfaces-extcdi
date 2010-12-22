@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
@@ -138,9 +139,9 @@ public class ViewConfigTest
         assertEquals(registrationConfigEntry.getNavigationMode(), Page.NavigationMode.DEFAULT);
         assertEquals(orderConfigEntry.getNavigationMode(), Page.NavigationMode.REDIRECT);
 
-        assertTrue(registrationConfigEntry.getAccessDecisionVoters().length == 0);
-        assertEquals(orderConfigEntry.getAccessDecisionVoters().length, 1);
-        assertEquals(orderConfigEntry.getAccessDecisionVoters()[0], TestAccessDecisionVoter1.class);
+        assertTrue(registrationConfigEntry.getAccessDecisionVoters().size() == 0);
+        assertEquals(orderConfigEntry.getAccessDecisionVoters().size(), 1);
+        assertEquals(orderConfigEntry.getAccessDecisionVoters().iterator().next(), TestAccessDecisionVoter1.class);
     }
 
     @Test
@@ -190,13 +191,25 @@ public class ViewConfigTest
         ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
                 ViewConfigWithAccessDecisionVoters.Page1.class);
 
-        assertEquals(viewConfigEntry.getAccessDecisionVoters().length, 1);
+        assertEquals(viewConfigEntry.getAccessDecisionVoters().size(), 1);
 
         viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithAccessDecisionVoters.Page2.class);
 
-        assertEquals(viewConfigEntry.getAccessDecisionVoters().length, 2);
-        assertTrue(viewConfigEntry.getAccessDecisionVoters()[0].equals(TestAccessDecisionVoter2.class));
-        assertTrue(viewConfigEntry.getAccessDecisionVoters()[1].equals(TestAccessDecisionVoter1.class));
+        assertEquals(viewConfigEntry.getAccessDecisionVoters().size(), 2);
+
+        boolean voter2 = false;
+        for(Class<? extends AccessDecisionVoter> accessDecisionVoter : viewConfigEntry.getAccessDecisionVoters())
+        {
+            if(!voter2)
+            {
+                assertTrue(accessDecisionVoter.equals(TestAccessDecisionVoter2.class));
+                voter2 = true;
+            }
+            else
+            {
+                assertTrue(accessDecisionVoter.equals(TestAccessDecisionVoter1.class));
+            }
+        }
     }
 
     @Test

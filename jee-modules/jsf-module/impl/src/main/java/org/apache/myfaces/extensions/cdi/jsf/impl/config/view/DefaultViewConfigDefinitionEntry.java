@@ -258,10 +258,9 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
         return result.substring(0, result.length() - 1);
     }
 
-    public Class<? extends AccessDecisionVoter>[] getAccessDecisionVoters()
+    public List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters()
     {
-        //noinspection unchecked
-        return this.foundVoters.toArray(new Class[this.foundVoters.size()]);
+        return Collections.unmodifiableList(this.foundVoters);
     }
 
     public void addPageBean(Class pageBeanClass)
