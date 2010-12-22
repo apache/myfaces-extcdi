@@ -41,232 +41,290 @@ public class DefaultLogger implements Logger
     private transient java.util.logging.Logger wrapped;
 
     private String loggerName = null;
+    private String resourceBundleName; //TODO add support at the injection point
+    private boolean anonymous = false;
 
     protected DefaultLogger()
     {
+        this.anonymous = true;
     }
 
     protected DefaultLogger(String loggerName)
     {
         this.loggerName = loggerName;
-        this.wrapped = java.util.logging.Logger.getLogger(this.loggerName);
+    }
+
+    protected DefaultLogger(String loggerName, String resourceBundleName, boolean anonymous)
+    {
+        this.loggerName = loggerName;
+        this.resourceBundleName = resourceBundleName;
+        this.anonymous = anonymous;
     }
 
     public java.util.logging.Logger getWrapped()
     {
+        if(this.wrapped == null)
+        {
+            lazyInitLogger();
+        }
         return this.wrapped;
     }
 
     public ResourceBundle getResourceBundle()
     {
-        return this.wrapped.getResourceBundle();
+        return getWrapped().getResourceBundle();
     }
 
     public String getResourceBundleName()
     {
-        return this.wrapped.getResourceBundleName();
+        return getWrapped().getResourceBundleName();
     }
 
     public void setFilter(Filter filter) throws SecurityException
     {
-        this.wrapped.setFilter(filter);
+        getWrapped().setFilter(filter);
     }
 
     public Filter getFilter()
     {
-        return this.wrapped.getFilter();
+        return getWrapped().getFilter();
     }
 
     public void log(LogRecord logRecord)
     {
-        this.wrapped.log(logRecord);
+        getWrapped().log(logRecord);
     }
 
     public void log(Level level, String s)
     {
-        this.wrapped.logp(level, this.loggerName, getMethodName(), s);
+        getWrapped().logp(level, this.loggerName, getMethodName(), s);
     }
 
     public void log(Level level, String s, Object o)
     {
-        this.wrapped.logp(level, loggerName, getMethodName(), s, o);
+        getWrapped().logp(level, loggerName, getMethodName(), s, o);
     }
 
     public void log(Level level, String s, Object[] objects)
     {
-        this.wrapped.logp(level, this.loggerName, getMethodName(), s, objects);
+        getWrapped().logp(level, this.loggerName, getMethodName(), s, objects);
     }
 
     public void log(Level level, String s, Throwable throwable)
     {
-        this.wrapped.logp(level, this.loggerName, getMethodName(), s, throwable);
+        getWrapped().logp(level, this.loggerName, getMethodName(), s, throwable);
     }
 
     public void logp(Level level, String s, String s1, String s2)
     {
-        this.wrapped.logp(level, s, s1, s2);
+        getWrapped().logp(level, s, s1, s2);
     }
 
     public void logp(Level level, String s, String s1, String s2, Object o)
     {
-        this.wrapped.logp(level, s, s1, s2, o);
+        getWrapped().logp(level, s, s1, s2, o);
     }
 
     public void logp(Level level, String s, String s1, String s2, Object[] objects)
     {
-        this.wrapped.logp(level, s, s1, s2, objects);
+        getWrapped().logp(level, s, s1, s2, objects);
     }
 
     public void logp(Level level, String s, String s1, String s2, Throwable throwable)
     {
-        this.wrapped.logp(level, s, s1, s2, throwable);
+        getWrapped().logp(level, s, s1, s2, throwable);
     }
 
     public void logrb(Level level, String s, String s1, String s2, String s3)
     {
-        this.wrapped.logrb(level, s, s1, s2, s3);
+        getWrapped().logrb(level, s, s1, s2, s3);
     }
 
     public void logrb(Level level, String s, String s1, String s2, String s3, Object o)
     {
-        this.wrapped.logrb(level, s, s1, s2, s3, o);
+        getWrapped().logrb(level, s, s1, s2, s3, o);
     }
 
     public void logrb(Level level, String s, String s1, String s2, String s3, Object[] objects)
     {
-        this.wrapped.logrb(level, s, s1, s2, s3, objects);
+        getWrapped().logrb(level, s, s1, s2, s3, objects);
     }
 
     public void logrb(Level level, String s, String s1, String s2, String s3, Throwable throwable)
     {
-        this.wrapped.logrb(level, s, s1, s2, s3, throwable);
+        getWrapped().logrb(level, s, s1, s2, s3, throwable);
     }
 
     public void entering(String s, String s1)
     {
-        this.wrapped.entering(s, s1);
+        getWrapped().entering(s, s1);
     }
 
     public void entering(String s, String s1, Object o)
     {
-        this.wrapped.entering(s, s1, o);
+        getWrapped().entering(s, s1, o);
     }
 
     public void entering(String s, String s1, Object[] objects)
     {
-        this.wrapped.entering(s, s1, objects);
+        getWrapped().entering(s, s1, objects);
     }
 
     public void exiting(String s, String s1)
     {
-        this.wrapped.exiting(s, s1);
+        getWrapped().exiting(s, s1);
     }
 
     public void exiting(String s, String s1, Object o)
     {
-        this.wrapped.exiting(s, s1, o);
+        getWrapped().exiting(s, s1, o);
     }
 
     public void throwing(String s, String s1, Throwable throwable)
     {
-        this.wrapped.throwing(s, s1, throwable);
+        getWrapped().throwing(s, s1, throwable);
     }
 
     public void severe(String s)
     {
-        this.wrapped.logp(Level.SEVERE, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.SEVERE, loggerName, getMethodName(), s);
     }
 
     public void warning(String s)
     {
-        this.wrapped.logp(Level.WARNING, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.WARNING, loggerName, getMethodName(), s);
     }
 
     public void info(String s)
     {
-        this.wrapped.logp(Level.INFO, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.INFO, loggerName, getMethodName(), s);
     }
 
     public void config(String s)
     {
-        this.wrapped.config(s);
+        getWrapped().config(s);
     }
 
     public void fine(String s)
     {
-        this.wrapped.logp(Level.FINE, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.FINE, loggerName, getMethodName(), s);
     }
 
     public void finer(String s)
     {
-        this.wrapped.logp(Level.FINER, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.FINER, loggerName, getMethodName(), s);
     }
 
     public void finest(String s)
     {
-        this.wrapped.logp(Level.FINEST, loggerName, getMethodName(), s);
+        getWrapped().logp(Level.FINEST, loggerName, getMethodName(), s);
     }
 
     public void setLevel(Level level) throws SecurityException
     {
-        this.wrapped.setLevel(level);
+        getWrapped().setLevel(level);
     }
 
     public Level getLevel()
     {
-        return this.wrapped.getLevel();
+        return getWrapped().getLevel();
     }
 
     public boolean isLoggable(Level level)
     {
-        return this.wrapped.isLoggable(level);
+        return getWrapped().isLoggable(level);
     }
 
     public String getName()
     {
-        return this.wrapped.getName();
+        return getWrapped().getName();
     }
 
     public void addHandler(Handler handler) throws SecurityException
     {
-        this.wrapped.addHandler(handler);
+        getWrapped().addHandler(handler);
     }
 
     public void removeHandler(Handler handler) throws SecurityException
     {
-        this.wrapped.removeHandler(handler);
+        getWrapped().removeHandler(handler);
     }
 
     public Handler[] getHandlers()
     {
-        return this.wrapped.getHandlers();
+        return getWrapped().getHandlers();
     }
 
     public void setUseParentHandlers(boolean b)
     {
-        this.wrapped.setUseParentHandlers(b);
+        getWrapped().setUseParentHandlers(b);
     }
 
     public boolean getUseParentHandlers()
     {
-        return this.wrapped.getUseParentHandlers();
+        return getWrapped().getUseParentHandlers();
     }
 
     public java.util.logging.Logger getParent()
     {
-        return this.wrapped.getParent();
+        return getWrapped().getParent();
     }
 
     public void setParent(java.util.logging.Logger logger)
     {
-        this.wrapped.setParent(logger);
+        getWrapped().setParent(logger);
+    }
+
+    public Logger getLogger(String s)
+    {
+        return new DefaultLogger(s);
+    }
+
+    public Logger getLogger(String s, String s1)
+    {
+        return new DefaultLogger(s, s1, false);
+    }
+
+    public Logger getAnonymousLogger()
+    {
+        return new DefaultLogger();
+    }
+
+    public Logger getAnonymousLogger(String s)
+    {
+        return new DefaultLogger(null, s, true);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
     {
         in.defaultReadObject();
-        this.wrapped = java.util.logging.Logger.getLogger(this.loggerName);
+    }
+
+    private void lazyInitLogger()
+    {
+        if(this.anonymous)
+        {
+            if(this.resourceBundleName == null)
+            {
+                this.wrapped = java.util.logging.Logger.getAnonymousLogger();
+            }
+            else
+            {
+                this.wrapped = java.util.logging.Logger.getAnonymousLogger(this.resourceBundleName);
+            }
+        }
+        else
+        {
+            if(this.resourceBundleName == null)
+            {
+                this.wrapped = java.util.logging.Logger.getLogger(this.loggerName);
+            }
+            else
+            {
+                this.wrapped = java.util.logging.Logger.getLogger(this.loggerName, this.resourceBundleName);
+            }
+        }
     }
 
     private String getMethodName()

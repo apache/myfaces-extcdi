@@ -119,4 +119,16 @@ public interface Logger extends Serializable
      * @return the wrapped logger
      */
     java.util.logging.Logger getWrapped();
+
+    /*
+     * alternative to the static methods - usually they aren't needed - maybe for constructor injection
+     */
+
+    Logger getLogger(String s);
+
+    Logger getLogger(String s, String s1);
+
+    Logger getAnonymousLogger();
+
+    Logger getAnonymousLogger(String s);
 }
