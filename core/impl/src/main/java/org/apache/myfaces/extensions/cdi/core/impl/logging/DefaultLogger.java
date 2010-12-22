@@ -112,21 +112,37 @@ public class DefaultLogger implements Logger
 
     public void log(Level level, String s)
     {
+        if(!isLoggable(level))
+        {
+            return;
+        }
         getWrapped().logp(level, this.loggerName, getMethodName(), s);
     }
 
     public void log(Level level, String s, Object o)
     {
-        getWrapped().logp(level, loggerName, getMethodName(), s, o);
+        if(!isLoggable(level))
+        {
+            return;
+        }
+        getWrapped().logp(level, this.loggerName, getMethodName(), s, o);
     }
 
     public void log(Level level, String s, Object[] objects)
     {
+        if(!isLoggable(level))
+        {
+            return;
+        }
         getWrapped().logp(level, this.loggerName, getMethodName(), s, objects);
     }
 
     public void log(Level level, String s, Throwable throwable)
     {
+        if(!isLoggable(level))
+        {
+            return;
+        }
         getWrapped().logp(level, this.loggerName, getMethodName(), s, throwable);
     }
 
@@ -202,17 +218,29 @@ public class DefaultLogger implements Logger
 
     public void severe(String s)
     {
-        getWrapped().logp(Level.SEVERE, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.SEVERE))
+        {
+            return;
+        }
+        getWrapped().logp(Level.SEVERE, this.loggerName, getMethodName(), s);
     }
 
     public void warning(String s)
     {
-        getWrapped().logp(Level.WARNING, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.WARNING))
+        {
+            return;
+        }
+        getWrapped().logp(Level.WARNING, this.loggerName, getMethodName(), s);
     }
 
     public void info(String s)
     {
-        getWrapped().logp(Level.INFO, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.INFO))
+        {
+            return;
+        }
+        getWrapped().logp(Level.INFO, this.loggerName, getMethodName(), s);
     }
 
     public void config(String s)
@@ -222,17 +250,29 @@ public class DefaultLogger implements Logger
 
     public void fine(String s)
     {
-        getWrapped().logp(Level.FINE, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.FINE))
+        {
+            return;
+        }
+        getWrapped().logp(Level.FINE, this.loggerName, getMethodName(), s);
     }
 
     public void finer(String s)
     {
-        getWrapped().logp(Level.FINER, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.FINER))
+        {
+            return;
+        }
+        getWrapped().logp(Level.FINER, this.loggerName, getMethodName(), s);
     }
 
     public void finest(String s)
     {
-        getWrapped().logp(Level.FINEST, loggerName, getMethodName(), s);
+        if(!isLoggable(Level.FINEST))
+        {
+            return;
+        }
+        getWrapped().logp(Level.FINEST, this.loggerName, getMethodName(), s);
     }
 
     public void setLevel(Level level) throws SecurityException
@@ -353,11 +393,13 @@ public class DefaultLogger implements Logger
         @SuppressWarnings({"ThrowableInstanceNeverThrown"})
         RuntimeException runtimeException = new RuntimeException();
 
-        for(StackTraceElement element : runtimeException.getStackTrace())
+        StackTraceElement[] stackTrace = runtimeException.getStackTrace();
+
+        for(int i = 2; i < stackTrace.length - 1; i++)
         {
-            if(!element.getClassName().equals(getClass().getName()))
+            if(!stackTrace[i].getClassName().equals(getClass().getName()))
             {
-                return element.getMethodName();
+                return stackTrace[i].getMethodName();
             }
         }
 

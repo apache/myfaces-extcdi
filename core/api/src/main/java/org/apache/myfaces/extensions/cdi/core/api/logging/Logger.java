@@ -26,6 +26,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
+ * Meta-logger for injecting a serializable logger.
+ *
  * @author Gerhard Petracek
  */
 public interface Logger extends Serializable
