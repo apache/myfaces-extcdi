@@ -27,7 +27,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Wind
  *
  * @author Jakob Korherr
  */
-public class DefaultWindowContextConfig implements WindowContextConfig, CodiConfig
+public class DefaultWindowContextConfig extends WindowContextConfig
 {
 
     public boolean isUrlParameterSupported()
