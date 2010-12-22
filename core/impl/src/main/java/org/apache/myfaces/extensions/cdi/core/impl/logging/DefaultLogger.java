@@ -33,7 +33,7 @@ import java.util.logging.LogRecord;
  * @author Gerhard Petracek
  * @author Werner Punz
  */
-@Typed
+@Typed()
 public class DefaultLogger implements Logger
 {
     private static final long serialVersionUID = 6112073723716267680L;
@@ -59,6 +59,21 @@ public class DefaultLogger implements Logger
         this.loggerName = loggerName;
         this.resourceBundleName = resourceBundleName;
         this.anonymous = anonymous;
+
+        if("".equals(this.loggerName))
+        {
+            this.loggerName = null;
+        }
+
+        if("".equals(this.resourceBundleName))
+        {
+            this.resourceBundleName = null;
+        }
+    }
+
+    boolean isValid()
+    {
+        return !(!this.anonymous && this.loggerName == null && this.resourceBundleName == null);
     }
 
     public java.util.logging.Logger getWrapped()

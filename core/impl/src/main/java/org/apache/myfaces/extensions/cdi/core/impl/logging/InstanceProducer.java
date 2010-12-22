@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.logging;
 
-import org.apache.myfaces.extensions.cdi.core.api.Name;
+import org.apache.myfaces.extensions.cdi.core.api.logging.LoggerDetails;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 import javax.enterprise.inject.Produces;
@@ -30,6 +30,8 @@ import javax.enterprise.inject.spi.InjectionPoint;
  */
 final class InstanceProducer
 {
+    private java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InstanceProducer.class.getName());
+
     @Produces
     public Logger getLogger(InjectionPoint injectionPoint)
     {
@@ -37,11 +39,21 @@ final class InstanceProducer
     }
 
     @Produces
-    @Name("")
-    public Logger getLoggerWithName(InjectionPoint injectionPoint)
+    @LoggerDetails
+    public Logger getLoggerForDetails(InjectionPoint injectionPoint)
     {
-        Name nameQualifier = injectionPoint.getAnnotated().getAnnotation(Name.class);
+        LoggerDetails loggerDetails = injectionPoint.getAnnotated().getAnnotation(LoggerDetails.class);
 
-        return new DefaultLogger(nameQualifier.value());
+        DefaultLogger logger = new DefaultLogger(loggerDetails.name(),
+                                                 loggerDetails.resourceBundleName(),
+                                                 loggerDetails.anonymous());
+
+        if(!logger.isValid())
+        {
+            this.logger.warning("an injection point in " + injectionPoint.getBean().getBeanClass().getName() +
+                                " uses an empty qualifier of type " + LoggerDetails.class.getName() +
+                                " - please remove it!");
+        }
+        return logger;
     }
 }
