@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.examples.codi.jsf12.conversation.grouped;
 
+import org.apache.myfaces.extensions.cdi.core.api.Name;
+import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
@@ -49,10 +51,19 @@ public class ConversationDemoBean1 implements Serializable
     @Inject
     private Conversation conversation;
 
+    @Inject
+    private Logger logger;
+
+    @Inject
+    @Name("l1")
+    private Logger l1;
+
     @PostConstruct
     public void init()
     {
         this.createdAt = new Date();
+        this.logger.info(getClass().getName() + " created at " + this.createdAt);
+        this.l1.info(getClass().getName() + " created at " + this.createdAt);
     }
 
     public String next()
