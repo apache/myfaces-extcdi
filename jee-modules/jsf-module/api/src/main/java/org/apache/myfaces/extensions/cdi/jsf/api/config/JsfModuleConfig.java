@@ -33,6 +33,10 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
 {
     private static final long serialVersionUID = 595393008764879504L;
 
+    protected JsfModuleConfig()
+    {
+    }
+
     /**
      * If the initial redirect is enabled, a redirect will be performed for adding the current window-id to the url.
      *

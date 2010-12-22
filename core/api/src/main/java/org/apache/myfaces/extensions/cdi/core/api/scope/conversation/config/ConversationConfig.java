@@ -31,6 +31,10 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
 {
     private static final long serialVersionUID = -1637900766842152725L;
 
+    protected ConversationConfig()
+    {
+    }
+
     /**
      * Timeout for {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} beans,
      * which will be used if the conversation doesn't get closed manually.

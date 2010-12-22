@@ -31,6 +31,10 @@ public class WindowContextConfig extends AbstractAttributeAware implements CodiC
 {
     private static final long serialVersionUID = 8159770064249255686L;
 
+    protected WindowContextConfig()
+    {
+    }
+
     /**
      * Specifies if it is allowed to use URL params for forwarding the current window-id.
      * (deactivate it e.g. for higher security - in this case it's required to use a window id provided by a
