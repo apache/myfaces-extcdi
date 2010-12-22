@@ -34,6 +34,6 @@ public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
 
     public boolean isAdvancedQualifierRequiredForDependencyInjection()
     {
-        return false;
+        return true;
     }
 }

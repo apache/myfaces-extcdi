@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
@@ -46,8 +45,7 @@ public class CdiAwareBeanValidationProducer
     @Advanced
     @Named(VALIDATOR_FACTORY)
     public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver,
-            CodiCoreConfig codiCoreConfig)
+            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
         ValidatorFactory validatorFactory = validatorFactoryResolver.resolve();
         if (validatorFactory == null)
@@ -55,39 +53,36 @@ public class CdiAwareBeanValidationProducer
             validatorFactory = ValidatorFactoryStorage.getOrCreateValidatorFactory();
         }
 
-        return new CdiAwareValidatorFactory(validatorFactory, codiCoreConfig);
+        return new CdiAwareValidatorFactory(validatorFactory);
     }
 
     @Produces
     @Dependent
     @Advanced
     public Validator createValidatorForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver,
-            CodiCoreConfig codiCoreConfig)
+            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
         return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver, codiCoreConfig).getValidator();
+                validatorFactoryResolver).getValidator();
     }
 
     @Produces
     @Dependent
     @Advanced
     public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver,
-            CodiCoreConfig codiCoreConfig)
+            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
         return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver, codiCoreConfig).getConstraintValidatorFactory();
+                validatorFactoryResolver).getConstraintValidatorFactory();
     }
 
     @Produces
     @Dependent
     @Advanced
     public MessageInterpolator createMessageInterpolator(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver,
-            CodiCoreConfig codiCoreConfig)
+            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
         return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver, codiCoreConfig).getMessageInterpolator();
+                validatorFactoryResolver).getMessageInterpolator();
     }
 }

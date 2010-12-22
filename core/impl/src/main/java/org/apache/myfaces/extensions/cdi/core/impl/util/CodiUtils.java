@@ -229,11 +229,6 @@ public class CodiUtils
     @SuppressWarnings({"unchecked"})
     private static <T> T tryToInjectFields(T instance)
     {
-        if(instance == null)
-        {
-            return null;
-        }
-
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
         T foundBean = (T)getOrCreateScopedInstanceOfBeanByClass(beanManager, instance.getClass(), true);
