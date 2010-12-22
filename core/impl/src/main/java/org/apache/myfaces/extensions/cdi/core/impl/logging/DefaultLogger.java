@@ -355,7 +355,7 @@ public class DefaultLogger implements Logger
 
         for(StackTraceElement element : runtimeException.getStackTrace())
         {
-            if(!element.toString().contains(getClass().getName()))
+            if(!element.getClassName().equals(getClass().getName()))
             {
                 return element.getMethodName();
             }
