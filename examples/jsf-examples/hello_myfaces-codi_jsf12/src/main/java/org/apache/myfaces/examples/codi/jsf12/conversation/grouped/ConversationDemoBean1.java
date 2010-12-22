@@ -55,7 +55,7 @@ public class ConversationDemoBean1 implements Serializable
     private Logger logger1;
 
     @Inject
-    @LoggerDetails
+    @LoggerDetails(name = "logger2")
     private Logger logger2;
 
     @PostConstruct
