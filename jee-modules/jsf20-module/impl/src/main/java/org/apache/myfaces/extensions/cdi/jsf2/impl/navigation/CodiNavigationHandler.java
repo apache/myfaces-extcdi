@@ -49,33 +49,42 @@ import javax.faces.context.ExternalContext;
 public class CodiNavigationHandler extends ConfigurableNavigationHandler implements Deactivatable
 {
     private final NavigationHandler wrapped;
+
+    private final NavigationHandler originalNavigationHandler;
+
     private final boolean deactivated;
+
     private final boolean addViewConfigsAsNavigationCase;
 
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
-        this.wrapped = navigationHandler;
         this.deactivated = !isActivated();
-
         if(!this.deactivated)
         {
+            ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
+                    new ViewConfigAwareNavigationHandler(navigationHandler, true);
+
+            this.wrapped = new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
             this.addViewConfigsAsNavigationCase = isAddViewConfigsAsNavigationCaseActivated();
         }
         else
         {
+            this.wrapped = navigationHandler;
             this.addViewConfigsAsNavigationCase = false;
         }
+
+        this.originalNavigationHandler = navigationHandler;
     }
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(this.deactivated || isUnhandledExceptionQueued(context))
+        if(isUnhandledExceptionQueued(context) || context.getResponseComplete() /*see EXTCDI-92*/)
         {
-            this.wrapped.handleNavigation(context, fromAction, outcome);
+            this.originalNavigationHandler.handleNavigation(context, fromAction, outcome);
         }
         else
         {
-            getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
+            this.wrapped.handleNavigation(context, fromAction, outcome);
         }
     }
 
@@ -83,14 +92,6 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
     {
         return context.getExceptionHandler().getUnhandledExceptionQueuedEvents() != null &&
                 context.getExceptionHandler().getUnhandledExceptionQueuedEvents().iterator().hasNext();
-    }
-
-    private NavigationHandler getWrappedNavigationHandler()
-    {
-        ViewConfigAwareNavigationHandler viewConfigAwareNavigationHandler =
-                new ViewConfigAwareNavigationHandler(this.wrapped, true);
-
-        return new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
     }
 
     public NavigationCase getNavigationCase(FacesContext context, String action, String outcome)
