@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 
 import javax.enterprise.event.Observes;
@@ -34,7 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation.isClassActivated;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.tryToInjectDependencies;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 /**
  * The PhaseListenerExtension picks up all {@link JsfPhaseListener} annotated
@@ -87,6 +89,10 @@ public class PhaseListenerExtension implements Extension
         ClassLoader classLoader = getClassLoader();
         List<Class<? extends PhaseListener>> foundPhaseListeners = phaseListeners.get(classLoader);
 
+        boolean advancedQualifierRequiredForDependencyInjection =
+                CodiUtils.getContextualReferenceByClass(CodiCoreConfig.class)
+                        .isAdvancedQualifierRequiredForDependencyInjection();
+
         if(foundPhaseListeners != null && ! foundPhaseListeners.isEmpty())
         {
             List<PhaseListener> result = new ArrayList<PhaseListener>(foundPhaseListeners.size());
@@ -94,7 +100,7 @@ public class PhaseListenerExtension implements Extension
             for(Class<? extends PhaseListener> phaseListenerClass : foundPhaseListeners)
             {
                 PhaseListener phaseListener = createPhaseListenerInstance(phaseListenerClass);
-                result.add(tryToInjectDependencies(phaseListener));
+                result.add(injectFields(phaseListener, advancedQualifierRequiredForDependencyInjection));
             }
 
             foundPhaseListeners.clear();

@@ -18,7 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.tryToInjectDependencies;
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;
@@ -35,9 +36,13 @@ class InjectionAwareApplicationWrapper extends ApplicationWrapper
 {
     private Application wrapped;
 
-    protected InjectionAwareApplicationWrapper(Application wrapped)
+    private boolean advancedQualifierRequiredForDependencyInjection;
+
+    protected InjectionAwareApplicationWrapper(Application wrapped, CodiCoreConfig codiCoreConfig)
     {
         this.wrapped = wrapped;
+        this.advancedQualifierRequiredForDependencyInjection =
+                codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection();
     }
 
     public Application getWrapped()
@@ -48,18 +53,21 @@ class InjectionAwareApplicationWrapper extends ApplicationWrapper
     @Override
     public Converter createConverter(String converterId)
     {
-        return tryToInjectDependencies(this.wrapped.createConverter(converterId));
+        return injectFields(this.wrapped.createConverter(converterId),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     @Override
     public Converter createConverter(Class targetClass)
     {
-        return tryToInjectDependencies(this.wrapped.createConverter(targetClass));
+        return injectFields(this.wrapped.createConverter(targetClass),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     @Override
     public Validator createValidator(String validatorId) throws FacesException
     {
-        return tryToInjectDependencies(this.wrapped.createValidator(validatorId));
+        return injectFields(this.wrapped.createValidator(validatorId),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 }

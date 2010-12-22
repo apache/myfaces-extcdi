@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.tryToInjectDependencies;
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 import javax.faces.application.Application;
 import javax.faces.application.ViewHandler;
@@ -54,24 +56,31 @@ class InjectionAwareApplicationWrapper extends Application
 {
     private Application wrapped;
 
-    protected InjectionAwareApplicationWrapper(Application wrapped)
+    private boolean advancedQualifierRequiredForDependencyInjection;
+
+    protected InjectionAwareApplicationWrapper(Application wrapped, CodiCoreConfig codiCoreConfig)
     {
         this.wrapped = wrapped;
+        this.advancedQualifierRequiredForDependencyInjection =
+                codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection();
     }
 
     public Converter createConverter(String converterId)
     {
-        return tryToInjectDependencies(this.wrapped.createConverter(converterId));
+        return injectFields(this.wrapped.createConverter(converterId),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     public Converter createConverter(Class targetClass)
     {
-        return tryToInjectDependencies(this.wrapped.createConverter(targetClass));
+        return injectFields(this.wrapped.createConverter(targetClass),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     public Validator createValidator(String validatorId) throws FacesException
     {
-        return tryToInjectDependencies(this.wrapped.createValidator(validatorId));
+        return injectFields(this.wrapped.createValidator(validatorId),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     /*

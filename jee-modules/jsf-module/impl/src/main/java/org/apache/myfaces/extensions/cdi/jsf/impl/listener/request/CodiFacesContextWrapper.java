@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
 import javax.el.ELContext;
@@ -50,6 +52,8 @@ class CodiFacesContextWrapper extends FacesContext
 
     private BeanManager beanManager;
 
+    private CodiCoreConfig codiCoreConfig;
+
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
@@ -68,6 +72,8 @@ class CodiFacesContextWrapper extends FacesContext
     {
         this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
+        this.codiCoreConfig = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(this.beanManager, CodiCoreConfig.class);
+
         initBroadcaster();
 
         broadcastBeforeFacesRequestEvent();
@@ -75,7 +81,7 @@ class CodiFacesContextWrapper extends FacesContext
 
     public Application getApplication()
     {
-        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication());
+        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(), this.codiCoreConfig);
     }
 
     private void broadcastBeforeFacesRequestEvent()

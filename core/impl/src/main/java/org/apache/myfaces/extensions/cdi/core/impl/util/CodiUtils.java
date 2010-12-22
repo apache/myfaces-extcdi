@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
@@ -192,16 +193,27 @@ public class CodiUtils
         return getContextualReferenceByClass(ProjectStage.class);
     }
 
-    public static <T> T tryToInjectDependencies(T instance)
+    public static <T> T injectFields(T instance)
+    {
+        CodiCoreConfig codiCoreConfig = getContextualReferenceByClass(CodiCoreConfig.class);
+
+        return injectFields(instance, codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection());
+    }
+
+    public static <T> T injectFields(T instance, boolean requiresAdvancedQualifier)
     {
         if(instance == null)
         {
             return null;
         }
 
-        if(instance.getClass().isAnnotationPresent(Advanced.class))
+        if(requiresAdvancedQualifier && instance.getClass().isAnnotationPresent(Advanced.class))
         {
-            injectFields(instance);
+            tryToInjectFields(instance);
+        }
+        else if(!requiresAdvancedQualifier)
+        {
+            tryToInjectFields(instance);
         }
         return instance;
     }
@@ -215,7 +227,7 @@ public class CodiUtils
      * a manually injected instance (or null if the given instance is null)
      */
     @SuppressWarnings({"unchecked"})
-    public static <T> T injectFields(T instance)
+    private static <T> T tryToInjectFields(T instance)
     {
         if(instance == null)
         {

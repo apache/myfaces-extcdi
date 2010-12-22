@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 import javax.enterprise.inject.Typed;
@@ -37,10 +39,13 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
 {
     private ValidatorFactory wrappedValidatorFactory;
     private boolean customContextUsed;
+    private boolean advancedQualifierRequiredForDependencyInjection;
 
-    protected CdiAwareValidatorFactory(ValidatorFactory wrappedValidatorFactory)
+    protected CdiAwareValidatorFactory(ValidatorFactory wrappedValidatorFactory, CodiCoreConfig codiCoreConfig)
     {
         this.wrappedValidatorFactory = wrappedValidatorFactory;
+        this.advancedQualifierRequiredForDependencyInjection =
+                codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection();
     }
 
     public Validator getValidator()
@@ -77,7 +82,7 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
             {
                 T validator = wrappedValidatorFactory.getConstraintValidatorFactory().getInstance(targetClass);
 
-                return injectFields(validator);
+                return injectFields(validator, advancedQualifierRequiredForDependencyInjection);
             }
         };
     }
