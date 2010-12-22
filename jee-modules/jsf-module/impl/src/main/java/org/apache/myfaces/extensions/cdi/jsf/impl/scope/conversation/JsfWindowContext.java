@@ -166,7 +166,7 @@ public class JsfWindowContext implements EditableWindowContext
                 return false;
             }
         }
-        return conversation.isActive();
+        return conversation.getActiveState();
     }
 
     public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
