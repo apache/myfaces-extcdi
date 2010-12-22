@@ -16,18 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.impl.config;
+package org.apache.myfaces.examples.codi.jsf12.config;
 
-import javax.enterprise.inject.Specializes;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
+
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Specializes;
 
 /**
+ * You also have to activate
+ * {@link org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.ClientSideWindowHandler}
+ * in beans.xml
+ * 
  * @author Gerhard Petracek
  */
-@Specializes
 @ApplicationScoped
-public class DefaultWindowContextConfig  extends
-        org.apache.myfaces.extensions.cdi.jsf.impl.config.DefaultWindowContextConfig
+@Specializes
+public class Jsf12ModuleConfigForClientSideWindowHandler extends JsfModuleConfig
 {
-    private static final long serialVersionUID = 2433934080486339139L;
+    private static final long serialVersionUID = -4094949435815088068L;
+
+    @Override
+    public boolean isInitialRedirectEnabled()
+    {
+        return false;
+    }
 }

@@ -18,36 +18,61 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
-import java.io.Serializable;
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ConversationConfig extends CodiConfig, Serializable
+@ApplicationScoped
+public class ConversationConfig extends AbstractAttributeAware implements CodiConfig
 {
+    private static final long serialVersionUID = -1637900766842152725L;
+
     /**
      * Timeout for {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped} beans,
      * which will be used if the conversation doesn't get closed manually.
      * 
      * @return timeout in minutes
      */
-    int getConversationTimeoutInMinutes();
+    public int getConversationTimeoutInMinutes()
+    {
+        return 30;
+    }
 
     /*
      * event config
      */
 
-    boolean isScopeBeanEventEnabled();
+    public boolean isScopeBeanEventEnabled()
+    {
+        return false;
+    }
 
-    boolean isAccessBeanEventEnabled();
+    public boolean isAccessBeanEventEnabled()
+    {
+        return false;
+    }
 
-    boolean isUnscopeBeanEventEnabled();
+    public boolean isUnscopeBeanEventEnabled()
+    {
+        return false;
+    }
 
-    boolean isStartConversationEventEnabled();
+    public boolean isStartConversationEventEnabled()
+    {
+        return false;
+    }
 
-    boolean isCloseConversationEventEnabled();
-    
-    boolean isRestartConversationEventEnabled();
+    public boolean isCloseConversationEventEnabled()
+    {
+        return false;
+    }
+
+    public boolean isRestartConversationEventEnabled()
+    {
+        return false;
+    }
 }

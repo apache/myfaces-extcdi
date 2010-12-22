@@ -18,26 +18,38 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
+
+import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Config for all JSF specific configurations.
  *
  * @author Gerhard Petracek
  */
-public interface JsfModuleConfig extends CodiConfig
+@ApplicationScoped
+public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfig
 {
+    private static final long serialVersionUID = 595393008764879504L;
+
     /**
      * If the initial redirect is enabled, a redirect will be performed for adding the current window-id to the url.
      *
      * @return true for activating it, false otherwise
      */
-    boolean isInitialRedirectEnabled();
+    public boolean isInitialRedirectEnabled()
+    {
+        return true;
+    }
 
     /**
      * esp useful for JSF 2.0
      * @return true for creating additional navigation-cases based on view configs for
      * ConfigurableNavigationHandler#getNavigationCases
      */
-    boolean isUseViewConfigsAsNavigationCasesEnabled();
+    public boolean isUseViewConfigsAsNavigationCasesEnabled()
+    {
+        return true;
+    }
 }

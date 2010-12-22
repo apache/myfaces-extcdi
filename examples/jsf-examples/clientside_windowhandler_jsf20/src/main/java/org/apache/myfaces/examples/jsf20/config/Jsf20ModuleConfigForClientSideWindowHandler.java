@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.examples.jsf20.config;
 
-import org.apache.myfaces.extensions.cdi.jsf2.impl.config.DefaultWindowContextConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Specializes;
@@ -28,18 +28,12 @@ import javax.enterprise.inject.Specializes;
  */
 @ApplicationScoped
 @Specializes
-public class CodiConfig extends DefaultWindowContextConfig
+public class Jsf20ModuleConfigForClientSideWindowHandler extends JsfModuleConfig
 {
     private static final long serialVersionUID = -4094949435815088068L;
 
     @Override
     public boolean isInitialRedirectEnabled()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isAddWindowIdToActionUrlsEnabled()
     {
         return false;
     }
