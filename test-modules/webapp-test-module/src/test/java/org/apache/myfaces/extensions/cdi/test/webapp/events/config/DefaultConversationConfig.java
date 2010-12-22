@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.test.webapp.events.config;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 
 /**
@@ -27,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Conv
  *
  * @author Jakob Korherr
  */
-public class DefaultConversationConfig implements ConversationConfig, CodiConfig
+public class DefaultConversationConfig extends ConversationConfig
 {
 
     public int getConversationTimeoutInMinutes()
