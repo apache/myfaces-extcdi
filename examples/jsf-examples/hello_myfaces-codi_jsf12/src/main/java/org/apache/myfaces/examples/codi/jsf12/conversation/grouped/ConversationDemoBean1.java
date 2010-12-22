@@ -58,12 +58,17 @@ public class ConversationDemoBean1 implements Serializable
     @LoggerDetails(name = "logger2")
     private Logger logger2;
 
+    @Inject
+    private Logger.Factory loggerFactory;
+
     @PostConstruct
     public void init()
     {
         this.createdAt = new Date();
-        this.logger1.info(getClass().getName() + " created at " + this.createdAt);
-        this.logger2.info(getClass().getName() + " created at " + this.createdAt);
+        String message = getClass().getName() + " created at " + this.createdAt;
+        this.logger1.info(message);
+        this.logger2.info(message);
+        this.loggerFactory.getLogger("logger3").info(message);
     }
 
     public String next()

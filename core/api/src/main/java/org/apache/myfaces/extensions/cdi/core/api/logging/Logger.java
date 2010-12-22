@@ -120,15 +120,20 @@ public interface Logger extends Serializable
      */
     java.util.logging.Logger getWrapped();
 
+    Factory getFactory();
+
     /*
      * alternative to the static methods - usually they aren't needed - maybe for constructor injection
      */
 
-    Logger getLogger(String s);
+    interface Factory extends Serializable
+    {
+        Logger getLogger(String s);
 
-    Logger getLogger(String s, String s1);
+        Logger getLogger(String s, String s1);
 
-    Logger getAnonymousLogger();
+        Logger getAnonymousLogger();
 
-    Logger getAnonymousLogger(String s);
+        Logger getAnonymousLogger(String s);
+    }
 }

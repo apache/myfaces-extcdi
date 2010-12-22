@@ -39,6 +39,12 @@ final class InstanceProducer
     }
 
     @Produces
+    public Logger.Factory getLoggerFactory(InjectionPoint injectionPoint)
+    {
+        return new DefaultLogger(injectionPoint.getBean().getBeanClass().getName()).getFactory();
+    }
+
+    @Produces
     @LoggerDetails
     public Logger getLoggerForDetails(InjectionPoint injectionPoint)
     {
