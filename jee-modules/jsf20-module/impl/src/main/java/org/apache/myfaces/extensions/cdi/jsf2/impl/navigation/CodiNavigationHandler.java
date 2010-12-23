@@ -69,12 +69,13 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(this.deactivated || isUnhandledExceptionQueued(context))
+        if(this.deactivated || isUnhandledExceptionQueued(context) || context.getRenderResponse() /*see EXTCDI-92*/)
         {
             this.wrapped.handleNavigation(context, fromAction, outcome);
         }
         else
         {
+            //don't refactor it - currently we need the lazy wrapping due to special jsf2 constellations
             getWrappedNavigationHandler().handleNavigation(context, fromAction, outcome);
         }
     }
