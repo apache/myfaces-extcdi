@@ -33,8 +33,6 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
 {
     private final NavigationHandler wrapped;
 
-    private final NavigationHandler originalNavigationHandler;
-
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
         if(isActivated())
@@ -48,20 +46,11 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
         {
             this.wrapped = navigationHandler;
         }
-
-        this.originalNavigationHandler = navigationHandler;
     }
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(context.getResponseComplete() /*see EXTCDI-92*/)
-        {
-            this.originalNavigationHandler.handleNavigation(context, fromAction, outcome);
-        }
-        else
-        {
-            this.wrapped.handleNavigation(context, fromAction, outcome);
-        }
+        this.wrapped.handleNavigation(context, fromAction, outcome);
     }
 
     public boolean isActivated()
