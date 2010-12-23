@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
-
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 import javax.faces.application.Application;
@@ -58,11 +56,11 @@ class InjectionAwareApplicationWrapper extends Application
 
     private boolean advancedQualifierRequiredForDependencyInjection;
 
-    protected InjectionAwareApplicationWrapper(Application wrapped, CodiCoreConfig codiCoreConfig)
+    protected InjectionAwareApplicationWrapper(Application wrapped,
+                                               boolean advancedQualifierRequiredForDependencyInjection)
     {
         this.wrapped = wrapped;
-        this.advancedQualifierRequiredForDependencyInjection =
-                codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection();
+        this.advancedQualifierRequiredForDependencyInjection = advancedQualifierRequiredForDependencyInjection;
     }
 
     public Converter createConverter(String converterId)

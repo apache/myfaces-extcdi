@@ -52,7 +52,7 @@ class CodiFacesContextWrapper extends FacesContext
 
     private BeanManager beanManager;
 
-    private CodiCoreConfig codiCoreConfig;
+    private boolean advancedQualifierRequiredForDependencyInjection;
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
@@ -72,8 +72,10 @@ class CodiFacesContextWrapper extends FacesContext
     {
         this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
-        this.codiCoreConfig = CodiUtils.getOrCreateScopedInstanceOfBeanByClass(this.beanManager, CodiCoreConfig.class);
-
+        this.advancedQualifierRequiredForDependencyInjection =
+                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(this.beanManager, CodiCoreConfig.class)
+                        .isAdvancedQualifierRequiredForDependencyInjection();
+        
         initBroadcaster();
 
         broadcastBeforeFacesRequestEvent();
@@ -81,7 +83,8 @@ class CodiFacesContextWrapper extends FacesContext
 
     public Application getApplication()
     {
-        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(), this.codiCoreConfig);
+        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(),
+                this.advancedQualifierRequiredForDependencyInjection);
     }
 
     private void broadcastBeforeFacesRequestEvent()
