@@ -97,4 +97,12 @@ public class ViewConfigCache
     {
         return getDefaultErrorViewForApplication();
     }
+
+    /**
+     * resets the whole cache - e.g. needed for junit tests
+     */
+    public static void reset()
+    {
+        clear();
+    }
 }

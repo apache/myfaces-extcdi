@@ -72,6 +72,12 @@ class ViewConfigCacheStore
         return defaultErrorView.get(getClassloader());
     }
 
+    static void clear()
+    {
+        getViewIdToViewDefinitionEntryMapping().clear();
+        getViewDefinitionToViewDefinitionEntryMapping().clear();
+    }
+
     public static void setDefaultErrorView(ViewConfigEntry viewDefinitionEntry)
     {
         defaultErrorView.put(getClassloader(), viewDefinitionEntry);
