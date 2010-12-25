@@ -22,41 +22,46 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-    <artifactId>myfaces-extcdi-test-project</artifactId>
+    <artifactId>myfaces-extcdi-cargo-base-test-infrastructure</artifactId>
     <version>0.9.2-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Test-Project</name>
+    <name>MyFaces Extensions-CDI Base-Test-Infrastructure for Cargo</name>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>myfaces-extcdi-parent</artifactId>
+        <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+        <artifactId>myfaces-extcdi-test-project</artifactId>
         <version>0.9.2-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>base-cargo-test-infrastructure-module</module>
-    </modules>
-    
-    <profiles>
+    <dependencies>
 
-        <!-- use mvn clean install -Pwebapptest to run the webapp-tests -->
-        <profile>
-            <id>webapptest</id>
-            <modules>
-                <module>webapp-test-module</module>
-            </modules>
-        </profile>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
+            <artifactId>myfaces-extcdi-core-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
-        <!-- use mvn clean install -Pcargo to run the cargo-htmlunit-tests -->
-        <profile>
-            <id>cargo</id>
-            <modules>
-                <module>cargo-test-module</module>
-            </modules>
-        </profile>
-    </profiles>
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+            <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        
+    </dependencies>
 
 </project>
