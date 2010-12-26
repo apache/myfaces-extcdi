@@ -16,12 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.cargo;
+package org.apache.myfaces.extensions.cdi.test.junit4;
+
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
+
+import javax.inject.Inject;
+
+import static org.testng.Assert.assertEquals;
 
 /**
  * @author Gerhard Petracek
  */
-public class ContainerNotStartedException extends RuntimeException
+
+@RunWith(JUnit4.class)
+public class InjectedProjectStageTest extends AbstractTest
 {
-    private static final long serialVersionUID = -2362433864481560645L;
+    @Inject
+    private ProjectStage projectStage;
+
+    @Test
+    public void testProjectStage()
+    {
+        assertEquals(this.projectStage, ProjectStage.UnitTest);
+    }
 }

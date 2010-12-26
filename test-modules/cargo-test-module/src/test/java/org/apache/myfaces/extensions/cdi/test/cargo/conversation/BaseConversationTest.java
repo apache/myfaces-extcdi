@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo.conversation;
 
-import org.apache.myfaces.extensions.cdi.test.base.cargo.AbstractCargoTest;
+import org.apache.myfaces.extensions.cdi.test.cargo.AbstractCargoTest;
 
 /**
  * @author Gerhard Petracek

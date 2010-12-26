@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo.conversation;
 
-import org.apache.myfaces.extensions.cdi.test.base.cargo.SimplePageInteraction;
-import org.apache.myfaces.extensions.cdi.test.base.cargo.runner.JUnit4WithCargo;
+import org.apache.myfaces.extensions.cdi.test.cargo.SimplePageInteraction;
+import org.apache.myfaces.extensions.cdi.test.cargo.runner.JUnit4WithCargo;
 import org.apache.myfaces.extensions.cdi.test.cargo.view.config.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;

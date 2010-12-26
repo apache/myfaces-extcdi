@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.cargo.runner;
+package org.apache.myfaces.extensions.cdi.test.cargo.runner;
 
-import org.apache.myfaces.extensions.cdi.test.base.cargo.ContainerNotStartedException;
+import org.apache.myfaces.extensions.cdi.test.cargo.ContainerNotStartedException;
 import org.junit.Ignore;
 import org.junit.internal.AssumptionViolatedException;
 import org.junit.internal.runners.model.EachTestNotifier;
@@ -66,7 +66,8 @@ public class JUnit4WithCargo extends BlockJUnit4ClassRunner
         }
         catch (ContainerNotStartedException e)
         {
-            LOGGER.warning("In this step the container isn't started -> test result is ignored.");
+            LOGGER.fine("In this step the container isn't started -> test result is ignored for now. " +
+                    "Please make sure that the test gets executed in a later phase.");
         }
         catch (Throwable e)
         {

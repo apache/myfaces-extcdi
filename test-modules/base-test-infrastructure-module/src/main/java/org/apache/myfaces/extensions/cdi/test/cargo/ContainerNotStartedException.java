@@ -16,18 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.cargo;
-
-import com.gargoylesoftware.htmlunit.WebClient;
+package org.apache.myfaces.extensions.cdi.test.cargo;
 
 /**
  * @author Gerhard Petracek
  */
-public interface TestConfiguration
+public class ContainerNotStartedException extends RuntimeException
 {
-    WebClient getWebClient();
-
-    String getBaseURL();
-
-    boolean isCheckWindowId();
+    private static final long serialVersionUID = -2362433864481560645L;
 }

@@ -16,30 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.junit4;
+package org.apache.myfaces.extensions.cdi.test.cargo;
 
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
-
-import javax.inject.Inject;
-
-import static org.testng.Assert.assertEquals;
+import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
  * @author Gerhard Petracek
  */
-
-@RunWith(JUnit4.class)
-public class InjectedProjectStageTest extends AbstractTest
+public interface TestConfiguration
 {
-    @Inject
-    private ProjectStage projectStage;
+    WebClient getWebClient();
 
-    @Test
-    public void testProjectStage()
-    {
-        assertEquals(this.projectStage, ProjectStage.UnitTest);
-    }
+    String getBaseURL();
+
+    boolean isCheckWindowId();
 }

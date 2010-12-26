@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.junit4;
+package org.apache.myfaces.extensions.cdi.test.junit4;
 
 import org.apache.myfaces.test.mock.MockHttpServletRequest;
 import org.apache.webbeans.cditest.CdiTestContainer;
