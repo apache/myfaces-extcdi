@@ -20,42 +20,50 @@ package org.apache.myfaces.extensions.cdi.test.base.junit4;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
-import org.apache.webbeans.context.ContextFactory;
+import org.apache.webbeans.cditest.CdiTestContainer;
+import org.apache.webbeans.cditest.CdiTestContainerLoader;
 import org.junit.After;
 import org.junit.Before;
 
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.AnnotatedType;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionTarget;
 
 /**
- * Allows dependency injection in JUnit tests and implementing JUnit tests in web-projects.
+ * Allows dependency injection in (standalone) JUnit tests.
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractServletAwareTest extends AbstractTest
+public abstract class AbstractTest
 {
-    @Override
+    protected CdiTestContainer testContainer;
+
     @Before
     public void before() throws Exception
     {
         ProjectStageProducer.setProjectStage(ProjectStage.UnitTest);
 
-        this.testContainer = new HybridCdiTestOpenWebBeansContainer();
+        this.testContainer = CdiTestContainerLoader.getCdiContainer();
         this.testContainer.bootContainer();
-
         this.testContainer.startContexts();
-        ContextFactory.activateContext(SessionScoped.class);
-        ContextFactory.activateContext(RequestScoped.class);
 
         injectFields();
+    }
+
+    protected void injectFields()
+    {
+        BeanManager beanManager = this.testContainer.getBeanManager();
+        CreationalContext creationalContext = beanManager.createCreationalContext(null);
+
+        AnnotatedType annotatedType = beanManager.createAnnotatedType(getClass());
+        InjectionTarget injectionTarget = beanManager.createInjectionTarget(annotatedType);
+        injectionTarget.inject(this, creationalContext);
     }
 
     @After
     public void after() throws Exception
     {
-        ContextFactory.deActivateContext(SessionScoped.class);
-        ContextFactory.deActivateContext(RequestScoped.class);
         this.testContainer.stopContexts();
-        this.testContainer.shutdownContainer();
     }
 }
