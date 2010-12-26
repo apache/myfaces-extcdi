@@ -97,13 +97,13 @@ class DefaultMessageContextConfig implements MessageContextConfig
 
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config)
             {
-                newMessageContextConfig.addNewFormatterConfig(type, config);
+                newMessageContextConfig.addNewFormatterConfig(type, config, Locale.getDefault());
                 return this;
             }
 
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config, Locale locale)
             {
-                addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale));
+                addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale), locale);
                 return this;
             }
 
@@ -169,13 +169,13 @@ class DefaultMessageContextConfig implements MessageContextConfig
 
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config)
             {
-                addNewFormatterConfig(type, config);
+                addNewFormatterConfig(type, config, Locale.getDefault());
                 return this;
             }
 
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config, Locale locale)
             {
-                addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale));
+                addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale), locale);
                 return this;
             }
 
@@ -269,9 +269,9 @@ class DefaultMessageContextConfig implements MessageContextConfig
         this.formatterFactory.add(formatter);
     }
 
-    private void addNewFormatterConfig(Class<?> type, GenericConfig config)
+    private void addNewFormatterConfig(Class<?> type, GenericConfig config, Locale locale)
     {
-        this.formatterFactory.addFormatterConfig(type, config);
+        this.formatterFactory.addFormatterConfig(type, config, locale);
     }
 
     private void addNewMessageHandler(MessageHandler messageHandler)

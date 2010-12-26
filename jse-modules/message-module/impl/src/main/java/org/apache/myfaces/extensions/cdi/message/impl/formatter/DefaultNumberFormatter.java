@@ -94,13 +94,13 @@ class DefaultNumberFormatter implements Formatter<Number>
         if (formatterConfig.containsProperty(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY))
         {
             this.groupingSeparator = formatterConfig
-                    .getProperty(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, Character.class);
+                    .getProperty(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, String.class).charAt(0);
         }
 
         if (formatterConfig.containsProperty(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY))
         {
             this.decimalSeparator = formatterConfig
-                    .getProperty(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY, Character.class);
+                    .getProperty(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY, String.class).charAt(0);
         }
 
         if (formatterConfig.containsProperty(NumberFormatterConfigKeys.MINIMUM_FRACTION_DIGITS_KEY))
