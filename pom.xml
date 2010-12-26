@@ -148,6 +148,12 @@
                 <version>${owb.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.myfaces.test</groupId>
+                <artifactId>myfaces-test12</artifactId>
+                <version>1.0.0</version>
+                <scope>provided</scope>
+            </dependency>
 
             <!-- the JSF independent core -->
             <dependency>

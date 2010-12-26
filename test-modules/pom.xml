@@ -37,7 +37,7 @@
     </parent>
 
     <modules>
-        <module>base-cargo-test-infrastructure-module</module>
+        <module>base-test-infrastructure-module</module>
     </modules>
     
     <profiles>
