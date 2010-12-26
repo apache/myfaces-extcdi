@@ -18,8 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.test.base.cargo;
 
+import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
+import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
@@ -45,6 +47,7 @@ public class SimplePageInteraction
     private String initialWindowId;
     private String okButtonId = "ok";
     private boolean checkWindowId;
+    private boolean defaultFormActive = true;
 
     public SimplePageInteraction(TestConfiguration testConfiguration)
     {
@@ -76,12 +79,17 @@ public class SimplePageInteraction
 
     public SimplePageInteraction useDefaultForm()
     {
-        return useForm("mainForm");
+        if(this.defaultFormActive)
+        {
+            return useForm("mainForm");
+        }
+        return this;
     }
 
     public SimplePageInteraction useForm(String formId)
     {
         this.currentForm = this.currentPage.getFormByName(formId);
+        this.defaultFormActive = false;
         return this;
     }
 
@@ -142,15 +150,29 @@ public class SimplePageInteraction
         return this;
     }
 
-    public SimplePageInteraction checkValue(String inputId, String expectedValue)
+    public SimplePageInteraction checkTextValue(String inputId, String expectedValue)
     {
-        assertEquals(expectedValue, getValue(this.currentPage, inputId));
+        return checkValue(inputId, expectedValue, true);
+    }
+
+    public SimplePageInteraction checkInputValue(String inputId, String expectedValue)
+    {
+        return checkValue(inputId, expectedValue, false);
+    }
+
+    protected SimplePageInteraction checkValue(String inputId, String expectedValue, boolean outputText)
+    {
+        assertEquals(expectedValue, getValue(this.currentPage, inputId, outputText));
         return this;
     }
 
-    protected String getValue(HtmlPage htmlPage, String inputId)
+    protected String getValue(HtmlPage htmlPage, String id, boolean outputText)
     {
-        return htmlPage.getElementById(inputId).getAttribute("value");
+        if(outputText)
+        {
+            return htmlPage.getElementById(id).getTextContent();
+        }
+        return htmlPage.getElementById(id).getAttribute("value");
     }
 
     protected void setInputValue(HtmlPage htmlPage, String inputId, String value)
@@ -202,8 +224,19 @@ public class SimplePageInteraction
     {
         try
         {
-            this.currentPage = this.currentForm.getInputByName(id).click();
-            //TODO
+            HtmlInput commandNode;
+
+            try
+            {
+                commandNode = this.currentForm.getInputByName(id);
+            }
+            catch (ElementNotFoundException e)
+            {
+                //in case of get-requests it isn't required that the element is in a form
+                commandNode = this.currentPage.getHtmlElementById(id);
+            }
+
+            this.currentPage = commandNode.click();
             useDefaultForm();
 
             if(expectedTarget != null)

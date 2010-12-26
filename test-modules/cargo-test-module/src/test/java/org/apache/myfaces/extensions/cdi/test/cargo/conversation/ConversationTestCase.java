@@ -18,19 +18,17 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo.conversation;
 
-import com.gargoylesoftware.htmlunit.html.HtmlForm;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.apache.myfaces.extensions.cdi.test.cargo.AbstractCodiTest;
-import org.junit.Assert;
+import org.apache.myfaces.extensions.cdi.test.base.cargo.SimplePageInteraction;
+import org.apache.myfaces.extensions.cdi.test.base.cargo.runner.JUnit4WithCargo;
+import org.apache.myfaces.extensions.cdi.test.cargo.view.config.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 /**
  * @author Jakob Korherr
  */
-@RunWith(JUnit4.class)
-public class ConversationTestCase extends AbstractCodiTest
+@RunWith(JUnit4WithCargo.class)
+public class ConversationTestCase extends BaseConversationTest
 {
 
     // NOTE that new @Test means new WebClient means new WindowContext
@@ -38,99 +36,102 @@ public class ConversationTestCase extends AbstractCodiTest
     @Test
     public void testConversationDialog() throws Exception
     {
-        HtmlPage page = webClient.getPage(BASE_URL + "conversation/conversation1.xhtml");
+        SimplePageInteraction pageInteraction = new SimplePageInteraction(getTestConfiguration())
+                .with(Pages.Conversation.Conversation1.class)
+                .with(Pages.Conversation.Conversation2.class)
+                .with(Pages.Conversation.Conversation3.class)
+                .with(Pages.Conversation.Result.class)
+                .start(Pages.Conversation.Conversation1.class)
+                .useForm("conversation1");
 
-        // page 1
-        HtmlForm form = page.getFormByName("conversation1");
-        form.getInputByName("conversation1:value1").setValueAttribute("1");
-        page = form.getInputByName("conversation1:nextPage").click();
+        pageInteraction.setValue("conversation1:value1", "1");
+        pageInteraction
+                .click("conversation1:nextPage")
+                .checkState(Pages.Conversation.Conversation2.class)
+                .useForm("conversation2");
 
-        // page 2
-        form = page.getFormByName("conversation2");
-        form.getInputByName("conversation2:value2").setValueAttribute("2");
-        page = form.getInputByName("conversation2:nextPage").click();
+        pageInteraction.setValue("conversation2:value2", "2")
+                .click("conversation2:nextPage")
+                .checkState(Pages.Conversation.Conversation3.class)
+                .useForm("conversation3");
 
-        // page 3
-        form = page.getFormByName("conversation3");
-        form.getInputByName("conversation3:value3").setValueAttribute("3");
-        page = form.getInputByName("conversation3:submit").click();
+        pageInteraction.setValue("conversation3:value3", "3")
+                .click("conversation3:submit")
+                .checkState(Pages.Conversation.Result.class);
 
-        // result page
-        Assert.assertEquals("1", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("2", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("3", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "1");
+        pageInteraction.checkTextValue("value2", "2");
+        pageInteraction.checkTextValue("value3", "3");
 
-        // GET request
-        page = page.getElementById("refresh").click();
+        pageInteraction.click("refresh")
+                .checkState(Pages.Conversation.Result.class);
 
-        Assert.assertEquals("1", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("2", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("3", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "1");
+        pageInteraction.checkTextValue("value2", "2");
+        pageInteraction.checkTextValue("value3", "3");
 
-        // GET request to page 3
-        page = page.getElementById("back").click();
+        pageInteraction.click("back")
+                .checkState(Pages.Conversation.Conversation3.class)
+                .useForm("conversation3");
 
-        // POST request to page 2
-        page = page.getElementById("conversation3:back").click();
+        pageInteraction.click("conversation3:back")
+                .checkState(Pages.Conversation.Conversation2.class)
+                .useForm("conversation2");
 
-        // page 2
-        form = page.getFormByName("conversation2");
-        form.getInputByName("conversation2:value2").setValueAttribute("new2");
-        page = form.getInputByName("conversation2:nextPage").click();
+        pageInteraction.setValue("conversation2:value2", "new2")
+                .click("conversation2:nextPage")
+                .checkState(Pages.Conversation.Conversation3.class)
+                .useForm("conversation3");
 
-        // page 3
-        form = page.getFormByName("conversation3");
-        form.getInputByName("conversation3:value3").setValueAttribute("new3");
-        page = form.getInputByName("conversation3:submit").click();
+        pageInteraction.setValue("conversation3:value3", "new3")
+                .click("conversation3:submit")
+                .checkState(Pages.Conversation.Result.class);
 
-        // result page
-        Assert.assertEquals("1", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("new2", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("new3", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "1");
+        pageInteraction.checkTextValue("value2", "new2");
+        pageInteraction.checkTextValue("value3", "new3");
 
         // close conversation
-        form = page.getFormByName("form");
-        page = form.getInputByName("form:closeConversation").click();
+        pageInteraction.useForm("form").click("form:closeConversation");
 
-        // values must be empty
-        Assert.assertEquals("", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "");
+        pageInteraction.checkTextValue("value2", "");
+        pageInteraction.checkTextValue("value3", "");
     }
 
     @Test
     public void testConversationDialogRestart() throws Exception
     {
-        HtmlPage page = webClient.getPage(BASE_URL + "conversation/conversation1.xhtml");
+        SimplePageInteraction pageInteraction = new SimplePageInteraction(getTestConfiguration())
+                .with(Pages.Conversation.Conversation1.class)
+                .with(Pages.Conversation.Conversation2.class)
+                .with(Pages.Conversation.Conversation3.class)
+                .with(Pages.Conversation.Result.class)
+                .start(Pages.Conversation.Conversation1.class)
+                .useForm("conversation1");
 
-        // page 1
-        HtmlForm form = page.getFormByName("conversation1");
-        form.getInputByName("conversation1:value1").setValueAttribute("1");
-        page = form.getInputByName("conversation1:nextPage").click();
+        pageInteraction.setValue("conversation1:value1", "1")
+                .click("conversation1:nextPage")
+                .checkState(Pages.Conversation.Conversation2.class)
+                .useForm("conversation2");
 
-        // page 2
-        form = page.getFormByName("conversation2");
-        form.getInputByName("conversation2:value2").setValueAttribute("2");
-        page = form.getInputByName("conversation2:nextPage").click();
+        pageInteraction.setValue("conversation2:value2", "2")
+                .click("conversation2:nextPage")
+                .checkState(Pages.Conversation.Conversation3.class)
+                .useForm("conversation3");
 
-        // page 3
-        form = page.getFormByName("conversation3");
-        form.getInputByName("conversation3:value3").setValueAttribute("3");
-        page = form.getInputByName("conversation3:submit").click();
+        pageInteraction.setValue("conversation3:value3", "3")
+                .click("conversation3:submit")
+                .checkState(Pages.Conversation.Result.class);
 
-        // result page
-        Assert.assertEquals("1", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("2", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("3", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "1");
+        pageInteraction.checkTextValue("value2", "2");
+        pageInteraction.checkTextValue("value3", "3");
 
-        // restart conversation
-        form = page.getFormByName("form");
-        page = form.getInputByName("form:restartConversation").click();
+        pageInteraction.useForm("form").click("form:restartConversation");
 
-        // values must be empty
-        Assert.assertEquals("", page.getElementById("value1").getTextContent());
-        Assert.assertEquals("", page.getElementById("value2").getTextContent());
-        Assert.assertEquals("", page.getElementById("value3").getTextContent());
+        pageInteraction.checkTextValue("value1", "");
+        pageInteraction.checkTextValue("value2", "");
+        pageInteraction.checkTextValue("value3", "");
     }
-
 }

@@ -25,19 +25,26 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
-    <title>Apache MyFaces CODI - Conversation2</title>
+    <title>Apache MyFaces CODI - Conversation Result</title>
 </h:head>
 <h:body>
 
-    <h2>Conversation2</h2>
+    <h2>Conversation Result</h2>
 
-    <h:form id="conversation2">
-        <p>
-            Value2: <h:inputText id="value2" value="#{conversationBean.value2}" />
-        </p>
+    <p>
+        Value1: <h:outputText id="value1" value="#{conversationBean.value1}" /><br/>
+        Value2: <h:outputText id="value2" value="#{conversationBean.value2}" /><br/>
+        Value3: <h:outputText id="value3" value="#{conversationBean.value3}" />
+    </p>
 
-        <h:commandButton id="nextPage" value="Next Page" action="conversation3.xhtml" />
-        <h:commandButton id="back" value="Back" action="conversation1.xhtml" />
+    <h:button id="refresh" value="Refresh (GET)" outcome="/pages/conversation/result.xhtml" />
+    <h:button id="back" value="Back (GET)" outcome="/pages/conversation/conversation3.xhtml" />
+
+    <h:form id="form">
+        <h:commandButton id="closeConversation" value="Close conversation"
+                actionListener="#{conversationBean.closeConversation}" />
+        <h:commandButton id="restartConversation" value="Restart conversation"
+                actionListener="#{conversationBean.restartConversation}" />
     </h:form>
 
 </h:body>

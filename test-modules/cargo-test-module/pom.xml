@@ -37,7 +37,7 @@
     </parent>
 
     <properties>
-        <cargo.context>myfaces-extcdi-cargo-test</cargo.context>
+        <cargo.context>cargo-test</cargo.context>
         <cargo.port>8787</cargo.port> <!-- use port 8787 in order to prevent port-already-in-use on hudson -->
     </properties>
 
@@ -124,13 +124,18 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>net.sourceforge.htmlunit</groupId>
             <artifactId>htmlunit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+            <artifactId>myfaces-extcdi-cargo-base-test-infrastructure</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -259,4 +264,31 @@
         
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>jettyConfig</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!--This plugin allows to run the example using mvn jetty:run -->
+                        <groupId>org.mortbay.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>${maven.jetty.plugin.version}</version>
+                        <configuration>
+                            <scanIntervalSeconds>10</scanIntervalSeconds>
+                            <webAppConfig>
+                                <contextPath>/${cargo.context}</contextPath>
+                            </webAppConfig>                            
+                            <connectors>
+                                <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                                    <port>${cargo.port}</port>
+                                    <maxIdleTime>60000</maxIdleTime>
+                                </connector>
+                            </connectors>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

@@ -70,6 +70,13 @@ public abstract class AbstractCargoTest
             return;
         }
 
+        baseUrl = getCustomBaseURL();
+
+        if(baseUrl != null)
+        {
+            return;
+        }
+
         String port = System.getProperty(CARGO_PORT_PROPERTY);
         if (port == null)
         {
@@ -83,6 +90,12 @@ public abstract class AbstractCargoTest
         }
 
         baseUrl = "http://localhost:" + port + "/" + context + "/";
+    }
+
+    protected String getCustomBaseURL()
+    {
+        //override if needed
+        return null;
     }
 
     @Before

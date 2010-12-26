@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
+package org.apache.myfaces.extensions.cdi.test.cargo.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
