@@ -209,11 +209,11 @@ public class CodiUtils
 
         if(requiresAdvancedQualifier && instance.getClass().isAnnotationPresent(Advanced.class))
         {
-            tryToInjectFields(instance);
+            return tryToInjectFields(instance);
         }
         else if(!requiresAdvancedQualifier)
         {
-            tryToInjectFields(instance);
+            return tryToInjectFields(instance);
         }
         return instance;
     }
