@@ -34,9 +34,9 @@ class TestMessage extends DefaultMessage
         super(message);
     }
 
-    public TestMessage(String messageDescriptor, Object... arguments)
+    public TestMessage(String messageDescriptor)
     {
-        super(messageDescriptor, arguments);
+        super(messageDescriptor);
     }
 
     public TestMessage(String messageDescriptor, Set<NamedArgument> namedArguments)

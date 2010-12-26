@@ -40,9 +40,9 @@ public class DefaultMessage extends AbstractMessageWithSeverity
         super(message);
     }
 
-    public DefaultMessage(String messageDescriptor, Serializable... arguments)
+    public DefaultMessage(String messageDescriptor)
     {
-        super(messageDescriptor, MessageSeverity.INFO, arguments);
+        super(messageDescriptor, MessageSeverity.INFO);
     }
 
     public DefaultMessage(String messageDescriptor, Set<NamedArgument> namedArguments)

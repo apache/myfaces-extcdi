@@ -41,8 +41,9 @@ public interface Message extends Localizable, Serializable
 
     /**
      * @param arguments 1-n new arguments for the current message
+     * @return the current instance
      */
-    void addArgument(Serializable... arguments);
+    Message addArgument(Serializable... arguments);
 
     /**
      * @return the payload of the message
@@ -52,6 +53,7 @@ public interface Message extends Localizable, Serializable
     /**
      * @param key of the payload
      * @param payload value of the payload
+     * @return the current instance
      */
-    void addPayload(Class key, MessagePayload payload);
+    Message addPayload(Class key, MessagePayload payload);
 }

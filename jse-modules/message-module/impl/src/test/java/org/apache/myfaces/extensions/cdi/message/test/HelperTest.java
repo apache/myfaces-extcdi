@@ -48,7 +48,8 @@ public class HelperTest extends AbstractTest
         Message message1 = this.messageContext.message().text(text)
                 .namedArgument("arg1", arg1).namedArgument("arg2", arg2).create();
 
-        Message message2 = new DefaultMessage(text, NamedArguments.add("arg1", arg1).add("arg2", arg2).create());
+        Message message2 = new DefaultMessage(text)
+                .addArgument(NamedArguments.add("arg1", arg1).add("arg2", arg2).create());
         ((MessageContextConfigAware)message2).setMessageContextConfig(this.messageContext.config());
 
         assertEquals(message1, message2);
@@ -70,7 +71,7 @@ public class HelperTest extends AbstractTest
         Map<String, Serializable> arguments = new HashMap<String, Serializable>();
         arguments.put("arg1", arg1);
         arguments.put("arg2", arg2);
-        Message message2 = new DefaultMessage(text, NamedArguments.convert(arguments));
+        Message message2 = new DefaultMessage(text).addArgument(NamedArguments.convert(arguments));
         ((MessageContextConfigAware)message2).setMessageContextConfig(this.messageContext.config());
 
         assertEquals(message1, message2);

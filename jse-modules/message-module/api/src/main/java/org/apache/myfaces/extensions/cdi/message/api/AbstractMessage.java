@@ -78,7 +78,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         this.arguments = null;
     }
 
-    public void addArgument(Serializable... arguments)
+    public Message addArgument(Serializable... arguments)
     {
         for (Serializable currentArgument : arguments)
         {
@@ -98,6 +98,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
                 addArgumentToMessage(argument);
             }
         }
+        return this;
     }
 
     private void addArgumentToMessage(Object argument)
@@ -241,13 +242,14 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         return Collections.unmodifiableMap(this.messagePayload);
     }
 
-    public void addPayload(Class key, MessagePayload payload)
+    public Message addPayload(Class key, MessagePayload payload)
     {
         if (this.messagePayload.containsKey(key))
         {
             throw new UnsupportedOperationException("it isn't allowed to override payload - key: " + key.getName());
         }
         this.messagePayload.put(key, payload);
+        return this;
     }
 
     public Message setMessageContextConfig(MessageContextConfig messageContextConfig)

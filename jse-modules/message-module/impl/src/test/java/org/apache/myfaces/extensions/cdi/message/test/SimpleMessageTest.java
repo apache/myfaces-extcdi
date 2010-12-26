@@ -130,7 +130,7 @@ public class SimpleMessageTest extends AbstractTest
     @Test
    public void createMessageWithHiddenArgumentsTest()
    {
-       Message message = new TestMessage("{xyz123}", "123", 456, "789");
+       Message message = new TestMessage("{xyz123}").addArgument("123", 456, "789");
 
        assertEquals("???xyz123??? (123,456,789)", message.toString(this.messageContext));
    }
