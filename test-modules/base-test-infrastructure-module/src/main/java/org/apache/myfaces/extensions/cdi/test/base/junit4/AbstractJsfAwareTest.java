@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.base.junit4.runner;
+package org.apache.myfaces.extensions.cdi.test.base.junit4;
 
 import org.apache.myfaces.test.mock.MockHttpServletRequest;
 import org.apache.myfaces.test.mock.MockHttpServletResponse;
@@ -49,7 +49,7 @@ import java.net.URLClassLoader;
 /**
  * @author Gerhard Petracek
  */
-public class AbstractJsfAwareTest extends AbstractServletAwareTest
+public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
 {
     protected Application application = null;
     protected MockServletConfig config = null;
