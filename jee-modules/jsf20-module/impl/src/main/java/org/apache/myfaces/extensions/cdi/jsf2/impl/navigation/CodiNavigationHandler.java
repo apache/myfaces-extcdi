@@ -69,7 +69,8 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(this.deactivated || isUnhandledExceptionQueued(context) || context.getRenderResponse() /*see EXTCDI-92*/)
+        if(this.deactivated || isUnhandledExceptionQueued(context)
+                || context.getRenderResponse() /*see EXTCDI-92*/ || context.getViewRoot() == null)
         {
             this.wrapped.handleNavigation(context, fromAction, outcome);
         }
