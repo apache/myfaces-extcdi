@@ -26,6 +26,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * @author Gerhard Petracek
@@ -47,7 +48,13 @@ class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
         {
             messageDescriptor = extractKey(messageDescriptor);
 
-            return JsfUtils.getCustomFacesMessageBundle(messageContext.getLocale()).getString(messageDescriptor);
+            ResourceBundle resourceBundle = JsfUtils.getCustomFacesMessageBundle(messageContext.getLocale());
+
+            if(resourceBundle == null)
+            {
+                return defaultFacesMessage(messageDescriptor, messageContext.getLocale());
+            }
+            return resourceBundle.getString(messageDescriptor);
         }
         catch (MissingResourceException e)
         {

@@ -36,6 +36,7 @@ import org.junit.Before;
 import javax.faces.FactoryFinder;
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationFactory;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextFactory;
@@ -45,6 +46,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
@@ -86,6 +88,8 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
 
         initJsfObjects();
 
+        initDefaultView();
+
         super.before();
     }
 
@@ -124,6 +128,20 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
         initFacesContext();
         initApplication();
         initRenderKit();
+    }
+
+    protected void initDefaultView()
+    {
+        UIViewRoot root = new UIViewRoot();
+        root.setViewId("/viewId");
+        root.setLocale(getLocale());
+        root.setRenderKitId(RenderKitFactory.HTML_BASIC_RENDER_KIT);
+        facesContext.setViewRoot(root);
+    }
+
+    protected Locale getLocale()
+    {
+        return Locale.getDefault();
     }
 
     protected void initServletObjects() throws Exception
