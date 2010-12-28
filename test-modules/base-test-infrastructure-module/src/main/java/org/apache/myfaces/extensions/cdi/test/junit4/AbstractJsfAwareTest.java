@@ -71,7 +71,7 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
 
     @Override
     @Before
-    public final void before() throws Exception
+    public void before() throws Exception
     {
         // Set up a new thread context class loader
         threadContextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -197,7 +197,6 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
         RenderKitFactory renderKitFactory = (RenderKitFactory) FactoryFinder
                 .getFactory(FactoryFinder.RENDER_KIT_FACTORY);
         renderKit = new MockRenderKit();
-        renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT,
-                renderKit);
+        renderKitFactory.addRenderKit(RenderKitFactory.HTML_BASIC_RENDER_KIT, renderKit);
     }
 }

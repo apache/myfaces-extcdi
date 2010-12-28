@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.test.cargo;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
 import org.junit.After;
 import org.junit.Before;
 
@@ -29,7 +29,7 @@ import org.junit.Before;
  * @author Gerhard Petracek
  * @author Jakob Korherr
  */
-public abstract class AbstractCargoTest
+public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTest
 {
     private static final String CARGO_CONTEXT_PROPERTY = "cargo.context";
     private static final String CARGO_PORT_PROPERTY = "cargo.port";
@@ -98,19 +98,24 @@ public abstract class AbstractCargoTest
         return null;
     }
 
+    @Override
     @Before
-    public void setUp() throws Exception
+    public void before() throws Exception
     {
+        super.before();
+
         webClient = new WebClient(getBrowserVersion());
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
+    @Override
     @After
-    public void tearDown() throws Exception
+    public void after() throws Exception
     {
+        super.after();
+
         webClient.closeAllWindows();
         webClient = null;
-        ViewConfigCache.reset();
     }
 
     /**

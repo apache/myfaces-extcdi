@@ -182,7 +182,14 @@ public class SimplePageInteraction
 
     protected void setInputValue(HtmlPage htmlPage, HtmlForm htmlForm, String inputId, String value)
     {
-        htmlForm.getInputByName(inputId).setValueAttribute(value);
+        try
+        {
+            htmlForm.getInputByName(inputId).setValueAttribute(value);
+        }
+        catch (ElementNotFoundException e)
+        {
+            ((HtmlInput)htmlPage.getElementById(inputId)).setValueAttribute(value);
+        }
     }
 
     protected String getCurrentWindowId()
