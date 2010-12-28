@@ -70,7 +70,7 @@ public class TransactionalInterceptor implements Serializable
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
             new ThreadLocal<HashMap<String, EntityManager>>();
 
-    private static transient Map<ClassLoader, Map<String, PersistenceContextMetaEntry>> entityManagerFields =
+    private static transient Map<ClassLoader, Map<String, PersistenceContextMetaEntry>> persistenceContextMetaEntries =
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     /** 1 ms  in nanoTime ticks */
@@ -121,7 +121,14 @@ public class TransactionalInterceptor implements Serializable
         String entityManagerId = qualifierClass.getName();
         if (entityManagerBean == null)
         {
+            //support for special add-ons which introduce backward compatibility - resolves the injected entity manager
             entityManagerEntry = tryToFindEntityManagerEntryInTarget(context.getTarget());
+
+            if(entityManagerEntry == null)
+            {
+                throw unsupportedUsage(context);
+            }
+
             entityManager = entityManagerEntry.getEntityManager();
             entityManagerId = entityManagerEntry.getPersistenceContextEntry().getUnitName();
 
@@ -134,8 +141,8 @@ public class TransactionalInterceptor implements Serializable
         }
         else
         {
-            entityManager = (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
-                    beanManager.createCreationalContext(entityManagerBean));
+            entityManager = (EntityManager) this.beanManager.getReference(entityManagerBean, EntityManager.class,
+                    this.beanManager.createCreationalContext(entityManagerBean));
         }
 
         if (entityManagerMap.get() == null)
@@ -302,7 +309,7 @@ public class TransactionalInterceptor implements Serializable
      */
     private EntityManagerEntry tryToFindEntityManagerEntryInTarget(Object target)
     {
-        Map<String, PersistenceContextMetaEntry> mapping = entityManagerFields.get(getClassLoader());
+        Map<String, PersistenceContextMetaEntry> mapping = persistenceContextMetaEntries.get(getClassLoader());
 
         mapping = initMapping(mapping);
 
@@ -359,7 +366,7 @@ public class TransactionalInterceptor implements Serializable
         if(mapping == null)
         {
             mapping = new ConcurrentHashMap<String, PersistenceContextMetaEntry>();
-            entityManagerFields.put(getClassLoader(), mapping);
+            persistenceContextMetaEntries.put(getClassLoader(), mapping);
         }
         return mapping;
     }
@@ -392,5 +399,22 @@ public class TransactionalInterceptor implements Serializable
     private ClassLoader getClassLoader()
     {
         return ClassUtils.getClassLoader(null);
+    }
+
+    private IllegalStateException unsupportedUsage(InvocationContext context)
+    {
+        String target;
+
+        target = context.getTarget().getClass().getName();
+        if (context.getMethod().isAnnotationPresent(Transactional.class))
+        {
+            target += "." + context.getMethod().getName();
+        }
+
+        return new IllegalStateException("Please check your implementation! " +
+                "There is no @Transactional or @Transactional(MyQualifier.class) or @PersistenceContext at "
+                + target + " Please check the documentation for the correct usage or contact the mailing list. " +
+                "Hint: @Transactional just allows one qualifier -> using multiple Entity-Managers " +
+                "(-> different qualifiers) within ONE intercepted method isn't supported.");
     }
 }
