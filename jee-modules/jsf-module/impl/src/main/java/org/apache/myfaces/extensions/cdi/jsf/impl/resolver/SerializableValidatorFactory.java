@@ -49,7 +49,7 @@ class SerializableValidatorFactory implements ValidatorFactory, Serializable
 
     private transient boolean jsfInitialized = false;
 
-    protected SerializableValidatorFactory()
+    public SerializableValidatorFactory()
     {
     }
 

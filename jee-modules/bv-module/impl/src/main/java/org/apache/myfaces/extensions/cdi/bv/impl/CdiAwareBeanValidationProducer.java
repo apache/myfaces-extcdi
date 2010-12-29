@@ -53,7 +53,7 @@ public class CdiAwareBeanValidationProducer
             validatorFactory = ValidatorFactoryStorage.getOrCreateValidatorFactory();
         }
 
-        return new CdiAwareValidatorFactory(validatorFactory);
+        return new InjectableValidatorFactory(new CdiAwareValidatorFactory(validatorFactory));
     }
 
     @Produces
@@ -62,8 +62,9 @@ public class CdiAwareBeanValidationProducer
     public Validator createValidatorForDependencyInjectionAwareConstraintValidators(
             @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
-        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver).getValidator();
+        return new InjectableValidator(
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
+                    validatorFactoryResolver).getValidator());
     }
 
     @Produces
@@ -72,8 +73,9 @@ public class CdiAwareBeanValidationProducer
     public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators(
             @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
-        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver).getConstraintValidatorFactory();
+        return new InjectableConstraintValidatorFactory(
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(validatorFactoryResolver)
+                        .getConstraintValidatorFactory());
     }
 
     @Produces
@@ -82,7 +84,8 @@ public class CdiAwareBeanValidationProducer
     public MessageInterpolator createMessageInterpolator(
             @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
     {
-        return createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                validatorFactoryResolver).getMessageInterpolator();
+        return new InjectableMessageInterpolator(
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(validatorFactoryResolver)
+                        .getMessageInterpolator());
     }
 }
