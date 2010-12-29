@@ -129,6 +129,7 @@ public class ProjectStageProducer
                         ProjectStageProducer.class);
             }
 
+            /*TODO
             if(projectStageProducer == null)
             {
                 //workaround to avoid the usage of a service loader
@@ -136,6 +137,7 @@ public class ProjectStageProducer
                         "org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer",
                         ProjectStageProducer.class);
             }
+            */
 
             if (projectStageProducer == null)
             {
