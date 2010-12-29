@@ -110,7 +110,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         this.allowUnknownWindowIds = this.windowContextConfig.isUnknownWindowIdsAllowed();
         this.urlParameterSupported = this.windowContextConfig.isUrlParameterSupported();
 
-        this.projectStageDevelopment = ProjectStage.Development.equals(this.projectStage);
+        this.projectStageDevelopment = ProjectStage.Development == this.projectStage;
     }
 
     public WindowContext getCurrentWindowContext()

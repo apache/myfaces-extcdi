@@ -93,7 +93,7 @@ public class JsfAwareMessageContextProducer
             {
                 Locale locale = null;
                 FacesContext facesContext = FacesContext.getCurrentInstance();
-                if (facesContext != null)
+                if (facesContext != null && facesContext.getViewRoot() != null)
                 {
                     locale = facesContext.getViewRoot().getLocale();
                 }

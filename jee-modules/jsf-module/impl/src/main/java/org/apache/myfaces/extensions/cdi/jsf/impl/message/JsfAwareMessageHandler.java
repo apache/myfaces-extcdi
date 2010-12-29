@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.message;
 
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 import org.apache.myfaces.extensions.cdi.message.api.AbstractMessageHandler;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
@@ -28,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -35,6 +38,10 @@ import java.util.List;
 class JsfAwareMessageHandler extends AbstractMessageHandler
 {
     private static final long serialVersionUID = -7193428173462936712L;
+
+    private transient Logger logger;
+
+    private boolean projectStageDevelopment;
 
     @Override
     protected void processMessage(MessageContext messageContext, Message message)
@@ -46,10 +53,49 @@ class JsfAwareMessageHandler extends AbstractMessageHandler
             severity = ((MessageWithSeverity) message).getSeverity();
         }
 
-        FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(convertSeverity(severity),
-                        message.toString(messageContext),
-                        message.toString(messageContext)));
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(facesContext != null)
+        {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(convertSeverity(severity),
+                            message.toString(messageContext),
+                            message.toString(messageContext)));
+        }
+        else
+        {
+            logMessage(message.toString(messageContext), severity);
+        }
+    }
+
+    private void logMessage(String messageText, MessagePayload severity)
+    {
+        if(this.logger == null)
+        {
+            this.logger = Logger.getLogger(JsfAwareMessageHandler.class.getName());
+
+            this.projectStageDevelopment = ProjectStage.Development ==
+                    ProjectStageProducer.getInstance().getProjectStage();
+        }
+
+        if(this.projectStageDevelopment)
+        {
+            this.logger.warning(
+                    getClass().getName() + " logs a message instead of using the " + FacesContext.class.getName());
+        }
+
+        if (MessageSeverity.INFO.equals(severity))
+        {
+            this.logger.info(messageText);
+        }
+        else if (MessageSeverity.WARN.equals(severity))
+        {
+            this.logger.warning(messageText);
+        }
+        else
+        {
+            this.logger.severe(messageText);
+        }
     }
 
     private FacesMessage.Severity convertSeverity(MessagePayload payload)

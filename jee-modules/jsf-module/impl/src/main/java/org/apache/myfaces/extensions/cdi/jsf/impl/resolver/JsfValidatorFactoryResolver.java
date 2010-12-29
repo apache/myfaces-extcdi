@@ -21,10 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.resolver;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
 
-import javax.faces.context.FacesContext;
-import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -32,26 +29,8 @@ import java.util.Map;
 @BeanValidation
 public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFactory>
 {
-    private static final String VALIDATOR_FACTORY_KEY = "javax.faces.validator.beanValidator.ValidatorFactory";
-
     public ValidatorFactory resolve()
     {
-        Map<String, Object> applicationMap = FacesContext.getCurrentInstance().getExternalContext().getApplicationMap();
-        ValidatorFactory validatorFactory = null;
-
-        if (applicationMap.containsKey(VALIDATOR_FACTORY_KEY))
-        {
-            if (applicationMap.get(VALIDATOR_FACTORY_KEY) instanceof ValidatorFactory)
-            {
-                validatorFactory = (ValidatorFactory) applicationMap.get(VALIDATOR_FACTORY_KEY);
-            }
-        }
-
-        if (validatorFactory == null)
-        {
-            validatorFactory = Validation.buildDefaultValidatorFactory();
-            applicationMap.put(VALIDATOR_FACTORY_KEY, validatorFactory);
-        }
-        return validatorFactory;
+        return new SerializableValidatorFactory();
     }
 }
