@@ -35,7 +35,7 @@ public class CodiInformationExtension implements Extension, Deactivatable
     protected final Logger logger = Logger.getLogger(CodiInformationExtension.class.getName());
 
     @SuppressWarnings({"UnusedDeclaration"})
-    public void setBeanManager(@Observes AfterDeploymentValidation afterDeploymentValidation)
+    public void logStartupInfo(@Observes AfterDeploymentValidation afterDeploymentValidation)
     {
         if(!isActivated())
         {

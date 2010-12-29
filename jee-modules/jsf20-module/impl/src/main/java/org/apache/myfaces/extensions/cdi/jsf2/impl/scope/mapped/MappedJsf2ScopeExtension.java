@@ -95,7 +95,7 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
 
     private void logConvertedBean(AnnotatedType annotatedType, Class<? extends Annotation> jsf2ScopeAnnotation)
     {
-        ProjectStage projectStage = getCurrentProjectStage();
+        ProjectStage projectStage = ProjectStageProducer.getInstance().getProjectStage();
 
         if (projectStage == ProjectStage.Development)
         {
@@ -117,7 +117,7 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
 
         if(managedBeanAnnotation.eager())
         {
-            ProjectStage projectStage = getCurrentProjectStage();
+            ProjectStage projectStage = ProjectStageProducer.getInstance().getProjectStage();
 
             if (projectStage == ProjectStage.Development)
             {
@@ -128,26 +128,6 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
             return true;
         }
         return false;
-    }
-
-    private ProjectStage getCurrentProjectStage()
-    {
-        try
-        {
-            ProjectStageProducer projectStageProducer = ProjectStageProducer.getInstance();
-
-            //noinspection ConstantConditions
-            projectStageProducer.determineProjectStage();
-            return projectStageProducer.getProjectStage();
-        }
-        catch (Exception e)
-        {
-            if (!(e instanceof RuntimeException))
-            {
-                throw new RuntimeException(e);
-            }
-            throw (RuntimeException)e;
-        }
     }
 
     public boolean isActivated()

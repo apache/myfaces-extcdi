@@ -44,8 +44,6 @@ public class ProjectStageProducerTest
         // first manually reset the ProjectStage
         ProjectStageProducer.setProjectStage(null);
 
-        psp.determineProjectStage();
-
         ProjectStage ps = psp.getProjectStage();
         Assert.assertNotNull(ps);
         Assert.assertEquals(ps, ProjectStage.Production);

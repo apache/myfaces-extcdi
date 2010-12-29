@@ -76,7 +76,6 @@ public class ViewScopedExtension implements Extension, Deactivatable
             // at this time
             ProjectStageProducer psp = ProjectStageProducer.getInstance();
 
-            psp.determineProjectStage();
             ProjectStage projectStage = psp.getProjectStage();
 
             if (projectStage == ProjectStage.UnitTest)

@@ -20,16 +20,13 @@ package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.core.impl.util.JndiUtils;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-import java.io.IOException;
-import java.util.logging.Logger;
+import javax.enterprise.inject.Typed;
 
 /**
  * <p>Produces {@link ProjectStage} configurations.</p>
@@ -55,19 +52,18 @@ import java.util.logging.Logger;
  *
  * TODO move jsf specific parts
  */
-@ApplicationScoped
+@Typed()
 public class ProjectStageProducer
 {
+    private final static String PROJECTSTAGE_PRODUCER_PROPERTY_KEY
+            = "org.apache.myfaces.extensions.cdi.ProjectStageProducer";
 
-    /** JNDI path for the ProjectStage */
-    public final static String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
+    private static final String PROJECTSTAGE_PRODUCER_JNDI_NAME = "java:comp/env/myfaces-codi/ProjectStageProducer";
 
-    /** System Property to set the ProjectStage, if not present via the standard way */
-    public final static String JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME = "faces.PROJECT_STAGE";
+    private final static String PROJECTSTAGE_PROPERTY_KEY
+            = "org.apache.myfaces.extensions.cdi.ProjectStage";
 
-    private final static String PROJECTSTAGE_PRODUCER_PROPERTY_KEY= "extcdi.projectStageProducer"; 
-
-    private final static Logger log = Logger.getLogger(ProjectStageProducer.class.getName());
+    private static final String PROJECTSTAGE_JNDI_NAME = "java:comp/env/myfaces-codi/ProjectStage";
 
     /**
      * ProjectStageProducers must only be created by subclassing producers
@@ -84,15 +80,29 @@ public class ProjectStageProducer
     /**
      * for the singleton factory
      */
-    private static ProjectStageProducer psp;
+    private static ProjectStageProducer projectStageProducer;
 
     /**
      * We can only produce @Dependent scopes since an enum is final.
      * @return current ProjectStage
      */
-    @Produces @Dependent @Default
+    @Produces
+    @Dependent
+    @Default
     public ProjectStage getProjectStage()
     {
+        if(projectStage == null)
+        {
+            synchronized (ProjectStageProducer.class)
+            {
+                projectStage = resolveProjectStage();
+            }
+
+            if(projectStage == null)
+            {
+                projectStage = ProjectStage.Production;
+            }
+        }
         return projectStage;
     }
 
@@ -103,33 +113,40 @@ public class ProjectStageProducer
      * <p></p>
      *
      * @return the ProjectStageProducer instance.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     * @throws IllegalAccessException
-     * @throws InstantiationException
      */
     public synchronized static ProjectStageProducer getInstance()
-            throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException
     {
-        if (psp == null)
+        if (projectStageProducer == null)
         {
+            projectStageProducer = CodiUtils.lookupFromEnvironment(
+                    PROJECTSTAGE_PRODUCER_PROPERTY_KEY, PROJECTSTAGE_PRODUCER_JNDI_NAME, ProjectStageProducer.class);
 
-            String pspClassName = CodiUtils.getCodiProperty(PROJECTSTAGE_PRODUCER_PROPERTY_KEY);
-            if (pspClassName != null && pspClassName.length() > 0)
+            if(projectStageProducer == null)
             {
-                Class<ProjectStageProducer> pspClass = (Class<ProjectStageProducer>) Class.forName(pspClassName);
-                psp = pspClass.newInstance();
+                //workaround to avoid the usage of a service loader
+                projectStageProducer = ClassUtils.tryToInstantiateClassForName(
+                        "org.apache.myfaces.extensions.cdi.jsf2.impl.projectstage.JsfProjectStageProducer",
+                        ProjectStageProducer.class);
             }
 
-            if (psp == null)
+            if(projectStageProducer == null)
+            {
+                //workaround to avoid the usage of a service loader
+                projectStageProducer = ClassUtils.tryToInstantiateClassForName(
+                        "org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer",
+                        ProjectStageProducer.class);
+            }
+
+            if (projectStageProducer == null)
             {
                 // if we still didn't find a customised ProjectStageProducer,
                 // then we take the default one.
-                psp = new ProjectStageProducer();
+                projectStageProducer = new ProjectStageProducer();
             }
+            projectStageProducer.init();
         }
 
-        return psp;
+        return projectStageProducer;
     }
 
     /**
@@ -142,28 +159,11 @@ public class ProjectStageProducer
         projectStage = ps;
     }
 
-    /**
-     * Read the configuration from the stated places.
-     * This can be overloaded to implement own lookup mechanisms.
-     *
-     * This will only determine the ProjectStage if it is not yet set.
-     */
-    @Inject
-    public void determineProjectStage()
+    private void init()
     {
         if (projectStage == null)
         {
-            projectStage = determineCustomProjectStage();
-        }
-
-        if (projectStage == null)
-        {
-            projectStage = getProjectStageFromJNDI();
-        }
-
-        if (projectStage == null)
-        {
-            projectStage = getProjectStageFromEnvironment();
+            projectStage = resolveProjectStage();
         }
 
         // the last resort is setting it to Production
@@ -174,19 +174,10 @@ public class ProjectStageProducer
     }
 
 
-    /**
-     * This can get used to provide additional ProjectStage
-     * lookup mechanisms.
-     * @return the detected {@link ProjectStage} or <code>null</code> if non was found.
-     */
-    protected ProjectStage determineCustomProjectStage()
+    protected ProjectStage resolveProjectStage()
     {
-        return null;
-    }
-
-    protected ProjectStage getProjectStageFromEnvironment()
-    {
-        String stageName = System.getProperty(JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME);
+        String stageName = CodiUtils
+                .lookupFromEnvironment(PROJECTSTAGE_PROPERTY_KEY, PROJECTSTAGE_JNDI_NAME, String.class);
 
         if (stageName != null)
         {
@@ -194,27 +185,4 @@ public class ProjectStageProducer
         }
         return null;
     }
-
-    protected ProjectStage getProjectStageFromJNDI()
-    {
-        ProjectStage ps = null;
-        String stageName = null;
-
-        try
-        {
-            stageName = JndiUtils.lookup(PROJECT_STAGE_JNDI_NAME, String.class);
-        }
-        catch (RuntimeException jndiException)
-        {
-            // no-op
-        }
-
-        if (stageName != null)
-        {
-            ps = ProjectStage.valueOf(stageName);
-        }
-
-        return ps;
-    }
-
 }

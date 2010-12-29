@@ -19,24 +19,32 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
+import javax.enterprise.inject.Typed;
 import javax.faces.context.FacesContext;
 
 /**
- * This is a JSF-2 specific version of the {@link ProjectStageProducer}.
+ * This is a JSF-2 specific version of the
+ * {@link org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer}.
  * In addition to it's parent class, it will first try to pickup the
  * JSF ProjectStage from the Application. If this returns the JSF
  * {@link javax.faces.application.ProjectStage#Production}, we'll go on
  * and try to figure out our own EXTCDI 
  * {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}s
  */
-public class Jsf2ProjectStageProducer extends ProjectStageProducer
+@Typed()
+public class JsfProjectStageProducer extends
+        org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer
 {
     @Override
-    protected ProjectStage determineCustomProjectStage()
+    protected ProjectStage resolveProjectStage()
     {
-        ProjectStage codiProjectStage = null;
+        ProjectStage projectStage = super.resolveProjectStage();
+
+        if(projectStage != null)
+        {
+            return projectStage;
+        }
 
         javax.faces.application.ProjectStage jsfProjectStage =
                 FacesContext.getCurrentInstance().getApplication().getProjectStage();
@@ -47,22 +55,18 @@ public class Jsf2ProjectStageProducer extends ProjectStageProducer
             switch(jsfProjectStage)
             {
                 case UnitTest:
-                    codiProjectStage = ProjectStage.UnitTest;
-                    break;
-
+                    return ProjectStage.UnitTest;
                 case Development:
-                    codiProjectStage = ProjectStage.Development;
-                    break;
+                    return ProjectStage.Development;
 
                 case SystemTest:
-                    codiProjectStage = ProjectStage.SystemTest;
-                    break;
+                    return ProjectStage.SystemTest;
 
                 default:
                 // we cannot match others, so codiProjectStage remains null in the default case
             }
         }
 
-        return codiProjectStage;
+        return null;
     }
 }

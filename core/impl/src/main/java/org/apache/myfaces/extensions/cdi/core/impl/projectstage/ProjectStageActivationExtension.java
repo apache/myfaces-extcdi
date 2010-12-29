@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 
@@ -39,20 +40,10 @@ import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
  */
 public class ProjectStageActivationExtension implements Extension, Deactivatable
 {
-    private ProjectStage projectStage = null;
-
-    protected ProjectStage getProjectStage()
+    protected void initProjectStage(@Observes AfterDeploymentValidation afterDeploymentValidation)
     {
-        if (projectStage == null)
-        {
-            // we have to do this manually since we don't have any
-            // injection mechanism in place at this point since
-            // the CDI container has not yet been started...
-            ProjectStageProducer psp = new ProjectStageProducer();
-            psp.determineProjectStage();
-            projectStage = psp.getProjectStage();
-        }
-        return projectStage;
+        //trigger initialization
+        ProjectStageProducer.getInstance();
     }
 
     /**
@@ -84,7 +75,7 @@ public class ProjectStageActivationExtension implements Extension, Deactivatable
     {
         if (activatedIn != null && activatedIn.length > 0)
         {
-            ProjectStage ps = getProjectStage();
+            ProjectStage ps = ProjectStageProducer.getInstance().getProjectStage();
             for (Class<? extends ProjectStage> activated : activatedIn)
             {
                 if (ps.getClass().equals(activated))

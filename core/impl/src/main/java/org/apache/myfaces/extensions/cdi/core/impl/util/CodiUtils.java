@@ -49,9 +49,6 @@ import java.util.Set;
  */
 public class CodiUtils
 {
-    //TODO change source
-    public static final String CODI_PROPERTIES = "/META-INF/extcdi/extcdi.properties";
-
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
@@ -165,27 +162,6 @@ public class CodiUtils
         }
 
         return props;
-    }
-
-    /**
-     * Lookup the given property from the default CODI properties file.
-     *
-     * @param propertyName
-     * @return the value of the property or <code>null</code> it it doesn't exist.
-     * @throws IOException
-     * @throws IllegalArgumentException if the standard CODI properties file couldn't get found
-     */
-    public static String getCodiProperty(String propertyName) throws IOException
-    {
-        String value = null;
-        Properties props = getProperties(CODI_PROPERTIES);
-
-        if (props != null)
-        {
-            value = props.getProperty(propertyName);
-        }
-
-        return value;
     }
 
     public static ProjectStage getCurrentProjectStage()
@@ -454,26 +430,32 @@ public class CodiUtils
 
     public static <T> T lookupFromEnvironment(String systemPropertyName, String jndiName , Class<T> targetType)
     {
-        String className = System.getProperty(systemPropertyName);
-        if (className != null)
+        String configuredValue = System.getProperty(systemPropertyName);
+        if (configuredValue != null)
         {
-            return tryToInstantiateClassForName(className, targetType);
+            if(String.class.isAssignableFrom(targetType))
+            {
+                return (T)configuredValue;
+            }
+            return tryToInstantiateClassForName(configuredValue, targetType);
         }
-
-        String classDeactivatorName = null;
 
         try
         {
-            classDeactivatorName = JndiUtils.lookup(jndiName, String.class);
+            configuredValue = JndiUtils.lookup(jndiName, String.class);
         }
         catch (RuntimeException jndiException)
         {
             // noop - lookup did not work
         }
 
-        if (classDeactivatorName != null)
+        if (configuredValue != null)
         {
-            return tryToInstantiateClassForName(classDeactivatorName, targetType);
+            if(String.class.isAssignableFrom(targetType))
+            {
+                return (T)configuredValue;
+            }
+            return tryToInstantiateClassForName(configuredValue, targetType);
         }
 
         return null;
