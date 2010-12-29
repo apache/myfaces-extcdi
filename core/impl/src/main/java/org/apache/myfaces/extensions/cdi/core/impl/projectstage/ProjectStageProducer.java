@@ -129,16 +129,6 @@ public class ProjectStageProducer
                         ProjectStageProducer.class);
             }
 
-            /*TODO
-            if(projectStageProducer == null)
-            {
-                //workaround to avoid the usage of a service loader
-                projectStageProducer = ClassUtils.tryToInstantiateClassForName(
-                        "org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer",
-                        ProjectStageProducer.class);
-            }
-            */
-
             if (projectStageProducer == null)
             {
                 // if we still didn't find a customised ProjectStageProducer,
