@@ -25,18 +25,25 @@ import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
+import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
 
+import javax.enterprise.inject.Typed;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import static org.junit.Assert.*;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class SimplePageInteraction
 {
+    private static final Logger LOGGER = Logger.getLogger(SimplePageInteraction.class.getName());
+
     private WebClient webClient;
 
     private String baseURL;
@@ -58,6 +65,7 @@ public class SimplePageInteraction
 
     public SimplePageInteraction with(Class<? extends ViewConfig> pageDefinition)
     {
+        checkUsage();
         new ViewConfigExtension()
         {
             @Override
@@ -67,6 +75,32 @@ public class SimplePageInteraction
             }
         }.addPageDefinition(pageDefinition);
         return this;
+    }
+
+    protected void checkUsage()
+    {
+        @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+        RuntimeException runtimeException = new RuntimeException();
+
+        StackTraceElement[] stackTrace = runtimeException.getStackTrace();
+
+        Class currentClass;
+        for(StackTraceElement element : stackTrace)
+        {
+            currentClass = ClassUtils.tryToLoadClassForName(element.getClassName());
+            if(currentClass == null)
+            {
+                continue;
+            }
+
+            if(AbstractJsfAwareTest.class.isAssignableFrom(currentClass) &&
+                    !AbstractSimpleCargoTest.class.isAssignableFrom(currentClass))
+            {
+                LOGGER.warning(getClass().getName() + "#with is only required for tests which extend " +
+                    AbstractSimpleCargoTest.class.getName() + ". It's used with " + element.getClassName());
+                return;
+            }
+        }
     }
 
     public SimplePageInteraction start(Class<? extends ViewConfig> pageDefinition)
