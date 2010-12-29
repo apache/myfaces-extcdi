@@ -139,6 +139,24 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.openwebbeans.test</groupId>
+            <artifactId>cditest</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.openwebbeans.test</groupId>
+            <artifactId>cditest-owb</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.myfaces.test</groupId>
+            <artifactId>myfaces-test12</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
         <!-- Servlet container -->
         <dependency>
             <groupId>javax.servlet</groupId>

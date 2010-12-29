@@ -18,12 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo.conversation;
 
-import org.apache.myfaces.extensions.cdi.test.cargo.AbstractCargoTest;
+import org.apache.myfaces.extensions.cdi.test.cargo.AbstractSimpleCargoTest;
 
 /**
  * @author Gerhard Petracek
  */
-abstract class BaseConversationTest extends AbstractCargoTest
+abstract class BaseConversationTest extends AbstractSimpleCargoTest
 {
     @Override
     protected String getCustomBaseURL()
