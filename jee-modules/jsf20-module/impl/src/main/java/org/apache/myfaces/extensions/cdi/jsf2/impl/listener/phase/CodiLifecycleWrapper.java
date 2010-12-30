@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 
@@ -44,6 +45,8 @@ class CodiLifecycleWrapper extends Lifecycle
 
     private Boolean initialized;
 
+    private Boolean applicationInitialized;
+
     CodiLifecycleWrapper(Lifecycle wrapped, List<PhaseListener> phaseListeners)
     {
         this.wrapped = wrapped;
@@ -62,6 +65,7 @@ class CodiLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
+        broadcastApplicationStartupBroadcaster();
         broadcastBeforeFacesRequestEvent(facesContext);
 
         WindowHandler windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
@@ -93,6 +97,18 @@ class CodiLifecycleWrapper extends Lifecycle
             throws FacesException
     {
         wrapped.render(facesContext);
+    }
+
+    private void broadcastApplicationStartupBroadcaster()
+    {
+        //just an !additional! check to improve the performance
+        if(applicationInitialized == null)
+        {
+            applicationInitialized = true;
+            ApplicationStartupBroadcaster applicationStartupBroadcaster =
+                    CodiUtils.getContextualReferenceByClass(ApplicationStartupBroadcaster.class);
+            applicationStartupBroadcaster.broadcastStartupEvent();
+        }
     }
 
     private void broadcastBeforeFacesRequestEvent(FacesContext facesContext)

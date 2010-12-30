@@ -25,6 +25,12 @@
 
     <description>Hello MyFaces CODI JSF 1.2</description>
 
+    <context-param>
+        <description>This parameter is just a demo parameter used by the StartupObserver</description>
+        <param-name>demoName</param-name>
+        <param-value>MyFaces CODI JSF 1.2 Demo</param-value>
+    </context-param>
+
     <listener>
         <listener-class>org.apache.webbeans.servlet.WebBeansConfigurationListener</listener-class>
     </listener>
