@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.CompositeMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
+import org.apache.myfaces.extensions.cdi.message.impl.NamedArgumentMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.NumberedArgumentAwareMessageInterpolator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -98,6 +99,21 @@ public class ParametrizedMessageInterpolationTest extends AbstractTest
                 .namedArgument("lastName", "Geiler").namedArgument("firstName", "Manfred").toText();
 
         assertEquals("[hello] Gerhard and Manfred (Petracek and Geiler) greet Thomas", messageText);
+    }
+
+    @Test
+    public void createMixedArgumentAwareMessageWithSimpleNamedArgumentMessageInterpolatorTest()
+    {
+        MessageInterpolator messageInterpolator = new CompositeMessageInterpolator(new NamedArgumentMessageInterpolator(), new NumberedArgumentAwareMessageInterpolator());
+        String messageText = this.messageContext.config().change().messageInterpolator(messageInterpolator).create()
+                .message().text("[hello] {0} and {firstName} ({1} and {lastName})")
+                .argument("Gerhard", "Petracek")
+                .namedArgument("person", new TestPerson())
+                .namedArgument("firstName", "Manfred")
+                .namedArgument("lastName", "Geiler")
+                .toText();
+
+        assertEquals("[hello] Gerhard and Manfred (Petracek and Geiler)", messageText);
     }
 
     private class TestPerson implements Serializable

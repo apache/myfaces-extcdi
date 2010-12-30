@@ -16,11 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.resolver;
+package org.apache.myfaces.extensions.cdi.jsf.impl.bv.resolver;
 
 import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
 import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
 
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
+
+import javax.inject.Inject;
 import javax.validation.ValidatorFactory;
 
 /**
@@ -29,8 +32,25 @@ import javax.validation.ValidatorFactory;
 @BeanValidation
 public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFactory>
 {
+    private boolean invalidValueAwareMessageInterpolatorEnabled;
+
+    protected JsfValidatorFactoryResolver()
+    {
+    }
+
+    @Inject
+    public JsfValidatorFactoryResolver(JsfModuleConfig jsfModuleConfig)
+    {
+        this.invalidValueAwareMessageInterpolatorEnabled
+                = jsfModuleConfig.isInvalidValueAwareMessageInterpolatorEnabled();
+    }
+
     public ValidatorFactory resolve()
     {
+        if(this.invalidValueAwareMessageInterpolatorEnabled)
+        {
+            return new InvalidValueAwareValidatorFactory();
+        }
         return new SerializableValidatorFactory();
     }
 }

@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.impl.CompositeMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
+import org.apache.myfaces.extensions.cdi.message.impl.NamedArgumentMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.NumberedArgumentAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
@@ -47,7 +48,9 @@ class FacesMessageInterpolator implements MessageInterpolator
         }
         else
         {
-            this.messageInterpolator = new NumberedArgumentAwareMessageInterpolator();
+            this.messageInterpolator = new CompositeMessageInterpolator(
+                    new NamedArgumentMessageInterpolator(),
+                    new NumberedArgumentAwareMessageInterpolator());
         }
     }
 

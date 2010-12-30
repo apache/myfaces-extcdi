@@ -49,7 +49,11 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
         {
             return this.wrappedValidatorFactory.getValidator();
         }
-        return this.usingContext().constraintValidatorFactory(getConstraintValidatorFactory()).getValidator();
+        return this.usingContext()
+                .constraintValidatorFactory(getConstraintValidatorFactory())
+                .messageInterpolator(this.wrappedValidatorFactory.getMessageInterpolator())
+                .traversableResolver(this.wrappedValidatorFactory.getTraversableResolver())
+                .getValidator();
     }
 
     public ValidatorContext usingContext()

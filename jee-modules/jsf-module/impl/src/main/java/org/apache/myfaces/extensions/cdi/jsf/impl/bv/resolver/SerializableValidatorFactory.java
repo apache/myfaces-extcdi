@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.resolver;
+package org.apache.myfaces.extensions.cdi.jsf.impl.bv.resolver;
 
 import javax.enterprise.inject.Typed;
 import javax.faces.context.FacesContext;
@@ -83,7 +83,7 @@ class SerializableValidatorFactory implements ValidatorFactory, Serializable
         return getValidatorFactory().unwrap(tClass);
     }
 
-    private ValidatorFactory getValidatorFactory()
+    protected ValidatorFactory getValidatorFactory()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if(!this.jsfInitialized && facesContext == null &&

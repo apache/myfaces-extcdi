@@ -56,4 +56,14 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
     {
         return true;
     }
+
+    /**
+     * Allows to use e.g.:
+     * "Validation error: {invalidValue} isn't a valid value."
+     * @return true if the InvalidValueAwareMessageInterpolator should be used, false otherwise
+     */
+    public boolean isInvalidValueAwareMessageInterpolatorEnabled()
+    {
+        return true;
+    }
 }

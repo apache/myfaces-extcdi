@@ -37,7 +37,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
 
     public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
-        Serializable[] numberedArguments = addNumberedArguments(arguments);
+        Serializable[] numberedArguments = extractNumberedArguments(arguments);
 
         if (numberedArguments.length > 0)
         {
@@ -47,7 +47,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
         return messageDescriptor;
     }
 
-    private Serializable[] addNumberedArguments(Serializable[] arguments)
+    private Serializable[] extractNumberedArguments(Serializable[] arguments)
     {
         List<Serializable> result = new ArrayList<Serializable>();
 
