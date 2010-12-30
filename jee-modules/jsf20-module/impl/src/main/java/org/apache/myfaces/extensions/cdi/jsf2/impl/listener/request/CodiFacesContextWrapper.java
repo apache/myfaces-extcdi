@@ -19,20 +19,15 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
-import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
 import javax.faces.application.Application;
-import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -43,9 +38,7 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     private ExternalContext wrappedExternalContext;
 
-    private BeanManager beanManager;
-
-    private boolean advancedQualifierRequiredForDependencyInjection;
+    private Boolean advancedQualifierRequiredForDependencyInjection;
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
@@ -57,84 +50,62 @@ class CodiFacesContextWrapper extends FacesContextWrapper
                 new RedirectedConversationAwareExternalContext(wrappedFacesContext.getExternalContext());
 
         setCurrentInstance(this);
-        //(currently) causes issue in combination with geronimo 3.0-m1
-        init();
-    }
-
-    private void init()
-    {
-        this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        this.advancedQualifierRequiredForDependencyInjection =
-                CodiUtils.getOrCreateScopedInstanceOfBeanByClass(this.beanManager, CodiCoreConfig.class)
-                        .isAdvancedQualifierRequiredForDependencyInjection();
-
-        initBroadcaster();
-
-        broadcastBeforeFacesRequestEvent();
     }
 
     @Override
     public Application getApplication()
     {
+        lazyInit();
         return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(),
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
-    private void broadcastBeforeFacesRequestEvent()
+    @Override
+    public void release()
     {
-        if(this.beforeAfterFacesRequestBroadcaster != null)
+        if(!this.wrappedFacesContext.getApplication().getResourceHandler().isResourceRequest(this.wrappedFacesContext))
         {
-            this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(this);
+            broadcastAfterFacesRequestEvent();
         }
+
+        wrappedFacesContext.release();
     }
 
     private void broadcastAfterFacesRequestEvent()
     {
+        lazyInit();
         if(this.beforeAfterFacesRequestBroadcaster != null)
         {
             this.beforeAfterFacesRequestBroadcaster.broadcastAfterFacesRequestEvent(this);
         }
     }
 
+    private void lazyInit()
+    {
+        if(this.advancedQualifierRequiredForDependencyInjection == null)
+        {
+            this.advancedQualifierRequiredForDependencyInjection =
+                    CodiUtils.getContextualReferenceByClass(CodiCoreConfig.class)
+                            .isAdvancedQualifierRequiredForDependencyInjection();
+
+            if(!ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
+            {
+                return;
+            }
+
+            this.beforeAfterFacesRequestBroadcaster =
+                    CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);
+        }
+    }
+
+    @Override
+    public ExternalContext getExternalContext()
+    {
+        return this.wrappedExternalContext;
+    }
+
     public FacesContext getWrapped()
     {
         return this.wrappedFacesContext;
-    }
-
-    public ExternalContext getExternalContext()
-    {
-        return wrappedExternalContext;
-    }
-
-    public void release()
-    {
-        broadcastAfterFacesRequestEvent();
-        wrappedFacesContext.release();
-    }
-
-    private void initBroadcaster()
-    {
-        if(!ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
-        {
-            return;
-        }
-
-        Set<? extends Bean> broadcasterBeans = this.beanManager.getBeans(BeforeAfterFacesRequestBroadcaster.class);
-
-        if(broadcasterBeans.size() != 1)
-        {
-            //TODO add an exception to the exception context
-            return;
-        }
-
-        CreationalContext<BeforeAfterFacesRequestBroadcaster> creationalContext;
-
-        for(Bean<BeforeAfterFacesRequestBroadcaster> requestHandlerBean : broadcasterBeans)
-        {
-            creationalContext = beanManager.createCreationalContext(requestHandlerBean);
-
-            this.beforeAfterFacesRequestBroadcaster = requestHandlerBean.create(creationalContext);
-        }
     }
 }

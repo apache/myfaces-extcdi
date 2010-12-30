@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -38,6 +40,10 @@ class CodiLifecycleWrapper extends Lifecycle
 {
     private Lifecycle wrapped;
 
+    private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
+
+    private Boolean initialized;
+
     CodiLifecycleWrapper(Lifecycle wrapped, List<PhaseListener> phaseListeners)
     {
         this.wrapped = wrapped;
@@ -56,6 +62,8 @@ class CodiLifecycleWrapper extends Lifecycle
     public void execute(FacesContext facesContext)
             throws FacesException
     {
+        broadcastBeforeFacesRequestEvent(facesContext);
+
         WindowHandler windowHandler = CodiUtils.getContextualReferenceByClass(WindowHandler.class);
 
         if (windowHandler instanceof LifecycleAwareWindowHandler)
@@ -85,5 +93,31 @@ class CodiLifecycleWrapper extends Lifecycle
             throws FacesException
     {
         wrapped.render(facesContext);
+    }
+
+    private void broadcastBeforeFacesRequestEvent(FacesContext facesContext)
+    {
+        lazyInit();
+        if(this.beforeAfterFacesRequestBroadcaster != null)
+        {
+            this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(facesContext);
+        }
+    }
+
+    private void lazyInit()
+    {
+        if(this.initialized == null)
+        {
+            synchronized (this)
+            {
+                if(ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
+                {
+                    this.beforeAfterFacesRequestBroadcaster =
+                            CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);
+                }
+
+                this.initialized = true;
+            }
+        }
     }
 }
