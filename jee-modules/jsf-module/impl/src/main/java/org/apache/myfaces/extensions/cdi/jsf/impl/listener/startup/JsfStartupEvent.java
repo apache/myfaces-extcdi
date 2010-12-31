@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup;
 
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent;
 
+import javax.enterprise.inject.Typed;
 import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class JsfStartupEvent implements StartupEvent
 {
     private FacesContext facesContext;
@@ -36,7 +38,7 @@ class JsfStartupEvent implements StartupEvent
         this.facesContext = facesContext;
     }
 
-    public Map<String, Serializable> getApplicationProperties()
+    public Map<String, Serializable> getApplicationParameters()
     {
         return this.facesContext.getExternalContext().getInitParameterMap();
     }

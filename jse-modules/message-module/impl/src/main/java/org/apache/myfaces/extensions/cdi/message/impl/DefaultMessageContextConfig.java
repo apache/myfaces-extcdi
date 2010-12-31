@@ -289,6 +289,73 @@ class DefaultMessageContextConfig implements MessageContextConfig
         this.formatterFactory = formatterFactory;
     }
 
+    @Override
+    public String toString()
+    {
+        String newLine = System.getProperty("line.separator");
+
+        StringBuilder configInfo = new StringBuilder("MessageContextConfig class: ");
+        configInfo.append(getClass().getName());
+        configInfo.append(newLine);
+
+        if(this.messageInterpolator != null)
+        {
+            configInfo.append("   MessageInterpolator class: ").append(this.messageInterpolator.getClass());
+        }
+        else
+        {
+            configInfo.append("   no MessageInterpolator");
+        }
+        configInfo.append(newLine);
+
+        if(this.messageResolver != null)
+        {
+            configInfo.append("   MessageResolver class: ").append(this.messageResolver.getClass());
+        }
+        else
+        {
+            configInfo.append("   no MessageResolver");
+        }
+        configInfo.append(newLine);
+
+        if(this.messageHandlers != null && !this.messageHandlers.isEmpty())
+        {
+            for(MessageHandler messageHandler : this.messageHandlers)
+            {
+                configInfo.append("   MessageHandler class: ").append(messageHandler.getClass());
+            }
+        }
+        else
+        {
+            configInfo.append("   no MessageHandlers");
+        }
+        configInfo.append(newLine);
+
+        if(this.localeResolver != null)
+        {
+            configInfo.append("   LocaleResolver class: ").append(this.localeResolver.getClass());
+        }
+        else
+        {
+            configInfo.append("   no LocaleResolver");
+        }
+        configInfo.append(newLine);
+
+        if(this.formatterFactory != null)
+        {
+            configInfo.append("   FormatterFactory class: ").append(this.formatterFactory.getClass());
+            configInfo.append(newLine);
+            //TODO
+            //configInfo.append("   FormatterFactory details: ").append(this.formatterFactory.toString());
+        }
+        else
+        {
+            configInfo.append("   no FormatterFactory");
+        }
+
+        return configInfo.toString();
+    }
+
     /*
      * generated
      */

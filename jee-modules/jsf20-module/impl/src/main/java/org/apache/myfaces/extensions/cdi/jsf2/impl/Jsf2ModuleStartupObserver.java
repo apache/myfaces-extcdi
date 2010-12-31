@@ -16,29 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.jsf2.impl;
+
+import org.apache.myfaces.extensions.cdi.jsf.impl.JsfModuleStartupObserver;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Specializes;
 
 /**
  * @author Gerhard Petracek
  */
+@Specializes
 @ApplicationScoped
-public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
+public class Jsf2ModuleStartupObserver extends JsfModuleStartupObserver
 {
-    private static final long serialVersionUID = -3332668819111106748L;
-
-    protected CodiCoreConfig()
+    @Override
+    protected String getTargetJsfVersion()
     {
-    }
-
-    public boolean isAdvancedQualifierRequiredForDependencyInjection()
-    {
-        return true;
-    }
-
-    public boolean isConfigurationLoggingEnabled()
-    {
-        return true;
+        return "2.0";
     }
 }

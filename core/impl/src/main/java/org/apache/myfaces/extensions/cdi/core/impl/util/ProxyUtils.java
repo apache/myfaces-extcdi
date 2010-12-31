@@ -16,29 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.core.impl.util;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Typed;
 
 /**
  * @author Gerhard Petracek
  */
-@ApplicationScoped
-public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
+@Typed()
+public class ProxyUtils
 {
-    private static final long serialVersionUID = -3332668819111106748L;
-
-    protected CodiCoreConfig()
+    private ProxyUtils()
     {
     }
 
-    public boolean isAdvancedQualifierRequiredForDependencyInjection()
+    public static Class getUnproxiedClass(Class currentClass)
     {
-        return true;
+        if(isProxiedClass(currentClass))
+        {
+            return currentClass.getSuperclass();
+        }
+        return currentClass;
     }
 
-    public boolean isConfigurationLoggingEnabled()
+    public static boolean isProxiedClass(Class currentClass)
     {
-        return true;
+        return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
+            currentClass.getName().contains("$$FastClassByCGLIB$$") ||
+            currentClass.getName().contains("_$$_javassist");
     }
 }

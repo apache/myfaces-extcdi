@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.message;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 import static org.apache.myfaces.extensions.cdi.jsf.api.JsfModuleBeanNames.MESSAGE_CONTEXT;
-import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
@@ -30,9 +29,7 @@ import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
@@ -69,7 +66,7 @@ public class JsfAwareMessageContextProducer
 
         MessageContext result = defaultMessageContext.config()
                 .use()
-                    .localeResolver(createJsfAwareLocaleResolver())
+                    .localeResolver(new JsfAwareLocaleResolver())
                     .messageResolver(new JsfAwareApplicationMessagesMessageResolver())
                     .messageInterpolator(new FacesMessageInterpolator(elProvider, argumentFilter))
                     .addMessageHandler(new JsfAwareMessageHandler())
@@ -81,24 +78,5 @@ public class JsfAwareMessageContextProducer
         }
 
         return result;
-    }
-
-    private LocaleResolver createJsfAwareLocaleResolver()
-    {
-        return new LocaleResolver()
-        {
-            private static final long serialVersionUID = 5945811297524654438L;
-
-            public Locale getLocale()
-            {
-                Locale locale = null;
-                FacesContext facesContext = FacesContext.getCurrentInstance();
-                if (facesContext != null && facesContext.getViewRoot() != null)
-                {
-                    locale = facesContext.getViewRoot().getLocale();
-                }
-                return locale != null ? locale : Locale.getDefault();
-            }
-        };
     }
 }

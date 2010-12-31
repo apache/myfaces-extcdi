@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.logging;
 
 import org.apache.myfaces.extensions.cdi.core.impl.logging.DefaultLogger;
 
+import javax.enterprise.inject.Typed;
+
+@Typed()
 class SimpleTestLogger extends DefaultLogger
 {
     private static final long serialVersionUID = -4516457276481051077L;

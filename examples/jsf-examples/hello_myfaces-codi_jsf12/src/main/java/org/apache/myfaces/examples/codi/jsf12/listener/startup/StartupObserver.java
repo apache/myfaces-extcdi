@@ -38,7 +38,7 @@ public class StartupObserver
 
     protected void logApplicationProperties(@Observes StartupEvent startupEvent)
     {
-        for(Map.Entry<String, Serializable> property : startupEvent.getApplicationProperties().entrySet())
+        for(Map.Entry<String, Serializable> property : startupEvent.getApplicationParameters().entrySet())
         {
             this.logger.info("key: " + property.getKey() + " value: " + property.getValue());
         }

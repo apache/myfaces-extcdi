@@ -26,5 +26,5 @@ import java.util.Map;
  */
 public interface StartupEvent
 {
-    Map<String, Serializable> getApplicationProperties();
+    Map<String, Serializable> getApplicationParameters();
 }

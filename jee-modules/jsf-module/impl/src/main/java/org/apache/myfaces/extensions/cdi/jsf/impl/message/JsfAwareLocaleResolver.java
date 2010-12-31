@@ -16,29 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config;
+package org.apache.myfaces.extensions.cdi.jsf.impl.message;
 
-import javax.enterprise.context.ApplicationScoped;
+import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
+
+import javax.faces.context.FacesContext;
+import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
  */
-@ApplicationScoped
-public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
+public class JsfAwareLocaleResolver implements LocaleResolver
 {
-    private static final long serialVersionUID = -3332668819111106748L;
+    private static final long serialVersionUID = 5945811297524654438L;
 
-    protected CodiCoreConfig()
+    public Locale getLocale()
     {
-    }
-
-    public boolean isAdvancedQualifierRequiredForDependencyInjection()
-    {
-        return true;
-    }
-
-    public boolean isConfigurationLoggingEnabled()
-    {
-        return true;
+        Locale locale = null;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null && facesContext.getViewRoot() != null)
+        {
+            locale = facesContext.getViewRoot().getLocale();
+        }
+        return locale != null ? locale : Locale.getDefault();
     }
 }
