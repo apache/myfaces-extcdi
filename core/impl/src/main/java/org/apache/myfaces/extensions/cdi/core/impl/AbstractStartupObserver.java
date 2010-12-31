@@ -71,21 +71,21 @@ public abstract class AbstractStartupObserver
 
                 processedMethod.add(currentMethod.getName());
 
-                info.append("   method-name:\t\t").append(currentMethod.getName());
+                info.append("   method:\t").append(currentMethod.getName());
                 info.append(separator);
                 Object value;
                 try
                 {
                     value = currentMethod.invoke(config);
-                    info.append("   method-value:\t").append(value.toString());
+                    info.append("   value:\t").append(value.toString());
                 }
                 catch (IllegalAccessException e)
                 {
-                    info.append("   method-value:\t[unknown]");
+                    info.append("   value:\t[unknown]");
                 }
                 catch (InvocationTargetException e)
                 {
-                    info.append("   method-value: [unknown]");
+                    info.append("   value: [unknown]");
                 }
                 info.append(separator);
                 info.append(separator);

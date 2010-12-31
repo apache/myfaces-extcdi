@@ -21,10 +21,13 @@ package org.apache.myfaces.extensions.cdi.core.impl;
 import org.apache.myfaces.extensions.cdi.core.api.CodiInformation;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Map;
@@ -54,10 +57,20 @@ public class CoreStartupObserver extends AbstractStartupObserver
 
         try
         {
+            String cdiVersion = detectActiveCdiVersion();
+
             //module info
             StringBuilder info = new StringBuilder("[Started] MyFaces CODI (Extensions CDI) Core");
             info.append(getCodiCoreInformation());
             info.append(separator);
+
+            if(cdiVersion != null)
+            {
+                info.append(cdiVersion);
+                info.append(separator);
+            }
+            info.append(separator);
+
             info.append("project-stage: ");
             info.append(this.projectStage.toString());
             info.append(separator);
@@ -67,28 +80,23 @@ public class CoreStartupObserver extends AbstractStartupObserver
             info.append(separator);
 
             //application info
-            for(Map.Entry property : System.getProperties().entrySet())
-            {
-                if(property.getKey() instanceof String &&
-                        ((String) property.getKey()).startsWith("org.apache.myfaces.extensions.cdi"))
-                {
-                    info.append("system-property-name:\t").append(property.getKey());
-                    info.append(separator);
+            String systemProperties = getSystemPropertiesForCodi();
 
-                    info.append("system-property-value:\t").append(property.getValue());
-                    info.append(separator);
-                    info.append(separator);
-                }
+            if(systemProperties != null)
+            {
+                info.append("system-properties:");
+                info.append(separator);
+                info.append(systemProperties);
             }
 
-            for(Map.Entry<String, Serializable> contextParam : startupEvent.getApplicationParameters().entrySet())
-            {
-                info.append("param-name:\t\t").append(contextParam.getKey());
-                info.append(separator);
 
-                info.append("param-value:\t").append(contextParam.getValue());
+            String applicationParameters = getApplicationParameters(startupEvent);
+
+            if(applicationParameters != null)
+            {
+                info.append("application-parameters:");
                 info.append(separator);
-                info.append(separator);
+                info.append(applicationParameters);
             }
 
             //module config
@@ -102,6 +110,78 @@ public class CoreStartupObserver extends AbstractStartupObserver
             this.logger.warning("Core-Module couldn't log the current configuration." +
                                 "Startup will continue!");
         }
+    }
+
+    private String getSystemPropertiesForCodi()
+    {
+        StringBuilder info = new StringBuilder("");
+        for(Map.Entry property : System.getProperties().entrySet())
+        {
+            if(property.getKey() instanceof String &&
+                    ((String) property.getKey()).startsWith("org.apache.myfaces.extensions.cdi"))
+            {
+                info.append("   name:\t").append(property.getKey());
+                info.append(separator);
+
+                info.append("   value:\t").append(property.getValue());
+                info.append(separator);
+                info.append(separator);
+            }
+        }
+        String result = info.toString();
+
+        if("".equals(result))
+        {
+            return null;
+        }
+        return result;
+    }
+
+    private String getApplicationParameters(StartupEvent startupEvent)
+    {
+        StringBuilder info = new StringBuilder("");
+        for(Map.Entry<String, Serializable> contextParam : startupEvent.getApplicationParameters().entrySet())
+        {
+            info.append("   name:\t").append(contextParam.getKey());
+            info.append(separator);
+
+            info.append("   value:\t").append(contextParam.getValue());
+            info.append(separator);
+            info.append(separator);
+        }
+
+        String result = info.toString();
+
+        if("".equals(result))
+        {
+            return null;
+        }
+        return result;
+    }
+
+    private String detectActiveCdiVersion()
+    {
+        BeanManager cdiClass = BeanManagerProvider.getInstance().getBeanManager();
+
+        if(cdiClass == null)
+        {
+            return null;
+        }
+
+        String version = ClassUtils.getJarVersion(cdiClass.getClass());
+
+        String description = "Used CDI implementation: ";
+
+        if(cdiClass.getClass().getName().startsWith("org.apache"))
+        {
+            return description + "OpenWebBeans v" + version;
+        }
+        else if(cdiClass.getClass().getName().startsWith("org.jboss"))
+        {
+            return description + "Weld v" + version;
+        }
+        return null;
+
     }
 
     public String getCodiCoreInformation()

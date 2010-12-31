@@ -76,6 +76,7 @@ public class JsfModuleStartupObserver extends AbstractStartupObserver
             if(jsfVersion != null)
             {
                 info.append(jsfVersion);
+                info.append(separator);
             }
             info.append(separator);
 
