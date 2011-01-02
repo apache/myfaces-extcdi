@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.navigation.ViewNavigationHandler;
+import org.apache.myfaces.extensions.cdi.core.api.navigation.ViewNavigationHandler;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;

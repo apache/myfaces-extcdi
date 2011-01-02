@@ -20,7 +20,7 @@ package org.apache.myfaces.examples.codi.jsf12;
 
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.jsf.api.navigation.ViewNavigationHandler;
+import org.apache.myfaces.extensions.cdi.core.api.navigation.ViewNavigationHandler;
 
 import javax.enterprise.inject.Model;
 import javax.faces.event.ActionEvent;

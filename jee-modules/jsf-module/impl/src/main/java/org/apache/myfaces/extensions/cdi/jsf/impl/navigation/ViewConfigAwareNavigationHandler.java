@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
-import org.apache.myfaces.extensions.cdi.jsf.api.navigation.PreViewConfigNavigateEvent;
+import org.apache.myfaces.extensions.cdi.core.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
