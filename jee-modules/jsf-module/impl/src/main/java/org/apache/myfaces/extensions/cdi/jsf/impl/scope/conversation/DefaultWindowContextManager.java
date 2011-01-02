@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Conv
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
@@ -196,7 +195,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private EditableWindowContext createWindowContext(String windowContextId)
     {
-        WindowContextFactory windowContextFactory = getOrCreateScopedInstanceOfBeanByClass(
+        WindowContextFactory windowContextFactory = CodiUtils.getContextualReferenceByClass(
                 this.beanManager, WindowContextFactory.class, true);
 
         if(windowContextFactory != null)

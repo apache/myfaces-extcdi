@@ -25,8 +25,8 @@ import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -58,7 +58,7 @@ final class InstanceProducer
                                                                       BeanManager beanManager)
     {
         WindowContextManagerFactory windowContextManagerFactory =
-                getOrCreateScopedInstanceOfBeanByClass(beanManager, WindowContextManagerFactory.class, true);
+                CodiUtils.getContextualReferenceByClass(beanManager, WindowContextManagerFactory.class, true);
 
         if(windowContextManagerFactory != null)
         {

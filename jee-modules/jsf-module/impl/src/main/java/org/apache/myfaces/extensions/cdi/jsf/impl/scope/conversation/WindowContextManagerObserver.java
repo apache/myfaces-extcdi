@@ -76,6 +76,7 @@ final class WindowContextManagerObserver
         //don't refactor it to a lazy restore
         storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), windowContext);
 
+        //don't refactor it - the messages have to be restored directly after restoring the window-context(-id)
         tryToRestoreMessages(phaseEvent.getFacesContext(), windowContext, jsfModuleConfig);
 
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)

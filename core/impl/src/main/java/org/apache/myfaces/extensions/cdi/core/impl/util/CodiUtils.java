@@ -102,24 +102,24 @@ public class CodiUtils
 
     public static <T> T getContextualReferenceByClass(Class<T> targetClass, Annotation... qualifier)
     {
-        return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
+        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
                 targetClass, qualifier);
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+    public static <T> T getContextualReferenceByClass(
             BeanManager beanManager, Class<T> targetClass, Annotation... qualifier)
     {
-        return getOrCreateScopedInstanceOfBeanByClass(beanManager, targetClass, false, qualifier);
+        return getContextualReferenceByClass(beanManager, targetClass, false, qualifier);
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+    public static <T> T getContextualReferenceByClass(
             Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
     {
-        return getOrCreateScopedInstanceOfBeanByClass(BeanManagerProvider.getInstance().getBeanManager(),
+        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
                 targetClass, optionalBeanAllowed, qualifier);
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByClass(
+    public static <T> T getContextualReferenceByClass(
             BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
     {
         Bean<?> foundBean = getOrCreateBeanByClass(beanManager, targetClass, optionalBeanAllowed, qualifier);
@@ -207,7 +207,7 @@ public class CodiUtils
     {
         BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
 
-        T foundBean = (T)getOrCreateScopedInstanceOfBeanByClass(beanManager, instance.getClass(), true);
+        T foundBean = (T) getContextualReferenceByClass(beanManager, instance.getClass(), true);
 
         if(foundBean != null)
         {

@@ -98,7 +98,7 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
         if(this.renderKitWrapperFactory == null && CodiUtils.isCdiInitialized())
         {
             this.renderKitWrapperFactory = CodiUtils
-                    .getOrCreateScopedInstanceOfBeanByClass(RenderKitWrapperFactory.class, true);
+                    .getContextualReferenceByClass(RenderKitWrapperFactory.class, true);
         }
 
         if(CodiUtils.isCdiInitialized())

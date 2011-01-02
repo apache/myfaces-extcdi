@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByClass;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByClass;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
@@ -104,7 +104,7 @@ public class SecurityUtils
 
     private static void addViolationsAsMessage(Set<SecurityViolation> violations)
     {
-        MessageContext messageContext = getOrCreateScopedInstanceOfBeanByClass(
+        MessageContext messageContext = getContextualReferenceByClass(
                 MessageContext.class, true, JSF_QUALIFIER);
 
         if(messageContext == null)
