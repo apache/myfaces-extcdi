@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
- * Interface which marks an error view.
+ * Abstract class which marks an error view.
  *
  * @author Gerhard Petracek
  */
