@@ -19,9 +19,11 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RedirectedConversationAwareExternalContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 
 import javax.el.ELContext;
 import javax.faces.application.Application;
@@ -33,6 +35,8 @@ import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
 import javax.faces.render.RenderKit;
 import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -46,6 +50,8 @@ class CodiFacesContextWrapper extends FacesContext
     private Boolean advancedQualifierRequiredForDependencyInjection;
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
+
+    private WindowContext windowContext;
 
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
@@ -100,6 +106,33 @@ class CodiFacesContextWrapper extends FacesContext
     public ExternalContext getExternalContext()
     {
         return this.wrappedExternalContext;
+    }
+
+    public void addMessage(String componentId, FacesMessage facesMessage)
+    {
+        this.wrappedFacesContext.addMessage(componentId, facesMessage);
+
+        if(this.windowContext == null)
+        {
+            this.windowContext = ConversationUtils.getWindowContextManager().getCurrentWindowContext();
+        }
+
+        if(this.windowContext == null)
+        {
+            return;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        List<FacesMessageEntry> facesMessageEntryList =
+                this.windowContext.getAttribute(FacesMessage.class.getName(), List.class);
+
+        if(facesMessageEntryList == null)
+        {
+            facesMessageEntryList = new CopyOnWriteArrayList<FacesMessageEntry>();
+            this.windowContext.setAttribute(FacesMessage.class.getName(), facesMessageEntryList);
+        }
+
+        facesMessageEntryList.add(new FacesMessageEntry(componentId, facesMessage));
     }
 
     @Override
@@ -171,12 +204,6 @@ class CodiFacesContextWrapper extends FacesContext
     public void setViewRoot(UIViewRoot uiViewRoot)
     {
         wrappedFacesContext.setViewRoot(uiViewRoot);
-    }
-
-    public void addMessage(String s, FacesMessage facesMessage)
-    {
-        //TODO
-        wrappedFacesContext.addMessage(s, facesMessage);
     }
 
     public void renderResponse()

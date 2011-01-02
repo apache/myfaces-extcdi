@@ -66,4 +66,9 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
     {
         return true;
     }
+
+    public boolean isAlwaysKeepMessages()
+    {
+        return true;
+    }
 }

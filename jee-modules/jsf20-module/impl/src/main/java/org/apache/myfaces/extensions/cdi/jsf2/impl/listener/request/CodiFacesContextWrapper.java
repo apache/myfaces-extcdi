@@ -19,15 +19,21 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
 import javax.faces.application.Application;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -41,6 +47,8 @@ class CodiFacesContextWrapper extends FacesContextWrapper
     private Boolean advancedQualifierRequiredForDependencyInjection;
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
+
+    private WindowContext windowContext;
 
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
@@ -102,6 +110,34 @@ class CodiFacesContextWrapper extends FacesContextWrapper
     public ExternalContext getExternalContext()
     {
         return this.wrappedExternalContext;
+    }
+
+    @Override
+    public void addMessage(String componentId, FacesMessage facesMessage)
+    {
+        this.wrappedFacesContext.addMessage(componentId, facesMessage);
+
+        if(this.windowContext == null)
+        {
+            this.windowContext = ConversationUtils.getWindowContextManager().getCurrentWindowContext();
+        }
+
+        if(this.windowContext == null)
+        {
+            return;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        List<FacesMessageEntry> facesMessageEntryList =
+                this.windowContext.getAttribute(FacesMessage.class.getName(), List.class);
+
+        if(facesMessageEntryList == null)
+        {
+            facesMessageEntryList = new CopyOnWriteArrayList<FacesMessageEntry>();
+            this.windowContext.setAttribute(FacesMessage.class.getName(), facesMessageEntryList);
+        }
+
+        facesMessageEntryList.add(new FacesMessageEntry(componentId, facesMessage));
     }
 
     public FacesContext getWrapped()

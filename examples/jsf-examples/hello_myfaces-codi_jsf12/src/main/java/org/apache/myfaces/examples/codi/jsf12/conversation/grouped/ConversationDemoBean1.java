@@ -25,6 +25,9 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
+import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+
 import static org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.QualifierInstances.qualifier3;
 
 import javax.inject.Named;
@@ -61,6 +64,10 @@ public class ConversationDemoBean1 implements Serializable
     @Inject
     private Logger.Factory loggerFactory;
 
+    @Inject
+    @Jsf
+    private MessageContext messageContext;
+
     @PostConstruct
     public void init()
     {
@@ -73,6 +80,9 @@ public class ConversationDemoBean1 implements Serializable
 
     public String next()
     {
+        this.messageContext.message()
+                .text("message preserved over a redirect")
+                .add();
         return DemoPages.HelloMyFacesCodi1.class.getName();
     }
 
