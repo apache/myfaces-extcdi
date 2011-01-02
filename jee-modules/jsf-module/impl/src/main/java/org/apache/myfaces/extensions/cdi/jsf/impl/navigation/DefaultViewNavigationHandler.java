@@ -16,16 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.view;
+package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.navigation.ViewNavigationHandler;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * @author Gerhard Petracek
  */
-@Page(extension = JSP)
-public final class Login extends DefaultErrorView
+@ApplicationScoped
+public class DefaultViewNavigationHandler implements ViewNavigationHandler
 {
+    public void navigateTo(Class<? extends ViewConfig> targetView)
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, targetView.getName());
+        facesContext.renderResponse();
+    }
 }

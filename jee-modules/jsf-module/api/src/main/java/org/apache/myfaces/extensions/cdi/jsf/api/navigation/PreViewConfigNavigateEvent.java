@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
+package org.apache.myfaces.extensions.cdi.jsf.api.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 

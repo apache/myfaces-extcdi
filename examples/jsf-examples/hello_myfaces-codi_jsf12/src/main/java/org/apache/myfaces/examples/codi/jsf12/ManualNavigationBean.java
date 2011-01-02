@@ -16,16 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.view;
+package org.apache.myfaces.examples.codi.jsf12;
 
+import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
+import org.apache.myfaces.extensions.cdi.jsf.api.navigation.ViewNavigationHandler;
+
+import javax.enterprise.inject.Model;
+import javax.faces.event.ActionEvent;
+import javax.inject.Inject;
 
 /**
  * @author Gerhard Petracek
  */
-@Page(extension = JSP)
-public final class Login extends DefaultErrorView
+@Model
+public class ManualNavigationBean
 {
+    @Inject
+    private ViewNavigationHandler viewNavigationHandler;
+
+    public void navigateToHelloMyFacesCodi(ActionEvent actionEvent)
+    {
+        this.viewNavigationHandler.navigateTo(DemoPages.HelloMyFacesCodi.class);
+    }
+
+    public void navigateToErrorView(ActionEvent actionEvent)
+    {
+        this.viewNavigationHandler.navigateTo(DefaultErrorView.class);
+    }
 }

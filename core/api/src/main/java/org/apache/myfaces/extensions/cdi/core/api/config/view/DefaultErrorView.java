@@ -16,16 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.examples.codi.jsf12.view;
-
-import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
+package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
+ * Interface which marks an error view.
+ *
  * @author Gerhard Petracek
  */
-@Page(extension = JSP)
-public final class Login extends DefaultErrorView
+public abstract class DefaultErrorView implements ViewConfig
 {
 }

@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 import javax.interceptor.InterceptorBinding;

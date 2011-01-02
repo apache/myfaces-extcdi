@@ -16,15 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.security;
+package org.apache.myfaces.extensions.cdi.jsf.api.navigation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
- * Interface which marks an error view.
- *
  * @author Gerhard Petracek
  */
-public interface DefaultErrorView extends ViewConfig
+public interface ViewNavigationHandler
 {
+    void navigateTo(Class<? extends ViewConfig> targetView);
 }

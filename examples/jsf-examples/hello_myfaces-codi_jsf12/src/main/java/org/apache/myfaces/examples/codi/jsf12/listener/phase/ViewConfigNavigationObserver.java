@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewConfigNavigateEvent;
+import org.apache.myfaces.extensions.cdi.jsf.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.examples.codi.jsf12.view.DemoPages;
 

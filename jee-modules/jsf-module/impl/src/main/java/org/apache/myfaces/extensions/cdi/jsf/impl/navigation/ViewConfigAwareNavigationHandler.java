@@ -19,12 +19,14 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.navigation;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
+
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreViewConfigNavigateEvent;
+import org.apache.myfaces.extensions.cdi.jsf.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
@@ -82,6 +84,14 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                 }
                 ViewConfigEntry entry = this.viewConfigs.get(outcome);
 
+                if(entry == null)
+                {
+                    if(DefaultErrorView.class.getName().equals(originalOutcome))
+                    {
+                        entry = ViewConfigCache.getDefaultErrorView();
+                    }
+                }
+                
                 if(entry == null)
                 {
                     Object loadedClass = tryToLoadClassForName(outcome);
