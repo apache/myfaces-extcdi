@@ -23,17 +23,20 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
+import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import java.io.IOException;
+import java.util.List;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .AUTOMATED_ENTRY_POINT_PARAMETER_KEY;
@@ -73,6 +76,8 @@ final class WindowContextManagerObserver
         //don't refactor it to a lazy restore
         storeCurrentViewIdAsNewViewId(phaseEvent.getFacesContext(), windowContext);
 
+        tryToRestoreMessages(phaseEvent.getFacesContext(), windowContext, jsfModuleConfig);
+
         //for performance reasons + cleanup at the beginning of the request (check timeout,...)
         //+ we aren't allowed to cleanup in case of redirects
         //we would transfer the restored view-id into the conversation
@@ -83,6 +88,30 @@ final class WindowContextManagerObserver
         }
 
         cleanupInactiveConversations(windowContext);
+    }
+
+    private void tryToRestoreMessages(FacesContext facesContext,
+                                      EditableWindowContext windowContext,
+                                      JsfModuleConfig jsfModuleConfig)
+    {
+        if(!jsfModuleConfig.isAlwaysKeepMessages())
+        {
+            return;
+        }
+
+        @SuppressWarnings({"unchecked"})
+        List<FacesMessageEntry> facesMessageEntryList =
+                windowContext.getAttribute(Message.class.getName(), List.class);
+
+        if(facesMessageEntryList != null)
+        {
+            for(FacesMessageEntry facesMessageEntry : facesMessageEntryList)
+            {
+                facesContext.addMessage(facesMessageEntry.getComponentId(), facesMessageEntry.getFacesMessage());
+                facesMessageEntryList.remove(facesMessageEntry);
+            }
+            facesMessageEntryList.clear();
+        }
     }
 
     protected void cleanupAndRecordCurrentViewAsOldViewId(

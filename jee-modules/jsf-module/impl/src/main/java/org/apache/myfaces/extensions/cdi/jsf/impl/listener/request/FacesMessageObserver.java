@@ -22,13 +22,14 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.request.BeforeFacesRequest;
+import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.event.Observes;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Gerhard Petracek
@@ -53,40 +54,21 @@ public class FacesMessageObserver
         this.alwaysKeepMessages = jsfModuleConfig.isAlwaysKeepMessages();
     }
 
-    protected void restoreFacesMessages(@Observes @BeforeFacesRequest FacesContext facesContext)
-    {
-        if(!this.alwaysKeepMessages)
-        {
-            return;
-        }
-
-        @SuppressWarnings({"unchecked"})
-        List<FacesMessageEntry> facesMessageEntryList =
-                this.windowContext.getAttribute(FacesMessage.class.getName(), List.class);
-
-        if(facesMessageEntryList != null)
-        {
-            for(FacesMessageEntry facesMessageEntry : facesMessageEntryList)
-            {
-                facesContext.addMessage(facesMessageEntry.getComponentId(), facesMessageEntry.getFacesMessage());
-                facesMessageEntryList.remove(facesMessageEntry);
-            }
-            facesMessageEntryList.clear();
-        }
-    }
-
     protected void saveFacesMessages(@Observes @AfterFacesRequest FacesContext facesContext)
     {
-        if(this.lifecyclePhaseInformation.isRenderResponsePhase() || !this.alwaysKeepMessages)
+        if(this.alwaysKeepMessages && !this.lifecyclePhaseInformation.isRenderResponsePhase())
         {
+            Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+
             @SuppressWarnings({"unchecked"})
             List<FacesMessageEntry> facesMessageEntryList =
-                    this.windowContext.getAttribute(FacesMessage.class.getName(), List.class);
+                    (List<FacesMessageEntry>)requestMap.get(Message.class.getName());
 
-            if(facesMessageEntryList != null)
+            if(facesMessageEntryList == null)
             {
-                facesMessageEntryList.clear();
+                facesMessageEntryList = new CopyOnWriteArrayList<FacesMessageEntry>();
             }
+            this.windowContext.setAttribute(Message.class.getName(), facesMessageEntryList, true);
         }
     }
 }
