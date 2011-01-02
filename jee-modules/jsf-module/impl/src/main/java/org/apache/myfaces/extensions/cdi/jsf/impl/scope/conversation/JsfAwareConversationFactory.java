@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
@@ -73,7 +74,7 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
         if(ViewAccessScoped.class.isAssignableFrom(conversationKey.getScope()))
         {
             conversation = new DefaultConversation(conversationKey,
-                                                   new ViewAccessConversationExpirationEvaluator(),
+                                                   createAndRegisterViewAccessConversationEvaluator(),
                                                    configuration,
                                                    this.beanManager);
 
@@ -87,6 +88,15 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
                                                this.beanManager);
 
         return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
+    }
+
+    private ViewAccessConversationExpirationEvaluator createAndRegisterViewAccessConversationEvaluator()
+    {
+        ViewAccessConversationExpirationEvaluator evaluator = new ViewAccessConversationExpirationEvaluator();
+        CodiUtils.getContextualReferenceByClass(
+                this.beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class)
+                .addViewAccessConversationExpirationEvaluator(evaluator);
+        return evaluator;
     }
 
     private EditableConversation processCreatedConversation(EditableConversation conversation,

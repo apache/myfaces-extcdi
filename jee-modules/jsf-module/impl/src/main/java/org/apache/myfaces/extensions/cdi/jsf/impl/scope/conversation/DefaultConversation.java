@@ -61,6 +61,11 @@ public class DefaultConversation implements EditableConversation
 
         this.closeConversationEventEnable = conversationConfig.isCloseConversationEventEnabled();
         this.restartConversationEventEnable = conversationConfig.isRestartConversationEventEnabled();
+
+        if(this.expirationEvaluator instanceof ConversationAware)
+        {
+            ((ConversationAware)this.expirationEvaluator).setConversation(this);
+        }
     }
 
     //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}

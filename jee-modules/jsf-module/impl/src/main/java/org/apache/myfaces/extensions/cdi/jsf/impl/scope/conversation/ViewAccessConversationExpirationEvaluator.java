@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getOldViewId;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getNewViewId;
 
@@ -26,10 +28,25 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-class ViewAccessConversationExpirationEvaluator implements ConversationExpirationEvaluator
+class ViewAccessConversationExpirationEvaluator implements ConversationExpirationEvaluator, ConversationAware
 {
-    private String lastViewId; //for access scope
     private static final long serialVersionUID = 5586717766107967144L;
+
+    private String lastViewId; //for access scope
+
+    private Conversation conversation;
+
+    void observeRenderedView(String viewId)
+    {
+        if(!viewId.equals(this.lastViewId))
+        {
+            if(this.conversation != null)
+            {
+                this.conversation.close();
+            }
+            expire();
+        }
+    }
 
     public boolean isExpired()
     {
@@ -55,10 +72,16 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
     public void expire()
     {
         this.lastViewId = null;
+        this.conversation = null;
     }
 
     private String getCurrentViewId()
     {
         return FacesContext.getCurrentInstance().getViewRoot().getViewId();
+    }
+
+    public void setConversation(Conversation conversation)
+    {
+        this.conversation = conversation;
     }
 }
