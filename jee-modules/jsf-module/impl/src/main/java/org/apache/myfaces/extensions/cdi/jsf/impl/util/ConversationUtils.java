@@ -25,10 +25,13 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
+import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -45,6 +48,7 @@ import java.util.Set;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * internal! utils
@@ -313,7 +317,11 @@ public class ConversationUtils
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
 
         RequestCache.resetCache();
-        
+
+        //don't use @AfterFacesRequest event
+        //there might be an issue if the ServletRequestListener e.g. of OWB gets called earlier
+        saveFacesMessages(externalContext);
+
         if(windowHandler != null)
         {
             windowHandler.sendRedirect(externalContext, url, false);
@@ -322,6 +330,27 @@ public class ConversationUtils
         {
             //TODO log warning in case of project stage dev.
             externalContext.redirect(url);
+        }
+    }
+
+    private static void saveFacesMessages(ExternalContext externalContext)
+    {
+        JsfModuleConfig jsfModuleConfig = CodiUtils.getContextualReferenceByClass(JsfModuleConfig.class);
+
+        if(jsfModuleConfig != null && jsfModuleConfig.isAlwaysKeepMessages())
+        {
+            Map<String, Object> requestMap = externalContext.getRequestMap();
+
+            @SuppressWarnings({"unchecked"})
+            List<FacesMessageEntry> facesMessageEntryList =
+                    (List<FacesMessageEntry>)requestMap.get(Message.class.getName());
+
+            if(facesMessageEntryList == null)
+            {
+                facesMessageEntryList = new CopyOnWriteArrayList<FacesMessageEntry>();
+            }
+            getWindowContextManager().getCurrentWindowContext()
+                    .setAttribute(Message.class.getName(), facesMessageEntryList, true);
         }
     }
 
