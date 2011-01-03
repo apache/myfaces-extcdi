@@ -20,12 +20,12 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.event.Observes;
-import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseEvent;
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
@@ -36,9 +36,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class FacesMessageObserver
 {
-    @Inject
-    private JsfLifecyclePhaseInformation lifecyclePhaseInformation;
-
     @Inject
     private WindowContext windowContext;
 
@@ -54,11 +51,13 @@ public class FacesMessageObserver
         this.alwaysKeepMessages = jsfModuleConfig.isAlwaysKeepMessages();
     }
 
-    protected void saveFacesMessages(@Observes @AfterFacesRequest FacesContext facesContext)
+    //don't use @AfterFacesRequest
+    //there might be an issue if the ServletRequestListener e.g. of OWB gets called earlier
+    protected void saveFacesMessages(@Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
     {
-        if(this.alwaysKeepMessages && !this.lifecyclePhaseInformation.isRenderResponsePhase())
+        if(this.alwaysKeepMessages)
         {
-            Map<String, Object> requestMap = facesContext.getExternalContext().getRequestMap();
+            Map<String, Object> requestMap = phaseEvent.getFacesContext().getExternalContext().getRequestMap();
 
             @SuppressWarnings({"unchecked"})
             List<FacesMessageEntry> facesMessageEntryList =

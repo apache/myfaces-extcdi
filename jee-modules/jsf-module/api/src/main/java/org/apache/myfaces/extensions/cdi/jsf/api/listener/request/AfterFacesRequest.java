@@ -31,7 +31,10 @@ import java.lang.annotation.Target;
  * destroyed.
  *
  * Parameter-type of the observer: {@link javax.faces.context.FacesContext}
- * 
+ *
+ * Attention: referencing @ApplicationScoped or @Singleton scoped beans might lead to issues with a CDI implementation
+ * (e.g. if the ServletRequestListener of OWB gets called earlier)
+ *
  * @author Gerhard Petracek
  */
 
