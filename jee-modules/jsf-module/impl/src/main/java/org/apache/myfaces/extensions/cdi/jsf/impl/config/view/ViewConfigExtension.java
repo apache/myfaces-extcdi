@@ -42,10 +42,10 @@ import java.lang.reflect.Modifier;
 public class ViewConfigExtension implements Extension, Deactivatable
 {
     private static final String VIEW_CONFIG_EXTRACTOR_PROPERTY_NAME =
-            "org.apache.myfaces.extensions.cdi.ClassDeactivator";
+            "org.apache.myfaces.extensions.cdi.ViewConfigExtractor";
 
     private static final String VIEW_CONFIG_EXTRACTOR_JNDI_NAME =
-            "java:comp/env/myfaces-codi/ClassDeactivator";
+            "java:comp/env/myfaces-codi/ViewConfigExtractor";
 
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
