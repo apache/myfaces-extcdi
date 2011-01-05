@@ -29,7 +29,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.event.Observes;
@@ -126,8 +125,6 @@ final class WindowContextManagerObserver
         {
             cleanupInactiveWindowContexts(windowContextManager);
         }
-        
-        RequestCache.resetCache();
     }
 
     /**
