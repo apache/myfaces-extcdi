@@ -19,11 +19,6 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestParameter;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
@@ -35,11 +30,7 @@ import javax.faces.application.NavigationCase;
 import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
-import java.util.Collection;
-import java.util.HashSet;
-import javax.faces.context.ExternalContext;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
@@ -107,11 +98,16 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
     public Map<String, Set<NavigationCase>> getNavigationCases()
     {
-        Map<String, Set<NavigationCase>> result = new HashMap<String, Set<NavigationCase>>();
+        Map<String, Set<NavigationCase>> result = null;
 
         if (this.wrapped instanceof ConfigurableNavigationHandler)
         {
-            result.putAll(((ConfigurableNavigationHandler) this.wrapped).getNavigationCases());
+            result = ((ConfigurableNavigationHandler) this.wrapped).getNavigationCases();
+        }
+
+        if(result == null)
+        {
+            result = new HashMap<String, Set<NavigationCase>>();
         }
 
         if(!this.addViewConfigsAsNavigationCase || this.deactivated)
@@ -119,45 +115,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
             return result;
         }
 
-        Collection<ViewConfigEntry> viewConfigEntries = ViewConfigCache.getViewConfigEntries();
-
-        if(!viewConfigEntries.isEmpty())
-        {
-            Set<NavigationCase> navigationCase = new HashSet<NavigationCase>();
-
-            Map<String, List<String>> parameters = resolveParameters();
-            boolean includeParameters;
-
-            for(ViewConfigEntry entry : viewConfigEntries)
-            {
-                includeParameters = Page.ViewParameter.INCLUDE.equals(entry.getViewParameter());
-                navigationCase.add(new NavigationCase("*",
-                                                      null,
-                                                      null,
-                                                      null,
-                                                      entry.getViewId(),
-                                                      includeParameters ? parameters : null,
-                                                      Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
-                                                      includeParameters));
-
-                result.put(entry.getViewId(), navigationCase);
-            }
-        }
-        return result;
-    }
-
-    private Map<String, List<String>> resolveParameters()
-    {
-        Map<String, List<String>> parameters = new HashMap<String, List<String>>();
-
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-
-        for(RequestParameter parameter : JsfUtils.getRequestParameters(externalContext, true))
-        {
-            parameters.put(parameter.getKey(), parameter.getValueList());
-        }
-
-        return parameters;
+        return new NavigationCaseMapWrapper(result);
     }
 
     public boolean isActivated()

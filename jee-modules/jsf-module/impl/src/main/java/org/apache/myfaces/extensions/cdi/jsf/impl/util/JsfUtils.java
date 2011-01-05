@@ -162,6 +162,11 @@ public class JsfUtils
     {
         Set<RequestParameter> result = new HashSet<RequestParameter>();
 
+        if(externalContext == null || externalContext.getRequestParameterValuesMap() == null)
+        {
+            return result;
+        }
+
         String key;
         for(Map.Entry<String, String[]> entry : externalContext.getRequestParameterValuesMap().entrySet())
         {
