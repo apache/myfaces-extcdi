@@ -40,23 +40,6 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
 
     private BeanManager beanManager;
 
-    enum ConversationPropertyKeys
-    {
-        TIMEOUT("timeout");
-
-        private String key;
-
-        ConversationPropertyKeys(String key)
-        {
-            this.key = key;
-        }
-
-        String getKey()
-        {
-            return key;
-        }
-    }
-    
     public EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
     {
         EditableConversation conversation;
