@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class HelperTest extends AbstractTest
+public class HelperTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void namedArgumentBuilderTest()

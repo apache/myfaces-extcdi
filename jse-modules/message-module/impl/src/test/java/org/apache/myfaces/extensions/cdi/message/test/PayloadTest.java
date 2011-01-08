@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class PayloadTest extends AbstractTest
+public class PayloadTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void internalMessageAwareMessageHandlerTest()

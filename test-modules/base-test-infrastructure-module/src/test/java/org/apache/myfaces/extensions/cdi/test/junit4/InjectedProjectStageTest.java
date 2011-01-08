@@ -32,7 +32,7 @@ import static org.testng.Assert.assertEquals;
  */
 
 @RunWith(JUnit4.class)
-public class InjectedProjectStageTest extends AbstractTest
+public class InjectedProjectStageTest extends AbstractCdiAwareTest
 {
     @Inject
     private ProjectStage projectStage;

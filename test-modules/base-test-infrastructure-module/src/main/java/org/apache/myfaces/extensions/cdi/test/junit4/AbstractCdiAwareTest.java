@@ -35,7 +35,7 @@ import javax.enterprise.inject.spi.InjectionTarget;
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractTest
+public abstract class AbstractCdiAwareTest
 {
     protected CdiTestContainer testContainer;
 

@@ -28,7 +28,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class SimpleMessageTest extends AbstractTest
+public class SimpleMessageTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void createInlineMessageTest()

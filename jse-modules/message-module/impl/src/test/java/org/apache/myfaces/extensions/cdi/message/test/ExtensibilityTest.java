@@ -30,7 +30,7 @@ import java.util.Locale;
 /**
  * @author Gerhard Petracek
  */
-public class ExtensibilityTest extends AbstractTest
+public class ExtensibilityTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void messageHandlerTest()

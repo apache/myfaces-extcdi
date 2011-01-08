@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class ArgumentDescriptorTest extends AbstractTest
+public class ArgumentDescriptorTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void lazyNumberedArgumentsTest()

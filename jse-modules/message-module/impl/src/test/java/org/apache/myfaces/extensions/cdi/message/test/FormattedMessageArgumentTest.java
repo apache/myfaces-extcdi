@@ -28,7 +28,7 @@ import java.util.Locale;
 /**
  * @author Gerhard Petracek
  */
-public class FormattedMessageArgumentTest extends AbstractTest
+public class FormattedMessageArgumentTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void createFormattedMessageGermanTest()

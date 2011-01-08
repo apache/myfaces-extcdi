@@ -32,7 +32,7 @@ import java.io.Serializable;
 /**
  * @author Gerhard Petracek
  */
-public class ParametrizedMessageInterpolationTest extends AbstractTest
+public class ParametrizedMessageInterpolationTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void createElAwareMessageTest()

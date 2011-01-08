@@ -27,7 +27,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class MessageFilterTest extends AbstractTest
+public class MessageFilterTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void messageFilterTest()

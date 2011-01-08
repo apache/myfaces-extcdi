@@ -27,7 +27,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class MessageSeverityTest extends AbstractTest
+public class MessageSeverityTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void createMessageWithDefaultSeverityTest()

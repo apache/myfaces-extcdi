@@ -32,7 +32,7 @@ import javax.enterprise.context.SessionScoped;
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractServletAwareTest extends AbstractTest
+public abstract class AbstractServletAwareTest extends AbstractCdiAwareTest
 {
     @Override
     @Before

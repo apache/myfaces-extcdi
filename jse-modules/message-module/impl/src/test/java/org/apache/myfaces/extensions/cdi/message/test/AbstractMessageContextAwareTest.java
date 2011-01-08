@@ -25,7 +25,7 @@ import org.junit.Before;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractTest
+public abstract class AbstractMessageContextAwareTest
 {
     protected MessageContext messageContext;
 

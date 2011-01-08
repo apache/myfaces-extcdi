@@ -29,7 +29,7 @@ import java.util.Locale;
 /**
  * @author Gerhard Petracek
  */
-public class SerializationTest extends AbstractTest
+public class SerializationTest extends AbstractMessageContextAwareTest
 {
     @Test
     public void messageContextConfigSerializationTest()
