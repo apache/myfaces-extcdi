@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFa
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
@@ -97,6 +98,10 @@ class CodiLifecycleWrapper extends Lifecycle
             throws FacesException
     {
         wrapped.render(facesContext);
+        //if the cache would get resetted by an observer or a phase-listener
+        //it might be the case that a 2nd observer accesses the cache again and afterwards there won't be a cleanup
+        //-> don't remove:
+        RequestCache.resetCache();
     }
 
     private void broadcastApplicationStartupBroadcaster()

@@ -22,12 +22,10 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfLifecyclePhaseInformation;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.faces.event.PhaseEvent;
-import javax.faces.event.PhaseId;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.lang.annotation.Annotation;
@@ -67,14 +65,6 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
     {
         this.phaseEvent.select(createAnnotationLiteral(phaseEvent.getPhaseId(), false)).fire(phaseEvent);
         this.afterAnyPhaseEvent.fire(phaseEvent);
-
-        if(PhaseId.RENDER_RESPONSE.equals(phaseEvent.getPhaseId()))
-        {
-            //if the cache would get resetted by an observer
-            //it might be the case that a 2nd observer accesses the cache again and afterwards there won't be a cleanup
-            //-> don't remove:
-            RequestCache.resetCache();
-        }
     }
 
     private Annotation createAnnotationLiteral(javax.faces.event.PhaseId phaseId, boolean isBeforeEvent)
