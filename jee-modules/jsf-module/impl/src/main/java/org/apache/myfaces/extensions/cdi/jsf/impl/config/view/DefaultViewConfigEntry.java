@@ -43,8 +43,12 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCr
  */
 public class DefaultViewConfigEntry implements ViewConfigEntry
 {
-        private final String viewId;
+    private static final long serialVersionUID = 4707048794409336152L;
+
+    private final String viewId;
+
     private final Class<? extends ViewConfig> viewDefinitionClass;
+
     private final Page.NavigationMode navigationMode;
 
     private List<PageBeanConfigEntry> beanDefinition;
@@ -62,12 +66,12 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
     private BeanManager beanManager;
 
     public DefaultViewConfigEntry(String viewId,
-                           Class<? extends ViewConfig> viewDefinitionClass,
-                           Page.NavigationMode navigationMode,
-                           Page.ViewParameter viewParameter,
-                           List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
-                           Class<? extends ViewConfig> errorView,
-                           List<Annotation> metaDataList)
+                                  Class<? extends ViewConfig> viewDefinitionClass,
+                                  Page.NavigationMode navigationMode,
+                                  Page.ViewParameter viewParameter,
+                                  List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
+                                  Class<? extends ViewConfig> errorView,
+                                  List<Annotation> metaDataList)
     {
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;

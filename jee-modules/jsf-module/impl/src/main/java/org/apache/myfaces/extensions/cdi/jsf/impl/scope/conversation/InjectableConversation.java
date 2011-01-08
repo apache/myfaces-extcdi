@@ -37,12 +37,16 @@ public class InjectableConversation implements EditableConversation
 {
     private static final long serialVersionUID = 7754789230388003028L;
 
-    protected final Bean<?> bean;
-    protected final EditableWindowContext editableWindowContext;
+    protected final Class conversationGroup;
+
+    protected final Set<Annotation> qualifiers;
+
+    protected transient EditableWindowContext editableWindowContext;
 
     protected InjectableConversation(Bean<?> bean, WindowContextManager windowContextManager)
     {
-        this.bean = bean;
+        this.conversationGroup = ConversationUtils.getConversationGroup(bean);
+        this.qualifiers = bean.getQualifiers();
         this.editableWindowContext = (EditableWindowContext) windowContextManager.getCurrentWindowContext();
     }
 
@@ -83,11 +87,12 @@ public class InjectableConversation implements EditableConversation
 
     protected EditableConversation findConversation()
     {
-        Class conversationGroup = ConversationUtils.getConversationGroup(this.bean);
-
-        Set<Annotation> qualifiers = this.bean.getQualifiers();
-
-        return this.editableWindowContext.getConversation(conversationGroup,
-                                                          qualifiers.toArray(new Annotation[qualifiers.size()]));
+        if(this.editableWindowContext == null)
+        {
+            this.editableWindowContext = (EditableWindowContext) ConversationUtils
+                    .getWindowContextManager().getCurrentWindowContext();
+        }
+        return this.editableWindowContext.getConversation(this.conversationGroup,
+                                                          this.qualifiers.toArray(new Annotation[qualifiers.size()]));
     }
 }
