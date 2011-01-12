@@ -26,12 +26,12 @@
     <artifactId>scripting-module-project</artifactId>
 
     <name>MyFaces Extensions-CDI Scripting Module</name>
-    <version>0.9.2</version>
+    <version>0.9.3-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jse-modules-project</artifactId>
-        <version>0.9.2</version>
+        <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <modules>

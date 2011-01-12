@@ -24,14 +24,14 @@
 
     <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
     <artifactId>core-project</artifactId>
-    <version>0.9.2</version>
+    <version>0.9.3-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Core</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>myfaces-extcdi-parent</artifactId>
-        <version>0.9.2</version>
+        <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <modules>
