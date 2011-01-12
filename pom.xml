@@ -76,7 +76,7 @@
         <module>dist</module>
 
         <module>test-modules</module>
-        <module>examples</module>
+        <!--module>examples</module-->
     </modules>
 
     <properties>
