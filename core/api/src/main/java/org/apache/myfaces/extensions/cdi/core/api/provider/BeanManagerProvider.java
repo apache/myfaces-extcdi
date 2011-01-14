@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.provider;
 
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.event.Observes;
@@ -48,6 +49,10 @@ public class BeanManagerProvider implements Extension
 
     private volatile Map<ClassLoader, BeanManager> bms = new ConcurrentHashMap<ClassLoader, BeanManager>();
 
+    public static boolean isActive()
+    {
+        return bmp != null;
+    }
 
     /**
      * Singleton accessor
@@ -55,6 +60,13 @@ public class BeanManagerProvider implements Extension
      */
     public static BeanManagerProvider getInstance()
     {
+        if(bmp == null)
+        {
+            //workaround for Mojarra (in combination with OWB and a custom WebBeansConfigurationListener and a custom
+            //StartupBroadcaster for bootstrapping CDI)
+            CodiStartupBroadcaster.broadcastStartup();
+            //here bmp might not be null (depends on the broadcasters)
+        }
         if(bmp == null)
         {
             throw new IllegalStateException("no " + BeanManagerProvider.class.getName() + " in place! " +
@@ -119,6 +131,8 @@ public class BeanManagerProvider implements Extension
 
         ClassLoader cl = ClassUtils.getClassLoader(null);
         bmpFirst.bms.put(cl, beanManager);
+
+        CodiStartupBroadcaster.broadcastStartup();
     }
 
     /**

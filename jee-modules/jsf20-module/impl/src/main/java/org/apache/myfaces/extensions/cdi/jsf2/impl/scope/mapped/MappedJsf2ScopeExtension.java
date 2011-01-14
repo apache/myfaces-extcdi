@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.mapped;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
@@ -63,6 +64,8 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
         {
             return;
         }
+
+        CodiStartupBroadcaster.broadcastStartup();
 
         Class<? extends Annotation> jsf2ScopeAnnotation = getJsf2ScopeAnnotation(processAnnotatedType);
 

@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 
@@ -70,6 +71,8 @@ public class ViewScopedExtension implements Extension, Deactivatable
             return;
         }
 
+        CodiStartupBroadcaster.broadcastStartup();
+        
         try
         {
             // we need to do this manually because there is no dependency injection in place

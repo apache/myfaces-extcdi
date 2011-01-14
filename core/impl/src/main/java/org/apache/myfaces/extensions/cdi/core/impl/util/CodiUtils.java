@@ -463,6 +463,6 @@ public class CodiUtils
 
     public static boolean isCdiInitialized()
     {
-        return BeanManagerProvider.getInstance() != null;
+        return BeanManagerProvider.isActive();
     }
 }

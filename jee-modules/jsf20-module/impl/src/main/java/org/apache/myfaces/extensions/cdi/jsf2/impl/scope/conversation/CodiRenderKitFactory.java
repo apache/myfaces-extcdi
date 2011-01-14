@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.RenderKitWrapperFactory;
@@ -96,10 +97,16 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
 
     private void lazyInit()
     {
-        if(this.renderKitWrapperFactory == null && CodiUtils.isCdiInitialized())
+        if(this.renderKitWrapperFactory == null)
         {
-            this.renderKitWrapperFactory = CodiUtils
-                    .getContextualReferenceByClass(RenderKitWrapperFactory.class, true);
+            //workaround for mojarra
+            CodiStartupBroadcaster.broadcastStartup();
+
+            if(CodiUtils.isCdiInitialized())
+            {
+                this.renderKitWrapperFactory = CodiUtils
+                        .getContextualReferenceByClass(RenderKitWrapperFactory.class, true);
+            }
         }
 
         if(CodiUtils.isCdiInitialized())

@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -52,6 +53,8 @@ public class PhaseListenerExtension implements Extension
 
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
+        CodiStartupBroadcaster.broadcastStartup();
+
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(JsfPhaseListener.class))
         {
             Class<? extends PhaseListener> phaseListenerClass
@@ -86,6 +89,9 @@ public class PhaseListenerExtension implements Extension
 
     public static List<PhaseListener> consumePhaseListeners()
     {
+        //workaround for mojarra
+        CodiStartupBroadcaster.broadcastStartup();
+
         ClassLoader classLoader = getClassLoader();
         List<Class<? extends PhaseListener>> foundPhaseListeners = phaseListeners.get(classLoader);
 

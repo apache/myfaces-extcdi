@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -53,6 +54,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
         {
             return;
         }
+
+        CodiStartupBroadcaster.broadcastStartup();
 
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(Page.class))
         {
