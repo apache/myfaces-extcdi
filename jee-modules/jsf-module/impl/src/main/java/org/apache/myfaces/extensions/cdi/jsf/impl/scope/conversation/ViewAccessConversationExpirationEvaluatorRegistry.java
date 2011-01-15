@@ -18,8 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -31,6 +35,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class ViewAccessConversationExpirationEvaluatorRegistry implements Serializable
 {
     private static final long serialVersionUID = -1783266839383634211L;
+
+    @Inject
+    private WindowContext windowContext;
 
     protected ViewAccessConversationExpirationEvaluatorRegistry()
     {
@@ -54,6 +61,26 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
             {
                 this.viewAccessConversationExpirationEvaluatorList.remove(evaluator);
             }
+        }
+    }
+
+    @PreDestroy
+    protected void save()
+    {
+        this.windowContext.setAttribute(ViewAccessConversationExpirationEvaluatorRegistry.class.getName(),
+                this.viewAccessConversationExpirationEvaluatorList, true);
+    }
+
+    @PostConstruct
+    protected void restore()
+    {
+        List<ViewAccessConversationExpirationEvaluator> restoredList =
+            this.windowContext.getAttribute(ViewAccessConversationExpirationEvaluatorRegistry.class.getName(),
+                    List.class);
+
+        if(restoredList != null)
+        {
+            this.viewAccessConversationExpirationEvaluatorList = restoredList;
         }
     }
 }
