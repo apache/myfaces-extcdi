@@ -15,20 +15,6 @@
  ~~ specific language governing permissions and limitations
  ~~ under the License.
 
- ~~ NOTE: source-assemblies are not available for 0.9.1 due to EXTCDI-91
- ~~ --> uncomment and insert for 0.9.2 release!
-
- ~~ *-------------------------+---------+----------+-----------+
- ~~ | MyFaces Extensions CDI for JSF 1.2 0.9.1 Source (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.tar.gz} myfaces-extcdi-jsf12-0.9.1-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.tar.gz.md5} myfaces-extcdi-jsf12-0.9.1-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.tar.gz.asc} myfaces-extcdi-jsf12-0.9.1-src.tar.gz.asc}} |
- ~~ *-------------------------+---------+----------+-----------+
- ~~ | MyFaces Extensions CDI for JSF 1.2 0.9.1 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.zip} myfaces-extcdi-jsf12-0.9.1-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.zip.md5} myfaces-extcdi-jsf12-0.9.1-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf12-0.9.1-src.zip.asc} myfaces-extcdi-jsf12-0.9.1-src.zip.asc}} |
-
- ~~ *-------------------------+---------+----------+-----------+
- ~~ | MyFaces Extensions CDI for JSF 2.0 0.9.1 Source (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.tar.gz} myfaces-extcdi-jsf20-0.9.1-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.tar.gz.md5} myfaces-extcdi-jsf20-0.9.1-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.tar.gz.asc} myfaces-extcdi-jsf20-0.9.1-src.tar.gz.asc}} |
- ~~ *-------------------------+---------+----------+-----------+
- ~~ | MyFaces Extensions CDI for JSF 2.0 0.9.1 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.zip} myfaces-extcdi-jsf20-0.9.1-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.zip.md5} myfaces-extcdi-jsf20-0.9.1-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-jsf20-0.9.1-src.zip.asc} myfaces-extcdi-jsf20-0.9.1-src.zip.asc}} |
-
-
  ------
 Download Apache MyFaces Extensions CDI
  ------
@@ -54,15 +40,23 @@ Download Apache MyFaces Extensions CDI
 *-------------------------+---------+----------+-----------+
 |                         | Mirrors | Checksum | Signature |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions CDI for JSF 1.2 0.9.1 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz} myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz.md5} myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz.asc} myfaces-extcdi-assembly-jsf12-0.9.1.tar.gz.asc}} |
+| MyFaces Extensions CDI for JSF 1.2 0.9.2 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz} myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz.md5} myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz.asc} myfaces-extcdi-assembly-jsf12-0.9.2-bin.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions CDI for JSF 1.2 0.9.1 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.zip} myfaces-extcdi-assembly-jsf12-0.9.1.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.zip.md5} myfaces-extcdi-assembly-jsf12-0.9.1.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.1.zip.asc} myfaces-extcdi-assembly-jsf12-0.9.1.zip.asc}} |
+| MyFaces Extensions CDI for JSF 1.2 0.9.2 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip} myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip.md5} myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip.asc} myfaces-extcdi-assembly-jsf12-0.9.2-bin.zip.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions CDI for JSF 2.0 0.9.1 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz} myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.md5} myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.asc} myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.asc}} |
+| MyFaces Extensions CDI for JSF 1.2 0.9.2 Source (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz} myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz.md5} myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz.asc} myfaces-extcdi-assembly-jsf12-0.9.2-src.tar.gz.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions CDI for JSF 2.0 0.9.1 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.zip} myfaces-extcdi-assembly-jsf20-0.9.1.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.zip.md5} myfaces-extcdi-assembly-jsf20-0.9.1.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.1.zip.asc} myfaces-extcdi-assembly-jsf20-0.9.1.zip.asc}} |
+| MyFaces Extensions CDI for JSF 1.2 0.9.2 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.zip} myfaces-extcdi-assembly-jsf12-0.9.2-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.zip.md5} myfaces-extcdi-assembly-jsf12-0.9.2-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf12-0.9.2-src.zip.asc} myfaces-extcdi-assembly-jsf12-0.9.2-src.zip.asc}} |
 *-------------------------+---------+----------+-----------+
-| MyFaces Extensions CDI 0.9.1 Source-Release (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-parent-0.9.1-source-release.zip} myfaces-extcdi-parent-0.9.1-source-release.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-parent-0.9.1-source-release.zip.md5} myfaces-extcdi-parent-0.9.1-source-release.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-parent-0.9.1-source-release.zip.asc} myfaces-extcdi-parent-0.9.1-source-release.zip.asc}} |
+| MyFaces Extensions CDI for JSF 2.0 0.9.2 (tar.gz)     | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz} myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.md5} myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.asc} myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.asc}} |
+*-------------------------+---------+----------+-----------+
+| MyFaces Extensions CDI for JSF 2.0 0.9.2 (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip} myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip.md5} myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip.md5}} | {{{http://www.apache.org/dist/myfaces/binaries/myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip.asc} myfaces-extcdi-assembly-jsf20-0.9.2-bin.zip.asc}} |
+*-------------------------+---------+----------+-----------+
+| MyFaces Extensions CDI for JSF 2.0 0.9.2 Source (tar.gz)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz} myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz.md5} myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz.asc} myfaces-extcdi-assembly-jsf20-0.9.2-src.tar.gz.asc}} |
+*-------------------------+---------+----------+-----------+
+| MyFaces Extensions CDI for JSF 2.0 0.9.2 Source (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.zip} myfaces-extcdi-assembly-jsf20-0.9.2-src.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.zip.md5} myfaces-extcdi-assembly-jsf20-0.9.2-src.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-assembly-jsf20-0.9.2-src.zip.asc} myfaces-extcdi-assembly-jsf20-0.9.2-src.zip.asc}} |
+*-------------------------+---------+----------+-----------+
+| MyFaces Extensions CDI 0.9.2 Source-Release (zip)      | {{{http://www.apache.org/dyn/closer.cgi/myfaces/source/myfaces-extcdi-parent-0.9.2-source-release.zip} myfaces-extcdi-parent-0.9.2-source-release.zip}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-parent-0.9.2-source-release.zip.md5} myfaces-extcdi-parent-0.9.2-source-release.zip.md5}} | {{{http://www.apache.org/dist/myfaces/source/myfaces-extcdi-parent-0.9.2-source-release.zip.asc} myfaces-extcdi-parent-0.9.2-source-release.zip.asc}} |
 *-------------------------+---------+----------+-----------+
 
 Latest source code from SVN repository
@@ -100,19 +94,19 @@ Verifying signatures
 
 	  <<<
 	  % pgpk -a KEYS
-	  % pgpv myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz
+	  % pgpv myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz
 	  >>>
 
 	  <or>
 
 	  <<<
 	  % pgp -ka KEYS
-	  % pgp myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz
+	  % pgp myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz
 	  >>>
 
 	  <or>
 
 	  <<<
   	% gpg --import KEYS
-	  % gpg --verify myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.1.tar.gz
+	  % gpg --verify myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz.asc myfaces-extcdi-assembly-jsf20-0.9.2-bin.tar.gz
 	  >>>
