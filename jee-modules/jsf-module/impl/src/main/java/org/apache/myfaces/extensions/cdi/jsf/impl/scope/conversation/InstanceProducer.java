@@ -19,27 +19,16 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import static org.apache.myfaces.extensions.cdi.core.api.CoreModuleBeanNames.*;
-import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.*;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowContextManagerFactory;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.spi.InjectionPoint;
-import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import java.util.Map;
@@ -49,34 +38,6 @@ import java.util.Map;
  */
 final class InstanceProducer
 {
-    @Produces
-    @SessionScoped
-    @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)
-    protected EditableWindowContextManager createWindowContextManager(WindowContextConfig windowContextConfig,
-                                                                      ConversationConfig conversationConfig,
-                                                                      ProjectStage projectStage,
-                                                                      BeanManager beanManager)
-    {
-        WindowContextManagerFactory windowContextManagerFactory =
-                CodiUtils.getContextualReferenceByClass(beanManager, WindowContextManagerFactory.class, true);
-
-        if(windowContextManagerFactory != null)
-        {
-            return windowContextManagerFactory.createWindowContextManager(windowContextConfig, conversationConfig);
-        }
-        return new DefaultWindowContextManager(windowContextConfig, conversationConfig, projectStage, beanManager);
-    }
-
-    protected void destroyAllConversations(
-            @Disposes @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)WindowContextManager windowContextManager)
-    {
-        if(windowContextManager instanceof EditableWindowContextManager)
-        {
-            ((EditableWindowContextManager)windowContextManager).closeAllWindowContexts();
-        }
-        RequestCache.resetCache();
-    }
-
     @Produces
     @Named(CURRENT_WINDOW_CONTEXT_BEAN_NAME)
     @RequestScoped

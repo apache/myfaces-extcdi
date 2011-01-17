@@ -18,11 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +38,7 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
     private static final long serialVersionUID = -1783266839383634211L;
 
     @Inject
-    private WindowContext windowContext;
+    private EditableWindowContext windowContext;
 
     protected ViewAccessConversationExpirationEvaluatorRegistry()
     {
@@ -67,6 +68,11 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
     @PreDestroy
     protected void save()
     {
+        if(FacesContext.getCurrentInstance() == null || !this.windowContext.isActive())
+        {
+            //here we are outside a request -> currently that's not supported -> TODO
+            return;
+        }
         this.windowContext.setAttribute(ViewAccessConversationExpirationEvaluatorRegistry.class.getName(),
                 this.viewAccessConversationExpirationEvaluatorList, true);
     }
@@ -74,6 +80,11 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
     @PostConstruct
     protected void restore()
     {
+        if(FacesContext.getCurrentInstance() == null || !this.windowContext.isActive())
+        {
+            //here we are outside a request -> currently that's not supported -> TODO
+            return;
+        }
         List<ViewAccessConversationExpirationEvaluator> restoredList =
             this.windowContext.getAttribute(ViewAccessConversationExpirationEvaluatorRegistry.class.getName(),
                     List.class);
