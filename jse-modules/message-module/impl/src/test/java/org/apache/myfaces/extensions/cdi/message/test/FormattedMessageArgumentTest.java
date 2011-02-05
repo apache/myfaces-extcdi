@@ -35,7 +35,7 @@ public class FormattedMessageArgumentTest extends AbstractMessageContextAwareTes
     {
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator())
                 .localeResolver(new TestGermanLocaleResolver())
-                .addFormatterConfig(Number.class, new TestGermanNumberConfig()).create()
+                .create()
                 .message().text("{formatted_number}").argument(new BigDecimal("7654.3210")).toText();
 
         assertEquals("value: 7.654,321", messageText);
@@ -46,11 +46,21 @@ public class FormattedMessageArgumentTest extends AbstractMessageContextAwareTes
     {
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator())
                 .localeResolver(new TestEnglishLocaleResolver())
-                .addFormatterConfig(Number.class, new TestGermanNumberConfig(), Locale.GERMAN)
-                .addFormatterConfig(Number.class, new TestEnglishNumberConfig(), Locale.ENGLISH)
                 .create()
                 .message().text("{formatted_number}").argument(new BigDecimal("7654.3210")).toText();
 
         assertEquals("value: 7,654.321", messageText);
+    }
+
+    @Test
+    public void createCustomFormattedMessageEnglishTest()
+    {
+        String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator())
+                .localeResolver(new TestEnglishLocaleResolver())
+                .addFormatterConfig(Number.class, new TestCustomNumberConfig(), Locale.ENGLISH)
+                .create()
+                .message().text("{formatted_number}").argument(new BigDecimal("7654.3210")).toText();
+
+        assertEquals("value: 7'654,321", messageText);
     }
 }

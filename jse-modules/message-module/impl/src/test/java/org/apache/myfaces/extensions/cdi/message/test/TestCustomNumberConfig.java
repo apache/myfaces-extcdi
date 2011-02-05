@@ -28,16 +28,15 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-class TestGermanNumberConfig implements GenericConfig
+class TestCustomNumberConfig implements GenericConfig
 {
     private static final long serialVersionUID = 1581606533032801390L;
     private Map<String, Serializable> properties = new HashMap<String, Serializable>();
 
+    TestCustomNumberConfig()
     {
-        this.properties.put(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, ".");
+        this.properties.put(NumberFormatterConfigKeys.GROUPING_SEPARATOR_KEY, "'");
         this.properties.put(NumberFormatterConfigKeys.DECIMAL_SEPARATOR_KEY, ",");
-        this.properties.put(NumberFormatterConfigKeys.MINIMUM_FRACTION_DIGITS_KEY, 2);
-        this.properties.put(NumberFormatterConfigKeys.MINIMUM_INTEGER_DIGITS_KEY, 1);
     }
 
     public GenericConfig addProperty(String key, Serializable value)
