@@ -31,7 +31,15 @@ class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefini
     public ExtractedInlineViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass, String basePath)
     {
         super(viewDefinitionClass);
-        this.basePath = basePath + "/";
+
+        if(basePath != null)
+        {
+            this.basePath = basePath + "/";
+        }
+        else
+        {
+            this.basePath = "";
+        }
     }
 
     @Override

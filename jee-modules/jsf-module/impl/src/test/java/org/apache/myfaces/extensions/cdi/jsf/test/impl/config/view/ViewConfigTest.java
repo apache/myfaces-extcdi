@@ -46,6 +46,7 @@ public class ViewConfigTest
     public void resetCache()
     {
         ViewConfigCache.reset();
+        viewConfigExtension.beginViewConfigExtraction(); //allow lazy init
     }
 
     @Test
@@ -286,6 +287,8 @@ public class ViewConfigTest
         viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
         viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
 
+        viewConfigExtension.finalizeConfig();
+
         assertEquals(ViewConfigCache.getViewDefinition(
                 OrderOverviewPage.class).getViewId(),
                 "/pages/order/orderOverview.xhtml");
@@ -311,6 +314,8 @@ public class ViewConfigTest
         viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
         viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
 
+        viewConfigExtension.finalizeConfig();
+
         assertEquals(ViewConfigCache.getViewDefinition(
                 OrderOverviewPage.class).getViewId(),
                 "/views/order/orderOverview.xhtml");
@@ -335,6 +340,8 @@ public class ViewConfigTest
         viewConfigExtension.setInlineViewConfigRootMarker(SubfolderViewConfigRootMarker.class);
         viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
         viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
+
+        viewConfigExtension.finalizeConfig();
 
         assertEquals(ViewConfigCache.getViewDefinition(
                 OrderOverviewPage.class).getViewId(),
@@ -365,6 +372,8 @@ public class ViewConfigTest
     public void testMissingInlineViewConfigRootMarkerWithInlineViewConfig()
     {
         viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
+
+        viewConfigExtension.finalizeConfig();
 
         try
         {

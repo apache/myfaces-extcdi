@@ -62,6 +62,25 @@ public class ViewConfigCache
             inlineViewConfigRootMarker =
             new HashMap<ClassLoader, Class>();
 
+    private static Map<ClassLoader, Boolean>
+            lazyInitAllowed =
+            new HashMap<ClassLoader, Boolean>();
+
+    static void activateWriteMode()
+    {
+        setLazyInit(false);
+    }
+
+    static void deactivateWriteMode()
+    {
+        setLazyInit(true);
+    }
+
+    private static void setLazyInit(boolean newValue)
+    {
+        lazyInitAllowed.put(getClassloader(), newValue);
+    }
+
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
         storeViewDefinition(viewId, viewDefinitionEntry, false);
@@ -247,7 +266,17 @@ public class ViewConfigCache
             return;
         }
 
+        if(isInWriteMode())
+        {
+            return;
+        }
+
         registerInlineViewConfigEntry();
+    }
+
+    private static boolean isInWriteMode()
+    {
+        return !Boolean.TRUE.equals(lazyInitAllowed.get(getClassloader()));
     }
 
     private synchronized static void registerInlineViewConfigEntry()

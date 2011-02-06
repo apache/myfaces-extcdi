@@ -49,4 +49,15 @@ class TestableViewConfigExtension extends ViewConfigExtension
     {
         return super.isInlineViewConfig(beanClass);
     }
+
+    @Override
+    public void beginViewConfigExtraction()
+    {
+        super.beginViewConfigExtraction();
+    }
+
+    public void finalizeConfig()
+    {
+        super.endViewConfigExtraction();
+    }
 }

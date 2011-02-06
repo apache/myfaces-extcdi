@@ -65,6 +65,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
             return;
         }
 
+        beginViewConfigExtraction();
+
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(Page.class))
         {
             validateViewConfigDefinition(processAnnotatedType.getAnnotatedType().getJavaClass());
@@ -93,6 +95,18 @@ public class ViewConfigExtension implements Extension, Deactivatable
             processAnnotatedType.setAnnotatedType(
                                 new ViewControllerWrapper(processAnnotatedType.getAnnotatedType()));
         }
+
+        endViewConfigExtraction();
+    }
+
+    protected void beginViewConfigExtraction()
+    {
+        ViewConfigCache.activateWriteMode();
+    }
+
+    protected void endViewConfigExtraction()
+    {
+        ViewConfigCache.deactivateWriteMode();
     }
 
     protected void setInlineViewConfigRootMarker(Class markerClass)

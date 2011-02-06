@@ -62,10 +62,19 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         }
 
         int startIndex = viewConfigRootMarker.getPackage().getName().length() + 1;
-        String basePath = viewDefinitionClass.getName()
-                .substring(startIndex, viewDefinitionClass.getName().lastIndexOf("."));
+        int endIndex = viewDefinitionClass.getName().lastIndexOf(".");
 
-        basePath = basePath.replace(".", "/");
+        String basePath;
+        if(startIndex < endIndex)
+        {
+            basePath = viewDefinitionClass.getName()
+                    .substring(startIndex, endIndex);
+            basePath = basePath.replace(".", "/");
+        }
+        else
+        {
+            basePath = null; //both are in the same package
+        }
 
         //use the interface to make clear which information we really need
         ViewConfigEntry viewConfigEntry = new ExtractedInlineViewConfigDefinitionEntry(viewDefinitionClass, basePath);
