@@ -35,7 +35,7 @@ import java.util.Collections;
 /**
  * @author Gerhard Petracek
  */
-class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
+class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
 {
     private static final long serialVersionUID = -8387356240329549455L;
 
@@ -51,15 +51,15 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
 
     List<Annotation> viewMetaDataList = new ArrayList<Annotation>();
 
-    private Class<? extends ViewConfig> viewDefinitionClass;
-    private String basePath = ROOT_PATH;
+    protected Class<? extends ViewConfig> viewDefinitionClass;
+    protected String basePath = ROOT_PATH;
     private Map<String, String> simpleClassNameToPathMapping = new HashMap<String, String>();
-    private String pageName = DEFAULT_PAGE_NAME;
+    protected String pageName = DEFAULT_PAGE_NAME;
     private String extension = DEFAULT_EXTENSION;
     private Page.NavigationMode navigationMode = null;
     private Page.ViewParameter viewParameter = null;
 
-    public DefaultViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass)
+    public ExtractedViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass)
     {
         this.viewDefinitionClass = viewDefinitionClass;
     }
@@ -179,7 +179,7 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
             {
                 className = className.substring(className.lastIndexOf(".") + 1);
             }
-            className = className.substring(0, 1).toLowerCase() + className.substring(1);
+            className = createPageName(className);
             viewId.append(className);
         }
         //nested classes with manually defined page name and shared basePath
@@ -190,7 +190,7 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
             this.basePath = "";
             className = className.substring(className.lastIndexOf(".") + 1);
             className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
-            className = className.substring(0, 1).toLowerCase() + className.substring(1);
+            className = createPageName(className);
             className = className.substring(0, className.lastIndexOf("/") + 1);
             className += this.pageName;
             viewId.append(className);
@@ -217,6 +217,12 @@ class DefaultViewConfigDefinitionEntry implements ViewConfigEntry
 
         result = ensureValidViewIds(result);
         return result;
+    }
+
+    protected String createPageName(String className)
+    {
+        className = className.substring(0, 1).toLowerCase() + className.substring(1);
+        return className;
     }
 
     /*

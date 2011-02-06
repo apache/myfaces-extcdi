@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
 
 /**
@@ -26,8 +27,26 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtensio
 class TestableViewConfigExtension extends ViewConfigExtension
 {
     @Override
-    public void addPageDefinition(Class pageDefinitionClass)
+    public void addPageDefinition(Class<? extends ViewConfig> pageDefinitionClass)
     {
         super.addPageDefinition(pageDefinitionClass);
+    }
+
+    @Override
+    public void setInlineViewConfigRootMarker(Class viewConfigRootMarker)
+    {
+        super.setInlineViewConfigRootMarker(viewConfigRootMarker);
+    }
+
+    @Override
+    public void addInlinePageDefinition(Class<? extends ViewConfig> beanClass)
+    {
+        super.addInlinePageDefinition(beanClass);
+    }
+
+    @Override
+    public boolean isInlineViewConfig(Class<? extends ViewConfig> beanClass)
+    {
+        return super.isInlineViewConfig(beanClass);
     }
 }

@@ -16,18 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor
+class InlineViewConfigEntry
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    private final ViewConfigExtractor viewConfigExtractor;
+    private final Class<? extends ViewConfig> viewConfigDefinition;
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    InlineViewConfigEntry(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> viewConfigDefinition)
+    {
+        this.viewConfigExtractor = viewConfigExtractor;
+        this.viewConfigDefinition = viewConfigDefinition;
+    }
 
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    ViewConfigExtractor getViewConfigExtractor()
+    {
+        return viewConfigExtractor;
+    }
+
+    Class<? extends ViewConfig> getViewConfigDefinition()
+    {
+        return viewConfigDefinition;
+    }
 }

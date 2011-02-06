@@ -26,10 +26,13 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
+import javax.inject.Named;
 import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.missingInlineViewConfigRootMarkerException;
 
 /**
  * @author Gerhard Petracek
@@ -39,21 +42,53 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
     public ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //use the interface to make clear which information we really need
-        ViewConfigEntry scannedViewConfig = new DefaultViewConfigDefinitionEntry(viewDefinitionClass);
+        ViewConfigEntry viewConfigEntry = new ExtractedViewConfigDefinitionEntry(viewDefinitionClass);
 
-        scanViewConfigClass(viewDefinitionClass, (DefaultViewConfigDefinitionEntry)scannedViewConfig);
+        return extractViewConfigEntry(viewDefinitionClass, viewConfigEntry);
+    }
 
-        return new DefaultViewConfigEntry(scannedViewConfig.getViewId(),
+    public boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    {
+        return isResolvable(viewDefinitionClass, new ArrayList<Class<? extends Annotation>>());
+    }
+
+    public ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    {
+        Class viewConfigRootMarker = ViewConfigCache.getInlineViewConfigRootMarker();
+
+        if(viewConfigRootMarker == null)
+        {
+            throw missingInlineViewConfigRootMarkerException(viewDefinitionClass);
+        }
+
+        int startIndex = viewConfigRootMarker.getPackage().getName().length() + 1;
+        String basePath = viewDefinitionClass.getName()
+                .substring(startIndex, viewDefinitionClass.getName().lastIndexOf("."));
+
+        basePath = basePath.replace(".", "/");
+
+        //use the interface to make clear which information we really need
+        ViewConfigEntry viewConfigEntry = new ExtractedInlineViewConfigDefinitionEntry(viewDefinitionClass, basePath);
+
+        return extractViewConfigEntry(viewDefinitionClass, viewConfigEntry);
+    }
+
+    private ViewConfigEntry extractViewConfigEntry(Class<? extends ViewConfig> viewDefinitionClass,
+                                                   ViewConfigEntry viewConfigEntry)
+    {
+        scanViewConfigClass(viewDefinitionClass, (ExtractedViewConfigDefinitionEntry)viewConfigEntry);
+
+        return new DefaultViewConfigEntry(viewConfigEntry.getViewId(),
                                           viewDefinitionClass,
-                                          scannedViewConfig.getNavigationMode(),
-                                          scannedViewConfig.getViewParameter(),
-                                          scannedViewConfig.getAccessDecisionVoters(),
-                                          scannedViewConfig.getErrorView(),
-                                          scannedViewConfig.getMetaData());
+                                          viewConfigEntry.getNavigationMode(),
+                                          viewConfigEntry.getViewParameter(),
+                                          viewConfigEntry.getAccessDecisionVoters(),
+                                          viewConfigEntry.getErrorView(),
+                                          viewConfigEntry.getMetaData());
     }
 
     private Collection<Annotation> extractViewMetaData(
-            Class<?> targetClass, DefaultViewConfigDefinitionEntry entry)
+            Class<?> targetClass, ExtractedViewConfigDefinitionEntry entry)
     {
         List<Annotation> result = new ArrayList<Annotation>();
 
@@ -78,11 +113,11 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         return result;
     }
 
-    private void scanViewConfigClass(Class<?> viewDefinitionClass, DefaultViewConfigDefinitionEntry scannedViewConfig)
+    private void scanViewConfigClass(Class<?> viewDefinitionClass, ExtractedViewConfigDefinitionEntry scannedViewConfig)
     {
-        String defaultExtension = DefaultViewConfigDefinitionEntry.DEFAULT_EXTENSION;
-        String defaultPageName = DefaultViewConfigDefinitionEntry.DEFAULT_PAGE_NAME;
-        String rootPath = DefaultViewConfigDefinitionEntry.ROOT_PATH;
+        String defaultExtension = ExtractedViewConfigDefinitionEntry.DEFAULT_EXTENSION;
+        String defaultPageName = ExtractedViewConfigDefinitionEntry.DEFAULT_PAGE_NAME;
+        String rootPath = ExtractedViewConfigDefinitionEntry.ROOT_PATH;
 
         String currentBasePath;
         Page pageAnnotation;
@@ -161,5 +196,41 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
             //scan super class
             currentClass = currentClass.getSuperclass();
         }
+    }
+
+    /**
+     * @param annotated current class to scan
+     * @param scannedAnnotations simple cycle prevention
+     * @return true to signal that the class is resolvable via EL
+     */
+    private boolean isResolvable(Class annotated, List<Class<? extends Annotation>> scannedAnnotations)
+    {
+        if(annotated.isAnnotation())
+        {
+            scannedAnnotations.add(annotated);
+        }
+
+        Class<? extends Annotation> annotationClass;
+        for(Annotation annotation : annotated.getAnnotations())
+        {
+            annotationClass = annotation.annotationType();
+
+            if(scannedAnnotations.contains(annotationClass))
+            {
+                continue;
+            }
+
+            if(Named.class.equals(annotationClass) || "javax.faces.bean.ManagedBean".equals(annotationClass.getName()))
+            {
+                return true;
+            }
+
+            //to support stereotypes
+            if(isResolvable(annotationClass, scannedAnnotations))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
@@ -57,10 +58,30 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         CodiStartupBroadcaster.broadcastStartup();
 
+        if(processAnnotatedType.getAnnotatedType().isAnnotationPresent(InlineViewConfigRoot.class))
+        {
+            setInlineViewConfigRootMarker(processAnnotatedType.getAnnotatedType().getJavaClass());
+            processAnnotatedType.veto();
+            return;
+        }
+
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(Page.class))
         {
-            addPageDefinition(processAnnotatedType.getAnnotatedType().getJavaClass());
-            processAnnotatedType.veto();
+            validateViewConfigDefinition(processAnnotatedType.getAnnotatedType().getJavaClass());
+
+            @SuppressWarnings({"unchecked"})
+            Class<? extends ViewConfig> beanClass = processAnnotatedType.getAnnotatedType().getJavaClass();
+
+            ViewConfigExtractor viewConfigExtractor = getViewConfigExtractor();
+            if(isInlineViewConfig(viewConfigExtractor, beanClass))
+            {
+                addInlinePageDefinition(viewConfigExtractor, beanClass);
+            }
+            else
+            {
+                addPageDefinition(beanClass);
+                processAnnotatedType.veto();
+            }
         }
 
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(View.class) &&
@@ -74,7 +95,12 @@ public class ViewConfigExtension implements Extension, Deactivatable
         }
     }
 
-    protected void addPageDefinition(Class pageDefinitionClass)
+    protected void setInlineViewConfigRootMarker(Class markerClass)
+    {
+        ViewConfigCache.setInlineViewConfigRootMarker(markerClass);
+    }
+
+    protected void addPageDefinition(Class<? extends ViewConfig> pageDefinitionClass)
     {
         ViewConfigEntry newEntry = createViewConfigEntry(pageDefinitionClass);
 
@@ -103,6 +129,26 @@ public class ViewConfigExtension implements Extension, Deactivatable
             //if there is already an normal (not simple!) entry force an exception
             ViewConfigCache.addViewDefinition(newEntry.getViewId(), newEntry);
         }
+    }
+
+    protected boolean isInlineViewConfig(Class<? extends ViewConfig> beanClass)
+    {
+        return isInlineViewConfig(getViewConfigExtractor(), beanClass);
+    }
+
+    private boolean isInlineViewConfig(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> beanClass)
+    {
+        return viewConfigExtractor.isInlineViewConfig(beanClass);
+    }
+
+    protected void addInlinePageDefinition(Class<? extends ViewConfig> beanClass)
+    {
+        addInlinePageDefinition(getViewConfigExtractor(), beanClass);
+    }
+
+    private void addInlinePageDefinition(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> beanClass)
+    {
+        ViewConfigCache.queueInlineViewConfig(viewConfigExtractor, beanClass);
     }
 
     /**
@@ -150,18 +196,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
         }
     }
 
-    protected ViewConfigEntry createViewConfigEntry(Class pageDefinitionClass)
+    protected ViewConfigEntry createViewConfigEntry(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        if(!ViewConfig.class.isAssignableFrom(pageDefinitionClass))
-        {
-            throw new IllegalArgumentException(
-                    "the page definition " + pageDefinitionClass.getName() + " has to implement "
-                            + ViewConfig.class.getName());
-        }
-
-        @SuppressWarnings({"unchecked"})
-        Class<? extends ViewConfig> viewDefinitionClass = (Class<? extends ViewConfig>)pageDefinitionClass;
-
         //we use abstract classes for nesting definitions
         //TODO log a warning in case of project-stage dev
         if(Modifier.isAbstract(viewDefinitionClass.getModifiers()))
@@ -169,17 +205,31 @@ public class ViewConfigExtension implements Extension, Deactivatable
             return null;
         }
 
+        ViewConfigEntry result = getViewConfigExtractor().extractViewConfig(viewDefinitionClass);
+        return result;
+    }
+
+    private void validateViewConfigDefinition(Class beanClass)
+    {
+        if(!ViewConfig.class.isAssignableFrom(beanClass))
+        {
+            throw new IllegalArgumentException(
+                    "the page definition " + beanClass.getName() + " has to implement "
+                            + ViewConfig.class.getName());
+        }
+    }
+
+    private ViewConfigExtractor getViewConfigExtractor()
+    {
         ViewConfigExtractor viewConfigExtractor = CodiUtils.lookupFromEnvironment(VIEW_CONFIG_EXTRACTOR_PROPERTY_NAME,
-                                                                                  VIEW_CONFIG_EXTRACTOR_JNDI_NAME,
-                                                                                  ViewConfigExtractor.class);
-        
+                VIEW_CONFIG_EXTRACTOR_JNDI_NAME,
+                ViewConfigExtractor.class);
+
         if(viewConfigExtractor == null)
         {
             viewConfigExtractor = new DefaultViewConfigExtractor();
         }
-
-        ViewConfigEntry result = viewConfigExtractor.extractViewConfig(viewDefinitionClass);
-        return result;
+        return viewConfigExtractor;
     }
 
     public boolean isActivated()

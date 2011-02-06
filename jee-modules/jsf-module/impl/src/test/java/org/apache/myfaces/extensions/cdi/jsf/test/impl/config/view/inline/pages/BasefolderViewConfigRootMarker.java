@@ -16,18 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor
+@InlineViewConfigRoot(pageBeanPostfix = {"Page", "PageBean"})
+public interface BasefolderViewConfigRootMarker
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

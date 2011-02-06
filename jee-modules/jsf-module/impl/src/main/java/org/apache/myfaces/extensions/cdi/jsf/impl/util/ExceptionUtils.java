@@ -18,9 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
@@ -87,5 +89,53 @@ public class ExceptionUtils
     public static IllegalArgumentException conversationNotFoundException(String conversationKey)
     {
         return new IllegalArgumentException("Cannot find conversation with key: " + conversationKey);
+    }
+
+    public static IllegalStateException missingInlineViewConfigRootMarkerException(
+            Class<? extends ViewConfig> viewDefinitionClass)
+    {
+        StringBuilder message = new StringBuilder();
+
+        message.append(viewDefinitionClass.getName());
+        message.append(" is an inline view-config and no page-root marker has been found. ");
+        message.append("Please remove the @Page annotation ");
+        message.append("or add a marker class or interface in the root package of your page-beans ");
+        message.append("and annotate it with ");
+        message.append(InlineViewConfigRoot.class.getName());
+        message.append(" or refactor it to normal view-configs");
+        
+        throw new IllegalStateException(message.toString());
+    }
+
+    public static IllegalStateException ambiguousViewConfigRootException(
+            Class storedPageClass, Class viewConfigRootClass)
+    {
+        StringBuilder message = new StringBuilder();
+
+        message.append("Inline view-configs don't support multiple page-root markers in the same application.\n");
+        message.append("Refactor to normal view-configs or remove ");
+        message.append(storedPageClass.getName());
+        message.append(" or ");
+        message.append(viewConfigRootClass.getName());
+
+        throw new IllegalStateException(message.toString());
+    }
+
+    public static IllegalArgumentException ambiguousViewDefinitionException(String viewId,
+                                                                            Class<? extends ViewConfig> newDef,
+                                                                            Class<? extends ViewConfig> existingDef)
+    {
+        return new IllegalArgumentException(viewId + " is already mapped to "
+                + viewId + " via " + existingDef.getName()
+                + " -> a further view definition (" +
+                newDef.getName() + ") is invalid");
+    }
+
+    public static IllegalStateException ambiguousDefaultErrorViewDefinitionException(Class<? extends ViewConfig> newDef,
+                                                                         Class<? extends ViewConfig> existingDef)
+    {
+        return new IllegalStateException("multiple error pages found " +
+                        existingDef.getName() + " and " +
+                        newDef.getName());
     }
 }

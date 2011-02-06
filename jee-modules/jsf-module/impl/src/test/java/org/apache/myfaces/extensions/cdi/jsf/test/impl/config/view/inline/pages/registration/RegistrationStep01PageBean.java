@@ -16,18 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.registration;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
+
+import javax.enterprise.inject.Model;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor
+@Page
+@Model
+public class RegistrationStep01PageBean implements ViewConfig
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    private boolean preloaded = false;
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    @PreRenderView
+    protected void preload()
+    {
+        this.preloaded = true;
+    }
 
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    public boolean isPreloaded()
+    {
+        return preloaded;
+    }
 }

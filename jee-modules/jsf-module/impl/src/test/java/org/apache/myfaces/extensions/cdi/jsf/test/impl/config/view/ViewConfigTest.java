@@ -22,6 +22,12 @@ import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.BasefolderViewConfigRootMarker;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.RenamedBasefolderViewConfigRootMarker;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.SubfolderViewConfigRootMarker;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.OrderOverviewPage;
+import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.registration.RegistrationStep01PageBean;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
@@ -35,6 +41,12 @@ import java.util.List;
 public class ViewConfigTest
 {
     private TestableViewConfigExtension viewConfigExtension = new TestableViewConfigExtension();
+
+    @BeforeMethod
+    public void resetCache()
+    {
+        ViewConfigCache.reset();
+    }
 
     @Test
     public void testSimpleCase()
@@ -265,5 +277,120 @@ public class ViewConfigTest
             assertTrue(pageBeanConfigEntry.getBeanClass().equals(TestPageBean2.class) ||
                        pageBeanConfigEntry.getBeanClass().equals(TestPageBean3.class));
         }
+    }
+
+    @Test
+    public void testBasefolderInlineViewConfig()
+    {
+        viewConfigExtension.setInlineViewConfigRootMarker(BasefolderViewConfigRootMarker.class);
+        viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
+        viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getViewId(),
+                "/pages/order/orderOverview.xhtml");
+        assertEquals(ViewConfigCache.getViewDefinition(
+                RegistrationStep01PageBean.class).getViewId(),
+                "/pages/registration/registrationStep01.xhtml");
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
+                "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
+
+        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
+                .getPageBeanDefinitions().iterator().next();
+
+        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+    }
+
+    @Test
+    public void testRenamvedBasefolderInlineViewConfig()
+    {
+        viewConfigExtension.setInlineViewConfigRootMarker(RenamedBasefolderViewConfigRootMarker.class);
+        viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
+        viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getViewId(),
+                "/views/order/orderOverview.xhtml");
+        assertEquals(ViewConfigCache.getViewDefinition(
+                RegistrationStep01PageBean.class).getViewId(),
+                "/views/registration/registrationStep01.xhtml");
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
+                "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
+
+        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
+                .getPageBeanDefinitions().iterator().next();
+
+        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+    }
+
+    @Test
+    public void testSubfolderInlineViewConfig()
+    {
+        viewConfigExtension.setInlineViewConfigRootMarker(SubfolderViewConfigRootMarker.class);
+        viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
+        viewConfigExtension.addInlinePageDefinition(RegistrationStep01PageBean.class);
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getViewId(),
+                "/order/orderOverview.xhtml");
+        assertEquals(ViewConfigCache.getViewDefinition(
+                RegistrationStep01PageBean.class).getViewId(),
+                "/registration/registrationStep01.xhtml");
+
+        assertEquals(ViewConfigCache.getViewDefinition(
+                OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
+                "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
+
+        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
+                .getPageBeanDefinitions().iterator().next();
+
+        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+    }
+
+    @Test
+    public void testInlineViewConfigDetection()
+    {
+        assertTrue(viewConfigExtension.isInlineViewConfig(OrderOverviewPage.class));
+        assertTrue(viewConfigExtension.isInlineViewConfig(RegistrationStep01PageBean.class));
+    }
+
+    @Test
+    public void testMissingInlineViewConfigRootMarkerWithInlineViewConfig()
+    {
+        viewConfigExtension.addInlinePageDefinition(OrderOverviewPage.class);
+
+        try
+        {
+            assertEquals(ViewConfigCache.getViewDefinition(
+                    OrderOverviewPage.class).getViewId(),
+                    "/order/orderOverview.xhtml");
+        }
+        catch (IllegalStateException e)
+        {
+            return;
+        }
+        fail();
+    }
+
+    @Test
+    public void testAmbiguousInlineViewConfigRootMarkerWithInlineViewConfig()
+    {
+        try
+        {
+            viewConfigExtension.setInlineViewConfigRootMarker(SubfolderViewConfigRootMarker.class);
+            viewConfigExtension.setInlineViewConfigRootMarker(getClass());
+        }
+        catch (IllegalStateException e)
+        {
+            return;
+        }
+        fail();
     }
 }

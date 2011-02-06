@@ -16,18 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+
+import javax.inject.Named;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor
+@Page
+@Named
+public class OrderOverviewPage implements SecuredPage
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

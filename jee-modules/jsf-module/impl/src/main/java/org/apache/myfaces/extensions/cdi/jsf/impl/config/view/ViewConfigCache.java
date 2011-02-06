@@ -19,14 +19,19 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
-import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.*;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCacheStore.setDefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Collection;
+
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 
 /**
  * TODO move exceptions to util class
@@ -35,6 +40,28 @@ import java.util.Collection;
  */
 public class ViewConfigCache
 {
+    //we don't need a ConcurrentHashMap - write access is only allowed during the startup (by one thread)
+
+    private static Map<ClassLoader, Map<String, ViewConfigEntry>>
+            viewIdToViewDefinitionEntryMapping
+            = new HashMap<ClassLoader, Map<String, ViewConfigEntry>>();
+
+    private static Map<ClassLoader, Map<Class<? extends ViewConfig>, ViewConfigEntry>>
+            viewDefinitionToViewDefinitionEntryMapping =
+            new HashMap<ClassLoader, Map<Class<? extends ViewConfig>, ViewConfigEntry>>();
+
+    private static Map<ClassLoader, List<InlineViewConfigEntry>>
+            inlineViewDefinitionEntryList =
+            new HashMap<ClassLoader, List<InlineViewConfigEntry>>();
+
+    private static Map<ClassLoader, ViewConfigEntry>
+            defaultErrorView =
+            new HashMap<ClassLoader, ViewConfigEntry>();
+
+    private static Map<ClassLoader, Class>
+            inlineViewConfigRootMarker =
+            new HashMap<ClassLoader, Class>();
+
     static void addViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry)
     {
         storeViewDefinition(viewId, viewDefinitionEntry, false);
@@ -45,57 +72,27 @@ public class ViewConfigCache
         storeViewDefinition(viewId, viewDefinitionEntry, true);
     }
 
-    private static void storeViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry, boolean allowReplace)
-    {
-        tryToStorePageAsDefaultErrorPage(viewDefinitionEntry);
-
-        if(getViewIdToViewDefinitionEntryMapping().containsKey(viewId) && !allowReplace)
-        {
-            throw new IllegalArgumentException(viewId + " is already mapped to "
-                    + viewId + " via " + getViewIdToViewDefinitionEntryMapping().get(viewId).getViewDefinitionClass()
-                    + " -> a further view definition (" +
-                    viewDefinitionEntry.getViewDefinitionClass().getName() + ") is invalid");
-        }
-        getViewIdToViewDefinitionEntryMapping().put(viewId, viewDefinitionEntry);
-        getViewDefinitionToViewDefinitionEntryMapping()
-                .put(viewDefinitionEntry.getViewDefinitionClass(), viewDefinitionEntry);
-    }
-
-    private static void tryToStorePageAsDefaultErrorPage(ViewConfigEntry viewDefinitionEntry)
-    {
-        if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
-        {
-            if(getDefaultErrorViewForApplication() != null)
-            {
-                throw new IllegalStateException("multiple error pages found " +
-                        getDefaultErrorViewForApplication().getViewDefinitionClass().getClass().getName() + " and " +
-                        viewDefinitionEntry.getViewDefinitionClass().getName());
-            }
-
-            setDefaultErrorView(viewDefinitionEntry);
-        }
-    }
-
     public static ViewConfigEntry getViewDefinition(String viewId)
     {
-        return getViewIdToViewDefinitionEntryMapping().get(viewId);
+        return getViewIdToViewDefinitionEntryMapping(true).get(viewId);
     }
 
     public static Collection<ViewConfigEntry> getViewConfigEntries()
     {
-        Map<String, ViewConfigEntry> entryMap = getViewIdToViewDefinitionEntryMapping();
+        Map<String, ViewConfigEntry> entryMap = getViewIdToViewDefinitionEntryMapping(true);
 
         return entryMap.values();
     }
 
     public static ViewConfigEntry getViewDefinition(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        return getViewDefinitionToViewDefinitionEntryMapping().get(viewDefinitionClass);
+        return getViewDefinitionToViewDefinitionEntryMapping(true).get(viewDefinitionClass);
     }
 
     public static ViewConfigEntry getDefaultErrorView()
     {
-        return getDefaultErrorViewForApplication();
+        lazyInlineViewConfigCompilation();
+        return defaultErrorView.get(getClassloader());
     }
 
     /**
@@ -103,6 +100,182 @@ public class ViewConfigCache
      */
     public static void reset()
     {
-        clear();
+        getViewIdToViewDefinitionEntryMapping(false).clear();
+        getViewDefinitionToViewDefinitionEntryMapping(false).clear();
+        getInlineViewDefinitionToViewDefinitionEntryList().clear();
+
+        defaultErrorView.put(getClassloader(), null);
+        inlineViewConfigRootMarker.put(getClassloader(), null);
+    }
+
+    static void queueInlineViewConfig(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> beanClass)
+    {
+        getInlineViewDefinitionToViewDefinitionEntryList()
+                .add(new InlineViewConfigEntry(viewConfigExtractor, beanClass));
+    }
+
+    static void setInlineViewConfigRootMarker(Class viewConfigRootClass)
+    {
+        Class storedPageClass = getInlineViewConfigRootMarker();
+
+        if(storedPageClass != null)
+        {
+            if(!storedPageClass.equals(viewConfigRootClass))
+            {
+                throw ambiguousViewConfigRootException(storedPageClass, viewConfigRootClass);
+            }
+        }
+        else
+        {
+            inlineViewConfigRootMarker.put(getClassloader(), viewConfigRootClass);
+        }
+    }
+
+    static Class getInlineViewConfigRootMarker()
+    {
+        return inlineViewConfigRootMarker.get(getClassloader());
+    }
+
+    static void storeViewDefinition(String viewId,
+                                    ViewConfigEntry viewDefinitionEntry,
+                                    boolean allowReplace,
+                                    boolean lazyInit)
+    {
+        if(getViewIdToViewDefinitionEntryMapping(lazyInit).containsKey(viewId) && !allowReplace)
+        {
+            throw ambiguousViewDefinitionException(
+                    viewId,
+                    viewDefinitionEntry.getViewDefinitionClass(),
+                    getViewIdToViewDefinitionEntryMapping(lazyInit).get(viewId).getViewDefinitionClass());
+        }
+
+        tryToStorePageAsDefaultErrorPage(viewDefinitionEntry);
+
+        getViewIdToViewDefinitionEntryMapping(lazyInit).put(viewId, viewDefinitionEntry);
+        getViewDefinitionToViewDefinitionEntryMapping(lazyInit)
+                .put(viewDefinitionEntry.getViewDefinitionClass(), viewDefinitionEntry);
+    }
+
+    static void storeViewDefinition(String viewId, ViewConfigEntry viewDefinitionEntry, boolean allowReplace)
+    {
+        storeViewDefinition(viewId, viewDefinitionEntry, allowReplace, true);
+    }
+
+    private static Map<String, ViewConfigEntry> getViewIdToViewDefinitionEntryMapping(boolean lazyInit)
+    {
+        if(lazyInit)
+        {
+            lazyInlineViewConfigCompilation();
+        }
+
+        Map<String, ViewConfigEntry> result = viewIdToViewDefinitionEntryMapping.get(getClassloader());
+
+        if(result == null)
+        {
+            result = new HashMap<String, ViewConfigEntry>();
+            viewIdToViewDefinitionEntryMapping.put(getClassloader(), result);
+        }
+
+        return result;
+    }
+
+    private static Map<Class<? extends ViewConfig>, ViewConfigEntry>
+        getViewDefinitionToViewDefinitionEntryMapping(boolean lazyInit)
+    {
+        if(lazyInit)
+        {
+            lazyInlineViewConfigCompilation();
+        }
+
+        Map<Class<? extends ViewConfig>, ViewConfigEntry> result =
+                viewDefinitionToViewDefinitionEntryMapping.get(getClassloader());
+
+        if(result == null)
+        {
+            result = new HashMap<Class<? extends ViewConfig>, ViewConfigEntry>();
+            viewDefinitionToViewDefinitionEntryMapping.put(getClassloader(), result);
+        }
+        return result;
+    }
+
+    private static List<InlineViewConfigEntry> getInlineViewDefinitionToViewDefinitionEntryList()
+    {
+        List<InlineViewConfigEntry> inlineViewConfigEntryList = inlineViewDefinitionEntryList.get(getClassloader());
+
+        if(inlineViewConfigEntryList == null)
+        {
+            inlineViewConfigEntryList = new ArrayList<InlineViewConfigEntry>();
+            inlineViewDefinitionEntryList.put(getClassloader(), inlineViewConfigEntryList);
+        }
+        return inlineViewConfigEntryList;
+    }
+
+    private static void tryToStorePageAsDefaultErrorPage(ViewConfigEntry viewDefinitionEntry)
+    {
+        if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
+        {
+            ViewConfigEntry defaultErrorView = getDefaultErrorView();
+            if(defaultErrorView != null)
+            {
+                throw ambiguousDefaultErrorViewDefinitionException(viewDefinitionEntry.getViewDefinitionClass(),
+                                                                   defaultErrorView.getViewDefinitionClass());
+            }
+
+            setDefaultErrorView(viewDefinitionEntry);
+        }
+    }
+
+    private static void setDefaultErrorView(ViewConfigEntry viewDefinitionEntry)
+    {
+        //TODO
+        defaultErrorView.put(getClassloader(), viewDefinitionEntry);
+    }
+
+    private static ClassLoader getClassloader()
+    {
+        return ClassUtils.getClassLoader(null);
+    }
+
+    private static void lazyInlineViewConfigCompilation()
+    {
+        List<InlineViewConfigEntry> inlineViewConfigEntryList =
+                inlineViewDefinitionEntryList.get(getClassloader());
+
+        if(inlineViewConfigEntryList == null)
+        {
+            //there is no inline view config or it is already processed
+            return;
+        }
+
+        registerInlineViewConfigEntry();
+    }
+
+    private synchronized static void registerInlineViewConfigEntry()
+    {
+        List<InlineViewConfigEntry> inlineViewConfigEntryList =
+                inlineViewDefinitionEntryList.get(getClassloader());
+
+        // switch into paranoia mode
+        if(inlineViewConfigEntryList == null)
+        {
+            return;
+        }
+
+        ViewConfigEntry viewConfigEntry;
+        for(InlineViewConfigEntry inlineViewConfigEntry : inlineViewConfigEntryList)
+        {
+            viewConfigEntry = inlineViewConfigEntry.getViewConfigExtractor()
+                    .extractInlineViewConfig(inlineViewConfigEntry.getViewConfigDefinition());
+
+            if(viewConfigEntry != null)
+            {
+                //activate view controller annotations
+                viewConfigEntry.addPageBean(viewConfigEntry.getViewDefinitionClass());
+
+                storeViewDefinition(viewConfigEntry.getViewId(), viewConfigEntry, false, false);
+            }
+        }
+
+        inlineViewDefinitionEntryList.put(getClassloader(), null);
     }
 }

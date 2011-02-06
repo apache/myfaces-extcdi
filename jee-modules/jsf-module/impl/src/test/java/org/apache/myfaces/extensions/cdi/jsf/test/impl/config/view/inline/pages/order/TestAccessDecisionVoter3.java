@@ -16,18 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
+
+import javax.interceptor.InvocationContext;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor
+class TestAccessDecisionVoter3 implements AccessDecisionVoter
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
+    {
+        //do nothing
+        return null;
+    }
 }
