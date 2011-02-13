@@ -16,20 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.core.api.config;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 
-import java.io.Serializable;
+import java.util.List;
 
 /**
+ * Allows to customize CODI in case of extension points which aren't supported by CDI.
+ * E.g. for artifacts which are needed before the bootstrapping process is finished.
+ *
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor extends Serializable
+public interface ConfiguredValueResolver extends Deactivatable
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor);
 }

@@ -30,6 +30,8 @@ import javax.enterprise.inject.Typed;
 @Typed()
 public class JsfProjectStageProducer extends ProjectStageProducer
 {
+    private static final long serialVersionUID = 2378537865206165557L;
+
     /** JNDI path for the ProjectStage */
     private final static String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
 
@@ -46,8 +48,14 @@ public class JsfProjectStageProducer extends ProjectStageProducer
             return projectStage;
         }
 
-        String stageName = CodiUtils
-                .lookupFromEnvironment(JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME, PROJECT_STAGE_JNDI_NAME, String.class);
+        String stageName;
+
+        stageName = CodiUtils.lookupFromEnvironment(JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME, String.class);
+
+        if(stageName == null)
+        {
+            CodiUtils.lookupFromEnvironment(PROJECT_STAGE_JNDI_NAME, String.class);
+        }
 
         if (stageName != null)
         {

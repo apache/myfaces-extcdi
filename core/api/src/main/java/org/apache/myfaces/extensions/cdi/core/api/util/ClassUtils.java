@@ -72,6 +72,11 @@ public class ClassUtils
         return loader;
     }
 
+    public static <T> Class<T> tryToLoadClassForName(String name, Class<T> targetType)
+    {
+        return (Class<T>)tryToLoadClassForName(name);
+    }
+
     public static Class tryToLoadClassForName(String name)
     {
         try

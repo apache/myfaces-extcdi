@@ -19,11 +19,11 @@
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
+import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToInstantiateClassForName;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
@@ -33,15 +33,16 @@ import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.util.Nonbinding;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.Collections;
+import java.util.Properties;
+import java.util.Arrays;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -428,37 +429,49 @@ public class CodiUtils
         return Collections.emptyList();
     }
 
-    public static <T> T lookupFromEnvironment(String systemPropertyName, String jndiName , Class<T> targetType)
+    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType, Aggregatable<T>... aggregatable)
     {
-        String configuredValue = System.getProperty(systemPropertyName);
-        if (configuredValue != null)
+        return lookupFromEnvironment(targetType.getSimpleName(), targetType, aggregatable);
+    }
+
+    public static <T extends Serializable> T lookupFromEnvironment(String key,
+                                                                   Class<T> targetType,
+                                                                   Aggregatable<T>... aggregatable)
+    {
+        List<T> results = ConfiguredArtifactUtils.getCachedArtifact(key, targetType);
+
+        if(results == null)
         {
+            results = ConfiguredArtifactUtils.resolveFromEnvironment(key, targetType, aggregatable != null);
+
             if(String.class.isAssignableFrom(targetType))
             {
-                return (T)configuredValue;
+                ConfiguredArtifactUtils.processConfiguredArtifact(key, (List<String>)results);
             }
-            return tryToInstantiateClassForName(configuredValue, targetType);
-        }
-
-        try
-        {
-            configuredValue = JndiUtils.lookup(jndiName, String.class);
-        }
-        catch (RuntimeException jndiException)
-        {
-            // noop - lookup did not work
-        }
-
-        if (configuredValue != null)
-        {
-            if(String.class.isAssignableFrom(targetType))
+            else
             {
-                return (T)configuredValue;
+                ConfiguredArtifactUtils.processFoundArtifact(key, targetType, results);
             }
-            return tryToInstantiateClassForName(configuredValue, targetType);
         }
 
-        return null;
+        if(results.isEmpty())
+        {
+            return null;
+        }
+
+        if(aggregatable != null && aggregatable.length > 0)
+        {
+            Aggregatable<T> firstAggregatable = aggregatable[0]; //TODO
+            for(T currentEntry : results)
+            {
+                firstAggregatable.add(currentEntry);
+            }
+            return firstAggregatable.create();
+        }
+        else
+        {
+            return results.iterator().next();
+        }
     }
 
     public static boolean isCdiInitialized()

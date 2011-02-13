@@ -36,11 +36,6 @@ import java.util.Iterator;
  */
 public class CodiRenderKitFactory extends RenderKitFactory implements Deactivatable
 {
-    public static final String RENDER_KIT_WRAPPER_FACTORY_PROPERTY_NAME =
-            "org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.RenderKitWrapperFactory";
-    public static final String RENDER_KIT_WRAPPER_FACTORY_JNDI_NAME =
-            "java:comp/env/myfaces-codi/RenderKitWrapperFactory";
-
     private RenderKitFactory wrapped;
     private RenderKitWrapperFactory renderKitWrapperFactory;
 
@@ -54,9 +49,7 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
 
         if(!this.deactivated)
         {
-            this.renderKitWrapperFactory = CodiUtils.lookupFromEnvironment(RENDER_KIT_WRAPPER_FACTORY_PROPERTY_NAME,
-                                                                           RENDER_KIT_WRAPPER_FACTORY_JNDI_NAME,
-                                                                           RenderKitWrapperFactory.class);
+            this.renderKitWrapperFactory = CodiUtils.lookupFromEnvironment(RenderKitWrapperFactory.class);
         }
     }
 

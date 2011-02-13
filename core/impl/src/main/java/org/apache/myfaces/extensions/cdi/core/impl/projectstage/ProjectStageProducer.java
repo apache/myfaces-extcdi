@@ -27,6 +27,7 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.Typed;
+import java.io.Serializable;
 
 /**
  * <p>Produces {@link ProjectStage} configurations.</p>
@@ -53,17 +54,9 @@ import javax.enterprise.inject.Typed;
  * TODO move jsf specific parts
  */
 @Typed()
-public class ProjectStageProducer
+public class ProjectStageProducer implements Serializable
 {
-    private final static String PROJECTSTAGE_PRODUCER_PROPERTY_KEY
-            = "org.apache.myfaces.extensions.cdi.ProjectStageProducer";
-
-    private static final String PROJECTSTAGE_PRODUCER_JNDI_NAME = "java:comp/env/myfaces-codi/ProjectStageProducer";
-
-    private final static String PROJECTSTAGE_PROPERTY_KEY
-            = "org.apache.myfaces.extensions.cdi.ProjectStage";
-
-    private static final String PROJECTSTAGE_JNDI_NAME = "java:comp/env/myfaces-codi/ProjectStage";
+    private static final long serialVersionUID = -2987762608635612074L;
 
     /**
      * ProjectStageProducers must only be created by subclassing producers
@@ -106,6 +99,13 @@ public class ProjectStageProducer
         return projectStage;
     }
 
+    //just for testing
+    protected void reset()
+    {
+        projectStage = null;
+        projectStageProducer = null;
+    }
+
     /**
      * <p>This factory method should only get used if there is absolutly no way
      * to get the current {@link ProjectStage} via &#064;Inject.</p>
@@ -118,8 +118,7 @@ public class ProjectStageProducer
     {
         if (projectStageProducer == null)
         {
-            projectStageProducer = CodiUtils.lookupFromEnvironment(
-                    PROJECTSTAGE_PRODUCER_PROPERTY_KEY, PROJECTSTAGE_PRODUCER_JNDI_NAME, ProjectStageProducer.class);
+            projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class);
 
             if(projectStageProducer == null)
             {
@@ -169,7 +168,7 @@ public class ProjectStageProducer
     protected ProjectStage resolveProjectStage()
     {
         String stageName = CodiUtils
-                .lookupFromEnvironment(PROJECTSTAGE_PROPERTY_KEY, PROJECTSTAGE_JNDI_NAME, String.class);
+                .lookupFromEnvironment(ProjectStage.class.getSimpleName(), String.class); //we have to use a string here
 
         if (stageName != null)
         {

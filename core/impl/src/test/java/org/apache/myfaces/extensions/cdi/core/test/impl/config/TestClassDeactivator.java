@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.core.test.impl.config;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
 
-import java.io.Serializable;
-
-/**
- * @author Gerhard Petracek
- */
-public interface ViewConfigExtractor extends Serializable
+public class TestClassDeactivator extends AbstractClassDeactivator
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    private static final long serialVersionUID = 7799046096147501268L;
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    protected void deactivateClasses()
+    {
+        addDeactivatedClass(TestClassDeactivator.class);
+    }
 }

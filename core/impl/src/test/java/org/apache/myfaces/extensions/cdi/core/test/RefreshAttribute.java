@@ -16,20 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.core.test;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-
-import java.io.Serializable;
-
-/**
- * @author Gerhard Petracek
- */
-public interface ViewConfigExtractor extends Serializable
+public class RefreshAttribute implements Cloneable
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    public RefreshAttribute getClone()
+    {
+        try
+        {
+            return (RefreshAttribute) clone();
+        }
+        catch (CloneNotSupportedException e)
+        {
+            //do nothing
+        }
+        return null;
+    }
 }

@@ -16,20 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
-
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+package org.apache.myfaces.extensions.cdi.core.test.impl.config;
 
 import java.io.Serializable;
 
-/**
- * @author Gerhard Petracek
- */
-public interface ViewConfigExtractor extends Serializable
+public interface TestInterface extends Serializable
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
-
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    String getValue();
 }

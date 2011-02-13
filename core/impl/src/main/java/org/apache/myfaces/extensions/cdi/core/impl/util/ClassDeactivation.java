@@ -30,10 +30,6 @@ public class ClassDeactivation
 {
     private static Logger logger = Logger.getLogger(ClassDeactivation.class.getName());
 
-    private static final String CLASS_DEACTIVATOR_PROPERTY_NAME = "org.apache.myfaces.extensions.cdi.ClassDeactivator";
-
-    private static final String CLASS_DEACTIVATOR_JNDI_NAME = "java:comp/env/myfaces-codi/ClassDeactivator";
-
     public static boolean isClassActivated(Class targetClass)
     {
         ClassDeactivator classDeactivator = ClassDeactivatorStorage.getClassDeactivator();
@@ -55,10 +51,8 @@ public class ClassDeactivation
 
     private static ClassDeactivator getClassDeactivator()
     {
-        ClassDeactivator classDeactivator = CodiUtils
-                .lookupFromEnvironment(CLASS_DEACTIVATOR_PROPERTY_NAME,
-                                       CLASS_DEACTIVATOR_JNDI_NAME,
-                                       ClassDeactivator.class);
+        ClassDeactivator classDeactivator =
+                CodiUtils.lookupFromEnvironment(ClassDeactivator.class, new ClassDeactivatorAggregator());
 
         // use default deactivator
         if (classDeactivator == null)
@@ -67,7 +61,7 @@ public class ClassDeactivation
         }
         else
         {
-            logger.info("used class deactivator: " + classDeactivator.getClass().getName());
+            logger.info("used class deactivator: " + classDeactivator.toString());
 
             // display deactivated classes here once
             // NOTE that isClassActivated() will be called many times for the same class
@@ -85,6 +79,8 @@ public class ClassDeactivation
     {
         return new AbstractClassDeactivator()
         {
+            private static final long serialVersionUID = 3365575383802245760L;
+
             protected void deactivateClasses()
             {
                 //do nothing

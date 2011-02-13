@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.api.projectstage;
 import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.logging.Logger;
@@ -126,11 +125,9 @@ public abstract class ProjectStage implements Serializable
     static
     {
         ServiceLoader<ProjectStageHolder> psSl = ServiceLoader.load(ProjectStageHolder.class);
-        Iterator<ProjectStageHolder> psIt = psSl.iterator();
-        while (psIt.hasNext())
+        for (ProjectStageHolder aPsSl : psSl)
         {
-            ProjectStageHolder psH = psIt.next();
-            log.fine("registering ProjectStages from ProjectStageHolder " + psH.getClass().getName());
+            log.fine("registering ProjectStages from ProjectStageHolder " + aPsSl.getClass().getName());
         }
     }
 

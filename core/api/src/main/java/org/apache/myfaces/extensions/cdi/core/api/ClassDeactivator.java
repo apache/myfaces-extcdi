@@ -19,13 +19,14 @@
 package org.apache.myfaces.extensions.cdi.core.api;
 
 import java.util.Set;
+import java.io.Serializable;
 
 /**
  * Interface for an implementation which provides classes of default implementations which should be deactivated.
  *
  * @author Gerhard Petracek
  */
-public interface ClassDeactivator
+public interface ClassDeactivator extends Serializable
 {
     /**
      * Provides classes which should be deactivated.

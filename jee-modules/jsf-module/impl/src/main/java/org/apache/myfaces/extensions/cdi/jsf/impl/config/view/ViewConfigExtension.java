@@ -43,12 +43,6 @@ import java.lang.reflect.Modifier;
 @SuppressWarnings({"UnusedDeclaration"})
 public class ViewConfigExtension implements Extension, Deactivatable
 {
-    private static final String VIEW_CONFIG_EXTRACTOR_PROPERTY_NAME =
-            "org.apache.myfaces.extensions.cdi.ViewConfigExtractor";
-
-    private static final String VIEW_CONFIG_EXTRACTOR_JNDI_NAME =
-            "java:comp/env/myfaces-codi/ViewConfigExtractor";
-
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
@@ -235,9 +229,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
     private ViewConfigExtractor getViewConfigExtractor()
     {
-        ViewConfigExtractor viewConfigExtractor = CodiUtils.lookupFromEnvironment(VIEW_CONFIG_EXTRACTOR_PROPERTY_NAME,
-                VIEW_CONFIG_EXTRACTOR_JNDI_NAME,
-                ViewConfigExtractor.class);
+        ViewConfigExtractor viewConfigExtractor = CodiUtils.lookupFromEnvironment(ViewConfigExtractor.class);
 
         if(viewConfigExtractor == null)
         {

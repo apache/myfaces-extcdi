@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 
 import javax.faces.render.RenderKit;
+import java.io.Serializable;
 
 /**
  * Component libs like Trinidad use very special renderkits.
@@ -26,7 +27,7 @@ import javax.faces.render.RenderKit;
  * 
  * @author Gerhard Petracek
  */
-public interface RenderKitWrapperFactory
+public interface RenderKitWrapperFactory extends Serializable
 {
     /**
      * Creates a {@link RenderKit} based on the currently active {@link RenderKit}

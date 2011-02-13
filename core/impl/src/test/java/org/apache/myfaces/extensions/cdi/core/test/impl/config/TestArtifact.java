@@ -16,20 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
-
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+package org.apache.myfaces.extensions.cdi.core.test.impl.config;
 
 import java.io.Serializable;
+import java.util.Date;
 
-/**
- * @author Gerhard Petracek
- */
-public interface ViewConfigExtractor extends Serializable
+public class TestArtifact implements Serializable
 {
-    ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    private static final long serialVersionUID = -8150942173999559913L;
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    private Date created = new Date();
 
-    ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    Date getCreated()
+    {
+        return created;
+    }
+
+    @SuppressWarnings({"EqualsWhichDoesntCheckParameterClass"})
+    @Override
+    public boolean equals(Object o)
+    {
+        //just for testing the cache
+        return this == o;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return created.hashCode();
+    }
 }

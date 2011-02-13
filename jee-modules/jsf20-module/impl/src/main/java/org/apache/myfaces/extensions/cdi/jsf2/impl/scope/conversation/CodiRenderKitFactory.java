@@ -52,12 +52,7 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
 
         if(!this.deactivated)
         {
-            this.renderKitWrapperFactory = CodiUtils.lookupFromEnvironment(
-                    org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CodiRenderKitFactory
-                            .RENDER_KIT_WRAPPER_FACTORY_PROPERTY_NAME,
-                    org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CodiRenderKitFactory
-                            .RENDER_KIT_WRAPPER_FACTORY_JNDI_NAME,
-                            RenderKitWrapperFactory.class);
+            this.renderKitWrapperFactory = CodiUtils.lookupFromEnvironment(RenderKitWrapperFactory.class);
         }
     }
 
