@@ -142,6 +142,27 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             }
         }
 
+        handleStandardNavigation(facesContext, fromAction, outcome);
+    }
+
+    private void handleStandardNavigation(FacesContext facesContext, String fromAction, String outcome)
+    {
+        //security
+        try
+        {
+            ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
+
+            if(entry != null)
+            {
+                invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
+            }
+        }
+        catch (AccessDeniedException accessDeniedException)
+        {
+            tryToHandleSecurityViolation(accessDeniedException);
+            return;
+        }
+
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
     }
 
