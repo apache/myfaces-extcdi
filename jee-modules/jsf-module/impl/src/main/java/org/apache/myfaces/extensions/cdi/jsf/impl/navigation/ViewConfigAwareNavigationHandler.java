@@ -69,6 +69,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
     @Override
     public void handleNavigation(FacesContext facesContext, String fromAction, String outcome)
     {
+        initBeanManager();
         if(outcome != null && outcome.contains("."))
         {
             String originalOutcome = outcome;
@@ -76,7 +77,6 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
             if(!this.otherOutcomes.contains(outcome))
             {
-                initBeanManager();
                 //it isn't possible to support interfaces due to cdi restrictions
                 if(outcome.startsWith("class "))
                 {
