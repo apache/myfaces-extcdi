@@ -33,7 +33,7 @@ import java.util.Collections;
 @InvocationOrder(300)
 public class LocalJndiResolver extends AbstractConfiguredValueResolver
 {
-    private static final String BASE_NAME = "java:comp/env/myfaces/codi/";
+    private static final String BASE_NAME = "java:comp/env/myfaces-codi/";
 
     public <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor)
     {

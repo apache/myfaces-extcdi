@@ -23,7 +23,7 @@
          version="2.5">
 
     <env-entry>
-        <env-entry-name>myfaces/codi/ClassDeactivator</env-entry-name>
+        <env-entry-name>myfaces-codi/ClassDeactivator</env-entry-name>
         <env-entry-type>java.lang.String</env-entry-type>
         <env-entry-value>org.apache.myfaces.extensions.cdi.test.webapp.scopemapping.deactivator.ScopeMappingDeactivator</env-entry-value>
     </env-entry>
