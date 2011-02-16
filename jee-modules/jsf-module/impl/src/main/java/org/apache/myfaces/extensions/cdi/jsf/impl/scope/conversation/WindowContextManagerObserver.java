@@ -65,8 +65,7 @@ final class WindowContextManagerObserver
                                              WindowHandler windowHandler,
                                              WindowContextConfig windowContextConfig)
     {
-        boolean requestParameterSupported = windowContextConfig.isUrlParameterSupported();
-        if(!(requestParameterSupported && windowContextConfig.isEagerWindowContextDetectionEnabled()) ||
+        if(!windowContextConfig.isEagerWindowContextDetectionEnabled() ||
                 RequestCache.getCurrentWindowContext() != null /*skip the process if there is a custom mechanism*/)
         {
             return;
@@ -75,7 +74,7 @@ final class WindowContextManagerObserver
         //don't use: windowContextManager.getCurrentWindowContext(); it would create a new window-id immediately and
         //it would break other features.
         String windowId = resolveWindowContextId(windowHandler,
-                                                 requestParameterSupported,
+                                                 windowContextConfig.isUrlParameterSupported(),
                                                  windowContextConfig.isUnknownWindowIdsAllowed());
 
         if(windowId != null)
