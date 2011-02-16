@@ -54,4 +54,6 @@ public interface EditableWindowContextManager extends WindowContextManager
     Collection<EditableWindowContext> getWindowContexts();
 
     void closeAllWindowContexts();
+
+    boolean isWindowContextActive(String windowContextId);
 }

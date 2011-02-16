@@ -152,4 +152,9 @@ public class EditableWindowContextManagerProxy implements EditableWindowContextM
     {
         return editableWindowContextManager.getWindowContext(windowContextId);
     }
+
+    public boolean isWindowContextActive(String windowContextId)
+    {
+        return editableWindowContextManager.isWindowContextActive(windowContextId);
+    }
 }

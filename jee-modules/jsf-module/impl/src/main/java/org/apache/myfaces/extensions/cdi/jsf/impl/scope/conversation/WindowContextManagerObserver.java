@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
+import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
@@ -29,6 +30,9 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.event.Observes;
@@ -41,10 +45,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
         .AUTOMATED_ENTRY_POINT_PARAMETER_KEY;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.cleanupInactiveWindowContexts;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsNewViewId;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 /**
  * @author Gerhard Petracek
@@ -52,6 +53,45 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 @SuppressWarnings({"UnusedDeclaration"})
 final class WindowContextManagerObserver
 {
+    /**
+     * tries to restore the window-id and the window-context as early as possible
+     * @param phaseEvent the current jsf phase-event
+     * @param windowContextManager the current window-context-manager
+     * @param windowHandler current window-handler
+     * @param windowContextConfig the active window-context-config
+     */
+    protected void tryToRestoreWindowContext(@Observes @BeforePhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
+                                             EditableWindowContextManager windowContextManager,
+                                             WindowHandler windowHandler,
+                                             WindowContextConfig windowContextConfig)
+    {
+        boolean requestParameterSupported = windowContextConfig.isUrlParameterSupported();
+        if(!(requestParameterSupported && windowContextConfig.isEagerWindowContextDetectionEnabled()) ||
+                RequestCache.getCurrentWindowContext() != null /*skip the process if there is a custom mechanism*/)
+        {
+            return;
+        }
+
+        //don't use: windowContextManager.getCurrentWindowContext(); it would create a new window-id immediately and
+        //it would break other features.
+        String windowId = resolveWindowContextId(windowHandler,
+                                                 requestParameterSupported,
+                                                 windowContextConfig.isUnknownWindowIdsAllowed());
+
+        if(windowId != null)
+        {
+            boolean active = windowContextManager.isWindowContextActive(windowId);
+
+            if(active)
+            {
+                RequestCache.setCurrentWindowContext(windowContextManager.getWindowContext(windowId));
+                //just for supporting e.g. el-expressions
+                phaseEvent.getFacesContext().getExternalContext().getRequestMap()
+                        .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
+            }
+        }
+    }
+
     //don't change/optimize this observer!!!
     protected void cleanup(@Observes @AfterPhase(JsfPhaseId.RESTORE_VIEW) PhaseEvent phaseEvent,
                            RequestTypeResolver requestTypeResolver,

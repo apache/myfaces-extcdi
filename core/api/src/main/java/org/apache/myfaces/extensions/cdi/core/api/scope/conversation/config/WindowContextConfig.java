@@ -103,6 +103,17 @@ public class WindowContextConfig extends AbstractAttributeAware implements CodiC
         return false;
     }
 
+    /**
+     * Allows to restore the window-context before the component tree gets built.
+     * Per default it's only supported if {#isUrlParameterSupported} is true as well.
+     * 
+     * @return true for activating it, false otherwise
+     */
+    public boolean isEagerWindowContextDetectionEnabled()
+    {
+        return isUrlParameterSupported();
+    }
+
     /*
      * event config
      */

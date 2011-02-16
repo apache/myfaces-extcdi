@@ -362,6 +362,13 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
     }
 
+    public boolean isWindowContextActive(String windowContextId)
+    {
+        EditableWindowContext editableWindowContext = this.windowContextMap.get(windowContextId);
+
+        return editableWindowContext != null && editableWindowContext.isActive();
+    }
+
     private EditableWindowContext convert(WindowContext windowContext)
     {
         if(!(windowContext instanceof EditableWindowContext))
