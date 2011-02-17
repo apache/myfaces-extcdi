@@ -161,12 +161,7 @@ public class ClassUtils
 
     public static String getJarVersion(Class targetClass)
     {
-        String classFilePath = targetClass.getCanonicalName().replace('.', '/') + ".class";
-        String manifestFilePath = "/META-INF/MANIFEST.MF";
-
-        String classLocation = targetClass.getResource(targetClass.getSimpleName() + ".class").toString();
-        String manifestFileLocation = classLocation
-                .substring(0, classLocation.indexOf(classFilePath) - 1) + manifestFilePath;
+        String manifestFileLocation = getManifestLocation(targetClass);
 
         try
         {
@@ -177,5 +172,29 @@ public class ClassUtils
         {
             return null;
         }
+    }
+
+    public static String getRevision(Class targetClass)
+    {
+        String manifestFileLocation = getManifestLocation(targetClass);
+
+        try
+        {
+            return new Manifest(new URL(manifestFileLocation).openStream())
+                    .getMainAttributes().getValue("Revision");
+        }
+        catch (Throwable t)
+        {
+            return null;
+        }
+    }
+
+    private static String getManifestLocation(Class targetClass)
+    {
+        String classFilePath = targetClass.getCanonicalName().replace('.', '/') + ".class";
+        String manifestFilePath = "/META-INF/MANIFEST.MF";
+
+        String classLocation = targetClass.getResource(targetClass.getSimpleName() + ".class").toString();
+        return classLocation.substring(0, classLocation.indexOf(classFilePath) - 1) + manifestFilePath;
     }
 }

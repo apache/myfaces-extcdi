@@ -188,7 +188,14 @@ public class CoreStartupObserver extends AbstractStartupObserver
     {
         if(CodiInformation.VERSION != null && !CodiInformation.VERSION.startsWith("null"))
         {
-            return " v" + CodiInformation.VERSION;
+            String revision = "";
+            if(CodiInformation.VERSION.endsWith("-SNAPSHOT") &&
+                    CodiInformation.REVISION != null && !CodiInformation.REVISION.startsWith("null"))
+            {
+                revision = " r" + CodiInformation.REVISION;
+            }
+
+            return " v" + CodiInformation.VERSION + revision;
         }
         return "";
     }
