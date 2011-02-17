@@ -186,16 +186,23 @@ public class CoreStartupObserver extends AbstractStartupObserver
 
     public String getCodiCoreInformation()
     {
-        if(CodiInformation.VERSION != null && !CodiInformation.VERSION.startsWith("null"))
+        String version = CodiInformation.VERSION;
+        String revision;
+
+        if(version != null && !version.startsWith("null"))
         {
-            String revision = "";
-            if(CodiInformation.VERSION.endsWith("-SNAPSHOT") &&
-                    CodiInformation.REVISION != null && !CodiInformation.REVISION.startsWith("null"))
+            revision = CodiInformation.REVISION;
+
+            if(version.endsWith("-SNAPSHOT") && revision != null && !revision.startsWith("null"))
             {
-                revision = " r" + CodiInformation.REVISION;
+                version = version.replace("-SNAPSHOT", " r");
+            }
+            else
+            {
+                revision = "";
             }
 
-            return " v" + CodiInformation.VERSION + revision;
+            return " v" + version + revision;
         }
         return "";
     }

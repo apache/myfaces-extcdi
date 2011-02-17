@@ -605,6 +605,7 @@
                             <doUpdate>false</doUpdate>
                             <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                             <buildNumberPropertyName>scm.revision</buildNumberPropertyName>
+                            <!--revisionOnScmFailure>unknown</revisionOnScmFailure-->
                         </configuration>
                     </plugin>
                 </plugins>
