@@ -20,12 +20,16 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeViewIdAsNewViewId;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 import javax.faces.application.ViewHandlerWrapper;
 import javax.faces.application.ViewHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.component.UIViewRoot;
 
 /**
  * @author Gerhard Petracek
@@ -76,5 +80,33 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());
+    }
+
+    @Override
+    public UIViewRoot restoreView(FacesContext facesContext, String viewId)
+    {
+        if(isWindowIdAvailable(facesContext))
+        {
+            WindowContext windowContext = ConversationUtils.getWindowContextManager().getCurrentWindowContext();
+
+            if(windowContext != null)
+            {
+                //see EXTCDI-131
+                storeViewIdAsNewViewId(windowContext, viewId);
+            }
+        }
+
+        return super.restoreView(facesContext, viewId);
+    }
+
+    /**
+     * check if the window-id has been restored before the restore-view phase
+     * @param facesContext current faces-context
+     * @return true if the window-id has been restored before, false otherwise
+     */
+    private boolean isWindowIdAvailable(FacesContext facesContext)
+    {
+        return facesContext.getExternalContext().getRequestMap()
+                        .containsKey(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 }

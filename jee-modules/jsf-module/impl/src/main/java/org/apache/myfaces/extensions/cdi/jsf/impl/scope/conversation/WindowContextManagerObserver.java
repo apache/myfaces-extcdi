@@ -84,7 +84,7 @@ final class WindowContextManagerObserver
             if(active)
             {
                 RequestCache.setCurrentWindowContext(windowContextManager.getWindowContext(windowId));
-                //just for supporting e.g. el-expressions
+                //don't remove it - e.g. needed as marker for the view-handler
                 phaseEvent.getFacesContext().getExternalContext().getRequestMap()
                         .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
             }

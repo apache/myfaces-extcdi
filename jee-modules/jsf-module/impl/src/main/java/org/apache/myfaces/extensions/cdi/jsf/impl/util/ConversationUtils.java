@@ -234,6 +234,11 @@ public class ConversationUtils
     public static void storeCurrentViewIdAsNewViewId(FacesContext facesContext, WindowContext windowContext)
     {
         String newViewId = facesContext.getViewRoot().getViewId();
+        storeViewIdAsNewViewId(windowContext, newViewId);
+    }
+
+    public static void storeViewIdAsNewViewId(WindowContext windowContext, String newViewId)
+    {
         windowContext.setAttribute(NEW_VIEW_ID_KEY, newViewId);
     }
 
