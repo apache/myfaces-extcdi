@@ -19,13 +19,14 @@
 package org.apache.myfaces.examples.jsf20.listsample;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
+import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * backing bean which holds the list of our SampleListEntry beans
@@ -35,8 +36,9 @@ import java.util.logging.Logger;
 public class SampleList implements Serializable
 {
     private static final long serialVersionUID = 5655240534902984821L;
-    
-    private Logger log = Logger.getLogger(SampleList.class.getName());
+
+    @Inject
+    private Logger logger;
 
     /**
      * This just logs a INFO for each bean creation
@@ -44,7 +46,7 @@ public class SampleList implements Serializable
     @PostConstruct
     public void init()
     {
-        log.info("SampleList bean got created");
+        logger.info("SampleList bean got created");
     }
     
     public List<Integer> getEntryIds()

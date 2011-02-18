@@ -19,11 +19,12 @@
 package org.apache.myfaces.examples.jsf20.listsample;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
+import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
+import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.logging.Logger;
 
 /**
  * backing bean which holds one single SampleListEntry
@@ -33,8 +34,9 @@ import java.util.logging.Logger;
 public class SampleListEntry implements Serializable
 {
     private static final long serialVersionUID = 723390662860977802L;
-    
-    private Logger log = Logger.getLogger(SampleListEntry.class.getName());
+
+    @Inject
+    private Logger logger;
 
     private Integer id;
     private String value;
@@ -45,7 +47,7 @@ public class SampleListEntry implements Serializable
     @PostConstruct
     public void init()
     {
-        log.info("SampleListEntry bean got created");
+        logger.info("SampleListEntry bean got created");
     }
 
     public Integer getId()

@@ -20,8 +20,6 @@ package org.apache.myfaces.examples.jsf20.converter;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
 import javax.inject.Named;
 import java.io.Serializable;
 
@@ -34,12 +32,6 @@ public class PojoBean implements Serializable
 {
 
     private Pojo selectedPojo;
-
-    public Converter getConverter()
-    {
-        // workaround for EXTCDI-127
-        return FacesContext.getCurrentInstance().getApplication().createConverter("pojoConverter");
-    }
 
     public Pojo getSelectedPojo()
     {

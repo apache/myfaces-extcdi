@@ -38,7 +38,7 @@
 
         <h:form>
             <!-- converter="pojoConverter" does not work due to EXTCDI-127 -->
-            <h:selectOneMenu converter="#{pojoBean.converter}" value="#{pojoBean.selectedPojo}">
+            <h:selectOneMenu converter="pojoConverter" value="#{pojoBean.selectedPojo}">
                 <f:selectItems value="#{pojoFactory.pojos}" var="pojo" itemValue="#{pojo}" itemLabel="#{pojo.name}" />
             </h:selectOneMenu>
 
