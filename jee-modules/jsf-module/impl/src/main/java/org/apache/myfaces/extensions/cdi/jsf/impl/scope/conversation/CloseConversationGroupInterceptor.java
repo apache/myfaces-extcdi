@@ -19,13 +19,12 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.CloseConversationGroup;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.CloseConversationGroupStrategy;
 
-import javax.interceptor.Interceptor;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.InvocationContext;
 import javax.inject.Inject;
-import java.lang.reflect.Method;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
 import java.io.Serializable;
 
 /**
@@ -43,67 +42,11 @@ public class CloseConversationGroupInterceptor implements Serializable
     private static final long serialVersionUID = -2440058119479555994L;
 
     @Inject
-    private WindowContext windowContext;
+    private CloseConversationGroupStrategy closeConversationGroupStrategy;
 
     @AroundInvoke
     public Object handleCloseConversation(InvocationContext invocationContext) throws Exception
     {
-        Object result = null;
-
-        CloseConversationGroup closeConversationGroup = getCloseConversationGroupAnnotation(invocationContext);
-
-        RuntimeException catchedException = null;
-
-        try
-        {
-            result = invocationContext.proceed();
-        }
-        catch (RuntimeException exception)
-        {
-            catchedException = exception;
-        }
-
-        if(isDefaultExceptionValue(closeConversationGroup) ||
-                (catchedException != null && checkExceptionToCatch(catchedException, closeConversationGroup.on())))
-        {
-            Class conversationGroup = getConversationGroup(invocationContext, closeConversationGroup);
-
-            this.windowContext.closeConversation(conversationGroup);
-        }
-        return result;
-    }
-
-    private Class getConversationGroup(InvocationContext invocationContext,
-                                       CloseConversationGroup closeConversationGroup)
-    {
-        Class conversationGroup = closeConversationGroup.group();
-
-        if(CloseConversationGroup.class.isAssignableFrom(conversationGroup))
-        {
-            conversationGroup = invocationContext.getMethod().getDeclaringClass();
-            //TODO support more use-cases
-        }
-        return conversationGroup;
-    }
-
-    private boolean checkExceptionToCatch(RuntimeException catchedException,
-                                          Class<? extends RuntimeException> specifiedException)
-    {
-        if(specifiedException.isAssignableFrom(catchedException.getClass()))
-        {
-            return true;
-        }
-        throw catchedException;
-    }
-
-    private CloseConversationGroup getCloseConversationGroupAnnotation(InvocationContext invocationContext)
-    {
-        Method method = invocationContext.getMethod();
-        return method.getAnnotation(CloseConversationGroup.class);
-    }
-
-    private boolean isDefaultExceptionValue(CloseConversationGroup closeConversationGroup)
-    {
-        return RuntimeException.class.getName().equals(closeConversationGroup.on().getName());
+        return this.closeConversationGroupStrategy.execute(invocationContext);
     }
 }

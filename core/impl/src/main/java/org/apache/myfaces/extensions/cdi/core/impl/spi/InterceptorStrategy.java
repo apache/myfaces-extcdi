@@ -16,35 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.security;
+package org.apache.myfaces.extensions.cdi.core.impl.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
-import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
-import org.apache.myfaces.extensions.cdi.jsf.impl.security.spi.SecurityStrategy;
-
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import java.io.Serializable;
 
 /**
+ * Base interface for all interceptor strategies which allow to provide custom implementations for CODI interceptors.
+ *
  * @author Gerhard Petracek
  */
-@Secured(SecurityInterceptor.PlaceHolderVoter.class)
-@Interceptor
-public class SecurityInterceptor implements Serializable
+public interface InterceptorStrategy extends Serializable
 {
-    private static final long serialVersionUID = -7094673146532371976L;
-
-    interface PlaceHolderVoter extends AccessDecisionVoter {}
-
-    @Inject
-    private SecurityStrategy securityStrategy;
-
-    @AroundInvoke
-    public Object filterDeniedInvocations(InvocationContext invocationContext) throws Exception
-    {
-        return this.securityStrategy.execute(invocationContext);
-    }
+    Object execute(InvocationContext invocationContext) throws Exception;
 }

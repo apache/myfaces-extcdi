@@ -20,16 +20,12 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.View;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.spi.ViewControllerStrategy;
 
-import javax.interceptor.Interceptor;
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
-import javax.faces.context.FacesContext;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import java.io.Serializable;
 
 /**
@@ -42,96 +38,14 @@ public class ViewControllerInterceptor implements Serializable
 {
     private static final long serialVersionUID = -1562171889458823736L;
 
-    interface PlaceHolderConfig extends ViewConfig {}
+    interface PlaceHolderConfig extends ViewConfig{}
+
+    @Inject
+    private ViewControllerStrategy viewControllerStrategy;
 
     @AroundInvoke
     public Object filterPhaseListenerMethods(InvocationContext invocationContext) throws Exception
     {
-        Object result = null;
-
-        if(invokeListenerMethod(invocationContext))
-        {
-            result = invocationContext.proceed();
-        }
-
-        return result;
-    }
-
-    private boolean invokeListenerMethod(InvocationContext invocationContext)
-    {
-        if(!isObserverMethod(invocationContext))
-        {
-            return true;
-        }
-
-        View view = getViewAnnotation(invocationContext);
-
-        String viewId = FacesContext.getCurrentInstance().getViewRoot().getViewId();
-
-        if(view.inline().length > 1 || !"".equals(view.inline()[0]))
-        {
-            return isMethodBoundToView(view.inline(), viewId);
-        }
-        return isMethodBoundToViewDefinition(view.value(), viewId);
-    }
-
-    private boolean isObserverMethod(InvocationContext invocationContext)
-    {
-        for(Annotation[] annotations : invocationContext.getMethod().getParameterAnnotations())
-        {
-            for(Annotation annotation : annotations)
-            {
-                if(BeforePhase.class.isAssignableFrom(annotation.annotationType()) ||
-                        AfterPhase.class.isAssignableFrom(annotation.annotationType()))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private View getViewAnnotation(InvocationContext invocationContext)
-    {
-        View view;
-        Method method = invocationContext.getMethod();
-        if(method.isAnnotationPresent(View.class))
-        {
-            view = method.getAnnotation(View.class);
-        }
-        else
-        {
-            view = method.getDeclaringClass().getAnnotation(View.class);
-        }
-        return view;
-    }
-
-    private boolean isMethodBoundToView(String[] viewIds, String viewId)
-    {
-        for(String current : viewIds)
-        {
-            if(current.equals(viewId))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private boolean isMethodBoundToViewDefinition (Class<? extends ViewConfig>[] viewDefinitions, String viewId)
-    {
-        for(Class<? extends ViewConfig> viewDefinition : viewDefinitions)
-        {
-            if(resolveViewId(viewDefinition).equals(viewId))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String resolveViewId(Class<? extends ViewConfig> viewDefinitionClass)
-    {
-        return ViewConfigCache.getViewDefinition(viewDefinitionClass).getViewId();
+        return this.viewControllerStrategy.execute(invocationContext);
     }
 }
