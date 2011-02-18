@@ -30,6 +30,7 @@ import javax.faces.FacesException;
  * TODO move it to a meaningful package
  *
  * @author Gerhard Petracek
+ * @see org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.RestoreInjectionPointsObserver
  */
 class InjectionAwareApplicationWrapper extends ApplicationWrapper
 {
