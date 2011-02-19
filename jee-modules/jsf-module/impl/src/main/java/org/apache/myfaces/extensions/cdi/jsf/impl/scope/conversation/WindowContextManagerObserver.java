@@ -35,6 +35,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -51,7 +52,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
-final class WindowContextManagerObserver
+@RequestScoped
+public class WindowContextManagerObserver
 {
     /**
      * tries to restore the window-id and the window-context as early as possible
