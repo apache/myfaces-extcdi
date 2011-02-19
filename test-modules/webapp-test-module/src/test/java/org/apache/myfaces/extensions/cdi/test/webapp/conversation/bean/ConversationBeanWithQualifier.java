@@ -25,12 +25,15 @@ import org.apache.myfaces.extensions.cdi.test.webapp.conversation.qualifier.Conv
 import org.apache.myfaces.extensions.cdi.test.webapp.conversation.qualifier.ConversationQualifier4;
 import org.apache.myfaces.extensions.cdi.test.webapp.conversation.qualifier.ConversationQualifier5;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
+
 
 /**
  * @author Jakob Korherr
  */
+@Dependent
 public class ConversationBeanWithQualifier implements Serializable
 {
 

@@ -34,6 +34,7 @@ import javax.inject.Named;
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 public class JsfAwareMessageContextProducer
 {
     @Produces

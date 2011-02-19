@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -34,6 +35,7 @@ import java.util.MissingResourceException;
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 public class ClientAwareMessageResolverProducer
 {
     @Produces

@@ -23,12 +23,14 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qualifier1;
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qualifier3;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 public class ConversationDemoBeanWithQualifier implements Serializable
 {
     private String value = "";

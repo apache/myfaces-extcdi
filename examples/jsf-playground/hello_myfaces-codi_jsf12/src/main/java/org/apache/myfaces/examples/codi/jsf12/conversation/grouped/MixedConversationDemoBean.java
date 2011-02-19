@@ -26,6 +26,7 @@ import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qua
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qualifier2;
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier.Qualifier3;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
 import java.util.Date;
@@ -33,6 +34,7 @@ import java.util.Date;
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 public class MixedConversationDemoBean implements Serializable
 {
     private static final long serialVersionUID = -4238520498463300564L;

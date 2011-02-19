@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.logging;
 import org.apache.myfaces.extensions.cdi.core.api.logging.LoggerDetails;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
@@ -28,7 +29,8 @@ import javax.enterprise.inject.spi.InjectionPoint;
  * @author Gerhard Petracek
  * @author Werner Punz
  */
-final class InstanceProducer
+@Dependent
+public class InstanceProducer
 {
     private java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InstanceProducer.class.getName());
 

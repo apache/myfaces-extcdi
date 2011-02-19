@@ -36,6 +36,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 final class InstanceProducer
 {
     @Produces

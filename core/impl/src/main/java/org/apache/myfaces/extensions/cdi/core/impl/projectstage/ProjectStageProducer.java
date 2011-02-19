@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 
 /**
@@ -53,7 +52,7 @@ import java.io.Serializable;
  *
  * TODO move jsf specific parts
  */
-@Typed()
+@Dependent
 public class ProjectStageProducer implements Serializable
 {
     private static final long serialVersionUID = -2987762608635612074L;

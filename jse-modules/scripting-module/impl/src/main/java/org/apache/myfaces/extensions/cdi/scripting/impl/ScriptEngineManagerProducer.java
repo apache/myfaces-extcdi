@@ -37,6 +37,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@Dependent
 public class ScriptEngineManagerProducer
 {
     protected ScriptEngineManagerProducer()

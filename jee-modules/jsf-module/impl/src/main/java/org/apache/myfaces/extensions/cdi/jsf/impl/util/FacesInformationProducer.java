@@ -25,7 +25,6 @@ import javax.faces.context.FacesContext;
 /**
  * @author Gerhard Petracek
  */
-
 @RequestScoped
 public class FacesInformationProducer
 {
