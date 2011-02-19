@@ -33,7 +33,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({PARAMETER, FIELD, METHOD})
 @Retention(RUNTIME)
 @Documented
-
 @Qualifier
 public @interface LoggerDetails
 {

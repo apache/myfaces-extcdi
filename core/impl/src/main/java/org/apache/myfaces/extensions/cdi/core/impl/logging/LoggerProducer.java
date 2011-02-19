@@ -30,23 +30,25 @@ import javax.enterprise.inject.spi.InjectionPoint;
  * @author Werner Punz
  */
 @Dependent
-public class InstanceProducer
+public class LoggerProducer
 {
-    private java.util.logging.Logger logger = java.util.logging.Logger.getLogger(InstanceProducer.class.getName());
 
     @Produces
+    @Dependent
     public Logger getLogger(InjectionPoint injectionPoint)
     {
         return new DefaultLogger(injectionPoint.getBean().getBeanClass().getName());
     }
 
     @Produces
+    @Dependent
     public Logger.Factory getLoggerFactory(InjectionPoint injectionPoint)
     {
         return new DefaultLogger(injectionPoint.getBean().getBeanClass().getName()).getFactory();
     }
 
     @Produces
+    @Dependent
     @LoggerDetails
     public Logger getLoggerForDetails(InjectionPoint injectionPoint)
     {
@@ -58,9 +60,10 @@ public class InstanceProducer
 
         if(!logger.isValid())
         {
-            this.logger.warning("an injection point in " + injectionPoint.getBean().getBeanClass().getName() +
-                                " uses an empty qualifier of type " + LoggerDetails.class.getName() +
-                                " - please remove it!");
+            java.util.logging.Logger.getLogger(LoggerProducer.class.getName())
+                    .warning("an injection point in " + injectionPoint.getBean().getBeanClass().getName() +
+                             " uses an empty qualifier of type " + LoggerDetails.class.getName() +
+                             " - please remove it!");
         }
         return logger;
     }
