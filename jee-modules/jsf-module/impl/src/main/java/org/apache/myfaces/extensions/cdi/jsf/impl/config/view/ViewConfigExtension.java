@@ -36,6 +36,8 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.AnnotatedType;
 import java.lang.reflect.Modifier;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -43,6 +45,8 @@ import java.lang.reflect.Modifier;
 @SuppressWarnings({"UnusedDeclaration"})
 public class ViewConfigExtension implements Extension, Deactivatable
 {
+    private Logger logger = Logger.getLogger(ViewConfigExtension.class.getName());
+
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
@@ -54,8 +58,15 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         if(processAnnotatedType.getAnnotatedType().isAnnotationPresent(InlineViewConfigRoot.class))
         {
+            if(this.logger.isLoggable(Level.INFO))
+            {
+                this.logger.info(InlineViewConfigRoot.class.getName() + " found at " +
+                        processAnnotatedType.getAnnotatedType().getJavaClass().getName());
+            }
+
             setInlineViewConfigRootMarker(processAnnotatedType.getAnnotatedType().getJavaClass());
-            processAnnotatedType.veto();
+            vetoBean(processAnnotatedType);
+
             return;
         }
 
@@ -76,7 +87,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
             else
             {
                 addPageDefinition(beanClass);
-                processAnnotatedType.veto();
+                vetoBean(processAnnotatedType);
             }
         }
 
@@ -110,6 +121,11 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
     protected void addPageDefinition(Class<? extends ViewConfig> pageDefinitionClass)
     {
+        if(this.logger.isLoggable(Level.INFO))
+        {
+            this.logger.info(pageDefinitionClass.getName() + " will be used as page-definition.");
+        }
+
         ViewConfigEntry newEntry = createViewConfigEntry(pageDefinitionClass);
 
         if(newEntry != null)
@@ -156,6 +172,11 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
     private void addInlinePageDefinition(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> beanClass)
     {
+        if(this.logger.isLoggable(Level.INFO))
+        {
+            this.logger.info(beanClass.getName() + " will be used as inline-page-definition.");
+        }
+
         ViewConfigCache.queueInlineViewConfig(viewConfigExtractor, beanClass);
     }
 
@@ -174,6 +195,11 @@ public class ViewConfigExtension implements Extension, Deactivatable
             throw new IllegalStateException("Definition error at: " + annotatedType.getJavaClass().getName() +
                     " it isn't allowed to define a class level @" + View.class.getName() +
                     " without a typesafe view config. Please don't use @View(inline=\"...\") for this use-case!");
+        }
+
+        if(this.logger.isLoggable(Level.INFO))
+        {
+            this.logger.info(annotatedType.getJavaClass().getName() + " will be used as page-bean.");
         }
 
         String viewId;
@@ -236,6 +262,17 @@ public class ViewConfigExtension implements Extension, Deactivatable
             viewConfigExtractor = new DefaultViewConfigExtractor();
         }
         return viewConfigExtractor;
+    }
+
+    private void vetoBean(ProcessAnnotatedType processAnnotatedType)
+    {
+        if(this.logger.isLoggable(Level.FINER))
+        {
+            this.logger.finer(processAnnotatedType.getAnnotatedType().getJavaClass().getName() +
+                    " won't be used as CDI bean");
+        }
+
+        processAnnotatedType.veto();
     }
 
     public boolean isActivated()
