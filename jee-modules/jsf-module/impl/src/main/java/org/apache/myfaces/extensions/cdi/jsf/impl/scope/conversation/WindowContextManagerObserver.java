@@ -49,8 +49,10 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 /**
- * Observe some JSF phase events and set the apropriate
+ * Observe some JSF phase events and set the appropriate
  * states in the EditableWindowContextManager.
+ * We also use it to cleanup unused or obsolete
+ * WindowContexts if needed.
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
