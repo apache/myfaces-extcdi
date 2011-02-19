@@ -24,6 +24,7 @@
     <jsp:directive.page contentType="text/html;charset=utf-8"/>
     <f:view>
         <tr:document title="Apache MyFaces CODI + Trinidad Demo">
+            <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
             <tr:form>
 
                 <tr:panelPage>

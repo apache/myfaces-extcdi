@@ -23,6 +23,8 @@
 </head>
 <body>
 <f:view>
+    <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
+    
     <h1>Client-Side Window-Handler Demo</h1>
     <h:form>
         <h:panelGrid columns="3">

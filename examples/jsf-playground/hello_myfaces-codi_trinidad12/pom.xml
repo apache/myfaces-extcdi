@@ -24,7 +24,7 @@
     <packaging>war</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>playground-hello_myfaces-codi-trinidad12</artifactId>
+    <artifactId>playground-trinidad12</artifactId>
 
     <name>Internal MyFaces Extensions-CDI JSF 1.2-Examples Hello MyFaces CODI with Trinidad</name>
     <version>0.9.3-SNAPSHOT</version>

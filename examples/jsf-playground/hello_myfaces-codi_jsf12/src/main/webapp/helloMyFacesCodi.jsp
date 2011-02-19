@@ -23,6 +23,8 @@
     </head>
     <body>
         <f:view>
+            <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
+
             <h1>JSF-Demo</h1>
             <h:form id="jsfMainForm">
                 <h:panelGrid columns="2">
