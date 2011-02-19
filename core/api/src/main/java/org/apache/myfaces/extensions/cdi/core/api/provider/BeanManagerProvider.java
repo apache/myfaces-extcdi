@@ -70,7 +70,10 @@ public class BeanManagerProvider implements Extension
         if(bmp == null)
         {
             throw new IllegalStateException("no " + BeanManagerProvider.class.getName() + " in place! " +
-                "Please ensure that you configured the CDI implementation of your choice properly.");
+                "Please ensure that you configured the CDI implementation of your choice properly. " +
+                "If your setup is correct, please clear all caches and compiled artifacts." +
+                "If there is still a problem, try one of the controlled bootstrapping add-ons for the CDI " +
+                    "implementation you are using.");
         }
         return bmp;
     }
