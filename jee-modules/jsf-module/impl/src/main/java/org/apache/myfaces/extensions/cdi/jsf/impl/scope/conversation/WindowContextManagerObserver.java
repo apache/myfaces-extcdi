@@ -35,7 +35,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -49,10 +49,12 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 /**
+ * Observe some JSF phase events and set the apropriate
+ * states in the EditableWindowContextManager.
  * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
-@RequestScoped
+@ApplicationScoped
 public class WindowContextManagerObserver
 {
     /**
