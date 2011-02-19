@@ -36,9 +36,8 @@
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 
-
     <modules>
-        <module>jsf-examples</module>
+        <module>jsf-playground</module>
     </modules>
 
     <profiles>

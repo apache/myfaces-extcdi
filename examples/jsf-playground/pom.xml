@@ -25,9 +25,9 @@
     <packaging>pom</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>jsf-examples-project</artifactId>
+    <artifactId>jsf-playground-project</artifactId>
 
-    <name>MyFaces Extensions-CDI JSF-Examples Project</name>
+    <name>Internal MyFaces Extensions-CDI JSF playground Project</name>
     <version>0.9.3-SNAPSHOT</version>
 
     <parent>
