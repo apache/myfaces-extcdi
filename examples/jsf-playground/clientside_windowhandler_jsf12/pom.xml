@@ -24,14 +24,14 @@
     <packaging>war</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>examples-windowhandler-jsf12</artifactId>
+    <artifactId>playground-windowhandler-jsf12</artifactId>
 
-    <name>MyFaces Extensions-CDI JSF 1.2-Examples Client-Side Window Handler MyFaces CODI</name>
+    <name>Internal MyFaces Extensions-CDI JSF 1.2-Examples Client-Side Window Handler MyFaces CODI</name>
     <version>0.9.3-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-        <artifactId>jsf-examples-project</artifactId>
+        <artifactId>jsf-playground-project</artifactId>
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 

@@ -24,14 +24,14 @@
     <packaging>war</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>examples-hello_myfaces-codi-trinidad12</artifactId>
+    <artifactId>playground-hello_myfaces-codi-trinidad12</artifactId>
 
-    <name>MyFaces Extensions-CDI JSF 1.2-Examples Hello MyFaces CODI with Trinidad</name>
+    <name>Internal MyFaces Extensions-CDI JSF 1.2-Examples Hello MyFaces CODI with Trinidad</name>
     <version>0.9.3-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-        <artifactId>jsf-examples-project</artifactId>
+        <artifactId>jsf-playground-project</artifactId>
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 

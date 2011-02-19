@@ -24,14 +24,14 @@
     <packaging>war</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>examples-hello_myfaces-codi-jsf12</artifactId>
+    <artifactId>playground-jsf12</artifactId>
 
-    <name>MyFaces Extensions-CDI JSF 1.2-Examples Hello MyFaces CODI</name>
+    <name>Internal MyFaces Extensions-CDI JSF 1.2-Examples Hello MyFaces CODI</name>
     <version>0.9.3-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-        <artifactId>jsf-examples-project</artifactId>
+        <artifactId>jsf-playground-project</artifactId>
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 
