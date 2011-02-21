@@ -112,12 +112,46 @@ public final class JndiUtils
                     // we have a value and the type fits
                     return (T) lookedUp;
                 }
+                else if (lookedUp instanceof String)
+                {
+                    // lookedUp might be a class name
+                    try
+                    {
+                        Class<?>lookedUpClass = Class.forName((String) lookedUp);
+                        if (expectedClass.isAssignableFrom(lookedUpClass))
+                        {
+                            try
+                            {
+                                return (T) lookedUpClass.newInstance();
+                            }
+                            catch (Exception e)
+                            {
+                                // could not create instance
+                                log.log(Level.SEVERE, "Class " + lookedUpClass + " from JNDI lookup for name "
+                                        + name + " could not be instantiated", e);
+                            }
+                        }
+                        else
+                        {
+                            // lookedUpClass does not extend/implement expectedClass
+                            log.log(Level.SEVERE, "JNDI lookup for key " + name
+                                    + " returned class " + lookedUpClass.getName()
+                                    + " which does not implement/extend the expected class"
+                                    + expectedClass.getName());
+                        }
+                    }
+                    catch (ClassNotFoundException cnfe)
+                    {
+                        // could not find class
+                        log.log(Level.SEVERE, "Could not find Class " + lookedUp
+                                + " from JNDI lookup for name " + name, cnfe);
+                    }
+                }
                 else
                 {
                     // we have a value, but the value does not fit
-                    log.log(Level.SEVERE,
-                            "JNDI lookup for key " + name
-                            + " should return a value of " + expectedClass);
+                    log.log(Level.SEVERE, "JNDI lookup for key " + name + " should return a value of "
+                            + expectedClass + ", but returned " + lookedUp);
                 }
             }
 
