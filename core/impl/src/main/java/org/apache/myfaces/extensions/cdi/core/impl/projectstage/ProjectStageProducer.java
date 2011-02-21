@@ -176,7 +176,8 @@ public class ProjectStageProducer implements Serializable
      */
     protected ProjectStage resolveProjectStage()
     {
-         //we have to use a string here
+        // we first try to resolve the JSF standard configuration settings.
+        // this is needed to comply with the JSF spec if JSF is used
         String stageName = CodiUtils.lookupFromEnvironment("javax.faces.PROJECT_STAGE", String.class);
 
         if (stageName == null)
@@ -186,8 +187,16 @@ public class ProjectStageProducer implements Serializable
 
         if (stageName == null)
         {
+            // oki, try to get it from JNDI
+            stageName = CodiUtils.lookupFromEnvironment("java:comp/env/jsf/ProjectStage", String.class);
+        }
+
+        // If JSF wasn't used we lookup the codi specific ProjectStage settings
+        if (stageName == null)
+        {
             stageName = CodiUtils.lookupFromEnvironment("ProjectStage", String.class);
         }
+
 
         if (stageName != null)
         {
