@@ -21,13 +21,17 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
 
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.inject.Alternative;
+import java.io.Serializable;
 
 /**
+ * The mock version of the mailservice
  */
+@SessionScoped
 @Alternative
 @ProjectStageActivated({ProjectStage.UnitTest.class, ProjectStage.Development.class})
-public class MyMailServiceMockImpl implements MyMailService
+public class MyMailServiceMockImpl implements MyMailService, Serializable
 {
 
     public void sendMail(String mailTo, String text) {

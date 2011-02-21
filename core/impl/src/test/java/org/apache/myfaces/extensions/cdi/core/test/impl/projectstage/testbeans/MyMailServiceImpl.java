@@ -18,9 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
 
+import javax.enterprise.context.SessionScoped;
+import java.io.Serializable;
+
 /**
+ * The non-mock version of the mail service.
  */
-public class MyMailServiceImpl implements MyMailService
+@SessionScoped
+public class MyMailServiceImpl implements MyMailService, Serializable
 {
 
     public void sendMail(String mailTo, String text) {
