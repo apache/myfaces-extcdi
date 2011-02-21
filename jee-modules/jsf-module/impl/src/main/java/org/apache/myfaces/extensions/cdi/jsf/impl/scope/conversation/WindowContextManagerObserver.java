@@ -159,19 +159,6 @@ public class WindowContextManagerObserver
         }
     }
 
-    protected void cleanupAndRecordCurrentViewAsOldViewId(
-            @Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent,
-            EditableWindowContextManager windowContextManager,
-            WindowContextConfig windowContextConfig)
-    {
-        storeCurrentViewIdAsOldViewId(phaseEvent.getFacesContext());
-
-        if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
-        {
-            cleanupInactiveWindowContexts(windowContextManager);
-        }
-    }
-
     /**
      * an external app might call a page without url parameter.
      * to support such an use-case it's possible to

@@ -52,7 +52,7 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
         this.viewAccessConversationExpirationEvaluatorList.add(evaluator);
     }
 
-    void broadcastRenderedViewId(String viewId)
+    public void broadcastRenderedViewId(String viewId)
     {
         for(ViewAccessConversationExpirationEvaluator evaluator : this.viewAccessConversationExpirationEvaluatorList)
         {
