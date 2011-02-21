@@ -75,8 +75,6 @@ import javax.faces.event.PhaseId;
 public class WindowContextEventTest
 {
 
-    // TODO testForm:closeWindowContext must also fire
-
     @Tester
     private static WebappTester tester;
 
