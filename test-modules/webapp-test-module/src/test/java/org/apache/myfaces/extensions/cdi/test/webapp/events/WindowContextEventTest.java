@@ -89,14 +89,14 @@ public class WindowContextEventTest
         // new request
         tester.click("testForm:emptyCommand");
 
-        tester.assertThat("#{eventsBean.windowContextCreated}").is(2).after(PhaseId.RENDER_RESPONSE);
-        tester.assertThat("#{eventsBean.windowContextClosed}").is(1).after(PhaseId.RENDER_RESPONSE);
+        tester.assertThat("#{eventsBean.windowContextCreated}").is(1).after(PhaseId.RENDER_RESPONSE);
+        tester.assertThat("#{eventsBean.windowContextClosed}").is(0).after(PhaseId.RENDER_RESPONSE);
 
         // manually close WindowContext - must also fire CloseWindowContextEvent
         tester.click("testForm:closeWindowContext");
 
-        tester.assertThat("#{eventsBean.windowContextCreated}").is(3).after(PhaseId.RENDER_RESPONSE);
-        tester.assertThat("#{eventsBean.windowContextClosed}").is(3).after(PhaseId.RENDER_RESPONSE);
+        tester.assertThat("#{eventsBean.windowContextCreated}").is(1).after(PhaseId.RENDER_RESPONSE);
+        tester.assertThat("#{eventsBean.windowContextClosed}").is(1).after(PhaseId.RENDER_RESPONSE);
     }
 
 }
