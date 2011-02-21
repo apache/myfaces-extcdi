@@ -164,15 +164,36 @@ public class ProjectStageProducer implements Serializable
     }
 
 
+    /**
+     * We need to lookup a few environment variables in a specific order
+     * <ol>
+     *     <li>javax.faces.PROJECT_STAGE</li>
+     *     <li>faces.PROJECT_STAGE</li>
+     * </ol>
+     *
+     * For more information see <a href="https://issues.apache.org/jira/browse/MYFACES-2545">MYFACES-2545</a>
+     * @return the resolved {@link ProjectStage} or <code>null</code> if none defined.
+     */
     protected ProjectStage resolveProjectStage()
     {
-        String stageName = CodiUtils
-                .lookupFromEnvironment(ProjectStage.class.getSimpleName(), String.class); //we have to use a string here
+         //we have to use a string here
+        String stageName = CodiUtils.lookupFromEnvironment("javax.faces.PROJECT_STAGE", String.class);
+
+        if (stageName == null)
+        {
+            stageName = CodiUtils.lookupFromEnvironment("faces.PROJECT_STAGE", String.class);
+        }
+
+        if (stageName == null)
+        {
+            stageName = CodiUtils.lookupFromEnvironment("ProjectStage", String.class);
+        }
 
         if (stageName != null)
         {
             return ProjectStage.valueOf(stageName);
         }
+
         return null;
     }
 }

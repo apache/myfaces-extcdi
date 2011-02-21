@@ -68,7 +68,11 @@ public class ConfiguredArtifactUtils
             if(cachedValueMap != null)
             {
                 List<String> result = new ArrayList<String>();
-                result.addAll(cachedValueMap.get(key));
+                Set<String> cachedValues = cachedValueMap.get(key);
+                if (cachedValues != null && !cachedValues.isEmpty())
+                {
+                    result.addAll(cachedValues);
+                }
                 return (List<T>)result;
             }
             return null;

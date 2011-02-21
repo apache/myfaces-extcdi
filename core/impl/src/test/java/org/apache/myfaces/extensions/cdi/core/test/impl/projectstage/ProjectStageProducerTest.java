@@ -30,23 +30,31 @@ public class ProjectStageProducerTest
 {
 
     /**
-     * This test checks if the manual {@link ProjectStage} detection via
-     * {@link ProjectStageProducer} works properly.
-     *
+     * Test a ProjectStage which got set by the <i>javax.faces.ProjectStage</i>
      * @throws Exception
      */
     @Test
-    public void testManualDetection() throws Exception
+    public void testProjectStageSetByEnvironment() throws Exception
     {
-        ProjectStageProducer psp = ProjectStageProducer.getInstance();
-        Assert.assertNotNull(psp);
+        String envName = "faces.PROJECT_STAGE";
+        String oldEnvVal = "" + System.getProperty(envName);
+        try
+        {
+            System.setProperty(envName, "SystemTest");
 
-        // first manually reset the ProjectStage
-        ProjectStageProducer.setProjectStage(null);
+            ProjectStageProducer psp = ProjectStageProducer.getInstance();
+            Assert.assertNotNull(psp);
 
-        ProjectStage ps = psp.getProjectStage();
-        Assert.assertNotNull(ps);
-        Assert.assertEquals(ps, ProjectStage.Production);
-        Assert.assertTrue(ps == ProjectStage.Production);
+            ProjectStageProducer.setProjectStage(null);
+
+            ProjectStage ps = psp.getProjectStage();
+            Assert.assertNotNull(ps);
+            Assert.assertEquals(ps, ProjectStage.SystemTest);
+            Assert.assertTrue(ps == ProjectStage.SystemTest);
+        }
+        finally
+        {
+            System.setProperty(envName, oldEnvVal);
+        }
     }
 }
