@@ -22,12 +22,15 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.ViewAccessConversationExpirationEvaluatorRegistry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -484,5 +487,35 @@ public class ConversationUtils
         }
 
         return false;
+    }
+
+    //don't move it to an observer due to an unpredictable invocation order
+    public static void postRenderCleanup(FacesContext facesContext)
+    {
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+        EditableWindowContextManager windowContextManager =
+                CodiUtils.getContextualReferenceByClass(beanManager, EditableWindowContextManager.class);
+
+        WindowContextConfig windowContextConfig =
+                CodiUtils.getContextualReferenceByClass(beanManager, WindowContextConfig.class);
+
+        ViewAccessConversationExpirationEvaluatorRegistry registry =
+                CodiUtils.getContextualReferenceByClass(
+                        beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class);
+
+        registry.broadcastRenderedViewId(facesContext.getViewRoot().getViewId());
+
+        storeCurrentViewIdAsOldViewId(facesContext);
+
+        if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
+        {
+            cleanupInactiveWindowContexts(windowContextManager);
+        }
+
+        //if the cache would get resetted by an observer or a phase-listener
+        //it might be the case that a 2nd observer accesses the cache again and afterwards there won't be a cleanup
+        //-> don't remove:
+        RequestCache.resetCache();
     }
 }

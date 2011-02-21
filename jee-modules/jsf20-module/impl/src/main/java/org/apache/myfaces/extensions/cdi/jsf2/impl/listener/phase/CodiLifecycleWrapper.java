@@ -20,24 +20,17 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.ViewAccessConversationExpirationEvaluatorRegistry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeCurrentViewIdAsOldViewId;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.cleanupInactiveWindowContexts;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 
 
 import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
-import javax.enterprise.inject.spi.BeanManager;
 import java.util.List;
 
 /**
@@ -107,32 +100,7 @@ class CodiLifecycleWrapper extends Lifecycle
     {
         wrapped.render(facesContext);
 
-        //don't move it to an observer
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        EditableWindowContextManager windowContextManager =
-                CodiUtils.getContextualReferenceByClass(beanManager, EditableWindowContextManager.class);
-
-        WindowContextConfig windowContextConfig =
-                CodiUtils.getContextualReferenceByClass(beanManager, WindowContextConfig.class);
-
-        ViewAccessConversationExpirationEvaluatorRegistry registry =
-                CodiUtils.getContextualReferenceByClass(
-                        beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class);
-
-        registry.broadcastRenderedViewId(facesContext.getViewRoot().getViewId());
-
-        storeCurrentViewIdAsOldViewId(facesContext);
-
-        if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
-        {
-            cleanupInactiveWindowContexts(windowContextManager);
-        }
-
-        //if the cache would get resetted by an observer or a phase-listener
-        //it might be the case that a 2nd observer accesses the cache again and afterwards there won't be a cleanup
-        //-> don't remove:
-        RequestCache.resetCache();
+        ConversationUtils.postRenderCleanup(facesContext);
     }
 
     private void broadcastApplicationStartupBroadcaster()
