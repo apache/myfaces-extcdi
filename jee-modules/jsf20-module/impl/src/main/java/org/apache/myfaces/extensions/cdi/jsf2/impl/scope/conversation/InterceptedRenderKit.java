@@ -18,44 +18,23 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils
-        .addWindowContextIdHolderComponent;
-
-import javax.faces.render.RenderKit;
-import javax.faces.render.ClientBehaviorRenderer;
-import javax.faces.render.Renderer;
-import javax.faces.render.ResponseStateManager;
-import javax.faces.context.ResponseStream;
 import javax.faces.context.ResponseWriter;
-import java.io.OutputStream;
+import javax.faces.render.RenderKit;
+import javax.faces.render.RenderKitWrapper;
 import java.io.Writer;
-import java.util.Iterator;
+
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.addWindowContextIdHolderComponent;
 
 /**
  * @author Gerhard Petracek
  */
-class InterceptedRenderKit extends RenderKit
+class InterceptedRenderKit extends RenderKitWrapper
 {
     private final RenderKit wrapped;
 
     InterceptedRenderKit(RenderKit wrapped)
     {
         this.wrapped = wrapped;
-    }
-
-    public void addClientBehaviorRenderer(String s, ClientBehaviorRenderer clientBehaviorRenderer)
-    {
-        wrapped.addClientBehaviorRenderer(s, clientBehaviorRenderer);
-    }
-
-    public void addRenderer(String s, String s1, Renderer renderer)
-    {
-        wrapped.addRenderer(s, s1, renderer);
-    }
-
-    public ResponseStream createResponseStream(OutputStream outputStream)
-    {
-        return wrapped.createResponseStream(outputStream);
     }
 
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
@@ -65,33 +44,10 @@ class InterceptedRenderKit extends RenderKit
         return this.wrapped.createResponseWriter(writer, s, s1);
     }
 
-    public ClientBehaviorRenderer getClientBehaviorRenderer(String s)
+    @Override
+    public RenderKit getWrapped()
     {
-        return wrapped.getClientBehaviorRenderer(s);
+        return wrapped;
     }
-
-    public Iterator<String> getClientBehaviorRendererTypes()
-    {
-        return wrapped.getClientBehaviorRendererTypes();
-    }
-
-    public Iterator<String> getComponentFamilies()
-    {
-        return wrapped.getComponentFamilies();
-    }
-
-    public Renderer getRenderer(String s, String s1)
-    {
-        return wrapped.getRenderer(s, s1);
-    }
-
-    public Iterator<String> getRendererTypes(String s)
-    {
-        return wrapped.getRendererTypes(s);
-    }
-
-    public ResponseStateManager getResponseStateManager()
-    {
-        return wrapped.getResponseStateManager();
-    }
+    
 }
