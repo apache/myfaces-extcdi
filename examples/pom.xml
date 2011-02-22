@@ -36,11 +36,14 @@
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>jsf-playground</module>
-    </modules>
-
     <profiles>
+        <profile>
+            <id>playground</id>
+            <modules>
+                <module>jsf-playground</module>
+            </modules>
+        </profile>
+        
         <!-- This profile is invoked by -DprepareRelease=true.  This allows mvn release:prepare to
             run successfully on the assembly projects. -->
         <profile>
