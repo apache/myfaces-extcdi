@@ -36,11 +36,11 @@ class DefaultConversationKey implements ConversationKey
 {
     private static final long serialVersionUID = 3577945095460042939L;
 
-    protected Class<? extends Annotation> scopeType;
+    private Class<? extends Annotation> scopeType;
 
     private Class<?> groupKey;
 
-    private HashSet<Annotation> qualifiers;
+    private Set<Annotation> qualifiers;
 
     DefaultConversationKey(Class<? extends Annotation> scopeType,
                            Class<?> groupKey,
@@ -61,15 +61,14 @@ class DefaultConversationKey implements ConversationKey
                     ConversationGroup.class.isAssignableFrom(annotationType))
             {
                 //won't be used for this key!
+                continue;
             }
-            else
+
+            if (this.qualifiers == null)
             {
-                if (this.qualifiers == null)
-                {
-                    this.qualifiers = new HashSet<Annotation>();
-                }
-                this.qualifiers.add(qualifier);
+                this.qualifiers = new HashSet<Annotation>();
             }
+            this.qualifiers.add(qualifier);
         }
     }
 

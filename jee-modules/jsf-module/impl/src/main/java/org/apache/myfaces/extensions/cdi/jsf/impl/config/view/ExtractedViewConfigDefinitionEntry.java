@@ -40,10 +40,11 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
     private static final long serialVersionUID = -8387356240329549455L;
 
     final static String ROOT_PATH = "/";
-    final static String DEFAULT_PAGE_NAME = "";
+    protected final static String DEFAULT_PAGE_NAME = "";
     final static String DEFAULT_EXTENSION = Page.Extension.XHTML;
 
-    List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes = new ArrayList<Class<? extends Annotation>>();
+    private List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes
+            = new ArrayList<Class<? extends Annotation>>();
 
     //security
     private List<Class<? extends AccessDecisionVoter>> foundVoters =

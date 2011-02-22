@@ -39,6 +39,8 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.mis
  */
 class DefaultViewConfigExtractor implements ViewConfigExtractor
 {
+    private static final long serialVersionUID = 5794817257216134993L;
+
     public ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //use the interface to make clear which information we really need

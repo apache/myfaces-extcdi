@@ -41,31 +41,25 @@ import java.util.jar.JarOutputStream;
 /**
  * A resource transformer for the maven shade-plugin which
  * processes beans.xml files correctly.
- *
+ * <p/>
  * Most of the code is taken from the XmlAppendingTransformer from the shade-plugin.
  */
 public class BeansXmlTransformer implements ResourceTransformer
 {
     public static final String XSI_NS = "http://www.w3.org/2001/XMLSchema-instance";
 
-    boolean ignoreDtd = true;
+    private boolean ignoreDtd = true;
 
-    String resource;
+    private String resource;
 
-    Document doc;
+    private Document doc;
 
     public boolean canTransformResource(String r)
     {
-        if (resource != null && resource.equalsIgnoreCase(r))
-        {
-            return true;
-        }
-
-        return false;
+        return resource != null && resource.equalsIgnoreCase(r);
     }
 
-    public void processResource(String resource, InputStream is, List relocators)
-            throws IOException
+    public void processResource(String resource, InputStream is, List relocators) throws IOException
     {
         Document r;
         try
@@ -76,8 +70,7 @@ public class BeansXmlTransformer implements ResourceTransformer
             {
                 builder.setEntityResolver(new EntityResolver()
                 {
-                    public InputSource resolveEntity(String publicId, String systemId)
-                            throws SAXException, IOException
+                    public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException
                     {
                         return new InputSource(new StringReader(""));
                     }

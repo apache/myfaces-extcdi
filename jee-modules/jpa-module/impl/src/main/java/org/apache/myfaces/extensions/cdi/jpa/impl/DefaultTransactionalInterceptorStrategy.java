@@ -61,7 +61,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
-    protected final Logger logger = Logger.getLogger(TransactionalInterceptor.class.getName());
+    private final Logger logger = Logger.getLogger(TransactionalInterceptor.class.getName());
 
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =

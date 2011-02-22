@@ -33,7 +33,7 @@ public enum JsfPhaseId
     RENDER_RESPONSE(javax.faces.event.PhaseId.RENDER_RESPONSE),
     ANY_PHASE(javax.faces.event.PhaseId.ANY_PHASE);
 
-    javax.faces.event.PhaseId phaseId;
+    private javax.faces.event.PhaseId phaseId;
 
     JsfPhaseId(javax.faces.event.PhaseId phaseId)
     {

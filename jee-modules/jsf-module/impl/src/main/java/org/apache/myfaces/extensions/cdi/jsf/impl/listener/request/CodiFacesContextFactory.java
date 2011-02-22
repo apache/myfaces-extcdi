@@ -31,7 +31,7 @@ import javax.faces.FacesException;
  */
 public class CodiFacesContextFactory extends FacesContextFactory implements Deactivatable
 {
-    protected final FacesContextFactory wrappedFacesContextFactory;
+    private final FacesContextFactory wrappedFacesContextFactory;
 
     private final boolean deactivated;
 

@@ -37,11 +37,11 @@ public class InjectableConversation implements EditableConversation
 {
     private static final long serialVersionUID = 7754789230388003028L;
 
-    protected final Class conversationGroup;
+    private final Class conversationGroup;
 
-    protected final Set<Annotation> qualifiers;
+    private final Set<Annotation> qualifiers;
 
-    protected transient EditableWindowContext editableWindowContext;
+    private transient EditableWindowContext editableWindowContext;
 
     protected InjectableConversation(Bean<?> bean, WindowContextManager windowContextManager)
     {
