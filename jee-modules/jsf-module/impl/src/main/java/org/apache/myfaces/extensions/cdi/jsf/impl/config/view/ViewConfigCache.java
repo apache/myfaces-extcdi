@@ -33,11 +33,14 @@ import java.util.Collection;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * TODO move exceptions to util class
  *
  * @author Gerhard Petracek
  */
+@Typed()
 public class ViewConfigCache
 {
     //we don't need a ConcurrentHashMap - write access is only allowed during the startup (by one thread)
@@ -65,6 +68,10 @@ public class ViewConfigCache
     private static Map<ClassLoader, Boolean>
             lazyInitAllowed =
             new HashMap<ClassLoader, Boolean>();
+
+    private ViewConfigCache()
+    {
+    }
 
     static void activateWriteMode()
     {

@@ -27,6 +27,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
+import javax.enterprise.inject.Typed;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Iterator;
@@ -41,8 +42,13 @@ import java.util.HashSet;
  *
  * @author Gerhard Petracek
  */
+@Typed()
 public class JsfUtils
 {
+    private JsfUtils()
+    {
+    }
+
     public static void resetConversationCache()
     {
         RequestCache.resetConversationCache();

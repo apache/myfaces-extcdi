@@ -30,14 +30,20 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 
 import javax.faces.event.PhaseId;
+import javax.enterprise.inject.Typed;
 import java.lang.reflect.Method;
 
 /**
  * @author Gerhard Petracek
  */
 //TODO create CODI exceptions
+@Typed()
 public class ExceptionUtils
 {
+    private ExceptionUtils()
+    {
+    }
+
     public static RuntimeException tooManyOpenWindowException(int windowContextTimeoutInMinutes)
     {
         return new RuntimeException("Too many active windows/tabs have been opened!" +

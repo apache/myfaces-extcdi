@@ -25,14 +25,20 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 import javax.interceptor.InvocationContext;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.Typed;
 import java.util.List;
 import java.util.Set;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class SecurityUtils
 {
+    private SecurityUtils()
+    {
+    }
+
     public static void invokeVoters(InvocationContext invocationContext,
                                     BeanManager beanManager,
                                     List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,

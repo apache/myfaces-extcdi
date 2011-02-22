@@ -22,11 +22,18 @@ import org.apache.myfaces.extensions.cdi.scripting.impl.spi.LanguageBean;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class ExceptionUtils
 {
+    private ExceptionUtils()
+    {
+    }
+
     public static RuntimeException unknownScriptingLanguage(String name)
     {
         return new RuntimeException("No scripting engine found for: " + name);

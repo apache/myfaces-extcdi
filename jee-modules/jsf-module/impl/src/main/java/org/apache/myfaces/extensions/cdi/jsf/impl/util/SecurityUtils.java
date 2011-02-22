@@ -31,14 +31,20 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntr
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 
 import javax.faces.context.FacesContext;
+import javax.enterprise.inject.Typed;
 import java.util.Set;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class SecurityUtils
 {
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
+
+    private SecurityUtils()
+    {
+    }
 
     public static void tryToHandleSecurityViolation(RuntimeException runtimeException)
     {

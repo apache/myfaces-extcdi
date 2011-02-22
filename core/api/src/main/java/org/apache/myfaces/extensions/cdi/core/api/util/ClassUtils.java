@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.util;
 
+import javax.enterprise.inject.Typed;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.jar.Manifest;
@@ -27,8 +28,13 @@ import java.net.URL;
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class ClassUtils
 {
+    private ClassUtils()
+    {
+    }
+
     /**
      * Detect the right ClassLoader.
      * The lookup order is determined by:

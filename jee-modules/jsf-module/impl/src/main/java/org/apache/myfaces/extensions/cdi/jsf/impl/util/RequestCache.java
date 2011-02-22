@@ -25,12 +25,14 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 
+import javax.enterprise.inject.Typed;
 import java.util.Map;
 import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class RequestCache
 {
     private static ThreadLocal<WindowContext> windowContextCache = new ThreadLocal<WindowContext>();
@@ -43,6 +45,10 @@ public class RequestCache
 
     private static ThreadLocal<Map<ConversationKey, EditableConversation>> conversationCache
             = new ThreadLocal<Map<ConversationKey, EditableConversation>>();
+
+    protected RequestCache()
+    {
+    }
 
     public static void resetCache()
     {

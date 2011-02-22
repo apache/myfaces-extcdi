@@ -21,14 +21,20 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
 
+import javax.enterprise.inject.Typed;
 import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class ClassDeactivation
 {
-    private static Logger logger = Logger.getLogger(ClassDeactivation.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ClassDeactivation.class.getName());
+
+    private ClassDeactivation()
+    {
+    }
 
     public static boolean isClassActivated(Class targetClass)
     {
@@ -61,13 +67,13 @@ public class ClassDeactivation
         }
         else
         {
-            logger.info("used class deactivator: " + classDeactivator.toString());
+            LOGGER.info("used class deactivator: " + classDeactivator.toString());
 
             // display deactivated classes here once
             // NOTE that isClassActivated() will be called many times for the same class
             for (Class<?> deactivatedClass : classDeactivator.getDeactivatedClasses())
             {
-                logger.info("deactivate: " + deactivatedClass);
+                LOGGER.info("deactivate: " + deactivatedClass);
             }
         }
 

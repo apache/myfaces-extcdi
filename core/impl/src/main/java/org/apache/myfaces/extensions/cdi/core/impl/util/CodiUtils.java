@@ -30,6 +30,7 @@ import javax.enterprise.inject.spi.AnnotatedType;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
+import javax.enterprise.inject.Typed;
 import javax.enterprise.util.Nonbinding;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,9 +49,14 @@ import java.util.Arrays;
  * This is a collection of a few useful static helper functions.
  * <p/>
  */
+@Typed()
 public class CodiUtils
 {
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
+
+    private CodiUtils()
+    {
+    }
 
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
     {

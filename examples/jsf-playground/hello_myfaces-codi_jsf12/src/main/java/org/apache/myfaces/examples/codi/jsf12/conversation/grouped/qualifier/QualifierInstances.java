@@ -19,6 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.conversation.grouped.qualifier;
 
 import javax.enterprise.util.AnnotationLiteral;
+import javax.enterprise.inject.Typed;
 
 /**
  * optional
@@ -26,8 +27,13 @@ import javax.enterprise.util.AnnotationLiteral;
  * @author Jakob Korherr
  * @author Gerhard Petracek
  */
+@Typed()
 public class QualifierInstances
 {
+    private QualifierInstances()
+    {
+    }
+
     private static class QualifierAnnotation extends AnnotationLiteral<Qualifier3> implements Qualifier3
     {
         private static final long serialVersionUID = 6638619823102047921L;

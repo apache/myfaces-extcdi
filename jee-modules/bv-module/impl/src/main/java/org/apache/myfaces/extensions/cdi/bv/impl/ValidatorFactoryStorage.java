@@ -22,16 +22,22 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.validation.ValidatorFactory;
 import javax.validation.Validation;
+import javax.enterprise.inject.Typed;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class ValidatorFactoryStorage
 {
     private static Map<ClassLoader, ValidatorFactory> defaultValidatorFactoryCache
             = new ConcurrentHashMap<ClassLoader, ValidatorFactory>();
+
+    private ValidatorFactoryStorage()
+    {
+    }
 
     static ValidatorFactory getOrCreateValidatorFactory()
     {

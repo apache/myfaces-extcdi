@@ -25,6 +25,10 @@ import org.apache.myfaces.extensions.cdi.message.api.Formatter;
  */
 public class FormatterBuilder
 {
+    private FormatterBuilder()
+    {
+    }
+
     public static Formatter createFormatter(Class<?> type)
     {
         if (Number.class.isAssignableFrom(type))
