@@ -112,7 +112,7 @@ public class ClassUtils
         {
             return targetClass.newInstance();
         }
-        catch (Throwable t)
+        catch (Exception t)
         {
             //do nothing - it was just a try
         }
@@ -125,7 +125,7 @@ public class ClassUtils
         {
             return (T)targetClass.newInstance();
         }
-        catch (Throwable t)
+        catch (Exception t)
         {
             //do nothing - it was just a try
         }
@@ -146,7 +146,7 @@ public class ClassUtils
         {
             return instantiateClassForName(className);
         }
-        catch (Throwable t)
+        catch (Exception t)
         {
             //do nothing - it was just a try
         }
@@ -168,7 +168,7 @@ public class ClassUtils
             return new Manifest(new URL(manifestFileLocation).openStream())
                     .getMainAttributes().getValue(Attributes.Name.IMPLEMENTATION_VERSION);
         }
-        catch (Throwable t)
+        catch (Exception t)
         {
             return null;
         }
@@ -183,7 +183,7 @@ public class ClassUtils
             return new Manifest(new URL(manifestFileLocation).openStream())
                     .getMainAttributes().getValue("Revision");
         }
-        catch (Throwable t)
+        catch (Exception t)
         {
             return null;
         }

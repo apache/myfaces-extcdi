@@ -113,7 +113,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         this.annotationClass = annotationClass;
     }
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+    public Object invoke(Object proxy, Method method, Object[] args) throws Exception
     {
         if ("hashCode".equals(method.getName()))
         {
@@ -165,7 +165,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
             {
                 memberValue = invoke(this, methods[i], EMPTY_OBJECT_ARRAY);
             }
-            catch (Throwable throwable)
+            catch (Exception e)
             {
                 memberValue = "";
             }
