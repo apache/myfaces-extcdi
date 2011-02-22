@@ -30,27 +30,29 @@ public abstract class UnmodifiableMap<K, V> extends HashMap<K, V>
 {
     private static final long serialVersionUID = -7117422976009229722L;
 
+    private static final String NOT_ALLOWED_MESSAGE = "It isn't allowed to modify this map!";
+
     @Override
     public final V put(K key, V value)
     {
-        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+        throw new UnsupportedOperationException(NOT_ALLOWED_MESSAGE);
     }
 
     @Override
     public final void putAll(Map<? extends K, ? extends V> m)
     {
-        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+        throw new UnsupportedOperationException(NOT_ALLOWED_MESSAGE);
     }
 
     @Override
     public final V remove(Object key)
     {
-        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+        throw new UnsupportedOperationException(NOT_ALLOWED_MESSAGE);
     }
 
     @Override
     public final void clear()
     {
-        throw new UnsupportedOperationException("It isn't allowed to modify this map!");
+        throw new UnsupportedOperationException(NOT_ALLOWED_MESSAGE);
     }
 }

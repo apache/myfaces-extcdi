@@ -41,9 +41,9 @@ import javax.faces.event.SystemEventListener;
  */
 public class ViewScopedContext implements Context, SystemEventListener
 {
-
-    private final static String COMPONENT_MAP_NAME ="codi.componentInstanceMap";
-    private final static String CREATIONAL_MAP_NAME ="codi.creationalInstanceMap";
+    private static final String COMPONENT_MAP_NAME ="codi.componentInstanceMap";
+    private static final String CREATIONAL_MAP_NAME ="codi.creationalInstanceMap";
+    private static final String UNCHECKED = "unchecked";
 
     private boolean isJsfSubscribed = false;
 
@@ -61,7 +61,7 @@ public class ViewScopedContext implements Context, SystemEventListener
 
         Map<String, Object> viewMap = getViewMap();
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings(UNCHECKED)
         ConcurrentHashMap<Contextual<?>, Object> componentInstanceMap
                 = (ConcurrentHashMap<Contextual<?>, Object>) viewMap.get(COMPONENT_MAP_NAME);
 
@@ -70,7 +70,7 @@ public class ViewScopedContext implements Context, SystemEventListener
             return null;
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings(UNCHECKED)
         T instance = (T) componentInstanceMap.get(component);
 
         return instance;
@@ -82,7 +82,7 @@ public class ViewScopedContext implements Context, SystemEventListener
 
         Map<String, Object> viewMap = getViewMap();
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings(UNCHECKED)
         ConcurrentHashMap<Contextual<?>, Object> componentInstanceMap
                 = (ConcurrentHashMap<Contextual<?>, Object>) viewMap.get(COMPONENT_MAP_NAME);
 
@@ -93,7 +93,7 @@ public class ViewScopedContext implements Context, SystemEventListener
             viewMap.put(COMPONENT_MAP_NAME, componentInstanceMap);
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings(UNCHECKED)
         ConcurrentHashMap<Contextual<?>, CreationalContext<?>> creationalContextMap
                 = (ConcurrentHashMap<Contextual<?>, CreationalContext<?>>) viewMap.get(CREATIONAL_MAP_NAME);
         if(creationalContextMap == null)
@@ -103,7 +103,7 @@ public class ViewScopedContext implements Context, SystemEventListener
             viewMap.put(CREATIONAL_MAP_NAME, creationalContextMap);
         }
 
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings(UNCHECKED)
         T instance = (T) componentInstanceMap.get(component);
         if (instance != null)
         {
@@ -119,7 +119,7 @@ public class ViewScopedContext implements Context, SystemEventListener
         synchronized (componentInstanceMap)
         {
             // just to make sure...
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings(UNCHECKED)
             T i = (T)componentInstanceMap.get(component);
             if (i != null)
             {
@@ -177,7 +177,7 @@ public class ViewScopedContext implements Context, SystemEventListener
      *
      * @see javax.faces.event.SystemEventListener#processEvent(javax.faces.event.SystemEvent)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(UNCHECKED)
     public void processEvent(SystemEvent event)
     {
         if (event instanceof PreDestroyViewMapEvent)

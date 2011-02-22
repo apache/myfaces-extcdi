@@ -18,11 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.message.impl;
 
-import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,7 +28,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class NamedArguments
+public final class NamedArguments
 {
     private NamedArgumentBuilder namedArgumentBuilder = new NamedArgumentBuilder();
 
@@ -47,7 +43,7 @@ public class NamedArguments
             return new Serializable[]{};
         }
 
-        NamedArguments.NamedArgumentBuilder namedArgumentBuilder = new NamedArguments().getNamedArgumentBuilder();
+        NamedArgumentBuilder namedArgumentBuilder = new NamedArguments().getNamedArgumentBuilder();
         for (Map.Entry<String, Serializable> entry : arguments.entrySet())
         {
             namedArgumentBuilder = namedArgumentBuilder.add(entry.getKey(), entry.getValue());
@@ -64,25 +60,5 @@ public class NamedArguments
     private NamedArgumentBuilder getNamedArgumentBuilder()
     {
         return namedArgumentBuilder;
-    }
-
-    public class NamedArgumentBuilder
-    {
-        private List<NamedArgument> parameters = new ArrayList<NamedArgument>();
-
-        private NamedArgumentBuilder()
-        {
-        }
-
-        public NamedArgumentBuilder add(String name, Serializable value)
-        {
-            this.parameters.add(new DefaultNamedArgument(name, value));
-            return this;
-        }
-
-        public NamedArgument[] create()
-        {
-            return this.parameters.toArray(new NamedArgument[this.parameters.size()]);
-        }
     }
 }

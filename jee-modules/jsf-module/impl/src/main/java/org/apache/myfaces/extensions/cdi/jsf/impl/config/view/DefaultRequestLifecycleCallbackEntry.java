@@ -29,6 +29,8 @@ import java.util.List;
  */
 public class DefaultRequestLifecycleCallbackEntry implements RequestLifecycleCallbackEntry
 {
+    private static final long serialVersionUID = -5230233565028268416L;
+
     private final List<Method> beforePhaseCallbacks;
 
     private final List<Method> afterPhaseCallbacks;

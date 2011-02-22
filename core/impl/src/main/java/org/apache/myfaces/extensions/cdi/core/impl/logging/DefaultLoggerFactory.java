@@ -16,18 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.core.impl.logging;
 
-import java.lang.reflect.Method;
-import java.util.List;
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-public interface RequestLifecycleCallbackEntry extends Serializable
+class DefaultLoggerFactory implements Logger.Factory
 {
-    List<Method> getBeforePhaseCallbacks();
+    private static final long serialVersionUID = -4149574697548186019L;
 
-    List<Method> getAfterPhaseCallbacks();
+    public Logger getLogger(String s)
+    {
+        return new DefaultLogger(s);
+    }
+
+    public Logger getLogger(String s, String s1)
+    {
+        return new DefaultLogger(s, s1, false);
+    }
+
+    public Logger getAnonymousLogger()
+    {
+        return new DefaultLogger();
+    }
+
+    public Logger getAnonymousLogger(String s)
+    {
+        return new DefaultLogger(null, s, true);
+    }
 }

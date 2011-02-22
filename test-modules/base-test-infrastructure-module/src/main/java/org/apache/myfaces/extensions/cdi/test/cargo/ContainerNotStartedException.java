@@ -18,10 +18,17 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo;
 
+import java.io.IOException;
+
 /**
  * @author Gerhard Petracek
  */
 public class ContainerNotStartedException extends RuntimeException
 {
     private static final long serialVersionUID = -2362433864481560645L;
+
+    public ContainerNotStartedException(IOException e)
+    {
+        super(e);
+    }
 }

@@ -332,28 +332,7 @@ public class DefaultLogger implements Logger
 
     public Factory getFactory()
     {
-        return new Factory()
-        {
-            public Logger getLogger(String s)
-            {
-                return new DefaultLogger(s);
-            }
-
-            public Logger getLogger(String s, String s1)
-            {
-                return new DefaultLogger(s, s1, false);
-            }
-
-            public Logger getAnonymousLogger()
-            {
-                return new DefaultLogger();
-            }
-
-            public Logger getAnonymousLogger(String s)
-            {
-                return new DefaultLogger(null, s, true);
-            }
-        };
+        return new DefaultLoggerFactory();
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

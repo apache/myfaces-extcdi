@@ -369,7 +369,11 @@ public class CodiUtils
         }
         catch (Exception e)
         {
-            throw new RuntimeException("Exception in method call : " + method.getName());
+            if(e instanceof RuntimeException)
+            {
+                throw (RuntimeException)e;
+            }
+            throw new RuntimeException("Exception in method call : " + method.getName(), e);
         }
         finally
         {

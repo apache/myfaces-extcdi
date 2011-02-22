@@ -27,6 +27,8 @@ import java.util.Collection;
  */
 abstract class MapHelper<K, V> implements Map<K, V>
 {
+    private final String unsupportedMessage = "unsupported operation";
+
     protected abstract V getValue(K key);
 
     public final V get(Object key)
@@ -36,56 +38,56 @@ abstract class MapHelper<K, V> implements Map<K, V>
 
     public final int size()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final boolean isEmpty()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final boolean containsKey(Object key)
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final boolean containsValue(Object value)
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final V put(K key, V value)
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final V remove(Object key)
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final void putAll(Map<? extends K, ? extends V> m)
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final void clear()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final Set<K> keySet()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final Collection<V> values()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 
     public final Set<Entry<K, V>> entrySet()
     {
-        throw new UnsupportedOperationException("unsupported operation");
+        throw new UnsupportedOperationException(unsupportedMessage);
     }
 }

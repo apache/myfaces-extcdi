@@ -63,7 +63,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
 
     private boolean simpleEntryMode = false;
 
-    private BeanManager beanManager;
+    private transient BeanManager beanManager;
 
     public DefaultViewConfigEntry(String viewId,
                                   Class<? extends ViewConfig> viewDefinitionClass,

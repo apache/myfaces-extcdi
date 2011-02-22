@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.core.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.CodiInformation;
-import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent;
@@ -38,9 +37,6 @@ import java.util.Map;
 @ApplicationScoped
 public class CoreStartupObserver extends AbstractStartupObserver
 {
-    @Inject
-    protected Logger logger;
-
     @Inject
     protected ProjectStage projectStage;
 

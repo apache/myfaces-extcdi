@@ -18,11 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
+import java.io.Serializable;
+
 /**
  * Marker interface for type-safe view-config classes.
  *
  * @author Gerhard Petracek
  */
-public interface ViewConfig
+public interface ViewConfig extends Serializable
 {
 }

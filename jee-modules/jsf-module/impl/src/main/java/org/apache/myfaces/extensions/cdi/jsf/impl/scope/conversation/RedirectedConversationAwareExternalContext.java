@@ -71,7 +71,7 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         sendRedirect(this.wrapped, url, this.windowHandler);
     }
 
-    private synchronized void lazyInit()
+    private void lazyInit()
     {
         if(this.windowHandler == null)
         {

@@ -252,7 +252,7 @@ public class SimplePageInteraction
         {
             if(e instanceof HttpHostConnectException)
             {
-                throw new ContainerNotStartedException();
+                throw new ContainerNotStartedException(e);
             }
             else
             {

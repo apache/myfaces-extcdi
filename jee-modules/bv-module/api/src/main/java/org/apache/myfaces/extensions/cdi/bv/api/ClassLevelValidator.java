@@ -67,6 +67,10 @@ public abstract class ClassLevelValidator<A extends Annotation, T> implements Co
         }
         catch (Exception e)
         {
+            if(e instanceof RuntimeException)
+            {
+                throw (RuntimeException)e;
+            }
             throw new RuntimeException(e);
         }
     }

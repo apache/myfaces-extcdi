@@ -29,6 +29,8 @@ import javax.faces.render.RenderKit;
 @Singleton
 public class TrinidadRenderKitWrapperFactory implements RenderKitWrapperFactory
 {
+    private static final long serialVersionUID = -6001306384562596713L;
+
     public RenderKit create(RenderKit renderKit)
     {
         return new TrinidadRenderKitWrapper(renderKit);

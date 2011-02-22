@@ -38,7 +38,7 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
 {
     private static final long serialVersionUID = 3553885372006874180L;
 
-    private ArrayList<MessageHandler> messageHandlers = new ArrayList<MessageHandler>();
+    private List<MessageHandler> messageHandlers = new ArrayList<MessageHandler>();
 
     DefaultCompositeMessageHandler(Iterable<MessageHandler> messageHandlerIterable)
     {

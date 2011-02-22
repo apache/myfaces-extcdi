@@ -40,8 +40,10 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
     private static final long serialVersionUID = -8387356240329549455L;
 
     final static String ROOT_PATH = "/";
-    protected final static String DEFAULT_PAGE_NAME = "";
     final static String DEFAULT_EXTENSION = Page.Extension.XHTML;
+
+    protected final static String DEFAULT_PAGE_NAME = "";
+    private static final String NOT_IMPLEMENTED_MESSAGE = "not implemented";
 
     private List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes
             = new ArrayList<Class<? extends Annotation>>();
@@ -232,7 +234,7 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
      */
     public Class<? extends ViewConfig> getViewDefinitionClass()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     private String ensureValidViewIds(String result)
@@ -275,32 +277,32 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
 
     public void addPageBean(Class pageBeanClass)
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public void invokeInitViewMethods()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public void invokePrePageActionMethods()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public void invokePreRenderViewMethods()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public void invokePostRenderViewMethods()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public List<PageBeanConfigEntry> getPageBeanDefinitions()
     {
-        throw new IllegalStateException("not implemented");
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
     public void blockMetaData(Class<? extends Annotation> metaDataClass)

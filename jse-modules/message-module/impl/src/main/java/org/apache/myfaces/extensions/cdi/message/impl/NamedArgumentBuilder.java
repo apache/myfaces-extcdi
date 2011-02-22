@@ -16,18 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.message.impl;
 
-import java.lang.reflect.Method;
+import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
+
 import java.util.List;
+import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface RequestLifecycleCallbackEntry extends Serializable
+public class NamedArgumentBuilder
 {
-    List<Method> getBeforePhaseCallbacks();
+    private List<NamedArgument> parameters = new ArrayList<NamedArgument>();
 
-    List<Method> getAfterPhaseCallbacks();
+    NamedArgumentBuilder()
+    {
+    }
+
+    public NamedArgumentBuilder add(String name, Serializable value)
+    {
+        this.parameters.add(new DefaultNamedArgument(name, value));
+        return this;
+    }
+
+    public NamedArgument[] create()
+    {
+        return this.parameters.toArray(new NamedArgument[this.parameters.size()]);
+    }
 }

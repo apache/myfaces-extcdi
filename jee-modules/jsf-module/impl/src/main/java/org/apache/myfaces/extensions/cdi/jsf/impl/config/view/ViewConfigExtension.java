@@ -202,7 +202,6 @@ public class ViewConfigExtension implements Extension, Deactivatable
             this.logger.info(annotatedType.getJavaClass().getName() + " will be used as page-bean.");
         }
 
-        String viewId;
         for(Class<? extends ViewConfig> viewConfigClass : view.value())
         {
             ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(viewConfigClass);

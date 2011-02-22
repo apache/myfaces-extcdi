@@ -65,7 +65,7 @@ public class WindowBeanProducers
             @Override
             public Object get(Object key)
             {
-                if(key == null || !(key instanceof String))
+                if(!(key instanceof String))
                 {
                     return null;
                 }

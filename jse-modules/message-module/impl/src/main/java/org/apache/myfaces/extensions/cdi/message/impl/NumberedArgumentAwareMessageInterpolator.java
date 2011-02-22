@@ -74,7 +74,7 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
             argument = arguments[i];
             localizedArgument = formatAsString(messageContext, argument);
 
-            if (localizedArgument != argument)
+            if (argument != null)
             {
                 if (localizedArguments == null)
                 {

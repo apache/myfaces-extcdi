@@ -51,17 +51,17 @@ public abstract class AbstractGroupedConversationContext
     {
         this.beanManager = beanManager;
 
-        boolean useFallback = true;
+        boolean useCreationFallback = true;
         for(StackTraceElement element : runtimeException.getStackTrace())
         {
             if(element.toString().contains("org.apache.webbeans."))
             {
-                useFallback = false;
+                useCreationFallback = false;
                 break;
             }
         }
 
-        this.useFallback = useFallback;
+        this.useFallback = useCreationFallback;
     }
 
     public <T> T create(Bean<T> bean, CreationalContext<T> creationalContext)

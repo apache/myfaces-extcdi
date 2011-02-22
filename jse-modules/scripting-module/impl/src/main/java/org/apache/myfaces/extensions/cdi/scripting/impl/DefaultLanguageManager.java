@@ -29,12 +29,15 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.context.ApplicationScoped;
+import javax.annotation.PostConstruct;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerhard Petracek
  */
+@ApplicationScoped
 public class DefaultLanguageManager implements LanguageManager
 {
     private ConcurrentHashMap<Class<? extends Language>, Language> languageCache;
@@ -45,8 +48,6 @@ public class DefaultLanguageManager implements LanguageManager
 
     public String getLanguageName(Class<? extends Language> languageType)
     {
-        lazyInitCache();
-
         Language language = this.languageCache.get(languageType);
 
         if(language == null)
@@ -56,7 +57,8 @@ public class DefaultLanguageManager implements LanguageManager
         return language.getName();
     }
 
-    private synchronized void lazyInitCache()
+    @PostConstruct
+    protected void init()
     {
         if(languageCache != null)
         {
@@ -81,6 +83,12 @@ public class DefaultLanguageManager implements LanguageManager
             creationalContext = beanManager.createCreationalContext(languageBean);
 
             currentBean = languageBean.create(creationalContext);
+
+            if(currentBean == null)
+            {
+                //TODO
+                continue;
+            }
 
             if(this.languageCache.containsKey(currentBean.getId()))
             {

@@ -30,6 +30,7 @@ import java.io.Serializable;
 @ViewAccessScoped
 public class PojoBean implements Serializable
 {
+    private static final long serialVersionUID = 1324579045807079994L;
 
     private Pojo selectedPojo;
 

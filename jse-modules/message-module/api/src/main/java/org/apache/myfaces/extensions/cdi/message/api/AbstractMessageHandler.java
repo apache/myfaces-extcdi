@@ -40,12 +40,8 @@ public abstract class AbstractMessageHandler implements MessageHandler
 
     protected abstract void processMessage(MessageContext messageContext, Message message);
 
-    public synchronized void addMessageFilter(MessageFilter... messageFilters)
+    public void addMessageFilter(MessageFilter... messageFilters)
     {
-        if (this.messageFilters == null)
-        {
-            this.messageFilters = new CopyOnWriteArraySet<MessageFilter>();
-        }
         this.messageFilters.addAll(Arrays.asList(messageFilters));
     }
 

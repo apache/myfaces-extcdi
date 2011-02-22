@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system;
 
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.faces.event.PostConstructApplicationEvent;
@@ -41,9 +39,6 @@ public class SystemEventBroadcaster
 
     @Inject
     private Event<PreDestroyApplicationEvent> preDestroyApplicationEvent;
-
-    @Inject
-    private ProjectStage projectStage;
 
     protected SystemEventBroadcaster()
     {

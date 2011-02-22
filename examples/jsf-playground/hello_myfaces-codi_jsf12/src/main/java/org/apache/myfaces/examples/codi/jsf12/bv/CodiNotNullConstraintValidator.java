@@ -38,12 +38,6 @@ public class CodiNotNullConstraintValidator extends NotNullValidator
     //private ProjectStage projectStage;
 
     @Override
-    public void initialize(NotNull parameters)
-    {
-        super.initialize(parameters);
-    }
-
-    @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext)
     {
         boolean isValid = super.isValid(object, constraintValidatorContext);

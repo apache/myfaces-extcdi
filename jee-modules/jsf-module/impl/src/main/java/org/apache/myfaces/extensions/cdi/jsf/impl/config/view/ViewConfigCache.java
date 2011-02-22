@@ -240,11 +240,11 @@ public class ViewConfigCache
     {
         if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewDefinitionClass()))
         {
-            ViewConfigEntry defaultErrorView = getDefaultErrorView();
-            if(defaultErrorView != null)
+            ViewConfigEntry currentErrorView = getDefaultErrorView();
+            if(currentErrorView != null)
             {
                 throw ambiguousDefaultErrorViewDefinitionException(viewDefinitionEntry.getViewDefinitionClass(),
-                                                                   defaultErrorView.getViewDefinitionClass());
+                                                                   currentErrorView.getViewDefinitionClass());
             }
 
             setDefaultErrorView(viewDefinitionEntry);
