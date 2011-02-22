@@ -116,11 +116,6 @@ public class InvalidValueAwareMessageInterpolator implements MessageInterpolator
         return attributes;
     }
 
-    private Serializable extractInvalidValue(String messageTemplate)
-    {
-        return messageTemplate;
-    }
-
     private void logWarning(Context context)
     {
         String constraintName = context.getConstraintDescriptor().getAnnotation().annotationType().getName();

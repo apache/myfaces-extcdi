@@ -145,11 +145,6 @@ public class CodiUtils
         return  (T) beanManager.getReference(bean, t, cc);
     }
 
-    private static <T> CreationalContext<T> getCreationalContextFor(BeanManager beanManager, Bean<T> bean)
-    {
-        return beanManager.createCreationalContext(bean);
-    }
-
     /**
      * Load Properties from a configuration file with the given resourceName.
      *

@@ -85,15 +85,7 @@ public class ProjectStageProducer implements Serializable
     {
         if(projectStage == null)
         {
-            synchronized (ProjectStageProducer.class)
-            {
-                projectStage = resolveProjectStage();
-            }
-
-            if(projectStage == null)
-            {
-                projectStage = ProjectStage.Production;
-            }
+            initProjectStage();
         }
         return projectStage;
     }
@@ -133,7 +125,7 @@ public class ProjectStageProducer implements Serializable
                 // then we take the default one.
                 projectStageProducer = new ProjectStageProducer();
             }
-            projectStageProducer.init();
+            projectStageProducer.initProjectStage();
         }
 
         return projectStageProducer;
@@ -148,21 +140,6 @@ public class ProjectStageProducer implements Serializable
     {
         projectStage = ps;
     }
-
-    private void init()
-    {
-        if (projectStage == null)
-        {
-            projectStage = resolveProjectStage();
-        }
-
-        // the last resort is setting it to Production
-        if (projectStage == null)
-        {
-            projectStage = ProjectStage.Production;
-        }
-    }
-
 
     /**
      * We need to lookup a few environment variables in a specific order
@@ -204,5 +181,21 @@ public class ProjectStageProducer implements Serializable
         }
 
         return null;
+    }
+
+    protected void initProjectStage()
+    {
+        synchronized (ProjectStageProducer.class)
+        {
+            if(projectStage == null)
+            {
+                projectStage = resolveProjectStage();
+
+                if(projectStage == null)
+                {
+                    projectStage = ProjectStage.Production;
+                }
+            }
+        }
     }
 }
