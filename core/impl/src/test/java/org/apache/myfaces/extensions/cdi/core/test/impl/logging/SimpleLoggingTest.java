@@ -51,7 +51,7 @@ public class SimpleLoggingTest
         {
             loggingClient = deserializeData(serialized);
         }
-        catch (Throwable e)
+        catch (Exception e)
         {
             fail("failed to deserialize instance of " + Logger.class.getName(), e);
         }

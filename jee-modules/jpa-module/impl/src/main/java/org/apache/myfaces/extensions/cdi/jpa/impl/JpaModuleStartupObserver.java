@@ -54,7 +54,7 @@ public class JpaModuleStartupObserver extends AbstractStartupObserver
             this.logger.info(info.toString());
         }
         //avoid that this log harms the startup
-        catch (Throwable t)
+        catch (Exception t)
         {
             this.logger.warning("JPA-Module couldn't log the current configuration." +
                                 "Startup will continue!");
