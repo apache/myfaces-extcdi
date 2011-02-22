@@ -38,6 +38,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.Typed;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
@@ -57,6 +58,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * internal! utils
  * @author Gerhard Petracek
  */
+@Typed()
 public class ConversationUtils
 {
     public static final String EXISTING_WINDOW_ID_SET_KEY =
@@ -69,7 +71,11 @@ public class ConversationUtils
             new ConcurrentHashMap<Class, Class<? extends Annotation>>();
 
     private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
-    
+
+    private ConversationUtils()
+    {
+    }
+
     public static Class getConversationGroup(Bean<?> bean)
     {
         Class<? extends Annotation> scopeType = bean.getScope();

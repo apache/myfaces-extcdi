@@ -35,7 +35,7 @@ public interface ClientConfig extends Serializable
     /**
      * The location of the default windowhandler resource
      */
-    public static final String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
+    String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
 
     /**
      * Defaults to <code>true</code>.
@@ -66,6 +66,5 @@ public interface ClientConfig extends Serializable
      * @return a String containing the whole windowhandler.html file.
      * @throws IOException
      */
-    String getWindowHandlerHtml()
-            throws IOException;
+    String getWindowHandlerHtml() throws IOException;
 }

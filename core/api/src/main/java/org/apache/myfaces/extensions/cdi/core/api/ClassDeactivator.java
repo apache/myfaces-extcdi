@@ -33,5 +33,5 @@ public interface ClassDeactivator extends Serializable
      *
      * @return classes which should be deactivated
      */
-    public Set<Class> getDeactivatedClasses();
+    Set<Class> getDeactivatedClasses();
 }

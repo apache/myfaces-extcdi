@@ -28,12 +28,12 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 public interface Pages extends ViewConfig
 {
     @Page
-    public final class Page1 implements Pages
+    final class Page1 implements Pages
     {
     }
 
     @Page
-    public final class Page2 implements Pages
+    final class Page2 implements Pages
     {
     }
 }

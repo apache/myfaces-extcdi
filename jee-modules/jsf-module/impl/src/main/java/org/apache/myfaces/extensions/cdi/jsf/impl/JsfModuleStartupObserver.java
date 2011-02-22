@@ -40,17 +40,17 @@ import javax.inject.Inject;
 public class JsfModuleStartupObserver extends AbstractStartupObserver
 {
     @Inject
-    protected JsfModuleConfig jsfModuleConfig;
+    private JsfModuleConfig jsfModuleConfig;
 
     @Inject
-    protected WindowContextConfig windowContextConfig;
+    private WindowContextConfig windowContextConfig;
 
     @Inject
-    protected ConversationConfig conversationConfig;
+    private ConversationConfig conversationConfig;
 
     @Inject
     @Jsf
-    protected MessageContext messageContext;
+    private MessageContext messageContext;
 
     protected JsfModuleStartupObserver()
     {

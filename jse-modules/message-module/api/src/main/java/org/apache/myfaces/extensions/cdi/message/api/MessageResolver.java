@@ -28,7 +28,7 @@ import java.io.Serializable;
  */
 public interface MessageResolver extends Serializable
 {
-    static final String MISSING_RESOURCE_MARKER = "???";
+    String MISSING_RESOURCE_MARKER = "???";
 
     /**
      * @param messageContext the current {@link org.apache.myfaces.extensions.cdi.message.api.MessageContext}

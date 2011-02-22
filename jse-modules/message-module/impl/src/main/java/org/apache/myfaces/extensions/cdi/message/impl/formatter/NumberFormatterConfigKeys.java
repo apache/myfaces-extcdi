@@ -23,17 +23,17 @@ package org.apache.myfaces.extensions.cdi.message.impl.formatter;
  */
 public interface NumberFormatterConfigKeys
 {
-    static final String GROUPING_SEPARATOR_KEY = "grouping_separator";
+    String GROUPING_SEPARATOR_KEY = "grouping_separator";
 
-    static final String DECIMAL_SEPARATOR_KEY = "decimal_separator";
+    String DECIMAL_SEPARATOR_KEY = "decimal_separator";
 
-    static final String MINIMUM_FRACTION_DIGITS_KEY = "minimum_fraction_digits";
+    String MINIMUM_FRACTION_DIGITS_KEY = "minimum_fraction_digits";
 
-    static final String MINIMUM_INTEGER_DIGITS_KEY = "minimum_integer_digits";
+    String MINIMUM_INTEGER_DIGITS_KEY = "minimum_integer_digits";
 
-    static final String MAXIMUM_FRACTION_DIGITS = "maximum_fraction_digits";
+    String MAXIMUM_FRACTION_DIGITS = "maximum_fraction_digits";
     
-    static final String MAXIMUM_INTEGER_DIGITS = "maximum_integer_digits";
+    String MAXIMUM_INTEGER_DIGITS = "maximum_integer_digits";
     
-    static final String EXPONENT_SEPARATOR = "exponent_separator";
+    String EXPONENT_SEPARATOR = "exponent_separator";
 }

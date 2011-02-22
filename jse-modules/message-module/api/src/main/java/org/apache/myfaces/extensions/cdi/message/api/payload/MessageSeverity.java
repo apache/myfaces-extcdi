@@ -23,13 +23,13 @@ package org.apache.myfaces.extensions.cdi.message.api.payload;
  */
 public interface MessageSeverity
 {
-    public static final Info INFO = new Info();
-    public static final Warn WARN = new Warn();
-    public static final Error ERROR = new Error();
-    public static final Fatal FATAL = new Fatal();
+    Info INFO = new Info();
+    Warn WARN = new Warn();
+    Error ERROR = new Error();
+    Fatal FATAL = new Fatal();
 
     @MessagePayloadKey(MessageSeverity.class)
-    public final class Info  extends AbstractMessagePayload
+    final class Info  extends AbstractMessagePayload
     {
         private static final long serialVersionUID = -8366105004121496310L;
 
@@ -39,7 +39,7 @@ public interface MessageSeverity
     }
 
     @MessagePayloadKey(MessageSeverity.class)
-    public final class Warn extends AbstractMessagePayload
+    final class Warn extends AbstractMessagePayload
     {
         private static final long serialVersionUID = -8656172186651851576L;
 
@@ -49,7 +49,7 @@ public interface MessageSeverity
     }
 
     @MessagePayloadKey(MessageSeverity.class)
-    public final class Error extends AbstractMessagePayload
+    final class Error extends AbstractMessagePayload
     {
         private static final long serialVersionUID = -1825994085836261242L;
 
@@ -59,7 +59,7 @@ public interface MessageSeverity
     }
 
     @MessagePayloadKey(MessageSeverity.class)
-    public final class Fatal extends AbstractMessagePayload
+    final class Fatal extends AbstractMessagePayload
     {
         private static final long serialVersionUID = 1323372922553756526L;
 

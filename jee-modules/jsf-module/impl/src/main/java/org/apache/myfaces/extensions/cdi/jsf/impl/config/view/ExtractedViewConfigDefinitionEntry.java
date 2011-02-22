@@ -46,10 +46,11 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
     List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes = new ArrayList<Class<? extends Annotation>>();
 
     //security
-    List<Class<? extends AccessDecisionVoter>> foundVoters = new ArrayList<Class<? extends AccessDecisionVoter>>();
-    Class<? extends ViewConfig> errorView = null;
+    private List<Class<? extends AccessDecisionVoter>> foundVoters =
+            new ArrayList<Class<? extends AccessDecisionVoter>>();
+    private Class<? extends ViewConfig> errorView = null;
 
-    List<Annotation> viewMetaDataList = new ArrayList<Annotation>();
+    private List<Annotation> viewMetaDataList = new ArrayList<Annotation>();
 
     protected Class<? extends ViewConfig> viewDefinitionClass;
     protected String basePath = ROOT_PATH;
