@@ -26,7 +26,6 @@ import javax.faces.event.PostConstructApplicationEvent;
 import javax.faces.event.PreDestroyApplicationEvent;
 import javax.enterprise.event.Event;
 import javax.enterprise.context.Dependent;
-import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -36,8 +35,6 @@ import java.util.logging.Logger;
 public class SystemEventBroadcaster
 {
     static final String BEAN_NAME = "systemEventBroadcaster";
-
-    private final Logger logger = Logger.getLogger(SystemEventBroadcaster.class.getName());
 
     @Inject
     private Event<PostConstructApplicationEvent> postConstructApplicationEvent;
