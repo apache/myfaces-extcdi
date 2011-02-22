@@ -34,12 +34,14 @@
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>base-test-infrastructure-module</module>
-    </modules>
-    
     <profiles>
-
+        <profile>
+            <id>test-infrastructure</id>
+            <modules>
+                <module>base-test-infrastructure-module</module>
+            </modules>
+        </profile>
+        
         <!-- use mvn clean install -Pwebapptest to run the webapp-tests -->
         <profile>
             <id>webapptest</id>
