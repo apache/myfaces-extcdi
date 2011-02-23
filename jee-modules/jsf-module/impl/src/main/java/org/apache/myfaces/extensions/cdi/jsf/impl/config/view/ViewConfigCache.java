@@ -286,7 +286,7 @@ public class ViewConfigCache
         return !Boolean.TRUE.equals(lazyInitAllowed.get(getClassloader()));
     }
 
-    private synchronized static void registerInlineViewConfigEntry()
+    private static synchronized void registerInlineViewConfigEntry()
     {
         List<InlineViewConfigEntry> inlineViewConfigEntryList =
                 inlineViewDefinitionEntryList.get(getClassloader());

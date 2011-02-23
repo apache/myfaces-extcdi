@@ -37,10 +37,10 @@ import java.util.Collections;
  */
 class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
 {
-    final static String ROOT_PATH = "/";
-    final static String DEFAULT_EXTENSION = Page.Extension.XHTML;
+    static final String ROOT_PATH = "/";
+    static final String DEFAULT_EXTENSION = Page.Extension.XHTML;
 
-    protected final static String DEFAULT_PAGE_NAME = "";
+    protected static final String DEFAULT_PAGE_NAME = "";
     private static final String NOT_IMPLEMENTED_MESSAGE = "not implemented";
 
     private List<Class<? extends Annotation>> foundAndBlockedMetaDataTypes

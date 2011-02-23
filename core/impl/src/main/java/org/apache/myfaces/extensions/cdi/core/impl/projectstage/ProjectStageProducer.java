@@ -105,7 +105,7 @@ public class ProjectStageProducer implements Serializable
      *
      * @return the ProjectStageProducer instance.
      */
-    public synchronized static ProjectStageProducer getInstance()
+    public static synchronized ProjectStageProducer getInstance()
     {
         if (projectStageProducer == null)
         {

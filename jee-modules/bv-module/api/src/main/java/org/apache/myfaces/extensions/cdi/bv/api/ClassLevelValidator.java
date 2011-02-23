@@ -67,12 +67,12 @@ public abstract class ClassLevelValidator<A extends Annotation, T> implements Co
             Method method = this.constraint.annotationType().getDeclaredMethod("message");
             return (String) method.invoke(this.constraint);
         }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            if(e instanceof RuntimeException)
-            {
-                throw (RuntimeException)e;
-            }
             throw new UnhandledException(e);
         }
     }

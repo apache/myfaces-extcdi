@@ -33,10 +33,10 @@ public class JsfProjectStageProducer extends ProjectStageProducer
     private static final long serialVersionUID = 2378537865206165557L;
 
     /** JNDI path for the ProjectStage */
-    private final static String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
+    private static final String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
 
     /** System Property to set the ProjectStage, if not present via the standard way */
-    private final static String JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME = "faces.PROJECT_STAGE";
+    private static final String JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME = "faces.PROJECT_STAGE";
 
     @Override
     protected ProjectStage resolveProjectStage()

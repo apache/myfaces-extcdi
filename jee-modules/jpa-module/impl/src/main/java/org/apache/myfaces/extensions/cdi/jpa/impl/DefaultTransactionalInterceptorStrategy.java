@@ -73,8 +73,8 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     /** 1 ms  in nanoTime ticks */
-    final static long LONG_MILLISECOND = 1000000L;
-    final static long LONG_RUNNING_THRESHOLD = 300L * LONG_MILLISECOND;
+    static final long LONG_MILLISECOND = 1000000L;
+    static final long LONG_RUNNING_THRESHOLD = 300L * LONG_MILLISECOND;
 
     public Object execute(InvocationContext context) throws Exception
     {

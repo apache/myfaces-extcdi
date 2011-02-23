@@ -29,7 +29,7 @@ import java.util.HashSet;
 public abstract class AbstractClassDeactivator implements ClassDeactivator
 {
     //HashSet due to Serializable warning in checkstyle rules
-    private HashSet<Class> deactivatedClasses;
+    private HashSet<Class> deactivatedClasses = null;
 
     /**
      * {@inheritDoc}

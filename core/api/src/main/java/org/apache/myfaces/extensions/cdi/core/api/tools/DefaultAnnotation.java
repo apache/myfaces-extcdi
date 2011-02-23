@@ -47,7 +47,7 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
 
     // NOTE that this cache needs to be a WeakHashMap in order to prevent a memory leak
     // (the garbage collector should be able to remove the ClassLoader).
-    private static final Map<ClassLoader, Map<String, Annotation>> annotationCachePerClassLoader
+    private static Map<ClassLoader, Map<String, Annotation>> annotationCachePerClassLoader
             = new WeakHashMap<ClassLoader, Map<String, Annotation>>();
 
     public static <T extends Annotation> T of(Class<T> annotationClass)

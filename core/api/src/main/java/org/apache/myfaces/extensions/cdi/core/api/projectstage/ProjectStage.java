@@ -114,7 +114,7 @@ public abstract class ProjectStage implements Serializable
     /**
      * logger for the ProjectStage
      */
-    private static final Logger log = Logger.getLogger(ProjectStage.class.getName());
+    private static final Logger LOG = Logger.getLogger(ProjectStage.class.getName());
 
 
     /**
@@ -127,7 +127,7 @@ public abstract class ProjectStage implements Serializable
         ServiceLoader<ProjectStageHolder> psSl = ServiceLoader.load(ProjectStageHolder.class);
         for (ProjectStageHolder aPsSl : psSl)
         {
-            log.fine("registering ProjectStages from ProjectStageHolder " + aPsSl.getClass().getName());
+            LOG.fine("registering ProjectStages from ProjectStageHolder " + aPsSl.getClass().getName());
         }
     }
 

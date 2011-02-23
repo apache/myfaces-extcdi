@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
@@ -58,38 +59,16 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     public void afterPhase(PhaseEvent event)
     {
-        try
-        {
             processInitView(event);
             processPostRenderView(event);
             processPhaseCallbacks(event, false);
-        }
-        catch (Exception e)
-        {
-            if(!(e instanceof RuntimeException))
-            {
-                throw new IllegalStateException(e);
-            }
-            throw (RuntimeException)e;
-        }
     }
 
     public void beforePhase(PhaseEvent event)
     {
-        try
-        {
-            processInitView(event);
-            processPreRenderView(event);
-            processPhaseCallbacks(event, true);
-        }
-        catch (Exception e)
-        {
-            if(!(e instanceof RuntimeException))
-            {
-                throw new IllegalStateException(e);
-            }
-            throw (RuntimeException)e;
-        }
+        processInitView(event);
+        processPreRenderView(event);
+        processPhaseCallbacks(event, true);
     }
 
     private void processInitView(PhaseEvent event)
@@ -164,7 +143,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         return javax.faces.event.PhaseId.ANY_PHASE;
     }
 
-    private void processPhaseCallbacks(PhaseEvent phaseEvent, boolean beforePhase) throws Exception
+    private void processPhaseCallbacks(PhaseEvent phaseEvent, boolean beforePhase)
     {
         UIViewRoot viewRoot = phaseEvent.getFacesContext().getViewRoot();
 
@@ -219,26 +198,36 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     }
 
     private void invokePhasesLifecycleCallbacks(Object bean, List<Method> lifecycleCallbacks, PhaseEvent phaseEvent)
-            throws InvocationTargetException, IllegalAccessException
     {
-        Class<?>[] parameterTypes;
-        for(Method currentMethod : lifecycleCallbacks)
+        try
         {
-            currentMethod.setAccessible(true);
+            Class<?>[] parameterTypes;
+            for(Method currentMethod : lifecycleCallbacks)
+            {
+                currentMethod.setAccessible(true);
 
-            parameterTypes = currentMethod.getParameterTypes();
-            if(parameterTypes.length == 0)
-            {
-                currentMethod.invoke(bean);
+                parameterTypes = currentMethod.getParameterTypes();
+                if(parameterTypes.length == 0)
+                {
+                    currentMethod.invoke(bean);
+                }
+                else if(parameterTypes.length == 1 && PhaseEvent.class.isAssignableFrom(parameterTypes[0]))
+                {
+                    currentMethod.invoke(bean, phaseEvent);
+                }
+                else
+                {
+                    throw invalidPhasesCallbackMethod(bean.getClass(), currentMethod);
+                }
             }
-            else if(parameterTypes.length == 1 && PhaseEvent.class.isAssignableFrom(parameterTypes[0]))
-            {
-                currentMethod.invoke(bean, phaseEvent);
-            }
-            else
-            {
-                throw invalidPhasesCallbackMethod(bean.getClass(), currentMethod);
-            }
+        }
+        catch (IllegalAccessException e)
+        {
+            throw new UnhandledException(e);
+        }
+        catch (InvocationTargetException e)
+        {
+            throw new UnhandledException(e);
         }
     }
 

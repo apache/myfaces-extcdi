@@ -29,15 +29,17 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.Start
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
 /**
  * @author Gerhard Petracek
  */
 @ApplicationScoped
-public class JsfAwareConversationFactory implements ConversationFactory, BeanManagerAware
+public class JsfAwareConversationFactory implements ConversationFactory
 {
     private static final long serialVersionUID = 2329113439978807663L;
 
+    @Inject
     private BeanManager beanManager;
 
     public EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
@@ -90,10 +92,5 @@ public class JsfAwareConversationFactory implements ConversationFactory, BeanMan
             this.beanManager.fireEvent(new StartConversationEvent(conversation));
         }
         return conversation;
-    }
-
-    public void setBeanManager(BeanManager beanManager)
-    {
-        this.beanManager = beanManager;
     }
 }

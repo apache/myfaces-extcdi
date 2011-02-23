@@ -235,11 +235,6 @@ public class JsfWindowContext implements EditableWindowContext
                 new DefaultConversationKey(scopeType, conversationGroupKey, qualifiers);
 
         ConversationFactory conversationFactory = CodiUtils.getContextualReferenceByClass(ConversationFactory.class);
-
-        if(conversationFactory instanceof BeanManagerAware)
-        {
-            ((BeanManagerAware)conversationFactory).setBeanManager(this.beanManager);
-        }
         return conversationFactory.createConversation(conversationKey, this.conversationConfig);
     }
 

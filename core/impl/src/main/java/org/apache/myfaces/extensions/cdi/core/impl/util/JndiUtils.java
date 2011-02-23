@@ -32,8 +32,7 @@ import java.util.logging.Logger;
  */
 public final class JndiUtils
 {
-
-    private final static Logger log = Logger.getLogger(JndiUtils.class.getName());
+    private static final Logger LOG = Logger.getLogger(JndiUtils.class.getName());
 
     private static InitialContext initialContext = null;
 
@@ -129,14 +128,14 @@ public final class JndiUtils
                             catch (Exception e)
                             {
                                 // could not create instance
-                                log.log(Level.SEVERE, "Class " + lookedUpClass + " from JNDI lookup for name "
+                                LOG.log(Level.SEVERE, "Class " + lookedUpClass + " from JNDI lookup for name "
                                         + name + " could not be instantiated", e);
                             }
                         }
                         else
                         {
                             // lookedUpClass does not extend/implement expectedClass
-                            log.log(Level.SEVERE, "JNDI lookup for key " + name
+                            LOG.log(Level.SEVERE, "JNDI lookup for key " + name
                                     + " returned class " + lookedUpClass.getName()
                                     + " which does not implement/extend the expected class"
                                     + expectedClass.getName());
@@ -145,14 +144,14 @@ public final class JndiUtils
                     catch (ClassNotFoundException cnfe)
                     {
                         // could not find class
-                        log.log(Level.SEVERE, "Could not find Class " + lookedUp
+                        LOG.log(Level.SEVERE, "Could not find Class " + lookedUp
                                 + " from JNDI lookup for name " + name, cnfe);
                     }
                 }
                 else
                 {
                     // we have a value, but the value does not fit
-                    log.log(Level.SEVERE, "JNDI lookup for key " + name + " should return a value of "
+                    LOG.log(Level.SEVERE, "JNDI lookup for key " + name + " should return a value of "
                             + expectedClass + ", but returned " + lookedUp);
                 }
             }

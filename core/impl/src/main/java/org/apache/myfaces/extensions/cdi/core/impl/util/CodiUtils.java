@@ -368,12 +368,12 @@ public class CodiUtils
 
             return method.invoke(instance, EMPTY_OBJECT_ARRAY);
         }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
         catch (Exception e)
         {
-            if(e instanceof RuntimeException)
-            {
-                throw (RuntimeException)e;
-            }
             throw new UnhandledException("Exception in method call : " + method.getName(), e);
         }
         finally
