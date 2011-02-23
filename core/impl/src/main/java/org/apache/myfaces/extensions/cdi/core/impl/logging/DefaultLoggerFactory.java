@@ -20,9 +20,12 @@ package org.apache.myfaces.extensions.cdi.core.impl.logging;
 
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class DefaultLoggerFactory implements Logger.Factory
 {
     private static final long serialVersionUID = -4149574697548186019L;
