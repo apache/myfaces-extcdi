@@ -172,16 +172,16 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
             if(className.contains("$") && ".".equals(this.basePath))
             {
                 this.basePath = "";
-                className = className.substring(className.lastIndexOf(".") + 1);
+                className = className.substring(className.lastIndexOf('.') + 1);
                 className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
             }
             else if(className.contains("$"))
             {
-                className = className.substring(className.lastIndexOf("$") + 1);
+                className = className.substring(className.lastIndexOf('$') + 1);
             }
             else
             {
-                className = className.substring(className.lastIndexOf(".") + 1);
+                className = className.substring(className.lastIndexOf('.') + 1);
             }
             className = createPageName(className);
             viewId.append(className);
@@ -192,10 +192,10 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
             String className = this.viewDefinitionClass.getName();
 
             this.basePath = "";
-            className = className.substring(className.lastIndexOf(".") + 1);
+            className = className.substring(className.lastIndexOf('.') + 1);
             className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
             className = createPageName(className);
-            className = className.substring(0, className.lastIndexOf("/") + 1);
+            className = className.substring(0, className.lastIndexOf('/') + 1);
             className += this.pageName;
             viewId.append(className);
         }

@@ -35,6 +35,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
 
@@ -339,5 +341,11 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
     public int hashCode()
     {
         return viewId.hashCode();
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

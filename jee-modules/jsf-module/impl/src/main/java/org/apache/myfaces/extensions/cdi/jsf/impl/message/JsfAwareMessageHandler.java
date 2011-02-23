@@ -31,6 +31,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 import java.util.List;
 import java.util.logging.Logger;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
@@ -132,5 +134,11 @@ class JsfAwareMessageHandler extends AbstractMessageHandler
     public List<Message> getMessages()
     {
         throw new UnsupportedOperationException("not implemented");
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

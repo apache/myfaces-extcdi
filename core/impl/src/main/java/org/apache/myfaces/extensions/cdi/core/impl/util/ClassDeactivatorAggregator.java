@@ -33,7 +33,8 @@ class ClassDeactivatorAggregator implements Aggregatable<ClassDeactivator>, Clas
 {
     private static final long serialVersionUID = 5996031456559606240L;
 
-    private Set<Class> deactivatedClasses = new HashSet<Class>();
+    //HashSet due to Serializable warning in checkstyle rules
+    private HashSet<Class> deactivatedClasses = new HashSet<Class>();
 
     private String deactivators = "";
 

@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.AbstractStartupObserver;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -53,10 +54,10 @@ public class BeanValidationModuleStartupObserver extends AbstractStartupObserver
             this.logger.info(info.toString());
         }
         //avoid that this log harms the startup
-        catch (Exception t)
+        catch (Exception e)
         {
-            this.logger.warning("Bean-Validation-Module couldn't log the current configuration." +
-                                "Startup will continue!");
+            this.logger.log(Level.WARNING, "Bean-Validation-Module couldn't log the current configuration." +
+                                "Startup will continue!", e);
         }
     }
 

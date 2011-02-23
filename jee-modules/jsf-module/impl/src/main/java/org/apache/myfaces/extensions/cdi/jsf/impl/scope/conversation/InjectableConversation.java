@@ -28,6 +28,8 @@ import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.Bean;
 import java.lang.annotation.Annotation;
 import java.util.Set;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
@@ -94,5 +96,11 @@ public class InjectableConversation implements EditableConversation
         }
         return this.editableWindowContext.getConversation(this.conversationGroup,
                                                           this.qualifiers.toArray(new Annotation[qualifiers.size()]));
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

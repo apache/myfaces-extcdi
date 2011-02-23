@@ -28,6 +28,8 @@ import javax.validation.MessageInterpolator;
 import javax.validation.TraversableResolver;
 import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -139,5 +141,11 @@ class SerializableValidatorFactory implements ValidatorFactory, Serializable
         }
 
         return this.currentValidatorFactory;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

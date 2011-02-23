@@ -29,6 +29,8 @@ import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Logger;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * TODO change to producer
@@ -40,7 +42,7 @@ public class DefaultFormatterFactory implements FormatterFactory
 {
     private static final long serialVersionUID = -7462205386564870045L;
 
-    transient private Logger logger = getLogger();
+    private transient Logger logger = getLogger();
 
     private CopyOnWriteArrayList<Formatter> formatters = new CopyOnWriteArrayList<Formatter>();
     private ConcurrentHashMap<Class<?>, Formatter> formatterCache = null;
@@ -141,5 +143,11 @@ public class DefaultFormatterFactory implements FormatterFactory
             this.logger = Logger.getLogger(getClass().getName());
         }
         return this.logger;
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

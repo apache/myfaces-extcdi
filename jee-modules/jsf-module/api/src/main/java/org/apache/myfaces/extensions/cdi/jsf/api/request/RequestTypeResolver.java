@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.request;
 
+import java.io.Serializable;
+
 /**
  * Pluggable (internal) helper for resolving the type of the current request.
  * For JSF 1.2 it allows to call the functionality
@@ -26,7 +28,7 @@ package org.apache.myfaces.extensions.cdi.jsf.api.request;
  * 
  * @author Gerhard Petracek
  */
-public interface RequestTypeResolver
+public interface RequestTypeResolver extends Serializable
 {
     boolean isPartialRequest();
 

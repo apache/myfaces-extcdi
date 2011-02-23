@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -49,12 +48,15 @@ class DefaultMessageBuilder implements MessageBuilder
 {
     private static final long serialVersionUID = 892218539314030675L;
 
-    private List<Serializable> argumentList;
+    //ArrayList due to Serializable warning in checkstyle rules
+    private ArrayList<Serializable> argumentList;
 
-    private Set<NamedArgument> namedArguments;
+    //HashSet due to Serializable warning in checkstyle rules
+    private HashSet<NamedArgument> namedArguments;
     
     private MessageContext messageContext;
-    private Map<Class, MessagePayload> messagePayload;
+    //HashMap due to Serializable warning in checkstyle rules
+    private HashMap<Class, MessagePayload> messagePayload;
     private String messageDescriptor;
 
     private MessageFactory messageFactory;

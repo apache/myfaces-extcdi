@@ -32,11 +32,15 @@ import javax.faces.context.FacesContext;
 public class DefaultRequestTypeResolver
         extends org.apache.myfaces.extensions.cdi.jsf.impl.request.DefaultRequestTypeResolver
 {
+    private static final long serialVersionUID = 3341790605524604799L;
+
     @Override
     protected RequestTypeResolver createDefaultRequestTypeResolver()
     {
         return new RequestTypeResolver()
         {
+            private static final long serialVersionUID = -3715731669842746792L;
+
             private boolean postRequest;
             private boolean partialRequest;
 

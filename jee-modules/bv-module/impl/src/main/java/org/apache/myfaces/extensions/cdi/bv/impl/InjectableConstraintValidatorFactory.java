@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
@@ -64,5 +66,11 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
     public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> tClass)
     {
         return getWrapped().getInstance(tClass);
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

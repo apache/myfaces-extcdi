@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * @author Gerhard Petracek
@@ -79,5 +81,11 @@ public abstract class CodiStartupBroadcaster
         }
 
         initialized.put(classLoader, Boolean.TRUE);
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

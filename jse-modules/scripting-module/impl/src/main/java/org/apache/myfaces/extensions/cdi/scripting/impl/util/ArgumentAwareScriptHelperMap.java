@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Gerhard Petracek
@@ -29,7 +28,9 @@ class ArgumentAwareScriptHelperMap extends ScriptHelperMap
     private static final long serialVersionUID = 393871900655666197L;
 
     private String language;
-    private Map<String, Object> arguments = new HashMap<String, Object>();
+
+    //HashMap due to Serializable warning in checkstyle rules
+    private HashMap<String, Object> arguments = new HashMap<String, Object>();
 
     public ArgumentAwareScriptHelperMap(String language, String arguments)
     {

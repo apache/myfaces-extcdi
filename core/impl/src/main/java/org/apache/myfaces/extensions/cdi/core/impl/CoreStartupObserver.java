@@ -30,6 +30,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import java.io.Serializable;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -101,10 +102,10 @@ public class CoreStartupObserver extends AbstractStartupObserver
             this.logger.info(info.toString());
         }
         //avoid that this log harms the startup
-        catch (Exception t)
+        catch (Exception e)
         {
-            this.logger.warning("Core-Module couldn't log the current configuration." +
-                                "Startup will continue!");
+            this.logger.log(Level.WARNING, "Core-Module couldn't log the current configuration." +
+                                "Startup will continue!", e);
         }
     }
 

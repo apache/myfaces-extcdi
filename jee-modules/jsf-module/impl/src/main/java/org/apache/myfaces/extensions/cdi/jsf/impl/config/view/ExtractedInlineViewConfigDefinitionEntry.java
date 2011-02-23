@@ -68,7 +68,7 @@ class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefini
         if(".".equals(viewConfigRoot.basePath()))
         {
             String packageName = viewConfigRootMarker.getPackage().getName();
-            this.basePath = "/" + packageName.substring(packageName.lastIndexOf(".") + 1) + "/" + this.basePath;
+            this.basePath = "/" + packageName.substring(packageName.lastIndexOf('.') + 1) + "/" + this.basePath;
         }
 
         if(DEFAULT_PAGE_NAME.equals(this.pageName))

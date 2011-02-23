@@ -43,6 +43,8 @@ import java.util.Set;
 import java.util.HashSet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 
 /**
  * @author Mark Struberg
@@ -413,5 +415,11 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                 + target + " Please check the documentation for the correct usage or contact the mailing list. " +
                 "Hint: @Transactional just allows one qualifier -> using multiple Entity-Managers " +
                 "(-> different qualifiers) within ONE intercepted method isn't supported.");
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

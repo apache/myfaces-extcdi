@@ -28,6 +28,8 @@ import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Default;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.io.ObjectInputStream;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
@@ -129,5 +131,11 @@ class BeanStorage implements Serializable
         result.append("\n*******");
 
         return result.toString();
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
+    {
+        objectInputStream.defaultReadObject();
     }
 }

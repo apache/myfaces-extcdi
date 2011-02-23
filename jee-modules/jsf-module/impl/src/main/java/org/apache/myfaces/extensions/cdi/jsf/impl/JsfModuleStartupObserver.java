@@ -32,6 +32,7 @@ import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
 import javax.faces.el.PropertyResolver;
 import javax.inject.Inject;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -90,10 +91,10 @@ public class JsfModuleStartupObserver extends AbstractStartupObserver
             this.logger.info(info.toString());
         }
         //avoid that this log harms the startup
-        catch (Exception t)
+        catch (Exception e)
         {
-            this.logger.warning("JSF-Module couldn't log the current configuration." +
-                                "Startup will continue!");
+            this.logger.log(Level.WARNING, "JSF-Module couldn't log the current configuration." +
+                                "Startup will continue!", e);
         }
     }
 

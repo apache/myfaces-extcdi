@@ -33,10 +33,14 @@ import javax.faces.render.RenderKitFactory;
 @RequestScoped
 public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
 {
+    private static final long serialVersionUID = -3702446693324781260L;
+
     protected RequestTypeResolver createDefaultRequestTypeResolver()
     {
         return new RequestTypeResolver()
         {
+            private static final long serialVersionUID = 6038323522900519990L;
+
             private boolean postRequest;
 
             {
