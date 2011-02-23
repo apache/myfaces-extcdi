@@ -45,8 +45,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCr
  */
 public class DefaultViewConfigEntry implements ViewConfigEntry
 {
-    private static final long serialVersionUID = 4707048794409336152L;
-
     private final String viewId;
 
     private final Class<? extends ViewConfig> viewDefinitionClass;

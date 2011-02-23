@@ -22,14 +22,13 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigEntry extends Serializable
+public interface ViewConfigEntry
 {
     String getViewId();
 

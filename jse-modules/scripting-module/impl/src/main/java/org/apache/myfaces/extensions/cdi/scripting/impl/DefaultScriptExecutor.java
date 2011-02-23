@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.scripting.impl;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptExecutor;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 
 import javax.script.Bindings;
 import javax.script.ScriptException;
@@ -64,7 +65,7 @@ public class DefaultScriptExecutor implements ScriptExecutor
         }
         catch (ScriptException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 
@@ -82,7 +83,7 @@ public class DefaultScriptExecutor implements ScriptExecutor
         }
         catch (ScriptException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

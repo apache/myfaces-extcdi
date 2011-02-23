@@ -26,7 +26,6 @@ import javax.annotation.PreDestroy;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.Serializable;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
@@ -40,12 +39,14 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
     @Inject
     private EditableWindowContext windowContext;
 
+    //CopyOnWriteArrayList due to Serializable warning in checkstyle rules
+    private CopyOnWriteArrayList<ViewAccessConversationExpirationEvaluator>
+            viewAccessConversationExpirationEvaluatorList
+            = new CopyOnWriteArrayList<ViewAccessConversationExpirationEvaluator>();
+
     protected ViewAccessConversationExpirationEvaluatorRegistry()
     {
     }
-
-    private List<ViewAccessConversationExpirationEvaluator> viewAccessConversationExpirationEvaluatorList
-            = new CopyOnWriteArrayList<ViewAccessConversationExpirationEvaluator>();
 
     void addViewAccessConversationExpirationEvaluator(ViewAccessConversationExpirationEvaluator evaluator)
     {
@@ -85,9 +86,9 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
             //here we are outside a request -> currently that's not supported -> TODO
             return;
         }
-        List<ViewAccessConversationExpirationEvaluator> restoredList =
+        CopyOnWriteArrayList<ViewAccessConversationExpirationEvaluator> restoredList =
             this.windowContext.getAttribute(ViewAccessConversationExpirationEvaluatorRegistry.class.getName(),
-                    List.class);
+                    CopyOnWriteArrayList.class);
 
         if(restoredList != null)
         {

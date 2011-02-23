@@ -20,12 +20,11 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface RequestLifecycleCallbackEntry extends Serializable
+public interface RequestLifecycleCallbackEntry
 {
     List<Method> getBeforePhaseCallbacks();
 

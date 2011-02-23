@@ -26,6 +26,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
 import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
@@ -256,7 +257,7 @@ public class SimplePageInteraction
             }
             else
             {
-                throw new RuntimeException(e);
+                throw new UnhandledException(e);
             }
         }
     }
@@ -287,7 +288,7 @@ public class SimplePageInteraction
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

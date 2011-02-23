@@ -21,12 +21,11 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 import javax.faces.event.PhaseId;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface PageBeanConfigEntry extends Serializable
+public interface PageBeanConfigEntry
 {
     Class getBeanClass();
 

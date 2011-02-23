@@ -43,8 +43,6 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.uns
  */
 class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
 {
-    private static final long serialVersionUID = -6578882497923715372L;
-
     private final String beanName;
 
     private final Class beanClass;

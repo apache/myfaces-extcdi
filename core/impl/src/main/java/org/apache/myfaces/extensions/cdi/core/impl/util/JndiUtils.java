@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
@@ -81,7 +83,7 @@ public final class JndiUtils
         }
         catch (NamingException e)
         {
-            throw new RuntimeException("Could not bind " + name + " to JNDI", e);
+            throw new UnhandledException("Could not bind " + name + " to JNDI", e);
         }
     }
 
@@ -94,7 +96,7 @@ public final class JndiUtils
         }
         catch (NamingException e)
         {
-            throw new RuntimeException("Could not unbind " + name + " from JNDI", e);
+            throw new UnhandledException("Could not unbind " + name + " from JNDI", e);
         }
     }
 
@@ -159,7 +161,7 @@ public final class JndiUtils
         }
         catch (NamingException e)
         {
-            throw new RuntimeException("Could not get " + name + " from JNDI", e);
+            throw new UnhandledException("Could not get " + name + " from JNDI", e);
         }
     }
 

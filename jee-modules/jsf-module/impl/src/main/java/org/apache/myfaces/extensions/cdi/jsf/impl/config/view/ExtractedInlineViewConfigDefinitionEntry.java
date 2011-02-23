@@ -26,8 +26,6 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoo
  */
 class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefinitionEntry
 {
-    private static final long serialVersionUID = 4506644013820265055L;
-
     public ExtractedInlineViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass, String basePath)
     {
         super(viewDefinitionClass);

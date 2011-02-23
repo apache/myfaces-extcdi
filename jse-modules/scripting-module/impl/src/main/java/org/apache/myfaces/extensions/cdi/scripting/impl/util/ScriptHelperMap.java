@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.getCurrentScriptEngineManager;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
@@ -87,7 +88,7 @@ class ScriptHelperMap extends UnmodifiableMap<String, Object>
         }
         catch (ScriptException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
@@ -223,7 +224,7 @@ public class WindowContextManagerObserver
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

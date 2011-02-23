@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.overrideBuilderState;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -105,7 +106,7 @@ class DefaultScriptBuilder implements ScriptBuilder
         }
         catch (ScriptException e)
         {
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

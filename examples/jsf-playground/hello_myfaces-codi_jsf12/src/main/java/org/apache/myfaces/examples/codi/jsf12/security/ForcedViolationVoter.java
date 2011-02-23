@@ -34,8 +34,6 @@ import java.util.Set;
 @ApplicationScoped
 public class ForcedViolationVoter extends AbstractAccessDecisionVoter
 {
-    private static final long serialVersionUID = -3321616879108078874L;
-
     @Inject
     @Jsf
     private MessageContext messageContext;

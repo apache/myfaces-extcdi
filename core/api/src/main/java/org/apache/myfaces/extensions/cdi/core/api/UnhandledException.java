@@ -16,27 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.security;
-
-import javax.interceptor.InvocationContext;
-import java.util.Set;
+package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
- * Interface for implementing concrete voters.
- * A voter has to add an instance of
- * {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation} to the given result-set,
- * if a restriction is detected.
- * 
  * @author Gerhard Petracek
  */
-public interface AccessDecisionVoter
+public class UnhandledException extends RuntimeException
 {
-    /**
-     * Checks the permission for the given {@link javax.interceptor.InvocationContext}.
-     * If a violation is detected, it should be added to a set which gets returned by the method.
-     *
-     * @param invocationContext current invocationContext
-     * @return a set which contains violations which have been detected
-     */
-    Set<SecurityViolation> checkPermission(InvocationContext invocationContext);
+    private static final long serialVersionUID = -2218238182931072197L;
+
+    public UnhandledException(Throwable cause)
+    {
+        super(cause);
+    }
+
+    public UnhandledException(String message, Throwable cause)
+    {
+        super(message, cause);
+    }
 }

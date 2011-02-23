@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
@@ -373,7 +374,7 @@ public class CodiUtils
             {
                 throw (RuntimeException)e;
             }
-            throw new RuntimeException("Exception in method call : " + method.getName(), e);
+            throw new UnhandledException("Exception in method call : " + method.getName(), e);
         }
         finally
         {

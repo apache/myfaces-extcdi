@@ -29,8 +29,6 @@ import java.util.Set;
  */
 class TestAccessDecisionVoter3 implements AccessDecisionVoter
 {
-    private static final long serialVersionUID = -4768654044521911173L;
-
     public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
     {
         //do nothing

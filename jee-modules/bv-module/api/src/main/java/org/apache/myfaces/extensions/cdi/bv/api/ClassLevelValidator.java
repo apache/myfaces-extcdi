@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.api;
 
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.io.Serializable;
@@ -71,7 +73,7 @@ public abstract class ClassLevelValidator<A extends Annotation, T> implements Co
             {
                 throw (RuntimeException)e;
             }
-            throw new RuntimeException(e);
+            throw new UnhandledException(e);
         }
     }
 

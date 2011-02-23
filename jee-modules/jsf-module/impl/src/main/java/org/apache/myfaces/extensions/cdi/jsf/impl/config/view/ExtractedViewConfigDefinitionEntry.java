@@ -37,8 +37,6 @@ import java.util.Collections;
  */
 class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
 {
-    private static final long serialVersionUID = -8387356240329549455L;
-
     final static String ROOT_PATH = "/";
     final static String DEFAULT_EXTENSION = Page.Extension.XHTML;
 
