@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
 import javax.faces.lifecycle.Lifecycle;
-import javax.faces.FacesException;
 
 /**
  * @author Gerhard Petracek
@@ -45,7 +44,7 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
     public FacesContext getFacesContext(Object context,
                                         Object request,
                                         Object response,
-                                        Lifecycle lifecycle) throws FacesException
+                                        Lifecycle lifecycle)
     {
         FacesContext facesContext =
                 this.wrappedFacesContextFactory.getFacesContext(context, request, response, lifecycle);

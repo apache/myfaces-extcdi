@@ -24,7 +24,6 @@ import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
 import javax.faces.validator.Validator;
-import javax.faces.FacesException;
 
 /**
  * TODO move it to a meaningful package
@@ -65,7 +64,7 @@ class InjectionAwareApplicationWrapper extends ApplicationWrapper
     }
 
     @Override
-    public Validator createValidator(String validatorId) throws FacesException
+    public Validator createValidator(String validatorId)
     {
         return injectFields(this.wrapped.createValidator(validatorId),
                 this.advancedQualifierRequiredForDependencyInjection);

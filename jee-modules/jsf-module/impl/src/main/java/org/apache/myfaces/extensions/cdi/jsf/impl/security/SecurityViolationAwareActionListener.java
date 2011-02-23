@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.FacesException;
 
 /**
@@ -42,7 +41,7 @@ public class SecurityViolationAwareActionListener implements ActionListener, Dea
         this.deactivated = !isActivated();
     }
 
-    public void processAction(ActionEvent actionEvent) throws AbortProcessingException
+    public void processAction(ActionEvent actionEvent)
     {
         try
         {

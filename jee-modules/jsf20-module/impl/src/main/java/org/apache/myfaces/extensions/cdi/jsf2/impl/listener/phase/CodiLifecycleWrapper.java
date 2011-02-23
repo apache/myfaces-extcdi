@@ -27,7 +27,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Lifecyc
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 
 
-import javax.faces.FacesException;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
@@ -65,7 +64,6 @@ class CodiLifecycleWrapper extends Lifecycle
     }
 
     public void execute(FacesContext facesContext)
-            throws FacesException
     {
         broadcastApplicationStartupBroadcaster();
         broadcastBeforeFacesRequestEvent(facesContext);
@@ -96,7 +94,6 @@ class CodiLifecycleWrapper extends Lifecycle
     }
 
     public void render(FacesContext facesContext)
-            throws FacesException
     {
         wrapped.render(facesContext);
 

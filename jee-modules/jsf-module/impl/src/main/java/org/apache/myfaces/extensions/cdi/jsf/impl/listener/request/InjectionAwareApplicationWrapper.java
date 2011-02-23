@@ -25,7 +25,6 @@ import javax.faces.application.ViewHandler;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.StateManager;
 import javax.faces.context.FacesContext;
-import javax.faces.FacesException;
 import javax.faces.validator.Validator;
 import javax.faces.convert.Converter;
 import javax.faces.el.ValueBinding;
@@ -76,7 +75,7 @@ class InjectionAwareApplicationWrapper extends Application
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
-    public Validator createValidator(String validatorId) throws FacesException
+    public Validator createValidator(String validatorId)
     {
         return injectFields(this.wrapped.createValidator(validatorId),
                 this.advancedQualifierRequiredForDependencyInjection);
@@ -96,14 +95,14 @@ class InjectionAwareApplicationWrapper extends Application
     }
 
     public ResourceBundle getResourceBundle(FacesContext ctx, String name)
-            throws FacesException, NullPointerException
+            throws NullPointerException
     {
         return wrapped.getResourceBundle(ctx, name);
     }
 
     public UIComponent createComponent(
             ValueExpression componentExpression, FacesContext facesContext, String componentType)
-            throws FacesException, NullPointerException
+            throws NullPointerException
     {
         return wrapped.createComponent(componentExpression, facesContext, componentType);
     }
@@ -230,13 +229,11 @@ class InjectionAwareApplicationWrapper extends Application
     }
 
     public UIComponent createComponent(String componentType)
-            throws FacesException
     {
         return wrapped.createComponent(componentType);
     }
 
     public UIComponent createComponent(ValueBinding componentBinding, FacesContext context, String componentType)
-            throws FacesException
     {
         return wrapped.createComponent(componentBinding, context, componentType);
     }

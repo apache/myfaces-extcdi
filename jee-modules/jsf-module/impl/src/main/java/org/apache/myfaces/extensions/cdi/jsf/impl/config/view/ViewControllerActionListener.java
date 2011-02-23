@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntr
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.context.FacesContext;
 
 /**
@@ -42,7 +41,7 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
         this.deactivated = !isActivated();
     }
 
-    public void processAction(ActionEvent actionEvent) throws AbortProcessingException
+    public void processAction(ActionEvent actionEvent)
     {
         if(this.deactivated)
         {

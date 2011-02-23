@@ -25,7 +25,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewControllerActi
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.AbortProcessingException;
 
 /**
  * @author Gerhard Petracek
@@ -41,7 +40,7 @@ public class CodiActionListener implements ActionListener, Deactivatable
         this.deactivated = !isActivated();
     }
 
-    public void processAction(ActionEvent actionEvent) throws AbortProcessingException
+    public void processAction(ActionEvent actionEvent)
     {
         if(this.deactivated)
         {
