@@ -63,7 +63,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
-    private transient Logger logger;
+    private transient Logger logger = Logger.getLogger(getClass().getName());
 
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
@@ -217,7 +217,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                         }
                         catch (Exception eRollback)
                         {
-                            getLogger().log(Level.SEVERE, "Got additional Exception while subsequently " +
+                            this.logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
                                     "rolling back other SQL transactions", eRollback);
                         }
 
@@ -415,15 +415,6 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                 + target + " Please check the documentation for the correct usage or contact the mailing list. " +
                 "Hint: @Transactional just allows one qualifier -> using multiple Entity-Managers " +
                 "(-> different qualifiers) within ONE intercepted method isn't supported.");
-    }
-
-    protected Logger getLogger()
-    {
-        if(logger == null)
-        {
-            logger = Logger.getLogger(getClass().getName());
-        }
-        return logger;
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
