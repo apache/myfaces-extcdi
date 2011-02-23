@@ -36,7 +36,7 @@ public interface Logger extends Serializable
 
     String getResourceBundleName();
 
-    void setFilter(Filter filter) throws SecurityException;
+    void setFilter(Filter filter);
 
     Filter getFilter();
 
@@ -92,7 +92,7 @@ public interface Logger extends Serializable
 
     void finest(String s);
 
-    void setLevel(Level level) throws SecurityException;
+    void setLevel(Level level);
 
     Level getLevel();
 
@@ -100,9 +100,9 @@ public interface Logger extends Serializable
 
     String getName();
 
-    void addHandler(Handler handler) throws SecurityException;
+    void addHandler(Handler handler);
 
-    void removeHandler(Handler handler) throws SecurityException;
+    void removeHandler(Handler handler);
 
     Handler[] getHandlers();
 

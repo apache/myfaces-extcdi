@@ -95,7 +95,7 @@ public class DefaultLogger implements Logger
         return getWrapped().getResourceBundleName();
     }
 
-    public void setFilter(Filter filter) throws SecurityException
+    public void setFilter(Filter filter)
     {
         getWrapped().setFilter(filter);
     }
@@ -275,7 +275,7 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.FINEST, this.loggerName, getMethodName(), s);
     }
 
-    public void setLevel(Level level) throws SecurityException
+    public void setLevel(Level level)
     {
         getWrapped().setLevel(level);
     }
@@ -295,12 +295,12 @@ public class DefaultLogger implements Logger
         return getWrapped().getName();
     }
 
-    public void addHandler(Handler handler) throws SecurityException
+    public void addHandler(Handler handler)
     {
         getWrapped().addHandler(handler);
     }
 
-    public void removeHandler(Handler handler) throws SecurityException
+    public void removeHandler(Handler handler)
     {
         getWrapped().removeHandler(handler);
     }
