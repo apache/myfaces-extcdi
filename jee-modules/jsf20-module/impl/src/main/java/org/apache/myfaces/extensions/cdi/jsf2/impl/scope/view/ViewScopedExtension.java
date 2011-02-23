@@ -73,32 +73,21 @@ public class ViewScopedExtension implements Extension, Deactivatable
 
         CodiStartupBroadcaster.broadcastStartup();
         
-        try
+        // we need to do this manually because there is no dependency injection in place
+        // at this time
+        ProjectStageProducer psp = ProjectStageProducer.getInstance();
+
+        ProjectStage projectStage = psp.getProjectStage();
+
+        if (projectStage == ProjectStage.UnitTest)
         {
-            // we need to do this manually because there is no dependency injection in place
-            // at this time
-            ProjectStageProducer psp = ProjectStageProducer.getInstance();
-
-            ProjectStage projectStage = psp.getProjectStage();
-
-            if (projectStage == ProjectStage.UnitTest)
-            {
-                // for unit tests, we use the mock context
-                afterBeanDiscovery.addContext(new MockViewScopedContext());
-            }
-            else
-            {
-                // otherwise we use the real JSF ViewMap context
-                afterBeanDiscovery.addContext(new ViewScopedContext());
-            }
+            // for unit tests, we use the mock context
+            afterBeanDiscovery.addContext(new MockViewScopedContext());
         }
-        catch (Exception e)
+        else
         {
-            if (!(e instanceof RuntimeException))
-            {
-                throw new RuntimeException(e);
-            }
-            throw (RuntimeException)e;
+            // otherwise we use the real JSF ViewMap context
+            afterBeanDiscovery.addContext(new ViewScopedContext());
         }
     }
 
