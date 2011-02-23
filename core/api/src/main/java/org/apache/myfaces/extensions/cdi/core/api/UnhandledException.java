@@ -25,6 +25,11 @@ public class UnhandledException extends RuntimeException
 {
     private static final long serialVersionUID = -2218238182931072197L;
 
+    public UnhandledException(String message)
+    {
+        super(message);
+    }
+
     public UnhandledException(Throwable cause)
     {
         super(cause);

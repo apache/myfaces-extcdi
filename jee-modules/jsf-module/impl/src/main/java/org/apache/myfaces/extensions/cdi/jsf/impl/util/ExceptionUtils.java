@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
@@ -46,32 +47,32 @@ public class ExceptionUtils
 
     public static RuntimeException tooManyOpenWindowException(int windowContextTimeoutInMinutes)
     {
-        return new RuntimeException("Too many active windows/tabs have been opened!" +
+        return new UnhandledException("Too many active windows/tabs have been opened!" +
             " Please continue with one of the existing windows or wait up to "
                 + windowContextTimeoutInMinutes + " minutes.");
     }
 
     public static RuntimeException windowContextManagerNotEditableException(WindowContextManager windowContextManager)
     {
-        return new RuntimeException(windowContextManager.getClass().getName() + " has to implement "
+        return new UnhandledException(windowContextManager.getClass().getName() + " has to implement "
                 + EditableWindowContextManager.class.getName());
     }
 
     public static RuntimeException windowContextNotEditableException(WindowContext windowContext)
     {
-        return new RuntimeException(windowContext.getClass().getName() + " has to implement "
+        return new UnhandledException(windowContext.getClass().getName() + " has to implement "
                 + EditableWindowContext.class.getName());
     }
 
     public static RuntimeException conversationNotEditableException(Conversation conversation)
     {
-        return new RuntimeException(conversation.getClass().getName() + " has to implement "
+        return new UnhandledException(conversation.getClass().getName() + " has to implement "
                 + EditableConversation.class.getName());
     }
 
     public static RuntimeException invalidViewException(String viewId)
     {
-        return new RuntimeException("View-ID: " + viewId + " doesn't exist.");
+        return new UnhandledException("View-ID: " + viewId + " doesn't exist.");
     }
 
     public static IllegalArgumentException invalidPhasesCallbackMethod(Class targetClass, Method method)

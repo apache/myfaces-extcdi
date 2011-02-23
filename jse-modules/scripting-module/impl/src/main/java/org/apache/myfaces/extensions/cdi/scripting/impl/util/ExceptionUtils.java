@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.LanguageBean;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 
 import javax.enterprise.inject.Typed;
 
@@ -36,29 +37,29 @@ public class ExceptionUtils
 
     public static RuntimeException unknownScriptingLanguage(String name)
     {
-        return new RuntimeException("No scripting engine found for: " + name);
+        return new UnhandledException("No scripting engine found for: " + name);
     }
 
     public static RuntimeException noScriptingLanguageAvailable()
     {
-        return new RuntimeException("No bean of type " + LanguageBean.class.getName() + " found!");
+        return new UnhandledException("No bean of type " + LanguageBean.class.getName() + " found!");
     }
 
     public static RuntimeException noScriptingLanguageAvailableFor(Class<? extends Language> languageType)
     {
-        return new RuntimeException("No language is mapped to " + languageType.getName());
+        return new UnhandledException("No language is mapped to " + languageType.getName());
     }
 
     public static RuntimeException ambiguousLanguageDefinition(
             Class<? extends Language> id, Language foundLanguage, Language newLanguage)
     {
-        return new RuntimeException("Invalid approach detected to replace " + id.getName() + ". Can't replace " +
+        return new UnhandledException("Invalid approach detected to replace " + id.getName() + ". Can't replace " +
             foundLanguage.getClass().getName() + " with " + newLanguage.getClass().getName());
     }
 
     public static RuntimeException overrideBuilderState(String newValueHint)
     {
-        return new RuntimeException("Invalid script builder (" + ScriptBuilder.class.getName() + ") state. " +
+        return new UnhandledException("Invalid script builder (" + ScriptBuilder.class.getName() + ") state. " +
             "It isn't allowed to override the existing state of the builder with new " + newValueHint);
     }
 }
