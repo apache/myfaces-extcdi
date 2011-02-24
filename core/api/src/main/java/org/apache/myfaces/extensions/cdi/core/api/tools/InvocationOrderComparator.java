@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl;
+package org.apache.myfaces.extensions.cdi.core.api.tools;
 
 import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 

@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
-import org.apache.myfaces.extensions.cdi.core.impl.InvocationOrderComparator;
+import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 
 import javax.enterprise.inject.Typed;
 import java.util.List;

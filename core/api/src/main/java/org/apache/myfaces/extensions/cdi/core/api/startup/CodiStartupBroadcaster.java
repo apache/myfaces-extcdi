@@ -20,7 +20,10 @@ package org.apache.myfaces.extensions.cdi.core.api.startup;
 
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEventBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +34,12 @@ import java.io.ObjectInputStream;
 import java.io.IOException;
 
 /**
+ * This broadcaster has to be part of the api module because
+ * {@link org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider}
+ * has to use it. You don't have to use it directly. It's possible to register a
+ * {@link org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEventBroadcaster}
+ * for broadcasting custom events.
+ * 
  * @author Gerhard Petracek
  */
 public abstract class CodiStartupBroadcaster
@@ -71,13 +80,22 @@ public abstract class CodiStartupBroadcaster
             broadcasterFilter.put(classLoader, filter);
         }
 
+        List<StartupEventBroadcaster> broadcasters = new ArrayList<StartupEventBroadcaster>();
+
         for (StartupEventBroadcaster startupEventBroadcaster : eventBroadcasterServiceLoader)
         {
             if (!filter.contains(startupEventBroadcaster.getClass()))
             {
                 filter.add(startupEventBroadcaster.getClass());
-                startupEventBroadcaster.broadcastStartup();
+                broadcasters.add(startupEventBroadcaster);
             }
+        }
+
+        Collections.sort(broadcasters, new InvocationOrderComparator<StartupEventBroadcaster>());
+
+        for (StartupEventBroadcaster startupEventBroadcaster : broadcasters)
+        {
+            startupEventBroadcaster.broadcastStartup();
         }
 
         initialized.put(classLoader, Boolean.TRUE);

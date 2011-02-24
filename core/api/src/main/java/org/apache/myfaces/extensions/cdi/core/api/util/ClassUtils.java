@@ -39,9 +39,9 @@ public class ClassUtils
      * Detect the right ClassLoader.
      * The lookup order is determined by:
      * <ol>
-     *  <li>ContextClassLoader of the current Thread</li>
-     *  <li>ClassLoader of the given Object 'o'</li>
-     *  <li>ClassLoader of this very CodiUtils class</li>
+     * <li>ContextClassLoader of the current Thread</li>
+     * <li>ClassLoader of the given Object 'o'</li>
+     * <li>ClassLoader of this very CodiUtils class</li>
      * </ol>
      *
      * @param o if not <code>null</code> it may get used to detect the classloader.
@@ -50,19 +50,19 @@ public class ClassUtils
     public static ClassLoader getClassLoader(Object o)
     {
         ClassLoader loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
+        {
+            public ClassLoader run()
             {
-                public ClassLoader run()
+                try
                 {
-                    try
-                    {
-                        return Thread.currentThread().getContextClassLoader();
-                    }
-                    catch (Exception e)
-                    {
-                        return null;
-                    }
+                    return Thread.currentThread().getContextClassLoader();
+                }
+                catch (Exception e)
+                {
+                    return null;
                 }
             }
+        }
         );
 
         if (loader == null && o != null)
@@ -80,7 +80,7 @@ public class ClassUtils
 
     public static <T> Class<T> tryToLoadClassForName(String name, Class<T> targetType)
     {
-        return (Class<T>)tryToLoadClassForName(name);
+        return (Class<T>) tryToLoadClassForName(name);
     }
 
     public static Class tryToLoadClassForName(String name)
@@ -102,13 +102,13 @@ public class ClassUtils
         {
             // Try WebApp ClassLoader first
             return Class.forName(name, false, // do not initialize for faster startup
-               getClassLoader(null));
+                    getClassLoader(null));
         }
         catch (ClassNotFoundException ignore)
         {
             // fallback: Try ClassLoader for ClassUtils (i.e. the myfaces.jar lib)
             return Class.forName(name, false, // do not initialize for faster startup
-                ClassUtils.class.getClassLoader());
+                    ClassUtils.class.getClassLoader());
         }
     }
 
@@ -129,7 +129,7 @@ public class ClassUtils
     {
         try
         {
-            return (T)targetClass.newInstance();
+            return (T) targetClass.newInstance();
         }
         catch (Exception e)
         {
@@ -143,7 +143,7 @@ public class ClassUtils
         Object result = tryToInstantiateClassForName(className);
 
         //noinspection unchecked
-        return result != null ? (T)result : null;
+        return result != null ? (T) result : null;
     }
 
     public static Object tryToInstantiateClassForName(String className)
@@ -160,7 +160,7 @@ public class ClassUtils
     }
 
     public static Object instantiateClassForName(String className)
-        throws ClassNotFoundException, IllegalAccessException, InstantiationException
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         return loadClassForName(className).newInstance();
     }
