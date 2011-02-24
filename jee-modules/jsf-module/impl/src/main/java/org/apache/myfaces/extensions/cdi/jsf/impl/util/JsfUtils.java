@@ -47,6 +47,7 @@ public abstract class JsfUtils
 {
     private JsfUtils()
     {
+        // prevent instantiation
     }
 
     public static void resetConversationCache()

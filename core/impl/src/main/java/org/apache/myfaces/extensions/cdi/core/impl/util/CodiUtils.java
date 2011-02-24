@@ -57,6 +57,7 @@ public abstract class CodiUtils
 
     private CodiUtils()
     {
+        // prevent instantiation
     }
 
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)

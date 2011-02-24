@@ -44,6 +44,7 @@ public abstract class SecurityUtils
 
     private SecurityUtils()
     {
+        // prevent instantiation
     }
 
     public static void tryToHandleSecurityViolation(RuntimeException runtimeException)

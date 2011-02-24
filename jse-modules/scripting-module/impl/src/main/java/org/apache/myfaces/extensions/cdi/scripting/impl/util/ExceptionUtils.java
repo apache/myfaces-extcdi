@@ -33,6 +33,7 @@ public abstract class ExceptionUtils
 {
     private ExceptionUtils()
     {
+        // prevent instantiation
     }
 
     public static RuntimeException unknownScriptingLanguage(String name)

@@ -40,7 +40,7 @@ import java.io.Serializable;
  * @author Gerhard Petracek
  */
 @Typed()
-public class ConfiguredArtifactUtils
+public abstract class ConfiguredArtifactUtils
 {
     private static Map<ClassLoader, Map<ArtifactCacheKey<String>, Set<Serializable>>> apiToImplCache
             = new ConcurrentHashMap<ClassLoader, Map<ArtifactCacheKey<String>, Set<Serializable>>>();
@@ -48,8 +48,10 @@ public class ConfiguredArtifactUtils
     private static Map<ClassLoader, Map<String, Set<String>>> configuredValueCache
             = new ConcurrentHashMap<ClassLoader, Map<String, Set<String>>>();
 
+    //just for testing
     protected ConfiguredArtifactUtils()
     {
+        // prevent instantiation
     }
 
     protected void reset()

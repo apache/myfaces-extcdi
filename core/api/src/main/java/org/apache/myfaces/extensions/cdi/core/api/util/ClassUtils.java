@@ -33,6 +33,7 @@ public abstract class ClassUtils
 {
     private ClassUtils()
     {
+        // prevent instantiation
     }
 
     /**

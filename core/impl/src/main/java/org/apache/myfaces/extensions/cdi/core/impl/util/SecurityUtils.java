@@ -37,6 +37,7 @@ public abstract class SecurityUtils
 {
     private SecurityUtils()
     {
+        // prevent instantiation
     }
 
     public static void invokeVoters(InvocationContext invocationContext,

@@ -74,6 +74,7 @@ public abstract class ConversationUtils
 
     private ConversationUtils()
     {
+        // prevent instantiation
     }
 
     public static Class getConversationGroup(Bean<?> bean)

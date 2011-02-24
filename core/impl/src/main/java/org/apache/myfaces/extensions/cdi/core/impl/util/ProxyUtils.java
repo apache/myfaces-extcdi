@@ -28,6 +28,7 @@ public abstract class ProxyUtils
 {
     private ProxyUtils()
     {
+        // prevent instantiation
     }
 
     public static Class getUnproxiedClass(Class currentClass)

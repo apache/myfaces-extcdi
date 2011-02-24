@@ -24,13 +24,15 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import javax.enterprise.inject.Typed;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * This is the internal helper class for low level access to JNDI
  */
-public final class JndiUtils
+@Typed()
+public abstract class JndiUtils
 {
     private static final Logger LOG = Logger.getLogger(JndiUtils.class.getName());
 
