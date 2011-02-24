@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import java.io.Serializable;
@@ -52,7 +53,7 @@ import java.io.Serializable;
  *
  * TODO move jsf specific parts
  */
-@Dependent
+@ApplicationScoped
 public class ProjectStageProducer implements Serializable
 {
     private static final long serialVersionUID = -2987762608635612074L;
@@ -72,7 +73,7 @@ public class ProjectStageProducer implements Serializable
     /**
      * for the singleton factory
      */
-    private static ProjectStageProducer projectStageProducer;
+    private static volatile ProjectStageProducer projectStageProducer;
 
     /**
      * We can only produce @Dependent scopes since an enum is final.
@@ -85,7 +86,8 @@ public class ProjectStageProducer implements Serializable
     {
         if(projectStage == null)
         {
-            initProjectStage();
+            //triggers initialization
+            getInstance();
         }
         return projectStage;
     }
@@ -105,30 +107,46 @@ public class ProjectStageProducer implements Serializable
      *
      * @return the ProjectStageProducer instance.
      */
-    public static synchronized ProjectStageProducer getInstance()
+    public static ProjectStageProducer getInstance()
     {
         if (projectStageProducer == null)
         {
-            projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class);
+            lazyInit();
+        }
 
-            if(projectStageProducer == null)
-            {
-                //workaround to avoid the usage of a service loader
-                projectStageProducer = ClassUtils.tryToInstantiateClassForName(
-                        "org.apache.myfaces.extensions.cdi.jsf2.impl.projectstage.JsfProjectStageProducer",
-                        ProjectStageProducer.class);
-            }
-
-            if (projectStageProducer == null)
-            {
-                // if we still didn't find a customised ProjectStageProducer,
-                // then we take the default one.
-                projectStageProducer = new ProjectStageProducer();
-            }
+        if(projectStage == null)
+        {
             projectStageProducer.initProjectStage();
         }
 
         return projectStageProducer;
+    }
+
+    private static synchronized void lazyInit()
+    {
+        // switch into paranoia mode
+        if (projectStageProducer != null)
+        {
+            return;
+        }
+
+        projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class);
+
+        if(projectStageProducer == null)
+        {
+            //workaround to avoid the usage of a service loader
+            projectStageProducer = ClassUtils.tryToInstantiateClassForName(
+                    "org.apache.myfaces.extensions.cdi.jsf2.impl.projectstage.JsfProjectStageProducer",
+                    ProjectStageProducer.class);
+        }
+
+        if (projectStageProducer == null)
+        {
+            // if we still didn't find a customised ProjectStageProducer,
+            // then we take the default one.
+            projectStageProducer = new ProjectStageProducer();
+        }
+        projectStageProducer.initProjectStage();
     }
 
     /**
@@ -185,6 +203,7 @@ public class ProjectStageProducer implements Serializable
 
     protected void initProjectStage()
     {
+        // switch into paranoia mode
         synchronized (ProjectStageProducer.class)
         {
             if(projectStage == null)

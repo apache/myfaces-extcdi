@@ -69,7 +69,8 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
             new ThreadLocal<HashMap<String, EntityManager>>();
 
-    private static transient Map<ClassLoader, Map<String, PersistenceContextMetaEntry>> persistenceContextMetaEntries =
+    private static transient volatile Map<ClassLoader, Map<String, PersistenceContextMetaEntry>>
+            persistenceContextMetaEntries =
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     /** 1 ms  in nanoTime ticks */

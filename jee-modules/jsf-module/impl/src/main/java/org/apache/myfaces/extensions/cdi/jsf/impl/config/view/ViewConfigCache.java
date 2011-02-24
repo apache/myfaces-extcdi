@@ -65,7 +65,7 @@ public class ViewConfigCache
             inlineViewConfigRootMarker =
             new HashMap<ClassLoader, Class>();
 
-    private static Map<ClassLoader, Boolean>
+    private static volatile Map<ClassLoader, Boolean>
             lazyInitAllowed =
             new HashMap<ClassLoader, Boolean>();
 

@@ -44,7 +44,7 @@ class CodiLifecycleWrapper extends Lifecycle
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
-    private Boolean initialized;
+    private volatile Boolean initialized;
 
     private Boolean applicationInitialized;
 
@@ -125,16 +125,22 @@ class CodiLifecycleWrapper extends Lifecycle
     {
         if(this.initialized == null)
         {
-            synchronized (this)
-            {
-                if(ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
-                {
-                    this.beforeAfterFacesRequestBroadcaster =
-                            CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);
-                }
+            init();
+        }
+    }
 
-                this.initialized = true;
+    private synchronized void init()
+    {
+        // switch into paranoia mode
+        if(this.initialized == null)
+        {
+            if(ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
+            {
+                this.beforeAfterFacesRequestBroadcaster =
+                        CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);
             }
+
+            this.initialized = true;
         }
     }
 }

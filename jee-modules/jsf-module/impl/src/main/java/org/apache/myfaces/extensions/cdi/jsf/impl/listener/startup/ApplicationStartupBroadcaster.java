@@ -33,7 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApplicationScoped
 public class ApplicationStartupBroadcaster
 {
-    private static Map<ClassLoader, Boolean> initialized =
+    private static volatile Map<ClassLoader, Boolean> initialized =
             new ConcurrentHashMap<ClassLoader, Boolean>();
 
     @Inject
@@ -46,8 +46,7 @@ public class ApplicationStartupBroadcaster
             return;
         }
 
-        //noinspection SynchronizeOnNonFinalField
-        synchronized (initialized)
+        synchronized (ApplicationStartupBroadcaster.class)
         {
             // switch into paranoia mode
             if(initialized.containsKey(getClassLoader()))

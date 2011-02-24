@@ -47,57 +47,67 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
 
     // NOTE that this cache needs to be a WeakHashMap in order to prevent a memory leak
     // (the garbage collector should be able to remove the ClassLoader).
-    private static Map<ClassLoader, Map<String, Annotation>> annotationCachePerClassLoader
+    private static volatile Map<ClassLoader, Map<String, Annotation>> annotationCache
             = new WeakHashMap<ClassLoader, Map<String, Annotation>>();
 
     public static <T extends Annotation> T of(Class<T> annotationClass)
     {
-        Map<String, Annotation> annotationCache = getAnnotationCache();
-        final String key = annotationClass.getName();
+        String key = annotationClass.getName();
 
-        Annotation annotation = annotationCache.get(key);
-        
+        Map<String, Annotation> cache = getAnnotationCache();
+
+        Annotation annotation = cache.get(key);
+
         if (annotation == null)
         {
-            // switch into paranoia mode
-            //noinspection SynchronizationOnLocalVariableOrMethodParameter
-            synchronized (annotationCache)
-            {
-                annotation = annotationCache.get(key);
-                if (annotation == null)
-                {
-                    annotation = (Annotation) Proxy.newProxyInstance(
-                            annotationClass.getClassLoader(),
-                            new Class[]{annotationClass},
-                            new DefaultAnnotation(annotationClass));
-                    
-                    annotationCache.put(key, annotation);
-                }
-            }
+            annotation = initAnnotation(key, annotationClass, cache);
         }
 
         return (T) annotation;
     }
 
+    private static synchronized <T extends Annotation> Annotation initAnnotation(String key,
+                                                                                 Class<T> annotationClass,
+                                                                                 Map<String, Annotation> cache)
+    {
+        Annotation annotation = cache.get(key);
+
+        // switch into paranoia mode
+        if(annotation == null)
+        {
+            annotation = (Annotation) Proxy.newProxyInstance(annotationClass.getClassLoader(),
+                    new Class[]{annotationClass},
+                    new DefaultAnnotation(annotationClass));
+
+            cache.put(key, annotation);
+        }
+
+        return annotation;
+    }
+
     private static Map<String, Annotation> getAnnotationCache()
     {
         ClassLoader classLoader = ClassUtils.getClassLoader(null);
-        Map<String, Annotation> annotationCache = annotationCachePerClassLoader.get(classLoader);
-        if (annotationCache == null)
+        Map<String, Annotation> cache = annotationCache.get(classLoader);
+
+        if (cache == null)
         {
-            // switch into paranoia mode
-            synchronized (annotationCachePerClassLoader)
-            {
-                annotationCache = annotationCachePerClassLoader.get(classLoader);
-                if (annotationCache == null)
-                {
-                    annotationCache = new ConcurrentHashMap<String, Annotation>();
-                    annotationCachePerClassLoader.put(classLoader, annotationCache);
-                }
-            }
+            cache = init(classLoader);
         }
 
-        return annotationCache;
+        return cache;
+    }
+
+    private static synchronized Map<String, Annotation> init(ClassLoader classLoader)
+    {
+        // switch into paranoia mode
+        Map<String, Annotation> cache = annotationCache.get(classLoader);
+        if (cache == null)
+        {
+            cache = new ConcurrentHashMap<String, Annotation>();
+            annotationCache.put(classLoader, cache);
+        }
+        return cache;
     }
 
     private Class<? extends Annotation> annotationClass;
@@ -211,5 +221,4 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
     {
         return annotationClass.hashCode();
     }
-
 }

@@ -42,7 +42,7 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
     private final RenderKitFactory wrapped;
     private RenderKitWrapperFactory renderKitWrapperFactory;
     
-    private Boolean initialized;
+    private volatile Boolean initialized;
     private final boolean deactivated;
 
     public CodiRenderKitFactory(RenderKitFactory wrapped)
@@ -90,8 +90,14 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
         return new InterceptedRenderKit(renderKit);
     }
 
-    private void lazyInit()
+    private synchronized void lazyInit()
     {
+        // switch into paranoia mode
+        if(this.initialized != null)
+        {
+            return;
+        }
+
         if(this.renderKitWrapperFactory == null)
         {
             //workaround for mojarra

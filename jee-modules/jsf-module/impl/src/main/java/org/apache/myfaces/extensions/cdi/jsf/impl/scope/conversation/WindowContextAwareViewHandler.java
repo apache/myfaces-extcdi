@@ -38,7 +38,7 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
 {
     private ViewHandler wrapped;
 
-    private WindowHandler windowHandler;
+    private volatile WindowHandler windowHandler;
 
     private final boolean deactivated;
 
@@ -69,8 +69,17 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
         return url;
     }
 
-    private synchronized void lazyInit()
+    private void lazyInit()
     {
+        if(this.windowHandler == null)
+        {
+            init();
+        }
+    }
+
+    private synchronized void init()
+    {
+        // switch into paranoia mode
         if(this.windowHandler == null)
         {
             this.windowHandler = ConversationUtils.getWindowHandler();

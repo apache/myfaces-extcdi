@@ -81,6 +81,12 @@ public class ConfigTest
     }
 
     @Test
+    public void testLazyInitBeforeStaticCall()
+    {
+        assertEquals(new ProjectStageProducer(){}.getProjectStage(), ProjectStage.Production);
+    }
+
+    @Test
     public void testConfiguredClassViaSystemPropertyConfig()
     {
         assertNull(CodiUtils.lookupFromEnvironment(ClassDeactivator.class));

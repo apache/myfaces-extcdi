@@ -65,6 +65,7 @@ public abstract class CodiStartupBroadcaster
 
     private static synchronized void invokeStartupEventBroadcaster(ClassLoader classLoader)
     {
+        // switch into paranoia mode
         if (initialized.containsKey(classLoader))
         {
             return;
