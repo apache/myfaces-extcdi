@@ -54,6 +54,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     @Inject
     private WindowContext windowContext;
 
+    //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 

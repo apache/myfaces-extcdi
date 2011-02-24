@@ -33,7 +33,7 @@ import java.util.Set;
  * @author Gerhard Petracek
  */
 @Typed()
-public class SecurityUtils
+public abstract class SecurityUtils
 {
     private SecurityUtils()
     {

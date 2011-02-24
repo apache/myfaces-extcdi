@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.validation.ConstraintValidatorFactory;
 import javax.validation.Validator;
@@ -34,7 +35,7 @@ import javax.inject.Named;
 /**
  * @author Gerhard Petracek
  */
-@Dependent
+@ApplicationScoped
 public class CdiAwareBeanValidationProducer
 {
     protected CdiAwareBeanValidationProducer()

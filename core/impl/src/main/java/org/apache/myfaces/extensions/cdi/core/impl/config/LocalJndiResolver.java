@@ -28,6 +28,7 @@ import java.util.Collections;
 
 /**
  * @author Gerhard Petracek
+ * @author Jakob Korherr
  */
 @Typed()
 @InvocationOrder(300)

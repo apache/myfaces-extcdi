@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.logging.LoggerDetails;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
@@ -29,10 +30,9 @@ import javax.enterprise.inject.spi.InjectionPoint;
  * @author Gerhard Petracek
  * @author Werner Punz
  */
-@Dependent
+@ApplicationScoped
 public class LoggerProducer
 {
-
     @Produces
     @Dependent
     public Logger getLogger(InjectionPoint injectionPoint)

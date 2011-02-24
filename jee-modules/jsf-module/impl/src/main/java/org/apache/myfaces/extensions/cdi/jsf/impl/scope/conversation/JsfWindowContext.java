@@ -62,6 +62,7 @@ public class JsfWindowContext implements EditableWindowContext
     private final ConversationConfig conversationConfig;
     private final boolean projectStageDevelopment;
 
+    //all implementations will be serializable
     private BeanManager beanManager;
 
     private ConcurrentHashMap<ConversationKey, EditableConversation> groupedConversations

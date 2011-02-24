@@ -124,10 +124,10 @@ public abstract class ProjectStage implements Serializable
      */
     static
     {
-        ServiceLoader<ProjectStageHolder> psSl = ServiceLoader.load(ProjectStageHolder.class);
-        for (ProjectStageHolder aPsSl : psSl)
+        ServiceLoader<ProjectStageHolder> projectStageHolderLoader = ServiceLoader.load(ProjectStageHolder.class);
+        for (ProjectStageHolder projectStageHolder : projectStageHolderLoader)
         {
-            LOG.fine("registering ProjectStages from ProjectStageHolder " + aPsSl.getClass().getName());
+            LOG.fine("registering ProjectStages from ProjectStageHolder " + projectStageHolder.getClass().getName());
         }
     }
 

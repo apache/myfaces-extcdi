@@ -51,7 +51,7 @@ import java.util.Arrays;
  * <p/>
  */
 @Typed()
-public class CodiUtils
+public abstract class CodiUtils
 {
     private static final Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 

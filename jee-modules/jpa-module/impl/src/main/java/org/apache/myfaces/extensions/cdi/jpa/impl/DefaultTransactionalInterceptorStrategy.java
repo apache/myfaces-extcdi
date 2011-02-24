@@ -58,6 +58,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
     //don't use final in interceptors
     private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
 
+    //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 

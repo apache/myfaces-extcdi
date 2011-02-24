@@ -29,7 +29,7 @@ import java.net.URL;
  * @author Gerhard Petracek
  */
 @Typed()
-public class ClassUtils
+public abstract class ClassUtils
 {
     private ClassUtils()
     {

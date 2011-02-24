@@ -43,7 +43,7 @@ import java.util.HashSet;
  * @author Gerhard Petracek
  */
 @Typed()
-public class JsfUtils
+public abstract class JsfUtils
 {
     private JsfUtils()
     {

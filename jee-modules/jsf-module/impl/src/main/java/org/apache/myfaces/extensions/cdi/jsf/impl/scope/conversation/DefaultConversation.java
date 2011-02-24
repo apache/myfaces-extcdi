@@ -42,6 +42,7 @@ public class DefaultConversation implements EditableConversation
     private final ConversationKey conversationKey;
     private ConversationExpirationEvaluator expirationEvaluator;
 
+    //all implementations will be serializable
     private BeanManager beanManager;
 
     private final BeanStorage beanStorage;

@@ -38,6 +38,7 @@ public class DefaultSecurityStrategy implements SecurityStrategy
 {
     private static final long serialVersionUID = -7999599690398948059L;
 
+    //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 

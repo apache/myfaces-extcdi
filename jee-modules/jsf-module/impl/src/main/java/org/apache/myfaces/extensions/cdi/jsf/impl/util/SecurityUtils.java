@@ -38,7 +38,7 @@ import java.util.Set;
  * @author Gerhard Petracek
  */
 @Typed()
-public class SecurityUtils
+public abstract class SecurityUtils
 {
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
 

@@ -38,6 +38,7 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -4351903831660165998L;
 
+    //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 

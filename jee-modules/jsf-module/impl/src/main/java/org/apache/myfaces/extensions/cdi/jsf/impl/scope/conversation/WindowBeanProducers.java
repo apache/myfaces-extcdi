@@ -30,13 +30,14 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-@Dependent
+@ApplicationScoped
 public class WindowBeanProducers
 {
     @Produces
@@ -89,7 +90,7 @@ public class WindowBeanProducers
     @Produces
     @Dependent
     protected EditableConversation currentConversation(InjectionPoint injectionPoint,
-                                               WindowContextManager windowContextManager)
+                                                       WindowContextManager windowContextManager)
     {
         //for @Inject Conversation conversation;
         return new InjectableConversation(injectionPoint.getBean(), windowContextManager);

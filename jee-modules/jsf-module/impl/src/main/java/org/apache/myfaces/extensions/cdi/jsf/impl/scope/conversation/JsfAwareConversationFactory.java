@@ -39,6 +39,7 @@ public class JsfAwareConversationFactory implements ConversationFactory
 {
     private static final long serialVersionUID = 2329113439978807663L;
 
+    //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 

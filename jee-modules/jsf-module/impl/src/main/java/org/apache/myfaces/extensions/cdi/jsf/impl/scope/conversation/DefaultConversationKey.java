@@ -40,7 +40,8 @@ class DefaultConversationKey implements ConversationKey
 
     private Class<?> groupKey;
 
-    private Set<Annotation> qualifiers;
+    //HashSet due to Serializable warning in checkstyle rules
+    private HashSet<Annotation> qualifiers;
 
     DefaultConversationKey(Class<? extends Annotation> scopeType,
                            Class<?> groupKey,

@@ -39,7 +39,7 @@ import java.lang.reflect.Method;
  */
 //TODO create CODI exceptions
 @Typed()
-public class ExceptionUtils
+public abstract class ExceptionUtils
 {
     private ExceptionUtils()
     {

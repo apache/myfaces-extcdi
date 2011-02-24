@@ -42,6 +42,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
 
     private CreationalContext<T> creationalContext;
 
+    //all implementations will be serializable
     private BeanManager beanManager;
 
     private final boolean scopeBeanEventEnable;

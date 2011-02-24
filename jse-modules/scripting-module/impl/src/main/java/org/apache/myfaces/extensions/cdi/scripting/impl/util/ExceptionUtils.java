@@ -29,7 +29,7 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public class ExceptionUtils
+public abstract class ExceptionUtils
 {
     private ExceptionUtils()
     {

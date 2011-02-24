@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.message.impl.spi.ELProvider;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Named;
@@ -34,7 +35,7 @@ import javax.inject.Named;
 /**
  * @author Gerhard Petracek
  */
-@Dependent
+@ApplicationScoped
 public class JsfAwareMessageContextProducer
 {
     @Produces

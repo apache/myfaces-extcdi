@@ -31,13 +31,14 @@ import javax.script.ScriptEngine;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-@Dependent
+@ApplicationScoped
 public class ScriptEngineManagerProducer
 {
     protected ScriptEngineManagerProducer()

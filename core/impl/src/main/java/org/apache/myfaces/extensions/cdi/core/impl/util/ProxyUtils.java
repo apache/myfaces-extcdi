@@ -24,7 +24,7 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public class ProxyUtils
+public abstract class ProxyUtils
 {
     private ProxyUtils()
     {

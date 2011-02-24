@@ -59,7 +59,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @author Gerhard Petracek
  */
 @Typed()
-public class ConversationUtils
+public abstract class ConversationUtils
 {
     public static final String EXISTING_WINDOW_ID_SET_KEY =
             WindowContext.class.getName() + ":EXISTING_WINDOW_ID_LIST";

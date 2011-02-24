@@ -63,6 +63,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
     private ProjectStage projectStage;
 
+    //all implementations will be serializable
     private BeanManager beanManager;
 
     private WindowContextConfig windowContextConfig;

@@ -40,7 +40,8 @@ class BeanStorage implements Serializable
 {
     private static final long serialVersionUID = 7020160538290030954L;
 
-    private transient BeanManager beanManager;
+    //all implementations will be serializable
+    private BeanManager beanManager;
 
     private ConcurrentHashMap<Class, BeanEntry<Serializable>> beanMap =
             new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
