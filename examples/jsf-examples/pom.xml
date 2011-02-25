@@ -25,29 +25,22 @@
     <packaging>pom</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
-    <artifactId>examples-project</artifactId>
+    <artifactId>jsf-examples-project</artifactId>
 
-    <name>MyFaces Extensions-CDI Examples Project</name>
+    <name>MyFaces Extensions-CDI JSF-Examples Project</name>
     <version>0.9.3-SNAPSHOT</version>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>myfaces-extcdi-parent</artifactId>
+        <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
+        <artifactId>examples-project</artifactId>
         <version>0.9.3-SNAPSHOT</version>
     </parent>
 
     <modules>
-        <module>jsf-examples</module>
+        <module>hello_myfaces-codi_jsf20</module>
     </modules>
 
     <profiles>
-        <profile>
-            <id>playground</id>
-            <modules>
-                <module>jsf-playground</module>
-            </modules>
-        </profile>
-        
         <!-- This profile is invoked by -DprepareRelease=true.  This allows mvn release:prepare to
             run successfully on the assembly projects. -->
         <profile>
