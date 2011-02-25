@@ -25,5 +25,4 @@ package org.apache.myfaces.extensions.cdi.core.api.config.view;
  */
 public final class ManualView implements ViewConfig
 {
-    private static final long serialVersionUID = -2477132285461472286L;
 }
