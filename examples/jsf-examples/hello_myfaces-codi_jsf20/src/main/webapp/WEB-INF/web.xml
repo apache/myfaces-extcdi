@@ -44,6 +44,6 @@
     </servlet-mapping>
 
     <welcome-file-list>
-        <welcome-file>pages/simple/form.xhtml</welcome-file>
+        <welcome-file>pages/simpleRegistration/form.xhtml</welcome-file>
     </welcome-file-list>
 </web-app>
