@@ -35,6 +35,6 @@ public class MenuBean
     {
         //close all conversations of the current window
         this.windowContext.closeConversations();
-        return Pages.Simple.Form.class;
+        return Pages.SimpleRegistration.Form.class;
     }
 }

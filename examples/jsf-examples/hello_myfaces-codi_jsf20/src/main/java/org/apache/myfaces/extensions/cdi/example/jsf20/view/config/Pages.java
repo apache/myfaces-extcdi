@@ -26,13 +26,13 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Navigat
 @Page(navigation = REDIRECT)
 public interface Pages extends ViewConfig
 {
-    public interface Simple extends Pages
+    public interface SimpleRegistration extends Pages
     {
-        public @Page class Form implements Simple
+        public @Page class Form implements SimpleRegistration
         {
         }
 
-        public @Page class Summary implements Simple
+        public @Page class Summary implements SimpleRegistration
         {
         }
     }

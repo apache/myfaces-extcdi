@@ -33,25 +33,25 @@ public class SimpleTestCase extends BaseCargoTest
     public void testSimpleRegistration() throws Exception
     {
         SimplePageInteraction pageInteraction = new SimplePageInteraction(getTestConfiguration())
-                .with(Pages.Simple.Form.class)
-                .with(Pages.Simple.Summary.class);
+                .with(Pages.SimpleRegistration.Form.class)
+                .with(Pages.SimpleRegistration.Summary.class);
 
         pageInteraction
-                .start(Pages.Simple.Form.class)
+                .start(Pages.SimpleRegistration.Form.class)
                 .useForm("mainForm");
 
         //prependId="false"
         pageInteraction.setValue("loginName", "codi");
         pageInteraction
                 .click("register")
-                .checkState(Pages.Simple.Summary.class);
+                .checkState(Pages.SimpleRegistration.Summary.class);
 
         pageInteraction.checkTextValue("loginName", "codi");
 
         //close conversation
         pageInteraction
                 .clickOk()
-                .checkState(Pages.Simple.Form.class);
+                .checkState(Pages.SimpleRegistration.Form.class);
 
         pageInteraction.checkTextValue("loginName", "");
     }

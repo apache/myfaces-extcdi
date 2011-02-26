@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.example.jsf20.view.simple;
+package org.apache.myfaces.extensions.cdi.example.jsf20.view.simpleRegistration;
 
 import org.apache.myfaces.extensions.cdi.example.jsf20.domain.User;
 import org.apache.myfaces.extensions.cdi.example.jsf20.view.config.Pages;
@@ -54,11 +54,11 @@ public class SimpleRegistrationPage implements Serializable
                 .argument(this.user.getLoginName())
                 .add();
         
-        return Pages.Simple.Summary.class;
+        return Pages.SimpleRegistration.Summary.class;
     }
 
     @CloseConversationGroup
-    public Class<? extends Pages.Simple> registerUserAndRestart()
+    public Class<? extends Pages.SimpleRegistration> registerUserAndRestart()
     {
         registerUser();
         return null; //stay on the same page
