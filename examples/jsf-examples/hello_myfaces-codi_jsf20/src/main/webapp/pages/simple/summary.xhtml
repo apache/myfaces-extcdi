@@ -30,7 +30,8 @@
 
     <ui:define name="content">
         #{i18n.welcome}<p>
-        #{simpleRegistrationPage.user.loginName}<br/>
+        <ui:remove>the span is just useful for the cargo test</ui:remove>
+        <span id="loginName">#{simpleRegistrationPage.user.loginName}</span><br/>
         #{simpleRegistrationPage.user.firstName}<br/>
         #{simpleRegistrationPage.user.lastName}
         </p>
