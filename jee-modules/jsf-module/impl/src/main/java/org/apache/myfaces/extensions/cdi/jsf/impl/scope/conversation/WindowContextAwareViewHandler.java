@@ -106,11 +106,28 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
             if(windowContext != null)
             {
                 //see EXTCDI-131
-                storeViewIdAsNewViewId(windowContext, viewId);
+                storeViewIdAsNewViewId(windowContext, calculateViewId(facesContext, viewId));
             }
         }
 
         return super.restoreView(facesContext, viewId);
+    }
+
+    //see EXTCDI-148 required if the mapped url is different from the final view-id
+    private String calculateViewId(FacesContext facesContext, String viewId)
+    {
+        UIViewRoot uiViewRoot = this.wrapped.createView(facesContext, viewId);
+
+        if(uiViewRoot != null)
+        {
+            String newViewId = uiViewRoot.getViewId();
+
+            if(newViewId != null)
+            {
+                return newViewId;
+            }
+        }
+        return viewId;
     }
 
     /**
