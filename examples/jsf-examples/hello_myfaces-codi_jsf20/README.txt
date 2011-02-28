@@ -19,3 +19,9 @@
 
 Start the demo e.g. via:
 mvn clean jetty:run-exploded -PjettyConfig -Dmaven.test.skip=true
+
+Only open and start this example outside of the rest of the project. That's required due to the missing shade support.
+
+For remote debugging:
+MAVEN_OPTS
+-XX:MaxPermSize=256m -Xmx1024m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n
