@@ -94,6 +94,11 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
     @Override
     public UIViewRoot restoreView(FacesContext facesContext, String viewId)
     {
+        if(this.deactivated)
+        {
+            return super.restoreView(facesContext, viewId);
+        }
+
         if(isWindowIdAvailable(facesContext))
         {
             WindowContext windowContext = ConversationUtils.getWindowContextManager().getCurrentWindowContext();
