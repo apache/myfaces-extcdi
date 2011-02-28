@@ -26,12 +26,12 @@
     <artifactId>myfaces-extcdi-dist-jsf12</artifactId>
 
     <name>MyFaces Extensions-CDI Distribution for JSF 1.2</name>
-    <version>0.9.3</version>
+    <version>0.9.4-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>dist-project</artifactId>
-        <version>0.9.3</version>
+        <version>0.9.4-SNAPSHOT</version>
     </parent>
     
     <dependencies>

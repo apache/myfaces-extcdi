@@ -26,12 +26,12 @@
     <artifactId>jse-modules-project</artifactId>
 
     <name>MyFaces Extensions-CDI Java-SE-Modules</name>
-    <version>0.9.3</version>
+    <version>0.9.4-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>myfaces-extcdi-parent</artifactId>
-        <version>0.9.3</version>
+        <version>0.9.4-SNAPSHOT</version>
     </parent>
 
     <modules>
