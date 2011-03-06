@@ -26,14 +26,14 @@
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
     <artifactId>myfaces-extcdi-cargo-test</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.4-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Cargo Tests</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.4-SNAPSHOT</version>
     </parent>
 
     <properties>
