@@ -60,9 +60,9 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     public void afterPhase(PhaseEvent event)
     {
-            processInitView(event);
-            processPostRenderView(event);
-            processPhaseCallbacks(event, false);
+        processInitView(event);
+        processPostRenderView(event);
+        processPhaseCallbacks(event, false);
     }
 
     public void beforePhase(PhaseEvent event)
@@ -87,12 +87,13 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     private void processInitView(String viewId)
     {
-        //view already initialized
+        //view already initialized in this or any prev. request
         if(viewId.equals(this.windowContext.getAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, String.class)))
         {
             return;
         }
 
+        //override the view-id if we have a new view
         this.windowContext.setAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, viewId);
 
         ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
