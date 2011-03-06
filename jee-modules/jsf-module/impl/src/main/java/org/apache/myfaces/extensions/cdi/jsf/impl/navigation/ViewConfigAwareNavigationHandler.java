@@ -22,15 +22,12 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 import org.apache.myfaces.extensions.cdi.core.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
@@ -66,6 +63,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         this.delegateCall = delegateCall;
     }
 
+    //Security checks will be performed by the view-handler provided by codi
     @Override
     public void handleNavigation(FacesContext facesContext, String fromAction, String outcome)
     {
@@ -109,17 +107,6 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
                 if(entry != null)
                 {
-                    //security
-                    try
-                    {
-                        invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
-                    }
-                    catch (AccessDeniedException accessDeniedException)
-                    {
-                        tryToHandleSecurityViolation(accessDeniedException);
-                        return;
-                    }
-
                     this.viewConfigs.put(outcome, entry);
 
                     PreViewConfigNavigateEvent navigateEvent = firePreViewConfigNavigateEvent(oldViewId, entry);
@@ -140,27 +127,6 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     }
                 }
             }
-        }
-
-        handleStandardNavigation(facesContext, fromAction, outcome);
-    }
-
-    private void handleStandardNavigation(FacesContext facesContext, String fromAction, String outcome)
-    {
-        //security
-        try
-        {
-            ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
-
-            if(entry != null)
-            {
-                invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
-            }
-        }
-        catch (AccessDeniedException accessDeniedException)
-        {
-            tryToHandleSecurityViolation(accessDeniedException);
-            return;
         }
 
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);

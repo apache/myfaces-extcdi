@@ -47,7 +47,18 @@ public abstract class SecurityUtils
         // prevent instantiation
     }
 
+    public static Class<? extends ViewConfig> getErrorView(RuntimeException runtimeException)
+    {
+        return tryToHandleSecurityViolation(runtimeException, false);
+    }
+
     public static void tryToHandleSecurityViolation(RuntimeException runtimeException)
+    {
+        tryToHandleSecurityViolation(runtimeException, true);
+    }
+
+    private static Class<? extends ViewConfig> tryToHandleSecurityViolation(RuntimeException runtimeException,
+                                                                            boolean allowNavigation)
     {
         AccessDeniedException exception = extractException(runtimeException);
 
@@ -80,7 +91,11 @@ public abstract class SecurityUtils
             throw exception;
         }
 
-        processApplicationSecurityException(exception, errorView);
+        if(allowNavigation)
+        {
+            processApplicationSecurityException(exception, errorView);
+        }
+        return errorView;
     }
 
     private static AccessDeniedException extractException(Throwable exception)

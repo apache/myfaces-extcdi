@@ -27,7 +27,7 @@
         <action-listener>org.apache.myfaces.extensions.cdi.jsf.impl.listener.action.CodiActionListener</action-listener>
         <navigation-handler>org.apache.myfaces.extensions.cdi.jsf.impl.navigation.CodiNavigationHandler</navigation-handler>
 
-        <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler</view-handler>
+        <view-handler>org.apache.myfaces.extensions.cdi.jsf.impl.CodiViewHandler</view-handler>
     </application>
 
     <factory>

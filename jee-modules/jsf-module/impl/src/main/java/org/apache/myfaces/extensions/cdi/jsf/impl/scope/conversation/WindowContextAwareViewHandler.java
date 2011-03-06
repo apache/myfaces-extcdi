@@ -32,6 +32,9 @@ import javax.faces.context.FacesContext;
 import javax.faces.component.UIViewRoot;
 
 /**
+ * ATTENTION:
+ * add all new methods to {@link org.apache.myfaces.extensions.cdi.jsf.impl.CodiViewHandler}
+ *
  * @author Gerhard Petracek
  */
 public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements Deactivatable
@@ -56,14 +59,14 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
     @Override
     public String getActionURL(FacesContext context, String viewId)
     {
-        lazyInit();
-
         String url = this.wrapped.getActionURL(context, viewId);
 
         if(this.deactivated)
         {
             return url;
         }
+
+        lazyInit();
 
         url = this.windowHandler.encodeURL(url);
         return url;
@@ -86,11 +89,6 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
         }
     }
 
-    public boolean isActivated()
-    {
-        return ClassDeactivation.isClassActivated(getClass());
-    }
-
     @Override
     public UIViewRoot restoreView(FacesContext facesContext, String viewId)
     {
@@ -111,6 +109,11 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
         }
 
         return super.restoreView(facesContext, viewId);
+    }
+
+    public boolean isActivated()
+    {
+        return ClassDeactivation.isClassActivated(getClass());
     }
 
     //see EXTCDI-148 required if the mapped url is different from the final view-id
