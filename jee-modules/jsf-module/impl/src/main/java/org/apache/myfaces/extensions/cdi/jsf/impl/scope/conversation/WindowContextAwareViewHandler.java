@@ -94,7 +94,7 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
     {
         if(this.deactivated)
         {
-            return super.restoreView(facesContext, viewId);
+            return this.wrapped.restoreView(facesContext, viewId);
         }
 
         if(isWindowIdAvailable(facesContext))
@@ -108,7 +108,7 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
             }
         }
 
-        return super.restoreView(facesContext, viewId);
+        return this.wrapped.restoreView(facesContext, viewId);
     }
 
     public boolean isActivated()
