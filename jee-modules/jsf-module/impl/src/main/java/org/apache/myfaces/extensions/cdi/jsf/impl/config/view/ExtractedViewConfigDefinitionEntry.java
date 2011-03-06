@@ -21,8 +21,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
@@ -35,7 +35,7 @@ import java.util.Collections;
 /**
  * @author Gerhard Petracek
  */
-class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
+class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
 {
     static final String ROOT_PATH = "/";
     static final String DEFAULT_EXTENSION = Page.Extension.XHTML;
@@ -59,7 +59,7 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
     protected String pageName = DEFAULT_PAGE_NAME;
     private String extension = DEFAULT_EXTENSION;
     private Page.NavigationMode navigationMode = null;
-    private Page.ViewParameter viewParameter = null;
+    private Page.ViewParameterMode viewParameterMode = null;
 
     public ExtractedViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass)
     {
@@ -87,16 +87,16 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
 
     public boolean isKnownViewParameter()
     {
-        return this.viewParameter != null;
+        return this.viewParameterMode != null;
     }
 
-    public Page.ViewParameter getViewParameter()
+    public Page.ViewParameterMode getViewParameterMode()
     {
-        if(this.viewParameter == null)
+        if(this.viewParameterMode == null)
         {
-            return Page.ViewParameter.DEFAULT;
+            return Page.ViewParameterMode.DEFAULT;
         }
-        return this.viewParameter;
+        return this.viewParameterMode;
     }
 
     public Class<? extends ViewConfig> getErrorView()
@@ -134,9 +134,9 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
         this.navigationMode = navigationMode;
     }
 
-    public void setViewParameter(Page.ViewParameter viewParameter)
+    public void setViewParameterMode(Page.ViewParameterMode viewParameterMode)
     {
-        this.viewParameter = viewParameter;
+        this.viewParameterMode = viewParameterMode;
     }
 
     public void setPageName(String pageName)
@@ -230,7 +230,7 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
     /*
      * TODO refactor it!
      */
-    public Class<? extends ViewConfig> getViewDefinitionClass()
+    public Class<? extends ViewConfig> getViewConfig()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
@@ -298,7 +298,7 @@ class ExtractedViewConfigDefinitionEntry implements ViewConfigEntry
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
-    public List<PageBeanConfigEntry> getPageBeanDefinitions()
+    public List<PageBeanDescriptor> getPageBeanConfigs()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }

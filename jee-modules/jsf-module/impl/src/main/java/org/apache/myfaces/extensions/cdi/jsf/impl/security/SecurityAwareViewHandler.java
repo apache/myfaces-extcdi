@@ -23,8 +23,9 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils;
 
 import javax.enterprise.inject.spi.BeanManager;
@@ -72,18 +73,26 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
 
         try
         {
-            ViewConfigEntry entry = ViewConfigCache.getViewDefinition(result.getViewId());
+            ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(result.getViewId());
 
             if(entry != null)
             {
                 lazyInit();
-                invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
+
+                Class<? extends ViewConfig> errorView = null;
+
+                if(entry instanceof EditableViewConfigDescriptor)
+                {
+                    errorView = ((EditableViewConfigDescriptor)entry).getErrorView();
+                }
+
+                invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), errorView);
             }
         }
         catch (AccessDeniedException accessDeniedException)
         {
             Class<? extends ViewConfig> errorView = SecurityUtils.getErrorView(accessDeniedException);
-            return this.wrapped.createView(context, ViewConfigCache.getViewDefinition(errorView).getViewId());
+            return this.wrapped.createView(context, ViewConfigCache.getViewConfig(errorView).getViewId());
         }
 
         return result;

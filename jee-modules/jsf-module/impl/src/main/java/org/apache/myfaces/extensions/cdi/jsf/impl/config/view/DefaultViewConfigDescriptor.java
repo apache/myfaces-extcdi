@@ -24,8 +24,10 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.LifecycleAwarePageBeanDescriptor;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Named;
@@ -43,7 +45,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCr
 /**
  * @author Gerhard Petracek
  */
-public class DefaultViewConfigEntry implements ViewConfigEntry
+public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
 {
     private final String viewId;
 
@@ -51,13 +53,13 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
 
     private final Page.NavigationMode navigationMode;
 
-    private List<PageBeanConfigEntry> beanDefinition;
+    private List<PageBeanDescriptor> pageBeanDescriptors;
 
     //security
     private final List<Class<? extends AccessDecisionVoter>> accessDecisionVoters;
     private final Class<? extends ViewConfig> customErrorView;
 
-    private Page.ViewParameter viewParameter;
+    private Page.ViewParameterMode viewParameterMode;
     //meta-data
     private List<Annotation> metaDataList;
 
@@ -65,22 +67,22 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
 
     private transient BeanManager beanManager;
 
-    public DefaultViewConfigEntry(String viewId,
-                                  Class<? extends ViewConfig> viewDefinitionClass,
-                                  Page.NavigationMode navigationMode,
-                                  Page.ViewParameter viewParameter,
-                                  List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
-                                  Class<? extends ViewConfig> errorView,
-                                  List<Annotation> metaDataList)
+    public DefaultViewConfigDescriptor(String viewId,
+                                       Class<? extends ViewConfig> viewDefinitionClass,
+                                       Page.NavigationMode navigationMode,
+                                       Page.ViewParameterMode viewParameterMode,
+                                       List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
+                                       Class<? extends ViewConfig> errorView,
+                                       List<Annotation> metaDataList)
     {
         this.viewId = viewId;
         this.viewDefinitionClass = viewDefinitionClass;
         this.navigationMode = navigationMode;
-        this.viewParameter = viewParameter;
+        this.viewParameterMode = viewParameterMode;
 
         this.metaDataList = metaDataList;
 
-        beanDefinition = Collections.unmodifiableList(findPageBeanDefinitions(viewDefinitionClass));
+        pageBeanDescriptors = Collections.unmodifiableList(findPageBeanDefinitions(viewDefinitionClass));
         //TODO validate view-id
 
         //noinspection unchecked
@@ -101,7 +103,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return viewId;
     }
 
-    public Class<? extends ViewConfig> getViewDefinitionClass()
+    public Class<? extends ViewConfig> getViewConfig()
     {
         return viewDefinitionClass;
     }
@@ -111,49 +113,61 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return navigationMode;
     }
 
-    public Page.ViewParameter getViewParameter()
+    public Page.ViewParameterMode getViewParameterMode()
     {
-        return viewParameter;
+        return viewParameterMode;
     }
 
-    public List<PageBeanConfigEntry> getPageBeanDefinitions()
+    public List<PageBeanDescriptor> getPageBeanConfigs()
     {
-        return beanDefinition;
+        return pageBeanDescriptors;
     }
 
     public void invokeInitViewMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
+        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
         {
-            processCallbacks(beanEntry, beanEntry.getInitViewMethods());
+            if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
+            {
+                processCallbacks(beanEntry, ((LifecycleAwarePageBeanDescriptor)beanEntry).getInitViewMethods());
+            }
         }
     }
 
     public void invokePrePageActionMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
+        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
         {
-            processCallbacks(beanEntry, beanEntry.getPrePageActionMethods());
+            if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
+            {
+                processCallbacks(beanEntry, ((LifecycleAwarePageBeanDescriptor)beanEntry).getPrePageActionMethods());
+            }
         }
     }
 
     public void invokePreRenderViewMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
+        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
         {
-            processCallbacks(beanEntry, beanEntry.getPreRenderViewMethods());
+            if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
+            {
+                processCallbacks(beanEntry, ((LifecycleAwarePageBeanDescriptor)beanEntry).getPreRenderViewMethods());
+            }
         }
     }
 
     public void invokePostRenderViewMethods()
     {
-        for(PageBeanConfigEntry beanEntry : getPageBeanDefinitions())
+        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
         {
-            processCallbacks(beanEntry, beanEntry.getPostRenderViewMethods());
+            if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
+            {
+                processCallbacks(beanEntry, ((LifecycleAwarePageBeanDescriptor)beanEntry).getPostRenderViewMethods());
+            }
         }
     }
 
-    private void processCallbacks(PageBeanConfigEntry beanEntry, List<Method> methodList)
+    private void processCallbacks(PageBeanDescriptor beanEntry, List<Method> methodList)
     {
         Object bean;
         if (!methodList.isEmpty())
@@ -220,13 +234,13 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
 
     public void addPageBean(Class pageBeanClass)
     {
-        List<PageBeanConfigEntry> newList = new ArrayList<PageBeanConfigEntry>(this.beanDefinition);
+        List<PageBeanDescriptor> newList = new ArrayList<PageBeanDescriptor>(this.pageBeanDescriptors);
 
-        PageBeanConfigEntry newEntry = new DefaultPageBeanConfigEntry(getBeanName(pageBeanClass) , pageBeanClass);
+        PageBeanDescriptor newEntry = new DefaultPageBeanDescriptor(getBeanName(pageBeanClass) , pageBeanClass);
 
         newList.add(newEntry);
 
-        this.beanDefinition = Collections.unmodifiableList(newList);
+        this.pageBeanDescriptors = Collections.unmodifiableList(newList);
     }
 
     void activateSimpleEntryMode()
@@ -239,7 +253,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return simpleEntryMode;
     }
 
-    private List<PageBeanConfigEntry> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)
+    private List<PageBeanDescriptor> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)
     {
         if(!viewDefinitionClass.isAnnotationPresent(PageBean.class) &&
                 !viewDefinitionClass.isAnnotationPresent(PageBean.List.class))
@@ -247,7 +261,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
             return Collections.emptyList();
         }
 
-        List<PageBeanConfigEntry> result = new ArrayList<PageBeanConfigEntry>();
+        List<PageBeanDescriptor> result = new ArrayList<PageBeanDescriptor>();
 
         if(viewDefinitionClass.isAnnotationPresent(PageBean.class))
         {
@@ -262,9 +276,9 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return result;
     }
 
-    private List<PageBeanConfigEntry> extractBeanEntries(PageBean.List pageBeanList)
+    private List<PageBeanDescriptor> extractBeanEntries(PageBean.List pageBeanList)
     {
-        List<PageBeanConfigEntry> result = new ArrayList<PageBeanConfigEntry>();
+        List<PageBeanDescriptor> result = new ArrayList<PageBeanDescriptor>();
         for(PageBean pageBean : pageBeanList.value())
         {
             result.add(extractBeanEntry(pageBean));
@@ -272,11 +286,11 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         return result;
     }
 
-    private PageBeanConfigEntry extractBeanEntry(PageBean pageBean)
+    private PageBeanDescriptor extractBeanEntry(PageBean pageBean)
     {
         if(!"".equals(pageBean.name()))
         {
-            return new DefaultPageBeanConfigEntry(pageBean.name(), pageBean.value());
+            return new DefaultPageBeanDescriptor(pageBean.name(), pageBean.value());
         }
 
         Class<?> pageBeanClass = pageBean.value();
@@ -285,7 +299,7 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         //TODO allow indirect usage of @Named
         pageBeanName = getBeanName(pageBeanClass);
 
-        return new DefaultPageBeanConfigEntry(pageBeanName, pageBeanClass);
+        return new DefaultPageBeanDescriptor(pageBeanName, pageBeanClass);
     }
 
     private String getBeanName(Class<?> pageBeanClass)
@@ -320,12 +334,12 @@ public class DefaultViewConfigEntry implements ViewConfigEntry
         {
             return true;
         }
-        if (!(o instanceof ViewConfigEntry))
+        if (!(o instanceof ViewConfigDescriptor))
         {
             return false;
         }
 
-        ViewConfigEntry that = (ViewConfigEntry) o;
+        ViewConfigDescriptor that = (ViewConfigDescriptor) o;
 
         if (!viewId.equals(that.getViewId()))
         {

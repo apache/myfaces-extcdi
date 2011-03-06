@@ -26,8 +26,9 @@ import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor;
 
@@ -126,32 +127,35 @@ public class ViewConfigExtension implements Extension, Deactivatable
             this.logger.info(pageDefinitionClass.getName() + " will be used as page-definition.");
         }
 
-        ViewConfigEntry newEntry = createViewConfigEntry(pageDefinitionClass);
+        ViewConfigDescriptor newEntry = createViewConfigDescriptor(pageDefinitionClass);
 
         if(newEntry != null)
         {
-            ViewConfigEntry existingEntry = ViewConfigCache.getViewDefinition(newEntry.getViewDefinitionClass());
+            ViewConfigDescriptor existingDescriptor = ViewConfigCache.getViewConfig(newEntry.getViewConfig());
 
             //TODO introduce an SPI with a better name
-            if(/*viewConfigEntry != null*/existingEntry instanceof DefaultViewConfigEntry
-                    && ((DefaultViewConfigEntry)existingEntry).isSimpleEntryMode())
+            if(/*viewConfigDescriptor != null*/existingDescriptor instanceof DefaultViewConfigDescriptor
+                    && ((DefaultViewConfigDescriptor)existingDescriptor).isSimpleEntryMode())
             {
                 //in this case the alternative view-controller approach which just adds page-beans was invoked before
                 //-> we just have to use the page bean of the existing entry
 
                 //here we have a simple-entry!   (which just contains page-bean definitions)
-                for(PageBeanConfigEntry pageBeanConfigEntry : existingEntry.getPageBeanDefinitions())
+                for(PageBeanDescriptor pageBeanDescriptor : existingDescriptor.getPageBeanConfigs())
                 {
                     //add page-beans to the real entry
-                    newEntry.addPageBean(pageBeanConfigEntry.getBeanClass());
+                    if(newEntry instanceof EditableViewConfigDescriptor)
+                    {
+                        ((EditableViewConfigDescriptor)newEntry).addPageBean(pageBeanDescriptor.getBeanClass());
+                    }
                 }
-                ViewConfigCache.replaceViewDefinition(newEntry.getViewId(), newEntry);
+                ViewConfigCache.replaceViewConfigDescriptor(newEntry.getViewId(), newEntry);
                 return;
             }
 
             //add created entry
             //if there is already an normal (not simple!) entry force an exception
-            ViewConfigCache.addViewDefinition(newEntry.getViewId(), newEntry);
+            ViewConfigCache.addViewConfigDescriptor(newEntry.getViewId(), newEntry);
         }
     }
 
@@ -204,32 +208,38 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         for(Class<? extends ViewConfig> viewConfigClass : view.value())
         {
-            ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(viewConfigClass);
+            ViewConfigDescriptor viewConfigDescriptor = ViewConfigCache.getViewConfig(viewConfigClass);
 
-            if(viewConfigEntry == null)
+            if(viewConfigDescriptor == null)
             {
-                ViewConfigEntry entry = createViewConfigEntry(viewConfigClass);
+                ViewConfigDescriptor entry = createViewConfigDescriptor(viewConfigClass);
 
                 if(entry != null)
                 {
-                    entry.addPageBean(annotatedType.getJavaClass());
-
-                    //TODO introduce an SPI with a better name
-                    if(entry instanceof DefaultViewConfigEntry)
+                    if(entry instanceof EditableViewConfigDescriptor)
                     {
-                        ((DefaultViewConfigEntry)entry).activateSimpleEntryMode();
+                        ((EditableViewConfigDescriptor)entry).addPageBean(annotatedType.getJavaClass());
                     }
-                    ViewConfigCache.addViewDefinition(entry.getViewId(), entry);
+
+                    if(entry instanceof DefaultViewConfigDescriptor)
+                    {
+                        //TODO introduce an SPI with a better name
+                        ((DefaultViewConfigDescriptor)entry).activateSimpleEntryMode();
+                    }
+                    ViewConfigCache.addViewConfigDescriptor(entry.getViewId(), entry);
                 }
             }
             else
             {
-                viewConfigEntry.addPageBean(annotatedType.getJavaClass());
+                if(viewConfigDescriptor instanceof EditableViewConfigDescriptor)
+                {
+                    ((EditableViewConfigDescriptor)viewConfigDescriptor).addPageBean(annotatedType.getJavaClass());
+                }
             }
         }
     }
 
-    protected ViewConfigEntry createViewConfigEntry(Class<? extends ViewConfig> viewDefinitionClass)
+    protected ViewConfigDescriptor createViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //we use abstract classes for nesting definitions
         //TODO log a warning in case of project-stage dev
@@ -238,7 +248,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
             return null;
         }
 
-        ViewConfigEntry result = getViewConfigExtractor().extractViewConfig(viewDefinitionClass);
+        ViewConfigDescriptor result = getViewConfigExtractor().extractViewConfig(viewDefinitionClass);
         return result;
     }
 

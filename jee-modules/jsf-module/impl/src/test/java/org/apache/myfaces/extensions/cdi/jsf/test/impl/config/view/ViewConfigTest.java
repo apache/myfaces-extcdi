@@ -20,8 +20,10 @@ package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.LifecycleAwarePageBeanDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.BasefolderViewConfigRootMarker;
 import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.RenamedBasefolderViewConfigRootMarker;
 import org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.SubfolderViewConfigRootMarker;
@@ -54,9 +56,9 @@ public class ViewConfigTest
     {
         viewConfigExtension.addPageDefinition(SimpleView.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(SimpleView.class).getViewId(), "/simpleView.xhtml");
+        assertEquals(ViewConfigCache.getViewConfig(SimpleView.class).getViewId(), "/simpleView.xhtml");
 
-        assertEquals(ViewConfigCache.getViewDefinition(SimpleView.class).getViewDefinitionClass(),
+        assertEquals(ViewConfigCache.getViewConfig(SimpleView.class).getViewConfig(),
                                                        SimpleView.class);
     }
 
@@ -65,7 +67,7 @@ public class ViewConfigTest
     {
         viewConfigExtension.addPageDefinition(SimpleViewWithManualName.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(SimpleViewWithManualName.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(SimpleViewWithManualName.class).getViewId(),
                                                        "/simpleManualPage.xhtml");
     }
 
@@ -75,9 +77,9 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.Page1.class);
         viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.Page2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(SimpleNestedViewConfig.Page1.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(SimpleNestedViewConfig.Page1.class).getViewId(),
                                                        "/simpleNestedViewConfig/page1.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(SimpleNestedViewConfig.Page2.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(SimpleNestedViewConfig.Page2.class).getViewId(),
                                                        "/simpleNestedViewConfig/page2.xhtml");
     }
 
@@ -87,10 +89,10 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(NestedViewConfigWithManualNamesAndSharedBasePath1.Page1.class);
         viewConfigExtension.addPageDefinition(NestedViewConfigWithManualNamesAndSharedBasePath1.Page2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 NestedViewConfigWithManualNamesAndSharedBasePath1.Page1.class).getViewId(),
                 "/manual/page1.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 NestedViewConfigWithManualNamesAndSharedBasePath1.Page2.class).getViewId(),
                 "/manual/page2.xhtml");
     }
@@ -101,10 +103,10 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(NestedViewConfigWithManualNamesAndSharedBasePath2.Page1.class);
         viewConfigExtension.addPageDefinition(NestedViewConfigWithManualNamesAndSharedBasePath2.Page2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 NestedViewConfigWithManualNamesAndSharedBasePath2.Page1.class).getViewId(),
                 "/manual/page3.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 NestedViewConfigWithManualNamesAndSharedBasePath2.Page2.class).getViewId(),
                 "/manual/page4.xhtml");
     }
@@ -115,9 +117,9 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(VirtualNesting.Page1.class);
         viewConfigExtension.addPageDefinition(VirtualNesting.Page2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(VirtualNesting.Page1.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(VirtualNesting.Page1.class).getViewId(),
                                                        "/page1.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(VirtualNesting.Page2.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(VirtualNesting.Page2.class).getViewId(),
                                                        "/page2.xhtml");
     }
 
@@ -127,10 +129,10 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(MultipleSimpleNestedConfigs.Conversations.Grouped.Step1.class);
         viewConfigExtension.addPageDefinition(MultipleSimpleNestedConfigs.Conversations.Grouped.Step2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 MultipleSimpleNestedConfigs.Conversations.Grouped.Step1.class).getViewId(),
                 "/multipleSimpleNestedConfigs/conversations/grouped/step1.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 MultipleSimpleNestedConfigs.Conversations.Grouped.Step2.class).getViewId(),
                 "/multipleSimpleNestedConfigs/conversations/grouped/step2.xhtml");
     }
@@ -141,8 +143,8 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(SimpleInterfaceBasedConfigs.Wizards.Registration.Step1.class);
         viewConfigExtension.addPageDefinition(SimpleInterfaceBasedConfigs.Wizards.Order.Step1.class);
 
-        ViewConfigEntry registrationConfigEntry = ViewConfigCache.getViewDefinition(SimpleInterfaceBasedConfigs.Wizards.Registration.Step1.class);
-        ViewConfigEntry orderConfigEntry = ViewConfigCache.getViewDefinition(SimpleInterfaceBasedConfigs.Wizards.Order.Step1.class);
+        ViewConfigDescriptor registrationConfigEntry = ViewConfigCache.getViewConfig(SimpleInterfaceBasedConfigs.Wizards.Registration.Step1.class);
+        ViewConfigDescriptor orderConfigEntry = ViewConfigCache.getViewConfig(SimpleInterfaceBasedConfigs.Wizards.Order.Step1.class);
 
         assertEquals(registrationConfigEntry.getViewId(),
                 "/pages/wizards/registration/step1.xhtml");
@@ -163,17 +165,17 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(NavigationOverriding1.RedirectedPage1.class);
         viewConfigExtension.addPageDefinition(NavigationOverriding1.ForwardedPage1.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(NavigationOverriding1.RedirectedPage1.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(NavigationOverriding1.RedirectedPage1.class).getViewId(),
                                                        "/redirectedPage1.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(NavigationOverriding1.ForwardedPage1.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(NavigationOverriding1.ForwardedPage1.class).getViewId(),
                                                        "/forwardedPage1.xhtml");
 
-        ViewConfigEntry viewConfigEntry =ViewConfigCache.getViewDefinition(NavigationOverriding1.RedirectedPage1.class);
-        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.REDIRECT);
+        ViewConfigDescriptor viewConfig =ViewConfigCache.getViewConfig(NavigationOverriding1.RedirectedPage1.class);
+        assertEquals(viewConfig.getNavigationMode(), NavigationMode.REDIRECT);
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(NavigationOverriding1.ForwardedPage1.class);
+        viewConfig = ViewConfigCache.getViewConfig(NavigationOverriding1.ForwardedPage1.class);
 
-        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.FORWARD);
+        assertEquals(viewConfig.getNavigationMode(), NavigationMode.FORWARD);
     }
 
     @Test
@@ -182,17 +184,17 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(NavigationOverriding2.RedirectedPage2.class);
         viewConfigExtension.addPageDefinition(NavigationOverriding2.ForwardedPage2.class);
 
-        assertEquals(ViewConfigCache.getViewDefinition(NavigationOverriding2.RedirectedPage2.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(NavigationOverriding2.RedirectedPage2.class).getViewId(),
                                                        "/redirectedPage2.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(NavigationOverriding2.ForwardedPage2.class).getViewId(),
+        assertEquals(ViewConfigCache.getViewConfig(NavigationOverriding2.ForwardedPage2.class).getViewId(),
                                                        "/forwardedPage2.xhtml");
 
-        ViewConfigEntry viewConfigEntry =ViewConfigCache.getViewDefinition(NavigationOverriding2.RedirectedPage2.class);
-        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.REDIRECT);
+        ViewConfigDescriptor viewConfig =ViewConfigCache.getViewConfig(NavigationOverriding2.RedirectedPage2.class);
+        assertEquals(viewConfig.getNavigationMode(), NavigationMode.REDIRECT);
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(NavigationOverriding2.ForwardedPage2.class);
+        viewConfig = ViewConfigCache.getViewConfig(NavigationOverriding2.ForwardedPage2.class);
 
-        assertEquals(viewConfigEntry.getNavigationMode(), NavigationMode.FORWARD);
+        assertEquals(viewConfig.getNavigationMode(), NavigationMode.FORWARD);
     }
 
     @Test
@@ -201,17 +203,16 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(ViewConfigWithAccessDecisionVoters.Page1.class);
         viewConfigExtension.addPageDefinition(ViewConfigWithAccessDecisionVoters.Page2.class);
 
-        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
-                ViewConfigWithAccessDecisionVoters.Page1.class);
+        ViewConfigDescriptor viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithAccessDecisionVoters.Page1.class);
 
-        assertEquals(viewConfigEntry.getAccessDecisionVoters().size(), 1);
+        assertEquals(viewConfig.getAccessDecisionVoters().size(), 1);
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithAccessDecisionVoters.Page2.class);
+        viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithAccessDecisionVoters.Page2.class);
 
-        assertEquals(viewConfigEntry.getAccessDecisionVoters().size(), 2);
+        assertEquals(viewConfig.getAccessDecisionVoters().size(), 2);
 
         boolean voter2 = false;
-        for(Class<? extends AccessDecisionVoter> accessDecisionVoter : viewConfigEntry.getAccessDecisionVoters())
+        for(Class<? extends AccessDecisionVoter> accessDecisionVoter : viewConfig.getAccessDecisionVoters())
         {
             if(!voter2)
             {
@@ -231,13 +232,12 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(ViewConfigWithSecurityErrorPages.Page1.class);
         viewConfigExtension.addPageDefinition(ViewConfigWithSecurityErrorPages.Page2.class);
 
-        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
-                ViewConfigWithSecurityErrorPages.Page1.class);
+        ViewConfigDescriptor viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithSecurityErrorPages.Page1.class);
 
-        assertEquals(viewConfigEntry.getErrorView(), SimpleView.class);
+        assertEquals(((EditableViewConfigDescriptor)viewConfig).getErrorView(), SimpleView.class);
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithSecurityErrorPages.Page2.class);
-        assertEquals(viewConfigEntry.getErrorView(), SimpleViewWithManualName.class);
+        viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithSecurityErrorPages.Page2.class);
+        assertEquals(((EditableViewConfigDescriptor)viewConfig).getErrorView(), SimpleViewWithManualName.class);
     }
 
     @Test
@@ -246,13 +246,12 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(ViewConfigWithViewMetaData.Page1.class);
         viewConfigExtension.addPageDefinition(ViewConfigWithViewMetaData.Page2.class);
 
-        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
-                ViewConfigWithViewMetaData.Page1.class);
+        ViewConfigDescriptor viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewMetaData.Page1.class);
 
-        assertEquals(viewConfigEntry.getMetaData().size(), 2);
+        assertEquals(viewConfig.getMetaData().size(), 2);
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithViewMetaData.Page2.class);
-        assertEquals(viewConfigEntry.getMetaData().size(), 3);
+        viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewMetaData.Page2.class);
+        assertEquals(viewConfig.getMetaData().size(), 3);
     }
 
     @Test
@@ -261,22 +260,21 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(ViewConfigWithViewController.Page1.class);
         viewConfigExtension.addPageDefinition(ViewConfigWithViewController.Page2.class);
 
-        ViewConfigEntry viewConfigEntry = ViewConfigCache.getViewDefinition(
-                ViewConfigWithViewController.Page1.class);
+        ViewConfigDescriptor viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewController.Page1.class);
 
-        List<PageBeanConfigEntry> pageBeanConfigEntries = viewConfigEntry.getPageBeanDefinitions();
-        assertEquals(pageBeanConfigEntries.size(), 1);
-        assertTrue(pageBeanConfigEntries.iterator().next().getBeanClass().equals(TestPageBean2.class));
+        List<PageBeanDescriptor> pageBeanDescriptors = viewConfig.getPageBeanConfigs();
+        assertEquals(pageBeanDescriptors.size(), 1);
+        assertTrue(pageBeanDescriptors.iterator().next().getBeanClass().equals(TestPageBean2.class));
 
-        viewConfigEntry = ViewConfigCache.getViewDefinition(ViewConfigWithViewController.Page2.class);
+        viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewController.Page2.class);
 
-        pageBeanConfigEntries = viewConfigEntry.getPageBeanDefinitions();
-        assertEquals(pageBeanConfigEntries.size(), 2);
+        pageBeanDescriptors = viewConfig.getPageBeanConfigs();
+        assertEquals(pageBeanDescriptors.size(), 2);
 
-        for(PageBeanConfigEntry pageBeanConfigEntry : pageBeanConfigEntries)
+        for(PageBeanDescriptor pageBeanDescriptor : pageBeanDescriptors)
         {
-            assertTrue(pageBeanConfigEntry.getBeanClass().equals(TestPageBean2.class) ||
-                       pageBeanConfigEntry.getBeanClass().equals(TestPageBean3.class));
+            assertTrue(pageBeanDescriptor.getBeanClass().equals(TestPageBean2.class) ||
+                       pageBeanDescriptor.getBeanClass().equals(TestPageBean3.class));
         }
     }
 
@@ -289,22 +287,22 @@ public class ViewConfigTest
 
         viewConfigExtension.finalizeConfig();
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getViewId(),
                 "/pages/order/orderOverview.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 RegistrationStep01PageBean.class).getViewId(),
                 "/pages/registration/registrationStep01.xhtml");
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
-        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
-                .getPageBeanDefinitions().iterator().next();
+        PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
+                .getPageBeanConfigs().iterator().next();
 
-        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
-        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+        assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(((LifecycleAwarePageBeanDescriptor) pageBeanDescriptor).getPreRenderViewMethods().size(), 1);
     }
 
     @Test
@@ -316,22 +314,22 @@ public class ViewConfigTest
 
         viewConfigExtension.finalizeConfig();
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getViewId(),
                 "/views/order/orderOverview.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 RegistrationStep01PageBean.class).getViewId(),
                 "/views/registration/registrationStep01.xhtml");
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
-        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
-                .getPageBeanDefinitions().iterator().next();
+        PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
+                .getPageBeanConfigs().iterator().next();
 
-        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
-        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+        assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(((LifecycleAwarePageBeanDescriptor)pageBeanDescriptor).getPreRenderViewMethods().size(), 1);
     }
 
     @Test
@@ -343,22 +341,22 @@ public class ViewConfigTest
 
         viewConfigExtension.finalizeConfig();
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getViewId(),
                 "/order/orderOverview.xhtml");
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 RegistrationStep01PageBean.class).getViewId(),
                 "/registration/registrationStep01.xhtml");
 
-        assertEquals(ViewConfigCache.getViewDefinition(
+        assertEquals(ViewConfigCache.getViewConfig(
                 OrderOverviewPage.class).getAccessDecisionVoters().iterator().next().getName(),
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
-        PageBeanConfigEntry pageBeanConfigEntry = ViewConfigCache.getViewDefinition(RegistrationStep01PageBean.class)
-                .getPageBeanDefinitions().iterator().next();
+        PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
+                .getPageBeanConfigs().iterator().next();
 
-        assertEquals(pageBeanConfigEntry.getBeanClass(), RegistrationStep01PageBean.class);
-        assertEquals(pageBeanConfigEntry.getPreRenderViewMethods().size(), 1);
+        assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
+        assertEquals(((LifecycleAwarePageBeanDescriptor)pageBeanDescriptor).getPreRenderViewMethods().size(), 1);
     }
 
     @Test
@@ -377,7 +375,7 @@ public class ViewConfigTest
 
         try
         {
-            assertEquals(ViewConfigCache.getViewDefinition(
+            assertEquals(ViewConfigCache.getViewConfig(
                     OrderOverviewPage.class).getViewId(),
                     "/order/orderOverview.xhtml");
         }

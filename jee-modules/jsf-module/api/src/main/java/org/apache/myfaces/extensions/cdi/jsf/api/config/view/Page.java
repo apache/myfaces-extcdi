@@ -53,7 +53,7 @@ public @interface Page
      * for including view params in jsf2
      * @return
      */
-    ViewParameter viewParams() default ViewParameter.DEFAULT;
+    ViewParameterMode viewParams() default ViewParameterMode.DEFAULT;
 
     public interface Extension
     {
@@ -68,7 +68,7 @@ public @interface Page
         DEFAULT, FORWARD, REDIRECT
     }
 
-    public enum ViewParameter
+    public enum ViewParameterMode
     {
         DEFAULT, INCLUDE, EXCLUDE
     }

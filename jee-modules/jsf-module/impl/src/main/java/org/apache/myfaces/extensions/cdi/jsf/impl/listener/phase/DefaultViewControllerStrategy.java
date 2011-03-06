@@ -126,6 +126,6 @@ public class DefaultViewControllerStrategy implements ViewControllerStrategy
 
     private String resolveViewId(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        return ViewConfigCache.getViewDefinition(viewDefinitionClass).getViewId();
+        return ViewConfigCache.getViewConfig(viewDefinitionClass).getViewId();
     }
 }

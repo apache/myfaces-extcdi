@@ -26,9 +26,10 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 import org.apache.myfaces.extensions.cdi.core.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.faces.FacesException;
@@ -50,7 +51,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class ViewConfigAwareNavigationHandler extends NavigationHandler
 {
     private Set<String> otherOutcomes = new CopyOnWriteArraySet<String>();
-    private Map<String, ViewConfigEntry> viewConfigs = new ConcurrentHashMap<String, ViewConfigEntry>();
+    private Map<String, ViewConfigDescriptor> viewConfigs = new ConcurrentHashMap<String, ViewConfigDescriptor>();
 
     private NavigationHandler navigationHandler;
     private boolean delegateCall;
@@ -80,7 +81,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                 {
                     outcome = outcome.substring(6);
                 }
-                ViewConfigEntry entry = this.viewConfigs.get(outcome);
+                ViewConfigDescriptor entry = this.viewConfigs.get(outcome);
 
                 if(entry == null)
                 {
@@ -101,7 +102,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     else if(ViewConfig.class.isAssignableFrom((Class)loadedClass))
                     {
                         //noinspection unchecked
-                        entry = ViewConfigCache.getViewDefinition((Class<? extends ViewConfig>)loadedClass);
+                        entry = ViewConfigCache.getViewConfig((Class<? extends ViewConfig>) loadedClass);
                     }
                 }
 
@@ -132,10 +133,16 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
     }
 
-    private String convertEntryToOutcome(ExternalContext externalContext, ViewConfigEntry entry)
+    private String convertEntryToOutcome(ExternalContext externalContext, ViewConfigDescriptor entry)
     {
         boolean performRedirect = Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode());
-        boolean includeViewParameters = Page.ViewParameter.INCLUDE.equals(entry.getViewParameter());
+        boolean includeViewParameters = false;
+
+        if(entry instanceof EditableViewConfigDescriptor)
+        {
+            includeViewParameters = Page.ViewParameterMode.INCLUDE
+                    .equals(((EditableViewConfigDescriptor) entry).getViewParameterMode());
+        }
 
         StringBuilder result = new StringBuilder(entry.getViewId());
 
@@ -161,11 +168,12 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         return result.toString();
     }
 
-    private ViewConfigEntry tryToUpdateEntry(ViewConfigEntry viewConfigEntry, PreViewConfigNavigateEvent navigateEvent)
+    private ViewConfigDescriptor tryToUpdateEntry(ViewConfigDescriptor viewConfigDescriptor,
+                                                  PreViewConfigNavigateEvent navigateEvent)
     {
         if(navigateEvent == null)
         {
-            return viewConfigEntry;
+            return viewConfigDescriptor;
         }
 
         if(navigateEvent.getToView() == null)
@@ -173,23 +181,23 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             return null;
         }
 
-        if(navigateEvent.getToView().equals(viewConfigEntry.getViewDefinitionClass()))
+        if(navigateEvent.getToView().equals(viewConfigDescriptor.getViewConfig()))
         {
-            return viewConfigEntry;
+            return viewConfigDescriptor;
         }
 
-        return ViewConfigCache.getViewDefinition(navigateEvent.getToView());
+        return ViewConfigCache.getViewConfig(navigateEvent.getToView());
     }
 
     private PreViewConfigNavigateEvent firePreViewConfigNavigateEvent(
-            String oldViewId, ViewConfigEntry newViewConfigEntry)
+            String oldViewId, ViewConfigDescriptor newViewConfigDescriptor)
     {
-        ViewConfigEntry oldViewConfigEntry = ViewConfigCache.getViewDefinition(oldViewId);
+        ViewConfigDescriptor oldViewConfigDescriptor = ViewConfigCache.getViewConfig(oldViewId);
 
-        if(oldViewConfigEntry != null)
+        if(oldViewConfigDescriptor != null)
         {
             PreViewConfigNavigateEvent navigateEvent = new PreViewConfigNavigateEvent(
-                    oldViewConfigEntry.getViewDefinitionClass(), newViewConfigEntry.getViewDefinitionClass());
+                    oldViewConfigDescriptor.getViewConfig(), newViewConfigDescriptor.getViewConfig());
 
             this.beanManager.fireEvent(navigateEvent);
             return navigateEvent;
@@ -205,7 +213,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         }
     }
 
-    private void processViewDefinitionEntry(FacesContext facesContext, ViewConfigEntry entry)
+    private void processViewDefinitionEntry(FacesContext facesContext, ViewConfigDescriptor entry)
     {
         String targetViewId = entry.getViewId();
 

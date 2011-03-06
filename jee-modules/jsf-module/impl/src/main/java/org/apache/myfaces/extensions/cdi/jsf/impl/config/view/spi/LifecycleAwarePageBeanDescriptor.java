@@ -18,19 +18,24 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
 
-import java.io.Serializable;
+import javax.faces.event.PhaseId;
+import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigExtractor extends Serializable
+public interface LifecycleAwarePageBeanDescriptor extends PageBeanDescriptor
 {
-    ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    List<Method> getInitViewMethods();
 
-    boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    List<Method> getPrePageActionMethods();
 
-    ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    List<Method> getPreRenderViewMethods();
+
+    List<Method> getPostRenderViewMethods();
+
+    RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId);
 }

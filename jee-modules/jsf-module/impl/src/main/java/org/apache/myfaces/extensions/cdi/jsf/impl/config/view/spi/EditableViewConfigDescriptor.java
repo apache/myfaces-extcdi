@@ -19,30 +19,20 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-
-import java.lang.annotation.Annotation;
-import java.util.List;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigEntry
+public interface EditableViewConfigDescriptor extends ViewConfigDescriptor
 {
-    String getViewId();
-
-    Class<? extends ViewConfig> getViewDefinitionClass();
-
+    //it isn't available in ViewConfigDescriptor to avoid confusions of app-developers
+    //(e.g. navigation to the error view should be handled differently)
     Class<? extends ViewConfig> getErrorView();
 
-    Page.NavigationMode getNavigationMode();
-
-    Page.ViewParameter getViewParameter();
-
-    List<Annotation> getMetaData();
-
-    List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters();
+    //due to the usage in @Page we can't move it to the api of the jsf2 module
+    Page.ViewParameterMode getViewParameterMode();
 
     void addPageBean(Class pageBeanClass);
 
@@ -53,6 +43,4 @@ public interface ViewConfigEntry
     void invokePreRenderViewMethods();
 
     void invokePostRenderViewMethods();
-
-    List<PageBeanConfigEntry> getPageBeanDefinitions();
 }

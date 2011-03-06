@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.LifecycleAwarePageBeanDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
 
 import javax.faces.event.PhaseId;
@@ -41,7 +41,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.uns
 /**
  * @author Gerhard Petracek
  */
-class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
+class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
 {
     private final String beanName;
 
@@ -54,7 +54,7 @@ class DefaultPageBeanConfigEntry implements PageBeanConfigEntry
     private List<Method> preRenderViewMethods = new ArrayList<Method>();
     private List<Method> postRenderViewMethods = new ArrayList<Method>();
 
-    DefaultPageBeanConfigEntry(String beanName, Class beanClass)
+    DefaultPageBeanDescriptor(String beanName, Class beanClass)
     {
         this.beanName = beanName;
         this.beanClass = beanClass;

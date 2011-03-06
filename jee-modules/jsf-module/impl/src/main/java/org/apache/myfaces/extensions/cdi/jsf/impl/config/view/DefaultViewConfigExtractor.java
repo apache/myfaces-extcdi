@@ -23,7 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
 import javax.inject.Named;
@@ -41,12 +42,12 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
 {
     private static final long serialVersionUID = 5794817257216134993L;
 
-    public ViewConfigEntry extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //use the interface to make clear which information we really need
-        ViewConfigEntry viewConfigEntry = new ExtractedViewConfigDefinitionEntry(viewDefinitionClass);
+        ViewConfigDescriptor viewConfigDescriptor = new ExtractedViewConfigDefinitionEntry(viewDefinitionClass);
 
-        return extractViewConfigEntry(viewDefinitionClass, viewConfigEntry);
+        return extractViewConfigDescriptor(viewDefinitionClass, viewConfigDescriptor);
     }
 
     public boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
@@ -54,7 +55,7 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         return isResolvable(viewDefinitionClass, new ArrayList<Class<? extends Annotation>>());
     }
 
-    public ViewConfigEntry extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         Class viewConfigRootMarker = ViewConfigCache.getInlineViewConfigRootMarker();
 
@@ -79,23 +80,34 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         }
 
         //use the interface to make clear which information we really need
-        ViewConfigEntry viewConfigEntry = new ExtractedInlineViewConfigDefinitionEntry(viewDefinitionClass, basePath);
+        ViewConfigDescriptor viewConfigDescriptor =
+                new ExtractedInlineViewConfigDefinitionEntry(viewDefinitionClass, basePath);
 
-        return extractViewConfigEntry(viewDefinitionClass, viewConfigEntry);
+        return extractViewConfigDescriptor(viewDefinitionClass, viewConfigDescriptor);
     }
 
-    private ViewConfigEntry extractViewConfigEntry(Class<? extends ViewConfig> viewDefinitionClass,
-                                                   ViewConfigEntry viewConfigEntry)
+    private ViewConfigDescriptor extractViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass,
+                                                             ViewConfigDescriptor viewConfigDescriptor)
     {
-        scanViewConfigClass(viewDefinitionClass, (ExtractedViewConfigDefinitionEntry)viewConfigEntry);
+        scanViewConfigClass(viewDefinitionClass, (ExtractedViewConfigDefinitionEntry)viewConfigDescriptor);
 
-        return new DefaultViewConfigEntry(viewConfigEntry.getViewId(),
+        Class<? extends ViewConfig> errorView = null;
+
+        Page.ViewParameterMode viewParameterMode = Page.ViewParameterMode.DEFAULT;
+
+        if(viewConfigDescriptor instanceof EditableViewConfigDescriptor)
+        {
+            errorView = ((EditableViewConfigDescriptor)viewConfigDescriptor).getErrorView();
+            viewParameterMode = ((EditableViewConfigDescriptor)viewConfigDescriptor).getViewParameterMode();
+        }
+
+        return new DefaultViewConfigDescriptor(viewConfigDescriptor.getViewId(),
                                           viewDefinitionClass,
-                                          viewConfigEntry.getNavigationMode(),
-                                          viewConfigEntry.getViewParameter(),
-                                          viewConfigEntry.getAccessDecisionVoters(),
-                                          viewConfigEntry.getErrorView(),
-                                          viewConfigEntry.getMetaData());
+                                          viewConfigDescriptor.getNavigationMode(),
+                                          viewParameterMode,
+                                          viewConfigDescriptor.getAccessDecisionVoters(),
+                                          errorView,
+                                          viewConfigDescriptor.getMetaData());
     }
 
     private Collection<Annotation> extractViewMetaData(
@@ -187,9 +199,9 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
                 }
 
                 if (!scannedViewConfig.isKnownViewParameter() &&
-                        !pageAnnotation.viewParams().equals(Page.ViewParameter.DEFAULT))
+                        !pageAnnotation.viewParams().equals(Page.ViewParameterMode.DEFAULT))
                 {
-                    scannedViewConfig.setViewParameter(pageAnnotation.viewParams());
+                    scannedViewConfig.setViewParameterMode(pageAnnotation.viewParams());
                 }
 
                 if (!pageAnnotation.name().equals(defaultPageName))

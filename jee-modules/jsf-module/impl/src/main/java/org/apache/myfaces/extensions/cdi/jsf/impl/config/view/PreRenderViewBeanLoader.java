@@ -18,11 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -41,16 +41,16 @@ public class PreRenderViewBeanLoader
     {
         String viewId = event.getFacesContext().getViewRoot().getViewId();
 
-        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
 
         if(viewDefinitionEntry == null)
         {
             return;
         }
 
-        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getPageBeanDefinitions();
+        List<PageBeanDescriptor> beanEntries = viewDefinitionEntry.getPageBeanConfigs();
 
-        for(PageBeanConfigEntry beanEntry : beanEntries)
+        for(PageBeanDescriptor beanEntry : beanEntries)
         {
             //resolve bean to trigger @PostConstruct if it isn't scoped
             CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanManager, beanEntry.getBeanName(), Object.class);

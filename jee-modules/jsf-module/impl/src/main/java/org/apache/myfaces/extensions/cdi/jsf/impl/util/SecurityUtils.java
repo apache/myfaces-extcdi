@@ -24,10 +24,11 @@ import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByClass;
+
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 
 import javax.faces.context.FacesContext;
@@ -78,11 +79,11 @@ public abstract class SecurityUtils
 
         if(errorView == null)
         {
-            ViewConfigEntry errorPageEntry = ViewConfigCache.getDefaultErrorView();
+            ViewConfigDescriptor errorPageEntry = ViewConfigCache.getDefaultErrorView();
 
             if(errorPageEntry != null)
             {
-                errorView = errorPageEntry.getViewDefinitionClass();
+                errorView = errorPageEntry.getViewConfig();
             }
         }
 

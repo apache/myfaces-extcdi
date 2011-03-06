@@ -16,32 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
+package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
+
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-class InlineViewConfigEntry
+public interface ViewConfigResolver
 {
-    private final ViewConfigExtractor viewConfigExtractor;
-    private final Class<? extends ViewConfig> viewConfigDefinition;
+    ViewConfigDescriptor getViewConfig(String viewId);
 
-    InlineViewConfigEntry(ViewConfigExtractor viewConfigExtractor, Class<? extends ViewConfig> viewConfigDefinition)
-    {
-        this.viewConfigExtractor = viewConfigExtractor;
-        this.viewConfigDefinition = viewConfigDefinition;
-    }
+    ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
-    ViewConfigExtractor getViewConfigExtractor()
-    {
-        return viewConfigExtractor;
-    }
+    List<ViewConfigDescriptor> getViewConfigs();
 
-    Class<? extends ViewConfig> getViewConfigDefinition()
-    {
-        return viewConfigDefinition;
-    }
+    ViewConfigDescriptor getDefaultErrorViewConfig();
+
+    ViewConfigDescriptor getErrorViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

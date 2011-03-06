@@ -16,28 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
+package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
-import javax.faces.event.PhaseId;
-import java.lang.reflect.Method;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
+
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-public interface PageBeanConfigEntry
+public interface ViewConfigDescriptor
 {
-    Class getBeanClass();
+    String getViewId();
 
-    String getBeanName();
+    Class<? extends ViewConfig> getViewConfig();
 
-    List<Method> getInitViewMethods();
+    Page.NavigationMode getNavigationMode();
 
-    List<Method> getPrePageActionMethods();
+    List<Annotation> getMetaData();
 
-    List<Method> getPreRenderViewMethods();
+    List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters();
 
-    List<Method> getPostRenderViewMethods();
-
-    RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId);
+    List<PageBeanDescriptor> getPageBeanConfigs();
 }

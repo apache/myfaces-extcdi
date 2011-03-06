@@ -24,9 +24,11 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.invalidPhasesCallbackMethod;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageBeanConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.LifecycleAwarePageBeanDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
@@ -96,11 +98,11 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         //override the view-id if we have a new view
         this.windowContext.setAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, viewId);
 
-        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
 
-        if (viewDefinitionEntry != null)
+        if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
-            viewDefinitionEntry.invokeInitViewMethods();
+            ((EditableViewConfigDescriptor)viewDefinitionEntry).invokeInitViewMethods();
         }
     }
 
@@ -122,21 +124,21 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     private void processPreRenderView(String viewId)
     {
-        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
 
-        if (viewDefinitionEntry != null)
+        if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
-            viewDefinitionEntry.invokePreRenderViewMethods();
+            ((EditableViewConfigDescriptor)viewDefinitionEntry).invokePreRenderViewMethods();
         }
     }
 
     private void processPostRenderView(String viewId)
     {
-        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
 
-        if (viewDefinitionEntry != null)
+        if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
-            viewDefinitionEntry.invokePostRenderViewMethods();
+            ((EditableViewConfigDescriptor)viewDefinitionEntry).invokePostRenderViewMethods();
         }
     }
 
@@ -156,28 +158,33 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
         String viewId = viewRoot.getViewId();
 
-        ViewConfigEntry viewDefinitionEntry = ViewConfigCache.getViewDefinition(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
 
         if(viewDefinitionEntry == null)
         {
             return;
         }
 
-        List<PageBeanConfigEntry> beanEntries = viewDefinitionEntry.getPageBeanDefinitions();
+        List<PageBeanDescriptor> beanEntries = viewDefinitionEntry.getPageBeanConfigs();
 
         Object bean;
         RequestLifecycleCallbackEntry phasesLifecycleCallbackEntry;
         List<Method> lifecycleCallbacks;
 
-        for(PageBeanConfigEntry beanEntry : beanEntries)
+        for(PageBeanDescriptor beanEntry : beanEntries)
         {
-            phasesLifecycleCallbackEntry = beanEntry.getPhasesLifecycleCallback(phaseEvent.getPhaseId());
+            if(!(beanEntry instanceof LifecycleAwarePageBeanDescriptor))
+            {
+                continue;
+            }
+
+            phasesLifecycleCallbackEntry = ((LifecycleAwarePageBeanDescriptor)beanEntry)
+                    .getPhasesLifecycleCallback(phaseEvent.getPhaseId());
 
             if(phasesLifecycleCallbackEntry == null)
             {
                 continue;
             }
-
 
             if(beforePhase)
             {

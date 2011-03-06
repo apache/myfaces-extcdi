@@ -19,8 +19,9 @@
 package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestParameter;
 
@@ -55,9 +56,9 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
     {
         Map<String, Set<NavigationCase>> result = new HashMap<String, Set<NavigationCase>>();
 
-        Collection<ViewConfigEntry> viewConfigEntries = ViewConfigCache.getViewConfigEntries();
+        Collection<ViewConfigDescriptor> viewConfigDescriptors = ViewConfigCache.getViewConfigDescriptors();
 
-        if(!viewConfigEntries.isEmpty())
+        if(!viewConfigDescriptors.isEmpty())
         {
             Set<NavigationCase> navigationCase = new HashSet<NavigationCase>();
 
@@ -70,9 +71,16 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
 
             boolean includeParameters;
 
-            for(ViewConfigEntry entry : viewConfigEntries)
+            for(ViewConfigDescriptor entry : viewConfigDescriptors)
             {
-                includeParameters = Page.ViewParameter.INCLUDE.equals(entry.getViewParameter());
+                includeParameters = false;
+
+                if(entry instanceof EditableViewConfigDescriptor)
+                {
+                    includeParameters = Page.ViewParameterMode.INCLUDE
+                            .equals(((EditableViewConfigDescriptor) entry).getViewParameterMode());
+                }
+
                 navigationCase.add(new NavigationCase("*",
                                                       null,
                                                       null,

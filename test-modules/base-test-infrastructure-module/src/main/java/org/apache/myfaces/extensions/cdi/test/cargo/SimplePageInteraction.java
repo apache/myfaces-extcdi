@@ -235,7 +235,7 @@ public class SimplePageInteraction
 
     protected HtmlPage getPage(Class<? extends ViewConfig> pageDefinition)
     {
-        return getPage(ViewConfigCache.getViewDefinition(pageDefinition).getViewId());
+        return getPage(ViewConfigCache.getViewConfig(pageDefinition).getViewId());
     }
 
     protected HtmlPage getPage(String viewId)
@@ -298,7 +298,7 @@ public class SimplePageInteraction
         {
             return null;
         }
-        return ViewConfigCache.getViewDefinition(pageDefinition).getViewId();
+        return ViewConfigCache.getViewConfig(pageDefinition).getViewId();
     }
 
     protected String url(HtmlPage htmlPage)

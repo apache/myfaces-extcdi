@@ -20,7 +20,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 
 import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
@@ -48,12 +49,12 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
             return;
         }
         
-        ViewConfigEntry viewConfigEntry =
-                ViewConfigCache.getViewDefinition(FacesContext.getCurrentInstance().getViewRoot().getViewId());
+        ViewConfigDescriptor viewConfigDescriptor =
+                ViewConfigCache.getViewConfig(FacesContext.getCurrentInstance().getViewRoot().getViewId());
 
-        if(viewConfigEntry != null)
+        if(viewConfigDescriptor instanceof EditableViewConfigDescriptor)
         {
-            viewConfigEntry.invokePrePageActionMethods();
+            ((EditableViewConfigDescriptor)viewConfigDescriptor).invokePrePageActionMethods();
         }
 
         this.wrapped.processAction(actionEvent);

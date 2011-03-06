@@ -18,14 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import static org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigEntry;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.invokeVoters;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
@@ -77,7 +79,7 @@ public class SecurityViewListener
 
     private void checkPermission(BeanManager beanManager, FacesContext facesContext)
     {
-        ViewConfigEntry entry = ViewConfigCache.getViewDefinition(facesContext.getViewRoot().getViewId());
+        ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(facesContext.getViewRoot().getViewId());
 
         if(entry == null)
         {
@@ -86,7 +88,13 @@ public class SecurityViewListener
 
         try
         {
-            invokeVoters(null, beanManager, entry.getAccessDecisionVoters(), entry.getErrorView());
+            Class<? extends ViewConfig> errorView = null;
+
+            if(entry instanceof EditableViewConfigDescriptor)
+            {
+                errorView = ((EditableViewConfigDescriptor)entry).getErrorView();
+            }
+            invokeVoters(null, beanManager, entry.getAccessDecisionVoters(), errorView);
         }
         catch (AccessDeniedException accessDeniedException)
         {
