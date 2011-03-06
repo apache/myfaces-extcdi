@@ -20,12 +20,13 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigResolver
+public interface ViewConfigResolver extends Serializable
 {
     ViewConfigDescriptor getViewConfig(String viewId);
 

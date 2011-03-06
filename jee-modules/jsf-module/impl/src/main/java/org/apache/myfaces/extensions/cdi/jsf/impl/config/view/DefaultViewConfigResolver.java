@@ -33,6 +33,8 @@ import java.util.List;
 @ApplicationScoped
 public class DefaultViewConfigResolver implements ViewConfigResolver
 {
+    private static final long serialVersionUID = 5092196084535892957L;
+
     public ViewConfigDescriptor getViewConfig(String viewId)
     {
         return ViewConfigCache.getViewConfig(viewId);
