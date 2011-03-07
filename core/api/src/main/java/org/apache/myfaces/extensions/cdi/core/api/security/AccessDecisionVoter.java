@@ -26,7 +26,11 @@ import java.util.Set;
  * Interface for implementing concrete voters.
  * A voter has to add an instance of
  * {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation} to the given result-set,
- * if a restriction is detected.
+ * if a restriction is detected.<p/>
+ * A voter has to be used in combination with {@link Secured}.<p/>
+ * A voter can use every scope which is active. It's recommended to use
+ * {@link javax.enterprise.context.ApplicationScoped} for stateless voters and e.g.
+ * {@link javax.enterprise.context.RequestScoped} otherwise.
  * 
  * @author Gerhard Petracek
  */

@@ -80,13 +80,14 @@ public class BeanManagerProvider implements Extension
 
 
     /**
-     * @return The {@link BeanManager}
+     * The active {@link BeanManager} for the current {@link ClassLoader}
+     * @return the current bean-manager
      */
     public BeanManager getBeanManager()
     {
-        ClassLoader cl = ClassUtils.getClassLoader(null);
+        ClassLoader classLoader = ClassUtils.getClassLoader(null);
 
-        BeanManager result = bms.get(cl);
+        BeanManager result = bms.get(classLoader);
 
         if (result == null)
         {
@@ -94,7 +95,7 @@ public class BeanManagerProvider implements Extension
 
             if(result != null)
             {
-                bms.put(cl, result);
+                bms.put(classLoader, result);
             }
         }
         return result;
@@ -125,10 +126,10 @@ public class BeanManagerProvider implements Extension
     /**
      * It basiscally doesn't matter which of the system events we use,
      * but basically we
-     * @param abd event which we don't actually use ;)
+     * @param afterBeanDiscovery event which we don't actually use ;)
      * @param beanManager the BeanManager we store and make available.
      */
-    public void setBeanManager(@Observes AfterBeanDiscovery abd, BeanManager beanManager)
+    public void setBeanManager(@Observes AfterBeanDiscovery afterBeanDiscovery, BeanManager beanManager)
     {
         BeanManagerProvider bmpFirst = setBeanManagerProvider(this);
 
@@ -141,13 +142,14 @@ public class BeanManagerProvider implements Extension
     /**
      * This function exists to prevent findbugs to complain about
      * setting a static member from a non-static function.
-     * @return the first BeanManagerProvider 
+     * @param beanManagerProvider the bean-manager-provider which should be used if there isn't an existing provider
+     * @return the first BeanManagerProvider
      */
-    private static BeanManagerProvider setBeanManagerProvider(BeanManagerProvider bmpIn)
+    private static BeanManagerProvider setBeanManagerProvider(BeanManagerProvider beanManagerProvider)
     {
         if (bmp == null)
         {
-            bmp = bmpIn;
+            bmp = beanManagerProvider;
         }
 
         return bmp;

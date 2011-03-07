@@ -37,9 +37,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
-@NormalScope(passivating=true)
 @Inherited
 @Documented
+
+//cdi annotations
+@NormalScope(passivating=true)
 public @interface ConversationScoped
 {
 }

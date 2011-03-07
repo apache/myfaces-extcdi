@@ -21,9 +21,16 @@ package org.apache.myfaces.extensions.cdi.core.api.navigation;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
+ * Allows to trigger navigation via the type-safe {@link ViewConfig} approach.
+ *
  * @author Gerhard Petracek
  */
 public interface ViewNavigationHandler
 {
+    /**
+     * Triggers navigation to the given view.
+     *
+     * @param targetView the view which is the navigation target
+     */
     void navigateTo(Class<? extends ViewConfig> targetView);
 }

@@ -46,7 +46,7 @@ public @interface ProjectStageActivated
     /**
      * The {@link ProjectStage}s the which lead to activating this alternative bean.
      * If the current ProjectStage is not in this list, the bean will get vetoed.
+     * @return 1-n project-stages which are allowed for the annotated artifact
      */
     Class<? extends ProjectStage>[] value();
-
 }

@@ -27,6 +27,7 @@ import java.util.logging.LogRecord;
 
 /**
  * Meta-logger for injecting a serializable logger.
+ * Have a look at the java-doc of {@link java.util.logging.Logger}
  *
  * @author Gerhard Petracek
  */

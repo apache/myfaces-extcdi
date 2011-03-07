@@ -24,6 +24,8 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
+ * Configuration for CODI conversations - it's customizable via the @Alternative or @Specializes mechanism of CDI.
+ *
  * @author Gerhard Petracek
  */
 @ApplicationScoped
@@ -50,31 +52,73 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      * event config
      */
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isScopeBeanEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isAccessBeanEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isUnscopeBeanEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.StartConversationEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isStartConversationEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseConversationEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isCloseConversationEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.RestartConversationEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isRestartConversationEventEnabled()
     {
         return false;

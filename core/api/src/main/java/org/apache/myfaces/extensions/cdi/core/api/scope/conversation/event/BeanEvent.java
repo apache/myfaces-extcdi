@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 import java.io.Serializable;
 
 /**
+ * Base class for all events related to beans.
+ *
  * @author Gerhard Petracek
  */
 public abstract class BeanEvent
@@ -32,6 +34,10 @@ public abstract class BeanEvent
         this.bean = bean;
     }
 
+    /**
+     * The current bean instance
+     * @return the current bean instance
+     */
     public final Serializable getBeanInstance()
     {
         return bean;

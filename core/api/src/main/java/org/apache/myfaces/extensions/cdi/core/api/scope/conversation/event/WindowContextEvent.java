@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 /**
+ * Base class for all events related to {@link WindowContext}.
+ *
  * @author Gerhard Petracek
  */
 public abstract class WindowContextEvent
@@ -32,6 +34,10 @@ public abstract class WindowContextEvent
         this.windowContext = windowContext;
     }
 
+    /**
+     * The current {@link WindowContext}
+     * @return the current window-context
+     */
     public final WindowContext getWindowContext()
     {
         return windowContext;

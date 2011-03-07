@@ -39,13 +39,21 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RUNTIME)
 @Documented
 
+//cdi annotations
 @Qualifier
 public @interface BeanValidation
 {
+    /**
+     * Enum which specifies the current artifact-type
+     */
     public enum ArtifactType
     {
         ValidatorFactory, Validator, ConstraintValidatorFactory, MessageInterpolator, TraversableResolver
     }
 
+    /**
+     * Details of the qualifier
+     * @return type which allows different qualifiers with one annotation
+     */
     ArtifactType value() default ArtifactType.ValidatorFactory;
 }

@@ -31,18 +31,49 @@ import java.lang.annotation.Target;
  * Allows to restrict e.g. phase-listener methods to specific views.
  * Use an existing view-config OR ManualView.class + the view-id string/s.
  *
+ * Furthermore it's possible to use it at the class-level for configuring page-controllers
+ * (as an alternative to specifying the (page-)bean in the view-config).
+ * That means e.g.
+ *
+ * \@View(DemoPages.Page1.class)
+ * //...
+ * public class PageBean1 implements Serializable
+ * {
+ *     \@PreRenderView
+ *     protected void preRenderView()
+ *     {
+ *         //...
+ *     }
+ *
+ *     //...
+ * }
+ *
+ * leads to the invocation of the pre-render-view logic before page1 gets rendered and
+ * it won't be called for other pages.
+ *
  * @author Gerhard Petracek
  */
 
-@InterceptorBinding
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
+
+//cdi annotations
+@InterceptorBinding
 public @interface View
 {
+    /**
+     * Specifies the pages via type-safe {@link ViewConfig}.
+     * Use {@link ManualView} if it is required to use strings as view-id.
+     * @return views which should be aware of the bean or observer
+     */
     @Nonbinding
     Class<? extends ViewConfig>[] value();
 
+    /**
+     * Alternative to #value in order to use hardcoded strings instead of type-safe view-configs.
+     * @return views which should be aware of the bean or observer
+     */
     @Nonbinding
     String[] inline() default "";
 }

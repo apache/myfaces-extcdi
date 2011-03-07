@@ -29,6 +29,8 @@ import java.util.HashMap;
  */
 public abstract class AbstractAttributeAware implements AttributeAware
 {
+    private static final long serialVersionUID = 7845412079015046108L;
+
     private Map<String, Object> configAttributes;
 
     public boolean setAttribute(String name, Object value)

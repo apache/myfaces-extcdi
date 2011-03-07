@@ -50,6 +50,12 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
     private static volatile Map<ClassLoader, Map<String, Annotation>> annotationCache
             = new WeakHashMap<ClassLoader, Map<String, Annotation>>();
 
+    /**
+     * Creates an annotation instance for the given annotation class
+     * @param annotationClass type of the target annotation
+     * @param <T> current type
+     * @return annotation instance for the given type
+     */
     public static <T extends Annotation> T of(Class<T> annotationClass)
     {
         String key = annotationClass.getName();
@@ -123,6 +129,9 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         this.annotationClass = annotationClass;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object invoke(Object proxy, Method method, Object[] args) throws Exception
     {
         if ("hashCode".equals(method.getName()))
@@ -145,16 +154,19 @@ public class DefaultAnnotation implements Annotation, InvocationHandler, Seriali
         return method.getDefaultValue();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Annotation> annotationType()
     {
         return annotationClass;
     }
 
     /**
-     * Copied from javax.enterprise.util.AnnotationLiteral#toString()
+     * Copied from Apache OWB (javax.enterprise.util.AnnotationLiteral#toString())
      * with minor changes. 
      *
-     * @return
+     * @return the current state of the annotation as string
      */
     @Override
     public String toString()

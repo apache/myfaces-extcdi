@@ -19,11 +19,21 @@
 package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
+ * Allows to collect instances and create an aggregated instance for them.
+ *
  * @author Gerhard Petracek
  */
 public interface Aggregatable<T>
 {
+    /**
+     * Add an instance which should be aggregated with the existing instances
+     * @param t instance to add
+     */
     void add(T t);
 
+    /**
+     * Creates an aggregated instance for the added instances
+     * @return instance which aggregates the added instances
+     */
     T create();
 }

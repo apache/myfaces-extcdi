@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
+ * Base class for all events related to conversations.
+ *
  * @author Gerhard Petracek
  */
 public abstract class ConversationEvent
@@ -32,6 +34,10 @@ public abstract class ConversationEvent
         this.conversation = conversation;
     }
 
+    /**
+     * The current {@link Conversation}
+     * @return the current conversation
+     */
     public final Conversation getConversation()
     {
         return conversation;

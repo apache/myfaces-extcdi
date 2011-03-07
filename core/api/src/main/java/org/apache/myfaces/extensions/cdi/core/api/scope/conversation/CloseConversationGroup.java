@@ -34,18 +34,28 @@ import static java.lang.annotation.ElementType.METHOD;
  * 
  * @author Gerhard Petracek
  */
-@InterceptorBinding
-
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
 
 @Inherited
 @Documented
+
+//cdi annotations
+@InterceptorBinding
 public @interface CloseConversationGroup
 {
+    /**
+     * Specifies which exception (type) will trigger the termination of the current conversation.
+     * @return exception which should trigger the termination of the current conversation.
+     */
     @Nonbinding
     Class<? extends RuntimeException> on() default RuntimeException.class;
 
+    /**
+     * Specifies the conversation-group (specified implicitly or via {@link ConversationGroup})
+     * which should be terminated.
+     * @return group of the conversation which should be terminated
+     */
     @Nonbinding
     Class<?> group() default CloseConversationGroup.class;
 }

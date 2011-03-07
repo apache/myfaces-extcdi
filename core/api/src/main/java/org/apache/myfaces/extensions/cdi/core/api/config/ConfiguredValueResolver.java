@@ -30,5 +30,14 @@ import java.util.List;
  */
 public interface ConfiguredValueResolver extends Deactivatable
 {
+    /**
+     * Resolves 0-n instances configured for the given key of the type which is provided via the
+     * {@link ConfiguredValueDescriptor}.
+     *
+     * @param descriptor given descriptor for the configured-value
+     * @param <K> type of the key
+     * @param <T> type of the configured value
+     * @return all configured values for the given descriptor
+     */
     <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor);
 }

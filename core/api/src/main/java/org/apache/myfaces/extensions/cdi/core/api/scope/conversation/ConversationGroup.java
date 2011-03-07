@@ -38,15 +38,20 @@ import static java.lang.annotation.ElementType.CONSTRUCTOR;
  * it's possible to use this special qualifier for grouping such beans.
  *
  * Operations like {@link Conversation#close()} will be performed on the whole group.
- * 
+ *
  * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)
 @Documented
 
+//cdi annotations
 @Qualifier
 public @interface ConversationGroup
 {
+    /**
+     * Class or interface which should be used as type-safe key for identifying the conversation-group.
+     * @return class or interface which should be used as key
+     */
     Class<?> value();
 }

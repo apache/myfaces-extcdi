@@ -78,7 +78,7 @@ import java.util.logging.Logger;
  * </pre>
  * which contains the fully qualified class name of custom ProjectStageHolder implementation:
  * <pre>
- * # this class now get's picked up by java.util.ServiceLoader
+ * # this class now gets picked up by java.util.ServiceLoader
  * org.apache.myfaces.extensions.cdi.core.test.api.projectstage.MyProjectStages
  * </pre>
  * </p>

@@ -27,7 +27,13 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
  */
 public interface CodiInformation
 {
+    /**
+     * Current version of CODI
+     */
     String VERSION = ClassUtils.getJarVersion(CodiInformation.class);
 
+    /**
+     * VCS revision which is used to build this version (used for snapshots)
+     */
     String REVISION = ClassUtils.getRevision(CodiInformation.class);
 }

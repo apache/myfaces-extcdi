@@ -24,6 +24,9 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
+ * Configuration for the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+ * - it's customizable via the @Alternative or @Specializes mechanism of CDI.
+ *
  * @author Gerhard Petracek
  */
 @ApplicationScoped
@@ -64,6 +67,7 @@ public class WindowContextConfig extends AbstractAttributeAware implements CodiC
     /**
      * if set to <code>true</code> CODI will add a windowId=xxx parameter
      * while encoding each action URL.
+     * @return true if the window-id should be added, false otherwise
      */
     @Deprecated
     public boolean isAddWindowIdToActionUrlsEnabled()
@@ -117,11 +121,25 @@ public class WindowContextConfig extends AbstractAttributeAware implements CodiC
      * event config
      */
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CreateWindowContextEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isCreateWindowContextEventEnabled()
     {
         return false;
     }
 
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent}
+     * will be fired.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
     public boolean isCloseWindowContextEventEnabled()
     {
         return false;

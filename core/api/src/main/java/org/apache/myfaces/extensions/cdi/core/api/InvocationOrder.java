@@ -35,5 +35,9 @@ import static java.lang.annotation.ElementType.TYPE;
 @Documented
 public @interface InvocationOrder
 {
+    /**
+     * Specifies the slot for the class annotated class
+     * @return the position number
+     */
     int value() default 1000;
 }

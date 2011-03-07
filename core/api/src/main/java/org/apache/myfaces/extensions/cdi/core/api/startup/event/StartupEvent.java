@@ -22,9 +22,15 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
+ * Event which will be fired during the startup-process as soon as the target environment is up and running.
+ *
  * @author Gerhard Petracek
  */
 public interface StartupEvent
 {
+    /**
+     * Configuration parameters of the current application
+     * @return basic configuration of the current application
+     */
     Map<String, Serializable> getApplicationParameters();
 }

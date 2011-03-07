@@ -36,15 +36,28 @@ import static java.lang.annotation.ElementType.METHOD;
  * 
  * @author Gerhard Petracek
  */
-@InterceptorBinding
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)
 @Documented
+
+//cdi annotations
+@InterceptorBinding
 public @interface Secured
 {
+    /**
+     * {@link AccessDecisionVoter}s which will be invoked before accessing the intercepted instance or in case of
+     * view-configs before a view gets used.
+     *
+     * @return the configured access-decision-voters which should be used for the voting process
+     */
     @Nonbinding
     Class<? extends AccessDecisionVoter>[] value();
 
+    /**
+     * Optional inline error-view if it is required to show an error-page
+     * which is different from the default error page.
+     * @return type-safe view-config of the page which should be used as error-view
+     */
     @Nonbinding
     Class<? extends ViewConfig> errorView() default DefaultErrorView.class;
 }

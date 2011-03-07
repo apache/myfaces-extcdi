@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 import java.util.Set;
@@ -41,13 +42,23 @@ public class AccessDeniedException extends SecurityException
         this.errorView = errorView;
     }
 
+    /**
+     * All {@link SecurityViolation} which were found by a {@link AccessDecisionVoter}
+     *
+     * @return all security-violations
+     */
     public Set<SecurityViolation> getViolations()
     {
         return violations;
     }
 
+    /**
+     * Optional page which should be used as error-page
+     * @return type-safe view-config which is mapped to an error-view.
+     * Returning null would force the navigation to the default error-view.
+     */
     public Class<? extends ViewConfig> getErrorView()
     {
-        return errorView;
+        return this.errorView != null ? this.errorView : DefaultErrorView.class;
     }
 }

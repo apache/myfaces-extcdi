@@ -19,9 +19,18 @@
 package org.apache.myfaces.extensions.cdi.core.api.startup.event;
 
 /**
+ * Broadcasters which implement this interface don't use CDI concepts and have to be configured via the
+ * {@link java.util.ServiceLoader} approach for broadcasting the startup of CODI which might happen before the CDI
+ * container is up and running. E.g. add-ons like the controlled bootstrapping add-on can implement this interface
+ * in order to force the bootstrapping of the CDI container before CODI continues with the startup process.
+ * Further details are available at {@link org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster}
+ *
  * @author Gerhard Petracek
  */
 public interface StartupEventBroadcaster
 {
+    /**
+     * Allows to trigger any custom mechanism during the bootstrapping process.
+     */
     void broadcastStartup();
 }

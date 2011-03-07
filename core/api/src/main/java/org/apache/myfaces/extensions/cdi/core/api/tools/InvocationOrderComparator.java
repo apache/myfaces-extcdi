@@ -24,12 +24,17 @@ import java.util.Comparator;
 import java.io.Serializable;
 
 /**
+ * {@link Comparator} which allows to sort artifacts based on {@link InvocationOrder}
+ *
  * @author Gerhard Petracek
  */
 public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
 {
     private static final long serialVersionUID = -7492852803631628400L;
 
+    /**
+     * {@inheritDoc}
+     */
     public int compare(T t1, T t2)
     {
         if (hasPriority(t1) && hasPriority(t2))

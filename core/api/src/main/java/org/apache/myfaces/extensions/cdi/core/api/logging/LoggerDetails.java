@@ -28,11 +28,15 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Optional qualifier which allows to control the creation of the {@link java.util.logging.Logger}
+ *
  * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD})
 @Retention(RUNTIME)
 @Documented
+
+//cdi annotations
 @Qualifier
 public @interface LoggerDetails
 {

@@ -37,6 +37,7 @@ import static java.lang.annotation.ElementType.*;
 @Retention(RUNTIME)
 @Documented
 
+//cdi annotations
 @Qualifier
 public @interface Advanced
 {

@@ -119,7 +119,7 @@ public class PhaseListenerExtension implements Extension
 
     private static PhaseListener createPhaseListenerInstance(Class<? extends PhaseListener> phaseListenerClass)
     {
-        return ClassUtils.tryToInstantiateClass(phaseListenerClass, PhaseListener.class);
+        return ClassUtils.tryToInstantiateClass(phaseListenerClass);
     }
 
     private static ClassLoader getClassLoader()

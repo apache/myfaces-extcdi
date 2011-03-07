@@ -35,5 +35,4 @@ public interface CoreModuleBeanNames extends BeanNames
      * Useful for EL-Expressions e.g. to call #useNewId or a property of the current window
      */
     String CURRENT_WINDOW_BEAN_NAME = "currentWindow";
-
 }

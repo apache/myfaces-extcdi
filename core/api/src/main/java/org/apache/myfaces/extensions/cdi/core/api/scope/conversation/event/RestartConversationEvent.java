@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
+ * Event which gets fired directly before a conversation gets restarted.<p/>
+ * Attention: It's deactivated per default.
+ *
  * @author Gerhard Petracek
  */
 public final class RestartConversationEvent extends ConversationEvent

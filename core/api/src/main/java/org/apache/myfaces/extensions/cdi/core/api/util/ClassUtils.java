@@ -26,6 +26,8 @@ import java.util.jar.Attributes;
 import java.net.URL;
 
 /**
+ * Util methods for classes, {@link ClassLoader} and {@link Manifest} handling
+ *
  * @author Gerhard Petracek
  */
 @Typed()
@@ -79,11 +81,23 @@ public abstract class ClassUtils
         return loader;
     }
 
+    /**
+     * Tries to load a class based on the given name and interface or abstract class.
+     * @param name name of the concrete class
+     * @param targetType target type (interface or abstract class)
+     * @param <T> current type
+     * @return loaded class or null if it isn't in the classpath
+     */
     public static <T> Class<T> tryToLoadClassForName(String name, Class<T> targetType)
     {
         return (Class<T>) tryToLoadClassForName(name);
     }
 
+    /**
+     * Tries to load a class based on the given name
+     * @param name name of the class
+     * @return loaded class or null if it isn't in the classpath
+     */
     public static Class tryToLoadClassForName(String name)
     {
         try
@@ -97,6 +111,12 @@ public abstract class ClassUtils
         }
     }
 
+    /**
+     * Loads class for the given name
+     * @param name name of the class
+     * @return loaded class
+     * @throws ClassNotFoundException if the class can't be loaded
+     */
     public static Class loadClassForName(String name) throws ClassNotFoundException
     {
         try
@@ -113,6 +133,12 @@ public abstract class ClassUtils
         }
     }
 
+    /**
+     * Instantiates a given class via the default constructor
+     * @param targetClass class which should be instantiated
+     * @param <T> current type
+     * @return created instance or null if the instantiation failed
+     */
     public static <T> T tryToInstantiateClass(Class<T> targetClass)
     {
         try
@@ -126,19 +152,13 @@ public abstract class ClassUtils
         return null;
     }
 
-    public static <T> T tryToInstantiateClass(Class targetClass, Class<T> type)
-    {
-        try
-        {
-            return (T) targetClass.newInstance();
-        }
-        catch (Exception e)
-        {
-            //do nothing - it was just a try
-        }
-        return null;
-    }
-
+    /**
+     * Tries to instantiate a class for the given name and type via the default constructor
+     * @param className name of the class
+     * @param targetType target type
+     * @param <T> current type
+     * @return created instance or null if the instantiation failed
+     */
     public static <T> T tryToInstantiateClassForName(String className, Class<T> targetType)
     {
         Object result = tryToInstantiateClassForName(className);
@@ -147,6 +167,11 @@ public abstract class ClassUtils
         return result != null ? (T) result : null;
     }
 
+    /**
+     * Tries to instantiate a class for the given name via the default constructor
+     * @param className name of the class
+     * @return created instance or null if the instantiation failed
+     */
     public static Object tryToInstantiateClassForName(String className)
     {
         try
@@ -160,12 +185,25 @@ public abstract class ClassUtils
         return null;
     }
 
+    /**
+     * Creates an instance for the given class-name
+     * @param className name of the class which should be instantiated
+     * @return created instance
+     * @throws ClassNotFoundException if the instantiation failed
+     * @throws IllegalAccessException if the instantiation failed
+     * @throws InstantiationException if the instantiation failed
+     */
     public static Object instantiateClassForName(String className)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException
     {
         return loadClassForName(className).newInstance();
     }
 
+    /**
+     * Reads the version of the jar which contains the given class
+     * @param targetClass class within the jar
+     * @return version-string which has been found in the manifest or null if there is no version information available
+     */
     public static String getJarVersion(Class targetClass)
     {
         String manifestFileLocation = getManifestLocation(targetClass);
@@ -181,6 +219,11 @@ public abstract class ClassUtils
         }
     }
 
+    /**
+     * Reads the VCS revision which was used for creating the jar
+     * @param targetClass class within the jar
+     * @return revision-string which has been found in the manifest or null if there is no information available
+     */
     public static String getRevision(Class targetClass)
     {
         String manifestFileLocation = getManifestLocation(targetClass);

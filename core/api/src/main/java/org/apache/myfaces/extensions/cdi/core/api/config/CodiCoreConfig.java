@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.config;
 import javax.enterprise.context.ApplicationScoped;
 
 /**
+ * Configuration for the core of CODI - it's customizable via the @Alternative or @Specializes mechanism of CDI.
+ *
  * @author Gerhard Petracek
  */
 @ApplicationScoped
@@ -32,11 +34,22 @@ public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
     {
     }
 
+    /**
+     * Per default several artifacts which aren't managed by CDI have to be annotated
+     * with {@link org.apache.myfaces.extensions.cdi.core.api.Advanced} as marker for
+     * performing manual dependency injection. It isn't performed per default because the
+     * majority of those artifacts don't require dependency injection.
+     * @return true if the usage of {@link org.apache.myfaces.extensions.cdi.core.api.Advanced}, false otherwise
+     */
     public boolean isAdvancedQualifierRequiredForDependencyInjection()
     {
         return true;
     }
 
+    /**
+     * Allows to disable the logging of the current configuration during the bootstrapping process.
+     * @return true if the configuration should be logged, false otherwise
+     */
     public boolean isConfigurationLoggingEnabled()
     {
         return true;

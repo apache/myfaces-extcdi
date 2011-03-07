@@ -21,6 +21,9 @@ package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 
 /**
+ * Event which gets fired directly before the current {@link WindowContext} gets closed.<p/>
+ * Attention: It's deactivated per default.
+ *
  * @author Gerhard Petracek
  */
 public final class CloseWindowContextEvent extends WindowContextEvent
