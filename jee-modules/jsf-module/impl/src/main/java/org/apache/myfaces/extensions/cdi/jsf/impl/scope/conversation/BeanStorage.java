@@ -46,7 +46,7 @@ class BeanStorage implements Serializable
     private ConcurrentHashMap<Class, BeanEntry<Serializable>> beanMap =
             new ConcurrentHashMap<Class, BeanEntry<Serializable>>();
 
-    public BeanStorage(BeanManager beanManager)
+    BeanStorage(BeanManager beanManager)
     {
         this.beanManager = beanManager;
     }

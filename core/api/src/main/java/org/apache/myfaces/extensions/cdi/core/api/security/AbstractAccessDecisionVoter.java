@@ -29,6 +29,8 @@ import java.util.HashSet;
  */
 public abstract class AbstractAccessDecisionVoter implements AccessDecisionVoter
 {
+    private static final long serialVersionUID = -9145021044568668681L;
+
     /**
      * It should be final - but proxy-libs won't support it.
      *

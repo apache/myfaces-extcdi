@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
 import javax.interceptor.InvocationContext;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -29,7 +30,7 @@ import java.util.Set;
  * 
  * @author Gerhard Petracek
  */
-public interface AccessDecisionVoter
+public interface AccessDecisionVoter extends Serializable
 {
     /**
      * Checks the permission for the given {@link javax.interceptor.InvocationContext}.
