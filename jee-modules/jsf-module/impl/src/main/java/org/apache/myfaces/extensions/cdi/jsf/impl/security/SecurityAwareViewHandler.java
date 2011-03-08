@@ -71,6 +71,11 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
             return result;
         }
 
+        UIViewRoot originalViewRoot = context.getViewRoot();
+
+        //we have to use it as current view if an AccessDecisionVoter uses the JSF API to check access to the view-id
+        context.setViewRoot(result);
+
         try
         {
             ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(result.getViewId());
@@ -86,13 +91,20 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
                     errorView = ((EditableViewConfigDescriptor)entry).getErrorView();
                 }
 
-                invokeVoters(null, this.beanManager, entry.getAccessDecisionVoters(), errorView);
+                invokeVoters(null /*TODO*/, this.beanManager, entry.getAccessDecisionVoters(), errorView);
             }
         }
         catch (AccessDeniedException accessDeniedException)
         {
             Class<? extends ViewConfig> errorView = SecurityUtils.getErrorView(accessDeniedException);
             return this.wrapped.createView(context, ViewConfigCache.getViewConfig(errorView).getViewId());
+        }
+        finally
+        {
+            if(originalViewRoot != null)
+            {
+                context.setViewRoot(originalViewRoot);
+            }
         }
 
         return result;
