@@ -96,7 +96,9 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
         }
         catch (AccessDeniedException accessDeniedException)
         {
-            Class<? extends ViewConfig> errorView = SecurityUtils.getErrorView(accessDeniedException);
+            Class<? extends ViewConfig> errorView =
+                    SecurityUtils.handleSecurityViolationWithoutNavigation(accessDeniedException);
+
             return this.wrapped.createView(context, ViewConfigCache.getViewConfig(errorView).getViewId());
         }
         finally

@@ -48,7 +48,8 @@ public abstract class SecurityUtils
         // prevent instantiation
     }
 
-    public static Class<? extends ViewConfig> getErrorView(RuntimeException runtimeException)
+    public static Class<? extends ViewConfig> handleSecurityViolationWithoutNavigation(
+            RuntimeException runtimeException)
     {
         return tryToHandleSecurityViolation(runtimeException, false);
     }
@@ -92,10 +93,7 @@ public abstract class SecurityUtils
             throw exception;
         }
 
-        if(allowNavigation)
-        {
-            processApplicationSecurityException(exception, errorView);
-        }
+        processApplicationSecurityException(exception, errorView, allowNavigation);
         return errorView;
     }
 
@@ -115,14 +113,18 @@ public abstract class SecurityUtils
     }
 
     private static void processApplicationSecurityException(AccessDeniedException exception,
-                                                     Class<? extends ViewConfig> errorPage)
+                                                            Class<? extends ViewConfig> errorPage,
+                                                            boolean allowNavigation)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
         addViolationsAsMessage(exception.getViolations());
 
-        facesContext.getApplication().getNavigationHandler()
-                .handleNavigation(facesContext, null, errorPage.getName());
+        if(allowNavigation)
+        {
+            facesContext.getApplication().getNavigationHandler()
+                    .handleNavigation(facesContext, null, errorPage.getName());
+        }
     }
 
     private static void addViolationsAsMessage(Set<SecurityViolation> violations)
