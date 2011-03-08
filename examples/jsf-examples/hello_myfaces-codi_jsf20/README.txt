@@ -20,6 +20,23 @@
 Start the demo e.g. via:
 mvn clean jetty:run-exploded -PjettyConfig -Dmaven.test.skip=true
 
+this example also demonstrates cargo tests -> if a codi snapshot is build manuelly use (in the root of the project):
+mvn clean install -Pextended-manifest -Ptest-infrastructure
+
+
+
+build commands for this example:
+
+build example with owb + myfaces-core2
+mvn clean install
+
+build example with owb + mojarra
+mvn clean install -Denvironment=owb-mojarra
+
+build example for a jee6 application server
+mvn clean install -Denvironment=jee6
+
+
 Only open and start this example outside of the rest of the project. That's required due to the missing shade support.
 
 For remote debugging:
