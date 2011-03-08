@@ -38,15 +38,23 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -4351903831660165998L;
 
+    private static final String BEAN_NAME = "jsfRequestLifecycleBroadcaster";
+
     //all implementations will be serializable
     @Inject
     private BeanManager beanManager;
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforePhase(PhaseEvent phaseEvent)
     {
         resolveBroadcaster().broadcastBeforeEvent(phaseEvent);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterPhase(PhaseEvent phaseEvent)
     {
         resolveBroadcaster().broadcastAfterEvent(phaseEvent);
@@ -55,10 +63,13 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
     private JsfRequestLifecycleBroadcaster resolveBroadcaster()
     {
         //cdi has to inject the event
-        return getOrCreateScopedInstanceOfBeanByName(this.beanManager,
-                JsfRequestLifecycleBroadcaster.BEAN_NAME, JsfRequestLifecycleBroadcaster.class);
+        return getOrCreateScopedInstanceOfBeanByName(
+                this.beanManager, BEAN_NAME, JsfRequestLifecycleBroadcaster.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public PhaseId getPhaseId()
     {
         return PhaseId.ANY_PHASE;

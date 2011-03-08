@@ -110,30 +110,47 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
         return parameters;
     }
 
+    /**
+     * @return the final size (might be a combination of the configured navigation cases (via XML) and the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig}s
+     */
     public int size()
     {
         return this.wrappedNavigationCaseMap.size() +
                 this.viewConfigBasedNavigationCaseCache.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isEmpty()
     {
         return this.wrappedNavigationCaseMap.isEmpty() &&
                 this.viewConfigBasedNavigationCaseCache.isEmpty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean containsKey(Object key)
     {
         return this.wrappedNavigationCaseMap.containsKey(key) ||
                 this.viewConfigBasedNavigationCaseCache.containsKey(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean containsValue(Object value)
     {
         return this.wrappedNavigationCaseMap.containsValue(value) ||
                 this.viewConfigBasedNavigationCaseCache.containsValue(value);
     }
 
+    /**
+     * XML configuration overrules {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig}s
+     * {@inheritDoc}
+     */
     public Set<NavigationCase> get(Object key)
     {
         Set<NavigationCase> result = this.wrappedNavigationCaseMap.get(key);
@@ -145,26 +162,42 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<NavigationCase> put(String key, Set<NavigationCase> value)
     {
         return this.wrappedNavigationCaseMap.put(key, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<NavigationCase> remove(Object key)
     {
         return this.wrappedNavigationCaseMap.remove(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void putAll(Map<? extends String, ? extends Set<NavigationCase>> m)
     {
         this.wrappedNavigationCaseMap.putAll(m);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void clear()
     {
         this.wrappedNavigationCaseMap.clear();
     }
 
+    /**
+     * @return a combination of navigation-cases configured via XML and
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig}s
+     */
     public Set<String> keySet()
     {
         Set<String> result = new HashSet<String>();
@@ -173,6 +206,10 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
         return result;
     }
 
+    /**
+     * @return a combination of navigation-cases configured via XML and
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig}s
+     */
     public Collection<Set<NavigationCase>> values()
     {
         Collection<Set<NavigationCase>> result = new HashSet<Set<NavigationCase>>();
@@ -182,6 +219,10 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
         return result;
     }
 
+    /**
+     * @return a combination of navigation-cases configured via XML and
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig}s
+     */
     public Set<Entry<String, Set<NavigationCase>>> entrySet()
     {
         Set<Entry<String, Set<NavigationCase>>> result = new HashSet<Entry<String, Set<NavigationCase>>>();

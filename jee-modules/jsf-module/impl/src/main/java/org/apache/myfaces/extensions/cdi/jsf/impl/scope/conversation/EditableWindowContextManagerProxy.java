@@ -93,66 +93,106 @@ public class EditableWindowContextManagerProxy implements EditableWindowContextM
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean activateWindowContext(String windowContextId)
     {
         return editableWindowContextManager.activateWindowContext(windowContextId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean activateWindowContext(EditableWindowContext windowContext)
     {
         return editableWindowContextManager.activateWindowContext(windowContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations()
     {
         editableWindowContextManager.restartConversations();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations(String windowContextId)
     {
         editableWindowContextManager.restartConversations(windowContextId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations(EditableWindowContext windowContext)
     {
         editableWindowContextManager.restartConversations(windowContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeCurrentWindowContext()
     {
         editableWindowContextManager.closeCurrentWindowContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeWindowContext(String windowContextId)
     {
         editableWindowContextManager.closeWindowContext(windowContextId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeWindowContext(EditableWindowContext windowContext)
     {
         editableWindowContextManager.closeWindowContext(windowContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Collection<EditableWindowContext> getWindowContexts()
     {
         return editableWindowContextManager.getWindowContexts();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeAllWindowContexts()
     {
         editableWindowContextManager.closeAllWindowContexts();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public WindowContext getCurrentWindowContext()
     {
         return editableWindowContextManager.getCurrentWindowContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public WindowContext getWindowContext(String windowContextId)
     {
         return editableWindowContextManager.getWindowContext(windowContextId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isWindowContextActive(String windowContextId)
     {
         return editableWindowContextManager.isWindowContextActive(windowContextId);

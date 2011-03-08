@@ -40,9 +40,9 @@ class Jsf2BeanWrapper implements AnnotatedType<Object>
     private Map<Class<? extends Annotation>, Annotation> annotations;
     private Set<Annotation> annotationSet; //TODO
 
-    public Jsf2BeanWrapper(AnnotatedType wrapped,
-                           Class<? extends Annotation> cdiScopeAnnotation,
-                           Class<? extends Annotation> jsf2ScopeAnnotation)
+    Jsf2BeanWrapper(AnnotatedType wrapped,
+                    Class<? extends Annotation> cdiScopeAnnotation,
+                    Class<? extends Annotation> jsf2ScopeAnnotation)
     {
         this.wrapped = wrapped;
         Set<Annotation> originalAnnotationSet = wrapped.getAnnotations();
@@ -67,46 +67,73 @@ class Jsf2BeanWrapper implements AnnotatedType<Object>
         this.annotationSet.addAll(this.annotations.values());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class getJavaClass()
     {
         return wrapped.getJavaClass();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set getConstructors()
     {
         return wrapped.getConstructors();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set getMethods()
     {
         return wrapped.getMethods();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set getFields()
     {
         return wrapped.getFields();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Type getBaseType()
     {
         return wrapped.getBaseType();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<Type> getTypeClosure()
     {
         return wrapped.getTypeClosure();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T extends Annotation> T getAnnotation(Class<T> targetClass)
     {
         return (T)this.annotations.get(targetClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<Annotation> getAnnotations()
     {
         return this.annotationSet;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isAnnotationPresent(Class<? extends Annotation> targetClass)
     {
         return this.annotations.containsKey(targetClass);

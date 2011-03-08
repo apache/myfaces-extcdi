@@ -52,36 +52,57 @@ public class InjectableConversation implements EditableConversation
         this.editableWindowContext = (EditableWindowContext) windowContextManager.getCurrentWindowContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void close()
     {
         findConversation().close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restart()
     {
         findConversation().restart();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActive()
     {
         return findConversation().isActive();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean getActiveState()
     {
         return findConversation().getActiveState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void deactivate()
     {
         findConversation().deactivate();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> void addBean(BeanEntry<T> beanInstance)
     {
         findConversation().addBean(beanInstance);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T getBean(Class<T> key)
     {
         return findConversation().getBean(key);

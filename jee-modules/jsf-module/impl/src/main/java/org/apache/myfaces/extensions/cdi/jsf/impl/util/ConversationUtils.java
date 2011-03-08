@@ -77,6 +77,11 @@ public abstract class ConversationUtils
         // prevent instantiation
     }
 
+    /**
+     * Calculates the conversation-group for a given {@link Bean}
+     * @param bean current bean
+     * @return class which represents the conversation-group
+     */
     public static Class getConversationGroup(Bean<?> bean)
     {
         Class<? extends Annotation> scopeType = bean.getScope();
@@ -112,6 +117,15 @@ public abstract class ConversationUtils
     }
 
     //TODO
+
+    /**
+     * Tries to resolve the window-id via {@link WindowHandler}, request-parameters, request-map, component
+     * @param windowHandler current window-handler
+     * @param requestParameterSupported flag which indicates if it is allowed to restore the id from the request-params
+     * @param allowUnknownWindowIds flag which indicates if it is allowed to use id's which haven't been created for
+     * the current user
+     * @return restored window-id, null otherwise
+     */
     public static String resolveWindowContextId(WindowHandler windowHandler,
                                                 boolean requestParameterSupported,
                                                 boolean allowUnknownWindowIds)
@@ -223,12 +237,21 @@ public abstract class ConversationUtils
         return (String) requestMap.get(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY);
     }
 
+    /**
+     * Stores the view-id of the current {@link FacesContext} as prev. view-id e.g. before a navigation occurs
+     * @param facesContext current faces-context
+     */
     public static void storeCurrentViewIdAsOldViewId(FacesContext facesContext
     /*TODO add window context as parameter and test it in combination with redirects*/)
     {
         storeCurrentViewIdAsOldViewId(facesContext, getWindowContextManager());
     }
 
+    /**
+     * Stores the view-id of the current {@link FacesContext} as prev. view-id e.g. before a navigation occurs
+     * @param facesContext current faces-context
+     * @param windowContextManager current window-context-manager
+     */
     public static void storeCurrentViewIdAsOldViewId(
             FacesContext facesContext, WindowContextManager windowContextManager)
     {
@@ -236,32 +259,60 @@ public abstract class ConversationUtils
         windowContextManager.getCurrentWindowContext().setAttribute(OLD_VIEW_ID_KEY, oldViewId);
     }
 
+    /**
+     * Stores the view-id of the current {@link FacesContext} as next view-id e.g. after a navigation occurred
+     * @param facesContext current faces-context
+     */
     public static void storeCurrentViewIdAsNewViewId(FacesContext facesContext)
     {
         storeCurrentViewIdAsNewViewId(facesContext, getWindowContextManager().getCurrentWindowContext());
     }
 
+    /**
+     * Stores the view-id of the current {@link FacesContext} as next view-id e.g. after a navigation occurred
+     * @param facesContext current faces-context
+     * @param windowContext current window-context
+     */
     public static void storeCurrentViewIdAsNewViewId(FacesContext facesContext, WindowContext windowContext)
     {
         String newViewId = facesContext.getViewRoot().getViewId();
         storeViewIdAsNewViewId(windowContext, newViewId);
     }
 
+    /**
+     * Stores the given view-id as next view-id e.g. after a navigation occurred
+     * @param windowContext current window-context
+     * @param newViewId next view-id
+     */
     public static void storeViewIdAsNewViewId(WindowContext windowContext, String newViewId)
     {
         windowContext.setAttribute(NEW_VIEW_ID_KEY, newViewId);
     }
 
+    /**
+     * Exposes the prev. view-id.
+     * @return prev. view-id
+     */
     public static String getOldViewId()
     {
         return getWindowContextManager().getCurrentWindowContext().getAttribute(OLD_VIEW_ID_KEY, String.class);
     }
 
+    /**
+     * Exposes the next view-id.
+     * @return next view-id
+     */
     public static String getNewViewId()
     {
         return getWindowContextManager().getCurrentWindowContext().getAttribute(NEW_VIEW_ID_KEY, String.class);
     }
 
+    /**
+     * Resolves {@link WindowContextIdHolderComponent} which is responsible for storing the window-id in case of a
+     * server-side window-handler.
+     * @param facesContext current faces-context
+     * @return window-id holder which has been found, null otherwise
+     */
     public static WindowContextIdHolderComponent getWindowContextIdHolderComponent(FacesContext facesContext)
     {
         UIViewRoot uiViewRoot = facesContext.getViewRoot();
@@ -316,6 +367,14 @@ public abstract class ConversationUtils
         return new WindowContextIdHolderComponent(conversationManager.getCurrentWindowContext().getId());
     }
 
+    /**
+     * Triggers a redirect via the {@link ExternalContext} or the current {@link WindowHandler}, resets caches and
+     * prevents {@link javax.faces.application.FacesMessage}s
+     * @param externalContext current external-context
+     * @param url target URL
+     * @param windowHandler current window-handler
+     * @throws IOException in case of a failed redirect
+     */
     public static void sendRedirect(ExternalContext externalContext,
                                     String url,
                                     WindowHandler windowHandler) throws IOException
@@ -379,27 +438,52 @@ public abstract class ConversationUtils
         externalContext.getRequestMap().put(REDIRECT_PERFORMED_KEY, Boolean.TRUE);
     }
 
+    /**
+     * Resolves the current {@link WindowHandler}
+     * @return current window-handler
+     */
     public static WindowHandler getWindowHandler()
     {
         return CodiUtils.getContextualReferenceByClass(WindowHandler.class);
     }
 
+    /**
+     * Resolves the current {@link WindowContextManager}
+     * @return current window-context-manager
+     */
     public static WindowContextManager getWindowContextManager()
     {
         return RequestCache.getWindowContextManager();
     }
 
+    /**
+     * Allows to remove a window-id which has been created for a user(-session)
+     * @param externalContext current external-context
+     * @param windowContextId window-id to remove
+     * @return true if it was a known window-id, false otherwise
+     */
     public static boolean removeExistingWindowId(ExternalContext externalContext, String windowContextId)
     {
         return getEditableWindowIdSet(externalContext).remove(windowContextId);
     }
 
+    /**
+     * Exposes an unmodifiable representation of the active window-ids
+     * which have been generated and stored for the current user
+     * @param externalContext current external-context
+     * @return active window-ids
+     */
     public static Set<String> getExistingWindowIdSet(ExternalContext externalContext)
     {
         Set<String> existingWindowIdSet = getEditableWindowIdSet(externalContext);
         return Collections.unmodifiableSet(existingWindowIdSet);
     }
 
+    /**
+     * Allows to store the given window-id as active window-id
+     * @param externalContext current external-context
+     * @param windowContextId window-id
+     */
     public static void storeCreatedWindowContextId(ExternalContext externalContext, String windowContextId)
     {
         getEditableWindowIdSet(externalContext).add(windowContextId);
@@ -420,6 +504,11 @@ public abstract class ConversationUtils
         return existingWindowIdSet;
     }
 
+    /**
+     * Allows to cleanup empty or inactive {@link WindowContext}s which saves memory
+     * @param windowContextManager current window-context-manager
+     * @return true if 1-n instances were destroyed, false otherwise
+     */
     public static boolean cleanupInactiveWindowContexts(EditableWindowContextManager windowContextManager)
     {
         Collection<EditableWindowContext> windowContexts = windowContextManager.getWindowContexts();
@@ -436,6 +525,13 @@ public abstract class ConversationUtils
         return windowContexts.size() < count;
     }
 
+    /**
+     * Maps the given conversation-group-key to a scope-annotation
+     * @param beanManager current bean-manager
+     * @param conversationGroupKey current conversation-group key
+     * @param qualifiers current qualifiers
+     * @return annotation-class of the scope
+     */
     public static Class<? extends Annotation> convertToScope(
             BeanManager beanManager, Class conversationGroupKey, Annotation... qualifiers)
     {
@@ -496,6 +592,10 @@ public abstract class ConversationUtils
         return false;
     }
 
+    /**
+     * Performs the cleanup of inactive and empty {@link WindowContext}s (if permitted) and resets caches
+     * @param facesContext current faces-context
+     */
     //don't move it to an observer due to an unpredictable invocation order
     public static void postRenderCleanup(FacesContext facesContext)
     {

@@ -25,15 +25,39 @@ package org.apache.myfaces.extensions.cdi.jsf.api.listener.phase;
  */
 public interface JsfLifecyclePhaseInformation
 {
+    /**
+     * Evaluates if the current phase is the restore-view phase.
+     * @return true if the current phase matches the restore-view phase, false otherwise
+     */
     boolean isRestoreViewPhase();
 
+    /**
+     * Evaluates if the current phase is the apply-request-values phase.
+     * @return true if the current phase matches the apply-request-values phase, false otherwise
+     */
     boolean isApplyRequestValuesPhase();
 
+    /**
+     * Evaluates if the current phase is the process-validations phase.
+     * @return true if the current phase matches the process-validations phase, false otherwise
+     */
     boolean isProcessValidationsPhase();
 
+    /**
+     * Evaluates if the current phase is the update-model-values phase.
+     * @return true if the current phase matches the update-model-values phase, false otherwise
+     */
     boolean isUpdateModelValuesPhase();
 
+    /**
+     * Evaluates if the current phase is the invoke-application phase.
+     * @return true if the current phase matches the invoke-application phase, false otherwise
+     */
     boolean isInvokeApplicationPhase();
 
+    /**
+     * Evaluates if the current phase is the render-response phase.
+     * @return true if the current phase matches the render-response phase, false otherwise
+     */
     boolean isRenderResponsePhase();
 }

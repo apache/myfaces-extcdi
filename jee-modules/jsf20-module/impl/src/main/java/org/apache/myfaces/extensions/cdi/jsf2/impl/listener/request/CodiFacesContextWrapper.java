@@ -58,6 +58,10 @@ class CodiFacesContextWrapper extends FacesContextWrapper
         setCurrentInstance(this);
     }
 
+    /**
+     * Performs dependency injection manually (if permitted)
+     * {@inheritDoc}
+     */
     @Override
     public Application getApplication()
     {
@@ -66,6 +70,10 @@ class CodiFacesContextWrapper extends FacesContextWrapper
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
+    /**
+     * Broadcasts the {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest} event
+     * {@inheritDoc}
+     */
     @Override
     public void release()
     {
@@ -104,12 +112,20 @@ class CodiFacesContextWrapper extends FacesContextWrapper
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ExternalContext getExternalContext()
     {
         return this.wrappedExternalContext;
     }
 
+    /**
+     * Adds the {@link FacesMessage} also to a request scoped list to allow to preserve them later on
+     * (in case of redirects)
+     * {@inheritDoc}
+     */
     @Override
     public void addMessage(String componentId, FacesMessage facesMessage)
     {
@@ -131,6 +147,9 @@ class CodiFacesContextWrapper extends FacesContextWrapper
         facesMessageEntryList.add(new FacesMessageEntry(componentId, facesMessage));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FacesContext getWrapped()
     {
         return this.wrappedFacesContext;

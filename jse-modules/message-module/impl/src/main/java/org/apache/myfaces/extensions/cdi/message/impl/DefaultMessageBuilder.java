@@ -80,6 +80,9 @@ class DefaultMessageBuilder implements MessageBuilder
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder payload(MessagePayload... messagePayload)
     {
         Class key;
@@ -96,12 +99,18 @@ class DefaultMessageBuilder implements MessageBuilder
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder text(String messageDescriptor)
     {
         this.messageDescriptor = messageDescriptor;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder argument(Serializable... arguments)
     {
         for (Serializable argument : arguments)
@@ -119,12 +128,18 @@ class DefaultMessageBuilder implements MessageBuilder
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder namedArgument(String name, Serializable value)
     {
         this.namedArguments.add(new DefaultNamedArgument(name, value));
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Message add()
     {
         Message result = create();
@@ -204,6 +219,9 @@ class DefaultMessageBuilder implements MessageBuilder
         this.namedArguments = new HashSet<NamedArgument>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Message create()
     {
         Message result = buildMessage();
@@ -211,6 +229,9 @@ class DefaultMessageBuilder implements MessageBuilder
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String toText()
     {
         Message baseMessage = buildMessage();

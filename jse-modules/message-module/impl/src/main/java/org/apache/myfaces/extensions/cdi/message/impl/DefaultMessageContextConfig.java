@@ -70,6 +70,9 @@ class DefaultMessageContextConfig implements MessageContextConfig
         this.formatterFactory = messageContextConfigTemplate.getFormatterFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextBuilder use()
     {
         return new MessageContextBuilder()
@@ -77,66 +80,99 @@ class DefaultMessageContextConfig implements MessageContextConfig
             private DefaultMessageContextConfig newMessageContextConfig =
                     new DefaultMessageContextConfig(DefaultMessageContextConfig.this);
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder messageInterpolator(MessageInterpolator messageInterpolator)
             {
                 newMessageContextConfig.setMessageInterpolator(messageInterpolator);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder messageResolver(MessageResolver messageResolver)
             {
                 newMessageContextConfig.setMessageResolver(messageResolver);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatter(Formatter formatter)
             {
                 newMessageContextConfig.addNewFormatter(formatter);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config)
             {
                 newMessageContextConfig.addNewFormatterConfig(type, config, Locale.getDefault());
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config, Locale locale)
             {
                 addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale), locale);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder formatterFactory(FormatterFactory formatterFactory)
             {
                 newMessageContextConfig.setFormatterFactory(formatterFactory);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addMessageHandler(MessageHandler messageHandler)
             {
                 newMessageContextConfig.addNewMessageHandler(messageHandler);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder localeResolver(LocaleResolver localeResolver)
             {
                 newMessageContextConfig.setLocaleResolver(localeResolver);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder reset()
             {
                 newMessageContextConfig.resetMessageContextConfig();
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder clear()
             {
                 newMessageContextConfig.clearMessageContextConfig();
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContext create()
             {
                 return new DefaultMessageContext(this.newMessageContextConfig);
@@ -144,71 +180,106 @@ class DefaultMessageContextConfig implements MessageContextConfig
         };
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextBuilder change()
     {
         return new MessageContextBuilder()
         {
-
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder messageInterpolator(MessageInterpolator messageInterpolator)
             {
                 setMessageInterpolator(messageInterpolator);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder messageResolver(MessageResolver messageResolver)
             {
                 setMessageResolver(messageResolver);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatter(Formatter formatter)
             {
                 addNewFormatter(formatter);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config)
             {
                 addNewFormatterConfig(type, config, Locale.getDefault());
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addFormatterConfig(Class<?> type, GenericConfig config, Locale locale)
             {
                 addNewFormatterConfig(type, config.addProperty(Locale.class.toString(), locale), locale);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder formatterFactory(FormatterFactory formatterFactory)
             {
                 setFormatterFactory(formatterFactory);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder addMessageHandler(MessageHandler messageHandler)
             {
                 addNewMessageHandler(messageHandler);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder localeResolver(LocaleResolver localeResolver)
             {
                 setLocaleResolver(localeResolver);
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder reset()
             {
                 resetMessageContextConfig();
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContextBuilder clear()
             {
                 clearMessageContextConfig();
                 return this;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public MessageContext create()
             {
                 return new DefaultMessageContext(DefaultMessageContextConfig.this);
@@ -229,26 +300,41 @@ class DefaultMessageContextConfig implements MessageContextConfig
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageInterpolator getMessageInterpolator()
     {
         return this.messageInterpolator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageResolver getMessageResolver()
     {
         return this.messageResolver;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public LocaleResolver getLocaleResolver()
     {
         return this.localeResolver;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageHandler getMessageHandler()
     {
         return new DefaultCompositeMessageHandler(this.messageHandlers);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FormatterFactory getFormatterFactory()
     {
         return this.formatterFactory;
@@ -289,6 +375,9 @@ class DefaultMessageContextConfig implements MessageContextConfig
         this.formatterFactory = formatterFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
@@ -359,6 +448,10 @@ class DefaultMessageContextConfig implements MessageContextConfig
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -399,6 +492,9 @@ class DefaultMessageContextConfig implements MessageContextConfig
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {

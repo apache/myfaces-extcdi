@@ -41,11 +41,17 @@ class UnmodifiableMessageContext implements MessageContext
         this.messageContext = messageContext;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextConfig config()
     {
         return new UnmodifiableMessageContextConfig(messageContext.config());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T extends MessageContext> T typed(Class<T> contextType)
     {
         throw new IllegalStateException(UnmodifiableMessageContext.class.getName() +
@@ -75,51 +81,81 @@ class UnmodifiableMessageContext implements MessageContext
      * generated
      */
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder message()
     {
         return messageContext.message();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContext cloneContext()
     {
         return messageContext.cloneContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(Message message)
     {
         messageContext.addMessage(messageContext, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Locale getLocale()
     {
         return messageContext.getLocale();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(MessageContext messageContext, Message message)
     {
         this.messageContext.addMessage(messageContext, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessageFilter(MessageFilter... messageFilters)
     {
         messageContext.addMessageFilter(messageFilters);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<MessageFilter> getMessageFilters()
     {
         return messageContext.getMessageFilters();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeMessage(Message message)
     {
         messageContext.removeMessage(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeAllMessages()
     {
         messageContext.removeAllMessages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Message> getMessages()
     {
         return messageContext.getMessages();

@@ -50,6 +50,9 @@ public class RequestCache
     {
     }
 
+    /**
+     * Resets all caches
+     */
     public static void resetCache()
     {
         windowContextManagerCache.set(null);
@@ -64,12 +67,19 @@ public class RequestCache
         resetConversationCache();
     }
 
+    /**
+     * Resets conversation caches only
+     */
     public static void resetConversationCache()
     {
         conversationCache.set(null);
         conversationCache.remove();
     }
 
+    /**
+     * Exposes the cached {@link WindowContextManager}. If there isn't a cached instance a new one will be created.
+     * @return current window-context-manager
+     */
     public static WindowContextManager getWindowContextManager()
     {
         WindowContextManager windowContextManager = windowContextManagerCache.get();
@@ -83,6 +93,10 @@ public class RequestCache
         return windowContextManager;
     }
 
+    /**
+     * Exposes the cached {@link BeanEntryFactory}. If there isn't a cached instance a new one will be created.
+     * @return current bean-entry-factory
+     */
     public static BeanEntryFactory getBeanEntryFactory()
     {
         BeanEntryFactory beanEntryFactory = beanEntryFactoryCache.get();
@@ -96,21 +110,40 @@ public class RequestCache
         return beanEntryFactory;
     }
 
+    /**
+     * Exposes the cached {@link WindowContext}
+     * @return cached window-context or null if there is no instance
+     */
     public static WindowContext getCurrentWindowContext()
     {
         return windowContextCache.get();
     }
 
+    /**
+     * Caches the current {@link WindowContext}
+     * @param windowContext current window-context
+     */
     public static void setCurrentWindowContext(WindowContext windowContext)
     {
         windowContextCache.set(windowContext);
     }
 
+    /**
+     * Exposes the cached {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation}
+     * for the given {@link ConversationKey}
+     * @param conversationKey current conversation-key
+     * @return cached conversation for the given key or null if there is no conversation with the given key
+     */
     public static EditableConversation getConversation(ConversationKey conversationKey)
     {
         return getConversationCache().get(conversationKey);
     }
 
+    /**
+     * Caches the given {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation}
+     * @param conversationKey key of the conversation
+     * @param conversation current conversation
+     */
     public static void setConversation(ConversationKey conversationKey, EditableConversation conversation)
     {
         getConversationCache().put(conversationKey, conversation);

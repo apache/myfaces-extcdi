@@ -66,16 +66,36 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         this.viewDefinitionClass = viewDefinitionClass;
     }
 
+    /**
+     * Allows to read the current base-path
+     * @return current base-path
+     */
     public String getBasePath()
     {
         return basePath;
     }
 
+    /**
+     * Tells if a {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode} has been found
+     * @return true if a navigation mode has been found, false otherwise
+     */
     public boolean isKnownNavigationMode()
     {
         return this.navigationMode != null;
     }
 
+    /**
+     * Tells if a {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameterMode} has been found
+     * @return true if a view-parameter mode has been found, false otherwise
+     */
+    public boolean isKnownViewParameterMode()
+    {
+        return this.viewParameterMode != null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public Page.NavigationMode getNavigationMode()
     {
         if(this.navigationMode == null)
@@ -85,11 +105,9 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         return this.navigationMode;
     }
 
-    public boolean isKnownViewParameter()
-    {
-        return this.viewParameterMode != null;
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public Page.ViewParameterMode getViewParameterMode()
     {
         if(this.viewParameterMode == null)
@@ -99,66 +117,118 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         return this.viewParameterMode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends ViewConfig> getErrorView()
     {
         return errorView;
     }
 
+    /**
+     * Exposes the meta-data types which have been found so far
+     * @return found meta-data types
+     */
     public List<Class<? extends Annotation>> getFoundAndBlockedMetaDataTypes()
     {
         return foundAndBlockedMetaDataTypes;
     }
 
+    /**
+     * Allows to add {@link AccessDecisionVoter}s to the current entry
+     * @param accessDecisionVoterClasses access-decision-voter which should be added
+     */
     public void addAccessDecisionVoters(Class<? extends AccessDecisionVoter>[] accessDecisionVoterClasses)
     {
         Collections.addAll(this.foundVoters, accessDecisionVoterClasses);
     }
 
+    /**
+     * Allows to change the error-view for the current entry
+     * @param errorViewClass custom error-view
+     */
     public void setErrorView(Class<? extends ViewConfig> errorViewClass)
     {
         this.errorView = errorViewClass;
     }
 
+    /**
+     * Allows to change the file-extension which used be used for the page represented by this entry
+     * @param fileExtension custom file-extension
+     */
     public void setExtension(String fileExtension)
     {
         this.extension = fileExtension;
     }
 
+    /**
+     * Allows to change the base-path of the page
+     * @param currentBasePath custom base-path
+     */
     public void setBasePath(String currentBasePath)
     {
         this.basePath = currentBasePath;
     }
 
+    /**
+     * Allows to change the {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode} for the
+     * page represented by this entry
+     * @param navigationMode custom navigation-mode
+     */
     public void setNavigationMode(Page.NavigationMode navigationMode)
     {
         this.navigationMode = navigationMode;
     }
 
+    /**
+     * Allows to change the {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameterMode} for the
+     * page represented by this entry.
+     * @param viewParameterMode custom view-param mode
+     */
     public void setViewParameterMode(Page.ViewParameterMode viewParameterMode)
     {
         this.viewParameterMode = viewParameterMode;
     }
 
+    /**
+     * Allows to change the name of the page represented by this entry.
+     * @param pageName custom page-name
+     */
     public void setPageName(String pageName)
     {
         this.pageName = pageName;
     }
 
+    /**
+     * Allows to add further meta-data entries for the current entry
+     * @param annotations meta-data
+     */
     public void addMetaData(Collection<Annotation> annotations)
     {
         this.viewMetaDataList.addAll(annotations);
     }
 
+    /**
+     * Maps a custom base-path to the (simple) name of a {@link ViewConfig} class (might be empty)
+     * @param simpleName (simple) class-name
+     * @param currentBasePath base-path (might be empty)
+     */
     public void setSimpleClassNameToPathMapping(String simpleName, String currentBasePath)
     {
         this.simpleClassNameToPathMapping.put(simpleName, currentBasePath);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Annotation> getMetaData()
     {
         return this.viewMetaDataList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getViewId()
     {
         StringBuilder viewId = new StringBuilder(this.basePath);
@@ -230,6 +300,10 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
     /*
      * TODO refactor it!
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends ViewConfig> getViewConfig()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
@@ -268,41 +342,66 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         return result.substring(0, result.length() - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters()
     {
         return Collections.unmodifiableList(this.foundVoters);
     }
 
+    /**
+     * not available
+     */
     public void addPageBean(Class pageBeanClass)
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * not available
+     */
     public void invokeInitViewMethods()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * not available
+     */
     public void invokePrePageActionMethods()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * not available
+     */
     public void invokePreRenderViewMethods()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * not available
+     */
     public void invokePostRenderViewMethods()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * not available
+     */
     public List<PageBeanDescriptor> getPageBeanConfigs()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * Forces to block the given meta-data for new scanning processes
+     * @param metaDataClass meta-data which should be blocked
+     */
     public void blockMetaData(Class<? extends Annotation> metaDataClass)
     {
         this.foundAndBlockedMetaDataTypes.add(metaDataClass);

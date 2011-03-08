@@ -52,7 +52,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
  * @author Gerhard Petracek
  */
 @Typed()
-public class JsfWindowContext implements EditableWindowContext
+class JsfWindowContext implements EditableWindowContext
 {
     private static final long serialVersionUID = 5272798129165017829L;
 
@@ -88,16 +88,25 @@ public class JsfWindowContext implements EditableWindowContext
                 this.windowContextConfig.getWindowContextTimeoutInMinutes());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getId()
     {
         return this.id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeConversations()
     {
         closeConversations(false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void close()
     {
         if(this.windowContextConfig.isCloseWindowContextEventEnabled())
@@ -109,7 +118,7 @@ public class JsfWindowContext implements EditableWindowContext
         this.attributes.clear();
     }
 
-    public synchronized void closeConversations(boolean forceEnd)
+    private synchronized void closeConversations(boolean forceEnd)
     {
         for (Map.Entry<ConversationKey, EditableConversation> conversationEntry : this.groupedConversations.entrySet())
         {
@@ -118,6 +127,9 @@ public class JsfWindowContext implements EditableWindowContext
         JsfUtils.resetConversationCache();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public EditableConversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
@@ -149,6 +161,9 @@ public class JsfWindowContext implements EditableWindowContext
         return conversation;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isConversationActive(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
@@ -170,6 +185,9 @@ public class JsfWindowContext implements EditableWindowContext
         return conversation.getActiveState();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
@@ -182,6 +200,9 @@ public class JsfWindowContext implements EditableWindowContext
         return closeAndRemoveConversation(conversationKey, conversation, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<Conversation> closeConversationGroup(Class conversationGroupKey)
     {
         Set<Conversation> removedConversations = new HashSet<Conversation>();
@@ -228,6 +249,9 @@ public class JsfWindowContext implements EditableWindowContext
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public EditableConversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
@@ -239,31 +263,49 @@ public class JsfWindowContext implements EditableWindowContext
         return conversationFactory.createConversation(conversationKey, this.conversationConfig);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<ConversationKey /*conversation group*/, EditableConversation> getConversations()
     {
         return Collections.unmodifiableMap(this.groupedConversations);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public WindowContextConfig getConfig()
     {
         return this.windowContextConfig;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActive()
     {
         return !this.expirationEvaluator.isExpired();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Date getLastAccess()
     {
         return this.expirationEvaluator.getLastAccess();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void touch()
     {
         this.expirationEvaluator.touch();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeInactiveConversations()
     {
         Iterator<EditableConversation> conversations = this.groupedConversations.values().iterator();
@@ -280,11 +322,17 @@ public class JsfWindowContext implements EditableWindowContext
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean setAttribute(String name, Object value)
     {
         return setAttribute(name, value, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean setAttribute(String name, Object value, boolean forceOverride)
     {
         if(value == null || (!forceOverride && containsAttribute(name)))
@@ -295,11 +343,17 @@ public class JsfWindowContext implements EditableWindowContext
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean containsAttribute(String name)
     {
         return this.attributes.containsKey(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T getAttribute(String name, Class<T> targetType)
     {
         //noinspection unchecked
@@ -395,7 +449,7 @@ public class JsfWindowContext implements EditableWindowContext
         return sourceAnnotations.isEmpty() && targetAnnotations.isEmpty();
     }
 
-    public void logInformationAboutConversations(String label)
+    private void logInformationAboutConversations(String label)
     {
         if(!this.projectStageDevelopment)
         {

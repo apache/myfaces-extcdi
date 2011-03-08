@@ -72,16 +72,25 @@ public class DefaultConversation implements EditableConversation
     //just for a better performance to avoid frequent calls to the {@link #expirationEvaluator}
     private boolean active;
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActive()
     {
         return !isConversationExpired() && this.active;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean getActiveState()
     {
         return active;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void deactivate()
     {
         this.expirationEvaluator.expire();
@@ -91,6 +100,9 @@ public class DefaultConversation implements EditableConversation
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void close()
     {
         if(this.active)
@@ -103,6 +115,9 @@ public class DefaultConversation implements EditableConversation
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restart()
     {
         fireRestartConversationEvent();
@@ -110,6 +125,9 @@ public class DefaultConversation implements EditableConversation
         this.beanStorage.resetStorage();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings({"unchecked"})
     public <T> T getBean(Class<T> key)
     {
@@ -130,6 +148,9 @@ public class DefaultConversation implements EditableConversation
         return (T) scopedBean.getBeanInstance();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> void addBean(BeanEntry<T> beanEntry)
     {
         //TODO check if conversation is active
@@ -152,7 +173,10 @@ public class DefaultConversation implements EditableConversation
         this.expirationEvaluator.touch();
     }
 
-    //just for test-cases (to expire a conversation manually)
+    /**
+     * just for test-cases (to expire a conversation manually)
+     * @return current conversation-expiration-evaluator
+     */
     public ConversationExpirationEvaluator getExpirationEvaluator()
     {
         return expirationEvaluator;
@@ -174,6 +198,9 @@ public class DefaultConversation implements EditableConversation
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

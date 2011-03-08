@@ -52,6 +52,10 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         this.wrapped = wrapped;
     }
 
+    /**
+     * Adds the current window-id to the URL (if permitted)
+     * {@inheritDoc}
+     */
     public String encodeActionURL(String s)
     {
         lazyInit();
@@ -64,6 +68,11 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
         return this.wrapped.encodeActionURL(s);
     }
 
+    /**
+     * Triggers a redirect which is aware of the current window and preserves the
+     * {@link javax.faces.application.FacesMessage}s.
+     * {@inheritDoc}
+     */
     public void redirect(String url)
             throws IOException
     {
@@ -90,204 +99,333 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public void dispatch(String s)
             throws IOException
     {
         wrapped.dispatch(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String encodeNamespace(String s)
     {
         return wrapped.encodeNamespace(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String encodeResourceURL(String s)
     {
         return wrapped.encodeResourceURL(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Object> getApplicationMap()
     {
         return wrapped.getApplicationMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getAuthType()
     {
         return wrapped.getAuthType();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getContext()
     {
         return wrapped.getContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getInitParameter(String s)
     {
         return wrapped.getInitParameter(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map getInitParameterMap()
     {
         return wrapped.getInitParameterMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getRemoteUser()
     {
         return wrapped.getRemoteUser();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getRequest()
     {
         return wrapped.getRequest();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getRequestCharacterEncoding()
     {
         return wrapped.getRequestCharacterEncoding();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getRequestContentType()
     {
         return wrapped.getRequestContentType();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getRequestContextPath()
     {
         return wrapped.getRequestContextPath();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Object> getRequestCookieMap()
     {
         return wrapped.getRequestCookieMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, String> getRequestHeaderMap()
     {
         return wrapped.getRequestHeaderMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, String[]> getRequestHeaderValuesMap()
     {
         return wrapped.getRequestHeaderValuesMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Locale getRequestLocale()
     {
         return wrapped.getRequestLocale();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<Locale> getRequestLocales()
     {
         return wrapped.getRequestLocales();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Object> getRequestMap()
     {
         return wrapped.getRequestMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, String> getRequestParameterMap()
     {
         return wrapped.getRequestParameterMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<String> getRequestParameterNames()
     {
         return wrapped.getRequestParameterNames();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, String[]> getRequestParameterValuesMap()
     {
         return wrapped.getRequestParameterValuesMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getRequestPathInfo()
     {
         return wrapped.getRequestPathInfo();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getRequestServletPath()
     {
         return wrapped.getRequestServletPath();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public URL getResource(String s)
             throws MalformedURLException
     {
         return wrapped.getResource(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public InputStream getResourceAsStream(String s)
     {
         return wrapped.getResourceAsStream(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<String> getResourcePaths(String s)
     {
         return wrapped.getResourcePaths(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getResponse()
     {
         return wrapped.getResponse();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResponseContentType()
     {
         return wrapped.getResponseContentType();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object getSession(boolean b)
     {
         return wrapped.getSession(b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Object> getSessionMap()
     {
         return wrapped.getSessionMap();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Principal getUserPrincipal()
     {
         return wrapped.getUserPrincipal();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setRequest(Object o)
     {
         wrapped.setRequest(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setRequestCharacterEncoding(String s)
             throws UnsupportedEncodingException
     {
         wrapped.setRequestCharacterEncoding(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setResponse(Object o)
     {
         wrapped.setResponse(o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void setResponseCharacterEncoding(String s)
     {
         wrapped.setResponseCharacterEncoding(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String getResponseCharacterEncoding()
     {
         return wrapped.getResponseCharacterEncoding();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUserInRole(String s)
     {
         return wrapped.isUserInRole(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(String s)
     {
         wrapped.log(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(String s, Throwable throwable)
     {
         wrapped.log(s, throwable);

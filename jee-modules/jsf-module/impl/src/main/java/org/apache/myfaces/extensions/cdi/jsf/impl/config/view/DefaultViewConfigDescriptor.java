@@ -98,31 +98,49 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getViewId()
     {
         return viewId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends ViewConfig> getViewConfig()
     {
         return viewDefinitionClass;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Page.NavigationMode getNavigationMode()
     {
         return navigationMode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Page.ViewParameterMode getViewParameterMode()
     {
         return viewParameterMode;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<PageBeanDescriptor> getPageBeanConfigs()
     {
         return pageBeanDescriptors;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void invokeInitViewMethods()
     {
         for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
@@ -134,6 +152,9 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void invokePrePageActionMethods()
     {
         for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
@@ -145,6 +166,9 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void invokePreRenderViewMethods()
     {
         for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
@@ -156,6 +180,9 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void invokePostRenderViewMethods()
     {
         for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
@@ -200,38 +227,33 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters()
     {
         return Collections.unmodifiableList(this.accessDecisionVoters);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends ViewConfig> getErrorView()
     {
         return customErrorView;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Annotation> getMetaData()
     {
         return metaDataList;
     }
 
-    public synchronized void addMetaData(Annotation annotation)
-    {
-        this.metaDataList.add(annotation);
-    }
-
-    public synchronized List<Annotation> resetMetaData()
-    {
-        try
-        {
-            return new ArrayList<Annotation>(this.metaDataList);
-        }
-        finally
-        {
-            this.metaDataList.clear();
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     public void addPageBean(Class pageBeanClass)
     {
         List<PageBeanDescriptor> newList = new ArrayList<PageBeanDescriptor>(this.pageBeanDescriptors);
@@ -327,6 +349,9 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         return this.beanManager;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -349,6 +374,9 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {

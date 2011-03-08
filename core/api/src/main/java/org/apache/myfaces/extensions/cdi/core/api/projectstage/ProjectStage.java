@@ -167,11 +167,19 @@ public abstract class ProjectStage implements Serializable
         return projectStages.get(projectStageClassName);
     }
 
+    /**
+     * Exposes all registered {@link ProjectStage} implementations
+     * @return provided and custom project-stage implementations
+     */
     public static ProjectStage[] values()
     {
         return values;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public String toString()
     {
         return psName;
@@ -183,6 +191,10 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = -7910349894182034559L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final UnitTest UnitTest = new UnitTest();
 
     @Typed()
@@ -190,6 +202,10 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = 1977308277341527250L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final Development Development = new Development();
 
     @Typed()
@@ -197,6 +213,10 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = -7444003351466372539L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final SystemTest SystemTest = new SystemTest();
 
     @Typed()
@@ -204,6 +224,10 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = 2034474361615347127L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final IntegrationTest IntegrationTest = new IntegrationTest();
 
     @Typed()
@@ -211,6 +235,10 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = -8426149532860809553L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final Staging Staging = new Staging();
 
     @Typed()
@@ -218,5 +246,9 @@ public abstract class ProjectStage implements Serializable
     {
         private static final long serialVersionUID = -4030601958667812084L;
     }
+
+    /**
+     * Type-safe {@link ProjectStage}
+     */
     public static final Production Production = new Production();
 }

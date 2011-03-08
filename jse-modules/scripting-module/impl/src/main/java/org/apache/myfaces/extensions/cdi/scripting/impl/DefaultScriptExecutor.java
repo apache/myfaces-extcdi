@@ -41,21 +41,33 @@ public class DefaultScriptExecutor implements ScriptExecutor
         this.scriptEngine = scriptEngine;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object eval(String script)
     {
         return eval(script, Object.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object eval(String script, Map<String, Object> arguments)
     {
         return eval(script, arguments, Object.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object eval(String script, Bindings bindings)
     {
         return eval(script, bindings, Object.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T eval(String script, Class<T> returnType)
     {
         try
@@ -69,11 +81,17 @@ public class DefaultScriptExecutor implements ScriptExecutor
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType)
     {
         return eval(script, new SimpleBindings(arguments), returnType);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T eval(String script, Bindings bindings, Class<T> returnType)
     {
         try

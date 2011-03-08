@@ -43,6 +43,9 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
         this.wrappedValidatorFactory = wrappedValidatorFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Validator getValidator()
     {
         if(this.customContextUsed)
@@ -56,22 +59,34 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
                 .getValidator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext usingContext()
     {
         this.customContextUsed = true;
         return wrappedValidatorFactory.usingContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageInterpolator getMessageInterpolator()
     {
         return wrappedValidatorFactory.getMessageInterpolator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public TraversableResolver getTraversableResolver()
     {
         return wrappedValidatorFactory.getTraversableResolver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ConstraintValidatorFactory getConstraintValidatorFactory()
     {
         return new ConstraintValidatorFactory()
@@ -86,6 +101,9 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
         };
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T unwrap(Class<T> tClass)
     {
         return wrappedValidatorFactory.unwrap(tClass);

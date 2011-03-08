@@ -78,6 +78,9 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         this.arguments = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Message addArgument(Serializable... arguments)
     {
         for (Serializable currentArgument : arguments)
@@ -197,11 +200,17 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         this.arguments.add(argument);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getDescriptor()
     {
         return this.messageDescriptor;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Serializable[] getArguments()
     {
         if (this.namedArguments == null && this.arguments == null)
@@ -226,6 +235,10 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         return mergedArguments.toArray(new Serializable[mergedArguments.size()]);
     }
 
+    /**
+     * Allows to add {@link MessagePayload} to the current {@link Message}
+     * @param payload payload-instance which should be added
+     */
     public void addPayload(MessagePayload payload)
     {
         Class key = payload.getClass();
@@ -237,11 +250,17 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         addPayload(key, payload);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<Class, MessagePayload> getPayload()
     {
         return Collections.unmodifiableMap(this.messagePayload);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Message addPayload(Class key, MessagePayload payload)
     {
         if (this.messagePayload.containsKey(key))
@@ -252,12 +271,18 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Message setMessageContextConfig(MessageContextConfig messageContextConfig)
     {
         this.messageContextConfig = messageContextConfig;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextConfig getMessageContextConfig()
     {
         return this.messageContextConfig;
@@ -280,6 +305,9 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     * generated
     */
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -315,6 +343,9 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {

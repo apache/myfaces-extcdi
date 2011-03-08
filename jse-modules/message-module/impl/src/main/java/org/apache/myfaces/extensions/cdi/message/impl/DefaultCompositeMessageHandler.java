@@ -49,6 +49,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(MessageContext messageContext, Message message)
     {
         for (MessageHandler messageHandler : this.messageHandlers)
@@ -57,6 +60,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessageFilter(MessageFilter... messageFilters)
     {
         for (MessageHandler messageHandler : this.messageHandlers)
@@ -65,6 +71,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<MessageFilter> getMessageFilters()
     {
         Set<MessageFilter> result = new HashSet<MessageFilter>();
@@ -75,6 +84,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         return Collections.unmodifiableSet(result);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeMessage(Message message)
     {
         for (MessageHandler messageHandler : this.messageHandlers)
@@ -83,6 +95,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeAllMessages()
     {
         for (MessageHandler messageHandler : this.messageHandlers)
@@ -91,6 +106,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Message> getMessages()
     {
         List<Message> result = new ArrayList<Message>();
@@ -109,6 +127,9 @@ class DefaultCompositeMessageHandler implements CompositeMessageHandler, Seriali
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<MessageHandler> getMessageHandlers()
     {
         return Collections.unmodifiableList(this.messageHandlers);

@@ -40,6 +40,9 @@ class UnmodifiableMessageContextConfig implements MessageContextConfig
         this.messageContextConfig = messageContextConfig;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextBuilder use()
     {
         //it's ok to delegate - the call of #use creates a new instance of the context - the old context is untouched
@@ -47,6 +50,9 @@ class UnmodifiableMessageContextConfig implements MessageContextConfig
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextBuilder change()
     {
         throw new IllegalStateException(MessageContextConfig.class.getName() +
@@ -56,26 +62,42 @@ class UnmodifiableMessageContextConfig implements MessageContextConfig
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public MessageInterpolator getMessageInterpolator()
     {
         return messageContextConfig.getMessageInterpolator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageResolver getMessageResolver()
     {
         return messageContextConfig.getMessageResolver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public LocaleResolver getLocaleResolver()
     {
         return messageContextConfig.getLocaleResolver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageHandler getMessageHandler()
     {
         return messageContextConfig.getMessageHandler();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FormatterFactory getFormatterFactory()
     {
         return messageContextConfig.getFormatterFactory();

@@ -67,16 +67,25 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         this.unscopeBeanEventEnable = unscopeBeanEventEnable;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Bean<T> getBean()
     {
         return this.bean;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public CreationalContext<T> getCreationalContext()
     {
         return creationalContext;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public T getBeanInstance()
     {
         if (this.currentBeanInstance == null)
@@ -94,6 +103,9 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         return this.currentBeanInstance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public T resetBeanInstance()
     {
         T oldBeanInstance = this.currentBeanInstance;
@@ -103,16 +115,25 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         return oldBeanInstance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isScopeBeanEventEnabled()
     {
         return this.scopeBeanEventEnable;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isAccessBeanEventEnabled()
     {
         return this.accessBeanEventEnable;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUnscopeBeanEventEnabled()
     {
         return this.unscopeBeanEventEnable;
@@ -134,6 +155,9 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

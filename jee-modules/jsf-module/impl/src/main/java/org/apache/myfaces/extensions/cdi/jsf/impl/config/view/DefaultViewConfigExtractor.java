@@ -198,7 +198,7 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
                     scannedViewConfig.setNavigationMode(pageAnnotation.navigation());
                 }
 
-                if (!scannedViewConfig.isKnownViewParameter() &&
+                if (!scannedViewConfig.isKnownViewParameterMode() &&
                         !pageAnnotation.viewParams().equals(Page.ViewParameterMode.DEFAULT))
                 {
                     scannedViewConfig.setViewParameterMode(pageAnnotation.viewParams());

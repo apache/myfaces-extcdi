@@ -47,11 +47,18 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         this.wrapped = wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ExternalContext getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * Adds the current window-id to the URL (if permitted)
+     * {@inheritDoc}
+     */
     public String encodeActionURL(String s)
     {
         lazyInit();
@@ -64,6 +71,11 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
         return this.wrapped.encodeActionURL(s);
     }
 
+    /**
+     * Triggers a redirect which is aware of the current window and preserves the
+     * {@link javax.faces.application.FacesMessage}s.
+     * {@inheritDoc}
+     */
     @Override
     public void redirect(String url)
             throws IOException

@@ -38,8 +38,6 @@ import java.lang.annotation.Annotation;
 @Named
 public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformation
 {
-    static final String BEAN_NAME = "jsfRequestLifecycleBroadcaster";
-
     private javax.faces.event.PhaseId facesPhaseId;
 
     @Inject

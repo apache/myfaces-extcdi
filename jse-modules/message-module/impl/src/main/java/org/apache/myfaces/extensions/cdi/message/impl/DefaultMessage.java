@@ -64,6 +64,9 @@ public class DefaultMessage extends AbstractMessageWithSeverity
         super(messageDescriptor, severity, namedArguments);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {
@@ -74,6 +77,9 @@ public class DefaultMessage extends AbstractMessageWithSeverity
         return toString(new DefaultMessageContext());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String toString(MessageContext messageContext)
     {
         return messageContext.message()

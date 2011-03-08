@@ -27,20 +27,45 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescripto
  */
 public interface EditableViewConfigDescriptor extends ViewConfigDescriptor
 {
+    /**
+     * Exposes the inline error-page
+     * @return inline error-page
+     */
     //it isn't available in ViewConfigDescriptor to avoid confusions of app-developers
     //(e.g. navigation to the error view should be handled differently)
     Class<? extends ViewConfig> getErrorView();
 
+    /**
+     * Exposes the {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.ViewParameterMode} of the current
+     * entry
+     * @return current view-parameter-mode
+     */
     //due to the usage in @Page we can't move it to the api of the jsf2 module
     Page.ViewParameterMode getViewParameterMode();
 
+    /**
+     * Allows to add page-beans
+     * @param pageBeanClass page-bean which should be added
+     */
     void addPageBean(Class pageBeanClass);
 
+    /**
+     * Invokes the methods annotated with {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView}
+     */
     void invokeInitViewMethods();
 
+    /**
+     * Invokes the methods annotated with {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction}
+     */
     void invokePrePageActionMethods();
 
+    /**
+     * Invokes the methods annotated with {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView}
+     */
     void invokePreRenderViewMethods();
 
+    /**
+     * Invokes the methods annotated with {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PostRenderView}
+     */
     void invokePostRenderViewMethods();
 }

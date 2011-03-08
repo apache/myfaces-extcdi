@@ -49,6 +49,12 @@ class TrinidadRenderKitWrapper extends RenderKit
         this.wrapped = wrapped;
     }
 
+    /**
+     * Wraps the {@link ResponseWriter} with a special wrapper which adds
+     * {@link org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent}
+     * at the beginning.
+     * {@inheritDoc}
+     */
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
     {
         ResponseWriter responseWriter = wrapped.createResponseWriter(writer, s, s1);
@@ -61,6 +67,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return new InterceptedResponseWriter(responseWriter);
     }
     
+    /**
+     * {@inheritDoc}
+     */
     public <T> T getService(Class<T> tClass)
     {
         if(this.wrapped instanceof Service.Provider)
@@ -70,6 +79,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean launchDialog(FacesContext facesContext,
                                 UIViewRoot uiViewRoot,
                                 UIComponent uiComponent,
@@ -91,6 +103,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean returnFromDialog(FacesContext facesContext, Object returnValue)
     {
         if(this.wrapped instanceof DialogRenderKitService)
@@ -102,6 +117,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isReturning(FacesContext facesContext, UIComponent source)
     {
         if(this.wrapped instanceof DialogRenderKitService)
@@ -113,6 +131,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addScript(FacesContext facesContext, String s)
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -121,6 +142,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void encodeScripts(FacesContext facesContext) throws IOException
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -129,6 +153,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean shortCircuitRenderView(FacesContext facesContext) throws IOException
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -140,6 +167,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isStateless(FacesContext facesContext)
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -151,6 +181,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void encodeBegin(FacesContext facesContext) throws IOException
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -159,6 +192,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void encodeEnd(FacesContext facesContext) throws IOException
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -167,6 +203,9 @@ class TrinidadRenderKitWrapper extends RenderKit
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void encodeFinally(FacesContext facesContext)
     {
         if(this.wrapped instanceof ExtendedRenderKitService)
@@ -175,21 +214,33 @@ class TrinidadRenderKitWrapper extends RenderKit
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addRenderer(String s, String s1, Renderer renderer)
     {
         this.wrapped.addRenderer(s, s1, renderer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Renderer getRenderer(String s, String s1)
     {
         return this.wrapped.getRenderer(s, s1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseStateManager getResponseStateManager()
     {
         return this.wrapped.getResponseStateManager();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseStream createResponseStream(OutputStream outputStream)
     {
         return this.wrapped.createResponseStream(outputStream);

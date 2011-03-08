@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RedirectedC
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.el.ELContext;
+import javax.enterprise.inject.Typed;
 import javax.faces.application.Application;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
@@ -41,6 +42,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class CodiFacesContextWrapper extends FacesContext
 {
     private FacesContext wrappedFacesContext;
@@ -61,6 +63,10 @@ class CodiFacesContextWrapper extends FacesContext
         setCurrentInstance(this);
     }
 
+    /**
+     * Performs dependency injection manually (if permitted)
+     * {@inheritDoc}
+     */
     public Application getApplication()
     {
         lazyInit();
@@ -68,6 +74,10 @@ class CodiFacesContextWrapper extends FacesContext
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
+    /**
+     * Broadcasts the {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest} event
+     * {@inheritDoc}
+     */
     public void release()
     {
         broadcastAfterFacesRequestEvent();
@@ -101,11 +111,19 @@ class CodiFacesContextWrapper extends FacesContext
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ExternalContext getExternalContext()
     {
         return this.wrappedExternalContext;
     }
 
+    /**
+     * Adds the {@link FacesMessage} also to a request scoped list to allow to preserve them later on
+     * (in case of redirects)
+     * {@inheritDoc}
+     */
     public void addMessage(String componentId, FacesMessage facesMessage)
     {
         this.wrappedFacesContext.addMessage(componentId, facesMessage);
@@ -126,82 +144,130 @@ class CodiFacesContextWrapper extends FacesContext
         facesMessageEntryList.add(new FacesMessageEntry(componentId, facesMessage));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ELContext getELContext()
     {
         return wrappedFacesContext.getELContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<String> getClientIdsWithMessages()
     {
         return wrappedFacesContext.getClientIdsWithMessages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FacesMessage.Severity getMaximumSeverity()
     {
         return wrappedFacesContext.getMaximumSeverity();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<FacesMessage> getMessages()
     {
         return wrappedFacesContext.getMessages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<FacesMessage> getMessages(String s)
     {
         return wrappedFacesContext.getMessages(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public RenderKit getRenderKit()
     {
         return wrappedFacesContext.getRenderKit();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean getRenderResponse()
     {
         return wrappedFacesContext.getRenderResponse();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean getResponseComplete()
     {
         return wrappedFacesContext.getResponseComplete();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseStream getResponseStream()
     {
         return wrappedFacesContext.getResponseStream();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setResponseStream(ResponseStream responseStream)
     {
         wrappedFacesContext.setResponseStream(responseStream);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseWriter getResponseWriter()
     {
         return wrappedFacesContext.getResponseWriter();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setResponseWriter(ResponseWriter responseWriter)
     {
         wrappedFacesContext.setResponseWriter(responseWriter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public UIViewRoot getViewRoot()
     {
         return wrappedFacesContext.getViewRoot();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setViewRoot(UIViewRoot uiViewRoot)
     {
         wrappedFacesContext.setViewRoot(uiViewRoot);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void renderResponse()
     {
         wrappedFacesContext.renderResponse();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void responseComplete()
     {
         wrappedFacesContext.responseComplete();

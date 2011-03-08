@@ -46,16 +46,33 @@ public class DefaultMessageContext implements MessageContext
     {
     }
 
+    /**
+     * Creates a {@link MessageContext} for the given {@link MessageContextConfig}
+     * @param config current message-context-config
+     * @return created message-context
+     */
     public static MessageContext create(MessageContextConfig config)
     {
         return new DefaultMessageContext(config);
     }
 
+    /**
+     * Creates a {@link MessageContext} which is aware of the given {@link MessageFactory}
+     * @param messageFactory current message-factory
+     * @return created message-context
+     */
     public static MessageContext create(MessageFactory messageFactory)
     {
         return new DefaultMessageContext(messageFactory);
     }
 
+    /**
+     * Creates a {@link MessageContext} for the given {@link MessageContextConfig}
+     * which is aware of the given {@link MessageFactory}
+     * @param config current message-context-config
+     * @param messageFactory current message-factory
+     * @return created message-context
+     */
     public static MessageContext create(MessageContextConfig config, MessageFactory messageFactory)
     {
         return new DefaultMessageContext(config, messageFactory);
@@ -77,62 +94,98 @@ public class DefaultMessageContext implements MessageContext
         this.messageFactory = messageFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageBuilder message()
     {
         return new DefaultMessageBuilder(this, this.messageFactory);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContextConfig config()
     {
         return config;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T extends MessageContext> T typed(Class<T> contextType)
     {
         //noinspection unchecked
         return (T) this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageContext cloneContext()
     {
         return config().use().create();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(Message message)
     {
         addMessage(this, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(MessageContext messageContext, Message message)
     {
         config().getMessageHandler().addMessage(messageContext, message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessageFilter(MessageFilter... messageFilters)
     {
         config().getMessageHandler().addMessageFilter(messageFilters);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<MessageFilter> getMessageFilters()
     {
         return config().getMessageHandler().getMessageFilters();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeMessage(Message message)
     {
         config().getMessageHandler().removeMessage(message);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeAllMessages()
     {
         config().getMessageHandler().removeAllMessages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Message> getMessages()
     {
         return config().getMessageHandler().getMessages();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Locale getLocale()
     {
         return config().getLocaleResolver().getLocale();
@@ -142,6 +195,9 @@ public class DefaultMessageContext implements MessageContext
      * generated
      */
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -165,6 +221,9 @@ public class DefaultMessageContext implements MessageContext
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {

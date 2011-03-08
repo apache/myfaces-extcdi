@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
+import javax.enterprise.inject.Typed;
 import javax.faces.application.ApplicationWrapper;
 import javax.faces.application.Application;
 import javax.faces.convert.Converter;
@@ -31,24 +32,32 @@ import javax.faces.validator.Validator;
  * @author Gerhard Petracek
  * @see org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.RestoreInjectionPointsObserver
  */
+@Typed()
 class InjectionAwareApplicationWrapper extends ApplicationWrapper
 {
     private Application wrapped;
 
     private boolean advancedQualifierRequiredForDependencyInjection;
 
-    protected InjectionAwareApplicationWrapper(Application wrapped,
-                                               boolean advancedQualifierRequiredForDependencyInjection)
+    InjectionAwareApplicationWrapper(Application wrapped,
+                                     boolean advancedQualifierRequiredForDependencyInjection)
     {
         this.wrapped = wrapped;
         this.advancedQualifierRequiredForDependencyInjection = advancedQualifierRequiredForDependencyInjection;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Application getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * Performs dependency injection manually (if permitted).
+     * {@inheritDoc}
+     */
     @Override
     public Converter createConverter(String converterId)
     {
@@ -56,6 +65,10 @@ class InjectionAwareApplicationWrapper extends ApplicationWrapper
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
+    /**
+     * Performs dependency injection manually (if permitted).
+     * {@inheritDoc}
+     */
     @Override
     public Converter createConverter(Class targetClass)
     {
@@ -63,6 +76,10 @@ class InjectionAwareApplicationWrapper extends ApplicationWrapper
                 this.advancedQualifierRequiredForDependencyInjection);
     }
 
+    /**
+     * Performs dependency injection manually (if permitted).
+     * {@inheritDoc}
+     */
     @Override
     public Validator createValidator(String validatorId)
     {

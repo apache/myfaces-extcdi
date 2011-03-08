@@ -27,8 +27,21 @@ import java.util.Collection;
  */
 public interface EditableWindowContextManager extends WindowContextManager
 {
+    /**
+     * Activates the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} with has
+     * the given window-id. If there is no
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * which has the given id a new context will be created automatically.
+     * @param windowContextId window-id
+     * @return true if the context was created successfully, false otherwise
+     */
     boolean activateWindowContext(String windowContextId);
 
+    /**
+     * Activates the given {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * @param windowContext window-context which has to be activated
+     * @return true if the context was created successfully, false otherwise
+     */
     boolean activateWindowContext(EditableWindowContext windowContext);
 
     /*
@@ -39,21 +52,66 @@ public interface EditableWindowContextManager extends WindowContextManager
     void resetWindowContext(EditableWindowContext windowContext);
     */
 
+    /**
+     * Restarts all conversations of the current
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     */
     void restartConversations();
 
+    /**
+     * Restarts all conversations of the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * with the given window-id
+     * @param windowContextId current window-id
+     */
     void restartConversations(String windowContextId);
 
+    /**
+     * Restarts all conversations of the given
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * @param windowContext window-context which will be restarted (the conversations of it)
+     */
     void restartConversations(EditableWindowContext windowContext);
 
+    /**
+     * Closes all conversations of the current
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     */
     void closeCurrentWindowContext();
 
+    /**
+     * Closes all conversations of the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * with the given window-id
+     * @param windowContextId current window-id
+     */
     void closeWindowContext(String windowContextId);
 
+    /**
+     * Closes all conversations of the given
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
+     * @param windowContext window-context which will be closed (the conversations of it)
+     */
     void closeWindowContext(EditableWindowContext windowContext);
 
+    /**
+     * Exposes all {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} instances for
+     * the current user(-session)
+     * @return all window-contexts available in the current user(-session)
+     */
     Collection<EditableWindowContext> getWindowContexts();
 
+    /**
+     * Closes all {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} of the current
+     * user(-session)
+     */
     void closeAllWindowContexts();
 
+    /**
+     * Evaluates if the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} with the
+     * given window-id is currently active
+     * @param windowContextId current window-id
+     * @return true if the window-context with the given id is active, false otherwise
+     */
     boolean isWindowContextActive(String windowContextId);
 }

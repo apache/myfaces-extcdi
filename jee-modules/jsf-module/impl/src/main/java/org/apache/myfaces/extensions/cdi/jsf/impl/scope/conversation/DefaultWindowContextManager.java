@@ -113,6 +113,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         this.projectStageDevelopment = ProjectStage.Development == this.projectStage;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public WindowContext getCurrentWindowContext()
     {
         WindowContext windowContext = RequestCache.getCurrentWindowContext();
@@ -172,6 +175,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return this.windowContextMap.size() + 1;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public synchronized WindowContext getWindowContext(String windowContextId)
     {
         EditableWindowContext result = this.windowContextMap.get(windowContextId);
@@ -219,11 +225,17 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return windowContext;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean activateWindowContext(String windowContextId)
     {
         return activateWindowContext(convert(getWindowContext(windowContextId)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean activateWindowContext(EditableWindowContext windowContext)
     {
         JsfUtils.resetCaches();
@@ -260,16 +272,25 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     }
     */
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations()
     {
         restartConversations(convert(getCurrentWindowContext()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations(String windowContextId)
     {
         restartConversations(convert(getWindowContext(windowContextId)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restartConversations(EditableWindowContext windowContext)
     {
         JsfUtils.resetCaches();
@@ -284,16 +305,25 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeCurrentWindowContext()
     {
         closeWindowContext(convert(getCurrentWindowContext()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeWindowContext(String windowContextId)
     {
         closeWindowContext(convert(getWindowContext(windowContextId)));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeWindowContext(EditableWindowContext editableWindowContext)
     {
         if(this.closeWindowContextEventEnable)
@@ -344,11 +374,17 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         return devWindowContextId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Collection<EditableWindowContext> getWindowContexts()
     {
         return Collections.unmodifiableCollection(this.windowContextMap.values());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void closeAllWindowContexts()
     {
         for (WindowContext windowContext : this.windowContextMap.values())
@@ -363,6 +399,9 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isWindowContextActive(String windowContextId)
     {
         EditableWindowContext editableWindowContext = this.windowContextMap.get(windowContextId);
