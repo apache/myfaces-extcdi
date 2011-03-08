@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.ConfigEntry;
 import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
@@ -43,6 +44,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      * 
      * @return timeout in minutes
      */
+    @ConfigEntry
     public int getConversationTimeoutInMinutes()
     {
         return 30;
@@ -59,6 +61,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isScopeBeanEventEnabled()
     {
         return false;
@@ -71,6 +74,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isAccessBeanEventEnabled()
     {
         return false;
@@ -83,6 +87,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isUnscopeBeanEventEnabled()
     {
         return false;
@@ -95,6 +100,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isStartConversationEventEnabled()
     {
         return false;
@@ -107,6 +113,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isCloseConversationEventEnabled()
     {
         return false;
@@ -119,6 +126,7 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
      *
      * @return true if the event should be fired, false otherwise
      */
+    @ConfigEntry
     public boolean isRestartConversationEventEnabled()
     {
         return false;

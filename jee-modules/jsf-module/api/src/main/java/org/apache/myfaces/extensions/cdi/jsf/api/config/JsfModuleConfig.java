@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.ConfigEntry;
 import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
@@ -42,6 +43,7 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
      *
      * @return true for activating it, false otherwise
      */
+    @ConfigEntry
     public boolean isInitialRedirectEnabled()
     {
         return true;
@@ -52,6 +54,7 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
      * @return true for creating additional navigation-cases based on view configs for
      * ConfigurableNavigationHandler#getNavigationCases
      */
+    @ConfigEntry
     public boolean isUseViewConfigsAsNavigationCasesEnabled()
     {
         return true;
@@ -62,11 +65,13 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
      * "Validation error: {invalidValue} isn't a valid value."
      * @return true if the InvalidValueAwareMessageInterpolator should be used, false otherwise
      */
+    @ConfigEntry
     public boolean isInvalidValueAwareMessageInterpolatorEnabled()
     {
         return true;
     }
 
+    @ConfigEntry
     public boolean isAlwaysKeepMessages()
     {
         return true;

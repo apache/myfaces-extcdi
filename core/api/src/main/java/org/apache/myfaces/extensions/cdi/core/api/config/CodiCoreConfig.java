@@ -41,6 +41,7 @@ public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
      * majority of those artifacts don't require dependency injection.
      * @return true if the usage of {@link org.apache.myfaces.extensions.cdi.core.api.Advanced}, false otherwise
      */
+    @ConfigEntry
     public boolean isAdvancedQualifierRequiredForDependencyInjection()
     {
         return true;
@@ -50,6 +51,7 @@ public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
      * Allows to disable the logging of the current configuration during the bootstrapping process.
      * @return true if the configuration should be logged, false otherwise
      */
+    @ConfigEntry
     public boolean isConfigurationLoggingEnabled()
     {
         return true;
