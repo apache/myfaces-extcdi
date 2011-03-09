@@ -96,7 +96,7 @@ public class DefaultConversation implements EditableConversation
         this.expirationEvaluator.expire();
         if (this.expirationEvaluator.isExpired())
         {
-            this.active = false;
+            endConversation();
         }
     }
 
@@ -105,14 +105,19 @@ public class DefaultConversation implements EditableConversation
      */
     public void close()
     {
+        fireCloseConversationEvent();
+
         if(this.active)
         {
-            fireCloseConversationEvent();
-
-            this.active = false;
-            this.beanStorage.resetStorage();
-            RequestCache.resetConversationCache();
+            endConversation();
         }
+    }
+
+    private void endConversation()
+    {
+        this.active = false;
+        this.beanStorage.resetStorage();
+        RequestCache.resetConversationCache();
     }
 
     /**

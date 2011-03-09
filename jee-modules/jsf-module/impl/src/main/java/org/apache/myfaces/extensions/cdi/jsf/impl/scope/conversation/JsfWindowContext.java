@@ -101,6 +101,7 @@ class JsfWindowContext implements EditableWindowContext
      */
     public void closeConversations()
     {
+        //don't force it because window-scoped beans shouldn't be affected
         closeConversations(false);
     }
 
@@ -236,7 +237,6 @@ class JsfWindowContext implements EditableWindowContext
 
                 if(!conversation.isActive())
                 {
-                    conversation.close();
                     return this.groupedConversations.remove(conversationKey);
                 }
             }
