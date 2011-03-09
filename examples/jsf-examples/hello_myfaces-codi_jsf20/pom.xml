@@ -388,6 +388,20 @@
                     <url>http://download.java.net/maven/2</url>
                 </repository>
             </repositories>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.1.1</version>
+                        <configuration>
+                            <webXml>${basedir}/src/main/webapp/WEB-INF/jee-web.xml</webXml>
+                            <warSourceExcludes>**/jee-web.xml</warSourceExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <profile>
