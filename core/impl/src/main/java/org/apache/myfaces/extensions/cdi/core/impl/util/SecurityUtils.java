@@ -18,10 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionState;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
+import org.apache.myfaces.extensions.cdi.core.impl.security.spi.EditableAccessDecisionVoterContext;
 
 import javax.interceptor.InvocationContext;
 import javax.enterprise.inject.spi.BeanManager;
@@ -50,18 +53,50 @@ public abstract class SecurityUtils
             return;
         }
 
-        Set<SecurityViolation> violations;
+        AccessDecisionVoterContext voterContext =
+                CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
 
-        AccessDecisionVoter voter;
-        for(Class<? extends AccessDecisionVoter> voterClass : accessDecisionVoters)
+        AccessDecisionState voterState = AccessDecisionState.VOTE_IN_PROGRESS;
+        try
         {
-            voter = CodiUtils.getContextualReferenceByClass(beanManager, voterClass);
-
-            violations = voter.checkPermission(invocationContext);
-
-            if(violations != null && violations.size() > 0)
+            if(voterContext instanceof EditableAccessDecisionVoterContext)
             {
-                throw new AccessDeniedException(violations, errorView);
+                ((EditableAccessDecisionVoterContext)voterContext).setState(voterState);
+            }
+
+            Set<SecurityViolation> violations;
+
+            AccessDecisionVoter voter;
+            for(Class<? extends AccessDecisionVoter> voterClass : accessDecisionVoters)
+            {
+                voter = CodiUtils.getContextualReferenceByClass(beanManager, voterClass);
+
+                violations = voter.checkPermission(invocationContext);
+
+                if(violations != null && violations.size() > 0)
+                {
+                    if(voterContext instanceof EditableAccessDecisionVoterContext)
+                    {
+                        voterState = AccessDecisionState.VIOLATION_FOUND;
+                        for(SecurityViolation securityViolation : violations)
+                        {
+                            ((EditableAccessDecisionVoterContext) voterContext).addViolation(securityViolation);
+                        }
+                    }
+                    throw new AccessDeniedException(violations, errorView);
+                }
+            }
+        }
+        finally
+        {
+            if(voterContext instanceof EditableAccessDecisionVoterContext)
+            {
+                if(AccessDecisionState.VOTE_IN_PROGRESS.equals(voterState))
+                {
+                    voterState = AccessDecisionState.NO_VIOLATION_FOUND;
+                }
+
+                ((EditableAccessDecisionVoterContext)voterContext).setState(voterState);
             }
         }
     }
