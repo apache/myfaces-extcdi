@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionState;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getOldViewId;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getNewViewId;
@@ -36,6 +38,13 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
 
     private Conversation conversation;
 
+    private AccessDecisionVoterContext accessDecisionVoterContext;
+
+    ViewAccessConversationExpirationEvaluator(AccessDecisionVoterContext accessDecisionVoterContext)
+    {
+        this.accessDecisionVoterContext = accessDecisionVoterContext;
+    }
+
     void observeRenderedView(String viewId)
     {
         if(!viewId.equals(this.lastViewId))
@@ -50,6 +59,13 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
 
     public boolean isExpired()
     {
+        //see EXTCDI-154
+        if(this.accessDecisionVoterContext != null &&
+                AccessDecisionState.VOTE_IN_PROGRESS.equals(this.accessDecisionVoterContext.getState()))
+        {
+            return false;
+        }
+
         if(this.lastViewId == null)
         {
             return true;

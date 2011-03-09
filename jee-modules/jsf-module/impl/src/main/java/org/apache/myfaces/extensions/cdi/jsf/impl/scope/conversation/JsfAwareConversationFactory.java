@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
@@ -78,7 +79,12 @@ public class JsfAwareConversationFactory implements ConversationFactory
 
     private ViewAccessConversationExpirationEvaluator createAndRegisterViewAccessConversationEvaluator()
     {
-        ViewAccessConversationExpirationEvaluator evaluator = new ViewAccessConversationExpirationEvaluator();
+        AccessDecisionVoterContext securityTransaction =
+                CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
+
+        ViewAccessConversationExpirationEvaluator evaluator =
+                new ViewAccessConversationExpirationEvaluator(securityTransaction);
+
         CodiUtils.getContextualReferenceByClass(
                 this.beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class)
                 .addViewAccessConversationExpirationEvaluator(evaluator);
