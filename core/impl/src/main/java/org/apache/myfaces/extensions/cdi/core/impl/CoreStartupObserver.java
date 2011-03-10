@@ -181,7 +181,7 @@ public class CoreStartupObserver extends AbstractStartupObserver
 
     }
 
-    public String getCodiCoreInformation()
+    private String getCodiCoreInformation()
     {
         String version = CodiInformation.VERSION;
         String revision;

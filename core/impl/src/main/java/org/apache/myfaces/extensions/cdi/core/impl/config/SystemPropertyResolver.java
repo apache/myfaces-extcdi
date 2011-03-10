@@ -34,7 +34,10 @@ import java.util.Collections;
 public class SystemPropertyResolver extends AbstractConfiguredValueResolver
 {
     private static final String BASE_NAME = "org.apache.myfaces.extensions.cdi.";
-    
+
+    /**
+     * {@inheritDoc}
+     */
     public <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor)
     {
         String key = "" + descriptor.getKey();

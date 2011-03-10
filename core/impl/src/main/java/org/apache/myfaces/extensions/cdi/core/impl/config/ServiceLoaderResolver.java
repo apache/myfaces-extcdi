@@ -35,6 +35,9 @@ import java.lang.reflect.Modifier;
 @InvocationOrder(200)
 public class ServiceLoaderResolver extends AbstractConfiguredValueResolver
 {
+    /**
+     * {@inheritDoc}
+     */
     public <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor)
     {
         List<T> result = new ArrayList<T>();

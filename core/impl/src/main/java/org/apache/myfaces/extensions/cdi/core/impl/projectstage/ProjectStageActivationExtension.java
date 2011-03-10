@@ -91,6 +91,9 @@ public class ProjectStageActivationExtension implements Extension, Deactivatable
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

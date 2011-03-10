@@ -26,6 +26,21 @@ import javax.enterprise.context.spi.CreationalContext;
  */
 public interface BeanEntryFactory
 {
+    /**
+     * Creates a new {@link BeanEntry} which will be used for storing all data needed for creating and managing
+     * a scoped bean
+     *
+     * @param bean current bean
+     * @param creationalContext context for the current bean
+     * @param scopeBeanEventEnabled flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent} should be fired
+     * @param accessBeanEventEnabled flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent} should be fired
+     * @param unscopeBeanEventEnabled flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent} should be fired
+     * @param <T> current type
+     * @return entry which will be stored by one of the CODI scopes
+     */
     <T> BeanEntry<T> createBeanEntry(Bean<T> bean,
                                      CreationalContext<T> creationalContext,
                                      boolean scopeBeanEventEnabled,

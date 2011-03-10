@@ -36,6 +36,9 @@ public class LocalJndiResolver extends AbstractConfiguredValueResolver
 {
     private static final String BASE_NAME = "java:comp/env/myfaces-codi/";
 
+    /**
+     * {@inheritDoc}
+     */
     public <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor)
     {
         String key;

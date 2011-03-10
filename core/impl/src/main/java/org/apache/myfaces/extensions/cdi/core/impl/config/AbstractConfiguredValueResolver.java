@@ -88,6 +88,9 @@ public abstract class AbstractConfiguredValueResolver implements ConfiguredValue
         return (List<T>)this.configuredValues;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return !deactivated;

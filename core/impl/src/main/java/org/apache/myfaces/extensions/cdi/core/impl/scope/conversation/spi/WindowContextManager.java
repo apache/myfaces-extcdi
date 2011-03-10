@@ -27,11 +27,27 @@ import java.io.Serializable;
  */
 public interface WindowContextManager extends Serializable
 {
+    /**
+     * Key for storing the window-id e.g. in URLs
+     */
     String WINDOW_CONTEXT_ID_PARAMETER_KEY = "windowId";
 
+    /**
+     * Value which can be used as "window-id" by external clients which aren't aware of windows.
+     * It deactivates e.g. the redirect for the initial request.
+     */
     String AUTOMATED_ENTRY_POINT_PARAMETER_KEY = "automatedEntryPoint";
 
+    /**
+     * Resolves the current {@link WindowContext}
+     * @return current window-context
+     */
     WindowContext getCurrentWindowContext();
 
+    /**
+     * Resolves the {@link WindowContext} for the given window-id
+     * @param windowContextId window-id
+     * @return window-context of the given window-id
+     */
     WindowContext getWindowContext(String windowContextId);
 }

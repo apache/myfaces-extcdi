@@ -76,6 +76,9 @@ public class DefaultLogger implements Logger
         return !(!this.anonymous && this.loggerName == null && this.resourceBundleName == null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public java.util.logging.Logger getWrapped()
     {
         if(this.wrapped == null)
@@ -85,31 +88,49 @@ public class DefaultLogger implements Logger
         return this.wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResourceBundle getResourceBundle()
     {
         return getWrapped().getResourceBundle();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getResourceBundleName()
     {
         return getWrapped().getResourceBundleName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setFilter(Filter filter)
     {
         getWrapped().setFilter(filter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Filter getFilter()
     {
         return getWrapped().getFilter();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(LogRecord logRecord)
     {
         getWrapped().log(logRecord);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(Level level, String s)
     {
         if(!isLoggable(level))
@@ -119,6 +140,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(level, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(Level level, String s, Object o)
     {
         if(!isLoggable(level))
@@ -128,6 +152,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(level, this.loggerName, getMethodName(), s, o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(Level level, String s, Object[] objects)
     {
         if(!isLoggable(level))
@@ -137,6 +164,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(level, this.loggerName, getMethodName(), s, objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void log(Level level, String s, Throwable throwable)
     {
         if(!isLoggable(level))
@@ -146,76 +176,121 @@ public class DefaultLogger implements Logger
         getWrapped().logp(level, this.loggerName, getMethodName(), s, throwable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logp(Level level, String s, String s1, String s2)
     {
         getWrapped().logp(level, s, s1, s2);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logp(Level level, String s, String s1, String s2, Object o)
     {
         getWrapped().logp(level, s, s1, s2, o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logp(Level level, String s, String s1, String s2, Object[] objects)
     {
         getWrapped().logp(level, s, s1, s2, objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logp(Level level, String s, String s1, String s2, Throwable throwable)
     {
         getWrapped().logp(level, s, s1, s2, throwable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logrb(Level level, String s, String s1, String s2, String s3)
     {
         getWrapped().logrb(level, s, s1, s2, s3);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logrb(Level level, String s, String s1, String s2, String s3, Object o)
     {
         getWrapped().logrb(level, s, s1, s2, s3, o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logrb(Level level, String s, String s1, String s2, String s3, Object[] objects)
     {
         getWrapped().logrb(level, s, s1, s2, s3, objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void logrb(Level level, String s, String s1, String s2, String s3, Throwable throwable)
     {
         getWrapped().logrb(level, s, s1, s2, s3, throwable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void entering(String s, String s1)
     {
         getWrapped().entering(s, s1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void entering(String s, String s1, Object o)
     {
         getWrapped().entering(s, s1, o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void entering(String s, String s1, Object[] objects)
     {
         getWrapped().entering(s, s1, objects);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void exiting(String s, String s1)
     {
         getWrapped().exiting(s, s1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void exiting(String s, String s1, Object o)
     {
         getWrapped().exiting(s, s1, o);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void throwing(String s, String s1, Throwable throwable)
     {
         getWrapped().throwing(s, s1, throwable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void severe(String s)
     {
         if(!isLoggable(Level.SEVERE))
@@ -225,6 +300,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.SEVERE, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void warning(String s)
     {
         if(!isLoggable(Level.WARNING))
@@ -234,6 +312,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.WARNING, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void info(String s)
     {
         if(!isLoggable(Level.INFO))
@@ -243,11 +324,17 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.INFO, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void config(String s)
     {
         getWrapped().config(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void fine(String s)
     {
         if(!isLoggable(Level.FINE))
@@ -257,6 +344,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.FINE, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void finer(String s)
     {
         if(!isLoggable(Level.FINER))
@@ -266,6 +356,9 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.FINER, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void finest(String s)
     {
         if(!isLoggable(Level.FINEST))
@@ -275,61 +368,97 @@ public class DefaultLogger implements Logger
         getWrapped().logp(Level.FINEST, this.loggerName, getMethodName(), s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setLevel(Level level)
     {
         getWrapped().setLevel(level);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Level getLevel()
     {
         return getWrapped().getLevel();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isLoggable(Level level)
     {
         return getWrapped().isLoggable(level);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getName()
     {
         return getWrapped().getName();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addHandler(Handler handler)
     {
         getWrapped().addHandler(handler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeHandler(Handler handler)
     {
         getWrapped().removeHandler(handler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Handler[] getHandlers()
     {
         return getWrapped().getHandlers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setUseParentHandlers(boolean b)
     {
         getWrapped().setUseParentHandlers(b);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean getUseParentHandlers()
     {
         return getWrapped().getUseParentHandlers();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public java.util.logging.Logger getParent()
     {
         return getWrapped().getParent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setParent(java.util.logging.Logger logger)
     {
         getWrapped().setParent(logger);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Factory getFactory()
     {
         return new DefaultLoggerFactory();

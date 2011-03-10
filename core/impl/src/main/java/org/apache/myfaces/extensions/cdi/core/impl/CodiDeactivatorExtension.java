@@ -34,6 +34,10 @@ import javax.interceptor.Interceptor;
  */
 public class CodiDeactivatorExtension implements Extension, Deactivatable
 {
+    /**
+     * TODO re-visit if we still need it
+     * @param processAnnotatedType current process-annotated-type
+     */
     public void filterInterceptors(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
