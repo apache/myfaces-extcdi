@@ -80,6 +80,9 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         super(config);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String encodeURL(String url)
     {
@@ -95,6 +98,9 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String restoreWindowId(ExternalContext externalContext)
     {
@@ -109,6 +115,9 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforeLifecycleExecute(FacesContext facesContext)
     {
         if (!isClientSideWindowHandlerRequest())

@@ -35,16 +35,25 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
 {
     private static final long serialVersionUID = 5092196084535892957L;
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor getViewConfig(String viewId)
     {
         return ViewConfigCache.getViewConfig(viewId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor getDefaultErrorViewConfig()
     {
         return ViewConfigCache.getDefaultErrorView();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor getErrorViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         ViewConfigDescriptor viewConfigDescriptor = getViewConfig(viewDefinitionClass);
@@ -62,12 +71,18 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
         return getViewConfig(errorView);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<ViewConfigDescriptor> getViewConfigs()
     {
         return Collections
                 .unmodifiableList((List<? extends ViewConfigDescriptor>) ViewConfigCache.getViewConfigDescriptors());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return ViewConfigCache.getViewConfig(viewDefinitionClass);

@@ -56,11 +56,19 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addRenderKit(String s, RenderKit renderKit)
     {
         wrapped.addRenderKit(s, renderKit);
     }
 
+    /**
+     * Creates an intercepted {@link RenderKit} in order to wrap the {@link javax.faces.context.ResponseWriter}
+     *
+     * {@inheritDoc}
+     */
     public RenderKit getRenderKit(FacesContext facesContext, String s)
     {
         RenderKit renderKit = wrapped.getRenderKit(facesContext, s);
@@ -116,17 +124,26 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<String> getRenderKitIds()
     {
         return wrapped.getRenderKitIds();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RenderKitFactory getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

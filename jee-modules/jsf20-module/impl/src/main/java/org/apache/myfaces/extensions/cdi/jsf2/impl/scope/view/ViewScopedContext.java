@@ -47,7 +47,9 @@ public class ViewScopedContext implements Context, SystemEventListener
 
     private boolean isJsfSubscribed = false;
 
-
+    /**
+     * {@inheritDoc}
+     */
     public <T> T get(Contextual<T> component)
     {
         checkActive();
@@ -76,6 +78,9 @@ public class ViewScopedContext implements Context, SystemEventListener
         return instance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
         checkActive();
@@ -138,6 +143,9 @@ public class ViewScopedContext implements Context, SystemEventListener
         return  instance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Annotation> getScope()
     {
         return ViewScoped.class;
@@ -160,6 +168,9 @@ public class ViewScopedContext implements Context, SystemEventListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isListenerForSource(Object source)
     {
         if (source instanceof UIViewRoot)

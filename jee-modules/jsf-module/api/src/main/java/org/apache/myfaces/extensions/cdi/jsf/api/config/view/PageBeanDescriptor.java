@@ -23,7 +23,15 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
  */
 public interface PageBeanDescriptor
 {
+    /**
+     * Class of the configured page-bean which is represented by this entry
+     * @return class of the configured page-bean
+     */
     Class getBeanClass();
 
+    /**
+     * Name of the configured page-bean which is represented by this entry
+     * @return name of the configured page-bean
+     */
     String getBeanName();
 }

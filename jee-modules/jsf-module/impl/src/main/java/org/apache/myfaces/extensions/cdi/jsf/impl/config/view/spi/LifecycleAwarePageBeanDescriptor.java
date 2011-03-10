@@ -29,13 +29,40 @@ import java.util.List;
  */
 public interface LifecycleAwarePageBeanDescriptor extends PageBeanDescriptor
 {
+    /**
+     * Exposes the lifecycle-callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView}
+     * @return init-view lifecycle-callback methods
+     */
     List<Method> getInitViewMethods();
 
+    /**
+     * Exposes the lifecycle-callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction}
+     * @return pre-page-action lifecycle-callback methods
+     */
     List<Method> getPrePageActionMethods();
 
+    /**
+     * Exposes the lifecycle-callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView}
+     * @return pre-render-view lifecycle-callback methods
+     */
     List<Method> getPreRenderViewMethods();
 
+    /**
+     * Exposes the lifecycle-callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PostRenderView}
+     * @return post-render-view lifecycle-callback methods
+     */
     List<Method> getPostRenderViewMethods();
 
+    /**
+     * Exposes the entry for the lifecycle-callbacks
+     * ({@link org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase} and/or
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase}) for the given {@link PhaseId}
+     * @param phaseId current phase-id
+     * @return entry for the lifecycle-callbacks
+     */
     RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId);
 }

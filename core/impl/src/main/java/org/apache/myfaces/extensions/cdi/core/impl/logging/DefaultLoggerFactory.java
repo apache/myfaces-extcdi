@@ -30,21 +30,33 @@ class DefaultLoggerFactory implements Logger.Factory
 {
     private static final long serialVersionUID = -4149574697548186019L;
 
+    /**
+     * {@inheritDoc}
+     */
     public Logger getLogger(String s)
     {
         return new DefaultLogger(s);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Logger getLogger(String s, String s1)
     {
         return new DefaultLogger(s, s1, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Logger getAnonymousLogger()
     {
         return new DefaultLogger();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Logger getAnonymousLogger(String s)
     {
         return new DefaultLogger(null, s, true);

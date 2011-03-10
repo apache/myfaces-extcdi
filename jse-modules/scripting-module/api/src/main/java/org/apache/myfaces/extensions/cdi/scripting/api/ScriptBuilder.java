@@ -25,13 +25,38 @@ import javax.script.Bindings;
  */
 public interface ScriptBuilder
 {
+    /**
+     * Adds a script to the current builder instance
+     * @param script target script
+     * @return current builder
+     */
     ScriptBuilder script(String script);
 
+    /**
+     * Adds an argument with a specific nam to the current builder instance
+     * @param name name of the argument
+     * @param value value of the argument
+     * @return current builder
+     */
     ScriptBuilder namedArgument(String name, Object value);
 
+    /**
+     * Adds a {@link Bindings} instance to the current builder instance
+     * @param bindings bindings which should be used
+     * @return current builder
+     */
     ScriptBuilder bindings(Bindings bindings);
 
+    /**
+     * Evaluates the script built with the current {@link ScriptBuilder}
+     * @return result of the evaluated script
+     */
     Object eval();
     
+    /**
+     * Evaluates the script built with the current {@link ScriptBuilder}
+     * @param returnType target type of the result
+     * @return result of the evaluated script
+     */
     <T> T eval(Class<T> returnType);
 }

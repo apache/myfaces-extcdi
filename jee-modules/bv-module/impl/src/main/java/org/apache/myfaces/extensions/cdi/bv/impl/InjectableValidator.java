@@ -64,26 +64,42 @@ class InjectableValidator implements Validator, Serializable
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public <T> Set<ConstraintViolation<T>> validate(T t, Class<?>... classes)
     {
         return getWrapped().validate(t, classes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> Set<ConstraintViolation<T>> validateProperty(T t, String s, Class<?>... classes)
     {
         return getWrapped().validateProperty(t, s, classes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> Set<ConstraintViolation<T>> validateValue(Class<T> tClass, String s, Object o, Class<?>... classes)
     {
         return getWrapped().validateValue(tClass, s, o, classes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public BeanDescriptor getConstraintsForClass(Class<?> aClass)
     {
         return getWrapped().getConstraintsForClass(aClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T unwrap(Class<T> tClass)
     {
         return getWrapped().unwrap(tClass);

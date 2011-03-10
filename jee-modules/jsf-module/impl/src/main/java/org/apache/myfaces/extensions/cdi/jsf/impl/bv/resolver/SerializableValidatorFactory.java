@@ -55,31 +55,49 @@ class SerializableValidatorFactory implements ValidatorFactory, Serializable
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Validator getValidator()
     {
         return getValidatorFactory().getValidator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext usingContext()
     {
         return getValidatorFactory().usingContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageInterpolator getMessageInterpolator()
     {
         return getValidatorFactory().getMessageInterpolator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public TraversableResolver getTraversableResolver()
     {
         return getValidatorFactory().getTraversableResolver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ConstraintValidatorFactory getConstraintValidatorFactory()
     {
         return getValidatorFactory().getConstraintValidatorFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T unwrap(Class<T> tClass)
     {
         return getValidatorFactory().unwrap(tClass);

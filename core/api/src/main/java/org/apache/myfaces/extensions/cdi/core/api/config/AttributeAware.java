@@ -29,11 +29,36 @@ import java.io.Serializable;
  */
 public interface AttributeAware extends Serializable
 {
+    /**
+     * Sets an attribute
+     * @param name name of the attribute
+     * @param value value of the attribute (null values aren't allowed)
+     * @return true if it was possible to set the value
+     */
     boolean setAttribute(String name, Object value);
 
+    /**
+     * Sets or updates an attribute
+     * @param name name of the attribute
+     * @param value value of the attribute
+     * @param forceOverride flag which indicates if it is permitted to override an existing value
+     * @return true if it was possible to set the value
+     */
     boolean setAttribute(String name, Object value, boolean forceOverride);
 
+    /**
+     * Returns true if there is a value for the given name
+     * @param name name of the argument in question
+     * @return true if there is a value for the given name, false otherwise
+     */
     boolean containsAttribute(String name);
 
+    /**
+     * Exposes the value for the given name
+     * @param name name of the attribute
+     * @param targetType type of the attribute
+     * @param <T> current type
+     * @return value of the attribute, or null if there is no attribute with the given name
+     */
     <T> T getAttribute(String name, Class<T> targetType);
 }

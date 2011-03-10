@@ -80,6 +80,9 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
         {
             private static final long serialVersionUID = 849645435335842723L;
 
+            /**
+             * {@inheritDoc}
+             */
             public JsfPhaseId value()
             {
                 return JsfPhaseId.convertFromFacesClass(phaseId);
@@ -93,6 +96,9 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
         {
             private static final long serialVersionUID = 490037768660184656L;
 
+            /**
+             * {@inheritDoc}
+             */
             public JsfPhaseId value()
             {
                 return JsfPhaseId.convertFromFacesClass(phaseId);
@@ -103,31 +109,50 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
     /*
      * implementation of JsfLifecyclePhaseInformation methods
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public boolean isRestoreViewPhase()
     {
         return javax.faces.event.PhaseId.RESTORE_VIEW.equals(this.facesPhaseId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isApplyRequestValuesPhase()
     {
         return javax.faces.event.PhaseId.APPLY_REQUEST_VALUES.equals(this.facesPhaseId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isProcessValidationsPhase()
     {
         return javax.faces.event.PhaseId.PROCESS_VALIDATIONS.equals(this.facesPhaseId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isUpdateModelValuesPhase()
     {
         return javax.faces.event.PhaseId.UPDATE_MODEL_VALUES.equals(this.facesPhaseId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isInvokeApplicationPhase()
     {
         return javax.faces.event.PhaseId.INVOKE_APPLICATION.equals(this.facesPhaseId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isRenderResponsePhase()
     {
         return javax.faces.event.PhaseId.RENDER_RESPONSE.equals(this.facesPhaseId);

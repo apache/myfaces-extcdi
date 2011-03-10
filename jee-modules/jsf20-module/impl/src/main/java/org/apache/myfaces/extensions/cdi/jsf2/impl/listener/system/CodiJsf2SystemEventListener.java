@@ -42,11 +42,19 @@ public class CodiJsf2SystemEventListener implements SystemEventListener, Deactiv
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isListenerForSource(Object source)
     {
         return !this.deactivated && source instanceof Application;
     }
 
+    /**
+     * Broadcasts {@link PostConstructApplicationEvent} and {@link PreDestroyApplicationEvent} for CDI observers.
+     *
+     * {@inheritDoc}
+     */
     public void processEvent(SystemEvent systemEvent)
     {
         if(systemEvent instanceof PostConstructApplicationEvent)
@@ -67,6 +75,9 @@ public class CodiJsf2SystemEventListener implements SystemEventListener, Deactiv
                 beanManager, SystemEventBroadcaster.BEAN_NAME, SystemEventBroadcaster.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

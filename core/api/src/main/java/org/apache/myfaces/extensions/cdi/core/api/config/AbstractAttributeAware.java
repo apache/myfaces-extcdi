@@ -33,11 +33,17 @@ public abstract class AbstractAttributeAware implements AttributeAware
 
     private Map<String, Object> configAttributes;
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean setAttribute(String name, Object value)
     {
         return setAttribute(name, value, true);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean setAttribute(String name, Object value, boolean forceOverride)
     {
         if(!forceOverride && containsAttribute(name))
@@ -48,11 +54,17 @@ public abstract class AbstractAttributeAware implements AttributeAware
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean containsAttribute(String name)
     {
         return this.getConfigAttributeMap().containsKey(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings({"unchecked"})
     public <T> T getAttribute(String name, Class<T> targetType)
     {

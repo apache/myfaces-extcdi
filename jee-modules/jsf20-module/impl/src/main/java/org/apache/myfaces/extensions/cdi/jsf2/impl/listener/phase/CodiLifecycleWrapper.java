@@ -58,11 +58,21 @@ class CodiLifecycleWrapper extends Lifecycle
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addPhaseListener(PhaseListener phaseListener)
     {
         wrapped.addPhaseListener(phaseListener);
     }
 
+    /**
+     * Broadcasts {@link org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent} and
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.BeforeFacesRequest} btw.
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest}
+     *
+     * {@inheritDoc}
+     */
     public void execute(FacesContext facesContext)
     {
         broadcastApplicationStartupBroadcaster();
@@ -83,16 +93,27 @@ class CodiLifecycleWrapper extends Lifecycle
         wrapped.execute(facesContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public PhaseListener[] getPhaseListeners()
     {
         return wrapped.getPhaseListeners();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removePhaseListener(PhaseListener phaseListener)
     {
         wrapped.removePhaseListener(phaseListener);
     }
 
+    /**
+     * Performs cleanup tasks after the rendering process
+     *
+     * {@inheritDoc}
+     */
     public void render(FacesContext facesContext)
     {
         wrapped.render(facesContext);

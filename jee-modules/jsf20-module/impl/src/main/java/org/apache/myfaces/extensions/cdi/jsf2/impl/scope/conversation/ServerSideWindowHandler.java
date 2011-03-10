@@ -57,6 +57,9 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
         this.useFallback = tryToLoadClassForName("org.apache.myfaces.context.FacesContextFactoryImpl") == null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
             throws IOException
@@ -89,6 +92,9 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
         externalContext.redirect(url);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String restoreWindowId(ExternalContext externalContext)
     {

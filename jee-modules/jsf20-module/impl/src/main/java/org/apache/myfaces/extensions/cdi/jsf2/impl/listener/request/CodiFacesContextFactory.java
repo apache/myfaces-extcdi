@@ -40,6 +40,11 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         this.deactivated = !isActivated();
     }
 
+    /**
+     * Wrapps the created {@link FacesContext} with {@link CodiFacesContextWrapper}
+     *
+     * {@inheritDoc}
+     */
     @Override
     public FacesContext getFacesContext(Object context,
                                         Object request,
@@ -62,6 +67,9 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         return new CodiFacesContextWrapper(facesContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FacesContextFactory getWrapped()
     {
@@ -77,6 +85,9 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         return new CodiFacesContextWrapper(facesContext);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

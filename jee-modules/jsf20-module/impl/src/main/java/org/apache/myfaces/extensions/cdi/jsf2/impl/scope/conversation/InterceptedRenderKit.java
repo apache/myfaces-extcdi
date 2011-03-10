@@ -37,6 +37,12 @@ class InterceptedRenderKit extends RenderKitWrapper
         this.wrapped = wrapped;
     }
 
+    /**
+     * Adds a {@link org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextIdHolderComponent}
+     * to the component tree.
+     *
+     * {@inheritDoc}
+     */
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
     {
         addWindowContextIdHolderComponent();
@@ -44,10 +50,12 @@ class InterceptedRenderKit extends RenderKitWrapper
         return this.wrapped.createResponseWriter(writer, s, s1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RenderKit getWrapped()
     {
         return wrapped;
     }
-    
 }

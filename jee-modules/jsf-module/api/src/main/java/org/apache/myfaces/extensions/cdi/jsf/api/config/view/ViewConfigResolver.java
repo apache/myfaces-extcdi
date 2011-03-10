@@ -28,13 +28,36 @@ import java.util.List;
  */
 public interface ViewConfigResolver extends Serializable
 {
+    /**
+     * Resolves the {@link ViewConfigDescriptor} for the given view-id
+     * @param viewId view-id of the page
+     * @return view-config-descriptor which represents the given view-id, null otherwise
+     */
     ViewConfigDescriptor getViewConfig(String viewId);
 
+    /**
+     * Resolves the {@link ViewConfigDescriptor} for the given view-config-class
+     * @param viewDefinitionClass view-config-class of the page
+     * @return view-config-descriptor which represents the given view-config-class
+     */
     ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
+    /**
+     * Resolves all descriptors for the known {@link ViewConfig}s
+     * @return all descriptors for the known view-configs
+     */
     List<ViewConfigDescriptor> getViewConfigs();
 
+    /**
+     * Resolves the descriptor for the default-error page
+     * @return descriptor for the default-error page
+     */
     ViewConfigDescriptor getDefaultErrorViewConfig();
 
+    /**
+     * Resolves the descriptor for the inline- (or default-) error-page
+     * @param viewDefinitionClass view-config class which should be inspected concerning an inline-error-page
+     * @return descriptor for the error page
+     */
     ViewConfigDescriptor getErrorViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

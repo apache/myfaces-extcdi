@@ -93,7 +93,7 @@ import java.util.logging.Logger;
 @Typed()
 public abstract class ProjectStage implements Serializable
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -1210639662598734888L;
 
     /**
      * This map contains a static map with all registered projectStages.
@@ -185,7 +185,9 @@ public abstract class ProjectStage implements Serializable
         return psName;
     }
 
-
+    /**
+     * Project-stage for unit-tests
+     */
     @Typed()
     public static final class UnitTest extends ProjectStage
     {
@@ -197,6 +199,9 @@ public abstract class ProjectStage implements Serializable
      */
     public static final UnitTest UnitTest = new UnitTest();
 
+    /**
+     * Project-stage for development
+     */
     @Typed()
     public static final class Development extends ProjectStage
     {
@@ -208,6 +213,9 @@ public abstract class ProjectStage implements Serializable
      */
     public static final Development Development = new Development();
 
+    /**
+     * Project-stage for system-tests
+     */
     @Typed()
     public static final class SystemTest extends ProjectStage
     {
@@ -219,6 +227,9 @@ public abstract class ProjectStage implements Serializable
      */
     public static final SystemTest SystemTest = new SystemTest();
 
+    /**
+     * Project-stage for integration-tests
+     */
     @Typed()
     public static final class IntegrationTest extends ProjectStage
     {
@@ -230,6 +241,9 @@ public abstract class ProjectStage implements Serializable
      */
     public static final IntegrationTest IntegrationTest = new IntegrationTest();
 
+    /**
+     * Project-stage for staging
+     */
     @Typed()
     public static final class Staging extends ProjectStage
     {
@@ -241,6 +255,9 @@ public abstract class ProjectStage implements Serializable
      */
     public static final Staging Staging = new Staging();
 
+    /**
+     * Default project-stage for production
+     */
     @Typed()
     public static final class Production extends ProjectStage
     {

@@ -40,15 +40,30 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface PageBean
 {
+    /**
+     * Class of the page-bean
+     * @return class of the page-bean
+     */
     Class value();
 
+    /**
+     * Optional name of the page-bean
+     * @return name of the page-bean
+     */
     String name() default "";
 
+    /**
+     * Allows to specify multiple page-beans
+     */
     @Target(TYPE)
     @Retention(RUNTIME)
     @Documented
     public static @interface List
     {
+        /**
+         * Allows to specify multiple page-beans
+         * @return page-bean annotations
+         */
         PageBean[] value();
     }
 }

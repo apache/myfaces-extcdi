@@ -27,20 +27,49 @@ import java.io.Serializable;
  */
 public interface BeanEntry<T> extends Serializable
 {
+    /**
+     * {@link Bean} of the current entry
+     * @return current bean
+     */
     Bean<T> getBean();
 
+    /**
+     * {@link CreationalContext} of the current entry
+     * @return creational-context of the bean
+     */
     CreationalContext<T> getCreationalContext();
 
+    /**
+     * Scoped instance which was created based on the {@link Bean} of the current entry.
+     * If it hasn't been created, it will be created automatically.
+     * @return instance of the bean
+     */
     T getBeanInstance();
 
     /**
+     * Resets the bean instance to null
      * @return the old instance
      */
     T resetBeanInstance();
 
+    /**
+     * Flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.ScopeBeanEvent} is enabled
+     * @return true if the event is enabled, false otherwise
+     */
     boolean isScopeBeanEventEnabled();
 
+    /**
+     * Flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.AccessBeanEvent} is enabled
+     * @return true if the event is enabled, false otherwise
+     */
     boolean isAccessBeanEventEnabled();
 
+    /**
+     * Flag which indicates if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.UnscopeBeanEvent} is enabled
+     * @return true if the event is enabled, false otherwise
+     */
     boolean isUnscopeBeanEventEnabled();
 }

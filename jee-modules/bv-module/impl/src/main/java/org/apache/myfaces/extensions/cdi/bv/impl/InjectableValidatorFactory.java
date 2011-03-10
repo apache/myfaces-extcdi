@@ -40,6 +40,9 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
 
     private transient ValidatorFactory wrapped;
 
+    /**
+     * Default constructor
+     */
     public InjectableValidatorFactory()
     {
     }
@@ -66,31 +69,50 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public Validator getValidator()
     {
         return getWrapped().getValidator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext usingContext()
     {
         return getWrapped().usingContext();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public MessageInterpolator getMessageInterpolator()
     {
         return getWrapped().getMessageInterpolator();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public TraversableResolver getTraversableResolver()
     {
         return getWrapped().getTraversableResolver();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ConstraintValidatorFactory getConstraintValidatorFactory()
     {
         return getWrapped().getConstraintValidatorFactory();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T unwrap(Class<T> tClass)
     {
         return getWrapped().unwrap(tClass);

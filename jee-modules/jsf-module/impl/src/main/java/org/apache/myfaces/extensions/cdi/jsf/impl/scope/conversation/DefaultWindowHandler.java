@@ -60,6 +60,9 @@ public class DefaultWindowHandler implements WindowHandler
         this.useWindowAwareUrlEncoding = config.isUrlParameterSupported();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String encodeURL(String url)
     {
         if(this.useWindowAwareUrlEncoding)
@@ -69,6 +72,9 @@ public class DefaultWindowHandler implements WindowHandler
         return url;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter)
             throws IOException
     {
@@ -94,6 +100,9 @@ public class DefaultWindowHandler implements WindowHandler
         externalContext.redirect(url);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     //TODO add a counter in case of project stage dev
     public String createWindowId()
     {
@@ -146,6 +155,9 @@ public class DefaultWindowHandler implements WindowHandler
         return windowContextIdHolderComponent.getWindowContextId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String restoreWindowId(ExternalContext externalContext)
     {
         if(!this.useWindowAwareUrlEncoding)

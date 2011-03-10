@@ -29,15 +29,40 @@ import java.util.List;
  */
 public interface ViewConfigDescriptor
 {
+    /**
+     * View-ID of the current descriptor
+     * @return current view-id
+     */
     String getViewId();
 
+    /**
+     * Class which was used for creating the current descriptor
+     * @return view-config class
+     */
     Class<? extends ViewConfig> getViewConfig();
 
+    /**
+     * Navigation type which should be used if type-safe navigation is used
+     * @return configured navigation mode
+     */
     Page.NavigationMode getNavigationMode();
 
+    /**
+     * Custom meta-data which is configured for the entry. It allows to provide and resolve custom meta-data annotated
+     * with {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData}
+     * @return custom meta-data of the current entry
+     */
     List<Annotation> getMetaData();
 
+    /**
+     * {@link AccessDecisionVoter}s which should be invoked to secure the page represented by the current entry.
+     * @return configured access-decision-voters
+     */
     List<Class<? extends AccessDecisionVoter>> getAccessDecisionVoters();
 
+    /**
+     * Page-bean descriptors for the page represented by the current entry.
+     * @return descriptors which represent the page-beans for the current page
+     */
     List<PageBeanDescriptor> getPageBeanConfigs();
 }

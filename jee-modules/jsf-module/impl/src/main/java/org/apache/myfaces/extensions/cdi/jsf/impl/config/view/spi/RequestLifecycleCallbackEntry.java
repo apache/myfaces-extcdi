@@ -26,7 +26,17 @@ import java.util.List;
  */
 public interface RequestLifecycleCallbackEntry
 {
+    /**
+     * Exposes the lifecycle callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase}
+     * @return before-phase lifecycle callbacks
+     */
     List<Method> getBeforePhaseCallbacks();
 
+    /**
+     * Exposes the lifecycle callbacks annotated with
+     * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase}
+     * @return after-phase lifecycle callbacks
+     */
     List<Method> getAfterPhaseCallbacks();
 }

@@ -27,11 +27,32 @@ import java.io.Serializable;
  */
 public interface WindowHandler extends Serializable
 {
+    /**
+     * Allows to intercept the URL encoding
+     * @param url URL which has to be encoded
+     * @return the changed URL
+     */
     String encodeURL(String url);
 
+    /**
+     * Allows to intercept redirects
+     * @param externalContext current external-context
+     * @param url current URL
+     * @param addRequestParameter flag which indicates if the request-parameters should be added to the URL
+     * @throws IOException exception which might be thrown by the external-context during the redirect
+     */
     void sendRedirect(ExternalContext externalContext, String url, boolean addRequestParameter) throws IOException;
 
+    /**
+     * Creates a new and unique window-id for the current user-session
+     * @return valid window-id
+     */
     String createWindowId();
 
+    /**
+     * Allows to restore the window-id depending on the window-strategy supported by the implementation
+     * @param externalContext current external-context
+     * @return extracted window-id, null otherwise
+     */
     String restoreWindowId(ExternalContext externalContext);
 }

@@ -61,37 +61,57 @@ class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
         this.phasesLifecycleCallbacks = Collections.unmodifiableMap(findCallbackDefinitions(beanClass));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getBeanName()
     {
         return beanName;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class getBeanClass()
     {
         return beanClass;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public RequestLifecycleCallbackEntry getPhasesLifecycleCallback(PhaseId phaseId)
     {
         return phasesLifecycleCallbacks.get(phaseId);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public List<Method> getInitViewMethods()
     {
         return Collections.unmodifiableList(this.initViewMethods);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Method> getPrePageActionMethods()
     {
         return Collections.unmodifiableList(this.prePageActionMethods);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Method> getPreRenderViewMethods()
     {
         return Collections.unmodifiableList(this.preRenderViewMethods);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Method> getPostRenderViewMethods()
     {
         return Collections.unmodifiableList(this.postRenderViewMethods);

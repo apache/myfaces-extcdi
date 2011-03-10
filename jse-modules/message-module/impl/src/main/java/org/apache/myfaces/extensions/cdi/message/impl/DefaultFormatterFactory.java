@@ -49,6 +49,9 @@ public class DefaultFormatterFactory implements FormatterFactory
     private ConcurrentHashMap<FormatterConfigKey, GenericConfig> formatterConfigs =
             new ConcurrentHashMap<FormatterConfigKey, GenericConfig>();
 
+    /**
+     * {@inheritDoc}
+     */
     public synchronized FormatterFactory add(Formatter formatter)
     {
         if(!this.formatters.contains(formatter))
@@ -62,6 +65,9 @@ public class DefaultFormatterFactory implements FormatterFactory
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public synchronized List<Formatter> reset()
     {
         List<Formatter> oldFormatters = Collections.unmodifiableList(this.formatters);
@@ -69,6 +75,9 @@ public class DefaultFormatterFactory implements FormatterFactory
         return oldFormatters;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Formatter findFormatter(Class<?> type)
     {
         if (this.formatterCache != null && this.formatterCache.containsKey(type))
@@ -98,12 +107,18 @@ public class DefaultFormatterFactory implements FormatterFactory
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig)
     {
         addFormatterConfig(type, formatterConfig, Locale.getDefault());
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public FormatterFactory addFormatterConfig(Class<?> type, GenericConfig formatterConfig, Locale locale)
     {
         if (formatterConfig.containsProperty(Locale.class.getName()))
@@ -114,6 +129,9 @@ public class DefaultFormatterFactory implements FormatterFactory
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public GenericConfig findFormatterConfig(Class<?> type, Locale locale)
     {
         return this.formatterConfigs.get(createKey(type, locale));

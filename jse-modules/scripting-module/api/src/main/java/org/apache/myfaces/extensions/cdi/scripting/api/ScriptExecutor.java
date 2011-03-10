@@ -26,15 +26,52 @@ import java.util.Map;
  */
 public interface ScriptExecutor
 {
+    /**
+     * Executes the given script
+     * @param script script which has to be executed
+     * @return result of the script
+     */
     Object eval(String script);
 
+    /**
+     * Executes the given script with the given arguments
+     * @param script script which has to be executed
+     * @param arguments current arguments
+     * @return result of the script
+     */
     Object eval(String script, Map<String, Object> arguments);
 
+    /**
+     * Executes the given script with the given {@link Bindings}
+     * @param script script which has to be executed
+     * @param bindings current bindings
+     * @return result of the script
+     */
     Object eval(String script, Bindings bindings);
 
+    /**
+     * Executes the given script and the expected type of the result
+     * @param script script which has to be executed
+     * @param returnType type of the result
+     * @return result of the script
+     */
     <T> T eval(String script, Class<T> returnType);
 
+    /**
+     * Executes the given script with the given arguments and the expected type of the result
+     * @param script script which has to be executed
+     * @param arguments current arguments
+     * @param returnType type of the result
+     * @return result of the script
+     */
     <T> T eval(String script, Map<String, Object> arguments, Class<T> returnType);
 
+    /**
+     * Executes the given script with the given {@link Bindings} and the expected type of the result
+     * @param script script which has to be executed
+     * @param bindings current bindings
+     * @param returnType type of the result
+     * @return result of the script
+     */
     <T> T eval(String script, Bindings bindings, Class<T> returnType);
 }

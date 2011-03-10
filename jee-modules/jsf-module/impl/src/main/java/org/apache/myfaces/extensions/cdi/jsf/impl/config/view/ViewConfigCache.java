@@ -99,11 +99,20 @@ public class ViewConfigCache
         storeViewConfigDescriptor(viewId, viewDefinitionEntry, true);
     }
 
+    /**
+     * Resolves the {@link ViewConfigDescriptor} for the given view-id
+     * @param viewId view-id of the page
+     * @return view-config-descriptor which represents the given view-id, null otherwise
+     */
     public static ViewConfigDescriptor getViewConfig(String viewId)
     {
         return getViewIdToViewDefinitionEntryMapping(true).get(viewId);
     }
 
+    /**
+     * Resolves all descriptors for the known {@link ViewConfig}s
+     * @return all descriptors for the known view-configs
+     */
     public static Collection<ViewConfigDescriptor> getViewConfigDescriptors()
     {
         Map<String, ViewConfigDescriptor> entryMap = getViewIdToViewDefinitionEntryMapping(true);
@@ -111,11 +120,20 @@ public class ViewConfigCache
         return entryMap.values();
     }
 
+    /**
+     * Resolves the {@link ViewConfigDescriptor} for the given view-config-class
+     * @param viewDefinitionClass view-config-class of the page
+     * @return view-config-descriptor which represents the given view-config-class
+     */
     public static ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return getViewDefinitionToViewDefinitionEntryMapping(true).get(viewDefinitionClass);
     }
 
+    /**
+     * Resolves the descriptor for the default-error page
+     * @return descriptor for the default-error page
+     */
     public static ViewConfigDescriptor getDefaultErrorView()
     {
         lazyInlineViewConfigCompilation();

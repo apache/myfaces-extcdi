@@ -46,6 +46,9 @@ class DefaultScriptBuilder implements ScriptBuilder
         this.scriptEngine = scriptEngine;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ScriptBuilder script(String script)
     {
         DefaultScriptBuilder newScriptBuilder = new DefaultScriptBuilder(this.scriptEngine);
@@ -53,6 +56,9 @@ class DefaultScriptBuilder implements ScriptBuilder
         return newScriptBuilder;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ScriptBuilder namedArgument(String name, Object value)
     {
         if(this.bindings != null)
@@ -68,6 +74,9 @@ class DefaultScriptBuilder implements ScriptBuilder
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ScriptBuilder bindings(Bindings bindings)
     {
         if(this.arguments != null)
@@ -79,11 +88,17 @@ class DefaultScriptBuilder implements ScriptBuilder
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Object eval()
     {
         return eval(Object.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public <T> T eval(Class<T> returnType)
     {
         try

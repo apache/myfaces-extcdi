@@ -40,6 +40,9 @@ class InvalidValueAwareValidatorContext implements ValidatorContext
         this.wrapped = wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext messageInterpolator(MessageInterpolator messageInterpolator)
     {
         MessageInterpolator messageInterpolatorWrapper = new InvalidValueAwareMessageInterpolator(messageInterpolator);
@@ -50,16 +53,26 @@ class InvalidValueAwareValidatorContext implements ValidatorContext
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext traversableResolver(TraversableResolver traversableResolver)
     {
         return wrapped.traversableResolver(traversableResolver);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorContext constraintValidatorFactory(ConstraintValidatorFactory constraintValidatorFactory)
     {
         return wrapped.constraintValidatorFactory(constraintValidatorFactory);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Validator getValidator()
     {
         return wrapped.getValidator();

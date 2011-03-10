@@ -39,22 +39,41 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface Page
 {
+    /**
+     * Allows to specify a custom base-path for the page represented by the view-conig
+     * @return base-path
+     */
     String basePath() default ".";
 
+    /**
+     * Allows to specify a custom (file-)name for the page represented by the view-conig
+     * @return name of the page
+     */
     String name() default "";
 
+    /**
+     * Allows to specify the (file-)extension for the page represented by the view-conig
+     * @return extension of the page
+     */
     //TODO config for default extension
     String extension() default Extension.XHTML;
 
+    /**
+     * Allows to specify navigation-mode which should be used to navigate to the page represented by the view-config
+     * @return navigation-mode which should be used to navigate to the page represented by the view-config
+     */
     //TODO config for default navigation mode
     NavigationMode navigation() default NavigationMode.DEFAULT;
 
     /**
      * for including view params in jsf2
-     * @return
+     * @return the strategy which should be used by jsf2 for handling view-parameters (for the navigation)
      */
     ViewParameterMode viewParams() default ViewParameterMode.DEFAULT;
 
+    /**
+     * Extension of the markup file
+     */
     public interface Extension
     {
         String XHTML = "xhtml";
@@ -63,11 +82,17 @@ public @interface Page
         String JSP = "jsp";
     }
 
+    /**
+     * Type of the navigation which should be used by the {@link javax.faces.application.NavigationHandler}
+     */
     public enum NavigationMode
     {
         DEFAULT, FORWARD, REDIRECT
     }
 
+    /**
+     * Mode specifies if JSF2 should include view-params
+     */
     public enum ViewParameterMode
     {
         DEFAULT, INCLUDE, EXCLUDE

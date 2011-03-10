@@ -41,11 +41,17 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Dea
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addLifecycle(String s, Lifecycle lifecycle)
     {
         wrapped.addLifecycle(s, lifecycle);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Lifecycle getLifecycle(String s)
     {
         Lifecycle result = this.wrapped.getLifecycle(s);
@@ -57,16 +63,25 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Dea
         return new CodiLifecycleWrapper(result, PhaseListenerExtension.consumePhaseListeners());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Iterator<String> getLifecycleIds()
     {
         return wrapped.getLifecycleIds();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public LifecycleFactory getWrapped()
     {
         return wrapped.getWrapped();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

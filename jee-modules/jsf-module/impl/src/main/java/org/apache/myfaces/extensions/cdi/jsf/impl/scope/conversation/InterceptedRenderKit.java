@@ -38,21 +38,36 @@ class InterceptedRenderKit extends RenderKit
         this.wrapped = wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void addRenderer(String s, String s1, Renderer renderer)
     {
         wrapped.addRenderer(s, s1, renderer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Renderer getRenderer(String s, String s1)
     {
         return wrapped.getRenderer(s, s1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseStateManager getResponseStateManager()
     {
         return wrapped.getResponseStateManager();
     }
 
+    /**
+     * Creates an intercepted {@link ResponseWriter} which adds a {@link WindowContextIdHolderComponent} to the
+     * component tree.
+     *
+     * {@inheritDoc}
+     */
     public ResponseWriter createResponseWriter(Writer writer, String s, String s1)
     {
         ResponseWriter responseWriter = wrapped.createResponseWriter(writer, s, s1);
@@ -65,6 +80,9 @@ class InterceptedRenderKit extends RenderKit
         return new InterceptedResponseWriter(responseWriter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ResponseStream createResponseStream(OutputStream outputStream)
     {
         return wrapped.createResponseStream(outputStream);
