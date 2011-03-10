@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 
 import javax.faces.event.PhaseEvent;
@@ -63,7 +63,7 @@ public class JsfRequestLifecyclePhaseListener implements PhaseListener
     private JsfRequestLifecycleBroadcaster resolveBroadcaster()
     {
         //cdi has to inject the event
-        return getOrCreateScopedInstanceOfBeanByName(
+        return getContextualReferenceByName(
                 this.beanManager, BEAN_NAME, JsfRequestLifecycleBroadcaster.class);
     }
 

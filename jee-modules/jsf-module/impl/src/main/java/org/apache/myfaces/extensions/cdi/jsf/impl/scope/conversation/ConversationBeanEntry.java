@@ -146,7 +146,7 @@ class ConversationBeanEntry<T> implements BeanEntry<T>
             return;
         }
         
-        this.currentBeanInstance = createNewInstanceOfBean(this.bean, this.creationalContext);
+        this.currentBeanInstance = createNewInstanceOfBean(this.creationalContext, this.bean);
 
         if(this.scopeBeanEventEnable)
         {

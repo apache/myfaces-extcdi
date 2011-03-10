@@ -22,9 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
@@ -33,8 +31,6 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
 import javax.enterprise.inject.Typed;
 import javax.enterprise.util.Nonbinding;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -43,7 +39,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
-import java.util.Properties;
 import java.util.Arrays;
 
 /**
@@ -60,17 +55,27 @@ public abstract class CodiUtils
         // prevent instantiation
     }
 
+    /**
+     * Creates an instance for the given {@link Bean} and {@link CreationalContext}
+     * @param creationalContext current context
+     * @param bean current bean
+     * @param <T> current type
+     * @return created instance
+     */
     public static <T> T createNewInstanceOfBean(CreationalContext<T> creationalContext, Bean<T> bean)
-    {
-        return createNewInstanceOfBean(bean, creationalContext);
-    }
-
-    public static <T> T createNewInstanceOfBean(Bean<T> bean, CreationalContext<T> creationalContext)
     {
         return bean.create(creationalContext);
     }
 
-    public static <T> T getOrCreateScopedInstanceOfBeanByName(
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-name and class
+     * @param beanManager current bean-manager
+     * @param beanName name of the bean
+     * @param targetClass class of the bean
+     * @param <T> target type
+     * @return created or resolved instance
+     */
+    public static <T> T getContextualReferenceByName(
             BeanManager beanManager, String beanName, Class<T> targetClass)
     {
         Set<Bean<?>> foundBeans = beanManager.getBeans(beanName);
@@ -81,19 +86,79 @@ public abstract class CodiUtils
         return (T) getContextualReference(beanManager, targetClass, bean);
     }
 
-    public static <T> Bean<T> getOrCreateBeanByClass(Class<T> targetClass, Annotation... qualifier)
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-class and qualifiers
+     * @param targetClass class of the bean
+     * @param qualifier optional qualifiers
+     * @param <T> target type
+     * @return created or resolved instance
+     */
+    public static <T> T getContextualReferenceByClass(Class<T> targetClass, Annotation... qualifier)
     {
-        return getOrCreateBeanByClass(BeanManagerProvider.getInstance().getBeanManager(), targetClass, qualifier);
+        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
+                targetClass, qualifier);
     }
 
-    public static <T> Bean<T> getOrCreateBeanByClass(
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-class and qualifiers
+     * @param beanManager current bean-manager
+     * @param targetClass class of the bean
+     * @param qualifier optional qualifiers
+     * @param <T> target type
+     * @return created or resolved instance
+     */
+    public static <T> T getContextualReferenceByClass(
             BeanManager beanManager, Class<T> targetClass, Annotation... qualifier)
     {
-        return getOrCreateBeanByClass(beanManager, targetClass, false, qualifier);
+        return getContextualReferenceByClass(beanManager, targetClass, false, qualifier);
     }
 
-    public static <T> Bean<T> getOrCreateBeanByClass(BeanManager beanManager, Class<T> targetClass,
-                                                     boolean optionalBeanAllowed, Annotation... qualifier)
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-class and qualifiers.
+     * Compared to the other util methods it allows optional beans.
+     * @param targetClass class of the bean
+     * @param optionalBeanAllowed flag which indicates if it's an optional bean
+     * @param qualifier optional qualifiers
+     * @param <T> target type
+     * @return created or resolved instance if such a bean exists, null otherwise
+     */
+    public static <T> T getContextualReferenceByClass(Class<T> targetClass,
+                                                      boolean optionalBeanAllowed,
+                                                      Annotation... qualifier)
+    {
+        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
+                targetClass, optionalBeanAllowed, qualifier);
+    }
+
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-class and qualifiers.
+     * Compared to the other util methods it allows optional beans.
+     * @param beanManager current bean-manager
+     * @param targetClass class of the bean
+     * @param optionalBeanAllowed flag which indicates if it's an optional bean
+     * @param qualifier optional qualifiers
+     * @param <T> target type
+     * @return created or resolved instance if such a bean exists, null otherwise
+     */
+    public static <T> T getContextualReferenceByClass(BeanManager beanManager,
+                                                      Class<T> targetClass,
+                                                      boolean optionalBeanAllowed,
+                                                      Annotation... qualifier)
+    {
+        Bean<?> foundBean = getOrCreateBeanByClass(beanManager, targetClass, optionalBeanAllowed, qualifier);
+
+        if(foundBean != null)
+        {
+            //noinspection unchecked
+            return (T) getContextualReference(beanManager, targetClass, foundBean);
+        }
+        return null;
+    }
+
+    private static <T> Bean<T> getOrCreateBeanByClass(BeanManager beanManager,
+                                                      Class<T> targetClass,
+                                                      boolean optionalBeanAllowed,
+                                                      Annotation... qualifier)
     {
         Set<? extends Bean> foundBeans = beanManager.getBeans(targetClass, qualifier);
 
@@ -109,70 +174,18 @@ public abstract class CodiUtils
         return null;
     }
 
-    public static <T> T getContextualReferenceByClass(Class<T> targetClass, Annotation... qualifier)
-    {
-        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
-                targetClass, qualifier);
-    }
-
-    public static <T> T getContextualReferenceByClass(
-            BeanManager beanManager, Class<T> targetClass, Annotation... qualifier)
-    {
-        return getContextualReferenceByClass(beanManager, targetClass, false, qualifier);
-    }
-
-    public static <T> T getContextualReferenceByClass(
-            Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
-    {
-        return getContextualReferenceByClass(BeanManagerProvider.getInstance().getBeanManager(),
-                targetClass, optionalBeanAllowed, qualifier);
-    }
-
-    public static <T> T getContextualReferenceByClass(
-            BeanManager beanManager, Class<T> targetClass, boolean optionalBeanAllowed, Annotation... qualifier)
-    {
-        Bean<?> foundBean = getOrCreateBeanByClass(beanManager, targetClass, optionalBeanAllowed, qualifier);
-
-        if(foundBean != null)
-        {
-            //noinspection unchecked
-            return (T) getContextualReference(beanManager, targetClass, foundBean);
-        }
-        return null;
-    }
-
-    public static <T> T getContextualReference(BeanManager beanManager, Type t, Bean<T> bean)
+    private static <T> T getContextualReference(BeanManager beanManager, Type t, Bean<T> bean)
     {
         CreationalContext<T> cc = beanManager.createCreationalContext(bean);
         return  (T) beanManager.getReference(bean, t, cc);
     }
 
     /**
-     * Load Properties from a configuration file with the given resourceName.
-     *
-     * @param resourceName
-     * @return Properties or <code>null</code> if the given property file doesn't exist
-     * @throws IOException on underlying IO problems
+     * Allows to perform dependency injection for instances which aren't managed by CDI
+     * @param instance current instance
+     * @param <T> current type
+     * @return instance with injected fields (if possible)
      */
-    public static Properties getProperties(String resourceName) throws IOException
-    {
-        Properties props = null;
-        ClassLoader cl = ClassUtils.getClassLoader(resourceName);
-        InputStream is = cl.getResourceAsStream(resourceName);
-        if (is != null)
-        {
-            props = new Properties();
-            props.load(is);
-        }
-
-        return props;
-    }
-
-    public static ProjectStage getCurrentProjectStage()
-    {
-        return getContextualReferenceByClass(ProjectStage.class);
-    }
-
     public static <T> T injectFields(T instance)
     {
         CodiCoreConfig codiCoreConfig = getContextualReferenceByClass(CodiCoreConfig.class);
@@ -180,6 +193,14 @@ public abstract class CodiUtils
         return injectFields(instance, codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection());
     }
 
+    /**
+     * Allows to perform dependency injection for instances which aren't managed by CDI
+     * @param instance current instance
+     * @param requiresAdvancedQualifier flag which indicates if an instance has to be annotated with {@link Advanced}
+     * to be eligible for dependency injection.
+     * @param <T> current type
+     * @return instance with injected fields (if possible)
+     */
     public static <T> T injectFields(T instance, boolean requiresAdvancedQualifier)
     {
         if(instance == null)
@@ -232,9 +253,9 @@ public abstract class CodiUtils
      * Qualifiers are equal if they have the same annotationType and all their
      * methods, except those annotated with @Nonbinding, return the same value.
      *
-     * @param qualifier1
-     * @param qualifier2
-     * @return
+     * @param qualifier1 first qualifier
+     * @param qualifier2 second qualifier
+     * @return true if both qualifiers are equal, false otherwise
      */
     public static boolean isQualifierEqual(Annotation qualifier1, Annotation qualifier2)
     {
@@ -264,13 +285,6 @@ public abstract class CodiUtils
         return true;
     }
 
-    /**
-     * Quecks if the two values are equal.
-     *
-     * @param value1
-     * @param value2
-     * @return
-     */
     private static boolean checkEquality(Object value1, Object value2)
     {
         if ((value1 == null && value2 != null) || (value1 != null && value2 == null))
@@ -352,9 +366,9 @@ public abstract class CodiUtils
      * Calls the given method on the given instance.
      * Used to determine the values of annotation instances.
      *
-     * @param instance
-     * @param method
-     * @return
+     * @param instance current instance
+     * @param method method which should be invoked
+     * @return result of the called method
      */
     private static Object callMethod(Object instance, Method method)
     {
@@ -386,10 +400,10 @@ public abstract class CodiUtils
 
     /**
      * Return a List of all methods of the qualifier,
-     * which are not annotated with @Nonbinding.
+     * which are not annotated with {@link Nonbinding}.
      * 
-     * @param qualifierAnnotationType
-     * @return
+     * @param qualifierAnnotationType annotation class which has to be inspected
+     * @return methods which aren't annotated with Nonbinding
      */
     private static List<Method> getBindingQualifierMethods(Class<? extends Annotation> qualifierAnnotationType)
     {
@@ -436,14 +450,52 @@ public abstract class CodiUtils
         return Collections.emptyList();
     }
 
-    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType, Aggregatable<T>... aggregatable)
+    /**
+     * Resolves resources outside of CDI for the given class.
+     * @param targetType target type
+     * @param <T> current type
+     * @return configured artifact or null if there is no result
+     */
+    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType)
+    {
+        return lookupFromEnvironment(targetType, null);
+    }
+
+    /**
+     * Resolves resources outside of CDI for the given class.
+     * @param targetType target type which is also used as key (the simple name of it)
+     * @param aggregatable allows to aggregate multiple results
+     * @param <T> current type
+     * @return configured artifact or an aggregated instance if there are multiple results or null if there is no result
+     */
+    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType, Aggregatable<T> aggregatable)
     {
         return lookupFromEnvironment(targetType.getSimpleName(), targetType, aggregatable);
     }
 
+    /**
+     * Resolves resources outside of CDI for the given key and class.
+     * @param key key for identifying the resource which has to be resolved
+     * @param targetType target type
+     * @param <T> current type
+     * @return configured artifact or null if there is no result
+     */
+    public static <T extends Serializable> T lookupFromEnvironment(String key, Class<T> targetType)
+    {
+        return lookupFromEnvironment(key, targetType, null);
+    }
+
+    /**
+     * Resolves resources outside of CDI for the given key and class.
+     * @param key key for identifying the resource which has to be resolved
+     * @param targetType target type
+     * @param aggregatable allows to aggregate multiple results
+     * @param <T> current type
+     * @return configured artifact or an aggregated instance if there are multiple results or null if there is no result
+     */
     public static <T extends Serializable> T lookupFromEnvironment(String key,
                                                                    Class<T> targetType,
-                                                                   Aggregatable<T>... aggregatable)
+                                                                   Aggregatable<T> aggregatable)
     {
         List<T> results = ConfiguredArtifactUtils.getCachedArtifact(key, targetType);
 
@@ -466,14 +518,13 @@ public abstract class CodiUtils
             return null;
         }
 
-        if(aggregatable != null && aggregatable.length > 0)
+        if(aggregatable != null)
         {
-            Aggregatable<T> firstAggregatable = aggregatable[0]; //TODO
             for(T currentEntry : results)
             {
-                firstAggregatable.add(currentEntry);
+                aggregatable.add(currentEntry);
             }
-            return firstAggregatable.create();
+            return aggregatable.create();
         }
         else
         {
@@ -481,6 +532,10 @@ public abstract class CodiUtils
         }
     }
 
+    /**
+     * Checks if CDI is up and running
+     * @return true if CDI was bootstrapped, false otherwise
+     */
     public static boolean isCdiInitialized()
     {
         return BeanManagerProvider.isActive();

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
@@ -201,7 +201,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
             }
 
             //TODO provide a detailed error message in case of a missing bean
-            bean = getOrCreateScopedInstanceOfBeanByName(this.beanManager, beanEntry.getBeanName(), Object.class);
+            bean = getContextualReferenceByName(this.beanManager, beanEntry.getBeanName(), Object.class);
             invokePhasesLifecycleCallbacks(bean, lifecycleCallbacks, phaseEvent);
         }
     }

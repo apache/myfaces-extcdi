@@ -40,7 +40,7 @@ import java.util.List;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
-import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getOrCreateScopedInstanceOfBeanByName;
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 
 /**
  * @author Gerhard Petracek
@@ -200,7 +200,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         if (!methodList.isEmpty())
         {
             //TODO provide a detailed error message in case of a missing bean
-            bean = getOrCreateScopedInstanceOfBeanByName(getBeanManager(), beanEntry.getBeanName(), Object.class);
+            bean = getContextualReferenceByName(getBeanManager(), beanEntry.getBeanName(), Object.class);
 
             if (bean == null)
             {

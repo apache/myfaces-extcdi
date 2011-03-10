@@ -53,7 +53,7 @@ public class PreRenderViewBeanLoader
         for(PageBeanDescriptor beanEntry : beanEntries)
         {
             //resolve bean to trigger @PostConstruct if it isn't scoped
-            CodiUtils.getOrCreateScopedInstanceOfBeanByName(beanManager, beanEntry.getBeanName(), Object.class);
+            CodiUtils.getContextualReferenceByName(beanManager, beanEntry.getBeanName(), Object.class);
         }
     }
 }
