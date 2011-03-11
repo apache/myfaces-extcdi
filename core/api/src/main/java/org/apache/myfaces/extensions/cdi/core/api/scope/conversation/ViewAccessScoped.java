@@ -38,6 +38,10 @@ import static java.lang.annotation.ElementType.FIELD;
 @Inherited
 @Documented
 
+//internal hint:
+//this scope doesn't support conversation-groups.
+//if such a support is requested, we lose one of the caches.
+
 //cdi annotations
 @NormalScope(passivating=true)
 public @interface ViewAccessScoped
