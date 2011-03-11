@@ -20,11 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
-import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionState;
-
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getOldViewId;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getNewViewId;
-
 import javax.faces.context.FacesContext;
 
 /**
