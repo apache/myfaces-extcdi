@@ -59,25 +59,8 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
 
     public boolean isExpired()
     {
-        //see EXTCDI-154
-        if(this.accessDecisionVoterContext != null &&
-                AccessDecisionState.VOTE_IN_PROGRESS.equals(this.accessDecisionVoterContext.getState()))
-        {
-            return false;
-        }
-
-        if(this.lastViewId == null)
-        {
-            return true;
-        }
-
-        String oldViewId = getOldViewId();
-
-        if (oldViewId != null && oldViewId.equals(this.lastViewId))
-        {
-            this.lastViewId = getNewViewId();
-        }
-        return !getCurrentViewId().equals(this.lastViewId);
+        //handled via #observeRenderedView
+        return false;
     }
 
     public void touch()
