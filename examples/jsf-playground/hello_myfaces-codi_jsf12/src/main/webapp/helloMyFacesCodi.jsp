@@ -23,7 +23,6 @@
     </head>
     <body>
         <f:view>
-            <h:outputText value="#{counterBean.value}"/>
             <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
 
             <h1>JSF-Demo</h1>
