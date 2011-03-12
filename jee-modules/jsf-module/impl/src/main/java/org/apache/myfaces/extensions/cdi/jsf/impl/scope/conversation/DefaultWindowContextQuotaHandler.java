@@ -51,11 +51,17 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
         this.maxWindowContextCount = windowContextConfig.getMaxWindowContextCount();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean checkQuota(int activeWindowContextCount)
     {
         return this.maxWindowContextCount < activeWindowContextCount;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void handleQuotaViolation()
     {
         if(!cleanupWindowContext())

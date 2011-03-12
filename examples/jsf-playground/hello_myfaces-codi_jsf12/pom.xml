@@ -125,7 +125,7 @@
         <!-- TODO jakobk: should be openwebbeans-jsf12, but this one does not support el 2.2 (owb bug) -->
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-jsf</artifactId>
+            <artifactId>openwebbeans-jsf12</artifactId>
             <version>${owb.version}</version>
             <scope>runtime</scope>
         </dependency>

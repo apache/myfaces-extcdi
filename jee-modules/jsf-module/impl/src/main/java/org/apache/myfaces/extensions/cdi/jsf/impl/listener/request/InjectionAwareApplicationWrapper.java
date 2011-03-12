@@ -32,14 +32,12 @@ import javax.faces.el.ValueBinding;
 import javax.faces.el.MethodBinding;
 import javax.faces.el.PropertyResolver;
 import javax.faces.el.VariableResolver;
-import javax.faces.el.ReferenceSyntaxException;
 import javax.faces.event.ActionListener;
 import javax.faces.component.UIComponent;
 import javax.el.ValueExpression;
 import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 import javax.el.ELContextListener;
-import javax.el.ELException;
 import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.Iterator;
@@ -122,7 +120,6 @@ class InjectionAwareApplicationWrapper extends Application
      */
     @Override
     public ResourceBundle getResourceBundle(FacesContext ctx, String name)
-            throws NullPointerException
     {
         return wrapped.getResourceBundle(ctx, name);
     }
@@ -133,7 +130,6 @@ class InjectionAwareApplicationWrapper extends Application
     @Override
     public UIComponent createComponent(
             ValueExpression componentExpression, FacesContext facesContext, String componentType)
-            throws NullPointerException
     {
         return wrapped.createComponent(componentExpression, facesContext, componentType);
     }
@@ -179,7 +175,6 @@ class InjectionAwareApplicationWrapper extends Application
      */
     @Override
     public Object evaluateExpressionGet(FacesContext context, String expression, Class expectedType)
-            throws ELException
     {
         return wrapped.evaluateExpressionGet(context, expression, expectedType);
     }
@@ -396,7 +391,6 @@ class InjectionAwareApplicationWrapper extends Application
      * {@inheritDoc}
      */
     public MethodBinding createMethodBinding(String ref, Class[] params)
-            throws ReferenceSyntaxException
     {
         return wrapped.createMethodBinding(ref, params);
     }
@@ -437,7 +431,6 @@ class InjectionAwareApplicationWrapper extends Application
      * {@inheritDoc}
      */
     public ValueBinding createValueBinding(String ref)
-            throws ReferenceSyntaxException
     {
         return wrapped.createValueBinding(ref);
     }

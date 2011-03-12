@@ -45,6 +45,7 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
         this.accessDecisionVoterContext = accessDecisionVoterContext;
     }
 
+    //see EXTCDI-49
     void observeRenderedView(String viewId)
     {
         if(!viewId.equals(this.lastViewId))
@@ -57,6 +58,9 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isExpired()
     {
         //see EXTCDI-154
@@ -77,14 +81,21 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
         {
             this.lastViewId = getNewViewId();
         }
-        return !getCurrentViewId().equals(this.lastViewId);
+        boolean result = !getCurrentViewId().equals(this.lastViewId);
+        return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void touch()
     {
         this.lastViewId = getCurrentViewId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void expire()
     {
         this.lastViewId = null;
@@ -96,6 +107,9 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
         return FacesContext.getCurrentInstance().getViewRoot().getViewId();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setConversation(Conversation conversation)
     {
         this.conversation = conversation;

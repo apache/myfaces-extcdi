@@ -41,6 +41,9 @@ public class InterceptedResponseWriter extends ResponseWriterWrapper
         this.wrapped = wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void startDocument()
             throws IOException
@@ -50,6 +53,9 @@ public class InterceptedResponseWriter extends ResponseWriterWrapper
         wrapped.startDocument();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected ResponseWriter getWrapped()
     {
         return this.wrapped;

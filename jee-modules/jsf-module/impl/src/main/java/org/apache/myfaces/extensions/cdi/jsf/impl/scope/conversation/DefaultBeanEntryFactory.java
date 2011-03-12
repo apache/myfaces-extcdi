@@ -35,7 +35,10 @@ class DefaultBeanEntryFactory implements BeanEntryFactory
 {
     @Inject
     private BeanManager beanManager;
-    
+
+    /**
+     * {@inheritDoc}
+     */
     public <T> BeanEntry<T> createBeanEntry(Bean<T> bean,
                                             CreationalContext<T> creationalContext,
                                             boolean scopeBeanEventEnabled,

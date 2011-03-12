@@ -178,7 +178,6 @@ public class CoreStartupObserver extends AbstractStartupObserver
             return description + "Weld v" + version;
         }
         return null;
-
     }
 
     private String getCodiCoreInformation()

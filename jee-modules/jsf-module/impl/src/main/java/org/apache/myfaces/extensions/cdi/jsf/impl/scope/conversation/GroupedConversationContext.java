@@ -59,11 +59,17 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         return FacesContext.getCurrentInstance().getExternalContext().getSession(false) != null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected WindowContextManager resolveWindowContextManager()
     {
         return RequestCache.getWindowContextManager();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected BeanEntryFactory resolveBeanEntryFactory()
     {
         return RequestCache.getBeanEntryFactory();
@@ -92,6 +98,9 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         return (T)foundConversation.getBean(beanClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected <T> void scopeBeanEntry(WindowContextManager windowContextManager, BeanEntry<T> beanEntry)
     {
         if(!(windowContextManager instanceof EditableWindowContextManager))
@@ -106,6 +115,9 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         foundConversation.addBean(beanEntry);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected ConversationConfig getConversationConfig()
     {
         return CodiUtils.getContextualReferenceByClass(ConversationConfig.class);

@@ -38,6 +38,9 @@ public class DefaultCloseConversationGroupStrategy implements CloseConversationG
     @Inject
     private WindowContext windowContext;
 
+    /**
+     * {@inheritDoc}
+     */
     public Object execute(InvocationContext invocationContext) throws Exception
     {
         Object result = null;

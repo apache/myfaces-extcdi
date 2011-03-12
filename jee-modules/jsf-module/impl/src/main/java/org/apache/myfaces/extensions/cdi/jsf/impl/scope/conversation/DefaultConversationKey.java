@@ -73,16 +73,25 @@ class DefaultConversationKey implements ConversationKey
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Annotation> getScope()
     {
         return this.scopeType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<?> getConversationGroup()
     {
         return groupKey;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<Annotation> getQualifiers()
     {
         if (qualifiers == null)
@@ -92,6 +101,9 @@ class DefaultConversationKey implements ConversationKey
         return Collections.unmodifiableSet(this.qualifiers);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -131,6 +143,9 @@ class DefaultConversationKey implements ConversationKey
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
@@ -140,6 +155,9 @@ class DefaultConversationKey implements ConversationKey
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

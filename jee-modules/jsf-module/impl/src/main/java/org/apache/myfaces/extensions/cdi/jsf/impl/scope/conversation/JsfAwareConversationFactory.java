@@ -44,6 +44,9 @@ public class JsfAwareConversationFactory implements ConversationFactory
     @Inject
     private BeanManager beanManager;
 
+    /**
+     * {@inheritDoc}
+     */
     public EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig configuration)
     {
         EditableConversation conversation;

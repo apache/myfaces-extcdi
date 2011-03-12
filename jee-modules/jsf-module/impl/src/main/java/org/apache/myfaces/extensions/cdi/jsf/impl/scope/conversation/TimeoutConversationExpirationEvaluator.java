@@ -31,6 +31,9 @@ class TimeoutConversationExpirationEvaluator extends TimeoutExpirationEvaluator
         super(conversationTimeoutInMinutes);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void expire()
     {
         this.lastAccess = null;

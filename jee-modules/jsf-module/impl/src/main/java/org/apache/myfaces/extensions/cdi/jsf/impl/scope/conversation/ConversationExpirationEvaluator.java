@@ -25,9 +25,19 @@ import java.io.Serializable;
  */
 public interface ConversationExpirationEvaluator extends Serializable
 {
+    /**
+     * Evaluates if the conversation is still valid
+     * @return false if the conversation is valid, true otherwise
+     */
     boolean isExpired();
 
+    /**
+     * Marks the conversation as used
+     */
     void touch();
 
+    /**
+     * Marks the conversation as invalid
+     */
     void expire();
 }

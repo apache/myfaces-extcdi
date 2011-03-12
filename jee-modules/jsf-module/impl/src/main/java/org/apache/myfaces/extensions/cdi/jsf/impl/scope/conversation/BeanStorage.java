@@ -86,6 +86,9 @@ class BeanStorage implements Serializable
         this.beanManager.fireEvent(new UnscopeBeanEvent(instance));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

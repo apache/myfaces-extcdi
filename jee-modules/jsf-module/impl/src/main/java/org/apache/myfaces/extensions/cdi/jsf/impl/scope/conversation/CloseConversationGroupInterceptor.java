@@ -44,6 +44,13 @@ public class CloseConversationGroupInterceptor implements Serializable
     @Inject
     private CloseConversationGroupStrategy closeConversationGroupStrategy;
 
+    /**
+     * Interceptor methods which closes the conversation of the bean after the execution of the method
+     * or if the declared exception was thrown.
+     * @param invocationContext current invocation-context
+     * @return result of the intercepted method
+     * @throws Exception exception which might be thrown by the intercepted method
+     */
     @AroundInvoke
     public Object handleCloseConversation(InvocationContext invocationContext) throws Exception
     {

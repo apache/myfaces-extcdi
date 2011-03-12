@@ -48,23 +48,33 @@ public class DefaultClientConfig implements ClientConfig
     @Inject
     private ProjectStage projectStage;
 
-
+    /**
+     * {@inheritDoc}
+     */
     public boolean isJavaScriptEnabled()
     {
         return this.javaScriptEnabled;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void setJavaScriptEnabled(boolean javaScriptEnabled)
     {
         this.javaScriptEnabled = javaScriptEnabled;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public String getWindowHandlerResourceLocation()
     {
         return DEFAULT_WINDOW_HANDLER_HTML_FILE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getWindowHandlerHtml()
             throws IOException
     {
@@ -94,5 +104,4 @@ public class DefaultClientConfig implements ClientConfig
         windowHandlerHtml = sb.toString();
         return windowHandlerHtml;
     }
-
 }
