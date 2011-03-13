@@ -19,9 +19,10 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
@@ -78,21 +79,27 @@ public abstract class ConversationUtils
     }
 
     /**
-     * Calculates the conversation-group for a given {@link Bean}
+     * Calculates the conversation-group for a given {@link Bean}.
+     * Conversation-groups are only supported in combination with
+     * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped}
      * @param bean current bean
      * @return class which represents the conversation-group
      */
-    //don't cache it to support different producers
     public static Class getConversationGroup(Bean<?> bean)
     {
         Class<? extends Annotation> scopeType = bean.getScope();
 
-        //TODO check if we should support conversation groups for @WindowScoped
+        if(ViewAccessScoped.class.isAssignableFrom(scopeType))
+        {
+            return bean.getBeanClass();
+        }
+
         if(WindowScoped.class.isAssignableFrom(scopeType))
         {
             return WindowScoped.class;
         }
 
+        //don't cache it (due to the support of different producers)
         ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
 
         if(conversationGroupAnnotation == null)
