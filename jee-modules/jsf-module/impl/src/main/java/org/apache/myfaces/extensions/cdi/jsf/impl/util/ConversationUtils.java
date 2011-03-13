@@ -70,9 +70,6 @@ public abstract class ConversationUtils
     private static Map<Class, Class<? extends Annotation>> conversationGroupToScopeCache =
             new ConcurrentHashMap<Class, Class<? extends Annotation>>();
 
-    private static Map<Class, Class> beanClassToConversationGroupCache =
-            new ConcurrentHashMap<Class, Class>();
-
     private static final String REDIRECT_PERFORMED_KEY = WindowHandler.class.getName() + "redirect:KEY";
 
     private ConversationUtils()
@@ -85,42 +82,25 @@ public abstract class ConversationUtils
      * @param bean current bean
      * @return class which represents the conversation-group
      */
+    //don't cache it to support different producers
     public static Class getConversationGroup(Bean<?> bean)
     {
-        Class beanClass = bean.getBeanClass();
-        Class foundGroup = beanClassToConversationGroupCache.get(beanClass);
+        Class<? extends Annotation> scopeType = bean.getScope();
 
-        if(foundGroup != null)
+        //TODO check if we should support conversation groups for @WindowScoped
+        if(WindowScoped.class.isAssignableFrom(scopeType))
         {
-            return foundGroup;
+            return WindowScoped.class;
         }
 
-        try
+        ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
+
+        if(conversationGroupAnnotation == null)
         {
-            Class<? extends Annotation> scopeType = bean.getScope();
-
-            //TODO check if we should support conversation groups for @WindowScoped
-            if(WindowScoped.class.isAssignableFrom(scopeType))
-            {
-                foundGroup = WindowScoped.class;
-                return foundGroup;
-            }
-
-            ConversationGroup conversationGroupAnnotation = findConversationGroupAnnotation(bean);
-
-            if(conversationGroupAnnotation == null)
-            {
-                foundGroup = beanClass;
-                return foundGroup;
-            }
-
-            foundGroup = conversationGroupAnnotation.value();
-            return foundGroup;
+            return bean.getBeanClass();
         }
-        finally
-        {
-            beanClassToConversationGroupCache.put(beanClass, foundGroup);
-        }
+
+        return conversationGroupAnnotation.value();
     }
 
     private static ConversationGroup findConversationGroupAnnotation(Bean<?> bean)
