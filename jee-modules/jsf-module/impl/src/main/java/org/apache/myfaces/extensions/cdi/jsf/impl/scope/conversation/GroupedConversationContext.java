@@ -129,8 +129,13 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 
         Set<Annotation> qualifiers = bean.getQualifiers();
 
-        EditableWindowContext editableWindowContext = (EditableWindowContext)windowContextManager
-                .getCurrentWindowContext();
+        EditableWindowContext editableWindowContext = (EditableWindowContext)RequestCache.getCurrentWindowContext();
+
+        if(editableWindowContext == null)
+        {
+            editableWindowContext = (EditableWindowContext)windowContextManager.getCurrentWindowContext();
+            RequestCache.setCurrentWindowContext(editableWindowContext);
+        }
 
         return editableWindowContext
                 .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
