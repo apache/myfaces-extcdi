@@ -397,6 +397,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
             ((EditableWindowContext) windowContext).removeInactiveConversations();
         }
+        RequestCache.resetCache();
     }
 
     /**
