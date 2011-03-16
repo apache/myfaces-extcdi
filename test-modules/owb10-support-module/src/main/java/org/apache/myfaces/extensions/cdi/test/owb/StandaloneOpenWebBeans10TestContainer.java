@@ -16,20 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
+package org.apache.myfaces.extensions.cdi.test.owb;
 
-import java.io.IOException;
+import org.apache.webbeans.cditest.CdiTestContainerLoader;
 
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
-public class ContainerNotStartedException extends RuntimeException
+public class StandaloneOpenWebBeans10TestContainer extends AbstractOpenWebBeans10TestContainer
 {
-    private static final long serialVersionUID = -2362433864481560645L;
-
-    public ContainerNotStartedException(IOException e)
+    public StandaloneOpenWebBeans10TestContainer()
     {
-        super(e);
+        this.testContainer = CdiTestContainerLoader.getCdiContainer();
     }
 }

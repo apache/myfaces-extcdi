@@ -16,20 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
+package org.apache.myfaces.extensions.cdi.test.spi;
 
-import java.io.IOException;
+import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
-public class ContainerNotStartedException extends RuntimeException
+public interface CdiTestContainer extends TestContainer
 {
-    private static final long serialVersionUID = -2362433864481560645L;
+    void startContexts();
 
-    public ContainerNotStartedException(IOException e)
-    {
-        super(e);
-    }
+    void stopContexts();
+
+    BeanManager getBeanManager();
+
+    <T> T injectFields(T instance);
 }

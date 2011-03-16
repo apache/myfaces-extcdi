@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 /**
  * @author Gerhard Petracek
  */
+@Deprecated
 public class JUnit4WithCargo extends BlockJUnit4ClassRunner
 {
     private static final Logger LOGGER = Logger.getLogger(JUnit4WithCargo.class.getName());

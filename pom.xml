@@ -267,6 +267,18 @@
                 <version>0.9.4-SNAPSHOT</version>
             </dependency>
             
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+                <artifactId>myfaces-extcdi-owb10-support-module</artifactId>
+                <version>0.9.4-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+                <artifactId>myfaces-extcdi-jsf-support-module</artifactId>
+                <version>0.9.4-SNAPSHOT</version>
+            </dependency>
+
             <!--
                 We currently need this for the CDI test container to emulate the @SessionScoped.
                 TODO: Finally this should not be necessary anymore.

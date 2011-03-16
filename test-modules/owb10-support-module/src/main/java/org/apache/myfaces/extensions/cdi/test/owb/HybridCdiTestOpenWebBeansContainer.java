@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.junit4;
+package org.apache.myfaces.extensions.cdi.test.owb;
 
 import org.apache.myfaces.test.mock.MockHttpServletRequest;
 import org.apache.webbeans.cditest.CdiTestContainer;
@@ -40,6 +40,7 @@ class HybridCdiTestOpenWebBeansContainer implements CdiTestContainer
     private ContainerLifecycle lifecycle = null;
     private MockServletContext servletContext = null;
     private MockHttpSession session = null;
+    //TODO
     private MockHttpServletRequest request;
 
     public void bootContainer() throws Exception

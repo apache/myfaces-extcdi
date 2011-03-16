@@ -18,44 +18,41 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
-import org.apache.webbeans.context.ContextFactory;
+import org.apache.myfaces.extensions.cdi.test.TestContainerResolver;
+import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.junit.After;
 import org.junit.Before;
-
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 
 /**
  * Allows dependency injection in JUnit tests and implementing JUnit tests in web-projects.
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractServletAwareTest extends AbstractCdiAwareTest
+public abstract class AbstractServletAwareTest
 {
-    @Override
+    protected CdiTestContainer testContainer;
+
     @Before
     public void before() throws Exception
     {
-        ProjectStageProducer.setProjectStage(ProjectStage.UnitTest);
+        this.testContainer = TestContainerResolver.getNewCdiTestContainer(true);
 
-        this.testContainer = new HybridCdiTestOpenWebBeansContainer();
-        this.testContainer.bootContainer();
-
+        this.testContainer.initEnvironment();
+        this.testContainer.startContainer();
         this.testContainer.startContexts();
-        ContextFactory.activateContext(SessionScoped.class);
-        ContextFactory.activateContext(RequestScoped.class);
+        ((WebAppAwareCdiTestContainer)this.testContainer).beginSession();
+        ((WebAppAwareCdiTestContainer)this.testContainer).beginRequest();
 
-        injectFields();
+        this.testContainer.injectFields(this);
     }
 
     @After
     public void after() throws Exception
     {
-        ContextFactory.deActivateContext(SessionScoped.class);
-        ContextFactory.deActivateContext(RequestScoped.class);
+        ((WebAppAwareCdiTestContainer)this.testContainer).endRequest();
+        ((WebAppAwareCdiTestContainer)this.testContainer).endSession();
         this.testContainer.stopContexts();
-        this.testContainer.shutdownContainer();
+        this.testContainer.stopContainer();
     }
 }

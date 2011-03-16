@@ -1,0 +1,2 @@
+org.apache.myfaces.extensions.cdi.test.owb.StandaloneOpenWebBeans10TestContainer
+org.apache.myfaces.extensions.cdi.test.owb.ServletOpenWebBeans10TestContainer

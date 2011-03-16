@@ -16,20 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
-
-import java.io.IOException;
+package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
  * @author Gerhard Petracek
  */
-@Deprecated
-public class ContainerNotStartedException extends RuntimeException
+public interface TestContainer
 {
-    private static final long serialVersionUID = -2362433864481560645L;
+    void initEnvironment();
 
-    public ContainerNotStartedException(IOException e)
-    {
-        super(e);
-    }
+    void startContainer();
+
+    void stopContainer();
 }

@@ -37,25 +37,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.myfaces.core</groupId>
-            <artifactId>myfaces-api</artifactId>
-            <version>1.2.8</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-el_2.2_spec</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-validation_1.0_spec</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
             <scope>provided</scope>
@@ -70,24 +51,6 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans.test</groupId>
-            <artifactId>cditest</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans.test</groupId>
-            <artifactId>cditest-owb</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.test</groupId>
-            <artifactId>myfaces-test12</artifactId>
             <scope>provided</scope>
         </dependency>
 
