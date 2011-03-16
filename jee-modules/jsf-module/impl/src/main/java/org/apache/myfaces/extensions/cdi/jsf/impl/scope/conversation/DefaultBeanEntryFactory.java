@@ -49,7 +49,7 @@ class DefaultBeanEntryFactory implements BeanEntryFactory
                                             boolean accessBeanEventEnabled,
                                             boolean unscopeBeanEventEnabled)
     {
-        if(Serializable.class.isAssignableFrom(bean.getBeanClass()))
+        if(Serializable.class.isAssignableFrom(bean.getClass()))
         {
             return new ConversationBeanEntry<T>(creationalContext,
                                                 bean,
