@@ -17,7 +17,7 @@
  * under the License.
  */
 
-Start the demo e.g. via:
+start the demo e.g. via:
 mvn clean jetty:run-exploded -PjettyConfig -Dmaven.test.skip=true
 
 this example also demonstrates cargo tests -> if a codi snapshot is build manuelly use (in the root of the project):
@@ -37,8 +37,28 @@ build example for a jee6 application server
 mvn clean install -Denvironment=jee6
 
 
-Only open and start this example outside of the rest of the project. That's required due to the missing shade support.
+only open and start this example outside of the rest of the project. that's required due to the missing shade support.
 
 For remote debugging:
 MAVEN_OPTS
 -XX:MaxPermSize=256m -Xmx1024m -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=n
+
+
+
+application server hints:
+
+manual glassfish deployment:
+cd [example root]
+mvn clean install -Denvironment=jee6
+//cd target to see the war-file - in case of demo-apps the file is usually very small < 1mb
+asadmin start-domain
+asadmin deploy "[path to war-file]"
+//find out the name of the deployed application(s): asadmin list-applications
+//start the browser and enter the url http://localhost:8080/[name of the deployed applications]
+//enjoy the application
+
+//undeploy an application:
+asadmin undeploy [name of the deployed applications]
+
+//stop the domain
+asadmin stop-domain
