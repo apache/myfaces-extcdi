@@ -172,6 +172,7 @@ public class DefaultWindowHandler implements WindowHandler
     //don't use {@link RequestCache} here directly - due to the redirect it was cleared
     protected String getCurrentWindowId()
     {
+        //TODO
         return RequestCache.getWindowContextManager().getCurrentWindowContext().getId();
     }
 

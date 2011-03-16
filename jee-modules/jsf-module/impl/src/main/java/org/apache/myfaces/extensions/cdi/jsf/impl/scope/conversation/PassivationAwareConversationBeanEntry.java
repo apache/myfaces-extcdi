@@ -23,23 +23,29 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
+ * Fallback e.g. for Weld
+ *
  * @author Gerhard Petracek
  */
-class ConversationBeanEntry<T> extends AbstractConversationBeanEntry<T>
+class PassivationAwareConversationBeanEntry<T> extends AbstractConversationBeanEntry<T>
 {
-    private static final long serialVersionUID = -4756851133555458294L;
+    private static final long serialVersionUID = 5461280883272018770L;
 
-    private final Bean<T> bean;
+    private String beanId;
 
-    ConversationBeanEntry(CreationalContext<T> creationalContext,
-                          Bean<T> bean,
-                          BeanManager beanManager,
-                          boolean scopeBeanEventEnable,
-                          boolean accessBeanEventEnable,
-                          boolean unscopeBeanEventEnable)
+    private transient Bean<T> bean;
+
+    PassivationAwareConversationBeanEntry(CreationalContext<T> creationalContext,
+                                          Bean<T> bean,
+                                          String beanId,
+                                          BeanManager beanManager,
+                                          boolean scopeBeanEventEnable,
+                                          boolean accessBeanEventEnable,
+                                          boolean unscopeBeanEventEnable)
     {
         super(creationalContext, beanManager, scopeBeanEventEnable, accessBeanEventEnable, unscopeBeanEventEnable);
         this.bean = bean;
+        this.beanId = beanId;
     }
 
     /**
@@ -47,6 +53,11 @@ class ConversationBeanEntry<T> extends AbstractConversationBeanEntry<T>
      */
     public Bean<T> getBean()
     {
-        return this.bean;
+        if(this.bean == null)
+        {
+            this.bean = (Bean<T>) this.beanManager.getPassivationCapableBean(this.beanId);
+        }
+
+        return bean;
     }
 }

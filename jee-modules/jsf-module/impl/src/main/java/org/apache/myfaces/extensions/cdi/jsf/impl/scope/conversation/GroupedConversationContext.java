@@ -134,6 +134,7 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
         if(editableWindowContext == null)
         {
             editableWindowContext = (EditableWindowContext)windowContextManager.getCurrentWindowContext();
+            //also done by the default implementation but this also ensures that custom impls are fast
             RequestCache.setCurrentWindowContext(editableWindowContext);
         }
 

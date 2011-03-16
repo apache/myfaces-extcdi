@@ -25,7 +25,11 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.spi.PassivationCapable;
 import javax.inject.Inject;
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -45,6 +49,36 @@ class DefaultBeanEntryFactory implements BeanEntryFactory
                                             boolean accessBeanEventEnabled,
                                             boolean unscopeBeanEventEnabled)
     {
+        if(Serializable.class.isAssignableFrom(bean.getBeanClass()))
+        {
+            return new ConversationBeanEntry<T>(creationalContext,
+                                                bean,
+                                                this.beanManager,
+                                                scopeBeanEventEnabled,
+                                                accessBeanEventEnabled,
+                                                unscopeBeanEventEnabled);
+        }
+
+        if(PassivationCapable.class.isAssignableFrom(bean.getClass()))
+        {
+            return new PassivationAwareConversationBeanEntry<T>(creationalContext,
+                                                                bean,
+                                                                ((PassivationCapable)bean).getId(),
+                                                                this.beanManager,
+                                                                scopeBeanEventEnabled,
+                                                                accessBeanEventEnabled,
+                                                                unscopeBeanEventEnabled);
+        }
+
+        //should never occur
+        Logger logger = Logger.getLogger(DefaultBeanEntryFactory.class.getName());
+        if(logger.isLoggable(Level.WARNING))
+        {
+            logger.warning("the bean-implementation: " + bean.getClass() + " doesn't implement " +
+                Serializable.class.getName() + " or " + PassivationCapable.class.getName() +
+                    " -> mechanisms like session serialization won't work.");
+        }
+
         return new ConversationBeanEntry<T>(creationalContext,
                                             bean,
                                             this.beanManager,
