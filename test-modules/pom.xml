@@ -34,16 +34,13 @@
         <version>0.9.4-SNAPSHOT</version>
     </parent>
 
+    <modules>
+        <module>base-test-infrastructure-module</module>
+        <module>owb10-support-module</module>
+        <module>jsf12-support-module</module>
+    </modules>
+
     <profiles>
-        <profile>
-            <id>test-infrastructure</id>
-            <modules>
-                <module>base-test-infrastructure-module</module>
-                <module>owb10-support-module</module>
-                <module>jsf12-support-module</module>
-            </modules>
-        </profile>
-        
         <!-- use mvn clean install -Pwebapptest to run the webapp-tests -->
         <profile>
             <id>webapptest</id>
