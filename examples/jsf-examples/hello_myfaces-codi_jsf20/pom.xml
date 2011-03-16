@@ -40,6 +40,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi</groupId>
+            <artifactId>myfaces-extcdi-dist-jsf20</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- or use the modules you need individually.
+        ATTENTION: some application servers have bugs concerning the deployment of individual modules.
+        In this example we use the all-in-one jar to avoid problems with the jee6 profile due to the mentioned
+        application server issues.-->
+        <!--
+        <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
             <scope>compile</scope>
@@ -74,13 +85,7 @@
             <artifactId>myfaces-extcdi-message-module-impl</artifactId>
             <scope>runtime</scope>
         </dependency>
-
-        <!-- alternative to the single modules -->
-        <!--dependency>
-            <groupId>org.apache.myfaces.extensions.cdi</groupId>
-            <artifactId>myfaces-extcdi-dist-jsf20</artifactId>
-            <scope>compile</scope>
-        </dependency-->
+        -->
 
         <!-- test dependencies -->
         <dependency>
@@ -228,6 +233,12 @@
                 <dependency>
                     <groupId>org.apache.geronimo.specs</groupId>
                     <artifactId>geronimo-validation_1.0_spec</artifactId>
+                    <scope>runtime</scope>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.apache.geronimo.specs</groupId>
+                    <artifactId>geronimo-jpa_1.0_spec</artifactId>
                     <scope>runtime</scope>
                 </dependency>
 
