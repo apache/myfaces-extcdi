@@ -32,6 +32,8 @@ import javax.enterprise.inject.spi.BeanManager;
  * @author Gerhard Petracek
  */
 
+//This class is no cdi-bean, there will be a #veto during the bootstrapping process
+
 @Advanced
 @JsfPhaseListener
 public class JsfRequestLifecyclePhaseListener implements PhaseListener

@@ -36,7 +36,6 @@ import javax.faces.event.PhaseId;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.spi.BeanManager;
 import java.util.List;
 import java.lang.reflect.Method;
@@ -45,9 +44,9 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * @author Gerhard Petracek
  */
+//This class is no cdi-bean, there will be a #veto during the bootstrapping process
 @Advanced
 @JsfPhaseListener
-@Dependent
 @SuppressWarnings({"UnusedDeclaration"})
 public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 {
