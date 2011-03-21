@@ -18,14 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.test.owb;
 
-import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletContainerAwareCdiTestContainer;
 import org.apache.webbeans.cditest.CdiTestContainerLoader;
 
 /**
  * @author Gerhard Petracek
  */
 public class ServletOpenWebBeans10TestContainer
-        extends AbstractOpenWebBeans10TestContainer implements ServletAwareCdiTestContainer
+        extends AbstractOpenWebBeans10TestContainer implements ServletContainerAwareCdiTestContainer
 {
     public ServletOpenWebBeans10TestContainer()
     {

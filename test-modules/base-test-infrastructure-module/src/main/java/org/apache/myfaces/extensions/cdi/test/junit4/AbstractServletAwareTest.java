@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
 import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
-import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletContainerAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.junit.After;
 import org.junit.Before;
@@ -39,13 +39,13 @@ public abstract class AbstractServletAwareTest
     @Before
     public void before()
     {
-        this.testContainer = TestContainerFactory.createTestContainer(ServletAwareCdiTestContainer.class);
+        this.testContainer = TestContainerFactory.createTestContainer(ServletContainerAwareCdiTestContainer.class);
 
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();
         this.testContainer.startContexts();
-        ((ServletAwareCdiTestContainer)this.testContainer).startSession();
-        ((ServletAwareCdiTestContainer)this.testContainer).startRequest();
+        ((ServletContainerAwareCdiTestContainer)this.testContainer).startSession();
+        ((ServletContainerAwareCdiTestContainer)this.testContainer).startRequest();
 
         this.testContainer.injectFields(this);
     }
@@ -56,8 +56,8 @@ public abstract class AbstractServletAwareTest
     @After
     public void after()
     {
-        ((ServletAwareCdiTestContainer)this.testContainer).stopRequest();
-        ((ServletAwareCdiTestContainer)this.testContainer).stopSession();
+        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopRequest();
+        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopSession();
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();
     }

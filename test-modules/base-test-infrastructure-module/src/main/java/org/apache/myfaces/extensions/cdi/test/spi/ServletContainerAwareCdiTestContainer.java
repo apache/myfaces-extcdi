@@ -23,7 +23,7 @@ package org.apache.myfaces.extensions.cdi.test.spi;
  *
  * @author Gerhard Petracek
  */
-public interface ServletAwareCdiTestContainer extends CdiTestContainer
+public interface ServletContainerAwareCdiTestContainer extends CdiTestContainer
 {
     /**
      * Starts a new {@link javax.servlet.http.HttpSessionEvent}

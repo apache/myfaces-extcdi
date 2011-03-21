@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.test;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
-import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletContainerAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.TestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
@@ -49,7 +49,7 @@ public class TestContainerFactory
         {
             return (T)getNewJsfTestContainer();
         }
-        if(ServletAwareCdiTestContainer.class.isAssignableFrom(expectedContainer))
+        if(ServletContainerAwareCdiTestContainer.class.isAssignableFrom(expectedContainer))
         {
             return (T)getNewCdiTestContainer(true);
         }
@@ -139,6 +139,6 @@ public class TestContainerFactory
 
     private static boolean isServletContextAwareContainer(CdiTestContainer testContainer)
     {
-        return ServletAwareCdiTestContainer.class.isAssignableFrom(testContainer.getClass());
+        return ServletContainerAwareCdiTestContainer.class.isAssignableFrom(testContainer.getClass());
     }
 }
