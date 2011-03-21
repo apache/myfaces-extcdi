@@ -35,7 +35,7 @@ public abstract class AbstractCdiAwareTest
     @Before
     public void before() throws Exception
     {
-        this.testContainer = TestContainerFactory.getNewCdiTestContainer(false);
+        this.testContainer = TestContainerFactory.createTestContainer(CdiTestContainer.class);
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();
         this.testContainer.startContexts();
@@ -47,6 +47,6 @@ public abstract class AbstractCdiAwareTest
     public void after() throws Exception
     {
         this.testContainer.stopContexts();
-        this.testContainer.startContainer();
+        this.testContainer.stopContainer();
     }
 }

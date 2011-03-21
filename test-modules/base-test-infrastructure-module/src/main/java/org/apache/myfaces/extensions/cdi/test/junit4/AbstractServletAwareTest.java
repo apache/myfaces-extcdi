@@ -36,7 +36,7 @@ public abstract class AbstractServletAwareTest
     @Before
     public void before() throws Exception
     {
-        this.testContainer = TestContainerFactory.getNewCdiTestContainer(true);
+        this.testContainer = TestContainerFactory.createTestContainer(WebAppAwareCdiTestContainer.class);
 
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();

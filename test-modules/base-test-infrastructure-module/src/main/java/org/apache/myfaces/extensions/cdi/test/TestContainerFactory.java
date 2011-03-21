@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.test;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
+import org.apache.myfaces.extensions.cdi.test.spi.TestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
@@ -31,7 +32,20 @@ import java.util.List;
  */
 public class TestContainerFactory
 {
-    public static WebAppTestContainer getNewJsfTestContainer()
+    public static <T extends TestContainer> T createTestContainer(Class<T> expectedContainer)
+    {
+        if(WebAppTestContainer.class.isAssignableFrom(expectedContainer))
+        {
+            return (T)getNewJsfTestContainer();
+        }
+        if(WebAppAwareCdiTestContainer.class.isAssignableFrom(expectedContainer))
+        {
+            return (T)getNewCdiTestContainer(true);
+        }
+        return (T)getNewCdiTestContainer(false);
+    }
+
+    private static WebAppTestContainer getNewJsfTestContainer()
     {
         List<WebAppTestContainer> testContainers =
                 new ServiceLoaderResolver()
@@ -69,7 +83,7 @@ public class TestContainerFactory
         return testContainers.iterator().next();
     }
 
-    public static CdiTestContainer getNewCdiTestContainer(boolean createServletContext /*TODO*/)
+    private static CdiTestContainer getNewCdiTestContainer(boolean createServletContext /*TODO*/)
     {
         List<CdiTestContainer> testContainers =
                 new ServiceLoaderResolver().resolveInstances(new ConfiguredValueDescriptor<String, CdiTestContainer>()

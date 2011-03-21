@@ -34,7 +34,7 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
     @Before
     public void before() throws Exception
     {
-        this.webAppTestContainer = TestContainerFactory.getNewJsfTestContainer();
+        this.webAppTestContainer = TestContainerFactory.createTestContainer(WebAppTestContainer.class);
 
         this.webAppTestContainer.initEnvironment();
         this.webAppTestContainer.startContainer();
