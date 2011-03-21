@@ -100,7 +100,7 @@ public abstract class AbstractOpenWebBeans10TestContainer implements CdiTestCont
         BeanManager beanManager = getBeanManager();
         CreationalContext creationalContext = beanManager.createCreationalContext(null);
 
-        AnnotatedType annotatedType = beanManager.createAnnotatedType(getClass());
+        AnnotatedType annotatedType = beanManager.createAnnotatedType(instance.getClass());
         InjectionTarget injectionTarget = beanManager.createInjectionTarget(annotatedType);
         injectionTarget.inject(instance, creationalContext);
         return instance;
