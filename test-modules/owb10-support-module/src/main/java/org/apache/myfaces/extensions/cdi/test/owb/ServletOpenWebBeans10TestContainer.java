@@ -20,10 +20,6 @@ package org.apache.myfaces.extensions.cdi.test.owb;
 
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
 import org.apache.webbeans.cditest.CdiTestContainerLoader;
-import org.apache.webbeans.context.ContextFactory;
-
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
 
 /**
  * @author Gerhard Petracek
@@ -38,21 +34,65 @@ public class ServletOpenWebBeans10TestContainer
 
     public void beginSession()
     {
-        ContextFactory.activateContext(SessionScoped.class);
+        try
+        {
+            this.testContainer.startSessionScope();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public void beginRequest()
     {
-        ContextFactory.activateContext(RequestScoped.class);
+        try
+        {
+            this.testContainer.startRequestScope();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public void endRequest()
     {
-        ContextFactory.deActivateContext(RequestScoped.class);
+        try
+        {
+            this.testContainer.stopRequestScope();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public void endSession()
     {
-        ContextFactory.deActivateContext(SessionScoped.class);
+        try
+        {
+            this.testContainer.stopSessionScope();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }
