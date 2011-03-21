@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.owb;
 
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
+import org.apache.webbeans.cditest.CdiTestContainerLoader;
 import org.apache.webbeans.context.ContextFactory;
 
 import javax.enterprise.context.RequestScoped;
@@ -32,7 +33,7 @@ public class ServletOpenWebBeans10TestContainer
 {
     public ServletOpenWebBeans10TestContainer()
     {
-        this.testContainer = new HybridCdiTestOpenWebBeansContainer();
+        this.testContainer = CdiTestContainerLoader.getCdiContainer();
     }
 
     public void beginSession()
