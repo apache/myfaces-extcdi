@@ -23,9 +23,9 @@ import org.apache.webbeans.cditest.CdiTestContainerLoader;
 /**
  * @author Gerhard Petracek
  */
-public class StandaloneOpenWebBeans10TestContainer extends AbstractOpenWebBeans10TestContainer
+public class StandaloneOpenWebBeansTestContainer extends AbstractOpenWebBeansTestContainer
 {
-    public StandaloneOpenWebBeans10TestContainer()
+    public StandaloneOpenWebBeansTestContainer()
     {
         this.testContainer = CdiTestContainerLoader.getCdiContainer();
     }

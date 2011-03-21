@@ -30,7 +30,7 @@ import javax.enterprise.inject.spi.InjectionTarget;
 /**
  * @author Gerhard Petracek
  */
-public abstract class AbstractOpenWebBeans10TestContainer implements CdiTestContainer
+public abstract class AbstractOpenWebBeansTestContainer implements CdiTestContainer
 {
     protected org.apache.webbeans.cditest.CdiTestContainer testContainer;
 

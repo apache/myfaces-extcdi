@@ -23,7 +23,7 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-    <artifactId>myfaces-extcdi-owb10-support-module</artifactId>
+    <artifactId>myfaces-extcdi-owb-support-module</artifactId>
     <version>0.9.4-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI OpenWebBeans 1.0.0 Test-Support Module</name>

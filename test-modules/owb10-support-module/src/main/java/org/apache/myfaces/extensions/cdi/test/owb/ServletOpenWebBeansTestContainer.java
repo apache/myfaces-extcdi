@@ -24,10 +24,10 @@ import org.apache.webbeans.cditest.CdiTestContainerLoader;
 /**
  * @author Gerhard Petracek
  */
-public class ServletOpenWebBeans10TestContainer
-        extends AbstractOpenWebBeans10TestContainer implements ServletContainerAwareCdiTestContainer
+public class ServletOpenWebBeansTestContainer
+        extends AbstractOpenWebBeansTestContainer implements ServletContainerAwareCdiTestContainer
 {
-    public ServletOpenWebBeans10TestContainer()
+    public ServletOpenWebBeansTestContainer()
     {
         this.testContainer = CdiTestContainerLoader.getCdiContainer();
     }
