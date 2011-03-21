@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.test.TestContainerResolver;
+import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.junit.After;
@@ -36,7 +36,7 @@ public abstract class AbstractServletAwareTest
     @Before
     public void before() throws Exception
     {
-        this.testContainer = TestContainerResolver.getNewCdiTestContainer(true);
+        this.testContainer = TestContainerFactory.getNewCdiTestContainer(true);
 
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();

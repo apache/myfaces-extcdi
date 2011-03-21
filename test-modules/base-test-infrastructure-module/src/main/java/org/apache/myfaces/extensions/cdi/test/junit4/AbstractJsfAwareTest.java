@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.test.TestContainerResolver;
+import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
 import org.junit.After;
 import org.junit.Before;
@@ -34,7 +34,7 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
     @Before
     public void before() throws Exception
     {
-        this.webAppTestContainer = TestContainerResolver.getNewJsfTestContainer();
+        this.webAppTestContainer = TestContainerFactory.getNewJsfTestContainer();
 
         this.webAppTestContainer.initEnvironment();
         this.webAppTestContainer.startContainer();

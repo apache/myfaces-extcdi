@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.test.TestContainerResolver;
+import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.junit.After;
 import org.junit.Before;
@@ -35,7 +35,7 @@ public abstract class AbstractCdiAwareTest
     @Before
     public void before() throws Exception
     {
-        this.testContainer = TestContainerResolver.getNewCdiTestContainer(false);
+        this.testContainer = TestContainerFactory.getNewCdiTestContainer(false);
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();
         this.testContainer.startContexts();
