@@ -92,8 +92,7 @@ public abstract class AbstractOpenWebBeans10TestContainer implements CdiTestCont
 
     public BeanManager getBeanManager()
     {
-        this.testContainer.getBeanManager();
-        throw new IllegalStateException("not implemented");
+        return this.testContainer.getBeanManager();
     }
 
     public <T> T injectFields(T instance)
