@@ -21,15 +21,34 @@ package org.apache.myfaces.extensions.cdi.test.spi;
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
+ * Interface for handling a CDI container
+ *
  * @author Gerhard Petracek
  */
 public interface CdiTestContainer extends TestContainer
 {
+    /**
+     * Starts all contexts of the container
+     */
     void startContexts();
 
+    /**
+     * Stops all contexts of the container
+     */
     void stopContexts();
 
+    /**
+     * Resolves the current {@link BeanManager}
+     * @return current bean-manager
+     */
     BeanManager getBeanManager();
 
+    /**
+     * Performs manual dependency injection.
+     * It's needed for classes which aren't managed by CDI
+     * @param instance instance which isn't managed by CDI
+     * @param <T> current type
+     * @return the given instance with injected beans
+     */
     <T> T injectFields(T instance);
 }

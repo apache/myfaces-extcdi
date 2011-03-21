@@ -18,21 +18,21 @@
  */
 package org.apache.myfaces.extensions.cdi.test.owb;
 
-import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
 import org.apache.webbeans.cditest.CdiTestContainerLoader;
 
 /**
  * @author Gerhard Petracek
  */
 public class ServletOpenWebBeans10TestContainer
-        extends AbstractOpenWebBeans10TestContainer implements WebAppAwareCdiTestContainer
+        extends AbstractOpenWebBeans10TestContainer implements ServletAwareCdiTestContainer
 {
     public ServletOpenWebBeans10TestContainer()
     {
         this.testContainer = CdiTestContainerLoader.getCdiContainer();
     }
 
-    public void beginSession()
+    public void startSession()
     {
         try
         {
@@ -48,7 +48,7 @@ public class ServletOpenWebBeans10TestContainer
         }
     }
 
-    public void beginRequest()
+    public void startRequest()
     {
         try
         {
@@ -64,7 +64,7 @@ public class ServletOpenWebBeans10TestContainer
         }
     }
 
-    public void endRequest()
+    public void stopRequest()
     {
         try
         {
@@ -80,7 +80,7 @@ public class ServletOpenWebBeans10TestContainer
         }
     }
 
-    public void endSession()
+    public void stopSession()
     {
         try
         {

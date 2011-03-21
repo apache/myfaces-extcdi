@@ -98,9 +98,12 @@ public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTe
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Before
-    public void before() throws Exception
+    public void before()
     {
         super.before();
 
@@ -108,9 +111,12 @@ public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTe
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @After
-    public void after() throws Exception
+    public void after()
     {
         super.after();
 

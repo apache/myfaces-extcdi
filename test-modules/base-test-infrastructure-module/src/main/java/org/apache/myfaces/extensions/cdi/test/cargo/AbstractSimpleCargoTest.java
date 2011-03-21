@@ -31,17 +31,23 @@ import org.junit.Before;
  */
 public abstract class AbstractSimpleCargoTest extends AbstractContainerAwareCargoTest
 {
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Before
-    public void before() throws Exception
+    public void before()
     {
         webClient = new WebClient(getBrowserVersion());
         webClient.setAjaxController(new NicelyResynchronizingAjaxController());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @After
-    public void after() throws Exception
+    public void after()
     {
         webClient.closeAllWindows();
         webClient = null;

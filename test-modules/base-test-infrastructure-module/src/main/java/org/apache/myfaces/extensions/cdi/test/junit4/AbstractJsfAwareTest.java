@@ -24,15 +24,20 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
+ * Base class which can be used for CODI unit-tests
+ *
  * @author Gerhard Petracek
  */
 public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
 {
     protected WebAppTestContainer webAppTestContainer;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @Before
-    public void before() throws Exception
+    public void before()
     {
         this.webAppTestContainer = TestContainerFactory.createTestContainer(WebAppTestContainer.class);
 
@@ -42,9 +47,12 @@ public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
         super.before();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     @After
-    public void after() throws Exception
+    public void after()
     {
         super.after();
         this.webAppTestContainer.stopContainer();

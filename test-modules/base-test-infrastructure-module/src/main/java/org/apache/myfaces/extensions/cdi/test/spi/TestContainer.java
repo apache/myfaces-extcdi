@@ -19,13 +19,24 @@
 package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
+ * Base interface for all containers
+ *
  * @author Gerhard Petracek
  */
 public interface TestContainer
 {
+    /**
+     * Initializes the environment e.g. project-stage, class-loader,...
+     */
     void initEnvironment();
 
+    /**
+     * Bootstraps the container
+     */
     void startContainer();
 
+    /**
+     * Closes the container
+     */
     void stopContainer();
 }

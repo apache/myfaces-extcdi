@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
 import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
-import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.junit.After;
 import org.junit.Before;
@@ -33,25 +33,31 @@ public abstract class AbstractServletAwareTest
 {
     protected CdiTestContainer testContainer;
 
+    /**
+     * Bootstraps a new container
+     */
     @Before
-    public void before() throws Exception
+    public void before()
     {
-        this.testContainer = TestContainerFactory.createTestContainer(WebAppAwareCdiTestContainer.class);
+        this.testContainer = TestContainerFactory.createTestContainer(ServletAwareCdiTestContainer.class);
 
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();
         this.testContainer.startContexts();
-        ((WebAppAwareCdiTestContainer)this.testContainer).beginSession();
-        ((WebAppAwareCdiTestContainer)this.testContainer).beginRequest();
+        ((ServletAwareCdiTestContainer)this.testContainer).startSession();
+        ((ServletAwareCdiTestContainer)this.testContainer).startRequest();
 
         this.testContainer.injectFields(this);
     }
 
+    /**
+     * Stops the current container
+     */
     @After
-    public void after() throws Exception
+    public void after()
     {
-        ((WebAppAwareCdiTestContainer)this.testContainer).endRequest();
-        ((WebAppAwareCdiTestContainer)this.testContainer).endSession();
+        ((ServletAwareCdiTestContainer)this.testContainer).stopRequest();
+        ((ServletAwareCdiTestContainer)this.testContainer).stopSession();
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();
     }

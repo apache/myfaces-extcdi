@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.cdi.test;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
+import org.apache.myfaces.extensions.cdi.test.spi.ServletAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.TestContainer;
-import org.apache.myfaces.extensions.cdi.test.spi.WebAppAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
 
@@ -32,13 +32,24 @@ import java.util.List;
  */
 public class TestContainerFactory
 {
+    private TestContainerFactory()
+    {
+    }
+
+    /**
+     * Creates a container which fulfills the given interface.
+     *
+     * @param expectedContainer type of the requested container
+     * @param <T> container type
+     * @return a new container for the given type
+     */
     public static <T extends TestContainer> T createTestContainer(Class<T> expectedContainer)
     {
         if(WebAppTestContainer.class.isAssignableFrom(expectedContainer))
         {
             return (T)getNewJsfTestContainer();
         }
-        if(WebAppAwareCdiTestContainer.class.isAssignableFrom(expectedContainer))
+        if(ServletAwareCdiTestContainer.class.isAssignableFrom(expectedContainer))
         {
             return (T)getNewCdiTestContainer(true);
         }
@@ -83,7 +94,7 @@ public class TestContainerFactory
         return testContainers.iterator().next();
     }
 
-    private static CdiTestContainer getNewCdiTestContainer(boolean createServletContext /*TODO*/)
+    private static CdiTestContainer getNewCdiTestContainer(boolean createServletContext)
     {
         List<CdiTestContainer> testContainers =
                 new ServiceLoaderResolver().resolveInstances(new ConfiguredValueDescriptor<String, CdiTestContainer>()
@@ -128,6 +139,6 @@ public class TestContainerFactory
 
     private static boolean isServletContextAwareContainer(CdiTestContainer testContainer)
     {
-        return WebAppAwareCdiTestContainer.class.isAssignableFrom(testContainer.getClass());
+        return ServletAwareCdiTestContainer.class.isAssignableFrom(testContainer.getClass());
     }
 }

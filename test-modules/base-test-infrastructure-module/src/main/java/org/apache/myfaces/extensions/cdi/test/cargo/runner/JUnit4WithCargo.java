@@ -38,11 +38,17 @@ public class JUnit4WithCargo extends BlockJUnit4ClassRunner
 {
     private static final Logger LOGGER = Logger.getLogger(JUnit4WithCargo.class.getName());
 
+    /**
+     * {@inheritDoc}
+     */
     public JUnit4WithCargo(Class<?> testClass) throws InitializationError
     {
         super(testClass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void runChild(FrameworkMethod method, RunNotifier notifier)
     {

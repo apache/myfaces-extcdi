@@ -25,6 +25,8 @@ import org.junit.Before;
 
 /**
  * Allows dependency injection in (standalone) JUnit tests.
+ * For implementing unit tests with servlet-scopes or CODI unit tests use
+ * {@link AbstractServletAwareTest} or {@link AbstractJsfAwareTest}
  *
  * @author Gerhard Petracek
  */
@@ -32,8 +34,11 @@ public abstract class AbstractCdiAwareTest
 {
     protected CdiTestContainer testContainer;
 
+    /**
+     * Bootstraps a new container
+     */
     @Before
-    public void before() throws Exception
+    public void before()
     {
         this.testContainer = TestContainerFactory.createTestContainer(CdiTestContainer.class);
         this.testContainer.initEnvironment();
@@ -43,8 +48,11 @@ public abstract class AbstractCdiAwareTest
         this.testContainer.injectFields(this);
     }
 
+    /**
+     * Stops the current container
+     */
     @After
-    public void after() throws Exception
+    public void after()
     {
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();

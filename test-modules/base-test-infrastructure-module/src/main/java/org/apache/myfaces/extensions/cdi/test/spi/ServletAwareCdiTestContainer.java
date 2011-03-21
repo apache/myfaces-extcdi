@@ -19,15 +19,29 @@
 package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
+ * CDI container which is aware of servlet based applications.
+ *
  * @author Gerhard Petracek
  */
-public interface WebAppAwareCdiTestContainer extends CdiTestContainer
+public interface ServletAwareCdiTestContainer extends CdiTestContainer
 {
-    void beginSession();
+    /**
+     * Starts a new {@link javax.servlet.http.HttpSessionEvent}
+     */
+    void startSession();
 
-    void beginRequest();
+    /**
+     * Starts a new {@link javax.servlet.http.HttpServletRequest}
+     */
+    void startRequest();
 
-    void endRequest();
+    /**
+     * Stops the current {@link javax.servlet.http.HttpServletRequest}
+     */
+    void stopRequest();
 
-    void endSession();
+    /**
+     * Stops the current {@link javax.servlet.http.HttpSessionEvent}
+     */
+    void stopSession();
 }

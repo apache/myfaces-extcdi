@@ -71,16 +71,14 @@ public class MyFacesCore12WebAppTestContainer implements WebAppTestContainer
 
     public void initEnvironment()
     {
-        //nothing to do
-    }
-
-    public void startContainer()
-    {
         // Set up a new thread context class loader
         threadContextClassLoader = Thread.currentThread().getContextClassLoader();
         Thread.currentThread()
                 .setContextClassLoader(new URLClassLoader(new URL[0], this.getClass().getClassLoader()));
+    }
 
+    public void startContainer()
+    {
         try
         {
             // Set up Servlet API Objects
