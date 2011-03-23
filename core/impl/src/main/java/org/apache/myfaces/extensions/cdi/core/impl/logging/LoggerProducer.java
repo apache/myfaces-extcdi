@@ -24,7 +24,9 @@ import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.InjectionPoint;
+import java.lang.reflect.Field;
 
 /**
  * @author Gerhard Petracek
@@ -37,7 +39,41 @@ public class LoggerProducer
     @Dependent
     public Logger getLogger(InjectionPoint injectionPoint)
     {
-        return new DefaultLogger(injectionPoint.getBean().getBeanClass().getName());
+        Bean<?> bean = injectionPoint.getBean();
+        String name = null;
+
+        if(bean != null)
+        {
+            name = bean.getBeanClass().getName();
+        }
+        //workaround for weld - only in some constellations
+        else if(injectionPoint.getClass().getName().contains(".weld."))
+        {
+            name = tryToExtractName(injectionPoint);
+        }
+
+        if(name == null)
+        {
+            throw new IllegalStateException("InjectionPoint#getBean returns null");
+        }
+        return new DefaultLogger(name);
+    }
+
+    //workaround for weld
+    private String tryToExtractName(InjectionPoint injectionPoint)
+    {
+        try
+        {
+            Object field1 = tryToGetFieldValue(injectionPoint, "field", Object.class);
+
+            Field field2 = tryToGetFieldValue(field1, "field", Field.class);
+
+            return field2.getDeclaringClass().getName();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     @Produces
@@ -66,5 +102,38 @@ public class LoggerProducer
                              " - please remove it!");
         }
         return logger;
+    }
+
+    //TODO
+    public <T> T tryToGetFieldValue(Object object, String fieldName, Class<T> resultType)
+    {
+        Class currentClass = object.getClass();
+        while (currentClass != null && !Object.class.getName().equals(currentClass.getName()))
+        {
+            for(Field currentField : currentClass.getDeclaredFields())
+            {
+                if(currentField.getName().equals(fieldName))
+                {
+                    boolean accessibleState = currentField.isAccessible();
+
+                    try
+                    {
+                        currentField.setAccessible(true);
+                        return (T)currentField.get(object);
+                    }
+                    catch (IllegalAccessException e)
+                    {
+                        return null;
+                    }
+                    finally
+                    {
+                        currentField.setAccessible(accessibleState);
+                    }
+                }
+            }
+            currentClass = currentClass.getSuperclass();
+        }
+
+        return null;
     }
 }
