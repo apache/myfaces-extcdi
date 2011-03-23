@@ -24,7 +24,10 @@ import org.apache.myfaces.extensions.cdi.example.jsf20.view.config.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.enterprise.inject.Typed;
+
 @RunWith(JUnit4WithCargo.class)
+@Typed()
 public class SimpleTestCase extends BaseCargoTest
 {
     // NOTE that new @Test means new WebClient means new WindowContext

@@ -25,10 +25,13 @@ import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
 import org.junit.After;
 import org.junit.Before;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Gerhard Petracek
  * @author Jakob Korherr
  */
+@Typed()
 public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTest
 {
     private static final String CARGO_CONTEXT_PROPERTY = "cargo.context";

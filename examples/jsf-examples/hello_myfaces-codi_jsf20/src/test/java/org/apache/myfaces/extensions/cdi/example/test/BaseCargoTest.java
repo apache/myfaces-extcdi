@@ -20,6 +20,9 @@ package org.apache.myfaces.extensions.cdi.example.test;
 
 import org.apache.myfaces.extensions.cdi.test.cargo.AbstractSimpleCargoTest;
 
+import javax.enterprise.inject.Typed;
+
+@Typed()
 abstract class BaseCargoTest extends AbstractSimpleCargoTest
 {
     @Override

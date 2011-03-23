@@ -24,10 +24,13 @@ import org.apache.myfaces.extensions.cdi.test.cargo.view.config.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Jakob Korherr
  */
 @RunWith(JUnit4WithCargo.class)
+@Typed()
 public class ConversationTestCase extends BaseConversationTest
 {
 

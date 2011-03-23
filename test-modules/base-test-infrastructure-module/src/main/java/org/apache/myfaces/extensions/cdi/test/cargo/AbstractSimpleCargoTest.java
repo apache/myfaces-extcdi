@@ -24,11 +24,14 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.junit.After;
 import org.junit.Before;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * Removes support of dependency injection for a higher performances if it isn't needed.
  *
  * @author Gerhard Petracek
  */
+@Typed()
 public abstract class AbstractSimpleCargoTest extends AbstractContainerAwareCargoTest
 {
     /**

@@ -165,16 +165,12 @@
         <dependency>
             <groupId>org.apache.openwebbeans.test</groupId>
             <artifactId>cditest</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.openwebbeans.test</groupId>
             <artifactId>cditest-owb</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -275,40 +271,30 @@
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-impl</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-spi</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>runtime</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-jsf</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>runtime</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-resource</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>runtime</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.openwebbeans</groupId>
             <artifactId>openwebbeans-web</artifactId>
-            <!-- owb 1.1+ isn't compatible with the used owb-support module -> explicit version required -->
-            <version>1.0.0</version>
             <scope>runtime</scope>
         </dependency>
         
