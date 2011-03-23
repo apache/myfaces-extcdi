@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ProxyUtils;
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
@@ -47,6 +49,8 @@ public abstract class AbstractStartupObserver
     {
         StringBuilder info = new StringBuilder();
 
+        List<String> methodNames = new ArrayList<String>();
+
         Class currentClass = ProxyUtils.getUnproxiedClass(config.getClass());
         while (currentClass != null &&
                 !Object.class.getName().equals(currentClass.getName()) &&
@@ -60,10 +64,13 @@ public abstract class AbstractStartupObserver
             //inspect the other methods of the implementing class
             for(Method currentMethod : currentClass.getDeclaredMethods())
             {
-                if(!currentMethod.isAnnotationPresent(ConfigEntry.class))
+                if(!currentMethod.isAnnotationPresent(ConfigEntry.class) ||
+                        methodNames.contains(currentMethod.getName()))
                 {
                     continue;
                 }
+
+                methodNames.add(currentMethod.getName());
 
                 info.append("   method:\t").append(currentMethod.getName());
                 info.append(separator);
