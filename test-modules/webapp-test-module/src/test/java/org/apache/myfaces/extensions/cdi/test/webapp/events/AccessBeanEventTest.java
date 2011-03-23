@@ -60,11 +60,11 @@ import javax.faces.event.PhaseId;
     @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl:jar:0.9.4-SNAPSHOT"),
     @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-api:jar:0.9.4-SNAPSHOT"),
     @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl:jar:0.9.4-SNAPSHOT"),
-    @WebappDependency("org.apache.openwebbeans:openwebbeans-impl:jar:1.1.0-SNAPSHOT"),
-    @WebappDependency("org.apache.openwebbeans:openwebbeans-spi:jar:1.1.0-SNAPSHOT"),
-    @WebappDependency("org.apache.openwebbeans:openwebbeans-jsf:jar:1.1.0-SNAPSHOT"),
-    @WebappDependency("org.apache.openwebbeans:openwebbeans-resource:jar:1.1.0-SNAPSHOT"),
-    @WebappDependency("org.apache.openwebbeans:openwebbeans-web:jar:1.1.0-SNAPSHOT"),
+    @WebappDependency("org.apache.openwebbeans:openwebbeans-impl:jar:1.0.0"),
+    @WebappDependency("org.apache.openwebbeans:openwebbeans-spi:jar:1.0.0"),
+    @WebappDependency("org.apache.openwebbeans:openwebbeans-jsf:jar:1.0.0"),
+    @WebappDependency("org.apache.openwebbeans:openwebbeans-resource:jar:1.0.0"),
+    @WebappDependency("org.apache.openwebbeans:openwebbeans-web:jar:1.0.0"),
     @WebappDependency("javassist:javassist:jar:3.12.0.GA"),
     @WebappDependency("net.sf.scannotation:scannotation:jar:1.0.2")
 })
