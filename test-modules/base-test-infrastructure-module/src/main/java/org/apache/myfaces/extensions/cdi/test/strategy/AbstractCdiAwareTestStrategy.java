@@ -16,36 +16,64 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.junit4;
+package org.apache.myfaces.extensions.cdi.test.strategy;
 
 import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
-import org.apache.myfaces.extensions.cdi.test.spi.ServletContainerAwareCdiTestContainer;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
-import org.junit.After;
-import org.junit.Before;
+
+import javax.enterprise.context.ContextNotActiveException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Allows dependency injection in JUnit tests and implementing JUnit tests in web-projects.
+ * Allows dependency injection in (standalone) JUnit tests.
+ * For implementing unit tests with servlet-scopes or CODI unit tests use
+ * {@link AbstractServletAwareTestStrategy} or {@link AbstractJsfAwareTestStrategy}
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractServletAwareTest
+public abstract class AbstractCdiAwareTestStrategy implements TestStrategy
 {
     protected CdiTestContainer testContainer;
 
     /**
+     * {@inheritDoc}
+     */
+    public void beforeMethod()
+    {
+        before();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void afterMethod()
+    {
+        try
+        {
+            after();
+        }
+        catch (ContextNotActiveException e)
+        {
+            Logger logger = Logger.getLogger(AbstractServletAwareTestStrategy.class.getName());
+
+            if (logger.isLoggable(Level.WARNING))
+            {
+                logger.log(Level.WARNING, "this exception usually occurs due to an owb issue", e);
+            }
+        }
+    }
+
+    /**
      * Bootstraps a new container
      */
-    @Before
+    //@Before
     public void before()
     {
-        this.testContainer = TestContainerFactory.createTestContainer(ServletContainerAwareCdiTestContainer.class);
-
+        this.testContainer = TestContainerFactory.createTestContainer(CdiTestContainer.class);
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();
         this.testContainer.startContexts();
-        ((ServletContainerAwareCdiTestContainer)this.testContainer).startSession();
-        ((ServletContainerAwareCdiTestContainer)this.testContainer).startRequest();
 
         this.testContainer.injectFields(this);
     }
@@ -53,11 +81,9 @@ public abstract class AbstractServletAwareTest
     /**
      * Stops the current container
      */
-    @After
+    //@After
     public void after()
     {
-        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopRequest();
-        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopSession();
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();
     }

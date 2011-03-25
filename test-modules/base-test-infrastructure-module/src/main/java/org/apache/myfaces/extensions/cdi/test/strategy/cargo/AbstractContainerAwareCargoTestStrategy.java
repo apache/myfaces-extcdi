@@ -16,14 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
+package org.apache.myfaces.extensions.cdi.test.strategy.cargo;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
-import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
-import org.junit.After;
-import org.junit.Before;
+import org.apache.myfaces.extensions.cdi.test.cargo.TestConfiguration;
+import org.apache.myfaces.extensions.cdi.test.strategy.AbstractJsfAwareTestStrategy;
 
 import javax.enterprise.inject.Typed;
 
@@ -32,7 +31,7 @@ import javax.enterprise.inject.Typed;
  * @author Jakob Korherr
  */
 @Typed()
-public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTest
+public abstract class AbstractContainerAwareCargoTestStrategy extends AbstractJsfAwareTestStrategy
 {
     private static final String CARGO_CONTEXT_PROPERTY = "cargo.context";
     private static final String CARGO_PORT_PROPERTY = "cargo.port";
@@ -105,7 +104,7 @@ public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTe
      * {@inheritDoc}
      */
     @Override
-    @Before
+    //@Before
     public void before()
     {
         super.before();
@@ -118,7 +117,7 @@ public abstract class AbstractContainerAwareCargoTest extends AbstractJsfAwareTe
      * {@inheritDoc}
      */
     @Override
-    @After
+    //@After
     public void after()
     {
         super.after();

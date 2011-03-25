@@ -18,43 +18,32 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
-import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
+import org.apache.myfaces.extensions.cdi.test.strategy.AbstractServletAwareTestStrategy;
 import org.junit.After;
 import org.junit.Before;
 
 /**
- * Base class which can be used for CODI unit-tests
- *
  * @author Gerhard Petracek
  */
-public abstract class AbstractJsfAwareTest extends AbstractServletAwareTest
+public abstract class AbstractServletAwareTest extends AbstractServletAwareTestStrategy
 {
-    protected WebAppTestContainer webAppTestContainer;
-
     /**
      * {@inheritDoc}
      */
-    @Override
     @Before
-    public void before()
+    @Override
+    public void beforeMethod()
     {
-        this.webAppTestContainer = TestContainerFactory.createTestContainer(WebAppTestContainer.class);
-
-        this.webAppTestContainer.initEnvironment();
-        this.webAppTestContainer.startContainer();
-
-        super.before();
+        super.beforeMethod();
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
     @After
-    public void after()
+    @Override
+    public void afterMethod()
     {
-        super.after();
-        this.webAppTestContainer.stopContainer();
+        super.afterMethod();
     }
 }

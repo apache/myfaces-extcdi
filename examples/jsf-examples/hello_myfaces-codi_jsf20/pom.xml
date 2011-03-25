@@ -90,7 +90,7 @@
         <!-- test dependencies -->
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-            <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
+            <artifactId>myfaces-extcdi-junit-support-module</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -599,7 +599,7 @@
 
                 <dependency>
                     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-                    <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
+                    <artifactId>myfaces-extcdi-junit-support-module</artifactId>
                     <scope>test</scope>
                 </dependency>
 

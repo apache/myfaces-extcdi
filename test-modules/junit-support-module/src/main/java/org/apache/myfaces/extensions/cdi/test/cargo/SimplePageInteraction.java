@@ -24,18 +24,20 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
-import org.apache.myfaces.extensions.cdi.test.junit4.AbstractJsfAwareTest;
+import org.apache.myfaces.extensions.cdi.test.strategy.AbstractJsfAwareTestStrategy;
+import org.apache.myfaces.extensions.cdi.test.strategy.cargo.AbstractSimpleCargoTestStrategy;
 
 import javax.enterprise.inject.Typed;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Gerhard Petracek
@@ -94,11 +96,11 @@ public class SimplePageInteraction
                 continue;
             }
 
-            if(AbstractJsfAwareTest.class.isAssignableFrom(currentClass) &&
-                    !AbstractSimpleCargoTest.class.isAssignableFrom(currentClass))
+            if(AbstractJsfAwareTestStrategy.class.isAssignableFrom(currentClass) &&
+                    !AbstractSimpleCargoTestStrategy.class.isAssignableFrom(currentClass))
             {
                 LOGGER.warning(getClass().getName() + "#with is only required for tests which extend " +
-                    AbstractSimpleCargoTest.class.getName() + ". It's used with " + element.getClassName());
+                    AbstractSimpleCargoTestStrategy.class.getName() + ". It's used with " + element.getClassName());
                 return;
             }
         }

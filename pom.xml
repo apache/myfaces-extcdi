@@ -266,7 +266,13 @@
                 <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
                 <version>0.9.4-SNAPSHOT</version>
             </dependency>
-            
+
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+                <artifactId>myfaces-extcdi-junit-support-module</artifactId>
+                <version>0.9.4-SNAPSHOT</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-owb-support-module</artifactId>

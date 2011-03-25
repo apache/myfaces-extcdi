@@ -23,10 +23,10 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-    <artifactId>myfaces-extcdi-owb-support-module</artifactId>
+    <artifactId>myfaces-extcdi-junit-support-module</artifactId>
     <version>0.9.4-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI OpenWebBeans Test-Support Module</name>
+    <name>MyFaces Extensions-CDI JUnit-Support Module</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
@@ -35,6 +35,13 @@
     </parent>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+            <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-api</artifactId>
@@ -48,53 +55,23 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-            <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-            <artifactId>myfaces-extcdi-junit-support-module</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans</groupId>
-            <artifactId>openwebbeans-impl</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans.test</groupId>
-            <artifactId>cditest</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openwebbeans.test</groupId>
-            <artifactId>cditest-owb</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+            <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>provided</scope>
+            <scope>compile</scope>
         </dependency>
 
-        <!-- TODO -->
         <dependency>
-            <groupId>org.apache.myfaces.test</groupId>
-            <artifactId>myfaces-test12</artifactId>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
             <scope>provided</scope>
         </dependency>
+        
     </dependencies>
 
 </project>

@@ -16,13 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.cargo;
+package org.apache.myfaces.extensions.cdi.test.strategy.cargo;
 
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
-import org.junit.After;
-import org.junit.Before;
 
 import javax.enterprise.inject.Typed;
 
@@ -32,13 +30,13 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public abstract class AbstractSimpleCargoTest extends AbstractContainerAwareCargoTest
+public abstract class AbstractSimpleCargoTestStrategy extends AbstractContainerAwareCargoTestStrategy
 {
     /**
      * {@inheritDoc}
      */
     @Override
-    @Before
+    //@Before
     public void before()
     {
         webClient = new WebClient(getBrowserVersion());
@@ -49,7 +47,7 @@ public abstract class AbstractSimpleCargoTest extends AbstractContainerAwareCarg
      * {@inheritDoc}
      */
     @Override
-    @After
+    //@After
     public void after()
     {
         webClient.closeAllWindows();

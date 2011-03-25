@@ -18,43 +18,32 @@
  */
 package org.apache.myfaces.extensions.cdi.test.junit4;
 
-import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
-import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
+import org.apache.myfaces.extensions.cdi.test.strategy.AbstractJsfAwareTestStrategy;
 import org.junit.After;
 import org.junit.Before;
 
 /**
- * Allows dependency injection in (standalone) JUnit tests.
- * For implementing unit tests with servlet-scopes or CODI unit tests use
- * {@link AbstractServletAwareTest} or {@link AbstractJsfAwareTest}
- *
  * @author Gerhard Petracek
  */
-public abstract class AbstractCdiAwareTest
+public abstract class AbstractJsfAwareTest extends AbstractJsfAwareTestStrategy
 {
-    protected CdiTestContainer testContainer;
-
     /**
-     * Bootstraps a new container
+     * {@inheritDoc}
      */
     @Before
-    public void before()
+    @Override
+    public void beforeMethod()
     {
-        this.testContainer = TestContainerFactory.createTestContainer(CdiTestContainer.class);
-        this.testContainer.initEnvironment();
-        this.testContainer.startContainer();
-        this.testContainer.startContexts();
-
-        this.testContainer.injectFields(this);
+        super.beforeMethod();
     }
 
     /**
-     * Stops the current container
+     * {@inheritDoc}
      */
     @After
-    public void after()
+    @Override
+    public void afterMethod()
     {
-        this.testContainer.stopContexts();
-        this.testContainer.stopContainer();
+        super.afterMethod();
     }
 }
