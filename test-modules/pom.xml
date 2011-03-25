@@ -38,7 +38,7 @@
         <module>base-test-infrastructure-module</module>
 
         <module>junit-support-module</module>
-        <module>owb10-support-module</module>
+        <module>owb-support-module</module>
         <module>jsf12-support-module</module>
     </modules>
 
