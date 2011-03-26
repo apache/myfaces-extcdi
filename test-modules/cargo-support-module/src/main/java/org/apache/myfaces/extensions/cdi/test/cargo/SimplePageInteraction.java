@@ -23,7 +23,6 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import org.apache.http.conn.HttpHostConnectException;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
@@ -253,14 +252,7 @@ public class SimplePageInteraction
         }
         catch (IOException e)
         {
-            if(e instanceof HttpHostConnectException)
-            {
-                throw new ContainerNotStartedException(e);
-            }
-            else
-            {
-                throw new UnhandledException(e);
-            }
+            throw new UnhandledException(e);
         }
     }
 

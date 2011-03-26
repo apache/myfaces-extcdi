@@ -19,14 +19,14 @@
 package org.apache.myfaces.extensions.cdi.example.test;
 
 import org.apache.myfaces.extensions.cdi.test.cargo.SimplePageInteraction;
-import org.apache.myfaces.extensions.cdi.test.cargo.runner.JUnit4WithCargo;
 import org.apache.myfaces.extensions.cdi.example.jsf20.view.config.Pages;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import javax.enterprise.inject.Typed;
 
-@RunWith(JUnit4WithCargo.class)
+@RunWith(JUnit4.class)
 @Typed()
 public class SimpleTestCase extends BaseCargoTest
 {
