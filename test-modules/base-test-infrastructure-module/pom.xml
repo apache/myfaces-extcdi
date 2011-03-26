@@ -59,12 +59,6 @@
             <artifactId>geronimo-servlet_2.5_spec</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <dependency>
-            <groupId>net.sourceforge.htmlunit</groupId>
-            <artifactId>htmlunit</artifactId>
-            <scope>provided</scope>
-        </dependency>
         
     </dependencies>
 

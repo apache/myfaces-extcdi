@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.cargo;
 
-import org.apache.myfaces.extensions.cdi.test.strategy.cargo.AbstractContainerAwareCargoTestStrategy;
+import org.apache.myfaces.extensions.cdi.test.cargo.strategy.AbstractContainerAwareCargoTestStrategy;
 import org.junit.After;
 import org.junit.Before;
 

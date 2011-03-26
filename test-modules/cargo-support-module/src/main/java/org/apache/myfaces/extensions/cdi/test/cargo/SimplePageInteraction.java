@@ -29,8 +29,8 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
+import org.apache.myfaces.extensions.cdi.test.cargo.strategy.AbstractSimpleCargoTestStrategy;
 import org.apache.myfaces.extensions.cdi.test.strategy.AbstractJsfAwareTestStrategy;
-import org.apache.myfaces.extensions.cdi.test.strategy.cargo.AbstractSimpleCargoTestStrategy;
 
 import javax.enterprise.inject.Typed;
 import java.io.IOException;

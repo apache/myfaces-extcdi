@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.test.strategy.cargo;
+package org.apache.myfaces.extensions.cdi.test.cargo.strategy;
 
 import com.gargoylesoftware.htmlunit.NicelyResynchronizingAjaxController;
 import com.gargoylesoftware.htmlunit.WebClient;
@@ -29,6 +29,7 @@ import javax.enterprise.inject.Typed;
  *
  * @author Gerhard Petracek
  */
+//TODO
 @Typed()
 public abstract class AbstractSimpleCargoTestStrategy extends AbstractContainerAwareCargoTestStrategy
 {
