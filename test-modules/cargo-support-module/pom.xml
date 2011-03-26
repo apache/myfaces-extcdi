@@ -23,10 +23,10 @@
     <packaging>jar</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-    <artifactId>myfaces-extcdi-junit-support-module</artifactId>
+    <artifactId>myfaces-extcdi-cargo-support-module</artifactId>
     <version>0.9.4-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI JUnit-Support Module</name>
+    <name>MyFaces Extensions-CDI Cargo-Support Module</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
@@ -64,6 +64,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.htmlunit</groupId>
+            <artifactId>htmlunit</artifactId>
+            <scope>provided</scope>
         </dependency>
         
     </dependencies>
