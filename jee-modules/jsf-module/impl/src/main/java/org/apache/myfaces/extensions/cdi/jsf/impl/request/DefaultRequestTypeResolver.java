@@ -35,6 +35,9 @@ public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
 {
     private static final long serialVersionUID = -3702446693324781260L;
 
+    /**
+     * {@inheritDoc}
+     */
     protected RequestTypeResolver createDefaultRequestTypeResolver()
     {
         return new RequestTypeResolver()
@@ -60,11 +63,17 @@ public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
                 this.postRequest = renderKit.getResponseStateManager().isPostback(facesContext);
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public boolean isPartialRequest()
             {
                 return false;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public boolean isPostRequest()
             {
                 return this.postRequest;

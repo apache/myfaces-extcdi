@@ -38,11 +38,21 @@ import java.util.Set;
 @Typed()
 public abstract class SecurityUtils
 {
+    /**
+     * Constructor which prevents the instantiation of this class
+     */
     private SecurityUtils()
     {
         // prevent instantiation
     }
 
+    /**
+     * Helper for invoking the given {@link AccessDecisionVoter}s
+     * @param invocationContext current invocation-context (might be null in case of secured views)
+     * @param beanManager current bean-manager
+     * @param accessDecisionVoters current access-decision-voters
+     * @param errorView optional inline error view
+     */
     public static void invokeVoters(InvocationContext invocationContext,
                                     BeanManager beanManager,
                                     List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,

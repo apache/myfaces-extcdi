@@ -41,10 +41,18 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
 
     private int maxWindowContextCount;
 
+    /**
+     * Default constructor required by proxy libs
+     */
     public DefaultWindowContextQuotaHandler()
     {
     }
 
+    /**
+     * Constructor used by the container for creating the {@link WindowContextQuotaHandler} based on the given
+     * {@link WindowContextConfig}
+     * @param windowContextConfig current window-context-config
+     */
     @Inject
     public DefaultWindowContextQuotaHandler(WindowContextConfig windowContextConfig)
     {
@@ -54,7 +62,7 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
     /**
      * {@inheritDoc}
      */
-    public boolean checkQuota(int activeWindowContextCount)
+    public boolean isWindowContextQuotaViolated(int activeWindowContextCount)
     {
         return this.maxWindowContextCount < activeWindowContextCount;
     }

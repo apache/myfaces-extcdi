@@ -47,6 +47,10 @@ public class RedirectedConversationAwareExternalContext extends ExternalContext
 
     private boolean encodeActionURLs;
 
+    /**
+     * Constructor for wrapping the given {@link ExternalContext}
+     * @param wrapped external-context which should be wrapped
+     */
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;

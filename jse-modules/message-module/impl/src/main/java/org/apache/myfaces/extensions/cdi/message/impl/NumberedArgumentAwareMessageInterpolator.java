@@ -35,6 +35,9 @@ public class NumberedArgumentAwareMessageInterpolator extends AbstractFormatterA
 {
     private static final long serialVersionUID = 8699632465559596371L;
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         Serializable[] numberedArguments = extractNumberedArguments(arguments);

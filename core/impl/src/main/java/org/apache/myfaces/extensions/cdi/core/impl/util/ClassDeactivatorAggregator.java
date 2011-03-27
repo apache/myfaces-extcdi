@@ -38,6 +38,9 @@ class ClassDeactivatorAggregator implements Aggregatable<ClassDeactivator>, Clas
 
     private String deactivators = "";
 
+    /**
+     * {@inheritDoc}
+     */
     public void add(ClassDeactivator classDeactivator)
     {
         this.deactivatedClasses.addAll(classDeactivator.getDeactivatedClasses());
@@ -52,16 +55,25 @@ class ClassDeactivatorAggregator implements Aggregatable<ClassDeactivator>, Clas
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ClassDeactivator create()
     {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<Class> getDeactivatedClasses()
     {
         return this.deactivatedClasses;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString()
     {

@@ -25,5 +25,9 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
  */
 interface ConversationAware
 {
+    /**
+     * Allows to inject the current conversation without reflection
+     * @param conversation current conversation
+     */
     void setConversation(Conversation conversation);
 }

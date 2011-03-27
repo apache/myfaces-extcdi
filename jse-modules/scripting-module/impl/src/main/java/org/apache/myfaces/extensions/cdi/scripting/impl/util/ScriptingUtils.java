@@ -35,6 +35,10 @@ public class ScriptingUtils
 
     private static ThreadLocal<ScriptEngineManager> scriptEngineManagerCache = new ThreadLocal<ScriptEngineManager>();
 
+    /**
+     * Resolves the current {@link ScriptEngineManager}
+     * @return the current script-engine-manager
+     */
     public static ScriptEngineManager getCurrentScriptEngineManager()
     {
         ScriptEngineManager scriptEngineManager = scriptEngineManagerCache.get();
@@ -48,11 +52,19 @@ public class ScriptingUtils
         return scriptEngineManager;
     }
 
+    /**
+     * Creates a new el helper map
+     * @return a new el helper
+     */
     public static UnmodifiableMap<String, Object> createExpressionLanguageHelper()
     {
         return new ExpressionLanguageSelectionMap();
     }
 
+    /**
+     * Resolves an {@link ExternalExpressionInterpreter}
+     * @return a scoped custom bean or a new instance of the default implementation
+     */
     public static ExternalExpressionInterpreter resolveExternalExpressionInterpreter()
     {
         ExternalExpressionInterpreter externalExpressionInterpreter =

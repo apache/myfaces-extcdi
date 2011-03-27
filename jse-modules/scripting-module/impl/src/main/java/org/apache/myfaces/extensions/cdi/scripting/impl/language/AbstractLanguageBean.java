@@ -29,6 +29,9 @@ public abstract class AbstractLanguageBean implements LanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getName()
     {
         return getAlternativeNames()[0];

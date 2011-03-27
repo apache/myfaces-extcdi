@@ -38,5 +38,9 @@ import static java.lang.annotation.ElementType.*;
 @Documented
 public @interface ScriptLanguage
 {
+    /**
+     * {@link Language} which defines the script-language
+     * @return target script-language
+     */
     @Nonbinding Class<? extends Language> value();
 }

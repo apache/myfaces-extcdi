@@ -45,17 +45,27 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
 
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link ViewHandler}
+     * @param wrapped view-handler which should be wrapped
+     */
     public WindowContextAwareViewHandler(ViewHandler wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewHandler getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getActionURL(FacesContext context, String viewId)
     {
@@ -89,6 +99,9 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UIViewRoot restoreView(FacesContext facesContext, String viewId)
     {
@@ -111,6 +124,9 @@ public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements
         return this.wrapped.restoreView(facesContext, viewId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

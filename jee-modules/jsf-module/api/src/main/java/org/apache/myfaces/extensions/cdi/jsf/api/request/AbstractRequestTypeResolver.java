@@ -27,11 +27,17 @@ public abstract class AbstractRequestTypeResolver implements RequestTypeResolver
 {
     private RequestTypeResolver defaultRequestTypeResolver;
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isPartialRequest()
     {
         return getCurrentRequestTypeResolver().isPartialRequest();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isPostRequest()
     {
         return getCurrentRequestTypeResolver().isPostRequest();

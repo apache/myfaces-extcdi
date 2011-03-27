@@ -36,12 +36,19 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
 
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link ActionListener}
+     * @param wrapped action-listener which should be wrapped
+     */
     public ViewControllerActionListener(ActionListener wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void processAction(ActionEvent actionEvent)
     {
         if(this.deactivated)
@@ -60,6 +67,9 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
         this.wrapped.processAction(actionEvent);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

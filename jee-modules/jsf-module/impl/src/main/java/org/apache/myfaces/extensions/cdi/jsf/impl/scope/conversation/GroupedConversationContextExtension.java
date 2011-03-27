@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
@@ -41,8 +42,13 @@ import java.util.Set;
  *
  * @author Gerhard Petracek
  */
-public class GroupedConversationContextExtension implements Extension
+public class GroupedConversationContextExtension implements Extension, Deactivatable
 {
+    /**
+     * Adds codi scopes to the container
+     * @param event after-bean-discovery event
+     * @param manager current bean-manager
+     */
     public void afterBeanDiscovery(@Observes AfterBeanDiscovery event, BeanManager manager)
     {
         if(!isActivated())
@@ -58,6 +64,10 @@ public class GroupedConversationContextExtension implements Extension
         event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext));
     }
 
+    /**
+     * Validates the correct usage of codi scopes.
+     * @param processBean current process-bean
+     */
     @SuppressWarnings({"ThrowableInstanceNeverThrown"})
     public void validateScopes(@Observes ProcessBean processBean)
     {
@@ -91,6 +101,9 @@ public class GroupedConversationContextExtension implements Extension
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

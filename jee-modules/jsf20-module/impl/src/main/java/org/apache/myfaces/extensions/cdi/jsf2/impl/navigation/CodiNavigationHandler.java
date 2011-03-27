@@ -43,6 +43,10 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
     private final boolean deactivated;
     private final boolean addViewConfigsAsNavigationCase;
 
+    /**
+     * Constructor for wrapping the given {@link NavigationHandler}
+     * @param navigationHandler navigation-handler which should be wrapped
+     */
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
         this.wrapped = navigationHandler;
@@ -58,6 +62,9 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
         if(this.deactivated || isUnhandledExceptionQueued(context)
@@ -86,6 +93,9 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         return new AccessScopeAwareNavigationHandler(viewConfigAwareNavigationHandler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public NavigationCase getNavigationCase(FacesContext context, String action, String outcome)
     {
         if (this.wrapped instanceof ConfigurableNavigationHandler)
@@ -96,6 +106,9 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Set<NavigationCase>> getNavigationCases()
     {
         Map<String, Set<NavigationCase>> result = null;
@@ -118,6 +131,9 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
         return new NavigationCaseMapWrapper(result);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

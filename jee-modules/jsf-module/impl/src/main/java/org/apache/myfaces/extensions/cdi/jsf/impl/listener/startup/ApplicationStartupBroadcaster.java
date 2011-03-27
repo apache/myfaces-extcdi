@@ -39,6 +39,9 @@ public class ApplicationStartupBroadcaster
     @Inject
     private Event<JsfStartupEvent> applicationStartupEvent;
 
+    /**
+     * Broadcasts the {@link org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent}
+     */
     public void broadcastStartupEvent()
     {
         if(initialized.containsKey(getClassLoader()))

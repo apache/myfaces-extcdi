@@ -35,12 +35,19 @@ public class SecurityViolationAwareActionListener implements ActionListener, Dea
 
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link ActionListener}
+     * @param wrapped action-listener which should be wrapped
+     */
     public SecurityViolationAwareActionListener(ActionListener wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void processAction(ActionEvent actionEvent)
     {
         try
@@ -58,8 +65,12 @@ public class SecurityViolationAwareActionListener implements ActionListener, Dea
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());
     }
+
 }

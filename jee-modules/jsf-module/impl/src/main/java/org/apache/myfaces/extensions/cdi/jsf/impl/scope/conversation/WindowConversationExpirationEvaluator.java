@@ -25,16 +25,25 @@ class WindowConversationExpirationEvaluator implements ConversationExpirationEva
 {
     private static final long serialVersionUID = 6646005969384698897L;
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isExpired()
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void touch()
     {
         //not needed
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void expire()
     {
         //isn't supported

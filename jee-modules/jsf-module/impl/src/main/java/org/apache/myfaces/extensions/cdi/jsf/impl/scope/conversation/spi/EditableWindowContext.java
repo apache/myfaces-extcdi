@@ -34,10 +34,20 @@ public interface EditableWindowContext extends WindowContext
      */
     boolean isActive();
 
+    /**
+     * Date of the last access of the whole {@link WindowContext}
+     * @return date of the last access
+     */
     Date getLastAccess();
 
+    /**
+     * Signals that the {@link WindowContext} gets used
+     */
     void touch();
 
+    /**
+     * Removes conversations which are already marked as expired
+     */
     void removeInactiveConversations();
 
     /**

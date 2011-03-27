@@ -36,6 +36,10 @@ public class DefaultScriptExecutor implements ScriptExecutor
 {
     private ScriptEngine scriptEngine;
 
+    /**
+     * Constructor which creates the executor which is awae of the current script-engine
+     * @param scriptEngine script-engine which should be used
+     */
     public DefaultScriptExecutor(ScriptEngine scriptEngine)
     {
         this.scriptEngine = scriptEngine;

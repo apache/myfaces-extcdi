@@ -35,6 +35,10 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
 
     private final NavigationHandler originalNavigationHandler;
 
+    /**
+     * Constructor for wrapping the given {@link NavigationHandler}
+     * @param navigationHandler navigation-handler which should be wrapped
+     */
     public CodiNavigationHandler(NavigationHandler navigationHandler)
     {
         if(isActivated())
@@ -51,6 +55,9 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
         this.originalNavigationHandler = navigationHandler;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
         if(context.getResponseComplete() /*see EXTCDI-92*/)
@@ -63,6 +70,9 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

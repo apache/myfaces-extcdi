@@ -29,22 +29,39 @@ public class RequestParameter
     private final String key;
     private final String[] values;
 
+    /**
+     * Constructor for creating a parameter for the given key and values
+     * @param key current key
+     * @param values current values
+     */
     public RequestParameter(String key, String[] values)
     {
         this.key = key;
         this.values = values;
     }
 
+    /**
+     * Key of the parameter
+     * @return current key
+     */
     public String getKey()
     {
         return key;
     }
 
+    /**
+     * Exposes the values of the parameter as list
+     * @return values of the parameter
+     */
     public List<String> getValueList()
     {
         return Arrays.asList(this.values);
     }
 
+    /**
+     * Exposes the values of the parameter as array
+     * @return values of the parameter
+     */
     public String[] getValues()
     {
         return values;

@@ -25,7 +25,15 @@ import java.io.Serializable;
  */
 public interface WindowContextQuotaHandler extends Serializable
 {
-    boolean checkQuota(int activeWindowContextCount);
+    /**
+     * Checks if the count of the currently active window-contexts is too high
+     * @param activeWindowContextCount current window-context count
+     * @return true if the count is too high and a cleanup has to be triggered, false otherwise
+     */
+    boolean isWindowContextQuotaViolated(int activeWindowContextCount);
 
+    /**
+     * Handles a quota violation if #checkQuota returned true and the cleanup couldn't remove an old context
+     */
     void handleQuotaViolation();
 }

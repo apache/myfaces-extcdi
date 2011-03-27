@@ -34,10 +34,17 @@ public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFac
 {
     private boolean invalidValueAwareMessageInterpolatorEnabled;
 
+    /**
+     * Default constructor required by proxy libs
+     */
     protected JsfValidatorFactoryResolver()
     {
     }
 
+    /**
+     * Constructor which will be used by the CDI container for creating the {@link GenericResolver}
+     * @param jsfModuleConfig current jsf-module-config
+     */
     @Inject
     public JsfValidatorFactoryResolver(JsfModuleConfig jsfModuleConfig)
     {
@@ -45,6 +52,9 @@ public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFac
                 = jsfModuleConfig.isInvalidValueAwareMessageInterpolatorEnabled();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ValidatorFactory resolve()
     {
         if(this.invalidValueAwareMessageInterpolatorEnabled)

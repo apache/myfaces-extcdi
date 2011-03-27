@@ -36,17 +36,30 @@ public class FacesMessageEntry implements Serializable
     {
     }
 
+    /**
+     * Constructor for creating the entry for the given component-id and {@link FacesMessage}
+     * @param componentId current component-id
+     * @param facesMessage current faces-message
+     */
     public FacesMessageEntry(String componentId, FacesMessage facesMessage)
     {
         this.componentId = componentId;
         this.facesMessage = facesMessage;
     }
 
+    /**
+     * Returns the current component-id
+     * @return component-id of the entry
+     */
     public String getComponentId()
     {
         return componentId;
     }
 
+    /**
+     * Returns the current {@link FacesMessage}
+     * @return faces-message of the entry
+     */
     public FacesMessage getFacesMessage()
     {
         return facesMessage;

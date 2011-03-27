@@ -36,6 +36,11 @@ public final class NamedArguments
     {
     }
 
+    /**
+     * Converts the given arguments to an array
+     * @param arguments current arguments
+     * @return current arguments as array
+     */
     public static Serializable[] convert(Map<String, Serializable> arguments)
     {
         if (arguments == null || arguments.size() == 0)
@@ -52,6 +57,12 @@ public final class NamedArguments
         return namedArgumentBuilder.create();
     }
 
+    /**
+     * Helper for creating named arguments easily
+     * @param name name of the argument
+     * @param value value of the argument
+     * @return named-argument-builder which provides a fluent API for adding more named arguments
+     */
     public static NamedArgumentBuilder add(String name, Serializable value)
     {
         return new NamedArguments().getNamedArgumentBuilder().add(name, value);

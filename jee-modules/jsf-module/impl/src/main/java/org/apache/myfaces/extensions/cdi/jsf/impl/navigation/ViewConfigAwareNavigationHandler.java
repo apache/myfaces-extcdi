@@ -54,14 +54,19 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
     private Map<String, ViewConfigDescriptor> viewConfigs = new ConcurrentHashMap<String, ViewConfigDescriptor>();
 
     private NavigationHandler navigationHandler;
-    private boolean delegateCall;
+    private boolean implicitNavigationSupported;
 
     private BeanManager beanManager;
 
-    public ViewConfigAwareNavigationHandler(NavigationHandler navigationHandler, boolean delegateCall)
+    /**
+     * Constructor which allows to use the given {@link NavigationHandler}
+     * @param navigationHandler navigation-handler of jsf
+     * @param implicitNavigationSupported true in case of jsf2+ and false in case of jsf1.2
+     */
+    public ViewConfigAwareNavigationHandler(NavigationHandler navigationHandler, boolean implicitNavigationSupported)
     {
         this.navigationHandler = navigationHandler;
-        this.delegateCall = delegateCall;
+        this.implicitNavigationSupported = implicitNavigationSupported;
     }
 
     //Security checks will be performed by the view-handler provided by codi
@@ -114,8 +119,9 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
                     entry = tryToUpdateEntry(entry, navigateEvent);
 
-                    if(entry != null && !this.delegateCall) //entry might be null after the update
+                    if(entry != null && !this.implicitNavigationSupported) //entry might be null after the update
                     {
+                        //jsf1.2
                         processViewDefinitionEntry(facesContext, entry);
 
                         //just to invoke all other nav handlers if they have to perform special tasks...
@@ -124,6 +130,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     }
                     else if(entry != null)
                     {
+                        //jsf2+
                         outcome = convertEntryToOutcome(facesContext.getExternalContext(), entry);
                     }
                 }

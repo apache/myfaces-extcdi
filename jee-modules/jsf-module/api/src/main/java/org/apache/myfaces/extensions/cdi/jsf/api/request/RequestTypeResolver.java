@@ -30,7 +30,15 @@ import java.io.Serializable;
  */
 public interface RequestTypeResolver extends Serializable
 {
+    /**
+     * Exposes if the current request isn't a full request
+     * @return false if the current request is a full request, true otherwise
+     */
     boolean isPartialRequest();
 
+    /**
+     * Exposes if the current request is a post request
+     * @return true if the current requset is a post request, true otherwise
+     */
     boolean isPostRequest();
 }

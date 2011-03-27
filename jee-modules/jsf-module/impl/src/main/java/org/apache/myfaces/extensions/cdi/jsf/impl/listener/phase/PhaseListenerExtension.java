@@ -54,6 +54,11 @@ public class PhaseListenerExtension implements Extension
     private static Map<ClassLoader, List<Class<? extends PhaseListener>>> phaseListeners = 
             new ConcurrentHashMap<ClassLoader,List<Class<? extends PhaseListener>>>();
 
+    /**
+     * Filters beans annotated with {@link JsfPhaseListener}.
+     * The class will be stored for consuming it later (see #consumePhaseListeners)
+     * @param processAnnotatedType current process-annotated-type
+     */
     public void filterJsfPhaseListeners(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         CodiStartupBroadcaster.broadcastStartup();
@@ -90,6 +95,11 @@ public class PhaseListenerExtension implements Extension
         phaseListenerClass.add(newPhaseListener);
     }
 
+    /**
+     * Exposes the found phase-listeners for the invocation. Afterwards it will return an empty list.
+     * @return found phase-listeners for the first invocation,
+     * an empty list if there are no phase-listeners or if they are consumed already.
+     */
     public static List<PhaseListener> consumePhaseListeners()
     {
         //workaround for mojarra

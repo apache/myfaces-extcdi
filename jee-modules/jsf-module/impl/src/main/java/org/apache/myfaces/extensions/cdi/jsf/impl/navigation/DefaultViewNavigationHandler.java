@@ -30,6 +30,9 @@ import javax.faces.context.FacesContext;
 @ApplicationScoped
 public class DefaultViewNavigationHandler implements ViewNavigationHandler
 {
+    /**
+     * {@inheritDoc}
+     */
     public void navigateTo(Class<? extends ViewConfig> targetView)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();

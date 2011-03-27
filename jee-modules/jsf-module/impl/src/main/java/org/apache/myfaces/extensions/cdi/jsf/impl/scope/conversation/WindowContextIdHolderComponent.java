@@ -30,17 +30,26 @@ public class WindowContextIdHolderComponent extends UIOutput
 {
     private String windowContextId;
 
+    /**
+     * Default constructor might be invoked by the jsf implementation
+     */
     @SuppressWarnings({"UnusedDeclaration"})
     public WindowContextIdHolderComponent()
     {
     }
 
+    /**
+     * Constructor which creates the holder for the given window-id
+     * @param windowContextId current window-id
+     */
     public WindowContextIdHolderComponent(String windowContextId)
     {
         this.windowContextId = windowContextId;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     public Object saveState(FacesContext facesContext)
     {
         Object[] values = new Object[2];
@@ -49,6 +58,9 @@ public class WindowContextIdHolderComponent extends UIOutput
         return values;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void restoreState(FacesContext facesContext, Object state)
     {
         if (state == null)
@@ -66,6 +78,10 @@ public class WindowContextIdHolderComponent extends UIOutput
                 .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, this.windowContextId);
     }
 
+    /**
+     * Exposes the stored window-id
+     * @return current window-id
+     */
     public String getWindowContextId()
     {
         return windowContextId;

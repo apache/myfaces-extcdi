@@ -38,11 +38,19 @@ public class BeforeAfterFacesRequestBroadcaster
     @AfterFacesRequest
     private Event<FacesContext> afterFacesRequestEvent;
 
+    /**
+     * Broadcasts the {@link BeforeFacesRequest} event
+     * @param facesContext current faces-context
+     */
     public void broadcastBeforeFacesRequestEvent(FacesContext facesContext)
     {
         this.beforeFacesRequestEvent.fire(facesContext);
     }
 
+    /**
+     * Broadcasts the {@link AfterFacesRequest} event
+     * @param facesContext current faces-context
+     */
     public void broadcastAfterFacesRequestEvent(FacesContext facesContext)
     {
         this.afterFacesRequestEvent.fire(facesContext);

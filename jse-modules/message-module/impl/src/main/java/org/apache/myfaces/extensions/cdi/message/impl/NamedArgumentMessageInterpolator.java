@@ -34,6 +34,9 @@ public class NamedArgumentMessageInterpolator implements MessageInterpolator
 {
     private static final long serialVersionUID = -8511553781756269753L;
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(MessageContext messageContext, String messageText, Serializable... arguments)
     {
         NamedArgument[] namedArguments = extractNamedArguments(arguments);

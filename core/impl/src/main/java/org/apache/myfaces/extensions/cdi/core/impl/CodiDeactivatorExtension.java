@@ -56,6 +56,9 @@ public class CodiDeactivatorExtension implements Extension, Deactivatable
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return isClassActivated(getClass());

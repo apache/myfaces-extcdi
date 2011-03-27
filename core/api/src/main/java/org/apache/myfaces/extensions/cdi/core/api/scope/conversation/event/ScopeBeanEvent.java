@@ -29,6 +29,10 @@ import java.io.Serializable;
  */
 public final class ScopeBeanEvent extends BeanEvent
 {
+    /**
+     * Constructor for creating the event for the given bean-instance
+     * @param bean bean-instance (unproxied) for which the event gets created
+     */
     public ScopeBeanEvent(Serializable bean)
     {
         super(bean);

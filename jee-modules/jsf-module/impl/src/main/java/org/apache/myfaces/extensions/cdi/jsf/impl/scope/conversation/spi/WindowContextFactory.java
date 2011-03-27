@@ -26,6 +26,14 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Conv
  */
 public interface WindowContextFactory
 {
+    /**
+     * Creates an {@link EditableWindowContext} for the given
+     * window-id, {@link WindowContextConfig} and {@link ConversationConfig}
+     * @param windowContextId current window-id
+     * @param windowContextConfig current window-context-config
+     * @param conversationConfig current conversation-config
+     * @return context for the current window or tab
+     */
     EditableWindowContext createWindowContext(String windowContextId,
                                               WindowContextConfig windowContextConfig,
                                               ConversationConfig conversationConfig);

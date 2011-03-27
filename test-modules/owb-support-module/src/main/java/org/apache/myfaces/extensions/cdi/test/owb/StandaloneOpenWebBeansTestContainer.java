@@ -25,6 +25,9 @@ import org.apache.webbeans.cditest.CdiTestContainerLoader;
  */
 public class StandaloneOpenWebBeansTestContainer extends AbstractOpenWebBeansTestContainer
 {
+    /**
+     * Constructor which initializes the {@link org.apache.webbeans.cditest.CdiTestContainer}
+     */
     public StandaloneOpenWebBeansTestContainer()
     {
         this.testContainer = CdiTestContainerLoader.getCdiContainer();

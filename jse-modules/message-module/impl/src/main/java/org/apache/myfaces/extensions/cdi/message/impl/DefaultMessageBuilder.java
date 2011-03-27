@@ -65,6 +65,11 @@ class DefaultMessageBuilder implements MessageBuilder
     {
     }
 
+    /**
+     * Constructor for creating the builder which uses the given {@link MessageContext} and {@link MessageFactory}
+     * @param messageContext current message-context
+     * @param messageFactory current message-factory
+     */
     public DefaultMessageBuilder(MessageContext messageContext, MessageFactory messageFactory)
     {
         reset();

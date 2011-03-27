@@ -50,17 +50,27 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
 
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link ViewHandler}
+     * @param wrapped view-handler which should be wrapped
+     */
     public SecurityAwareViewHandler(ViewHandler wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewHandler getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UIViewRoot createView(FacesContext context, String viewId)
     {
@@ -129,6 +139,9 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

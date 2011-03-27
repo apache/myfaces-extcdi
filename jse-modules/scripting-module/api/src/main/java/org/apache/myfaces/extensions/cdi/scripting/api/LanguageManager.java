@@ -25,5 +25,11 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
  */
 public interface LanguageManager
 {
+    /**
+     * Calculates the script-language-name for the given {@link Language} definition.
+     * The name will be used for the {@link javax.script.ScriptEngineManager#getEngineByName}
+     * @param languageType language-type which will be mapped to the name of the language
+     * @return name of the script-language
+     */
     String getLanguageName(Class<? extends Language> languageType);
 }

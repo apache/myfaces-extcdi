@@ -35,6 +35,9 @@ class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
 {
     private static final long serialVersionUID = 4646223879356055470L;
 
+    /**
+     * {@inheritDoc}
+     */
     public String getMessage(MessageContext messageContext,
                              String messageDescriptor,
                              Map<Class, MessagePayload> messagePayload)

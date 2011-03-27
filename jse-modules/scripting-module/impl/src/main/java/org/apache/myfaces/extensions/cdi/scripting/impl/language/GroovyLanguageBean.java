@@ -33,11 +33,17 @@ public class GroovyLanguageBean extends AbstractLanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Language> getId()
     {
         return Groovy.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String[] getAlternativeNames()
     {
         return new String[] {"Groovy", "groovy", "gr"};

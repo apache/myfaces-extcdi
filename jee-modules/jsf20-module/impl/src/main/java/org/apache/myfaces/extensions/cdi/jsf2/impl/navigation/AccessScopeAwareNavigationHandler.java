@@ -29,6 +29,10 @@ import javax.faces.context.FacesContext;
 public class AccessScopeAwareNavigationHandler extends
         org.apache.myfaces.extensions.cdi.jsf.impl.navigation.AccessScopeAwareNavigationHandler
 {
+    /**
+     * Constructor for wrapping the given {@link NavigationHandler}
+     * @param navigationHandler navigation-handler which should be wrapped
+     */
     public AccessScopeAwareNavigationHandler(NavigationHandler navigationHandler)
     {
         super(navigationHandler);

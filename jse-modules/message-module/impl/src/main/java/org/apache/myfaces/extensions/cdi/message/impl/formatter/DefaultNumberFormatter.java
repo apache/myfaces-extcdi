@@ -48,16 +48,25 @@ class DefaultNumberFormatter implements Formatter<Number>
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isResponsibleFor(Class<?> type)
     {
         return Number.class.isAssignableFrom(type);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isStateless()
     {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String format(MessageContext messageContext, Number valueToFormat)
     {
         Locale locale = messageContext.getLocale();
@@ -184,6 +193,9 @@ class DefaultNumberFormatter implements Formatter<Number>
         return format;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o)
     {
@@ -237,6 +249,9 @@ class DefaultNumberFormatter implements Formatter<Number>
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {

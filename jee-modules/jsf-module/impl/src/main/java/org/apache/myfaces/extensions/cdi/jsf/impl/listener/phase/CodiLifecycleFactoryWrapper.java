@@ -33,6 +33,10 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Dea
     private final LifecycleFactory wrapped;
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link LifecycleFactory}
+     * @param wrapped lifecycle-factory which should be wrapped
+     */
     public CodiLifecycleFactoryWrapper(LifecycleFactory wrapped)
     {
         this.wrapped = wrapped;

@@ -33,11 +33,17 @@ public class JRubyLanguageBean extends AbstractLanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Language> getId()
     {
         return Ruby.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String[] getAlternativeNames()
     {
         return new String[] {"jruby", "ruby"};

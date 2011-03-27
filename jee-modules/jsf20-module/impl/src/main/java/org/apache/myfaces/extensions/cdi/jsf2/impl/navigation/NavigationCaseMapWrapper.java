@@ -46,6 +46,10 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
     private Map<String, Set<NavigationCase>> wrappedNavigationCaseMap;
     private final Map<String, Set<NavigationCase>> viewConfigBasedNavigationCaseCache;
 
+    /**
+     * Constructor for wrapping the given navigation-cases
+     * @param navigationCases current navigation-cases
+     */
     public NavigationCaseMapWrapper(Map<String, Set<NavigationCase>> navigationCases)
     {
         this.wrappedNavigationCaseMap = navigationCases;

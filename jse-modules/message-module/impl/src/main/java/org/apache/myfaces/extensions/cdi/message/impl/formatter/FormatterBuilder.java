@@ -25,10 +25,18 @@ import org.apache.myfaces.extensions.cdi.message.api.Formatter;
  */
 public class FormatterBuilder
 {
+    /**
+     * Constructor which prevents the instantiation of this class
+     */
     private FormatterBuilder()
     {
     }
 
+    /**
+     * Internal helper for creating a {@link Formatter} for the given type
+     * @param type current type
+     * @return default formatter mapped to the given type
+     */
     public static Formatter createFormatter(Class<?> type)
     {
         if (Number.class.isAssignableFrom(type))

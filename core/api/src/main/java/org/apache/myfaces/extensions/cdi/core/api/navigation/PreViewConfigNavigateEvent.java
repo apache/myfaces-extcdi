@@ -31,6 +31,11 @@ public class PreViewConfigNavigateEvent
     private final Class<? extends ViewConfig> fromView;
     private Class<? extends ViewConfig> toView;
 
+    /**
+     * Constructor for creating the event for the given source and target view
+     * @param fromView source-view
+     * @param toView target-view
+     */
     public PreViewConfigNavigateEvent(Class<? extends ViewConfig> fromView, Class<? extends ViewConfig> toView)
     {
         this.fromView = fromView;

@@ -42,6 +42,9 @@ public class DefaultSecurityStrategy implements SecurityStrategy
     @Inject
     private BeanManager beanManager;
 
+    /**
+     * {@inheritDoc}
+     */
     public Object execute(InvocationContext invocationContext) throws Exception
     {
         Secured secured = getSecuredAnnotation(invocationContext);

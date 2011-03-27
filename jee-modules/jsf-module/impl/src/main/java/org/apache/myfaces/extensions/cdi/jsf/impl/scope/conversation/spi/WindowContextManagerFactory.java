@@ -26,6 +26,13 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Conv
  */
 public interface WindowContextManagerFactory
 {
+    /**
+     * Creates a {@link EditableWindowContextManager} based on the given {@link WindowContextConfig} and
+     * {@link ConversationConfig}
+     * @param windowContextConfig current window-context-config
+     * @param conversationConfig current conversation-config
+     * @return window-context-manager for the current user(-session)
+     */
     EditableWindowContextManager createWindowContextManager(WindowContextConfig windowContextConfig,
                                                             ConversationConfig conversationConfig);
 }

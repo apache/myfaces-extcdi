@@ -33,11 +33,17 @@ public class JythonLanguageBean extends AbstractLanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Language> getId()
     {
         return Python.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String[] getAlternativeNames()
     {
         return new String[] {"jython", "py"};

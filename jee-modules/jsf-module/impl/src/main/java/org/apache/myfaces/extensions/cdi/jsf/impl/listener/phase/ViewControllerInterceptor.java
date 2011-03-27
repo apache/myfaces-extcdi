@@ -43,6 +43,12 @@ public class ViewControllerInterceptor implements Serializable
     @Inject
     private ViewControllerStrategy viewControllerStrategy;
 
+    /**
+     * Alternative to view-controller configured via view-configs
+     * @param invocationContext current invocation-context
+     * @return result of the intercepted method
+     * @throws Exception exception which might be thrown by the intercepted method
+     */
     @AroundInvoke
     public Object filterPhaseListenerMethods(InvocationContext invocationContext) throws Exception
     {

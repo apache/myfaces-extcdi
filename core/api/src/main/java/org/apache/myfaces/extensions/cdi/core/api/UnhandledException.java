@@ -28,16 +28,26 @@ public class UnhandledException extends RuntimeException
 {
     private static final long serialVersionUID = -2218238182931072197L;
 
+    /**
+     * @param message message for the exception
+     */
     public UnhandledException(String message)
     {
         super(message);
     }
 
+    /**
+     * @param cause exception which should be wrapped in an {@link RuntimeException}
+     */
     public UnhandledException(Throwable cause)
     {
         super(cause);
     }
 
+    /**
+     * @param message message for the exception
+     * @param cause exception which should be wrapped in an {@link RuntimeException}
+     */
     public UnhandledException(String message, Throwable cause)
     {
         super(message, cause);

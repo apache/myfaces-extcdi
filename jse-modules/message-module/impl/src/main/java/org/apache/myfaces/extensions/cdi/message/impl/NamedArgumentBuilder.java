@@ -35,12 +35,22 @@ public class NamedArgumentBuilder
     {
     }
 
+    /**
+     * Allows to add further arguments which are mapped to a name.
+     * @param name name of the argument
+     * @param value value of the argument
+     * @return the current instance of the builder
+     */
     public NamedArgumentBuilder add(String name, Serializable value)
     {
         this.parameters.add(new DefaultNamedArgument(name, value));
         return this;
     }
 
+    /**
+     * Creates an array of {@link NamedArgument}s for the stored arguments
+     * @return array of the added arguments
+     */
     public NamedArgument[] create()
     {
         return this.parameters.toArray(new NamedArgument[this.parameters.size()]);

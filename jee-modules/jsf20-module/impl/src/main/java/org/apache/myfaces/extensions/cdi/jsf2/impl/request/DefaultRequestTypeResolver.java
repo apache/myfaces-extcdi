@@ -34,6 +34,9 @@ public class DefaultRequestTypeResolver
 {
     private static final long serialVersionUID = 3341790605524604799L;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected RequestTypeResolver createDefaultRequestTypeResolver()
     {
@@ -50,11 +53,17 @@ public class DefaultRequestTypeResolver
                 this.partialRequest = facesContext.getPartialViewContext().isPartialRequest();
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public boolean isPartialRequest()
             {
                 return this.partialRequest;
             }
 
+            /**
+             * {@inheritDoc}
+             */
             public boolean isPostRequest()
             {
                 return this.postRequest;

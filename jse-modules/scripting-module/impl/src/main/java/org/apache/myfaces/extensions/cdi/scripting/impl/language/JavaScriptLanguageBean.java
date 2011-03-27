@@ -33,11 +33,17 @@ public class JavaScriptLanguageBean extends AbstractLanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Language> getId()
     {
         return JavaScript.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String[] getAlternativeNames()
     {
         return new String[] {"JavaScript", "javascript", "js"};

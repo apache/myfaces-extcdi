@@ -30,6 +30,9 @@ public abstract class AbstractMessageHandler implements MessageHandler
 {
     private Set<MessageFilter> messageFilters = new CopyOnWriteArraySet<MessageFilter>();
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessage(MessageContext messageContext, Message message)
     {
         if (isMessageAllowed(messageContext, message))
@@ -40,11 +43,17 @@ public abstract class AbstractMessageHandler implements MessageHandler
 
     protected abstract void processMessage(MessageContext messageContext, Message message);
 
+    /**
+     * {@inheritDoc}
+     */
     public void addMessageFilter(MessageFilter... messageFilters)
     {
         this.messageFilters.addAll(Arrays.asList(messageFilters));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Set<MessageFilter> getMessageFilters()
     {
         return Collections.unmodifiableSet(this.messageFilters);

@@ -67,6 +67,16 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
 
     private transient BeanManager beanManager;
 
+    /**
+     * Constructor for creating a {@link ViewConfigDescriptor}
+     * @param viewId view-id represented by the descriptor
+     * @param viewDefinitionClass view-config class
+     * @param navigationMode configured navigation-mode
+     * @param viewParameterMode configured view-parameter-mode
+     * @param accessDecisionVoters configured access-decision-voters
+     * @param errorView optional inline error-view
+     * @param metaDataList optional meta-data
+     */
     public DefaultViewConfigDescriptor(String viewId,
                                        Class<? extends ViewConfig> viewDefinitionClass,
                                        Page.NavigationMode navigationMode,

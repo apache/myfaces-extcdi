@@ -31,6 +31,11 @@ public abstract class ProxyUtils
         // prevent instantiation
     }
 
+    /**
+     * The real class of the implementation
+     * @param currentClass current class
+     * @return class of the real implementation
+     */
     public static Class getUnproxiedClass(Class currentClass)
     {
         if(isProxiedClass(currentClass))
@@ -40,6 +45,11 @@ public abstract class ProxyUtils
         return currentClass;
     }
 
+    /**
+     * Analyses if the given class is a generated proxy class
+     * @param currentClass current class
+     * @return true if the given class is a known proxy class, false otherwise
+     */
     public static boolean isProxiedClass(Class currentClass)
     {
         return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||

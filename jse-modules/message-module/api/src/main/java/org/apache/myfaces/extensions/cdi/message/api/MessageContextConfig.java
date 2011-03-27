@@ -124,6 +124,10 @@ public interface MessageContextConfig extends Serializable
          */
         MessageContextBuilder reset();
 
+        /**
+         * @deprecated
+         * @return the instance of the current message context builder
+         */
         @Deprecated //currently not implemented
         MessageContextBuilder clear();
 

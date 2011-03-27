@@ -65,6 +65,9 @@ public abstract class AbstractAccessDecisionVoter implements AccessDecisionVoter
     {
         return new SecurityViolation()
         {
+            /**
+             * {@inheritDoc}
+             */
             public String getReason()
             {
                 return reason;

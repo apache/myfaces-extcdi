@@ -27,11 +27,17 @@ public class DefaultArgumentFilter implements ArgumentFilter
 {
     private static final long serialVersionUID = -2599667995355691782L;
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isArgumentAllowed(String expression, Object value)
     {
         return value != null && !isUnresolvedArgument(expression, value);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getDefaultValue(String expression)
     {
         return '{' + expression + '}';

@@ -118,11 +118,17 @@ public abstract class ConfiguredArtifactUtils
             {
                 resolverResult = configuredValueResolver.resolveInstances(new ConfiguredValueDescriptor<String, T>()
                 {
+                    /**
+                     * {@inheritDoc}
+                     */
                     public String getKey()
                     {
                         return key;
                     }
 
+                    /**
+                     * {@inheritDoc}
+                     */
                     public Class<T> getTargetType()
                     {
                         return targetType;

@@ -41,9 +41,17 @@ public class TransactionalInterceptor implements Serializable
     @Inject
     private PersistenceStrategy persistenceStrategy;
 
+    /**
+     * Creates a transaction before the intercepted method gets called and commits or reverts it after the invocation.
+     * A {@link PersistenceStrategy} is allowed to begin the transaction lazily but
+     * it has to support nested interceptor calls.
+     * @param invocationContext current invocation-context
+     * @return result of the intercepted method
+     * @throws Exception exception which might be thrown by the intercepted method
+     */
     @AroundInvoke
-    public Object invoke(InvocationContext context) throws Exception
+    public Object executeInTransaction(InvocationContext invocationContext) throws Exception
     {
-        return this.persistenceStrategy.execute(context);
+        return this.persistenceStrategy.execute(invocationContext);
     }
 }

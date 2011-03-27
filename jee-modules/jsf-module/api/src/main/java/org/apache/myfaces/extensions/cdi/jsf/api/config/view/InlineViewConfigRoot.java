@@ -50,7 +50,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 public @interface InlineViewConfigRoot
 {
+    /**
+     * Allows to customize the base-path
+     * @return base-path which should be used for the view-ids
+     */
     String basePath() default ".";
 
+    /**
+     * Allows to implement beans which use a common post-fix which won't be part of the view-id
+     * @return optional common post-fix for page-beans
+     */
     String[] pageBeanPostfix() default "";
 }

@@ -37,6 +37,9 @@ public class CodiJsf2SystemEventListener implements SystemEventListener, Deactiv
 {
     private final boolean deactivated;
 
+    /**
+     * Constructor which checks the activation of the listener
+     */
     public CodiJsf2SystemEventListener()
     {
         this.deactivated = !isActivated();

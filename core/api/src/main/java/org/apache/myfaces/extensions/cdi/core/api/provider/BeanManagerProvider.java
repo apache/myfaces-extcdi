@@ -44,11 +44,14 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BeanManagerProvider implements Extension
 {
-
     private static BeanManagerProvider bmp = null;
 
     private volatile Map<ClassLoader, BeanManager> bms = new ConcurrentHashMap<ClassLoader, BeanManager>();
 
+    /**
+     * Returns if the {@link BeanManagerProvider} has been initialized
+     * @return true if the bean-manager-provider is ready to be used
+     */
     public static boolean isActive()
     {
         return bmp != null;

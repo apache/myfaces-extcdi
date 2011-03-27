@@ -32,7 +32,7 @@ class ArgumentAwareScriptHelperMap extends ScriptHelperMap
     //HashMap due to Serializable warning in checkstyle rules
     private HashMap<String, Object> arguments = new HashMap<String, Object>();
 
-    public ArgumentAwareScriptHelperMap(String language, String arguments)
+    ArgumentAwareScriptHelperMap(String language, String arguments)
     {
         this.language = language;
 

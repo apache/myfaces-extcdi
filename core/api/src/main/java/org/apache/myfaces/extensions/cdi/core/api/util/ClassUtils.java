@@ -33,6 +33,9 @@ import java.net.URL;
 @Typed()
 public abstract class ClassUtils
 {
+    /**
+     * Constructor which prevents the instantiation of this class
+     */
     private ClassUtils()
     {
         // prevent instantiation

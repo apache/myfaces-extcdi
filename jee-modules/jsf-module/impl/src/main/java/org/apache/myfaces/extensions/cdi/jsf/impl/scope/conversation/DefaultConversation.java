@@ -50,6 +50,15 @@ public class DefaultConversation implements EditableConversation
     private final boolean closeConversationEventEnable;
     private final boolean restartConversationEventEnable;
 
+    /**
+     * Constructor which creates a conversation for the given
+     * {@link ConversationKey}, {@link ConversationExpirationEvaluator}, {@link ConversationConfig}
+     * and {@link BeanManager}
+     * @param conversationKey key of the current conversation
+     * @param expirationEvaluator expiration strategy which decides if the current conversation is expired
+     * @param conversationConfig current conversation-config
+     * @param beanManager current bean-manager
+     */
     public DefaultConversation(ConversationKey conversationKey,
                                ConversationExpirationEvaluator expirationEvaluator,
                                ConversationConfig conversationConfig,

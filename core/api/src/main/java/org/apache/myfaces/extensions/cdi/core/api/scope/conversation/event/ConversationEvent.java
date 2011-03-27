@@ -29,6 +29,10 @@ public abstract class ConversationEvent
 {
     private final Conversation conversation;
 
+    /**
+     * Constructor for creating the event for the given conversation
+     * @param conversation conversation for which the event gets created
+     */
     public ConversationEvent(Conversation conversation)
     {
         this.conversation = conversation;

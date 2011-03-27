@@ -48,6 +48,10 @@ public class ViewConfigExtension implements Extension, Deactivatable
 {
     private Logger logger = Logger.getLogger(ViewConfigExtension.class.getName());
 
+    /**
+     * Initializes the whole view-config data-structures.
+     * @param processAnnotatedType current process-annotated-type
+     */
     public void processPageDefinitions(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
@@ -284,6 +288,9 @@ public class ViewConfigExtension implements Extension, Deactivatable
         processAnnotatedType.veto();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

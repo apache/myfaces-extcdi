@@ -25,5 +25,11 @@ package org.apache.myfaces.extensions.cdi.message.api;
  */
 public interface MessageFilter
 {
+    /**
+     * Allows to analyze and block the given {@link Message}
+     * @param messageContext current message-context
+     * @param message current message
+     * @return false if the given message should be blocked, true otherwise
+     */
     boolean processMessage(MessageContext messageContext, Message message);
 }

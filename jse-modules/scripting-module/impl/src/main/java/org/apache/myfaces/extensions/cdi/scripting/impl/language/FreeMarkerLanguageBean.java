@@ -33,11 +33,17 @@ public class FreeMarkerLanguageBean extends AbstractLanguageBean
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Language> getId()
     {
         return FreeMarker.class;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String[] getAlternativeNames()
     {
         return new String[] {"FreeMarker", "freemarker", "fm"};

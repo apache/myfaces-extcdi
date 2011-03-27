@@ -42,6 +42,12 @@ public class SecurityInterceptor implements Serializable
     @Inject
     private SecurityStrategy securityStrategy;
 
+    /**
+     * Triggers the registered {@link AccessDecisionVoter}s
+     * @param invocationContext current invocation-context
+     * @return result of the intercepted method
+     * @throws Exception exception which might be thrown by the intercepted method
+     */
     @AroundInvoke
     public Object filterDeniedInvocations(InvocationContext invocationContext) throws Exception
     {

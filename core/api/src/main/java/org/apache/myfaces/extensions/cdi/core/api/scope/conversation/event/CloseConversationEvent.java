@@ -28,6 +28,10 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
  */
 public final class CloseConversationEvent extends ConversationEvent
 {
+    /**
+     * Constructor for creating the event for the given conversation
+     * @param conversation conversation for which the event gets created
+     */
     public CloseConversationEvent(Conversation conversation)
     {
         super(conversation);

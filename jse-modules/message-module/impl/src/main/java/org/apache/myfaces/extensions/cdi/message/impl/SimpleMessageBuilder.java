@@ -43,16 +43,30 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
         super(messageContext, null);
     }
 
+    /**
+     * Creates a new {@link Message}
+     * @return a new message
+     */
     public static MessageBuilder message()
     {
         return new SimpleMessageBuilder();
     }
 
+    /**
+     * Creates a new {@link MessageBuilder} for the given {@link MessageContext}
+     * @param  messageContext current message-context
+     * @return a new message
+     */
     public static MessageBuilder message(MessageContext messageContext)
     {
         return new SimpleMessageBuilder(messageContext);
     }
 
+    /**
+     * Creates a new {@link MessageBuilder} which uses the given {@link MessageFactory}
+     * @param  messageFactory current message-factory
+     * @return a new message
+     */
     public static MessageBuilder message(MessageFactory messageFactory)
     {
         SimpleMessageBuilder messageBuilder = new SimpleMessageBuilder();
@@ -60,6 +74,9 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
         return messageBuilder;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Message add()
     {
@@ -72,6 +89,9 @@ public class SimpleMessageBuilder extends DefaultMessageBuilder
         return super.add();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toText()
     {

@@ -54,6 +54,9 @@ public abstract class CodiStartupBroadcaster
             new ConcurrentHashMap<ClassLoader, List<Class<? extends StartupEventBroadcaster>>>();
 
 
+    /**
+     * Triggers the {@link StartupEventBroadcaster}s
+     */
     public static void broadcastStartup()
     {
         ClassLoader classLoader = ClassUtils.getClassLoader(null);

@@ -28,6 +28,9 @@ import javax.enterprise.inject.Typed;
 @Typed()
 class DefaultExternalExpressionInterpreter implements ExternalExpressionInterpreter
 {
+    /**
+     * {@inheritDoc}
+     */
     public String transform(String sourceScript)
     {
         return sourceScript;

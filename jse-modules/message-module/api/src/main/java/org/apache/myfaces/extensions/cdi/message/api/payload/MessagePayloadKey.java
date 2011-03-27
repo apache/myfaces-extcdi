@@ -32,5 +32,9 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 public @interface MessagePayloadKey
 {
+    /**
+     * Type-safe identifier
+     * @return identifier for the message-payload
+     */
     Class value();
 }

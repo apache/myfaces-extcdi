@@ -27,9 +27,21 @@ import java.io.Serializable;
  */
 public interface ConversationKey extends Serializable
 {
+    /**
+     * Annotation class of the scope annotation
+     * @return scope annotation-class
+     */
     Class<? extends Annotation> getScope();
 
+    /**
+     * Class of the group of the conversation
+     * @return current conversation-group
+     */
     Class<?> getConversationGroup();
 
+    /**
+     * CDI qualifiers without the conversation group
+     * @return qualifiers for the conversation
+     */
     Set<Annotation> getQualifiers();
 }

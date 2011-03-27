@@ -27,5 +27,11 @@ import java.io.Serializable;
  */
 public interface ConversationFactory extends Serializable
 {
+    /**
+     * Creates an {@link EditableConversation} for the given {@link ConversationKey} and {@link ConversationConfig}
+     * @param conversationKey current conversation-key
+     * @param config current conversation-config
+     * @return created conversation
+     */
     EditableConversation createConversation(ConversationKey conversationKey, ConversationConfig config);
 }

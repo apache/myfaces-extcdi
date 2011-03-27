@@ -36,6 +36,11 @@ public class ClassDeactivation
     {
     }
 
+    /**
+     * Evaluates if the given class is active
+     * @param targetClass current class
+     * @return true if it is active, false otherwise
+     */
     public static boolean isClassActivated(Class targetClass)
     {
         ClassDeactivator classDeactivator = ClassDeactivatorStorage.getClassDeactivator();
@@ -50,6 +55,10 @@ public class ClassDeactivation
         return !classDeactivated;
     }
 
+    /**
+     * Allows to provide a custom {@link ClassDeactivator}
+     * @param classDeactivator class-deactivator which should be used
+     */
     public static void setClassDeactivator(ClassDeactivator classDeactivator)
     {
         ClassDeactivatorStorage.setClassDeactivator(classDeactivator);

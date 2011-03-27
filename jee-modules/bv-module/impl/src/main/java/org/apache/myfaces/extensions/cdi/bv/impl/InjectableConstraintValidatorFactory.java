@@ -36,10 +36,6 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
 
     private transient ConstraintValidatorFactory wrapped;
 
-    public InjectableConstraintValidatorFactory()
-    {
-    }
-
     InjectableConstraintValidatorFactory(ConstraintValidatorFactory constraintValidatorFactory)
     {
         this.wrapped = constraintValidatorFactory;

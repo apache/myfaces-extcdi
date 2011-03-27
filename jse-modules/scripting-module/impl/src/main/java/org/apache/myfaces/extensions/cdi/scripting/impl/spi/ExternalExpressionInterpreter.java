@@ -23,5 +23,10 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.spi;
  */
 public interface ExternalExpressionInterpreter
 {
+    /**
+     * Allows to modify the script before it gets evaluated
+     * @param sourceScript current script
+     * @return script which will be evaluated
+     */
     String transform(String sourceScript);
 }

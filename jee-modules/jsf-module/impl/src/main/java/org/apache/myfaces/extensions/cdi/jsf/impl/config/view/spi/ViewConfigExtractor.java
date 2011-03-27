@@ -28,9 +28,24 @@ import java.io.Serializable;
  */
 public interface ViewConfigExtractor extends Serializable
 {
+    /**
+     * Creates a {@link ViewConfigDescriptor} for the given view-config class
+     * @param viewDefinitionClass current view-config class
+     * @return descriptor which represents the view-config for the given config class
+     */
     ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
+    /**
+     * Evaluates if the given view-config class is an inline conifg - that means if it is a resolvable (page-)bean
+     * @param viewDefinitionClass view-config class
+     * @return true if it is a resolvable (page-)bean with inline view-config, false otherwise
+     */
     boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
+    /**
+     * Creates a {@link ViewConfigDescriptor} for the given inline view-config class
+     * @param viewDefinitionClass current view-config class
+     * @return descriptor which represents the view-config for the given config class
+     */
     ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

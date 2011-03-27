@@ -53,6 +53,10 @@ public class ViewAccessConversationExpirationEvaluatorRegistry implements Serial
         this.viewAccessConversationExpirationEvaluatorList.add(evaluator);
     }
 
+    /**
+     * Notifies all {@link ViewAccessConversationExpirationEvaluator}s about the rendered view
+     * @param viewId current view-id
+     */
     public void broadcastRenderedViewId(String viewId)
     {
         for(ViewAccessConversationExpirationEvaluator evaluator : this.viewAccessConversationExpirationEvaluatorList)

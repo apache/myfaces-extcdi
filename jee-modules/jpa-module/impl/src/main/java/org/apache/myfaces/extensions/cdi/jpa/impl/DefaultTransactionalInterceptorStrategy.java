@@ -74,10 +74,14 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
             persistenceContextMetaEntries =
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
+    //TODO for mark
     /** 1 ms  in nanoTime ticks */
-    static final long LONG_MILLISECOND = 1000000L;
-    static final long LONG_RUNNING_THRESHOLD = 300L * LONG_MILLISECOND;
+    //static final long LONG_MILLISECOND = 1000000L;
+    //static final long LONG_RUNNING_THRESHOLD = 300L * LONG_MILLISECOND;
 
+    /**
+     * {@inheritDoc}
+     */
     public Object execute(InvocationContext context) throws Exception
     {
         Transactional transactionalAnnotation = context.getMethod().getAnnotation(Transactional.class);

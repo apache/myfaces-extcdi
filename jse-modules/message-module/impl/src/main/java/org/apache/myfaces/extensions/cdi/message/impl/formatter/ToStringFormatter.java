@@ -40,16 +40,25 @@ class ToStringFormatter implements Formatter<Object>, Serializable
         this.responsibleFor = type;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isResponsibleFor(Class<?> type)
     {
         return type.isAssignableFrom(this.responsibleFor);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isStateless()
     {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String format(MessageContext messageContext, Object valueToFormat)
     {
         if(valueToFormat instanceof Localizable)
@@ -59,12 +68,18 @@ class ToStringFormatter implements Formatter<Object>, Serializable
         return valueToFormat != null ? valueToFormat.toString() : "";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return getClass().getName().hashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object target)
     {

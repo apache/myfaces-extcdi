@@ -23,13 +23,28 @@ import javax.el.ExpressionFactory;
 import java.io.Serializable;
 
 /**
+ * Decouples codi from an el-implementation which provides a simple-el-context e.g. like juel
+ *
  * @author Gerhard Petracek
  */
 public interface ELProvider extends Serializable
 {
+    /**
+     * Creates an {@link ExpressionFactory}
+     * @return a new expression-factory
+     */
     ExpressionFactory createExpressionFactory();
 
+    /**
+     * Create a {@link SimpleELContext}
+     * @param elResolver current el-resolver
+     * @return a new simple-el-context
+     */
     SimpleELContext createELContext(ELResolver elResolver);
 
+    /**
+     * Creates an {@link ELResolver}
+     * @return a new el-resolver
+     */
     ELResolver createELResolver();
 }

@@ -45,6 +45,13 @@ public class SecurityViewListener
 {
     private static final String LAZY_SECURITY_CHECK_KEY = "LAZY_SECURITY_CHECK";
 
+    /**
+     * Checks the permission based on the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter}s
+     * which are configured for the current view.
+     * @param event current phase-event
+     * @param beanManager current bean-manager
+     */
     public void checkPermission(@Observes @AfterPhase(RESTORE_VIEW) PhaseEvent event, BeanManager beanManager)
     {
         FacesContext facesContext = event.getFacesContext();
@@ -58,6 +65,13 @@ public class SecurityViewListener
         checkPermission(beanManager, facesContext);
     }
 
+    /**
+     * Checks the permission based on the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter}s
+     * which are configured for the current view.
+     * @param event current phase-event
+     * @param beanManager current bean-manager
+     */
     public void checkPermissionBeforeRendering(
             @Observes @BeforePhase(RENDER_RESPONSE) PhaseEvent event, BeanManager beanManager)
     {

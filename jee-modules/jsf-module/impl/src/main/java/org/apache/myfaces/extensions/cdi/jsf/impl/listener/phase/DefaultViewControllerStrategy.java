@@ -39,6 +39,9 @@ public class DefaultViewControllerStrategy implements ViewControllerStrategy
 {
     private static final long serialVersionUID = -4380864019324445036L;
 
+    /**
+     * {@inheritDoc}
+     */
     public Object execute(InvocationContext invocationContext) throws Exception
     {
         Object result = null;

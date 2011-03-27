@@ -23,5 +23,9 @@ package org.apache.myfaces.extensions.cdi.scripting.api.language;
  */
 public interface Language
 {
+    /**
+     * Name of the language which will be used for the {@link javax.script.ScriptEngineManager#getEngineByName}
+     * @return name of the script-language
+     */
     String getName();
 }

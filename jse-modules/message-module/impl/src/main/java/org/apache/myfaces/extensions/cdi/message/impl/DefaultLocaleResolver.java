@@ -30,6 +30,9 @@ class DefaultLocaleResolver implements LocaleResolver, Serializable
 {
     private static final long serialVersionUID = 2075618472090834156L;
 
+    /**
+     * {@inheritDoc}
+     */
     public Locale getLocale()
     {
         return Locale.getDefault();

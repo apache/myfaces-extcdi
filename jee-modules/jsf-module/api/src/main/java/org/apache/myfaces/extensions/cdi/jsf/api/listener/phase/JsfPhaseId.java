@@ -40,11 +40,21 @@ public enum JsfPhaseId
         this.phaseId = phaseId;
     }
 
+    /**
+     * Converts the codi implementation to the jsf implementation
+     * @param phaseId current phase-id which has to be converted
+     * @return jsf implementation for the given phase-id
+     */
     public static javax.faces.event.PhaseId convertToFacesClass(JsfPhaseId phaseId)
     {
         return phaseId.getPhaseId();
     }
 
+    /**
+     * Converts the jsf implementation to the codi implementation
+     * @param phaseId current phase-id which has to be converted
+     * @return codi implementation for the given phase-id
+     */
     public static JsfPhaseId convertFromFacesClass(javax.faces.event.PhaseId phaseId)
     {
         if(RESTORE_VIEW.getPhaseId().equals(phaseId))

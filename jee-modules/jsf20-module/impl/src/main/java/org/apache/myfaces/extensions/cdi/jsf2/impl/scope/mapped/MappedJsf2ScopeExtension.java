@@ -44,6 +44,9 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
     private Map<Class<? extends Annotation>, Class<? extends Annotation>> mappedJsfScopes
             = new HashMap<Class<? extends Annotation>, Class<? extends Annotation>>();
 
+    /**
+     * Default constructor which initializes the scope mapping
+     */
     public MappedJsf2ScopeExtension()
     {
         this.mappedJsfScopes.put(javax.faces.bean.ApplicationScoped.class,
@@ -133,6 +136,9 @@ public class MappedJsf2ScopeExtension implements Extension, Deactivatable
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

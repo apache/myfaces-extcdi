@@ -45,6 +45,9 @@ class JsfAwareMessageHandler extends AbstractMessageHandler
 
     private boolean projectStageDevelopment;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void processMessage(MessageContext messageContext, Message message)
     {
@@ -121,16 +124,25 @@ class JsfAwareMessageHandler extends AbstractMessageHandler
         throw new IllegalArgumentException(payload.getClass().getName());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeMessage(Message message)
     {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void removeAllMessages()
     {
         throw new UnsupportedOperationException("not implemented");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public List<Message> getMessages()
     {
         throw new UnsupportedOperationException("not implemented");

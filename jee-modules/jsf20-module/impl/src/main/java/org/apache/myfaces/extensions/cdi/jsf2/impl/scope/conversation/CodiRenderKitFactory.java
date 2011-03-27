@@ -45,6 +45,10 @@ public class CodiRenderKitFactory extends RenderKitFactory implements Deactivata
     private volatile Boolean initialized;
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link RenderKitFactory}
+     * @param wrapped render-kit-factory which will be wrapped
+     */
     public CodiRenderKitFactory(RenderKitFactory wrapped)
     {
         this.wrapped = wrapped;

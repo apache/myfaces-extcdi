@@ -35,6 +35,10 @@ class InvalidValueAwareValidatorContext implements ValidatorContext
 {
     private ValidatorContext wrapped;
 
+    /**
+     * Constructor for wrapping the given {@link ValidatorContext}
+     * @param wrapped validator-context which should be wrapped
+     */
     public InvalidValueAwareValidatorContext(ValidatorContext wrapped)
     {
         this.wrapped = wrapped;

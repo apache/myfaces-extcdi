@@ -36,6 +36,11 @@ public class AccessDeniedException extends SecurityException
     private Set<SecurityViolation> violations;
     private Class<? extends ViewConfig> errorView;
 
+    /**
+     * Constructor for creating the exception for the given violations and error-view
+     * @param violations current violations
+     * @param errorView optional inline error-view
+     */
     public AccessDeniedException(Set<SecurityViolation> violations, Class<? extends ViewConfig> errorView)
     {
         this.violations = violations;

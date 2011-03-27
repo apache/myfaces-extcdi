@@ -29,6 +29,10 @@ import java.io.Serializable;
  */
 public final class AccessBeanEvent extends BeanEvent
 {
+    /**
+     * Constructor for creating the event for the given bean-instance
+     * @param bean bean-instance (unproxied) for which the event gets created
+     */
     public AccessBeanEvent(Serializable bean)
     {
         super(bean);

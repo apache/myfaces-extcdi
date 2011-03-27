@@ -43,6 +43,9 @@ public abstract class SecurityUtils
 {
     private static final Jsf JSF_QUALIFIER = DefaultAnnotation.of(Jsf.class);
 
+    /**
+     * Constructor which prevents the instantiation of this class
+     */
     private SecurityUtils()
     {
         // prevent instantiation

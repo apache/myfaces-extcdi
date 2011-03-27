@@ -71,6 +71,10 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
         return true;
     }
 
+    /**
+     * Per default all faces-messages are preserved for the next rendering process
+     * @return true if the messages should be preserved automatically, false otherwise
+     */
     @ConfigEntry
     public boolean isAlwaysKeepMessages()
     {

@@ -36,6 +36,10 @@ public class InterceptedResponseWriter extends ResponseWriterWrapper
 {
     private ResponseWriter wrapped;
 
+    /**
+     * Constructor for wrapping the given {@link ResponseWriter}
+     * @param wrapped response-writer which should be wrapped
+     */
     public InterceptedResponseWriter(ResponseWriter wrapped)
     {
         this.wrapped = wrapped;

@@ -22,8 +22,14 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
+ * Base implementation which doesn't implement the {@link ConversationExpirationEvaluator} interface because
+ * this implementation will be used by the
+ * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} but
+ * there is no need for implementing the whole {@link ConversationExpirationEvaluator} interface.
+ *
  * @author Gerhard Petracek
  */
+//TODO re-visit it
 public class TimeoutExpirationEvaluator implements Serializable
 {
     private static final long serialVersionUID = -1132091879142732148L;
@@ -37,12 +43,19 @@ public class TimeoutExpirationEvaluator implements Serializable
         this.timeoutInMs = timeoutInMinutes * 60000;
     }
 
+    /**
+     * Evaluates if the conversation is still valid
+     * @return false if the conversation is valid, true otherwise
+     */
     public boolean isExpired()
     {
         return this.lastAccess == null ||
                 (this.lastAccess.getTime() + this.timeoutInMs) < System.currentTimeMillis();
     }
 
+    /**
+     * Marks the conversation as used
+     */
     public void touch()
     {
         this.lastAccess = new Date();

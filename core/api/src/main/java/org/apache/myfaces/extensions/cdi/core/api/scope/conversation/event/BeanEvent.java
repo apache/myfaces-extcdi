@@ -29,6 +29,10 @@ public abstract class BeanEvent
 {
     private final Serializable bean;
 
+    /**
+     * Constructor for creating the event for the given bean-instance
+     * @param bean bean-instance (unproxied) for which the event gets created
+     */
     public BeanEvent(Serializable bean)
     {
         this.bean = bean;

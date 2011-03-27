@@ -46,6 +46,9 @@ public class DefaultLanguageManager implements LanguageManager
     {
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getLanguageName(Class<? extends Language> languageType)
     {
         Language language = this.languageCache.get(languageType);

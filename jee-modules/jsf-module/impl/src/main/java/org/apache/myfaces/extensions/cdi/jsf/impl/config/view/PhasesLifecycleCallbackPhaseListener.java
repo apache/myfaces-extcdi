@@ -61,6 +61,9 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     @Inject
     private BeanManager beanManager;
 
+    /**
+     * {@inheritDoc}
+     */
     public void afterPhase(PhaseEvent event)
     {
         processInitView(event);
@@ -68,6 +71,9 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         processPhaseCallbacks(event, false);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void beforePhase(PhaseEvent event)
     {
         processInitView(event);
@@ -143,6 +149,9 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public javax.faces.event.PhaseId getPhaseId()
     {
         return javax.faces.event.PhaseId.ANY_PHASE;

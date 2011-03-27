@@ -35,6 +35,9 @@ public class TransactionalLiteral extends AnnotationLiteral<Transactional> imple
 {
     private static final long serialVersionUID = -275279485237713614L;
 
+    /**
+     * {@inheritDoc}
+     */
     public Class<? extends Annotation> qualifier()
     {
         return Default.class;

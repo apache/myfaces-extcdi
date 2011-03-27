@@ -32,11 +32,18 @@ public class NamedLiteral extends AnnotationLiteral<Named> implements Named
 
     private final String name;
 
+    /**
+     * Constructor for creating an instance with the given name
+     * @param name name which should be used
+     */
     public NamedLiteral(String name)
     {
         this.name = name;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String value()
     {
         return name;

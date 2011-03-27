@@ -55,11 +55,20 @@ public abstract class JndiUtils
         // prevent instantiation
     }
 
+    /**
+     * Exposes the current {@link InitialContext}
+     * @return current initial-context
+     */
     public static InitialContext getInitialContext()
     {
         return initialContext;
     }
 
+    /**
+     * Binds a given instance to a given name
+     * @param name current name
+     * @param object current instance
+     */
     public static void bind(String name, Object object)
     {
         try
@@ -88,6 +97,10 @@ public abstract class JndiUtils
         }
     }
 
+    /**
+     * Unbinds a given name
+     * @param name current name
+     */
     public static void unbind(String name)
     {
         try
@@ -101,6 +114,13 @@ public abstract class JndiUtils
         }
     }
 
+    /**
+     * Resolves an instance for the given name.
+     * @param name current name
+     * @param expectedClass target type
+     * @param <T> type
+     * @return the found instance, null otherwise
+     */
     @SuppressWarnings("unchecked")
     public static <T> T lookup(String name, Class<? extends T> expectedClass)
     {

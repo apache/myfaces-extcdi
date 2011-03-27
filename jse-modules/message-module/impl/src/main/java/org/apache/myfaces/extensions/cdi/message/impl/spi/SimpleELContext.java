@@ -26,5 +26,11 @@ import javax.el.ValueExpression;
  */
 public abstract class SimpleELContext extends ELContext
 {
-    public abstract ValueExpression setVariable(String variable, ValueExpression valueExpression);
+    /**
+     * Allows to map a variable to a {@link ValueExpression}
+     * @param variableName name of the variable
+     * @param valueExpression current value-expression
+     * @return the value-expression mapped to the variable
+     */
+    public abstract ValueExpression setVariable(String variableName, ValueExpression valueExpression);
 }

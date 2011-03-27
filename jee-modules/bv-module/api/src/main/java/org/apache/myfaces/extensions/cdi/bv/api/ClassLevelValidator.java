@@ -35,11 +35,17 @@ public abstract class ClassLevelValidator<A extends Annotation, T> implements Co
 {
     protected A constraint;
 
+    /**
+     * {@inheritDoc}
+     */
     public void initialize(A constraint)
     {
         this.constraint = constraint;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isValid(T instance, ConstraintValidatorContext constraintValidatorContext)
     {
         boolean valid = isValidInstance(instance, constraintValidatorContext);

@@ -42,6 +42,9 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
 {
     private static final long serialVersionUID = 5794817257216134993L;
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //use the interface to make clear which information we really need
@@ -50,11 +53,17 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         return extractViewConfigDescriptor(viewDefinitionClass, viewConfigDescriptor);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return isResolvable(viewDefinitionClass, new ArrayList<Class<? extends Annotation>>());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         Class viewConfigRootMarker = ViewConfigCache.getInlineViewConfigRootMarker();

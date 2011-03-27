@@ -146,7 +146,7 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-        if(this.windowContextQuotaHandler.checkQuota(getNumberOfNextWindowContext()))
+        if(this.windowContextQuotaHandler.isWindowContextQuotaViolated(getNumberOfNextWindowContext()))
         {
             //handle violation if cleanup is deactivated or the cleanup wasn't successful
             if(!this.windowContextConfig.isCloseEmptyWindowContextsEnabled() || !cleanupInactiveWindowContexts(this))

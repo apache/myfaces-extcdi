@@ -52,17 +52,27 @@ public class InvalidValueAwareMessageInterpolator implements MessageInterpolator
     protected InvalidValueAwareMessageInterpolator()
     {
     }
-    
+
+    /**
+     * Constructor for wrapping the given {@link MessageInterpolator}
+     * @param messageInterpolator message-interpolator which should be wrapped
+     */
     public InvalidValueAwareMessageInterpolator(MessageInterpolator messageInterpolator)
     {
         this.wrapped = messageInterpolator;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(String messageTemplate, Context context)
     {
         return interpolate(messageTemplate, context, null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(String messageTemplate, Context context, Locale locale)
     {
         Map<String, Serializable> attributes = new HashMap<String, Serializable>();

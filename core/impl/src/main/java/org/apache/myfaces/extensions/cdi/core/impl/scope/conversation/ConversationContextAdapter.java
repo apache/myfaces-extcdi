@@ -32,6 +32,11 @@ public class ConversationContextAdapter implements Context
     private final Class<? extends Annotation> scopeType;
     private final AbstractGroupedConversationContext conversationContext;
 
+    /**
+     * Constructor which allows to build a context for conversations for the given scope-type and scope-implementation
+     * @param scope type of the scope
+     * @param conversationContext implementation of the conversation scope
+     */
     public ConversationContextAdapter(Class<? extends Annotation> scope,
                                       AbstractGroupedConversationContext conversationContext)
     {

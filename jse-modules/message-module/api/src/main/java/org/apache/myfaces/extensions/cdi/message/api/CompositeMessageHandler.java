@@ -28,5 +28,9 @@ import java.util.List;
  */
 public interface CompositeMessageHandler extends MessageHandler
 {
+    /**
+     * Returns the registered {@link MessageHandler}s for adjusting them
+     * @return currently registered message-handlers
+     */
     List<MessageHandler> getMessageHandlers();
 }

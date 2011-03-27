@@ -33,11 +33,18 @@ public class AccessScopeAwareNavigationHandler extends NavigationHandler
 {
     private final NavigationHandler navigationHandler;
 
+    /**
+     * Constructor for wrapping the given {@link NavigationHandler}
+     * @param navigationHandler navigation-handler which should be wrapped
+     */
     public AccessScopeAwareNavigationHandler(NavigationHandler navigationHandler)
     {
         this.navigationHandler = navigationHandler;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void handleNavigation(FacesContext facesContext, String s, String s1)
     {
         //we have to reset it due to possible redirects

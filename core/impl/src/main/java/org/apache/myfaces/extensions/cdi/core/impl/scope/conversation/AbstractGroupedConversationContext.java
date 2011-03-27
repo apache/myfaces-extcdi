@@ -64,6 +64,11 @@ public abstract class AbstractGroupedConversationContext
         this.useFallback = useCreationFallback;
     }
 
+    /**
+     * @param bean         descriptor of the bean
+     * @param creationalContext context for creating a bean
+     * @return a scoped bean-instance
+     */
     public <T> T create(Bean<T> bean, CreationalContext<T> creationalContext)
     {
         //workaround for weld - start
@@ -93,6 +98,12 @@ public abstract class AbstractGroupedConversationContext
         return beanEntry.getBeanInstance();
     }
 
+    /**
+     * Resolves the instance for the given bean definition
+     * @param bean current bean
+     * @param <T> type of the current bean
+     * @return instance of the scoped bean
+     */
     @SuppressWarnings({"UnnecessaryLocalVariable"})
     public <T> T resolve(Bean<T> bean)
     {
@@ -137,6 +148,10 @@ public abstract class AbstractGroupedConversationContext
 
     protected abstract ConversationConfig getConversationConfig();
 
+    /**
+     * See {@link javax.enterprise.context.spi.Context#isActive()}
+     * @return true if the context is active, false otherwise
+     */
     public abstract boolean isActive();
 
     private void lazyInitConversationConfig()

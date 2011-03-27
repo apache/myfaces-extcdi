@@ -28,6 +28,10 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
  */
 public final class CloseWindowContextEvent extends WindowContextEvent
 {
+    /**
+     * Constructor for creating the event for the given window-context
+     * @param windowContext window-context for which the event gets created
+     */
     public CloseWindowContextEvent(WindowContext windowContext)
     {
         super(windowContext);

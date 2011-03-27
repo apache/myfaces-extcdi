@@ -61,6 +61,10 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
     private Page.NavigationMode navigationMode = null;
     private Page.ViewParameterMode viewParameterMode = null;
 
+    /**
+     * Constructor for creating a {@link EditableViewConfigDescriptor} for the given {@link ViewConfig} definition
+     * @param viewDefinitionClass current view-config
+     */
     public ExtractedViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass)
     {
         this.viewDefinitionClass = viewDefinitionClass;

@@ -45,11 +45,23 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
     private ELProvider elProvider;
     private ArgumentFilter argumentFilter;
 
+    /**
+     * Constructor for creating an {@link org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator}
+     * which uses the given {@link ELProvider} for interpolating el-expressions in a message.
+     * @param elProvider el-provider which should be used
+     */
     public ELAwareMessageInterpolator(ELProvider elProvider)
     {
         this(elProvider, null);
     }
 
+    /**
+     * Constructor for creating an {@link org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator}
+     * which uses the given {@link ELProvider} for interpolating el-expressions in a message and
+     * allows to filter arguments of the message.
+     * @param elProvider el-provider which should be used
+     * @param argumentFilter argument-filter which should be used
+     */
     public ELAwareMessageInterpolator(ELProvider elProvider, ArgumentFilter argumentFilter)
     {
         this.elProvider = elProvider;
@@ -64,6 +76,9 @@ public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInt
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         List<NamedArgument> namedArguments = addNamedArguments(arguments);

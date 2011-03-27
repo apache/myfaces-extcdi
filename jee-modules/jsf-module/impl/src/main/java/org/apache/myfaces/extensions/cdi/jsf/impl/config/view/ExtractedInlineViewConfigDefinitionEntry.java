@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoo
  */
 class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefinitionEntry
 {
-    public ExtractedInlineViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass, String basePath)
+    ExtractedInlineViewConfigDefinitionEntry(Class<? extends ViewConfig> viewDefinitionClass, String basePath)
     {
         super(viewDefinitionClass);
 
@@ -40,12 +40,18 @@ class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefini
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setBasePath(String currentBasePath)
     {
         //filtered
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getViewId()
     {

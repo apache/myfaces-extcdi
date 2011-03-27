@@ -41,5 +41,9 @@ import java.lang.annotation.Annotation;
 @Target( { ElementType.TYPE, ElementType.METHOD })
 public @interface Transactional
 {
+    /**
+     * Optional qualifier which allows to use multiple persistence-units
+     * @return target persistence-unit identifier
+     */
     @Nonbinding Class<? extends Annotation> qualifier() default Default.class;
 }

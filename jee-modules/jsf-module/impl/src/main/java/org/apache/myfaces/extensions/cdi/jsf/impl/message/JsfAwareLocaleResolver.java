@@ -30,6 +30,9 @@ public class JsfAwareLocaleResolver implements LocaleResolver
 {
     private static final long serialVersionUID = 5945811297524654438L;
 
+    /**
+     * {@inheritDoc}
+     */
     public Locale getLocale()
     {
         Locale locale = null;

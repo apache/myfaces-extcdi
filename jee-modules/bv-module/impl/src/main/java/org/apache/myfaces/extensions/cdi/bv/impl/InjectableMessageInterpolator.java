@@ -36,10 +36,6 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
 
     private transient MessageInterpolator wrapped;
 
-    public InjectableMessageInterpolator()
-    {
-    }
-
     InjectableMessageInterpolator(MessageInterpolator wrapped)
     {
         this.wrapped = wrapped;
@@ -63,11 +59,18 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(String s, Context context)
     {
         return getWrapped().interpolate(s, context);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(String s, Context context, Locale locale)
     {
         return getWrapped().interpolate(s, context, locale);

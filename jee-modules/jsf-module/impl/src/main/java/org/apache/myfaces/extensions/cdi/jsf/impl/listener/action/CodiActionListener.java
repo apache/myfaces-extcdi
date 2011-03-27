@@ -34,12 +34,19 @@ public class CodiActionListener implements ActionListener, Deactivatable
     private final ActionListener wrapped;
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link ActionListener}
+     * @param wrapped action-listener which should be wrapped
+     */
     public CodiActionListener(ActionListener wrapped)
     {
         this.wrapped = wrapped;
         this.deactivated = !isActivated();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void processAction(ActionEvent actionEvent)
     {
         if(this.deactivated)
@@ -60,6 +67,9 @@ public class CodiActionListener implements ActionListener, Deactivatable
         return new ViewControllerActionListener(viewConfigAwareNavigationHandler);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

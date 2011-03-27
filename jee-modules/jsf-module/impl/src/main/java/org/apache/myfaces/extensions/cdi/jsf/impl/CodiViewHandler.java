@@ -42,6 +42,10 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
 
     private ViewHandler securityAwareViewHandler;
 
+    /**
+     * Constructor for wrapping the given {@link ViewHandler}
+     * @param wrapped view-handler which should be wrapped
+     */
     public CodiViewHandler(ViewHandler wrapped)
     {
         this.wrapped = wrapped;
@@ -52,6 +56,9 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UIViewRoot createView(FacesContext facesContext, String viewId)
     {
@@ -62,6 +69,9 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
         return this.securityAwareViewHandler.createView(facesContext, viewId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String getActionURL(FacesContext facesContext, String viewId)
     {
@@ -73,6 +83,9 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
         return this.windowContextAwareViewHandler.getActionURL(facesContext, viewId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UIViewRoot restoreView(FacesContext facesContext, String viewId)
     {
@@ -83,11 +96,17 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
         return this.windowContextAwareViewHandler.restoreView(facesContext, viewId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public ViewHandler getWrapped()
     {
         return this.wrapped;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public boolean isActivated()
     {
         return ClassDeactivation.isClassActivated(getClass());

@@ -44,6 +44,10 @@ class TrinidadRenderKitWrapper extends RenderKit
 {
     private RenderKit wrapped;
 
+    /**
+     * Constructor for wrapping the given {@link RenderKit}
+     * @param wrapped render-kit which should be wrapped
+     */
     public TrinidadRenderKitWrapper(RenderKit wrapped)
     {
         this.wrapped = wrapped;

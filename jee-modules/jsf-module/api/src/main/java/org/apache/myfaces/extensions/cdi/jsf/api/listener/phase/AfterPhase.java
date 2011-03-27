@@ -45,5 +45,10 @@ import java.lang.annotation.Target;
  */
 public @interface AfterPhase
 {
+    /**
+     * {@link JsfPhaseId} which is the equivalent for the {@link javax.faces.event.PhaseId} value.
+     * For more details see {@link JsfPhaseId}
+     * @return phase-id which defines the jsf-lifecycle-phase to completely define this qualifier
+     */
     JsfPhaseId value();
 }

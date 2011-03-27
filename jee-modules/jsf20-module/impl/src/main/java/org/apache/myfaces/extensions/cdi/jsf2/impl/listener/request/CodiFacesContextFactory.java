@@ -34,6 +34,10 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
 
     private final boolean deactivated;
 
+    /**
+     * Constructor for wrapping the given {@link FacesContextFactory}
+     * @param wrappedFacesContextFactory wrapped faces-context-factory which should be used
+     */
     public CodiFacesContextFactory(FacesContextFactory wrappedFacesContextFactory)
     {
         this.wrappedFacesContextFactory = wrappedFacesContextFactory;
@@ -76,6 +80,11 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         return wrappedFacesContextFactory.getWrapped();
     }
 
+    /**
+     * Allows to wrap the given {@link FacesContext} manually
+     * @param facesContext current faces-context
+     * @return the wrapped faces-context, or the given faces-context if it was wrapped already
+     */
     public static FacesContext wrapFacesContext(FacesContext facesContext)
     {
         if(facesContext instanceof CodiFacesContextWrapper)

@@ -38,6 +38,14 @@ import javax.inject.Named;
 @ApplicationScoped
 public class JsfAwareMessageContextProducer
 {
+    /**
+     * Creates a specialized {@link MessageContext} for JSF which delegates to jsf mechanisms (as fallback)
+     * @param defaultMessageContext pre-configured message-context
+     * @param messageFactoryInstance current message-factory (optional)
+     * @param elProviderInstance current el-provider (optional)
+     * @param argumentFilterInstance current argument-filter (optional)
+     * @return optimized message-context for jsf-applications
+     */
     @Produces
     @Dependent
     @Jsf

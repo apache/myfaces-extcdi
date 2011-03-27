@@ -38,7 +38,7 @@ class FacesMessageInterpolator implements MessageInterpolator
     
     private MessageInterpolator messageInterpolator;
 
-    public FacesMessageInterpolator(ELProvider elProvider, ArgumentFilter argumentFilter)
+    FacesMessageInterpolator(ELProvider elProvider, ArgumentFilter argumentFilter)
     {
         if(elProvider != null)
         {
@@ -54,6 +54,9 @@ class FacesMessageInterpolator implements MessageInterpolator
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(MessageContext messageContext, String messageText, Serializable... arguments)
     {
         return this.messageInterpolator.interpolate(messageContext, messageText, arguments);

@@ -27,12 +27,11 @@ import javax.faces.context.FacesContext;
  */
 public interface LifecycleAwareWindowHandler extends WindowHandler
 {
-
     /**
      * Is called before the execute portion of the JSF lifecycle starts.
      * If this method sets responseComplete() to true, the lifecycle won't be started.
      *
-     * @param facesContext
+     * @param facesContext current faces-context
      */
     void beforeLifecycleExecute(FacesContext facesContext);
 

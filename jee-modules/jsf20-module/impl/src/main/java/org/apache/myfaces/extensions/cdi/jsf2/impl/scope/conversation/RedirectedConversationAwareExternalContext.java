@@ -42,6 +42,10 @@ public class RedirectedConversationAwareExternalContext extends ExternalContextW
 
     private boolean sessionInvalidated = false;
 
+    /**
+     * Constructor for wrapping the given {@link ExternalContext}
+     * @param wrapped external-context which should be wrapped
+     */
     public RedirectedConversationAwareExternalContext(ExternalContext wrapped)
     {
         this.wrapped = wrapped;

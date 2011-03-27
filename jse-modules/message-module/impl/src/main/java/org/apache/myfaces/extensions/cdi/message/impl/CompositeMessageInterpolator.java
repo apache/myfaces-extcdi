@@ -31,11 +31,18 @@ public class CompositeMessageInterpolator implements MessageInterpolator, Serial
     private static final long serialVersionUID = 7138747032627702804L;
     private MessageInterpolator[] messageInterpolators;
 
+    /**
+     * Wraps the given {@link MessageInterpolator}s
+     * @param messageInterpolators current message-interpolators
+     */
     public CompositeMessageInterpolator(MessageInterpolator... messageInterpolators)
     {
         this.messageInterpolators = messageInterpolators;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String interpolate(MessageContext messageContext, String messageDescriptor, Serializable... arguments)
     {
         String result = messageDescriptor;

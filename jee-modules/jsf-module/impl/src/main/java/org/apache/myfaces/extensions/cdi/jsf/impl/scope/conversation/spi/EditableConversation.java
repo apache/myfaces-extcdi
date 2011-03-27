@@ -42,6 +42,11 @@ public interface EditableConversation extends Conversation
      */
     void deactivate();
 
+    /**
+     * Adds a {@link BeanEntry} which represents a scoped bean to the current conversation
+     * @param beanInstance bean instance which should be added to the conversation
+     * @param <T> tpye of the bean
+     */
     <T> void addBean(BeanEntry<T> beanInstance);
 
     /**
