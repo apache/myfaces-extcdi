@@ -44,6 +44,7 @@ public abstract class ProxyUtils
     {
         return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
             currentClass.getName().contains("$$FastClassByCGLIB$$") ||
-            currentClass.getName().contains("_$$_javassist");
+            currentClass.getName().contains("_$$_javassist") ||
+            (currentClass.getName().contains("_$$_") && currentClass.getName().contains("-class_"));
     }
 }
