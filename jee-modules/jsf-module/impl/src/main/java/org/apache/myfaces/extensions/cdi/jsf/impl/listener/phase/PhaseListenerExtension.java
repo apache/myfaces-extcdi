@@ -19,9 +19,12 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
 import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
+import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 
@@ -103,8 +106,30 @@ public class PhaseListenerExtension implements Extension
         {
             List<PhaseListener> result = new ArrayList<PhaseListener>(foundPhaseListeners.size());
 
+            Class<? extends ProjectStage> activeProjectStage =
+                    ProjectStageProducer.getInstance().getProjectStage().getClass();
+
             for(Class<? extends PhaseListener> phaseListenerClass : foundPhaseListeners)
             {
+                if(phaseListenerClass.isAnnotationPresent(ProjectStageActivated.class))
+                {
+                    boolean projectStageFound = false;
+
+                    for(Class<? extends ProjectStage> currentProjectStage :
+                            phaseListenerClass.getAnnotation(ProjectStageActivated.class).value())
+                    {
+                        if(currentProjectStage.isAssignableFrom(activeProjectStage))
+                        {
+                            projectStageFound = true;
+                        }
+                    }
+
+                    if(!projectStageFound)
+                    {
+                        continue;
+                    }
+                }
+
                 PhaseListener phaseListener = createPhaseListenerInstance(phaseListenerClass);
                 result.add(injectFields(phaseListener, advancedQualifierRequiredForDependencyInjection));
             }
