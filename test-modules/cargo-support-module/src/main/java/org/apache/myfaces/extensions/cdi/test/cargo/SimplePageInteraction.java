@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.test.cargo;
 
 import com.gargoylesoftware.htmlunit.ElementNotFoundException;
 import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -260,7 +261,7 @@ public class SimplePageInteraction
     {
         try
         {
-            HtmlInput commandNode;
+            HtmlElement commandNode;
 
             try
             {
