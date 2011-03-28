@@ -619,7 +619,15 @@ public abstract class ConversationUtils
                 CodiUtils.getContextualReferenceByClass(
                         beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class);
 
-        registry.broadcastRenderedViewId(facesContext.getViewRoot().getViewId());
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        //e.g. in case of a ViewExpiredException (e.g. in case of an expired session)
+        if(uiViewRoot == null)
+        {
+            return;
+        }
+
+        registry.broadcastRenderedViewId(uiViewRoot.getViewId());
 
         storeCurrentViewIdAsOldViewId(facesContext);
 
