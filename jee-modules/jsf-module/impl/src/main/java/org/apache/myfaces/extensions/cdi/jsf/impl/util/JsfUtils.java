@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-
 import javax.faces.FactoryFinder;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -50,16 +48,26 @@ public abstract class JsfUtils
         // prevent instantiation
     }
 
+    /**
+     * Resets the conversation cache of the current request
+     */
     public static void resetConversationCache()
     {
         RequestCache.resetConversationCache();
     }
 
+    /**
+     * Resets all caches of the current request
+     */
     public static void resetCaches()
     {
         RequestCache.resetCache();
     }
 
+    /**
+     * Adds the given {@link PhaseListener} to the application
+     * @param phaseListener current phase-listener
+     */
     public static void registerPhaseListener(PhaseListener phaseListener)
     {
         LifecycleFactory lifecycleFactory = (LifecycleFactory) FactoryFinder.getFactory(
@@ -76,11 +84,21 @@ public abstract class JsfUtils
         }
     }
 
+    /**
+     * Exposes the default message-bundle of jsf for the given {@link Locale}
+     * @param locale current local
+     * @return default message-bundle
+     */
     public static ResourceBundle getDefaultFacesMessageBundle(Locale locale)
     {
         return ResourceBundle.getBundle(FacesMessage.FACES_MESSAGES, locale);
     }
 
+    /**
+     * Exposes the (optional) custom message-bundle configured in the faces-config for the given {@link Locale}
+     * @param locale current local
+     * @return custom message-bundle
+     */
     public static ResourceBundle getCustomFacesMessageBundle(Locale locale)
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -94,31 +112,14 @@ public abstract class JsfUtils
         return ResourceBundle.getBundle(bundleName, locale);
     }
 
-    @Deprecated
-    public static <T> T getCustomImplementation(Class<T> targetType)
-    {
-        String className = getWebXmlParameter(targetType.getName());
-
-        if(className != null && !"".equals(className.trim()))
-        {
-            return ClassUtils.tryToInstantiateClassForName(className, targetType);
-        }
-        return null;
-    }
-    
-    public static String getWebXmlParameter(String parameterKey)
-    {
-        return FacesContext.getCurrentInstance().getExternalContext().getInitParameter(parameterKey);
-    }
-
     /**
      * Encodes the given value using URLEncoder.encode() with the charset returned
      * from ExternalContext.getResponseCharacterEncoding().
      * This is exactly how the ExternalContext impl encodes URL parameter values.
      *
-     * @param value
-     * @param externalContext
-     * @return
+     * @param value value which should be encoded
+     * @param externalContext current external-context
+     * @return encoded value
      */
     public static String encodeURLParameterValue(String value, ExternalContext externalContext)
     {
@@ -134,6 +135,12 @@ public abstract class JsfUtils
         }
     }
 
+    /**
+     * Adds the current request-parameters to the given url
+     * @param externalContext current external-context
+     * @param url current url
+     * @return url with request-parameters
+     */
     public static String addRequestParameter(ExternalContext externalContext, String url)
     {
         StringBuilder finalUrl = new StringBuilder(url);
@@ -165,6 +172,12 @@ public abstract class JsfUtils
         return finalUrl.toString();
     }
 
+    /**
+     * Exposes all request-parameters (including or excluding the view-state)
+     * @param externalContext current external-context
+     * @param filterViewState flag which indicates if the view-state should be added or not
+     * @return current request-parameters
+     */
     public static Set<RequestParameter> getRequestParameters(ExternalContext externalContext, boolean filterViewState)
     {
         Set<RequestParameter> result = new HashSet<RequestParameter>();

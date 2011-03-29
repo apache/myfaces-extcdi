@@ -38,7 +38,7 @@
 
     <properties>
         <cargo.context>cargo-test</cargo.context>
-        <cargo.port>8787</cargo.port> <!-- use port 8787 in order to prevent port-already-in-use on hudson -->
+        <cargo.port>9090</cargo.port> <!-- use port 9090 in order to prevent port-already-in-use on hudson -->
     </properties>
 
     <build>

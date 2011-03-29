@@ -59,6 +59,10 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
     /*
      * generated
      */
+
+    /**
+     * {@inheritDoc}
+     */
     public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> tClass)
     {
         return getWrapped().getInstance(tClass);

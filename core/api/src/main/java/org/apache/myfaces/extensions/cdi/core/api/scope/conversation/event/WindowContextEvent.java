@@ -29,6 +29,10 @@ public abstract class WindowContextEvent
 {
     private final WindowContext windowContext;
 
+    /**
+     * Constructor for creating the event for the given {@link WindowContext}
+     * @param windowContext window-context for which the event gets created
+     */
     public WindowContextEvent(WindowContext windowContext)
     {
         this.windowContext = windowContext;

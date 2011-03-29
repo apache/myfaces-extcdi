@@ -31,6 +31,6 @@ abstract class BaseConversationTest extends AbstractSimpleCargoTest
     @Override
     protected String getCustomBaseURL()
     {
-        return "http://localhost:8787/cargo-test/";
+        return "http://localhost:9090/cargo-test/";
     }
 }

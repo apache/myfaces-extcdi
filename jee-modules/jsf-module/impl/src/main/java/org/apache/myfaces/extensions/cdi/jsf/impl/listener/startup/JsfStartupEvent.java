@@ -38,6 +38,9 @@ class JsfStartupEvent implements StartupEvent
         this.facesContext = facesContext;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public Map<String, Serializable> getApplicationParameters()
     {
         return this.facesContext.getExternalContext().getInitParameterMap();

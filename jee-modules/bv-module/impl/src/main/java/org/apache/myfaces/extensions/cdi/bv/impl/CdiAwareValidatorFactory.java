@@ -91,6 +91,9 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
     {
         return new ConstraintValidatorFactory()
         {
+            /**
+             * {@inheritDoc}
+             */
             @SuppressWarnings({"unchecked"})
             public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> targetClass)
             {

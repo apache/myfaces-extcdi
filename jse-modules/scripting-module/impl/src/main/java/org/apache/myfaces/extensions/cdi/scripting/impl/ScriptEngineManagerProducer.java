@@ -38,6 +38,8 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+//TODO producers have to create serializable instances
+
 @ApplicationScoped
 public class ScriptEngineManagerProducer
 {
@@ -46,6 +48,12 @@ public class ScriptEngineManagerProducer
     }
 
     //this syntax is neede for using it via the expression language
+
+    /**
+     * Creates an alias for #createScriptExecutorBean
+     * which creates a helper which allows to use a {@link ScriptExecutor} within el-expressions
+     * @return el-helper for the script-executor
+     */
     @Produces
     @Dependent
     @Named(SCRIPT_EXECUTOR_ALIAS)
@@ -54,6 +62,10 @@ public class ScriptEngineManagerProducer
         return createScriptExecutorBean();
     }
 
+    /**
+     * Creates a helper which allows to use a {@link ScriptExecutor} within el-expressions
+     * @return el-helper for the script-executor
+     */
     @Produces
     @Dependent
     @Named(SCRIPT_EXECUTOR)
@@ -65,9 +77,15 @@ public class ScriptEngineManagerProducer
 
     private interface PlaceHolderLanguage extends Language{}
 
+    /**
+     * Creates a {@link ScriptExecutor} for the specified language
+     * @param injectionPoint target injection-point
+     * @param languageManager current language-manager
+     * @return script-executor for the language specified at the given injection-point
+     */
     @Produces
     @ScriptLanguage(PlaceHolderLanguage.class)
-    @Deprecated
+    @Dependent
     public ScriptExecutor createScriptExecutor(InjectionPoint injectionPoint, LanguageManager languageManager)
     {
         ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
@@ -80,9 +98,15 @@ public class ScriptEngineManagerProducer
         return new DefaultScriptExecutor(scriptEngine);
     }
 
+    /**
+     * Creates a {@link ScriptBuilder} for the specified language
+     * @param injectionPoint target injection-point
+     * @param languageManager current language-manager
+     * @return script-builder for the language specified at the given injection-point
+     */
     @Produces
     @ScriptLanguage(PlaceHolderLanguage.class)
-    @Deprecated
+    @Dependent
     public ScriptBuilder createScriptBuilder(InjectionPoint injectionPoint, LanguageManager languageManager)
     {
         ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
@@ -95,8 +119,15 @@ public class ScriptEngineManagerProducer
         return new DefaultScriptBuilder(scriptEngine);
     }
 
+    /**
+     * Creates a {@link ScriptEngine} for the specified language
+     * @param injectionPoint target injection-point
+     * @param languageManager current language-manager
+     * @return script-engine for the language specified at the given injection-point
+     */
     @Produces
     @ScriptLanguage(PlaceHolderLanguage.class)
+    @Dependent
     public ScriptEngine createScriptEngineByLanguageName(InjectionPoint injectionPoint, LanguageManager languageManager)
     {
         Class<? extends Language> language =

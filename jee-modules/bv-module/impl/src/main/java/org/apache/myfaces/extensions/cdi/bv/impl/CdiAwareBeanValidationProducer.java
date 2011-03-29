@@ -42,6 +42,13 @@ public class CdiAwareBeanValidationProducer
     {
     }
 
+    /**
+     * Creates an injectable {@link ValidatorFactory} which supports cdi based dependency injection for
+     * {@link javax.validation.ConstraintValidator}s
+     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
+     * for wrapping it
+     * @return injectable validator-factory
+     */
     @Produces
     @Dependent
     @Advanced
@@ -58,6 +65,13 @@ public class CdiAwareBeanValidationProducer
         return new InjectableValidatorFactory(new CdiAwareValidatorFactory(validatorFactory));
     }
 
+    /**
+     * Creates an injectable {@link Validator} which supports cdi based dependency injection for
+     * {@link javax.validation.ConstraintValidator}s
+     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
+     * which should be used as wrapped factory
+     * @return injectable validator
+     */
     @Produces
     @Dependent
     @Advanced
@@ -69,6 +83,13 @@ public class CdiAwareBeanValidationProducer
                     validatorFactoryResolver).getValidator());
     }
 
+    /**
+     * Creates an injectable {@link ConstraintValidatorFactory} which supports cdi based dependency injection for
+     * {@link javax.validation.ConstraintValidator}s
+     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
+     * which should be used as wrapped factory
+     * @return injectable constraint-validator-factory
+     */
     @Produces
     @Dependent
     @Advanced
@@ -80,6 +101,12 @@ public class CdiAwareBeanValidationProducer
                         .getConstraintValidatorFactory());
     }
 
+    /**
+     * Creates an injectable {@link MessageInterpolator}
+     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
+     * which should be used as wrapped factory
+     * @return injectable message-interpolator
+     */
     @Produces
     @Dependent
     @Advanced

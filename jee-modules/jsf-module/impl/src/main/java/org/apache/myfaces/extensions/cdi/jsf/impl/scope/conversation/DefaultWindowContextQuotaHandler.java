@@ -74,7 +74,7 @@ public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandl
     {
         if(!cleanupWindowContext())
         {
-            throw tooManyOpenWindowException(this.maxWindowContextCount);
+            throw tooManyOpenWindowException();
         }
     }
 

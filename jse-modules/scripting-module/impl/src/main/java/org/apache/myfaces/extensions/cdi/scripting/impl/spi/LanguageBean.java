@@ -25,7 +25,16 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
  */
 public interface LanguageBean extends Language
 {
+    /**
+     * Type-safe id which should be used to identify the language
+     * @return id of the language
+     */
     Class<? extends Language> getId();
 
+    /**
+     * TODO
+     * Names which can be used for the {@link org.apache.myfaces.extensions.cdi.scripting.api.LanguageManager}
+     * @return possible names for the the current language
+     */
     String[] getAlternativeNames();
 }

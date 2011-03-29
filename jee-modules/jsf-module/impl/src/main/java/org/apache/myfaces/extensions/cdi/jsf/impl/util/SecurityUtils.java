@@ -51,12 +51,21 @@ public abstract class SecurityUtils
         // prevent instantiation
     }
 
+    /**
+     * Processes a security violation without triggering the navigation to the error page
+     * @param runtimeException current exception
+     * @return error view which can be used e.g. for manual navigation
+     */
     public static Class<? extends ViewConfig> handleSecurityViolationWithoutNavigation(
             RuntimeException runtimeException)
     {
         return tryToHandleSecurityViolation(runtimeException, false);
     }
 
+    /**
+     * Processes a security violation including the navigation to the error page
+     * @param runtimeException current exception
+     */
     public static void tryToHandleSecurityViolation(RuntimeException runtimeException)
     {
         tryToHandleSecurityViolation(runtimeException, true);

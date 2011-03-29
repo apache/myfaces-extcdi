@@ -57,6 +57,9 @@ public abstract class ClassUtils
     {
         ClassLoader loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
         {
+            /**
+             * {@inheritDoc}
+             */
             public ClassLoader run()
             {
                 try
