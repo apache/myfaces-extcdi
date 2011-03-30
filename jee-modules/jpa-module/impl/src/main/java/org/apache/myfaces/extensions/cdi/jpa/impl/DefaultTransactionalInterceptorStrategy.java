@@ -84,40 +84,11 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
      */
     public Object execute(InvocationContext context) throws Exception
     {
-        Transactional transactionalAnnotation = context.getMethod().getAnnotation(Transactional.class);
+        Transactional transactionalAnnotation = extractTransactionalAnnotation(context);
 
-        if (transactionalAnnotation == null)
-        {
-            transactionalAnnotation = context.getTarget().getClass().getAnnotation(Transactional.class);
-        }
+        Class<? extends Annotation> qualifierClass = getTransactionQualifier(transactionalAnnotation);
 
-        Class<? extends Annotation> qualifierClass = Default.class;
-        if (transactionalAnnotation != null)
-        {
-            qualifierClass = transactionalAnnotation.qualifier();
-        }
-
-        Set<Bean<?>> entityManagerBeans = beanManager.getBeans(EntityManager.class, new AnyLiteral());
-        if (entityManagerBeans == null)
-        {
-            entityManagerBeans = new HashSet<Bean<?>>();
-        }
-        Bean<EntityManager> entityManagerBean = null;
-
-        it:
-        for (Bean<?> currentEntityManagerBean : entityManagerBeans)
-        {
-            Set<Annotation> foundQualifierAnnotations = currentEntityManagerBean.getQualifiers();
-
-            for (Annotation currentQualifierAnnotation : foundQualifierAnnotations)
-            {
-                if (currentQualifierAnnotation.annotationType().equals(qualifierClass))
-                {
-                    entityManagerBean = (Bean<EntityManager>) currentEntityManagerBean;
-                    break it;
-                }
-            }
-        }
+        Bean<EntityManager> entityManagerBean = resolveEntityManagerBean(qualifierClass);
 
         EntityManagerEntry entityManagerEntry = null;
         EntityManager entityManager;
@@ -161,6 +132,60 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
             refCount.set(new AtomicInteger(0));
         }
 
+        return startProcess(context, entityManagerEntry, entityManager);
+    }
+
+    protected Transactional extractTransactionalAnnotation(InvocationContext context)
+    {
+        Transactional transactionalAnnotation = context.getMethod().getAnnotation(Transactional.class);
+
+        if (transactionalAnnotation == null)
+        {
+            transactionalAnnotation = context.getTarget().getClass().getAnnotation(Transactional.class);
+        }
+        return transactionalAnnotation;
+    }
+
+    protected Class<? extends Annotation> getTransactionQualifier(Transactional transactionalAnnotation)
+    {
+        Class<? extends Annotation> qualifierClass = Default.class;
+        if (transactionalAnnotation != null)
+        {
+            qualifierClass = transactionalAnnotation.qualifier();
+        }
+        return qualifierClass;
+    }
+
+    protected Bean<EntityManager> resolveEntityManagerBean(Class<? extends Annotation> qualifierClass)
+    {
+        Set<Bean<?>> entityManagerBeans = beanManager.getBeans(EntityManager.class, new AnyLiteral());
+        if (entityManagerBeans == null)
+        {
+            entityManagerBeans = new HashSet<Bean<?>>();
+        }
+        Bean<EntityManager> entityManagerBean = null;
+
+        it:
+        for (Bean<?> currentEntityManagerBean : entityManagerBeans)
+        {
+            Set<Annotation> foundQualifierAnnotations = currentEntityManagerBean.getQualifiers();
+
+            for (Annotation currentQualifierAnnotation : foundQualifierAnnotations)
+            {
+                if (currentQualifierAnnotation.annotationType().equals(qualifierClass))
+                {
+                    entityManagerBean = (Bean<EntityManager>) currentEntityManagerBean;
+                    break it;
+                }
+            }
+        }
+        return entityManagerBean;
+    }
+
+    protected Object startProcess(InvocationContext context,
+                                  EntityManagerEntry entityManagerEntry,
+                                  EntityManager entityManager) throws Exception
+    {
         EntityTransaction transaction = entityManager.getTransaction();
 
         if(entityManagerEntry != null)
@@ -181,24 +206,19 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                                           entityManagerEntry,
                                           entityManager,
                                           transaction);
-
     }
 
-    private Object proceedMethodInTransaction(InvocationContext context,
-                                              EntityManagerEntry entityManagerEntry,
-                                              EntityManager entityManager,
-                                              EntityTransaction transaction)
-            throws Exception
+    protected Object proceedMethodInTransaction(InvocationContext context,
+                                                EntityManagerEntry entityManagerEntry,
+                                                EntityManager entityManager,
+                                                EntityTransaction transaction) throws Exception
     {
         // used to store any exception we get from the services
         Exception firstException = null;
 
         try
         {
-            if(!transaction.isActive())
-            {
-                transaction.begin();
-            }
+            beginTransaction(entityManager);
             refCount.get().incrementAndGet();
 
             return context.proceed();
@@ -214,19 +234,14 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
             {
                 for (EntityManager currentEntityManager : entityManagerMap.get().values())
                 {
-                    transaction = currentEntityManager.getTransaction();
-                    if (transaction != null && transaction.isActive())
+                    try
                     {
-                        try
-                        {
-                            transaction.rollback();
-                        }
-                        catch (Exception eRollback)
-                        {
-                            this.logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
-                                    "rolling back other SQL transactions", eRollback);
-                        }
-
+                        rollbackTransaction(currentEntityManager);
+                    }
+                    catch (Exception eRollback)
+                    {
+                        this.logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
+                                "rolling back other SQL transactions", eRollback);
                     }
                 }
 
@@ -256,7 +271,6 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                 // commit stability over various databases!
                 if (refCount.get().intValue() == 0)
                 {
-
                     // only commit all transactions if we didn't rollback
                     // them already
                     if (firstException == null)
@@ -270,11 +284,11 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                                 {
                                     if (!commitFailed)
                                     {
-                                        transaction.commit();
+                                        commitTransaction(currentEntityManager);
                                     }
                                     else
                                     {
-                                        transaction.rollback();
+                                        rollbackTransaction(currentEntityManager);
                                     }
                                 }
                                 catch (Exception e)
@@ -289,22 +303,62 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                     // finally remove all ThreadLocals
                     refCount.remove();
                     entityManagerMap.remove();
-                    if (commitFailed)
+
+                    if(!commitFailed)
                     {
-                        //noinspection ThrowFromFinallyBlock
-                        throw firstException;
+                        endProcess(entityManagerEntry, entityManager, null);
                     }
                     else
                     {
-                        //commit was successful and entity manager of bean was used
-                        //(and not an entity manager of a producer) which isn't of type extended
-                        if(entityManagerEntry != null && entityManager != null && entityManager.isOpen() &&
-                                !entityManagerEntry.getPersistenceContextEntry().isExtended())
-                        {
-                            entityManager.clear();
-                        }
+                        endProcess(entityManagerEntry, entityManager, firstException);
                     }
                 }
+            }
+        }
+    }
+
+    protected void beginTransaction(EntityManager entityManager)
+    {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        if(!transaction.isActive())
+        {
+            transaction.begin();
+        }
+    }
+
+    protected void commitTransaction(EntityManager entityManager)
+    {
+        EntityTransaction transaction = entityManager.getTransaction();
+
+        transaction.commit();
+    }
+
+    protected void rollbackTransaction(EntityManager entityManager)
+    {
+        EntityTransaction transaction = entityManager.getTransaction();
+        if (transaction != null && transaction.isActive())
+        {
+            transaction.rollback();
+        }
+    }
+
+    protected void endProcess(EntityManagerEntry entityManagerEntry,
+                              EntityManager entityManager,
+                              Exception exception) throws Exception
+    {
+        if (exception != null)
+        {
+            throw exception;
+        }
+        else
+        {
+            //commit was successful and entity manager of bean was used
+            //(and not an entity manager of a producer) which isn't of type extended
+            if(entityManagerEntry != null && entityManager != null && entityManager.isOpen() &&
+                    !entityManagerEntry.getPersistenceContextEntry().isExtended())
+            {
+                entityManager.clear();
             }
         }
     }
