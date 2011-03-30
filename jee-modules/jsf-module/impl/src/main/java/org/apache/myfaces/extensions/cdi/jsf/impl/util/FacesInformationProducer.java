@@ -32,6 +32,13 @@ public class FacesInformationProducer
     {
     }
 
+    /**
+     * Using a request scoped proxy ensures a serializable proxy.
+     * Using a proxy instead of a custom wrapper allows upward compatibility.
+     * The disadvantage is the lower performance (due to the generated proxy.
+     *
+     * @return current faces-context
+     */
     @Produces
     @RequestScoped
     protected FacesContext currentFacesContext()
