@@ -82,11 +82,11 @@ public class JsfAwareConversationFactory implements ConversationFactory
 
     private ViewAccessConversationExpirationEvaluator createAndRegisterViewAccessConversationEvaluator()
     {
-        AccessDecisionVoterContext securityTransaction =
+        AccessDecisionVoterContext accessDecisionVoterContext =
                 CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
 
         ViewAccessConversationExpirationEvaluator evaluator =
-                new ViewAccessConversationExpirationEvaluator(securityTransaction);
+                new ViewAccessConversationExpirationEvaluator(accessDecisionVoterContext);
 
         CodiUtils.getContextualReferenceByClass(
                 this.beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class)
