@@ -72,7 +72,6 @@ public class WindowContextConfig extends AbstractAttributeAware implements CodiC
      * while encoding each action URL.
      * @return true if the window-id should be added, false otherwise
      */
-    @Deprecated
     @ConfigEntry
     public boolean isAddWindowIdToActionUrlsEnabled()
     {
