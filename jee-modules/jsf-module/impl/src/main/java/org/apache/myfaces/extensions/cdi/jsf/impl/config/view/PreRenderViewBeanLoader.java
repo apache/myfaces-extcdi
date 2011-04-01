@@ -48,7 +48,7 @@ public class PreRenderViewBeanLoader
             return;
         }
 
-        List<PageBeanDescriptor> beanEntries = viewDefinitionEntry.getPageBeanConfigs();
+        List<PageBeanDescriptor> beanEntries = viewDefinitionEntry.getPageBeanDescriptors();
 
         for(PageBeanDescriptor beanEntry : beanEntries)
         {

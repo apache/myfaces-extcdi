@@ -262,13 +262,13 @@ public class ViewConfigTest
 
         ViewConfigDescriptor viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewController.Page1.class);
 
-        List<PageBeanDescriptor> pageBeanDescriptors = viewConfig.getPageBeanConfigs();
+        List<PageBeanDescriptor> pageBeanDescriptors = viewConfig.getPageBeanDescriptors();
         assertEquals(pageBeanDescriptors.size(), 1);
         assertTrue(pageBeanDescriptors.iterator().next().getBeanClass().equals(TestPageBean2.class));
 
         viewConfig = ViewConfigCache.getViewConfig(ViewConfigWithViewController.Page2.class);
 
-        pageBeanDescriptors = viewConfig.getPageBeanConfigs();
+        pageBeanDescriptors = viewConfig.getPageBeanDescriptors();
         assertEquals(pageBeanDescriptors.size(), 2);
 
         for(PageBeanDescriptor pageBeanDescriptor : pageBeanDescriptors)
@@ -299,7 +299,7 @@ public class ViewConfigTest
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
         PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
-                .getPageBeanConfigs().iterator().next();
+                .getPageBeanDescriptors().iterator().next();
 
         assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
         assertEquals(((LifecycleAwarePageBeanDescriptor) pageBeanDescriptor).getPreRenderViewMethods().size(), 1);
@@ -326,7 +326,7 @@ public class ViewConfigTest
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
         PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
-                .getPageBeanConfigs().iterator().next();
+                .getPageBeanDescriptors().iterator().next();
 
         assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
         assertEquals(((LifecycleAwarePageBeanDescriptor)pageBeanDescriptor).getPreRenderViewMethods().size(), 1);
@@ -353,7 +353,7 @@ public class ViewConfigTest
                 "org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages.order.TestAccessDecisionVoter3");
 
         PageBeanDescriptor pageBeanDescriptor = ViewConfigCache.getViewConfig(RegistrationStep01PageBean.class)
-                .getPageBeanConfigs().iterator().next();
+                .getPageBeanDescriptors().iterator().next();
 
         assertEquals(pageBeanDescriptor.getBeanClass(), RegistrationStep01PageBean.class);
         assertEquals(((LifecycleAwarePageBeanDescriptor)pageBeanDescriptor).getPreRenderViewMethods().size(), 1);

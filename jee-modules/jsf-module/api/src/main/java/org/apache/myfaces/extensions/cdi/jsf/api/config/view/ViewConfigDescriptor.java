@@ -64,5 +64,5 @@ public interface ViewConfigDescriptor
      * Page-bean descriptors for the page represented by the current entry.
      * @return descriptors which represent the page-beans for the current page
      */
-    List<PageBeanDescriptor> getPageBeanConfigs();
+    List<PageBeanDescriptor> getPageBeanDescriptors();
 }

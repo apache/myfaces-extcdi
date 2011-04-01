@@ -145,7 +145,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
                 //-> we just have to use the page bean of the existing entry
 
                 //here we have a simple-entry!   (which just contains page-bean definitions)
-                for(PageBeanDescriptor pageBeanDescriptor : existingDescriptor.getPageBeanConfigs())
+                for(PageBeanDescriptor pageBeanDescriptor : existingDescriptor.getPageBeanDescriptors())
                 {
                     //add page-beans to the real entry
                     if(newEntry instanceof EditableViewConfigDescriptor)

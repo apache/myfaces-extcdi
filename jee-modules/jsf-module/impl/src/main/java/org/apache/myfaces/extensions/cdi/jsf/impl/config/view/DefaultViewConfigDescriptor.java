@@ -143,7 +143,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
     /**
      * {@inheritDoc}
      */
-    public List<PageBeanDescriptor> getPageBeanConfigs()
+    public List<PageBeanDescriptor> getPageBeanDescriptors()
     {
         return pageBeanDescriptors;
     }
@@ -153,7 +153,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
      */
     public void invokeInitViewMethods()
     {
-        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
+        for(PageBeanDescriptor beanEntry : getPageBeanDescriptors())
         {
             if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
             {
@@ -167,7 +167,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
      */
     public void invokePrePageActionMethods()
     {
-        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
+        for(PageBeanDescriptor beanEntry : getPageBeanDescriptors())
         {
             if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
             {
@@ -181,7 +181,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
      */
     public void invokePreRenderViewMethods()
     {
-        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
+        for(PageBeanDescriptor beanEntry : getPageBeanDescriptors())
         {
             if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
             {
@@ -195,7 +195,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
      */
     public void invokePostRenderViewMethods()
     {
-        for(PageBeanDescriptor beanEntry : getPageBeanConfigs())
+        for(PageBeanDescriptor beanEntry : getPageBeanDescriptors())
         {
             if(beanEntry instanceof LifecycleAwarePageBeanDescriptor)
             {

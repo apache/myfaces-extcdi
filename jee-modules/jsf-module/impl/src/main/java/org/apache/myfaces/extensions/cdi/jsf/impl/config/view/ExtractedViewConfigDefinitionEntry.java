@@ -397,7 +397,7 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
     /**
      * not available
      */
-    public List<PageBeanDescriptor> getPageBeanConfigs()
+    public List<PageBeanDescriptor> getPageBeanDescriptors()
     {
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
