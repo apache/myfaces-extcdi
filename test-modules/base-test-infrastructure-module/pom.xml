@@ -24,14 +24,14 @@
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
     <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
-    <version>0.9.4</version>
+    <version>0.9.5-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Base-Test-Infrastructure Module</name>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
-        <version>0.9.4</version>
+        <version>0.9.5-SNAPSHOT</version>
     </parent>
 
     <dependencies>
