@@ -14,6 +14,7 @@ Release Notes - MyFaces CODI - Version 0.9.4
 
 ** New Feature
 
+    * [EXTCDI-150] - ViewConfigResolver - resolving view-configs via an api
     * [EXTCDI-155] - optional AccessDecisionVoterContext
 
 ** Task
