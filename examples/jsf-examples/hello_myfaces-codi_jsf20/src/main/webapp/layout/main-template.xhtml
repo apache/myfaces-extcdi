@@ -128,5 +128,144 @@
                 </p>
             </div>
         </div>
+
+        <div style="
+                      overflow: hidden;
+                      position: fixed;
+                      left: 0.25em;
+                      bottom: 0;
+        ">
+            <h:form>
+                <h:commandLink action="#{windowPropertiesBean.toggleCommunityLinks}"
+                               value="#{windowPropertiesBean.showCommunityLinks ? 'x' : '+'}"
+                               style="
+                                      color: #000;
+                                      font: bold 120% Arial, sans-serif;
+
+                                      display: block;
+                                      z-index:4;
+
+                                      margin: 0.05em 0 0.075em 0;
+                                      padding: 0.5em 3em 0.5em -0.5em;
+
+                                      text-align: center;
+                                      text-decoration: none;
+
+                                      text-shadow: 0 0 0.5em #444;
+                "/>
+            </h:form>
+        </div>
+
+        <h:panelGroup rendered="#{windowPropertiesBean.showCommunityLinks}">
+            <div id="communityHints">
+                <div style="
+                              background-color: #558ED5;
+
+                              overflow: hidden;
+                              position: fixed;
+                              left: -3.2em;
+                              bottom: 1.0em;
+
+                              -moz-transform: rotate(45deg);
+                              -webkit-transform: rotate(45deg);
+
+                              -moz-box-shadow: 0 0 1em #888;
+                              -webkit-box-shadow: 0 0 1em #888;
+                ">
+                    <a href="http://twitter.com/MyFacesTeam" onclick="void(window.open(this.href, '', '')); return false;"
+                       style="
+                              border: 1px solid #00B0F0;
+                              color: #fff;
+                              font: bold Arial, sans-serif;
+
+                              display: block;
+                              z-index:3;
+
+                              margin: 0.05em 0 0.075em 0;
+                              padding: 0.5em 3em 0.5em 3em;
+
+                              text-align: center;
+                              text-decoration: none;
+
+                              text-shadow: 0 0 0.5em #444;
+                    ">Follow us!</a>
+                </div>
+
+                <div style="
+                              background-color: #a00;
+
+                              overflow: hidden;
+                              position: fixed;
+                              left: -3.7em;
+                              bottom: 2.5em;
+
+                              -moz-transform: rotate(45deg);
+                              -webkit-transform: rotate(45deg);
+
+                              -moz-box-shadow: 0 0 1em #888;
+                              -webkit-box-shadow: 0 0 1em #888;
+                ">
+                    <a href="https://github.com/apache/myfaces-extcdi"
+                       onclick="void(window.open(this.href, '', '')); return false;"
+                       style="
+                              border: 1px solid #faa;
+                              color: #fff;
+                              font: bold Arial, sans-serif;
+
+                              display: block;
+                              z-index:2;
+
+                              margin: 0.05em 0 0.075em 0;
+                              padding: 0.5em 4.5em 0.5em 3.5em;
+
+                              text-align: center;
+                              text-decoration: none;
+
+                              text-shadow: 0 0 0.5em #444;
+                    ">Fork me on GitHub</a>
+                </div>
+
+                <div style="
+                              background-color: #809E22;
+
+                              overflow: hidden;
+                              position: fixed;
+                              left: -8em;
+                              bottom: 4.2em;
+
+                              -moz-transform: rotate(45deg);
+                              -webkit-transform: rotate(45deg);
+
+                              -moz-box-shadow: 0 0 1em #888;
+                              -webkit-box-shadow: 0 0 1em #888;
+                ">
+                    <a href="https://bitbucket.org/os890/codi-mirror"
+                       onclick="void(window.open(this.href, '', '')); return false;"
+                       style="
+                              border: 1px solid #CDF185;
+                              color: #fff;
+                              font: bold Arial, sans-serif;
+
+                              display: block;
+                              z-index:1;
+
+                              margin: 0.05em 0 0.075em 0;
+                              padding: 0.5em 11em 0.5em 9em;
+
+                              text-align: center;
+                              text-decoration: none;
+
+                              text-shadow: 0 0 0.5em #444;
+                    ">Fork me on Bitbucket</a>
+                </div>
+            </div>
+        </h:panelGroup>
+
+        <script type="text/javascript">
+            /*workaround*/
+            if(navigator.userAgent.indexOf("Gecko") == -1) {
+                document.getElementById("communityHints").style.display='none';
+            }
+        </script>
     </h:body>
 </html>
