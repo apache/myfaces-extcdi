@@ -27,12 +27,12 @@
     <artifactId>playground-jsf20</artifactId>
     
     <name>Internal MyFaces Extensions-CDI JSF 2.0-Examples Hello MyFaces CODI</name>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
     
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>jsf-playground-project</artifactId>
-        <version>0.9.4-SNAPSHOT</version>
+        <version>0.9.5-SNAPSHOT</version>
     </parent>
 
     <properties>

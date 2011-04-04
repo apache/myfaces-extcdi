@@ -28,12 +28,12 @@
     <artifactId>jsf-playground-project</artifactId>
 
     <name>Internal MyFaces Extensions-CDI JSF playground Project</name>
-    <version>0.9.4-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>examples-project</artifactId>
-        <version>0.9.4-SNAPSHOT</version>
+        <version>0.9.5-SNAPSHOT</version>
     </parent>
 
     <modules>
