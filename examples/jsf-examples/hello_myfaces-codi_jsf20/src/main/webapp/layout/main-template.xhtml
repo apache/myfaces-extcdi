@@ -129,11 +129,11 @@
             </div>
         </div>
 
-        <div style="
-                      overflow: hidden;
-                      position: fixed;
-                      left: 0.25em;
-                      bottom: 0;
+        <div id="communityHintsSwitcher" style="
+                                                  overflow: hidden;
+                                                  position: fixed;
+                                                  left: 0.25em;
+                                                  bottom: 0;
         ">
             <h:form>
                 <h:commandLink action="#{windowPropertiesBean.toggleCommunityLinks}"
@@ -264,6 +264,7 @@
         <script type="text/javascript">
             /*workaround*/
             if(navigator.userAgent.indexOf("Gecko") == -1) {
+                document.getElementById("communityHintsSwitcher").style.display='none';
                 document.getElementById("communityHints").style.display='none';
             }
         </script>
