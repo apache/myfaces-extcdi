@@ -131,4 +131,16 @@ public class ConversationConfig extends AbstractAttributeAware implements CodiCo
     {
         return false;
     }
+
+    /**
+     * Specifies if {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationRequired}
+     * is enabled
+     *
+     * @return true if conversation-required is enabled, false otherwise
+     */
+    @ConfigEntry
+    public boolean isConversationRequiredEnabled()
+    {
+        return true;
+    }
 }

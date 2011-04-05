@@ -18,22 +18,37 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationRequired;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBeanDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
+
+import javax.enterprise.inject.Typed;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.FactoryFinder;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.application.FacesMessage;
 import javax.faces.event.PhaseListener;
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.lifecycle.LifecycleFactory;
-import javax.enterprise.inject.Typed;
 import java.io.UnsupportedEncodingException;
+import java.lang.annotation.Annotation;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.ResourceBundle;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.HashSet;
 
 /**
  * keep in sync with extval!
@@ -200,5 +215,133 @@ public abstract class JsfUtils
         }
 
         return result;
+    }
+
+    /**
+     * Checks if the page-bean for the current view hosts {@link ConversationRequired} and the conversation has been
+     * started or the current page is an allowed entry-point for the conversation. If a violation is detected,
+     * the default-entry-point (specified by {@link ConversationRequired}) will be used as new view
+     * which will be rendered.
+     *
+     * @param facesContext current faces-context
+     */
+    public static void ensureExistingConversation(FacesContext facesContext)
+    {
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot == null)
+        {
+            return;
+        }
+
+        String oldViewId = uiViewRoot.getViewId();
+
+        if(oldViewId == null)
+        {
+            return;
+        }
+
+        ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(oldViewId);
+
+        if(entry == null)
+        {
+            return;
+        }
+
+        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+        ConversationConfig conversationConfig =
+                CodiUtils.getContextualReferenceByClass(beanManager, ConversationConfig.class);
+
+        if(!conversationConfig.isConversationRequiredEnabled())
+        {
+            return;
+        }
+
+        String newViewId = checkConversationRequired(beanManager, uiViewRoot, entry);
+
+        if(newViewId != null && !oldViewId.equals(newViewId))
+        {
+            UIViewRoot newViewRoot = facesContext.getApplication().getViewHandler().createView(facesContext, newViewId);
+
+            if(newViewRoot != null)
+            {
+                facesContext.setViewRoot(newViewRoot);
+            }
+        }
+    }
+
+    private static String checkConversationRequired(BeanManager beanManager,
+                                                    UIViewRoot uiViewRoot,
+                                                    ViewConfigDescriptor entry)
+    {
+        Class<? extends ViewConfig> currentView =
+                ViewConfigCache.getViewConfig(uiViewRoot.getViewId()).getViewConfig();
+
+        if(currentView == null)
+        {
+            return null;
+        }
+
+        for(PageBeanDescriptor pageBeanDescriptor : entry.getPageBeanDescriptors())
+        {
+            Class<?> pageBeanClass = pageBeanDescriptor.getBeanClass();
+            ConversationRequired conversationRequired = pageBeanClass.getAnnotation(ConversationRequired.class);
+
+            if(conversationRequired == null)
+            {
+                continue;
+            }
+
+            if(!isEntryPoint(currentView, conversationRequired.defaultEntryPoint(), conversationRequired.entryPoints()))
+            {
+                EditableWindowContext editableWindowContext =
+                        (EditableWindowContext)ConversationUtils.getWindowContextManager().getCurrentWindowContext();
+
+                Set<? extends Bean> foundBeans =
+                        beanManager.getBeans(pageBeanDescriptor.getBeanClass(), new AnyLiteral());
+
+                Bean<?> foundBean;
+                Set<Bean<?>> beanSet;
+                for(Bean<?> currentBean : foundBeans)
+                {
+                    beanSet = new HashSet<Bean<?>>(1);
+                    beanSet.add(currentBean);
+                    foundBean = beanManager.resolve(beanSet);
+
+                    //only page-beans are supported -> we have to compare them by bean-name
+                    if(!pageBeanDescriptor.getBeanName().equals(foundBean.getName()))
+                    {
+                        continue;
+                    }
+
+                    if(!editableWindowContext.isConversationActive(ConversationUtils.getConversationGroup(foundBean),
+                            foundBean.getQualifiers().toArray(new Annotation[foundBean.getQualifiers().size()])))
+                    {
+                        return ViewConfigCache.getViewConfig(conversationRequired.defaultEntryPoint()).getViewId();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static boolean isEntryPoint(Class<? extends ViewConfig> currentView,
+                                        Class<? extends ViewConfig> defaultEntryPoint,
+                                        Class<? extends ViewConfig>[] entryPoints)
+    {
+        if(currentView.equals(defaultEntryPoint))
+        {
+            return true;
+        }
+
+        for(Class<? extends ViewConfig> entryPoint : entryPoints)
+        {
+            if(currentView.equals(entryPoint))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

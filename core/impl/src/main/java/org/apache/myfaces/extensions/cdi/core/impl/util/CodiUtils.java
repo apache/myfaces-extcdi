@@ -174,7 +174,16 @@ public abstract class CodiUtils
         return null;
     }
 
-    private static <T> T getContextualReference(BeanManager beanManager, Type t, Bean<T> bean)
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-descriptor.
+     *
+     * @param beanManager current bean-manager
+     * @param t type of the bean
+     * @param bean bean-descriptor
+     * @param <T> target type
+     * @return created or resolved instance if such a bean exists, null otherwise
+     */
+    public static <T> T getContextualReference(BeanManager beanManager, Type t, Bean<T> bean)
     {
         CreationalContext<T> cc = beanManager.createCreationalContext(bean);
         return  (T) beanManager.getReference(bean, t, cc);
