@@ -59,9 +59,9 @@ public class GroupedConversationContextExtension implements Extension, Deactivat
         //here we don't need CodiStartupBroadcaster.broadcastStartup(); see #validateScopes
 
         AbstractGroupedConversationContext codiConversationContext = new GroupedConversationContext(manager);
-        event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext));
-        event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext));
-        event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext));
+        event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext, manager));
+        event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext, manager));
+        event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext, manager));
     }
 
     /**

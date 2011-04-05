@@ -56,4 +56,18 @@ public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig
     {
         return true;
     }
+
+    /**
+     * Specifies if the
+     * {@link org.apache.myfaces.extensions.cdi.core.api.security.event.InvalidBeanCreationEvent}
+     * will be fired if a {@link org.apache.myfaces.extensions.cdi.core.api.security.BeanCreationDecisionVoter}
+     * detects a violation. This feature is deactivated per default to avoid side-effects.
+     *
+     * @return true if the event should be fired, false otherwise
+     */
+    @ConfigEntry
+    public boolean isInvalidBeanCreationEventEnabled()
+    {
+        return false;
+    }
 }

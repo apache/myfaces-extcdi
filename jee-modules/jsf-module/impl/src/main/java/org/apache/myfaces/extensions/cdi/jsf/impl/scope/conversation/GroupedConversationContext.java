@@ -19,12 +19,15 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableConversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
+import org.apache.myfaces.extensions.cdi.core.api.security.BeanCreationDecisionVoter;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
@@ -35,7 +38,10 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
+import java.util.HashSet;
 
 /**
  * jsf specific parts for managing grouped conversations
@@ -44,6 +50,8 @@ import java.util.Set;
  */
 class GroupedConversationContext extends AbstractGroupedConversationContext
 {
+    private List<BeanCreationDecisionVoter> beanCreationDecisionVoters;
+
     GroupedConversationContext(BeanManager beanManager)
     {
         super(beanManager);
@@ -57,6 +65,58 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
     public boolean isActive()
     {
         return FacesContext.getCurrentInstance().getExternalContext().getSession(false) != null;
+    }
+
+    protected <T> Set<SecurityViolation> checkPermission(Bean<T> bean)
+    {
+        lazyInit();
+
+        Set<SecurityViolation> violations = new HashSet<SecurityViolation>();
+
+        for(BeanCreationDecisionVoter beanCreationDecisionVoter : this.beanCreationDecisionVoters)
+        {
+            Set<SecurityViolation> currentViolations = beanCreationDecisionVoter.checkPermission(bean);
+
+            if(currentViolations != null)
+            {
+                violations.addAll(currentViolations);
+            }
+        }
+
+        return violations;
+    }
+
+    private void lazyInit()
+    {
+        if(this.beanCreationDecisionVoters == null)
+        {
+            init();
+        }
+    }
+
+    private synchronized void init()
+    {
+        // switch into paranoia mode
+        if(this.beanCreationDecisionVoters == null)
+        {
+            this.beanCreationDecisionVoters = new ArrayList<BeanCreationDecisionVoter>();
+
+            Set<? extends Bean> foundBeans =
+                    this.beanManager.getBeans(BeanCreationDecisionVoter.class, new AnyLiteral());
+
+            Bean<?> foundBean;
+            Set<Bean<?>> beanSet;
+            for(Bean<?> currentBean : foundBeans)
+            {
+                beanSet = new HashSet<Bean<?>>(1);
+                beanSet.add(currentBean);
+                foundBean = this.beanManager.resolve(beanSet);
+                this.beanCreationDecisionVoters.add(
+                        CodiUtils.getContextualReference(this.beanManager,
+                                                         BeanCreationDecisionVoter.class,
+                                                         (Bean<BeanCreationDecisionVoter>)foundBean));
+            }
+        }
     }
 
     /**

@@ -18,11 +18,17 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.event.InvalidBeanCreationEvent;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
 import java.lang.annotation.Annotation;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -31,17 +37,22 @@ public class ConversationContextAdapter implements Context
 {
     private final Class<? extends Annotation> scopeType;
     private final AbstractGroupedConversationContext conversationContext;
+    private BeanManager beanManager;
+    private Boolean invalidBeanCreationEventEnabled;
 
     /**
      * Constructor which allows to build a context for conversations for the given scope-type and scope-implementation
      * @param scope type of the scope
      * @param conversationContext implementation of the conversation scope
+     * @param beanManager current bean-manager
      */
     public ConversationContextAdapter(Class<? extends Annotation> scope,
-                                      AbstractGroupedConversationContext conversationContext)
+                                      AbstractGroupedConversationContext conversationContext,
+                                      BeanManager beanManager)
     {
         this.scopeType = scope;
         this.conversationContext = conversationContext;
+        this.beanManager = beanManager;
     }
 
     /** {@inheritDoc} */
@@ -59,6 +70,11 @@ public class ConversationContextAdapter implements Context
     {
         if (component instanceof Bean)
         {
+            //since the basic use-case is related to topics like security,
+            //we only have to check it at the very first access - everything else would have a major performance impact
+            checkForInvalidBeanAccess((Bean<T>)component);
+
+            //cdi doesn't support to throw an exception -> create the bean in any case - codi has to handle the rest
             return this.conversationContext.create((Bean<T>)component, creationalContext);
         }
 
@@ -85,5 +101,42 @@ public class ConversationContextAdapter implements Context
     public boolean isActive()
     {
         return this.conversationContext.isActive();
+    }
+
+    private <T> void checkForInvalidBeanAccess(Bean<T> bean)
+    {
+        lazyInit();
+
+        if(!this.invalidBeanCreationEventEnabled)
+        {
+            return;
+        }
+        
+        Set<SecurityViolation> violations = this.conversationContext.checkPermission(bean);
+
+        for(SecurityViolation securityViolation : violations)
+        {
+            this.beanManager.fireEvent(new InvalidBeanCreationEvent(securityViolation));
+        }
+    }
+
+    private void lazyInit()
+    {
+        if(this.invalidBeanCreationEventEnabled == null)
+        {
+            init();
+        }
+    }
+
+    private synchronized void init()
+    {
+        // switch into paranoia mode
+        if(this.invalidBeanCreationEventEnabled == null)
+        {
+            CodiCoreConfig codiCoreConfig =
+                    CodiUtils.getContextualReferenceByClass(this.beanManager, CodiCoreConfig.class);
+
+            this.invalidBeanCreationEventEnabled = codiCoreConfig.isInvalidBeanCreationEventEnabled();
+        }
     }
 }

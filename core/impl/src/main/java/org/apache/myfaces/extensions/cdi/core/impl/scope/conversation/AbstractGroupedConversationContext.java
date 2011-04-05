@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntryFactory;
@@ -26,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEn
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -153,6 +155,8 @@ public abstract class AbstractGroupedConversationContext
      * @return true if the context is active, false otherwise
      */
     public abstract boolean isActive();
+
+    protected abstract <T> Set<SecurityViolation> checkPermission(Bean<T> bean);
 
     private void lazyInitConversationConfig()
     {
