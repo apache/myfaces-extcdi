@@ -57,7 +57,7 @@ public class ViewControllerActionListener implements ActionListener, Deactivatab
         }
         
         ViewConfigDescriptor viewConfigDescriptor =
-                ViewConfigCache.getViewConfig(FacesContext.getCurrentInstance().getViewRoot().getViewId());
+                ViewConfigCache.getViewConfigDescriptor(FacesContext.getCurrentInstance().getViewRoot().getViewId());
 
         if(viewConfigDescriptor instanceof EditableViewConfigDescriptor)
         {

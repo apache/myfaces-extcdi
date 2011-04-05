@@ -93,7 +93,7 @@ public class SecurityViewListener
 
     private void checkPermission(BeanManager beanManager, FacesContext facesContext)
     {
-        ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(facesContext.getViewRoot().getViewId());
+        ViewConfigDescriptor entry = ViewConfigCache.getViewConfigDescriptor(facesContext.getViewRoot().getViewId());
 
         if(entry == null)
         {

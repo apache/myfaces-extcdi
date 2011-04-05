@@ -41,7 +41,7 @@ public class PreRenderViewBeanLoader
     {
         String viewId = event.getFacesContext().getViewRoot().getViewId();
 
-        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 
         if(viewDefinitionEntry == null)
         {

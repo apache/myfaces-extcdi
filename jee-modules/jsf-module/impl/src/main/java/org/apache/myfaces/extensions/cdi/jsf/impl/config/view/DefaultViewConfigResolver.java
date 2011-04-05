@@ -38,25 +38,25 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor getViewConfig(String viewId)
+    public ViewConfigDescriptor getViewConfigDescriptor(String viewId)
     {
-        return ViewConfigCache.getViewConfig(viewId);
+        return ViewConfigCache.getViewConfigDescriptor(viewId);
     }
 
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor getDefaultErrorViewConfig()
+    public ViewConfigDescriptor getDefaultErrorViewConfigDescriptor()
     {
-        return ViewConfigCache.getDefaultErrorView();
+        return ViewConfigCache.getDefaultErrorViewConfigDescriptor();
     }
 
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor getErrorViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public ViewConfigDescriptor getErrorViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        ViewConfigDescriptor viewConfigDescriptor = getViewConfig(viewDefinitionClass);
+        ViewConfigDescriptor viewConfigDescriptor = getViewConfigDescriptor(viewDefinitionClass);
 
         Class<? extends ViewConfig> errorView = null;
         if(viewConfigDescriptor instanceof EditableViewConfigDescriptor)
@@ -66,15 +66,15 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
 
         if(errorView == null)
         {
-            return getDefaultErrorViewConfig();
+            return getDefaultErrorViewConfigDescriptor();
         }
-        return getViewConfig(errorView);
+        return getViewConfigDescriptor(errorView);
     }
 
     /**
      * {@inheritDoc}
      */
-    public List<ViewConfigDescriptor> getViewConfigs()
+    public List<ViewConfigDescriptor> getViewConfigDescriptors()
     {
         return Collections
                 .unmodifiableList((List<? extends ViewConfigDescriptor>) ViewConfigCache.getViewConfigDescriptors());
@@ -83,8 +83,8 @@ public class DefaultViewConfigResolver implements ViewConfigResolver
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public ViewConfigDescriptor getViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass)
     {
-        return ViewConfigCache.getViewConfig(viewDefinitionClass);
+        return ViewConfigCache.getViewConfigDescriptor(viewDefinitionClass);
     }
 }

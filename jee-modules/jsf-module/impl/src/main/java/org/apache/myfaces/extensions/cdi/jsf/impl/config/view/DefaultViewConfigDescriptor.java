@@ -204,23 +204,24 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         }
     }
 
-    private void processCallbacks(PageBeanDescriptor beanEntry, List<Method> methodList)
+    private void processCallbacks(PageBeanDescriptor pageBeanDescriptor, List<Method> methodList)
     {
-        Object bean;
-        if (!methodList.isEmpty())
+        if(methodList.isEmpty())
+        {
+            return;
+        }
+
+        Object bean = getContextualReferenceByName(getBeanManager(), pageBeanDescriptor.getBeanName(), Object.class);
+
+        if (bean == null)
         {
             //TODO provide a detailed error message in case of a missing bean
-            bean = getContextualReferenceByName(getBeanManager(), beanEntry.getBeanName(), Object.class);
+            return;
+        }
 
-            if (bean == null)
-            {
-                return;
-            }
-
-            for (Method callbackMethod : methodList)
-            {
-                invokeMethod(bean, callbackMethod);
-            }
+        for (Method callbackMethod : methodList)
+        {
+            invokeMethod(bean, callbackMethod);
         }
     }
 

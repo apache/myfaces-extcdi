@@ -135,7 +135,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         if(newEntry != null)
         {
-            ViewConfigDescriptor existingDescriptor = ViewConfigCache.getViewConfig(newEntry.getViewConfig());
+            ViewConfigDescriptor existingDescriptor = ViewConfigCache.getViewConfigDescriptor(newEntry.getViewConfig());
 
             //TODO introduce an SPI with a better name
             if(/*viewConfigDescriptor != null*/existingDescriptor instanceof DefaultViewConfigDescriptor
@@ -212,7 +212,7 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
         for(Class<? extends ViewConfig> viewConfigClass : view.value())
         {
-            ViewConfigDescriptor viewConfigDescriptor = ViewConfigCache.getViewConfig(viewConfigClass);
+            ViewConfigDescriptor viewConfigDescriptor = ViewConfigCache.getViewConfigDescriptor(viewConfigClass);
 
             if(viewConfigDescriptor == null)
             {

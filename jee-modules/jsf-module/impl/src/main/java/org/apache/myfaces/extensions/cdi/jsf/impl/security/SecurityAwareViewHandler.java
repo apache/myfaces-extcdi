@@ -88,7 +88,7 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
 
         try
         {
-            ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(result.getViewId());
+            ViewConfigDescriptor entry = ViewConfigCache.getViewConfigDescriptor(result.getViewId());
 
             if(entry != null)
             {
@@ -109,7 +109,7 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
             Class<? extends ViewConfig> errorView =
                     SecurityUtils.handleSecurityViolationWithoutNavigation(accessDeniedException);
 
-            return this.wrapped.createView(context, ViewConfigCache.getViewConfig(errorView).getViewId());
+            return this.wrapped.createView(context, ViewConfigCache.getViewConfigDescriptor(errorView).getViewId());
         }
         finally
         {

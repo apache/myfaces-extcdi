@@ -92,7 +92,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                 {
                     if(DefaultErrorView.class.getName().equals(originalOutcome))
                     {
-                        entry = ViewConfigCache.getDefaultErrorView();
+                        entry = ViewConfigCache.getDefaultErrorViewConfigDescriptor();
                     }
                 }
                 
@@ -107,7 +107,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     else if(ViewConfig.class.isAssignableFrom((Class)loadedClass))
                     {
                         //noinspection unchecked
-                        entry = ViewConfigCache.getViewConfig((Class<? extends ViewConfig>) loadedClass);
+                        entry = ViewConfigCache.getViewConfigDescriptor((Class<? extends ViewConfig>) loadedClass);
                     }
                 }
 
@@ -193,13 +193,13 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             return viewConfigDescriptor;
         }
 
-        return ViewConfigCache.getViewConfig(navigateEvent.getToView());
+        return ViewConfigCache.getViewConfigDescriptor(navigateEvent.getToView());
     }
 
     private PreViewConfigNavigateEvent firePreViewConfigNavigateEvent(
             String oldViewId, ViewConfigDescriptor newViewConfigDescriptor)
     {
-        ViewConfigDescriptor oldViewConfigDescriptor = ViewConfigCache.getViewConfig(oldViewId);
+        ViewConfigDescriptor oldViewConfigDescriptor = ViewConfigCache.getViewConfigDescriptor(oldViewId);
 
         if(oldViewConfigDescriptor != null)
         {

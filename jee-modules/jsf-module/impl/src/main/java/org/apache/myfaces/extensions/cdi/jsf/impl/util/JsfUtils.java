@@ -241,7 +241,7 @@ public abstract class JsfUtils
             return;
         }
 
-        ViewConfigDescriptor entry = ViewConfigCache.getViewConfig(oldViewId);
+        ViewConfigDescriptor entry = ViewConfigCache.getViewConfigDescriptor(oldViewId);
 
         if(entry == null)
         {
@@ -276,7 +276,7 @@ public abstract class JsfUtils
                                                     ViewConfigDescriptor entry)
     {
         Class<? extends ViewConfig> currentView =
-                ViewConfigCache.getViewConfig(uiViewRoot.getViewId()).getViewConfig();
+                ViewConfigCache.getViewConfigDescriptor(uiViewRoot.getViewId()).getViewConfig();
 
         if(currentView == null)
         {
@@ -318,7 +318,8 @@ public abstract class JsfUtils
                     if(!editableWindowContext.isConversationActive(ConversationUtils.getConversationGroup(foundBean),
                             foundBean.getQualifiers().toArray(new Annotation[foundBean.getQualifiers().size()])))
                     {
-                        return ViewConfigCache.getViewConfig(conversationRequired.defaultEntryPoint()).getViewId();
+                        return ViewConfigCache
+                                .getViewConfigDescriptor(conversationRequired.defaultEntryPoint()).getViewId();
                     }
                 }
             }

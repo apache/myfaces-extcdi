@@ -92,11 +92,11 @@ public abstract class SecurityUtils
 
         if(errorView == null)
         {
-            ViewConfigDescriptor errorPageEntry = ViewConfigCache.getDefaultErrorView();
+            ViewConfigDescriptor errorPageDescriptor = ViewConfigCache.getDefaultErrorViewConfigDescriptor();
 
-            if(errorPageEntry != null)
+            if(errorPageDescriptor != null)
             {
-                errorView = errorPageEntry.getViewConfig();
+                errorView = errorPageDescriptor.getViewConfig();
             }
         }
 

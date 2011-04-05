@@ -104,7 +104,7 @@ public class ViewConfigCache
      * @param viewId view-id of the page
      * @return view-config-descriptor which represents the given view-id, null otherwise
      */
-    public static ViewConfigDescriptor getViewConfig(String viewId)
+    public static ViewConfigDescriptor getViewConfigDescriptor(String viewId)
     {
         return getViewIdToViewDefinitionEntryMapping(true).get(viewId);
     }
@@ -125,7 +125,7 @@ public class ViewConfigCache
      * @param viewDefinitionClass view-config-class of the page
      * @return view-config-descriptor which represents the given view-config-class
      */
-    public static ViewConfigDescriptor getViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public static ViewConfigDescriptor getViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return getViewDefinitionToViewDefinitionEntryMapping(true).get(viewDefinitionClass);
     }
@@ -134,7 +134,7 @@ public class ViewConfigCache
      * Resolves the descriptor for the default-error page
      * @return descriptor for the default-error page
      */
-    public static ViewConfigDescriptor getDefaultErrorView()
+    public static ViewConfigDescriptor getDefaultErrorViewConfigDescriptor()
     {
         lazyInlineViewConfigCompilation();
         return defaultErrorView.get(getClassloader());
@@ -262,7 +262,7 @@ public class ViewConfigCache
     {
         if(DefaultErrorView.class.isAssignableFrom(viewDefinitionEntry.getViewConfig()))
         {
-            ViewConfigDescriptor currentErrorView = getDefaultErrorView();
+            ViewConfigDescriptor currentErrorView = getDefaultErrorViewConfigDescriptor();
             if(currentErrorView != null)
             {
                 throw ambiguousDefaultErrorViewDefinitionException(viewDefinitionEntry.getViewConfig(),

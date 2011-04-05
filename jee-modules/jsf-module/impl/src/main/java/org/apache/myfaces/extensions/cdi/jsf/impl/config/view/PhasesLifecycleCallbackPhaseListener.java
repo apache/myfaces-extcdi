@@ -105,7 +105,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
         //override the view-id if we have a new view
         this.windowContext.setAttribute(INITIALIZED_VIEW_ID_MARKER_KEY, viewId);
 
-        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 
         if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
@@ -131,7 +131,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     private void processPreRenderView(String viewId)
     {
-        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 
         if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
@@ -141,7 +141,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     private void processPostRenderView(String viewId)
     {
-        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 
         if (viewDefinitionEntry instanceof EditableViewConfigDescriptor)
         {
@@ -168,7 +168,7 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
         String viewId = viewRoot.getViewId();
 
-        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfig(viewId);
+        ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 
         if(viewDefinitionEntry == null)
         {
