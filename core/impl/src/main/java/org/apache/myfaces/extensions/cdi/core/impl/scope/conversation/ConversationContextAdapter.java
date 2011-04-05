@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.security.event.InvalidBeanCreationEvent;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -28,6 +30,7 @@ import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import java.lang.annotation.Annotation;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -113,10 +116,22 @@ public class ConversationContextAdapter implements Context
         }
         
         Set<SecurityViolation> violations = this.conversationContext.checkPermission(bean);
+        Set<SecurityViolation> violationsToThrow = new HashSet<SecurityViolation>();
 
         for(SecurityViolation securityViolation : violations)
         {
-            this.beanManager.fireEvent(new InvalidBeanCreationEvent(securityViolation));
+            InvalidBeanCreationEvent invalidBeanCreationEvent = new InvalidBeanCreationEvent(securityViolation);
+            this.beanManager.fireEvent(invalidBeanCreationEvent);
+
+            if(invalidBeanCreationEvent.isThrowSecurityViolation())
+            {
+                violationsToThrow.add(securityViolation);
+            }
+        }
+
+        if(!violationsToThrow.isEmpty())
+        {
+            throw new AccessDeniedException(violationsToThrow, DefaultErrorView.class);
         }
     }
 

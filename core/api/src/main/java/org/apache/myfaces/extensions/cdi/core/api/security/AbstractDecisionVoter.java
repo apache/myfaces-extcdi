@@ -18,22 +18,30 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
-import javax.enterprise.inject.spi.Bean;
-import java.util.Set;
-
 /**
- * This feature is optional and has to be activated via
- * {@link org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig#isInvalidBeanCreationEventEnabled()}
- *
  * @author Gerhard Petracek
  */
-public interface BeanCreationDecisionVoter
+public abstract class AbstractDecisionVoter
 {
     /**
-     * Checks the permission to the given bean
-     * @param beanToCheck bean which should be checked
-     * @param <T> current type
-     * @return found violations, an empty set otherwise
+     * Creates an instance of {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation} for a given
+     * string which will be used as reason to describe the violation.
+     *
+     * @param reason description of the violation
+     * @return A new instance of {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation}
+     * which provides details about the found restriction.
      */
-    <T> Set<SecurityViolation> checkPermission(Bean<T> beanToCheck);
+    protected SecurityViolation newSecurityViolation(final String reason)
+    {
+        return new SecurityViolation()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public String getReason()
+            {
+                return reason;
+            }
+        };
+    }
 }

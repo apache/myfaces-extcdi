@@ -18,30 +18,27 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
-import javax.interceptor.InvocationContext;
-import java.util.Set;
+import javax.enterprise.inject.spi.Bean;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Base implementation which provides helper methods.
+ * This feature is optional and has to be activated via
+ * {@link org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig#isInvalidBeanCreationEventEnabled()}
  *
  * @author Gerhard Petracek
  */
-public abstract class AbstractAccessDecisionVoter
-        extends AbstractDecisionVoter implements AccessDecisionVoter
+public abstract class AbstractBeanCreationDecisionVoter
+        extends AbstractDecisionVoter implements BeanCreationDecisionVoter
 {
-    private static final long serialVersionUID = -9145021044568668681L;
-
     /**
-     * It should be final - but proxy-libs won't support it.
-     *
      * {@inheritDoc}
      */
-    public Set<SecurityViolation> checkPermission(InvocationContext invocationContext)
+    public <T> Set<SecurityViolation> checkPermission(Bean<T> beanToCheck)
     {
         Set<SecurityViolation> result = new HashSet<SecurityViolation>();
 
-        checkPermission(invocationContext, result);
+        checkPermission(beanToCheck, result);
 
         return result;
     }
@@ -49,8 +46,8 @@ public abstract class AbstractAccessDecisionVoter
     /**
      * Allows an easier implementation in combination with {@link #newSecurityViolation(String)}.
      *
-     * @param invocationContext current invocationContext
+     * @param beanToCheck bean which has to be checked
      * @param violations set for adding violations
      */
-    protected abstract void checkPermission(InvocationContext invocationContext, Set<SecurityViolation> violations);
+    protected abstract <T> void checkPermission(Bean<T> beanToCheck, Set<SecurityViolation> violations);
 }

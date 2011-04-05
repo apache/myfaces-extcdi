@@ -27,6 +27,8 @@ public class InvalidBeanCreationEvent
 {
     private final SecurityViolation securityViolation;
 
+    private boolean throwSecurityViolation = true;
+
     /**
      * Constructor which is required to create the event for the given {@link SecurityViolation}
      * @param securityViolation current security-violation
@@ -43,5 +45,23 @@ public class InvalidBeanCreationEvent
     public SecurityViolation getSecurityViolation()
     {
         return securityViolation;
+    }
+
+    /**
+     * Allows e.g. to filter the current violation
+     * @param throwSecurityViolation new value for the flag
+     */
+    public void setThrowSecurityViolation(boolean throwSecurityViolation)
+    {
+        this.throwSecurityViolation = throwSecurityViolation;
+    }
+
+    /**
+     * Exposes if the {@link SecurityViolation} wrapped by the current event should be thrown as exception
+     * @return true if the violation should be thrown, false otherwise
+     */
+    public boolean isThrowSecurityViolation()
+    {
+        return throwSecurityViolation;
     }
 }
