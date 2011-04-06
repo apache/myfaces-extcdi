@@ -24,8 +24,8 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationSt
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationRequiredUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.faces.lifecycle.Lifecycle;
 import javax.faces.event.PhaseListener;
@@ -116,7 +116,7 @@ class CodiLifecycleWrapper extends Lifecycle
      */
     public void render(FacesContext facesContext)
     {
-        JsfUtils.ensureExistingConversation(facesContext);
+        ConversationRequiredUtils.ensureExistingConversation(facesContext);
 
         wrapped.render(facesContext);
 
