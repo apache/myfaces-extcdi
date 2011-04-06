@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -33,8 +34,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE})
 @Retention(RUNTIME)
 @Documented
+
+@ViewMetaData(override = true)
 public @interface ConversationRequired
 {
+    Class<?> conversationGroup() default ConversationRequired.class;
+
     /**
      * Default entry-point which will be used if a violation had been detected
      * @return entry-point page

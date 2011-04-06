@@ -45,6 +45,7 @@ import java.lang.annotation.Annotation;
 import java.net.URLEncoder;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -273,7 +274,7 @@ public abstract class JsfUtils
 
     private static String checkConversationRequired(BeanManager beanManager,
                                                     UIViewRoot uiViewRoot,
-                                                    ViewConfigDescriptor entry)
+                                                    ViewConfigDescriptor viewConfigDescriptor)
     {
         Class<? extends ViewConfig> currentView =
                 ViewConfigCache.getViewConfigDescriptor(uiViewRoot.getViewId()).getViewConfig();
@@ -283,10 +284,13 @@ public abstract class JsfUtils
             return null;
         }
 
-        for(PageBeanDescriptor pageBeanDescriptor : entry.getPageBeanDescriptors())
+        List<PageBeanDescriptor> pageBeanDescriptorList = viewConfigDescriptor.getPageBeanDescriptors();
+        for(PageBeanDescriptor pageBeanDescriptor : pageBeanDescriptorList)
         {
             Class<?> pageBeanClass = pageBeanDescriptor.getBeanClass();
-            ConversationRequired conversationRequired = pageBeanClass.getAnnotation(ConversationRequired.class);
+
+            ConversationRequired conversationRequired =
+                    resolveConversationRequiredAnnotation(viewConfigDescriptor, pageBeanDescriptorList, pageBeanClass);
 
             if(conversationRequired == null)
             {
@@ -303,6 +307,7 @@ public abstract class JsfUtils
 
                 Bean<?> foundBean;
                 Set<Bean<?>> beanSet;
+                Class<?> conversationGroup;
                 for(Bean<?> currentBean : foundBeans)
                 {
                     beanSet = new HashSet<Bean<?>>(1);
@@ -315,7 +320,16 @@ public abstract class JsfUtils
                         continue;
                     }
 
-                    if(!editableWindowContext.isConversationActive(ConversationUtils.getConversationGroup(foundBean),
+                    if(ConversationRequired.class.equals(conversationRequired.conversationGroup()))
+                    {
+                        conversationGroup = ConversationUtils.getConversationGroup(foundBean);
+                    }
+                    else
+                    {
+                        conversationGroup = conversationRequired.conversationGroup();
+                    }
+
+                    if(!editableWindowContext.isConversationActive(conversationGroup,
                             foundBean.getQualifiers().toArray(new Annotation[foundBean.getQualifiers().size()])))
                     {
                         return ViewConfigCache
@@ -325,6 +339,26 @@ public abstract class JsfUtils
             }
         }
         return null;
+    }
+
+    private static ConversationRequired resolveConversationRequiredAnnotation(ViewConfigDescriptor viewConfigDescriptor,
+            List<PageBeanDescriptor> pageBeanDescriptorList, Class<?> pageBeanClass)
+    {
+        ConversationRequired conversationRequired = pageBeanClass.getAnnotation(ConversationRequired.class);
+
+        //here we support just simple constellations
+        //TODO handle unsupported constellations
+        if(conversationRequired == null && pageBeanDescriptorList.size() == 1)
+        {
+            List<ConversationRequired> conversationRequiredMetaData =
+                    viewConfigDescriptor.getMetaData(ConversationRequired.class);
+
+            if(conversationRequiredMetaData.size() == 1)
+            {
+                conversationRequired = conversationRequiredMetaData.iterator().next();
+            }
+        }
+        return conversationRequired;
     }
 
     private static boolean isEntryPoint(Class<? extends ViewConfig> currentView,

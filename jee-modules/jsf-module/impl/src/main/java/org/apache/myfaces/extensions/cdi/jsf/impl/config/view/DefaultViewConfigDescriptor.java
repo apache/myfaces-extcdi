@@ -265,6 +265,23 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
     /**
      * {@inheritDoc}
      */
+    public <T extends Annotation> List<T> getMetaData(Class<T> target)
+    {
+        List<T> result = new ArrayList<T>();
+
+        for(Annotation annotation : this.metaDataList)
+        {
+            if(target.isAssignableFrom(annotation.annotationType()))
+            {
+                result.add((T)annotation);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void addPageBean(Class pageBeanClass)
     {
         List<PageBeanDescriptor> newList = new ArrayList<PageBeanDescriptor>(this.pageBeanDescriptors);

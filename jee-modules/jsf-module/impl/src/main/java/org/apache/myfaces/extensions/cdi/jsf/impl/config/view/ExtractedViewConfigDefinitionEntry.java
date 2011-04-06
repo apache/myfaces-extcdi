@@ -313,6 +313,15 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public <T extends Annotation> List<T> getMetaData(Class<T> target)
+    {
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
+    }
+
+
     private String ensureValidViewIds(String result)
     {
         if(!result.startsWith("/"))

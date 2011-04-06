@@ -55,6 +55,14 @@ public interface ViewConfigDescriptor
     List<Annotation> getMetaData();
 
     /**
+     * Custom meta-data which is configured for the entry. It allows to provide and resolve custom meta-data annotated
+     * with {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData}
+     * @param target target type
+     * @return custom meta-data for the given type of the current entry
+     */
+    <T extends Annotation> List<T> getMetaData(Class<T> target);
+
+    /**
      * {@link AccessDecisionVoter}s which should be invoked to secure the page represented by the current entry.
      * @return configured access-decision-voters
      */
