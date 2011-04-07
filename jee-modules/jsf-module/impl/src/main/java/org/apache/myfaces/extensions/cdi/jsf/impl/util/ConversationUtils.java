@@ -263,8 +263,13 @@ public abstract class ConversationUtils
     public static void storeCurrentViewIdAsOldViewId(
             FacesContext facesContext, WindowContextManager windowContextManager)
     {
-        String oldViewId = facesContext.getViewRoot().getViewId();
-        windowContextManager.getCurrentWindowContext().setAttribute(OLD_VIEW_ID_KEY, oldViewId);
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot != null)
+        {
+            String oldViewId =  uiViewRoot.getViewId();
+            windowContextManager.getCurrentWindowContext().setAttribute(OLD_VIEW_ID_KEY, oldViewId);
+        }
     }
 
     /**
@@ -283,8 +288,13 @@ public abstract class ConversationUtils
      */
     public static void storeCurrentViewIdAsNewViewId(FacesContext facesContext, WindowContext windowContext)
     {
-        String newViewId = facesContext.getViewRoot().getViewId();
-        storeViewIdAsNewViewId(windowContext, newViewId);
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot != null)
+        {
+            String newViewId = uiViewRoot.getViewId();
+            storeViewIdAsNewViewId(windowContext, newViewId);
+        }
     }
 
     /**

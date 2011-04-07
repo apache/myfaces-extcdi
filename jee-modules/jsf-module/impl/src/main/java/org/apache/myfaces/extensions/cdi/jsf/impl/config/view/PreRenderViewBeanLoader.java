@@ -27,6 +27,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescripto
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.component.UIViewRoot;
 import javax.faces.event.PhaseEvent;
 import java.util.List;
 
@@ -39,7 +40,13 @@ public class PreRenderViewBeanLoader
     protected void initBeans(
             @Observes @BeforePhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent event, BeanManager beanManager)
     {
-        String viewId = event.getFacesContext().getViewRoot().getViewId();
+        UIViewRoot viewRoot = event.getFacesContext().getViewRoot();
+        if (viewRoot == null)
+        {
+            return;
+        }
+
+        String viewId = viewRoot.getViewId();
 
         ViewConfigDescriptor viewDefinitionEntry = ViewConfigCache.getViewConfigDescriptor(viewId);
 

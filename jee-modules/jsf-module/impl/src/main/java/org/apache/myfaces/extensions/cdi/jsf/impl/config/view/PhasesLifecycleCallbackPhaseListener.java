@@ -115,17 +115,19 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 
     private void processPreRenderView(PhaseEvent event)
     {
-        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE))
+        UIViewRoot uiViewRoot = event.getFacesContext().getViewRoot();
+        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE) && uiViewRoot != null)
         {
-            processPreRenderView(event.getFacesContext().getViewRoot().getViewId());
+            processPreRenderView(uiViewRoot.getViewId());
         }
     }
 
     private void processPostRenderView(PhaseEvent event)
     {
-        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE))
+        UIViewRoot uiViewRoot = event.getFacesContext().getViewRoot();
+        if (event.getPhaseId().equals(PhaseId.RENDER_RESPONSE) && uiViewRoot != null)
         {
-            processPostRenderView(event.getFacesContext().getViewRoot().getViewId());
+            processPostRenderView(uiViewRoot.getViewId());
         }
     }
 
