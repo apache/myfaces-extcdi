@@ -20,8 +20,11 @@
 start the demo e.g. via:
 mvn clean jetty:run-exploded -PjettyConfig -Dmaven.test.skip=true
 
-this example also demonstrates cargo tests -> if a codi snapshot is build manuelly use (in the root of the project):
-mvn clean install -Pextended-manifest -Ptest-infrastructure
+this example also demonstrates cargo tests -> if a codi snapshot is build manually use (in the root of the project):
+mvn clean install
+or
+mvn clean install -Pextended-manifest
+(which adds the svn revision to the manifest)
 
 
 
