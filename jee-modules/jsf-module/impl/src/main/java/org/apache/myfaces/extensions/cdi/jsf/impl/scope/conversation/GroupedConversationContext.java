@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
+import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.AbstractGroupedConversationContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
@@ -39,6 +40,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.context.FacesContext;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
@@ -116,6 +118,8 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
                                                          BeanCreationDecisionVoter.class,
                                                          (Bean<BeanCreationDecisionVoter>)foundBean));
             }
+            Collections
+                    .sort(this.beanCreationDecisionVoters, new InvocationOrderComparator<BeanCreationDecisionVoter>());
         }
     }
 
