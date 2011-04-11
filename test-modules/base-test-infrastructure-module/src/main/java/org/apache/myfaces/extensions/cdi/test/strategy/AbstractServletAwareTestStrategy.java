@@ -86,8 +86,8 @@ public abstract class AbstractServletAwareTestStrategy implements TestStrategy
     //@After
     public void after()
     {
-        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopRequest();
         ((ServletContainerAwareCdiTestContainer)this.testContainer).stopSession();
+        ((ServletContainerAwareCdiTestContainer)this.testContainer).stopRequest();
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();
     }
