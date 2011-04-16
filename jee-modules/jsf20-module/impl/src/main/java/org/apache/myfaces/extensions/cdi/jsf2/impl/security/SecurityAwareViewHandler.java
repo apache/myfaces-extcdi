@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.security;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -52,17 +52,18 @@ public class SecurityAwareViewHandler
         Map<String, Object> viewMap = null;
         if(originalViewRoot != null)
         {
-            viewMap = originalViewRoot.getViewMap(false);
+            Map<String, Object> originalViewMap = originalViewRoot.getViewMap(false);
 
-            if(viewMap instanceof Serializable)
+            if(originalViewMap != null && !originalViewMap.isEmpty())
             {
-                //noinspection unchecked
-                viewMap = StateCloner.clone((Serializable)viewMap, Map.class);
+                viewMap = new HashMap<String, Object>();
+                viewMap.putAll(originalViewMap);
             }
         }
+
         newViewRoot = super.createView(context, viewId);
 
-        if(viewMap instanceof Serializable)
+        if(viewMap != null)
         {
             originalViewRoot.getViewMap(true).putAll(viewMap);
         }
