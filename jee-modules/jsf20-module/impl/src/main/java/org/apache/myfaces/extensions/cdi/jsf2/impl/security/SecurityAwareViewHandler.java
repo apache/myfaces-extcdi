@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.security;
 
-import org.apache.myfaces.extensions.cdi.jsf2.api.view.TemporaryComponent;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi.TemporaryUIViewRoot;
 
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
@@ -63,17 +63,17 @@ public class SecurityAwareViewHandler
             }
         }
 
-        if(originalViewRoot instanceof TemporaryComponent)
+        if(originalViewRoot instanceof TemporaryUIViewRoot)
         {
             //workaround for PreDestroyViewMapEvent which would be caused by the security check
-            ((TemporaryComponent)originalViewRoot).setTemporaryMode(true);
+            ((TemporaryUIViewRoot)originalViewRoot).setTemporaryMode(true);
         }
 
         newViewRoot = super.createView(context, viewId);
 
-        if(originalViewRoot instanceof TemporaryComponent)
+        if(originalViewRoot instanceof TemporaryUIViewRoot)
         {
-            ((TemporaryComponent)originalViewRoot).setTemporaryMode(false);
+            ((TemporaryUIViewRoot)originalViewRoot).setTemporaryMode(false);
         }
 
         if(viewMap != null)

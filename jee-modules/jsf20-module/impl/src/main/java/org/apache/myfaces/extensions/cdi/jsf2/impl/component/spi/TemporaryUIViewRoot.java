@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf2.api.view;
+package org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi;
+
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface TemporaryComponent
+public interface TemporaryUIViewRoot extends Serializable
 {
     /**
      * De-/activates the temporary-mode

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.component;
 
-import org.apache.myfaces.extensions.cdi.jsf2.api.view.TemporaryComponent;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi.TemporaryUIViewRoot;
 
 import javax.faces.component.UIViewRoot;
 
@@ -26,8 +26,10 @@ import javax.faces.component.UIViewRoot;
 /**
  * @author Gerhard Petracek
  */
-public class TemporaryUIViewRoot extends UIViewRoot implements TemporaryComponent
+public class DefaultTemporaryUIViewRoot extends UIViewRoot implements TemporaryUIViewRoot
 {
+    private static final long serialVersionUID = -1800819266253071047L;
+
     private boolean activateTemporaryMode;
 
     /**

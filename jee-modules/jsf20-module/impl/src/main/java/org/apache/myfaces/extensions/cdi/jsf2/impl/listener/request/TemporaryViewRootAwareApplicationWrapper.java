@@ -18,7 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.jsf2.impl.component.TemporaryUIViewRoot;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.component.DefaultTemporaryUIViewRoot;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi.TemporaryUIViewRoot;
 
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
@@ -59,14 +61,19 @@ class TemporaryViewRootAwareApplicationWrapper extends ApplicationWrapper
             {
                 return getCustomizedUIViewRoot(uiComponent);
             }
-            return new TemporaryUIViewRoot();
+            return new DefaultTemporaryUIViewRoot();
         }
         return uiComponent;
     }
 
     private UIComponent getCustomizedUIViewRoot(UIComponent uiComponent)
     {
-        //TODO proxy or custom (optional) factory
+        TemporaryUIViewRoot temporaryComponent = CodiUtils.lookupFromEnvironment(TemporaryUIViewRoot.class);
+
+        if(temporaryComponent instanceof UIComponent)
+        {
+            return (UIComponent)temporaryComponent;
+        }
         return uiComponent;
     }
 
