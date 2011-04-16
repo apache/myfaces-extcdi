@@ -38,19 +38,25 @@ public class SecurityAwareViewHandler
         super(wrapped);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * see EXTCDI-167
+     */
     @Override
     public UIViewRoot createView(FacesContext context, String viewId)
     {
         UIViewRoot originalViewRoot = context.getViewRoot();
         UIViewRoot newViewRoot;
 
-        Map viewMap = null;
+        Map<String, Object> viewMap = null;
         if(originalViewRoot != null)
         {
             viewMap = originalViewRoot.getViewMap(false);
 
             if(viewMap instanceof Serializable)
             {
+                //noinspection unchecked
                 viewMap = StateCloner.clone((Serializable)viewMap, Map.class);
             }
         }
