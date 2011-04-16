@@ -36,7 +36,7 @@ import javax.faces.context.FacesContext;
  */
 public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
 {
-    private ViewHandler wrapped;
+    protected ViewHandler wrapped;
 
     private ViewHandler windowContextAwareViewHandler;
 
@@ -52,8 +52,13 @@ public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
         if(isActivated())
         {
             this.windowContextAwareViewHandler = new WindowContextAwareViewHandler(this.wrapped);
-            this.securityAwareViewHandler = new SecurityAwareViewHandler(this.wrapped);
+            this.securityAwareViewHandler = createSecurityAwareViewHandler();
         }
+    }
+
+    protected ViewHandler createSecurityAwareViewHandler()
+    {
+        return new SecurityAwareViewHandler(this.wrapped);
     }
 
     /**
