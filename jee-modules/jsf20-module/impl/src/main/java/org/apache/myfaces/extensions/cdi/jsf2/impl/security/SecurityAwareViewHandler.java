@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.security;
 
-import org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi.TemporaryUIViewRoot;
-
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -46,9 +44,9 @@ public class SecurityAwareViewHandler
      * see EXTCDI-167
      */
     @Override
-    public UIViewRoot createView(FacesContext context, String viewId)
+    public UIViewRoot createView(FacesContext facesContext, String viewId)
     {
-        UIViewRoot originalViewRoot = context.getViewRoot();
+        UIViewRoot originalViewRoot = facesContext.getViewRoot();
         UIViewRoot newViewRoot;
 
         Map<String, Object> viewMap = null;
@@ -63,23 +61,27 @@ public class SecurityAwareViewHandler
             }
         }
 
-        if(originalViewRoot instanceof TemporaryUIViewRoot)
-        {
-            //workaround for PreDestroyViewMapEvent which would be caused by the security check
-            ((TemporaryUIViewRoot)originalViewRoot).setTemporaryMode(true);
-        }
+        //workaround for PreDestroyViewMapEvent which would be caused by the security check
+        deactivatePreDestroyViewMapEvent(facesContext);
 
-        newViewRoot = super.createView(context, viewId);
+        newViewRoot = super.createView(facesContext, viewId);
 
-        if(originalViewRoot instanceof TemporaryUIViewRoot)
-        {
-            ((TemporaryUIViewRoot)originalViewRoot).setTemporaryMode(false);
-        }
+        activatePreDestroyViewMapEvent(facesContext);
 
         if(viewMap != null)
         {
             originalViewRoot.getViewMap(true).putAll(viewMap);
         }
         return newViewRoot;
+    }
+
+    private void deactivatePreDestroyViewMapEvent(FacesContext facesContext)
+    {
+        facesContext.getExternalContext().getRequestMap().put(SecurityAwareViewHandler.class.getName(), Boolean.TRUE);
+    }
+
+    private void activatePreDestroyViewMapEvent(FacesContext facesContext)
+    {
+        facesContext.getExternalContext().getRequestMap().put(SecurityAwareViewHandler.class.getName(), Boolean.FALSE);
     }
 }

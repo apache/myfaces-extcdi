@@ -18,19 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.component.DefaultTemporaryUIViewRoot;
-import org.apache.myfaces.extensions.cdi.jsf2.impl.component.spi.TemporaryUIViewRoot;
 
-import javax.el.ValueExpression;
-import javax.faces.FacesException;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.security.SecurityAwareViewHandler;
+
 import javax.faces.application.Application;
 import javax.faces.application.ApplicationWrapper;
-import javax.faces.application.Resource;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.el.ValueBinding;
+import javax.faces.event.PreDestroyViewMapEvent;
+import javax.faces.event.SystemEvent;
 
 //needed due to EXTCDI-167
 /**
@@ -53,91 +48,22 @@ class TemporaryViewRootAwareApplicationWrapper extends ApplicationWrapper
         return this.wrapped;
     }
 
-    protected UIComponent tryToWrapUIViewRoot(UIComponent uiComponent)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void publishEvent(FacesContext facesContext, Class<? extends SystemEvent> systemEventClass, Object source)
     {
-        if(uiComponent instanceof UIViewRoot)
+        if(!PreDestroyViewMapEvent.class.isAssignableFrom(systemEventClass) ||
+                isPreDestroyViewMapEventAllowed(facesContext))
         {
-            if(!uiComponent.getClass().getName().equals(UIViewRoot.class.getName()))
-            {
-                return getCustomizedUIViewRoot(uiComponent);
-            }
-            return new DefaultTemporaryUIViewRoot();
+            super.publishEvent(facesContext, systemEventClass, source);
         }
-        return uiComponent;
     }
 
-    private UIComponent getCustomizedUIViewRoot(UIComponent uiComponent)
+    private boolean isPreDestroyViewMapEventAllowed(FacesContext facesContext)
     {
-        TemporaryUIViewRoot temporaryComponent = CodiUtils.lookupFromEnvironment(TemporaryUIViewRoot.class);
-
-        if(temporaryComponent instanceof UIComponent)
-        {
-            return (UIComponent)temporaryComponent;
-        }
-        return uiComponent;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(FacesContext context,
-                                       Resource componentResource)
-    {
-        return tryToWrapUIViewRoot(super.createComponent(context, componentResource));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(FacesContext context,
-                                       String componentType,
-                                       String rendererType)
-    {
-        return tryToWrapUIViewRoot(super.createComponent(context, componentType, rendererType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(String componentType) throws FacesException
-    {
-        return tryToWrapUIViewRoot(super.createComponent(componentType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(ValueBinding componentBinding,
-                                       FacesContext context,
-                                       String componentType) throws FacesException
-    {
-        return tryToWrapUIViewRoot(super.createComponent(componentBinding, context, componentType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(ValueExpression componentExpression,
-                                       FacesContext context,
-                                       String componentType,
-                                       String rendererType)
-    {
-        return tryToWrapUIViewRoot(super.createComponent(componentExpression, context, componentType, rendererType));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public UIComponent createComponent(ValueExpression componentExpression,
-                                       FacesContext contexte,
-                                       String componentType) throws FacesException
-    {
-        return tryToWrapUIViewRoot(super.createComponent(componentExpression, contexte, componentType));
+        return !Boolean.TRUE.equals(
+                facesContext.getExternalContext().getRequestMap().get(SecurityAwareViewHandler.class.getName()));
     }
 }
