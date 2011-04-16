@@ -64,9 +64,14 @@ public class SecurityAwareViewHandler
         //workaround for PreDestroyViewMapEvent which would be caused by the security check
         deactivatePreDestroyViewMapEvent(facesContext);
 
-        newViewRoot = super.createView(facesContext, viewId);
-
-        activatePreDestroyViewMapEvent(facesContext);
+        try
+        {
+            newViewRoot = super.createView(facesContext, viewId);
+        }
+        finally
+        {
+            activatePreDestroyViewMapEvent(facesContext);
+        }
 
         if(viewMap != null)
         {
