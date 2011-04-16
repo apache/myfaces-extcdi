@@ -24,6 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
+import org.apache.myfaces.extensions.cdi.jsf2.impl.security.SecurityAwareViewHandler;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.faces.application.FacesMessage;
@@ -48,6 +49,8 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     private BeforeAfterFacesRequestBroadcaster beforeAfterFacesRequestBroadcaster;
 
+    private boolean temporaryViewRootAwareApplicationWrapperActivated;
+
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
@@ -66,8 +69,14 @@ class CodiFacesContextWrapper extends FacesContextWrapper
     public Application getApplication()
     {
         lazyInit();
-        return new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(),
+        Application application = new InjectionAwareApplicationWrapper(wrappedFacesContext.getApplication(),
                 this.advancedQualifierRequiredForDependencyInjection);
+
+        if(this.temporaryViewRootAwareApplicationWrapperActivated)
+        {
+            return new TemporaryViewRootAwareApplicationWrapper(application);
+        }
+        return application;
     }
 
     /**
@@ -109,6 +118,10 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
             this.beforeAfterFacesRequestBroadcaster =
                     CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);
+
+            this.temporaryViewRootAwareApplicationWrapperActivated =
+                    ClassDeactivation.isClassActivated(SecurityAwareViewHandler.class) &&
+                    ClassDeactivation.isClassActivated(TemporaryViewRootAwareApplicationWrapper.class);
         }
     }
 
