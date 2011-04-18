@@ -412,6 +412,22 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
     }
 
     /**
+     * not available
+     */
+    public void setPartialViewConfig(boolean partialMode)
+    {
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
+    }
+
+    /**
+     * not available
+     */
+    public boolean isPartialViewConfig()
+    {
+        throw new IllegalStateException(NOT_IMPLEMENTED_MESSAGE);
+    }
+
+    /**
      * Forces to block the given meta-data for new scanning processes
      * @param metaDataClass meta-data which should be blocked
      */

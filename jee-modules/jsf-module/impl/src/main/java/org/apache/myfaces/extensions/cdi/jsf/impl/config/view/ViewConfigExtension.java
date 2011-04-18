@@ -137,9 +137,8 @@ public class ViewConfigExtension implements Extension, Deactivatable
         {
             ViewConfigDescriptor existingDescriptor = ViewConfigCache.getViewConfigDescriptor(newEntry.getViewConfig());
 
-            //TODO introduce an SPI with a better name
-            if(/*viewConfigDescriptor != null*/existingDescriptor instanceof DefaultViewConfigDescriptor
-                    && ((DefaultViewConfigDescriptor)existingDescriptor).isSimpleEntryMode())
+            if(existingDescriptor instanceof EditableViewConfigDescriptor
+                    && ((EditableViewConfigDescriptor)existingDescriptor).isPartialViewConfig())
             {
                 //in this case the alternative view-controller approach which just adds page-beans was invoked before
                 //-> we just have to use the page bean of the existing entry
@@ -223,13 +222,9 @@ public class ViewConfigExtension implements Extension, Deactivatable
                     if(entry instanceof EditableViewConfigDescriptor)
                     {
                         ((EditableViewConfigDescriptor)entry).addPageBean(annotatedType.getJavaClass());
+                        ((EditableViewConfigDescriptor)entry).setPartialViewConfig(true);
                     }
 
-                    if(entry instanceof DefaultViewConfigDescriptor)
-                    {
-                        //TODO introduce an SPI with a better name
-                        ((DefaultViewConfigDescriptor)entry).activateSimpleEntryMode();
-                    }
                     ViewConfigCache.addViewConfigDescriptor(entry.getViewId(), entry);
                 }
             }

@@ -63,7 +63,7 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
     //meta-data
     private List<Annotation> metaDataList;
 
-    private boolean simpleEntryMode = false;
+    private boolean partialViewConfig = false;
 
     private transient BeanManager beanManager;
 
@@ -293,14 +293,20 @@ public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
         this.pageBeanDescriptors = Collections.unmodifiableList(newList);
     }
 
-    void activateSimpleEntryMode()
+    /**
+     * {@inheritDoc}
+     */
+    public void setPartialViewConfig(boolean inlinePageBean)
     {
-        this.simpleEntryMode = true;
+        this.partialViewConfig = inlinePageBean;
     }
 
-    boolean isSimpleEntryMode()
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPartialViewConfig()
     {
-        return simpleEntryMode;
+        return partialViewConfig;
     }
 
     private List<PageBeanDescriptor> findPageBeanDefinitions(Class<? extends ViewConfig> viewDefinitionClass)

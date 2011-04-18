@@ -20,18 +20,20 @@ package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
 /**
  * @author Gerhard Petracek
  */
 @Advanced
-public class CustomViewConfigExtractor implements ViewConfigExtractor
+public class TestViewConfigExtractor implements ViewConfigExtractor
 {
+    private static final long serialVersionUID = -1714138861845603400L;
+
     private ViewConfigExtractor defaultViewConfigExtractor;
 
-    public ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public EditableViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return defaultViewConfigExtractor.extractViewConfig(viewDefinitionClass);
     }
@@ -41,7 +43,7 @@ public class CustomViewConfigExtractor implements ViewConfigExtractor
         return defaultViewConfigExtractor.isInlineViewConfig(viewDefinitionClass);
     }
 
-    public ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public EditableViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         return defaultViewConfigExtractor.extractInlineViewConfig(viewDefinitionClass);
     }

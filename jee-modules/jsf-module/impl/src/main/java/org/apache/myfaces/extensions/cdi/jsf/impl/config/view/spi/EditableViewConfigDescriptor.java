@@ -50,6 +50,19 @@ public interface EditableViewConfigDescriptor extends ViewConfigDescriptor
     void addPageBean(Class pageBeanClass);
 
     /**
+     * Allows to mark the current descriptor as partial config e.g. due to inline configs with
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.view.View}
+     * @param partialMode indicates if the entry is in the partial view-config mode
+     */
+    void setPartialViewConfig(boolean partialMode);
+
+    /**
+     * Exposes if the current view-config represents a partial config which isn't created based on a central config
+     * @return true if it is a partial config, false otherwise
+     */
+    boolean isPartialViewConfig();
+
+    /**
      * Invokes the methods annotated with {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.InitView}
      */
     void invokeInitViewMethods();

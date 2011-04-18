@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 
 import java.io.Serializable;
 
@@ -29,11 +28,11 @@ import java.io.Serializable;
 public interface ViewConfigExtractor extends Serializable
 {
     /**
-     * Creates a {@link ViewConfigDescriptor} for the given view-config class
+     * Creates a {@link EditableViewConfigDescriptor} for the given view-config class
      * @param viewDefinitionClass current view-config class
      * @return descriptor which represents the view-config for the given config class
      */
-    ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    EditableViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
     /**
      * Evaluates if the given view-config class is an inline conifg - that means if it is a resolvable (page-)bean
@@ -43,9 +42,9 @@ public interface ViewConfigExtractor extends Serializable
     boolean isInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 
     /**
-     * Creates a {@link ViewConfigDescriptor} for the given inline view-config class
+     * Creates a {@link EditableViewConfigDescriptor} for the given inline view-config class
      * @param viewDefinitionClass current view-config class
      * @return descriptor which represents the view-config for the given config class
      */
-    ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
+    EditableViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass);
 }

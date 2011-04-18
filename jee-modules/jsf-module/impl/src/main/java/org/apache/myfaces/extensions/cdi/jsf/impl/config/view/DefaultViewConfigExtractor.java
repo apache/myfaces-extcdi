@@ -45,7 +45,7 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public EditableViewConfigDescriptor extractViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         //use the interface to make clear which information we really need
         ViewConfigDescriptor viewConfigDescriptor = new ExtractedViewConfigDefinitionEntry(viewDefinitionClass);
@@ -64,7 +64,7 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
     /**
      * {@inheritDoc}
      */
-    public ViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
+    public EditableViewConfigDescriptor extractInlineViewConfig(Class<? extends ViewConfig> viewDefinitionClass)
     {
         Class viewConfigRootMarker = ViewConfigCache.getInlineViewConfigRootMarker();
 
@@ -95,8 +95,8 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         return extractViewConfigDescriptor(viewDefinitionClass, viewConfigDescriptor);
     }
 
-    private ViewConfigDescriptor extractViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass,
-                                                             ViewConfigDescriptor viewConfigDescriptor)
+    private EditableViewConfigDescriptor extractViewConfigDescriptor(Class<? extends ViewConfig> viewDefinitionClass,
+                                                                     ViewConfigDescriptor viewConfigDescriptor)
     {
         scanViewConfigClass(viewDefinitionClass, (ExtractedViewConfigDefinitionEntry)viewConfigDescriptor);
 
@@ -111,12 +111,12 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
         }
 
         return new DefaultViewConfigDescriptor(viewConfigDescriptor.getViewId(),
-                                          viewDefinitionClass,
-                                          viewConfigDescriptor.getNavigationMode(),
-                                          viewParameterMode,
-                                          viewConfigDescriptor.getAccessDecisionVoters(),
-                                          errorView,
-                                          viewConfigDescriptor.getMetaData());
+                                               viewDefinitionClass,
+                                               viewConfigDescriptor.getNavigationMode(),
+                                               viewParameterMode,
+                                               viewConfigDescriptor.getAccessDecisionVoters(),
+                                               errorView,
+                                               viewConfigDescriptor.getMetaData());
     }
 
     private Collection<Annotation> extractViewMetaData(

@@ -17,4 +17,4 @@
 # under the License.
 #####################################################################################
 
-org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.CustomViewConfigExtractor
+org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.TestViewConfigExtractor
