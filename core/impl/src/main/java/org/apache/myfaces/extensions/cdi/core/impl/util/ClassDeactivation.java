@@ -67,7 +67,7 @@ public class ClassDeactivation
     private static ClassDeactivator getClassDeactivator()
     {
         ClassDeactivator classDeactivator =
-                CodiUtils.lookupFromEnvironment(ClassDeactivator.class, new ClassDeactivatorAggregator());
+                CodiUtils.lookupFromEnvironment(ClassDeactivator.class, new ClassDeactivatorAggregator(), null);
 
         // use default deactivator
         if (classDeactivator == null)

@@ -268,11 +268,13 @@ public class ViewConfigExtension implements Extension, Deactivatable
 
     private ViewConfigExtractor getViewConfigExtractor()
     {
-        ViewConfigExtractor viewConfigExtractor = CodiUtils.lookupFromEnvironment(ViewConfigExtractor.class);
+        ViewConfigExtractor defaultViewConfigExtractor = new DefaultViewConfigExtractor();
+        ViewConfigExtractor viewConfigExtractor =
+                CodiUtils.lookupFromEnvironment(ViewConfigExtractor.class, defaultViewConfigExtractor);
 
         if(viewConfigExtractor == null)
         {
-            viewConfigExtractor = new DefaultViewConfigExtractor();
+            viewConfigExtractor = defaultViewConfigExtractor;
         }
         return viewConfigExtractor;
     }

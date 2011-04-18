@@ -18,12 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
+import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 
 import javax.enterprise.inject.Typed;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Set;
@@ -35,6 +37,8 @@ import java.util.ServiceLoader;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -105,7 +109,8 @@ public abstract class ConfiguredArtifactUtils
 
     static <T> List<T> resolveFromEnvironment(final String key,
                                               final Class<T> targetType,
-                                              boolean supportOfMultipleArtifacts)
+                                              boolean supportOfMultipleArtifacts,
+                                              T defaultImplementation)
     {
         List<T> results = new ArrayList<T>();
         List<T> resolverResult = null;
@@ -136,15 +141,65 @@ public abstract class ConfiguredArtifactUtils
                 });
             }
 
+            Field defaultInjectionPoint;
             if(resolverResult != null && !resolverResult.isEmpty())
             {
-                results.addAll(resolverResult);
+                for(T currentResult : resolverResult)
+                {
+                    if(defaultImplementation != null && currentResult.getClass().isAnnotationPresent(Advanced.class))
+                    {
+                        defaultInjectionPoint = findInjectionPointForDefaultImplementation(currentResult, targetType);
+
+                        if(defaultInjectionPoint != null)
+                        {
+                            try
+                            {
+                                //TODO
+                                defaultInjectionPoint.setAccessible(true);
+                                defaultInjectionPoint.set(currentResult, defaultImplementation);
+                            }
+                            catch (Exception e)
+                            {
+                                Logger logger = Logger.getLogger(ConfiguredArtifactUtils.class.getName());
+
+                                if(logger.isLoggable(Level.SEVERE))
+                                {
+                                    logger.log(Level.SEVERE, currentResult.getClass().getName() + " is annotated with" +
+                                            Advanced.class.getName() + " but it wasn't possible to inject the default" +
+                                            " implementation into " + defaultInjectionPoint.getName() + "." +
+                                            " Please contact the community or remove the annotation.", e);
+
+                                }
+                            }
+                        }
+                    }
+                    results.add(currentResult);
+                }
             }
         }
 
         checkArtifacts(targetType, results, supportOfMultipleArtifacts);
 
         return results;
+    }
+
+    private static <T> Field findInjectionPointForDefaultImplementation(T instance, Class<T> targetType)
+    {
+        Class currentParamClass = instance.getClass();
+        while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
+        {
+            for(Field currentField : currentParamClass.getDeclaredFields())
+            {
+                if(currentField.getName().endsWith("default" + targetType.getSimpleName()) &&
+                        targetType.isAssignableFrom(currentField.getType()))
+                {
+                    return currentField;
+                }
+            }
+            currentParamClass = currentParamClass.getSuperclass();
+        }
+
+        return null;
     }
 
     private static List<ConfiguredValueResolver> getConfiguredValueResolvers()

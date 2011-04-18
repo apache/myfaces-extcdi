@@ -462,36 +462,43 @@ public abstract class CodiUtils
     /**
      * Resolves resources outside of CDI for the given class.
      * @param targetType target type
+     * @param defaultImplementation default implementation
      * @param <T> current type
      * @return configured artifact or null if there is no result
      */
-    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType)
+    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType, T... defaultImplementation)
     {
-        return lookupFromEnvironment(targetType, null);
+        return lookupFromEnvironment(targetType, null, defaultImplementation);
     }
 
     /**
      * Resolves resources outside of CDI for the given class.
      * @param targetType target type which is also used as key (the simple name of it)
      * @param aggregatable allows to aggregate multiple results
+     * @param defaultImplementation default implementation
      * @param <T> current type
      * @return configured artifact or an aggregated instance if there are multiple results or null if there is no result
      */
-    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType, Aggregatable<T> aggregatable)
+    public static <T extends Serializable> T lookupFromEnvironment(Class<T> targetType,
+                                                                   Aggregatable<T> aggregatable,
+                                                                   T... defaultImplementation)
     {
-        return lookupFromEnvironment(targetType.getSimpleName(), targetType, aggregatable);
+        return lookupFromEnvironment(targetType.getSimpleName(), targetType, aggregatable, defaultImplementation);
     }
 
     /**
      * Resolves resources outside of CDI for the given key and class.
      * @param key key for identifying the resource which has to be resolved
      * @param targetType target type
+     * @param defaultImplementation default implementation
      * @param <T> current type
      * @return configured artifact or null if there is no result
      */
-    public static <T extends Serializable> T lookupFromEnvironment(String key, Class<T> targetType)
+    public static <T extends Serializable> T lookupFromEnvironment(String key,
+                                                                   Class<T> targetType,
+                                                                   T... defaultImplementation)
     {
-        return lookupFromEnvironment(key, targetType, null);
+        return lookupFromEnvironment(key, targetType, null, defaultImplementation);
     }
 
     /**
@@ -499,18 +506,30 @@ public abstract class CodiUtils
      * @param key key for identifying the resource which has to be resolved
      * @param targetType target type
      * @param aggregatable allows to aggregate multiple results
+     * @param defaultImplementation default implementation
      * @param <T> current type
      * @return configured artifact or an aggregated instance if there are multiple results or null if there is no result
      */
     public static <T extends Serializable> T lookupFromEnvironment(String key,
                                                                    Class<T> targetType,
-                                                                   Aggregatable<T> aggregatable)
+                                                                   Aggregatable<T> aggregatable,
+                                                                   T... defaultImplementation)
     {
+        checkDefaultImplementation(defaultImplementation);
+
         List<T> results = ConfiguredArtifactUtils.getCachedArtifact(key, targetType);
 
         if(results == null)
         {
-            results = ConfiguredArtifactUtils.resolveFromEnvironment(key, targetType, aggregatable != null);
+            T defaultInstance = null;
+
+            if(defaultImplementation != null && defaultImplementation.length == 1)
+            {
+                //only one is supported
+                defaultInstance = defaultImplementation[0];
+            }
+            results = ConfiguredArtifactUtils
+                    .resolveFromEnvironment(key, targetType, aggregatable != null, defaultInstance);
 
             if(String.class.isAssignableFrom(targetType))
             {
@@ -538,6 +557,22 @@ public abstract class CodiUtils
         else
         {
             return results.iterator().next();
+        }
+    }
+
+    private static void checkDefaultImplementation(Object[] defaultImplementation)
+    {
+        if(defaultImplementation != null && defaultImplementation.length > 1)
+        {
+            StringBuilder foundDefaultImplementations = new StringBuilder();
+
+            for(Object o : defaultImplementation)
+            {
+                foundDefaultImplementations.append(o.getClass()).append("\n");
+            }
+            throw new IllegalStateException(defaultImplementation.length + " default implementations are provided. " +
+                    "CodiUtils#lookupFromEnvironment only allows one default implementation. Found implementations: " +
+                    foundDefaultImplementations.toString());
         }
     }
 

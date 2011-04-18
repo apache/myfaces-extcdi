@@ -130,7 +130,8 @@ public class ProjectStageProducer implements Serializable
             return;
         }
 
-        projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class);
+        ProjectStageProducer defaultProjectStageProducer = new ProjectStageProducer();
+        projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class, defaultProjectStageProducer);
 
         if(projectStageProducer == null)
         {
@@ -144,7 +145,7 @@ public class ProjectStageProducer implements Serializable
         {
             // if we still didn't find a customised ProjectStageProducer,
             // then we take the default one.
-            projectStageProducer = new ProjectStageProducer();
+            projectStageProducer = defaultProjectStageProducer;
         }
         projectStageProducer.initProjectStage();
     }
