@@ -20,12 +20,16 @@ package org.apache.myfaces.extensions.cdi.core.impl;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation.isClassActivated;
 import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
 import javax.enterprise.inject.spi.Extension;
 import javax.interceptor.Interceptor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Allows the deactivation of interceptors
@@ -34,11 +38,14 @@ import javax.interceptor.Interceptor;
  */
 public class CodiDeactivatorExtension implements Extension, Deactivatable
 {
+    //don't use a static logger
+    private Logger logger =  Logger.getLogger(CodiDeactivatorExtension.class.getName());
+
     /**
      * TODO re-visit if we still need it
      * @param processAnnotatedType current process-annotated-type
      */
-    public void filterInterceptors(@Observes ProcessAnnotatedType processAnnotatedType)
+    public void filter(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
         {
@@ -47,12 +54,40 @@ public class CodiDeactivatorExtension implements Extension, Deactivatable
 
         CodiStartupBroadcaster.broadcastStartup();
 
+        filterInterceptors(processAnnotatedType);
+        filterProjectStageClasses(processAnnotatedType);
+    }
+
+    protected void filterInterceptors(ProcessAnnotatedType processAnnotatedType)
+    {
         if (processAnnotatedType.getAnnotatedType().isAnnotationPresent(Interceptor.class))
         {
             if(!isClassActivated(processAnnotatedType.getAnnotatedType().getJavaClass()))
             {
                 processAnnotatedType.veto();
             }
+        }
+    }
+
+    protected void filterProjectStageClasses(ProcessAnnotatedType processAnnotatedType)
+    {
+        if(!isClassActivated(ProjectStage.class))
+        {
+            return;
+        }
+
+        Class<?> beanClass = processAnnotatedType.getAnnotatedType().getJavaClass();
+        if(ProjectStage.class.isAssignableFrom(beanClass) && !beanClass.isAnnotationPresent(Typed.class))
+        {
+            if(this.logger.isLoggable(Level.FINE))
+            {
+                this.logger.fine(beanClass.getName() + " is no normal CDI bean and it isn't annotated with @Typed()"
+                      + " so an automatic veto has to be done. " +
+                        "If there is a problem, it's possible to deactivate this automatic veto. " +
+                        "In such a case please check the documentation or contact the community.");
+            }
+
+            processAnnotatedType.veto();
         }
     }
 
