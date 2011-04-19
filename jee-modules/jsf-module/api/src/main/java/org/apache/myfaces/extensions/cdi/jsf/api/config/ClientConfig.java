@@ -18,7 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 
 /**
@@ -30,8 +36,18 @@ import java.io.Serializable;
  * This allows the 'customisation' of this html file to e.g.
  * adopt the background colour to avoid screen flickering.
  */
-public interface ClientConfig extends Serializable
+@SessionScoped
+public class ClientConfig implements Serializable
 {
+    private static final long serialVersionUID = 581351549574404793L;
+
+    private boolean javaScriptEnabled = true;
+
+    protected String windowHandlerHtml;
+
+    @Inject
+    private ProjectStage projectStage;
+
     /**
      * The location of the default windowhandler resource
      */
@@ -41,7 +57,10 @@ public interface ClientConfig extends Serializable
      * Defaults to <code>true</code>.
      * @return if the user has JavaScript enabled
      */
-    boolean isJavaScriptEnabled();
+    public boolean isJavaScriptEnabled()
+    {
+        return this.javaScriptEnabled;
+    }
 
     /**
      * Set it to <code>false</code> if you don't like to use the
@@ -49,7 +68,10 @@ public interface ClientConfig extends Serializable
      * the request will be returned directly.
      * @param javaScriptEnabled
      */
-    void setJavaScriptEnabled(boolean javaScriptEnabled);
+    public void setJavaScriptEnabled(boolean javaScriptEnabled)
+    {
+        this.javaScriptEnabled = javaScriptEnabled;
+    }
 
     /**
      * For branding the windowhandler page - e.g. change the backgroundcolour
@@ -58,7 +80,10 @@ public interface ClientConfig extends Serializable
      * @return the location of the <i>windowhandler.html</i> resource
      *         which should be sent to the users browser.
      */
-    String getWindowHandlerResourceLocation();
+    public String getWindowHandlerResourceLocation()
+    {
+        return DEFAULT_WINDOW_HANDLER_HTML_FILE;
+    }
 
     /**
      * This might return different windowhandlers based on user settings like
@@ -66,5 +91,32 @@ public interface ClientConfig extends Serializable
      * @return a String containing the whole windowhandler.html file.
      * @throws IOException
      */
-    String getWindowHandlerHtml() throws IOException;
+    public String getWindowHandlerHtml() throws IOException
+    {
+        if (projectStage != ProjectStage.Development && windowHandlerHtml != null)
+        {
+            // use cached windowHandlerHtml except in Development
+            return windowHandlerHtml;
+        }
+
+        InputStream is = ClassUtils.getClassLoader(null).getResourceAsStream(getWindowHandlerResourceLocation());
+        StringBuffer sb = new StringBuffer();
+        try
+        {
+            byte[] buf = new byte[32 * 1024];
+            int bytesRead;
+            while ((bytesRead = is.read(buf)) != -1)
+            {
+                String sbuf = new String(buf);
+                sb.append(sbuf);
+            }
+        }
+        finally
+        {
+            is.close();
+        }
+
+        windowHandlerHtml = sb.toString();
+        return windowHandlerHtml;
+    }
 }
