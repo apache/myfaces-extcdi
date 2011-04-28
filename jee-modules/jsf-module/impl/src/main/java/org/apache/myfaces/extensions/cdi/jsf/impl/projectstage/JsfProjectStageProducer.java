@@ -19,10 +19,13 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.inject.Typed;
+import java.util.logging.Level;
 
 /**
  * @author Gerhard Petracek
@@ -32,29 +35,48 @@ public class JsfProjectStageProducer extends ProjectStageProducer
 {
     private static final long serialVersionUID = 2378537865206165557L;
 
-    /** JNDI path for the ProjectStage */
-    private static final String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
+    /** web.xml Property to set the ProjectStage */
+    private static final String JSF_PROJECT_STAGE_CONFIG_PROPERTY_NAME = "javax.faces.PROJECT_STAGE";
 
     /** System Property to set the ProjectStage, if not present via the standard way */
     private static final String JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME = "faces.PROJECT_STAGE";
 
+    /** JNDI path for the ProjectStage */
+    private static final String PROJECT_STAGE_JNDI_NAME = "java:comp/env/jsf/ProjectStage";
+
     @Override
     protected ProjectStage resolveProjectStage()
     {
-        ProjectStage projectStage = super.resolveProjectStage();
+        // we first try to resolve the JSF standard configuration settings.
+        // this is needed to comply with the JSF spec if JSF is used
 
-        if(projectStage != null)
+        //web.xml support isn't covert by the default implementations
+        String stageName = CodiUtils.lookupFromEnvironment(JSF_PROJECT_STAGE_CONFIG_PROPERTY_NAME, String.class);
+
+        if(stageName == null)
         {
-            return projectStage;
+            stageName = CodiUtils.lookupFromEnvironment(JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME, String.class);
         }
-
-        String stageName;
-
-        stageName = CodiUtils.lookupFromEnvironment(JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME, String.class);
 
         if(stageName == null)
         {
             CodiUtils.lookupFromEnvironment(PROJECT_STAGE_JNDI_NAME, String.class);
+        }
+
+        if(stageName != null)
+        {
+            Class jsfProjectStageClass = ClassUtils.tryToLoadClassForName("javax.faces.application.ProjectStage");
+
+            if(jsfProjectStageClass == null && this.logger.isLoggable(Level.WARNING))
+            {
+                this.logger.warning("a jsf2 project stage is used but jsf2 isn't in the classpath");
+            }
+
+            //check if the jsf project-stage should be ignored
+            if(jsfProjectStageClass != null && !ClassDeactivation.isClassActivated(jsfProjectStageClass))
+            {
+                stageName = null;
+            }
         }
 
         if (stageName != null)
@@ -62,6 +84,6 @@ public class JsfProjectStageProducer extends ProjectStageProducer
             return ProjectStage.valueOf(stageName);
         }
 
-        return null;
+        return super.resolveProjectStage();
     }
 }

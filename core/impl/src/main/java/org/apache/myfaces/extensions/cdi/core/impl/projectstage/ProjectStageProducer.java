@@ -27,7 +27,10 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 /**
  * <p>Produces {@link ProjectStage} configurations.</p>
@@ -57,6 +60,8 @@ import java.io.Serializable;
 public class ProjectStageProducer implements Serializable
 {
     private static final long serialVersionUID = -2987762608635612074L;
+
+    protected transient Logger logger = Logger.getLogger(getClass().getName());
 
     /**
      * ProjectStageProducers must only be created by subclassing producers
@@ -137,7 +142,7 @@ public class ProjectStageProducer implements Serializable
         {
             //workaround to avoid the usage of a service loader
             projectStageProducer = ClassUtils.tryToInstantiateClassForName(
-                    "org.apache.myfaces.extensions.cdi.jsf2.impl.projectstage.JsfProjectStageProducer",
+                    "org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer",
                     ProjectStageProducer.class);
         }
 
@@ -161,38 +166,13 @@ public class ProjectStageProducer implements Serializable
     }
 
     /**
-     * We need to lookup a few environment variables in a specific order
-     * <ol>
-     *     <li>javax.faces.PROJECT_STAGE</li>
-     *     <li>faces.PROJECT_STAGE</li>
-     * </ol>
-     *
+     * Resolves the project-stage configured for codi
      * For more information see <a href="https://issues.apache.org/jira/browse/MYFACES-2545">MYFACES-2545</a>
      * @return the resolved {@link ProjectStage} or <code>null</code> if none defined.
      */
     protected ProjectStage resolveProjectStage()
     {
-        // we first try to resolve the JSF standard configuration settings.
-        // this is needed to comply with the JSF spec if JSF is used
-        String stageName = CodiUtils.lookupFromEnvironment("javax.faces.PROJECT_STAGE", String.class);
-
-        if (stageName == null)
-        {
-            stageName = CodiUtils.lookupFromEnvironment("faces.PROJECT_STAGE", String.class);
-        }
-
-        if (stageName == null)
-        {
-            // oki, try to get it from JNDI
-            stageName = CodiUtils.lookupFromEnvironment("java:comp/env/jsf/ProjectStage", String.class);
-        }
-
-        // If JSF wasn't used we lookup the codi specific ProjectStage settings
-        if (stageName == null)
-        {
-            stageName = CodiUtils.lookupFromEnvironment("ProjectStage", String.class);
-        }
-
+        String stageName = CodiUtils.lookupFromEnvironment("ProjectStage", String.class);
 
         if (stageName != null)
         {
@@ -217,5 +197,11 @@ public class ProjectStageProducer implements Serializable
                 }
             }
         }
+    }
+
+    @SuppressWarnings({"UnusedDeclaration"})
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
+    {
+        in.defaultReadObject();
     }
 }

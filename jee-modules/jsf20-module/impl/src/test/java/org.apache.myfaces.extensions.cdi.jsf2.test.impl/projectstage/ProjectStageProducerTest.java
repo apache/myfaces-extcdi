@@ -16,41 +16,54 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage;
+package org.apache.myfaces.extensions.cdi.jsf2.test.impl.projectstage;
 
+import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 /**
  */
 public class ProjectStageProducerTest
 {
-
-    /**
-     * Test a ProjectStage which got set by the <i>javax.faces.ProjectStage</i>
-     * @throws Exception
-     */
     @Test
-    public void testProjectStageSetByEnvironment() throws Exception
+    public void testProjectStageSetByEnvironmentWithoutOverruledByJsf() throws Exception
     {
-        String envName = "org.apache.myfaces.extensions.cdi.ProjectStage";
+        ClassDeactivation.setClassDeactivator(new ClassDeactivator()
+        {
+            private static final long serialVersionUID = -3347461101187613055L;
+
+            public Set<Class> getDeactivatedClasses()
+            {
+                Set<Class> deactivated = new HashSet<Class>();
+                deactivated.add(javax.faces.application.ProjectStage.class);
+                return deactivated;
+            }
+        });
+
+        String envName = "faces.PROJECT_STAGE";
         String oldEnvVal = "" + System.getProperty(envName);
         try
         {
             System.setProperty(envName, "SystemTest");
 
-            ProjectStageProducer psp = ProjectStageProducer.getInstance();
+            ProjectStageProducer psp = JsfProjectStageProducer.getInstance();
             Assert.assertNotNull(psp);
 
             ProjectStageProducer.setProjectStage(null);
 
             ProjectStage ps = psp.getProjectStage();
             Assert.assertNotNull(ps);
-            Assert.assertEquals(ps, ProjectStage.SystemTest);
-            Assert.assertTrue(ps == ProjectStage.SystemTest);
+            Assert.assertEquals(ps, ProjectStage.Production);
+            Assert.assertTrue(ps == ProjectStage.Production);
         }
         finally
         {
