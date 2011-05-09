@@ -29,7 +29,7 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jpa1-module-project</artifactId>
-        <version>0.9.5-SNAPSHOT</version>
+        <version>0.9.5</version>
     </parent>
 
     <dependencies>
