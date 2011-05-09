@@ -12,7 +12,6 @@ Release Notes - MyFaces CODI - Version 0.9.5
 ** New Feature
 
     * [EXTCDI-100] - @ConversationRequired should be supported by typesafe view configs
-    * [EXTCDI-123] - EditableAnnotatedType
     * [EXTCDI-164] - optional InvalidBeanCreationEvent
     * [EXTCDI-170] - implementations looked up with CodiUtils#lookupFromEnvironment should be aware of the default implementation
 
