@@ -26,12 +26,12 @@
     <artifactId>jsf-examples-project</artifactId>
 
     <name>MyFaces Extensions-CDI JSF-Examples Project</name>
-    <version>0.9.5</version>
+    <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>examples-project</artifactId>
-        <version>0.9.5</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modules>
