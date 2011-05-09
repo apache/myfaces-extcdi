@@ -61,14 +61,7 @@ public abstract class ConversationRequiredUtils
      */
     public static void ensureExistingConversation(FacesContext facesContext)
     {
-        UIViewRoot uiViewRoot = facesContext.getViewRoot();
-
-        if(uiViewRoot == null)
-        {
-            return;
-        }
-
-        String oldViewId = uiViewRoot.getViewId();
+        String oldViewId = getViewId(facesContext);
 
         if(oldViewId == null)
         {
@@ -92,7 +85,7 @@ public abstract class ConversationRequiredUtils
             return;
         }
 
-        String newViewId = checkConversationRequired(beanManager, uiViewRoot, entry);
+        String newViewId = checkConversationRequired(beanManager, entry);
 
         if(newViewId != null && !oldViewId.equals(newViewId))
         {
@@ -105,17 +98,9 @@ public abstract class ConversationRequiredUtils
         }
     }
 
-    private static String checkConversationRequired(BeanManager beanManager,
-                                                    UIViewRoot uiViewRoot,
-                                                    ViewConfigDescriptor viewConfigDescriptor)
+    private static String checkConversationRequired(BeanManager beanManager, ViewConfigDescriptor viewConfigDescriptor)
     {
-        Class<? extends ViewConfig> currentView =
-                ViewConfigCache.getViewConfigDescriptor(uiViewRoot.getViewId()).getViewConfig();
-
-        if(currentView == null)
-        {
-            return null;
-        }
+        Class<? extends ViewConfig> currentView = viewConfigDescriptor.getViewConfig();
 
         List<PageBeanDescriptor> pageBeanDescriptorList = viewConfigDescriptor.getPageBeanDescriptors();
         for(PageBeanDescriptor pageBeanDescriptor : pageBeanDescriptorList)
@@ -218,5 +203,17 @@ public abstract class ConversationRequiredUtils
             }
         }
         return false;
+    }
+
+    private static String getViewId(FacesContext facesContext)
+    {
+        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+        if(uiViewRoot == null)
+        {
+            return null;
+        }
+
+        return uiViewRoot.getViewId();
     }
 }
