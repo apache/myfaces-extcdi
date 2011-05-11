@@ -23,8 +23,12 @@ package org.apache.myfaces.extensions.cdi.core.api.config.view;
  *
  * It's an abstract class instead of an interface,
  * because you can use it for navigation (which is restricted to classes).
- *(Since only the final page should be a class and for the rests it's recommended to use interfaces,
+ *(Since only the final page should be a class and for the rest it's recommended to use interfaces,
  * it isn't a problem/restriction.)
+ *
+ * The class which extends this class will also be used as error-view in case of security violations
+ * (if there is no special error-view configured via
+ * {@link org.apache.myfaces.extensions.cdi.core.api.security.Secured#errorView()})
  *
  * @author Gerhard Petracek
  */
