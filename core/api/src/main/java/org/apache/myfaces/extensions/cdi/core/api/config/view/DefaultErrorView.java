@@ -21,6 +21,11 @@ package org.apache.myfaces.extensions.cdi.core.api.config.view;
 /**
  * Abstract class which marks an error view.
  *
+ * It's an abstract class instead of an interface,
+ * because you can use it for navigation (which is restricted to classes).
+ *(Since only the final page should be a class and for the rests it's recommended to use interfaces,
+ * it isn't a problem/restriction.)
+ *
  * @author Gerhard Petracek
  */
 public abstract class DefaultErrorView implements ViewConfig
