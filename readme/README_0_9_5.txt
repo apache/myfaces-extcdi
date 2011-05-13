@@ -20,3 +20,4 @@ Release Notes - MyFaces CODI - Version 0.9.5
     * [EXTCDI-147] - create unit tests for all extension points to test custom implementations
     * [EXTCDI-162] - re-visit implementation of custom project stages.
     * [EXTCDI-165] - rename #getViewConfig to #getViewConfigDescriptor
+    * [EXTCDI-169] - re-visit ClientConfig
