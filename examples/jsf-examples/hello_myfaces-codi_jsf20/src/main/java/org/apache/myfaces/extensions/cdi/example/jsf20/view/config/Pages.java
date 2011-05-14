@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.example.jsf20.view.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
@@ -26,6 +27,11 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Navigat
 @Page(navigation = REDIRECT)
 public interface Pages extends ViewConfig
 {
+    @Page(navigation = REDIRECT)
+    public class Error extends DefaultErrorView
+    {
+    }
+
     public interface SimpleRegistration extends Pages
     {
         public @Page class Form implements SimpleRegistration
