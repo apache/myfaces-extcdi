@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -37,6 +38,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
+import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.Typed;
@@ -617,33 +619,45 @@ public abstract class ConversationUtils
     //don't move it to an observer due to an unpredictable invocation order
     public static void postRenderCleanup(FacesContext facesContext)
     {
-        BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
-
-        EditableWindowContextManager windowContextManager =
-                CodiUtils.getContextualReferenceByClass(beanManager, EditableWindowContextManager.class);
-
-        WindowContextConfig windowContextConfig =
-                CodiUtils.getContextualReferenceByClass(beanManager, WindowContextConfig.class);
-
-        ViewAccessConversationExpirationEvaluatorRegistry registry =
-                CodiUtils.getContextualReferenceByClass(
-                        beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class);
-
-        UIViewRoot uiViewRoot = facesContext.getViewRoot();
-
-        //e.g. in case of a ViewExpiredException (e.g. in case of an expired session)
-        if(uiViewRoot == null)
+        try
         {
-            return;
+            BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+
+            EditableWindowContextManager windowContextManager =
+                    CodiUtils.getContextualReferenceByClass(beanManager, EditableWindowContextManager.class);
+
+            WindowContextConfig windowContextConfig =
+                    CodiUtils.getContextualReferenceByClass(beanManager, WindowContextConfig.class);
+
+            ViewAccessConversationExpirationEvaluatorRegistry registry =
+                    CodiUtils.getContextualReferenceByClass(
+                            beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class);
+
+            UIViewRoot uiViewRoot = facesContext.getViewRoot();
+
+            //e.g. in case of a ViewExpiredException (e.g. in case of an expired session)
+            if(uiViewRoot == null)
+            {
+                return;
+            }
+
+            registry.broadcastRenderedViewId(uiViewRoot.getViewId());
+
+            storeCurrentViewIdAsOldViewId(facesContext);
+
+            if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
+            {
+                cleanupInactiveWindowContexts(windowContextManager);
+            }
         }
-
-        registry.broadcastRenderedViewId(uiViewRoot.getViewId());
-
-        storeCurrentViewIdAsOldViewId(facesContext);
-
-        if(windowContextConfig.isCloseEmptyWindowContextsEnabled())
+        catch (ContextNotActiveException e)
         {
-            cleanupInactiveWindowContexts(windowContextManager);
+            if(ProjectStageProducer.getInstance().getProjectStage() ==
+                                org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage.Development)
+            {
+                e.printStackTrace();
+            }
+            //we can ignore the exception because it's just an optional (immediate) cleanup
         }
 
         //if the cache would get resetted by an observer or a phase-listener

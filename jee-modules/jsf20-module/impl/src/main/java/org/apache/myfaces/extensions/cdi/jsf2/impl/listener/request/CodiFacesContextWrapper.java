@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.FacesMessageEntry;
 import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.RedirectedConversationAwareExternalContext;
@@ -28,10 +29,12 @@ import org.apache.myfaces.extensions.cdi.jsf2.impl.security.SecurityAwareViewHan
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 import javax.faces.application.FacesMessage;
+import javax.faces.application.Application;
+import javax.faces.context.ExceptionHandler;
+import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
-import javax.faces.application.Application;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -51,6 +54,8 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
     private boolean temporaryViewRootAwareApplicationWrapperActivated;
 
+    private boolean defaultErrorViewExceptionHandlerActivated;
+
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
         this.wrappedFacesContext = wrappedFacesContext;
@@ -59,6 +64,24 @@ class CodiFacesContextWrapper extends FacesContextWrapper
                 new RedirectedConversationAwareExternalContext(wrappedFacesContext.getExternalContext());
 
         setCurrentInstance(this);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ExceptionHandler getExceptionHandler()
+    {
+        lazyInit();
+
+        ExceptionHandler exceptionHandler = this.wrappedFacesContext.getExceptionHandler();
+
+        if(this.defaultErrorViewExceptionHandlerActivated)
+        {
+            exceptionHandler = new DefaultErrorViewExceptionHandler(exceptionHandler);
+        }
+        tryToInjectFields(exceptionHandler);
+        return exceptionHandler;
     }
 
     /**
@@ -122,6 +145,22 @@ class CodiFacesContextWrapper extends FacesContextWrapper
             this.temporaryViewRootAwareApplicationWrapperActivated =
                     ClassDeactivation.isClassActivated(SecurityAwareViewHandler.class) &&
                     ClassDeactivation.isClassActivated(TemporaryViewRootAwareApplicationWrapper.class);
+
+            //deactivate it, if there is no default-error-view available
+            //ExceptionHandler used as marker because it's part of the jsf2 api and won't change
+            this.defaultErrorViewExceptionHandlerActivated =
+                    ViewConfigCache.getDefaultErrorViewConfigDescriptor() != null &&
+                            ClassDeactivation.isClassActivated(ExceptionHandler.class);
+        }
+    }
+
+    private void tryToInjectFields(ExceptionHandler exceptionHandler)
+    {
+        CodiUtils.injectFields(exceptionHandler, this.advancedQualifierRequiredForDependencyInjection);
+
+        if(exceptionHandler instanceof ExceptionHandlerWrapper)
+        {
+            tryToInjectFields(((ExceptionHandlerWrapper) exceptionHandler).getWrapped());
         }
     }
 
