@@ -83,6 +83,7 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         {
             return facesContext;
         }
+        //TODO has to be deactivatable
         return new CodiFacesContextWrapper(facesContext);
     }
 
