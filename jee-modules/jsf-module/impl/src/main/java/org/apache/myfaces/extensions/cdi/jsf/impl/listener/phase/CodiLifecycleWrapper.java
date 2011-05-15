@@ -116,6 +116,9 @@ class CodiLifecycleWrapper extends Lifecycle
      */
     public void render(FacesContext facesContext)
     {
+        //TODO avoid ContextNotActiveException - details:
+        //TODO due to mojarra & weld issues (of some version) we might have to check if the context(s) are active
+
         ConversationRequiredUtils.ensureExistingConversation(facesContext);
 
         wrapped.render(facesContext);
