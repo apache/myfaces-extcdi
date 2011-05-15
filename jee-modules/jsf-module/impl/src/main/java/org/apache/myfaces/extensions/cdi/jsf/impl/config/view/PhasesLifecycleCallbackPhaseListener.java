@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
+
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
@@ -47,6 +49,7 @@ import java.lang.reflect.InvocationTargetException;
 //This class is no cdi-bean, there will be a #veto during the bootstrapping process
 @Advanced
 @JsfPhaseListener
+@InvocationOrder(2000)
 @SuppressWarnings({"UnusedDeclaration"})
 public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
 {

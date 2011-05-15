@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
@@ -36,6 +37,7 @@ import javax.enterprise.inject.spi.BeanManager;
 
 @Advanced
 @JsfPhaseListener
+@InvocationOrder(3000)
 public class JsfRequestLifecyclePhaseListener implements PhaseListener
 {
     private static final long serialVersionUID = -4351903831660165998L;
