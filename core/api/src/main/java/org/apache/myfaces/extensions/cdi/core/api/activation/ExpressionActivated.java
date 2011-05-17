@@ -36,6 +36,14 @@ public @interface ExpressionActivated
     String value();
 
     /**
+     * Default config name: org.apache.myfaces.extensions.cdi.ExpressionActivated.properties
+     * or myfaces-extcdi.properties as a default config file known by one of the default implementations of
+     * {@link org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver}
+     * @return config name
+     */
+    String configName() default "ExpressionActivated";
+
+    /**
      * @return class of the interpeter which should be used (default leads to a simple config-property interpreter
      */
     Class<? extends ExpressionInterpreter> interpreter() default ExpressionInterpreter.class;

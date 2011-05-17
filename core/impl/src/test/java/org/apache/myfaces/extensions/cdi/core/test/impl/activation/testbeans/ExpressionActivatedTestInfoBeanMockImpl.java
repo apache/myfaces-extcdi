@@ -26,7 +26,7 @@ import javax.enterprise.inject.Alternative;
 @ApplicationScoped
 
 @Alternative
-@ExpressionActivated("app.server_name==s2")
+@ExpressionActivated("server_name==s2")
 public class ExpressionActivatedTestInfoBeanMockImpl implements ExpressionActivatedTestInfoBean
 {
     public void test()

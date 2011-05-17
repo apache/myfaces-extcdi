@@ -35,6 +35,7 @@ public class PropertyExpressionInterpreter implements ExpressionInterpreter<Stri
     {
         boolean result = false;
         String[] foundExpressions = expressions.split(";");
+        String configFileName = null;
 
         SimpleOperationEnum operation;
         for(String expression : foundExpressions)
@@ -48,6 +49,11 @@ public class PropertyExpressionInterpreter implements ExpressionInterpreter<Stri
             {
                 operation = SimpleOperationEnum.NOT;
             }
+            else if(expression.startsWith("config:"))
+            {
+                configFileName = expression.split(":")[1];
+                continue;
+            }
             else
             {
                 throw new IllegalStateException("expression: " + expression + " isn't supported by " +
@@ -60,6 +66,13 @@ public class PropertyExpressionInterpreter implements ExpressionInterpreter<Stri
             String configuredValue = CodiUtils.lookupConfigFromEnvironment(keyValue[0], String.class, "");
 
             configuredValue = configuredValue.trim();
+
+            if("".equals(configuredValue))
+            {
+                configuredValue = CodiUtils
+                        .lookupConfigFromEnvironment(configFileName + "." + keyValue[0], String.class, "");
+                configuredValue = configuredValue.trim();
+            }
 
             if(!"*".equals(keyValue[1]) && "".equals(configuredValue))
             {

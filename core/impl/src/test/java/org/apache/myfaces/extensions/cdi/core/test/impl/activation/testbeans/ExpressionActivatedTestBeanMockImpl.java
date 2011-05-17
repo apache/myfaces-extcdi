@@ -26,7 +26,7 @@ import javax.enterprise.inject.Alternative;
 @ApplicationScoped
 
 @Alternative
-@ExpressionActivated("app.db_env!=prod-db")
+@ExpressionActivated("db_env!=prod-db")
 public class ExpressionActivatedTestBeanMockImpl implements ExpressionActivatedTestBean
 {
     public void test()
