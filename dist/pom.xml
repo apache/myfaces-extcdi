@@ -37,8 +37,8 @@
     <modules>
         <module>jsf12</module>
         <module>jsf20</module>
-        <module>jsf12-alternative</module>
-        <module>jsf20-alternative</module>
+        <module>jsf12-alternative-weld</module>
+        <module>jsf20-alternative-weld</module>
         <module>alternative-configuration</module>
         <module>alternative-configuration-weld</module>
     </modules>
