@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.system;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 
 import javax.faces.event.SystemEventListener;

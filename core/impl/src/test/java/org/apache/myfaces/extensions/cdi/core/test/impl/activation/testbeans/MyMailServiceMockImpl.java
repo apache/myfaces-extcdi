@@ -1,4 +1,3 @@
-package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -17,12 +16,25 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans;
+
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
+
+import javax.enterprise.context.SessionScoped;
+import javax.enterprise.inject.Alternative;
+import java.io.Serializable;
 
 /**
- * Test mailservice interface
+ * The mock version of the mailservice
  */
-public interface MyMailService {
+@SessionScoped
+@Alternative
+@ProjectStageActivated({ProjectStage.UnitTest.class, ProjectStage.Development.class})
+public class MyMailServiceMockImpl implements MyMailService, Serializable
+{
 
-    public void sendMail(String mailTo, String text);
-    
+    public void sendMail(String mailTo, String text) {
+        // do some mock mail sending 
+    }
 }

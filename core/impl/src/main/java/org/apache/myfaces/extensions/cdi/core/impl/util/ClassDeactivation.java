@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.AbstractClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 
 import javax.enterprise.inject.Typed;
 import java.util.logging.Logger;

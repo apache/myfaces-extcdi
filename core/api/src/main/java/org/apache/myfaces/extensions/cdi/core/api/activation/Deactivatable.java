@@ -16,16 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.api.activation;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.AbstractClassDeactivator;
-
-public class TestClassDeactivator extends AbstractClassDeactivator
+/**
+ * Interface to allow easier detection of deactivatable classes.
+ * These classes are activated by default (e.g. via CDI config).
+ * Since CDI, JSF,... currently don't allow to deactivate default implementations,
+ * CODI has to introduce a proprietary mechanism.
+ *
+ * @author Gerhard Petracek
+ */
+public interface Deactivatable
 {
-    private static final long serialVersionUID = 7799046096147501268L;
-
-    protected void deactivateClasses()
-    {
-        addDeactivatedClass(TestClassDeactivator.class);
-    }
+    /**
+     * Returns if the current instance is active or not.
+     *
+     * @return true if the current instance is active, false otherwise
+     */
+    boolean isActivated();
 }

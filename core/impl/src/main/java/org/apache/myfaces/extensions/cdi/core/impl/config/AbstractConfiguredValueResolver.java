@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
 
 import java.util.List;
 import java.util.ArrayList;

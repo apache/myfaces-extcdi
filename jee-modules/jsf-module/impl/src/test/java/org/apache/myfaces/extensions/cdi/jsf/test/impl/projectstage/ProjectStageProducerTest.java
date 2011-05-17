@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.projectstage;
 
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;

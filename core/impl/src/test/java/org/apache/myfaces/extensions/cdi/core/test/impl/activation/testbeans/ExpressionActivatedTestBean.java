@@ -16,22 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api;
+package org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans;
 
-import java.util.Set;
-import java.io.Serializable;
 
-/**
- * Interface for an implementation which provides classes of default implementations which should be deactivated.
- *
- * @author Gerhard Petracek
- */
-public interface ClassDeactivator extends Serializable
+public interface ExpressionActivatedTestBean
 {
-    /**
-     * Provides classes which should be deactivated.
-     *
-     * @return classes which should be deactivated
-     */
-    Set<Class> getDeactivatedClasses();
+    void test();
 }

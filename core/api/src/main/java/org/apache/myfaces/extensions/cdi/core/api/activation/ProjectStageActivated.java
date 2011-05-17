@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.projectstage;
+package org.apache.myfaces.extensions.cdi.core.api.activation;
+
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -44,7 +46,8 @@ import java.lang.annotation.Target;
 public @interface ProjectStageActivated 
 {
     /**
-     * The {@link ProjectStage}s the which lead to activating this alternative bean.
+     * The {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}s
+     * the which lead to activating this alternative bean.
      * If the current ProjectStage is not in this list, the bean will get vetoed.
      * @return 1-n project-stages which are allowed for the annotated artifact
      */

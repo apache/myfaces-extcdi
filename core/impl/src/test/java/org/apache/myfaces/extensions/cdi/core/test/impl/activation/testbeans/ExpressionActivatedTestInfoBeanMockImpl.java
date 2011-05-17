@@ -16,22 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api;
+package org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans;
 
-/**
- * Interface to allow easier detection of deactivatable classes.
- * These classes are activated by default (e.g. via CDI config).
- * Since CDI, JSF,... currently don't allow to deactivate default implementations,
- * CODI has to introduce a proprietary mechanism.
- *
- * @author Gerhard Petracek
- */
-public interface Deactivatable
+import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Alternative;
+
+@ApplicationScoped
+
+@Alternative
+@ExpressionActivated("app.server_name==s2")
+public class ExpressionActivatedTestInfoBeanMockImpl implements ExpressionActivatedTestInfoBean
 {
-    /**
-     * Returns if the current instance is active or not.
-     *
-     * @return true if the current instance is active, false otherwise
-     */
-    boolean isActivated();
+    public void test()
+    {
+    }
 }

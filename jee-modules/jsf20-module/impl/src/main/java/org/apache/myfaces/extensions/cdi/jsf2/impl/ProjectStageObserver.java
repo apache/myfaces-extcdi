@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl;
 import static org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage.*;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ProxyUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.AbstractStartupObserver;

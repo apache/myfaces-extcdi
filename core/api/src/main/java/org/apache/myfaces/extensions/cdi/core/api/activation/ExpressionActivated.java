@@ -16,19 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
+package org.apache.myfaces.extensions.cdi.core.api.activation;
 
-import javax.enterprise.context.SessionScoped;
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter;
 
-/**
- * The non-mock version of the mail service.
- */
-@SessionScoped
-public class MyMailServiceImpl implements MyMailService, Serializable
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.TYPE})
+public @interface ExpressionActivated
 {
+    /**
+     * Expression which signals if the annotated bean should be active or not
+     * @return expression-string which will be interpreted
+     */
+    String value();
 
-    public void sendMail(String mailTo, String text) {
-        // do some real mail sending 
-    }
+    /**
+     * @return class of the interpeter which should be used (default leads to a simple config-property interpreter
+     */
+    Class<? extends ExpressionInterpreter> interpreter() default ExpressionInterpreter.class;
 }

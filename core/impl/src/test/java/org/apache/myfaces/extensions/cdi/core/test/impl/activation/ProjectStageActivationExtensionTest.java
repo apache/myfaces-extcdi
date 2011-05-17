@@ -16,25 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans;
+package org.apache.myfaces.extensions.cdi.core.test.impl.activation;
 
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
+import org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans.MyMailService;
+import org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans.MyMailServiceMockImpl;
+import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
-import javax.enterprise.context.SessionScoped;
-import javax.enterprise.inject.Alternative;
-import java.io.Serializable;
 
 /**
- * The mock version of the mailservice
  */
-@SessionScoped
-@Alternative
-@ProjectStageActivated({ProjectStage.UnitTest.class, ProjectStage.Development.class})
-public class MyMailServiceMockImpl implements MyMailService, Serializable
+public class ProjectStageActivationExtensionTest extends ContainerTestBase
 {
+    @Test
+    public void testProjectStageActivationExtension()
+    {
+        MyMailService mailSvc =  getBeanInstance(MyMailService.class);
+        Assert.assertNotNull(mailSvc);
 
-    public void sendMail(String mailTo, String text) {
-        // do some mock mail sending 
+        Assert.assertTrue(mailSvc instanceof MyMailServiceMockImpl);
     }
 }

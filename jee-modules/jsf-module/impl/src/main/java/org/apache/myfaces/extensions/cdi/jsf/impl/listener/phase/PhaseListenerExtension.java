@@ -18,9 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStageActivated;
 import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;

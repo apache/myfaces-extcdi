@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.PhaseListenerExtension;
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
 import javax.faces.lifecycle.LifecycleFactory;

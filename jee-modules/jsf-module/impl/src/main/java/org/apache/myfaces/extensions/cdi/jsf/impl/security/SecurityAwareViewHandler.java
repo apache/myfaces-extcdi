@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;

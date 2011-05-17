@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.util;
 
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.inject.Typed;

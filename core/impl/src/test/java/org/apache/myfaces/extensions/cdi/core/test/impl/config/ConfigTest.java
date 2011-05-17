@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProd
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ConfiguredArtifactUtils;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.ClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 
 import java.util.Date;
 

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.config;
 
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 
 import java.util.List;
 

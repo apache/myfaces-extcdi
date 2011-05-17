@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.storeViewIdAsNewViewId;
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;

@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.api.interpreter;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.AbstractClassDeactivator;
-
-public class TestClassDeactivator extends AbstractClassDeactivator
+/**
+ * @author Gerhard Petracek
+ */
+public interface ExpressionInterpreter<E, R>
 {
-    private static final long serialVersionUID = 7799046096147501268L;
-
-    protected void deactivateClasses()
-    {
-        addDeactivatedClass(TestClassDeactivator.class);
-    }
+    /**
+     * Evaluates the given expression and returns the result for it
+     * @param expression expression which should be evaluated
+     * @return result of the evaluated expression
+     */
+    R evaluate(E expression);
 }

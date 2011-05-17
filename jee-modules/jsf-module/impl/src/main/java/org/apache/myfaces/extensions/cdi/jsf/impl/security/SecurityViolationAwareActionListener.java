@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.SecurityUtils.tryToHandleSecurityViolation;
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
 import javax.faces.event.ActionListener;

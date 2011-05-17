@@ -16,25 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.projectstage;
+package org.apache.myfaces.extensions.cdi.core.test.impl.activation;
 
-import org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans.MyMailService;
-import org.apache.myfaces.extensions.cdi.core.test.impl.projectstage.testbeans.MyMailServiceMockImpl;
+import org.apache.myfaces.extensions.cdi.core.test.impl.activation.testbeans.*;
 import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-
-/**
- */
-public class ProjectStageActivationExtensionTest extends ContainerTestBase
+public class ExpressionActivationExtensionTest extends ContainerTestBase
 {
     @Test
-    public void testProjectStageActivationExtension()
+    public void testTestBean()
     {
-        MyMailService mailSvc =  getBeanInstance(MyMailService.class);
-        Assert.assertNotNull(mailSvc);
+        ExpressionActivatedTestBean testBean =  getBeanInstance(ExpressionActivatedTestBean.class);
+        Assert.assertNotNull(testBean);
 
-        Assert.assertTrue(mailSvc instanceof MyMailServiceMockImpl);
+        Assert.assertTrue(testBean instanceof ExpressionActivatedTestBeanMockImpl);
+    }
+
+    @Test
+    public void testTestInfoBean()
+    {
+        ExpressionActivatedTestInfoBean testBean =  getBeanInstance(ExpressionActivatedTestInfoBean.class);
+        Assert.assertNotNull(testBean);
+
+        Assert.assertTrue(testBean instanceof ExpressionActivatedTestInfoBeanImpl);
     }
 }

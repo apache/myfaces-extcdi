@@ -20,7 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
-import org.apache.myfaces.extensions.cdi.core.api.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 

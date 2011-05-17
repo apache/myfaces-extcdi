@@ -16,16 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.impl.activation;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.AbstractClassDeactivator;
-
-public class TestClassDeactivator extends AbstractClassDeactivator
+/**
+ * @author Gerhard Petracek
+ */
+enum SimpleOperationEnum
 {
-    private static final long serialVersionUID = 7799046096147501268L;
+    IS("=="), NOT("!=");
 
-    protected void deactivateClasses()
+    private final String value;
+
+    SimpleOperationEnum(String value)
     {
-        addDeactivatedClass(TestClassDeactivator.class);
+        this.value = value;
+    }
+
+    String getValue()
+    {
+        return value;
+    }
+
+    static String getOperations()
+    {
+        String operations = "";
+
+        for(SimpleOperationEnum operation : SimpleOperationEnum.values())
+        {
+            operations += operation.getValue() + " ";
+        }
+        return operations;
     }
 }

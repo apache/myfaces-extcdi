@@ -79,7 +79,10 @@ public abstract class ConfiguredArtifactUtils
                 {
                     result.addAll(cachedValues);
                 }
-                return (List<T>)result;
+                if(!result.isEmpty())
+                {
+                    return (List<T>)result;
+                }
             }
             return null;
         }
