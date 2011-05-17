@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfigEntry;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
-import org.apache.myfaces.extensions.cdi.core.api.util.ProxyUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ProxyUtils;
 
 import javax.inject.Inject;
 import java.lang.reflect.InvocationTargetException;

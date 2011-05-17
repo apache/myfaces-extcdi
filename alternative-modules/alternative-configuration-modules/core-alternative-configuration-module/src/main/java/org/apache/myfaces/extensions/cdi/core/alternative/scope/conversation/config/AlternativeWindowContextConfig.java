@@ -39,16 +39,18 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
      */
     public AlternativeWindowContextConfig()
     {
-        String moduleVersion = detectModuleVersion();
+        Class configClass = AlternativeWindowContextConfig.class; //don't use getClass - would lead to a proxy
+
+        String moduleVersion = detectModuleVersion(configClass);
 
         StringBuilder info = new StringBuilder("[Started] MyFaces CODI (Extensions CDI) alternative config ");
-        info.append(getClass().getName());
+        info.append(configClass.getName());
         info.append(" is active (");
         info.append(moduleVersion);
         info.append(")");
         info.append(System.getProperty("line.separator"));
 
-        Logger logger = Logger.getLogger(getClass().getName());
+        Logger logger = Logger.getLogger(configClass.getName());
 
         if(logger.isLoggable(Level.INFO))
         {
@@ -56,13 +58,13 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
         }
     }
 
-    private String detectModuleVersion()
+    private String detectModuleVersion(Class configClass)
     {
-        String version = ClassUtils.getJarVersion(getClass());
+        String version = ClassUtils.getJarVersion(configClass);
 
         if(version != null && !version.startsWith("null"))
         {
-            return " v" + version;
+            return "v" + version;
         }
         return "";
     }

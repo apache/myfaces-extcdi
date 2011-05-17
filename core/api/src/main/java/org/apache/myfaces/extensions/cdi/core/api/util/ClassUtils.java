@@ -212,7 +212,7 @@ public abstract class ClassUtils
      */
     public static String getJarVersion(Class targetClass)
     {
-        String manifestFileLocation = getManifestLocation(targetClass);
+        String manifestFileLocation = getManifestFileLocationOfClass(targetClass);
 
         try
         {
@@ -232,7 +232,7 @@ public abstract class ClassUtils
      */
     public static String getRevision(Class targetClass)
     {
-        String manifestFileLocation = getManifestLocation(targetClass);
+        String manifestFileLocation = getManifestFileLocationOfClass(targetClass);
 
         try
         {
@@ -245,9 +245,24 @@ public abstract class ClassUtils
         }
     }
 
+    private static String getManifestFileLocationOfClass(Class targetClass)
+    {
+        String manifestFileLocation;
+
+        try
+        {
+            manifestFileLocation = getManifestLocation(targetClass);
+        }
+        catch (Exception e)
+        {
+            //in this case we have a proxy
+            manifestFileLocation = getManifestLocation(targetClass.getSuperclass());
+        }
+        return manifestFileLocation;
+    }
+
     private static String getManifestLocation(Class targetClass)
     {
-        targetClass = ProxyUtils.getUnproxiedClass(targetClass);
         String classFilePath = targetClass.getCanonicalName().replace('.', '/') + ".class";
         String manifestFilePath = "/META-INF/MANIFEST.MF";
 
