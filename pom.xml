@@ -306,6 +306,21 @@
                 <version>1.0.0-SNAPSHOT</version>
             </dependency>
 
+            <!-- optional configuration modules -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
+                <scope>provided</scope>
+            </dependency>
+
             <!-- alternative module - esp. required for weld -->
 
             <dependency>

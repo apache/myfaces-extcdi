@@ -22,8 +22,8 @@
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
     <alternatives>
-        <class>org.apache.myfaces.extensions.cdi.core.alternative.config.AlternativeCodiCoreConfig</class>
-        <class>org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config.AlternativeConversationConfig</class>
-        <class>org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config.AlternativeWindowContextConfig</class>
+        <class>org.apache.myfaces.extensions.cdi.core.alternative.config.AlternativeCodiCoreConfigProxy</class>
+        <class>org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config.AlternativeConversationConfigProxy</class>
+        <class>org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config.AlternativeWindowContextConfigProxy</class>
     </alternatives>
 </beans>

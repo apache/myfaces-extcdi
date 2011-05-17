@@ -247,6 +247,7 @@ public abstract class ClassUtils
 
     private static String getManifestLocation(Class targetClass)
     {
+        targetClass = ProxyUtils.getUnproxiedClass(targetClass);
         String classFilePath = targetClass.getCanonicalName().replace('.', '/') + ".class";
         String manifestFilePath = "/META-INF/MANIFEST.MF";
 

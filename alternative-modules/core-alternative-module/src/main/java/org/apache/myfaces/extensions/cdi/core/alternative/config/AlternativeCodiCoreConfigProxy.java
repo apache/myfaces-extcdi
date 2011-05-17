@@ -16,58 +16,54 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.alternative.config;
+package org.apache.myfaces.extensions.cdi.core.alternative.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Alternative;
 
 /**
  * @author Gerhard Petracek
  */
 @Alternative
-public class AlternativeJsfModuleConfig extends JsfModuleConfig
+public class AlternativeCodiCoreConfigProxy extends CodiCoreConfig
 {
-    private static final long serialVersionUID = 2385134740850201120L;
+    private static final long serialVersionUID = -1471628272055334671L;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isInitialRedirectEnabled()
+    private CodiCoreConfig wrapped;
+
+    @PostConstruct
+    protected void init()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                super.isInitialRedirectEnabled());
+        this.wrapped = CodiUtils.lookupAlternativeConfig(CodiCoreConfig.class);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isUseViewConfigsAsNavigationCasesEnabled()
+    public boolean isAdvancedQualifierRequiredForDependencyInjection()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                super.isUseViewConfigsAsNavigationCasesEnabled());
+        return wrapped.isAdvancedQualifierRequiredForDependencyInjection();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isInvalidValueAwareMessageInterpolatorEnabled()
+    public boolean isConfigurationLoggingEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                super.isInvalidValueAwareMessageInterpolatorEnabled());
+        return wrapped.isConfigurationLoggingEnabled();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isAlwaysKeepMessages()
+    public boolean isInvalidBeanCreationEventEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                super.isAlwaysKeepMessages());
+        return wrapped.isInvalidBeanCreationEventEnabled();
     }
 }

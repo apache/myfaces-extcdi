@@ -19,17 +19,53 @@
 package org.apache.myfaces.extensions.cdi.core.alternative.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
-import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Typed;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-@Alternative
+@Typed()
 public class AlternativeCodiCoreConfig extends CodiCoreConfig
 {
     private static final long serialVersionUID = -1471628272055334673L;
+
+    /**
+     * Logs the activation of the config
+     */
+    public AlternativeCodiCoreConfig()
+    {
+        String moduleVersion = detectModuleVersion();
+
+        StringBuilder info = new StringBuilder("[Started] MyFaces CODI (Extensions CDI) alternative config ");
+        info.append(getClass().getName());
+        info.append(" is active (");
+        info.append(moduleVersion);
+        info.append(")");
+        info.append(System.getProperty("line.separator"));
+
+        Logger logger = Logger.getLogger(getClass().getName());
+
+        if(logger.isLoggable(Level.INFO))
+        {
+            logger.info(info.toString());
+        }
+    }
+
+    private String detectModuleVersion()
+    {
+        String version = ClassUtils.getJarVersion(getClass());
+
+        if(version != null && !version.startsWith("null"))
+        {
+            return " v" + version;
+        }
+        return "";
+    }
 
     /**
      * {@inheritDoc}

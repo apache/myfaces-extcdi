@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -462,6 +463,65 @@ public abstract class CodiUtils
     }
 
     /**
+     * Resolves a custom configuration which is configured via a ServiceLoader config
+     * @param configurationType type of the configuration
+     * @param <T> target type
+     * @return resolved configuration
+     */
+    public static <T extends CodiConfig> T lookupAlternativeConfig(Class<T> configurationType)
+    {
+        final List<CodiConfig> configs = new CopyOnWriteArrayList<CodiConfig>();
+        CodiUtils.lookupFromEnvironment(CodiConfig.class, new Aggregatable<CodiConfig>()
+        {
+            /**
+             * {@inheritDoc}
+             */
+            public void add(CodiConfig codiConfig)
+            {
+                configs.add(codiConfig);
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            public CodiConfig create()
+            {
+                return null;
+            }
+        });
+
+        //remove other configs
+        for(CodiConfig codiConfig : configs)
+        {
+            if(!configurationType.isAssignableFrom(codiConfig.getClass()))
+            {
+                configs.remove(codiConfig);
+            }
+        }
+
+        if(configs.size() > 1)
+        {
+            //user provided a custom implementation -> remove codi implementations
+            for(CodiConfig codiConfig : configs)
+            {
+                if(!codiConfig.getClass().getName().startsWith("org.apache.myfaces.extensions.cdi."))
+                {
+                    configs.remove(codiConfig);
+                }
+            }
+        }
+        else if(configs.size() == 0)
+        {
+            RuntimeException runtimeException = new RuntimeException();
+            throw new IllegalStateException("no alternative configuration found for " + configurationType
+                + " please add a module with an alternative configuration implementation or remove the jar file"
+                + " which contains " + runtimeException.getStackTrace()[1].getClassName());
+        }
+
+        return (T)configs.iterator().next();
+    }
+
+    /**
      * Resolves resources outside of CDI for the given class.
      * @param targetType target type
      * @param defaultImplementation default implementation
@@ -503,6 +563,19 @@ public abstract class CodiUtils
         return lookupFromEnvironment(key, targetType, null, defaultImplementation);
     }
 
+    /**
+     * Resolves the configured value for the given key or uses the caller method-name as naming-convention,
+     * if no key is provided. Example for the naming-convention: method-name: getAbcXyz -> config-key: abc_xyz.
+     *
+     * if the target-type is boolean or int, the values will be converted automatically.
+     * otherwise the configured value gets returned as string.
+     *
+     * @param key optional key for the value in question
+     * @param targetType type of the configured value - supported: string, boolean, integer
+     * @param defaultValue the default value which will be returned if no configured value can be found
+     * @param <T> current type
+     * @return configured (optionally converted) value or the default value
+     */
     public static <T extends Serializable> T lookupConfigFromEnvironment(String key,
                                                                          Class<T> targetType,
                                                                          T defaultValue)

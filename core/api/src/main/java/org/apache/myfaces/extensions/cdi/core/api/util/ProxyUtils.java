@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.util;
+package org.apache.myfaces.extensions.cdi.core.api.util;
 
 import javax.enterprise.inject.Typed;
 

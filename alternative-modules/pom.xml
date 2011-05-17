@@ -37,6 +37,7 @@
     <modules>
         <module>core-alternative-module</module>
         <module>jsf-alternative-module</module>
+        <module>alternative-configuration-modules</module>
     </modules>
 
 </project>

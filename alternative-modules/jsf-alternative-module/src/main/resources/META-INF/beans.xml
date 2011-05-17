@@ -22,6 +22,6 @@
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
     <alternatives>
-        <class>org.apache.myfaces.extensions.cdi.jsf.alternative.config.AlternativeJsfModuleConfig</class>
+        <class>org.apache.myfaces.extensions.cdi.jsf.alternative.config.AlternativeJsfModuleConfigProxy</class>
     </alternatives>
 </beans>

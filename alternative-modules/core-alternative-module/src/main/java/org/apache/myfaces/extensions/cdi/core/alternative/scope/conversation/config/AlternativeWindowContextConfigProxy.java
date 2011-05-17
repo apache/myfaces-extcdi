@@ -21,15 +21,24 @@ package org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.co
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Alternative;
 
 /**
  * @author Gerhard Petracek
  */
 @Alternative
-public class AlternativeWindowContextConfig extends WindowContextConfig
+public class AlternativeWindowContextConfigProxy extends WindowContextConfig
 {
-    private static final long serialVersionUID = 8616591700809645827L;
+    private static final long serialVersionUID = 8616591700809645821L;
+
+    private WindowContextConfig wrapped;
+
+    @PostConstruct
+    protected void init()
+    {
+        this.wrapped = CodiUtils.lookupAlternativeConfig(WindowContextConfig.class);
+    }
 
     /**
      * {@inheritDoc}
@@ -37,8 +46,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isUrlParameterSupported()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                super.isUrlParameterSupported());
+        return wrapped.isUrlParameterSupported();
     }
 
     /**
@@ -47,8 +55,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isUnknownWindowIdsAllowed()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isUnknownWindowIdsAllowed());
+        return wrapped.isUnknownWindowIdsAllowed();
     }
 
     /**
@@ -57,8 +64,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isAddWindowIdToActionUrlsEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isAddWindowIdToActionUrlsEnabled());
+        return wrapped.isAddWindowIdToActionUrlsEnabled();
     }
 
     /**
@@ -67,8 +73,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public int getWindowContextTimeoutInMinutes()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Integer.class,
-                        super.getWindowContextTimeoutInMinutes());
+        return wrapped.getWindowContextTimeoutInMinutes();
     }
 
     /**
@@ -77,8 +82,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public int getMaxWindowContextCount()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Integer.class,
-                        super.getMaxWindowContextCount());
+        return wrapped.getMaxWindowContextCount();
     }
 
     /**
@@ -87,8 +91,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isCloseEmptyWindowContextsEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isCloseEmptyWindowContextsEnabled());
+        return wrapped.isCloseEmptyWindowContextsEnabled();
     }
 
     /**
@@ -97,8 +100,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isEagerWindowContextDetectionEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isEagerWindowContextDetectionEnabled());
+        return wrapped.isEagerWindowContextDetectionEnabled();
     }
 
     /**
@@ -107,8 +109,7 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isCreateWindowContextEventEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isCreateWindowContextEventEnabled());
+        return wrapped.isCreateWindowContextEventEnabled();
     }
 
     /**
@@ -117,7 +118,6 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     @Override
     public boolean isCloseWindowContextEventEnabled()
     {
-        return CodiUtils.lookupConfigFromEnvironment(null, Boolean.class,
-                        super.isCloseWindowContextEventEnabled());
+        return wrapped.isCloseWindowContextEventEnabled();
     }
 }
