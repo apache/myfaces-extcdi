@@ -23,20 +23,20 @@
     <packaging>pom</packaging>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
-    <artifactId>alternative-project</artifactId>
+    <artifactId>alternative-implementation-project</artifactId>
 
     <name>MyFaces Extensions-CDI Alternative Project</name>
     <version>1.0.0-SNAPSHOT</version>
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>myfaces-extcdi-parent</artifactId>
+        <artifactId>alternative-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modules>
-        <module>alternative-implementation-modules</module>
-        <module>alternative-configuration-modules</module>
+        <module>core-alternative-module</module>
+        <module>jsf-alternative-module</module>
     </modules>
 
 </project>
