@@ -157,4 +157,27 @@ public class ConfigTest
     {
         assertEquals(CodiUtils.lookupFromEnvironment(TestInterface.class).getValue(), "TestImpl");
     }
+
+    @Test
+    public void testLookupConfigByConvention()
+    {
+        System.setProperty("ConfigTest.custom_value", "true");
+        assertEquals(getCustomValue(), "true");
+    }
+
+    private String getCustomValue()
+    {
+        return CodiUtils.lookupConfigFromEnvironment(null, String.class, "false");
+    }
+
+    @Test
+    public void testLookupConfigByConventionDefaultValue()
+    {
+        assertEquals(isCustomValue(), "true");
+    }
+
+    private String isCustomValue()
+    {
+        return CodiUtils.lookupConfigFromEnvironment(null, String.class, "true");
+    }
 }

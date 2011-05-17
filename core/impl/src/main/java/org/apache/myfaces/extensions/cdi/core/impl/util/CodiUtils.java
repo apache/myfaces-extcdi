@@ -21,8 +21,10 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.AnnotatedType;
@@ -499,6 +501,85 @@ public abstract class CodiUtils
                                                                    T... defaultImplementation)
     {
         return lookupFromEnvironment(key, targetType, null, defaultImplementation);
+    }
+
+    public static <T extends Serializable> T lookupConfigFromEnvironment(String key,
+                                                                         Class<T> targetType,
+                                                                         T defaultValue)
+    {
+        if(key == null)
+        {
+            @SuppressWarnings({"ThrowableInstanceNeverThrown"})
+            RuntimeException runtimeException = new RuntimeException();
+
+            String baseKey = runtimeException.getStackTrace()[1].getMethodName();
+
+            if(baseKey.startsWith("get"))
+            {
+                baseKey = baseKey.substring(3);
+            }
+            else if(baseKey.startsWith("is"))
+            {
+                baseKey = baseKey.substring(2);
+            }
+
+            baseKey = baseKey.substring(0, 1).toLowerCase() + baseKey.substring(1);
+
+            StringBuilder dynamicKey = new StringBuilder(baseKey.length());
+
+            Character current;
+            for(int i = 0; i < baseKey.length(); i++)
+            {
+                current = baseKey.charAt(i);
+                if(Character.isUpperCase(current))
+                {
+                    dynamicKey.append("_");
+                    dynamicKey.append(Character.toLowerCase(current));
+                }
+                else
+                {
+                    dynamicKey.append(current);
+                }
+            }
+
+            String className = runtimeException.getStackTrace()[1].getClassName();
+
+            Class configClass = ClassUtils.tryToLoadClassForName(className);
+
+            if(configClass != null && CodiConfig.class.isAssignableFrom(configClass.getSuperclass()))
+            {
+                //config class extends the default impl. -> use the name of the default impl.
+                className = configClass.getSuperclass().getSimpleName();
+            }
+            else
+            {
+                className = className.substring(className.lastIndexOf(".") + 1);
+            }
+
+            key = className + "." + dynamicKey.toString();
+        }
+
+        String result = lookupFromEnvironment(key, String.class, null, null);
+
+        if(result == null)
+        {
+            return defaultValue != null ? defaultValue : null;
+        }
+
+        if(String.class.isAssignableFrom(targetType))
+        {
+            return targetType.cast(result);
+        }
+        if(Boolean.class.isAssignableFrom(targetType))
+        {
+            return targetType.cast(Boolean.parseBoolean(result));
+        }
+        if(Integer.class.isAssignableFrom(targetType))
+        {
+            return targetType.cast(Integer.parseInt(result));
+        }
+
+        throw new IllegalArgumentException(targetType.getName() + " isn't supported");
     }
 
     /**

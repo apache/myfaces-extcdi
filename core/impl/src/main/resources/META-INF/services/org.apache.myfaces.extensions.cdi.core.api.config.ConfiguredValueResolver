@@ -1,3 +1,4 @@
 org.apache.myfaces.extensions.cdi.core.impl.config.SystemPropertyResolver
 org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver
 org.apache.myfaces.extensions.cdi.core.impl.config.LocalJndiResolver
+org.apache.myfaces.extensions.cdi.core.impl.config.PropertyFileResolver

@@ -140,6 +140,10 @@ public abstract class ConfiguredArtifactUtils
                     }
                 });
             }
+            else
+            {
+                resolverResult = null;
+            }
 
             Field defaultInjectionPoint;
             if(resolverResult != null && !resolverResult.isEmpty())
