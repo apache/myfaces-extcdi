@@ -23,7 +23,11 @@ import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescript
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.inject.Typed;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * @author Gerhard Petracek
