@@ -51,7 +51,24 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
             return Collections.emptyList();
         }
 
-        String bundleName = BASE_NAME + key.substring(0, key.indexOf("."));
+        //TODO
+        if(key.endsWith("_"))
+        {
+            key = key.substring(0, key.length() - 1);
+        }
+
+        String bundleName;
+
+        //TODO
+        if(key.contains("@") && key.lastIndexOf("@") < key.indexOf("."))
+        {
+            bundleName = key.substring(0, key.indexOf("."));
+            bundleName = bundleName.replace("@", ".");
+        }
+        else
+        {
+            bundleName= BASE_NAME + key.substring(0, key.indexOf("."));
+        }
 
         ResourceBundle resourceBundle;
 

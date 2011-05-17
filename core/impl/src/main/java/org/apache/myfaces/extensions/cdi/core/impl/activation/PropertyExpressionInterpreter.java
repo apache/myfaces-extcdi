@@ -49,9 +49,11 @@ public class PropertyExpressionInterpreter implements ExpressionInterpreter<Stri
             {
                 operation = SimpleOperationEnum.NOT;
             }
-            else if(expression.startsWith("config:"))
+            else if(expression.startsWith("configName:"))
             {
                 configFileName = expression.split(":")[1];
+                //TODO refactor it - current impl. ensures backward compatibility (see PropertyFileResolver)
+                configFileName = configFileName.replace(".", "@");
                 continue;
             }
             else
@@ -69,8 +71,11 @@ public class PropertyExpressionInterpreter implements ExpressionInterpreter<Stri
 
             if("".equals(configuredValue))
             {
+                //TODO refactor it - current impl. ensures backward compatibility (see PropertyFileResolver)
+                String internalKey = keyValue[0] + "_";
+
                 configuredValue = CodiUtils
-                        .lookupConfigFromEnvironment(configFileName + "." + keyValue[0], String.class, "");
+                        .lookupConfigFromEnvironment(configFileName + "." + internalKey, String.class, "");
                 configuredValue = configuredValue.trim();
             }
 

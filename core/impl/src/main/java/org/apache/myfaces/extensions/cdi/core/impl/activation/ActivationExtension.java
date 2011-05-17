@@ -117,7 +117,7 @@ public class ActivationExtension implements Extension, Deactivatable
                 return;
             }
 
-            expressions = "config:" + expressionActivated.configName() + ";" + expressions;
+            expressions = "configName:" + expressionActivated.configName() + ";" + expressions;
             if (!expressionInterpreter.evaluate(expressions))
             {
                 // this alternative shall not get used
