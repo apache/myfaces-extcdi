@@ -121,11 +121,8 @@ public class BeanManagerProvider implements Extension
     {
         BeanManager beanManager = getBeanManager();
         Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
-        Bean<?> bean = beanManager.resolve(beans);
-        CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
 
-        //noinspection unchecked
-        return (T) beanManager.getReference(bean, type, creationalContext);
+        return getReference(type, beanManager, beans);
     }
 
     /**
@@ -141,11 +138,25 @@ public class BeanManagerProvider implements Extension
     {
         BeanManager beanManager = getBeanManager();
         Set<Bean<?>> beans = beanManager.getBeans(name);
+
+        return getReference(type, beanManager, beans);
+    }
+
+    /**
+     * Internal helper method to resolve the right bean and
+     * resolve the contextual reference.
+     * @param type
+     * @param beanManager
+     * @param beans
+     * @param <T>
+     * @return the contextual reference
+     */
+    private <T> T getReference(Class<T> type, BeanManager beanManager, Set<Bean<?>> beans)
+    {
         Bean<?> bean = beanManager.resolve(beans);
         CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
 
-        //noinspection unchecked
-        return (T)beanManager.getReference(bean, Object.class, creationalContext);
+        return (T)beanManager.getReference(bean, type, creationalContext);
     }
 
     /**
