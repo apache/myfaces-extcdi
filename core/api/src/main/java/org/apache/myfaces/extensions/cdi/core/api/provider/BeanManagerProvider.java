@@ -129,7 +129,7 @@ public class BeanManagerProvider implements Extension
      * Get a Contextual Reference by it's EL Name.
      * This only works for beans with the &#064;Named annotation.
      *
-     * @param type the type of the bean in question - use Object.class if the type is unknown in dyn. use-cases
+     * @param type the type of the bean in question - only use Object.class if the type is unknown in dyn. use-cases
      * @param name the EL name of the bean
      * @param <T> target type
      * @return the resolved Contextual Reference
@@ -145,10 +145,10 @@ public class BeanManagerProvider implements Extension
     /**
      * Internal helper method to resolve the right bean and
      * resolve the contextual reference.
-     * @param type
-     * @param beanManager
-     * @param beans
-     * @param <T>
+     * @param type the type of the bean in question
+     * @param beanManager current bean-manager
+     * @param beans beans in question
+     * @param <T> target type
      * @return the contextual reference
      */
     private <T> T getReference(Class<T> type, BeanManager beanManager, Set<Bean<?>> beans)
@@ -156,7 +156,9 @@ public class BeanManagerProvider implements Extension
         Bean<?> bean = beanManager.resolve(beans);
         CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
 
-        return (T)beanManager.getReference(bean, type, creationalContext);
+        @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
+        T result = (T)beanManager.getReference(bean, type, creationalContext);
+        return result;
     }
 
     /**
