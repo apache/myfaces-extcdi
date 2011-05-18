@@ -21,13 +21,18 @@ package org.apache.myfaces.extensions.cdi.core.api.provider;
 import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
+import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -102,6 +107,39 @@ public class BeanManagerProvider implements Extension
             }
         }
         return result;
+    }
+
+    /**
+     * Get a Contextual Reference by it's type and annotation.
+     * You can use this method
+     *
+     * @param type the java type it represents. E.g. 'MailService.class'
+     * @param qualifiers additional qualifiers which further distinct the resolved bean
+     * @return the resolved Contextual Reference
+     */
+    public Object getContextualReference(Type type, Annotation... qualifiers)
+    {
+        BeanManager bm = getBeanManager();
+        Set<Bean<?>> beans = bm.getBeans(type, qualifiers);
+        Bean<?> bean = bm.resolve(beans);
+        CreationalContext<?> cc = bm.createCreationalContext(bean);
+        return bm.getReference(bean, type, cc);
+    }
+
+    /**
+     * Get a Contextual Reference by it's EL Name.
+     * This only works for beans with the &#064;Named annotation.
+     *
+     * @param name the EL name of the bean
+     * @return the resolved Contextual Reference
+     */
+    public Object getContextualReference(String name)
+    {
+        BeanManager bm = getBeanManager();
+        Set<Bean<?>> beans = bm.getBeans(name);
+        Bean<?> bean = bm.resolve(beans);
+        CreationalContext<?> cc = bm.createCreationalContext(bean);
+        return bm.getReference(bean, Object.class, cc);
     }
 
     /**
