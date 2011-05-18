@@ -21,19 +21,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.myfaces.extensions.cdi</groupId>
-        <artifactId>alternative-project</artifactId>
+        <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
+        <artifactId>alternative-implementation-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+    <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
     <artifactId>myfaces-extcdi-core-alternative</artifactId>
     <packaging>jar</packaging>
-
+      
     <name>MyFaces Extensions-CDI Core Alternative Module</name>
     <version>1.0.0-SNAPSHOT</version>
-
 
     <dependencies>
         <dependency>

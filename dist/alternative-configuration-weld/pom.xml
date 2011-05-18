@@ -36,7 +36,7 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
             <scope>compile</scope>
             <exclusions>
@@ -52,7 +52,7 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+            <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
             <scope>compile</scope>
             <exclusions>

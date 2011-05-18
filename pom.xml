@@ -308,14 +308,14 @@
 
             <!-- optional configuration modules -->
             <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                 <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                 <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <scope>provided</scope>
@@ -324,14 +324,14 @@
             <!-- alternative module - esp. required for weld -->
 
             <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                 <artifactId>myfaces-extcdi-core-alternative</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                 <artifactId>myfaces-extcdi-jsf-alternative</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <scope>provided</scope>
