@@ -30,7 +30,6 @@ import javax.enterprise.inject.spi.Extension;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -115,15 +114,18 @@ public class BeanManagerProvider implements Extension
      *
      * @param type the java type it represents. E.g. 'MailService.class'
      * @param qualifiers additional qualifiers which further distinct the resolved bean
+     * @param <T> target type
      * @return the resolved Contextual Reference
      */
-    public Object getContextualReference(Type type, Annotation... qualifiers)
+    public <T> T getContextualReference(Class<T> type, Annotation... qualifiers)
     {
         BeanManager bm = getBeanManager();
         Set<Bean<?>> beans = bm.getBeans(type, qualifiers);
         Bean<?> bean = bm.resolve(beans);
         CreationalContext<?> cc = bm.createCreationalContext(bean);
-        return bm.getReference(bean, type, cc);
+
+        //noinspection unchecked
+        return (T) bm.getReference(bean, type, cc);
     }
 
     /**
