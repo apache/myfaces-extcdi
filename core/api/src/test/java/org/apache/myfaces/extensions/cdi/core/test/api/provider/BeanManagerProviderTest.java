@@ -45,7 +45,7 @@ public class BeanManagerProviderTest
             TestBean tb1 = bmp.getContextualReference(TestBean.class);
             Assert.assertNotNull(tb1);
 
-            TestBean tb2 = (TestBean) bmp.getContextualReference("extraNameBean");
+            TestBean tb2 = bmp.getContextualReference(TestBean.class, "extraNameBean");
             Assert.assertNotNull(tb2);
         }
         finally

@@ -112,36 +112,40 @@ public class BeanManagerProvider implements Extension
      * Get a Contextual Reference by it's type and annotation.
      * You can use this method
      *
-     * @param type the java type it represents. E.g. 'MailService.class'
+     * @param type the type of the bean in question
      * @param qualifiers additional qualifiers which further distinct the resolved bean
      * @param <T> target type
      * @return the resolved Contextual Reference
      */
     public <T> T getContextualReference(Class<T> type, Annotation... qualifiers)
     {
-        BeanManager bm = getBeanManager();
-        Set<Bean<?>> beans = bm.getBeans(type, qualifiers);
-        Bean<?> bean = bm.resolve(beans);
-        CreationalContext<?> cc = bm.createCreationalContext(bean);
+        BeanManager beanManager = getBeanManager();
+        Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
+        Bean<?> bean = beanManager.resolve(beans);
+        CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
 
         //noinspection unchecked
-        return (T) bm.getReference(bean, type, cc);
+        return (T) beanManager.getReference(bean, type, creationalContext);
     }
 
     /**
      * Get a Contextual Reference by it's EL Name.
      * This only works for beans with the &#064;Named annotation.
      *
+     * @param type the type of the bean in question - use Object.class if the type is unknown in dyn. use-cases
      * @param name the EL name of the bean
+     * @param <T> target type
      * @return the resolved Contextual Reference
      */
-    public Object getContextualReference(String name)
+    public <T> T getContextualReference(Class<T> type, String name)
     {
-        BeanManager bm = getBeanManager();
-        Set<Bean<?>> beans = bm.getBeans(name);
-        Bean<?> bean = bm.resolve(beans);
-        CreationalContext<?> cc = bm.createCreationalContext(bean);
-        return bm.getReference(bean, Object.class, cc);
+        BeanManager beanManager = getBeanManager();
+        Set<Bean<?>> beans = beanManager.getBeans(name);
+        Bean<?> bean = beanManager.resolve(beans);
+        CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
+
+        //noinspection unchecked
+        return (T)beanManager.getReference(bean, Object.class, creationalContext);
     }
 
     /**
