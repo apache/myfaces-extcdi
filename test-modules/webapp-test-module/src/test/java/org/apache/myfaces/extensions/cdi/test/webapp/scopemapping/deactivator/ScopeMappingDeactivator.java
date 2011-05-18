@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.webapp.scopemapping.deactivator;
 
-import org.apache.myfaces.extensions.cdi.core.api.AbstractClassDeactivator;
+import org.apache.myfaces.extensions.cdi.core.api.activation.AbstractClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 /**
@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
  */
 public class ScopeMappingDeactivator extends AbstractClassDeactivator
 {
+    private static final long serialVersionUID = 575300829864763591L;
 
     @Override
     protected void deactivateClasses()
