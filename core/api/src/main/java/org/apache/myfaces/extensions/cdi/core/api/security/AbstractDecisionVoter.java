@@ -35,6 +35,8 @@ public abstract class AbstractDecisionVoter
     {
         return new SecurityViolation()
         {
+            private static final long serialVersionUID = -382472852735452131L;
+
             /**
              * {@inheritDoc}
              */
