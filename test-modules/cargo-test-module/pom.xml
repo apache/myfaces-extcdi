@@ -22,19 +22,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <packaging>war</packaging>
-
-    <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
-    <artifactId>myfaces-extcdi-cargo-test</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-
-    <name>MyFaces Extensions-CDI Cargo Tests</name>
-
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
+
+    <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
+    <artifactId>myfaces-extcdi-cargo-test</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>MyFaces Extensions-CDI Cargo Tests</name>
+
 
     <properties>
         <cargo.context>cargo-test</cargo.context>

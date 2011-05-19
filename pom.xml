@@ -30,6 +30,7 @@
     <artifactId>myfaces-extcdi-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <name>Apache MyFaces CODI</name>
     <url>http://myfaces.apache.org/extensions/cdi/</url>
 
