@@ -319,7 +319,7 @@ public class ViewConfigCache
             return;
         }
 
-        ViewConfigDescriptor viewConfig;
+        EditableViewConfigDescriptor viewConfig;
         for(InlineViewConfigDescriptor inlineViewConfigDescriptor : inlineViewConfigDescriptors)
         {
             viewConfig = inlineViewConfigDescriptor.getViewConfigExtractor()
@@ -327,11 +327,8 @@ public class ViewConfigCache
 
             if(viewConfig != null)
             {
-                if(viewConfig instanceof EditableViewConfigDescriptor)
-                {
-                    //activate view controller annotations
-                    ((EditableViewConfigDescriptor)viewConfig).addPageBean(viewConfig.getViewConfig());
-                }
+                //activate view controller annotations
+                viewConfig.addPageBean(viewConfig.getViewConfig());
 
                 storeViewDefinition(viewConfig.getViewId(), viewConfig, false, false);
             }

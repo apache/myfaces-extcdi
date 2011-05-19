@@ -18,12 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
+import java.io.Serializable;
+
 /**
  * Provides the concrete reason for the restriction.
  *
  * @author Gerhard Petracek
  */
-public interface SecurityViolation
+public interface SecurityViolation extends Serializable
 {
     /**
      * Provides a description of the violation.

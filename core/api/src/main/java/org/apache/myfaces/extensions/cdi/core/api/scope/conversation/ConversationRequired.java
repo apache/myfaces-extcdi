@@ -38,6 +38,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @ViewMetaData(override = true)
 public @interface ConversationRequired
 {
+    /**
+     * Group of the conversation which is required. If used at beans, it's by default the group of the bean
+     * @return Group of the conversation
+     */
     Class<?> conversationGroup() default ConversationRequired.class;
 
     /**
