@@ -34,6 +34,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.WeldCache;
 
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -54,9 +55,13 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 {
     private List<BeanCreationDecisionVoter> beanCreationDecisionVoters;
 
+    private final boolean useFallback;
+
     GroupedConversationContext(BeanManager beanManager)
     {
         super(beanManager);
+
+        this.useFallback = !beanManager.getClass().getName().startsWith("org.apache.webbeans.");
     }
 
     /**
@@ -202,7 +207,22 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
             RequestCache.setCurrentWindowContext(editableWindowContext);
         }
 
-        return editableWindowContext
-                .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
+        try
+        {
+            if(this.useFallback)
+            {
+                WeldCache.setBean(bean);
+            }
+
+            return editableWindowContext
+                    .getConversation(conversationGroup, qualifiers.toArray(new Annotation[qualifiers.size()]));
+        }
+        finally
+        {
+            if(this.useFallback)
+            {
+                WeldCache.resetBean();
+            }
+        }
     }
 }

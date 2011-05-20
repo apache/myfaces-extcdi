@@ -578,7 +578,21 @@ public abstract class ConversationUtils
             }
             else
             {
-                scopeType = ConversationScoped.class;
+                if(!beanManager.getClass().getName().startsWith("org.apache.webbeans."))
+                {
+                    //workaround for weld v1.1.1
+                    Bean<?> bean = WeldCache.getBean();
+                    if(bean != null)
+                    {
+                        scopeType = bean.getScope();
+                    }
+                }
+
+                //default behaviour for cdi implementations without bug
+                if(scopeType == null)
+                {
+                    scopeType = ConversationScoped.class;
+                }
             }
         }
 
