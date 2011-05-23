@@ -47,7 +47,7 @@ public abstract class AbstractGroupedConversationContext
     private static RuntimeException runtimeException = new RuntimeException();
 
     //workaround for weld
-    private final boolean useFallback;
+    protected final boolean useFallback;
 
     protected AbstractGroupedConversationContext(BeanManager beanManager)
     {

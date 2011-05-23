@@ -55,13 +55,9 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
 {
     private List<BeanCreationDecisionVoter> beanCreationDecisionVoters;
 
-    private final boolean useFallback;
-
     GroupedConversationContext(BeanManager beanManager)
     {
         super(beanManager);
-
-        this.useFallback = !beanManager.getClass().getName().startsWith("org.apache.webbeans.");
     }
 
     /**
