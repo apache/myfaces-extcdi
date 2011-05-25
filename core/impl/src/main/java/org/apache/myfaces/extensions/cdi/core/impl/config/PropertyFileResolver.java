@@ -28,9 +28,11 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerhard Petracek
@@ -42,6 +44,9 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
     private static final String BASE_NAME = "org.apache.myfaces.extensions.cdi.";
 
     private static final String FILE_NAME = "myfaces-extcdi";
+
+    private static Map<ClassLoader, Map<String, String>> propertyCache =
+            new ConcurrentHashMap<ClassLoader, Map<String, String>>();
 
     /**
      * {@inheritDoc}
@@ -62,83 +67,115 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
             key = key.substring(0, key.length() - 1);
         }
 
-        String bundleName;
+        String configKey = key.substring(key.indexOf(".") + 1);
+        String configuredValue = null;
 
-        //TODO
-        if (key.contains("@") && key.lastIndexOf("@") < key.indexOf("."))
+        Map<String, String> cache = getPropertyCache();
+
+        configuredValue = cache.get(key);
+
+        if(configuredValue == null)
         {
-            bundleName = key.substring(0, key.indexOf("."));
-            bundleName = bundleName.replace("@", ".");
+            configuredValue = cache.get(configKey);
+        }
+
+        if(configuredValue != null)
+        {
+            add(configuredValue);
         }
         else
         {
-            bundleName = BASE_NAME + key.substring(0, key.indexOf("."));
-        }
 
-        ResourceBundle resourceBundle;
+            String bundleName;
 
-        try
-        {
+            //TODO
+            if (key.contains("@") && key.lastIndexOf("@") < key.indexOf("."))
+            {
+                bundleName = key.substring(0, key.indexOf("."));
+                bundleName = bundleName.replace("@", ".");
+            }
+            else
+            {
+                bundleName = BASE_NAME + key.substring(0, key.indexOf("."));
+            }
+
+            ResourceBundle resourceBundle;
+
             try
             {
-                resourceBundle = ResourceBundle
-                        .getBundle(bundleName, Locale.getDefault(), ClassUtils.getClassLoader(null));
-            }
-            catch (MissingResourceException e)
-            {
-                resourceBundle = null;
-            }
-
-            if (resourceBundle == null)
-            {
                 try
                 {
-                    resourceBundle = ResourceBundle.getBundle(FILE_NAME);
-                }
-                catch (MissingResourceException e2)
-                {
-                    resourceBundle = null;
-                }
-            }
-
-            String configKey = key.substring(key.indexOf(".") + 1);
-            String configuredValue = null;
-
-            if (resourceBundle != null)
-            {
-                try
-                {
-                    configuredValue = resourceBundle.getString(configKey);
-                    add(configuredValue);
+                    resourceBundle = ResourceBundle
+                            .getBundle(bundleName, Locale.getDefault(), ClassUtils.getClassLoader(null));
                 }
                 catch (MissingResourceException e)
                 {
                     resourceBundle = null;
                 }
-            }
 
-            if (resourceBundle == null)
-            {
-                Properties properties = getProperties("META-INF/" + FILE_NAME + ".properties");
-
-                if (properties != null)
+                if (resourceBundle == null)
                 {
-                    configuredValue = properties.getProperty(configKey);
-                    add(configuredValue);
+                    try
+                    {
+                        resourceBundle = ResourceBundle.getBundle(FILE_NAME);
+                    }
+                    catch (MissingResourceException e2)
+                    {
+                        resourceBundle = null;
+                    }
+                }
+
+                if (resourceBundle != null)
+                {
+                    try
+                    {
+                        configuredValue = resourceBundle.getString(configKey);
+                        add(configuredValue);
+                        cache.put(configKey, configuredValue);
+                    }
+                    catch (MissingResourceException e)
+                    {
+                        resourceBundle = null;
+                    }
+                }
+
+                if (resourceBundle == null)
+                {
+                    Properties properties = getProperties("META-INF/" + FILE_NAME + ".properties");
+
+                    if (properties != null)
+                    {
+                        configuredValue = properties.getProperty(configKey);
+                        add(configuredValue);
+                        cache.put(configKey, configuredValue);
+                    }
+                }
+
+                if (configuredValue == null)
+                {
+                    return Collections.emptyList();
                 }
             }
-
-            if (configuredValue == null)
+            catch (Exception e)
             {
                 return Collections.emptyList();
             }
         }
-        catch (Exception e)
-        {
-            return Collections.emptyList();
-        }
 
         return getConfiguredValues(descriptor.getTargetType());
+    }
+
+    private static Map<String, String> getPropertyCache()
+    {
+        ClassLoader classLoader = ClassUtils.getClassLoader(null);
+        Map<String, String> cache = propertyCache.get(classLoader);
+
+        if(cache == null)
+        {
+            cache = new ConcurrentHashMap<String, String>();
+            propertyCache.put(classLoader, cache);
+        }
+        return cache;
     }
 
     /**

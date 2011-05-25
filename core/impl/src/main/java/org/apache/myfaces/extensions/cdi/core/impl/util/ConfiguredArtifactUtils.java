@@ -122,34 +122,27 @@ public abstract class ConfiguredArtifactUtils
 
         for(ConfiguredValueResolver configuredValueResolver : resolvers)
         {
-            if(configuredValueResolver.isActivated())
+            resolverResult = configuredValueResolver.resolveInstances(new ConfiguredValueDescriptor<String, T>()
             {
-                resolverResult = configuredValueResolver.resolveInstances(new ConfiguredValueDescriptor<String, T>()
+                /**
+                 * {@inheritDoc}
+                 */
+                public String getKey()
                 {
-                    /**
-                     * {@inheritDoc}
-                     */
-                    public String getKey()
-                    {
-                        return key;
-                    }
+                    return key;
+                }
 
-                    /**
-                     * {@inheritDoc}
-                     */
-                    public Class<T> getTargetType()
-                    {
-                        return targetType;
-                    }
-                });
-            }
-            else
-            {
-                resolverResult = null;
-            }
+                /**
+                 * {@inheritDoc}
+                 */
+                public Class<T> getTargetType()
+                {
+                    return targetType;
+                }
+            });
 
             Field defaultInjectionPoint;
-            if(resolverResult != null && !resolverResult.isEmpty())
+            if(resolverResult != null)
             {
                 for(T currentResult : resolverResult)
                 {
@@ -220,7 +213,10 @@ public abstract class ConfiguredArtifactUtils
         //TODO cache the resolvers
         for(ConfiguredValueResolver currentResolver : configuredValueResolvers)
         {
-            resolvers.add(currentResolver);
+            if(currentResolver.isActivated())
+            {
+                resolvers.add(currentResolver);
+            }
         }
 
         Collections.sort(resolvers, comparator);
