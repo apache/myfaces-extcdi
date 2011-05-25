@@ -28,7 +28,7 @@ public class ExpressionActivationExtensionTest extends ContainerTestBase
     @Test
     public void testTestBean()
     {
-        ExpressionActivatedTestBean testBean =  getBeanInstance(ExpressionActivatedTestBean.class);
+        ExpressionActivatedTestBean testBean = getBeanInstance(ExpressionActivatedTestBean.class);
         Assert.assertNotNull(testBean);
 
         Assert.assertTrue(testBean instanceof ExpressionActivatedTestBeanMockImpl);
