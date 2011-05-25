@@ -22,7 +22,12 @@ import java.util.Set;
 import java.io.Serializable;
 
 /**
- * Interface for an implementation which provides classes of default implementations which should be deactivated.
+ * A class-deactivator allows to specify deactivated classes which can't be deactivated via std. CDI mechanisms.
+ * A class-deactivator will be resolved from the environment via the default resolvers or via a custom resolver which
+ * allows to use any type of configuration-format. An easy way to configure it permanently is e.g.
+ * to use the service-loader approach. Furthermore, {@link AbstractClassDeactivator} is a convenience class which
+ * allows an easier implementation. All classes which implement {@link Deactivatable} in-/directly, can be deactivated
+ * with this mechanism. For all other classes/beans, you can use the veto mechanism provided by CDI.
  *
  * @author Gerhard Petracek
  */
