@@ -286,13 +286,31 @@ public abstract class ConfiguredArtifactUtils
         if(!supportOfMultipleArtifacts && results.size() > 1)
         {
             //TODO move to exception utils
-            StringBuilder message = new StringBuilder("Multiple implementations for ");
-            message.append(targetType.getName());
-            message.append(" aren't allowed. Found implementations: \n");
-
-            for(T artifacts : results)
+            StringBuilder message = new StringBuilder();
+            if(String.class.equals(targetType))
             {
-                message.append(artifacts.getClass().getName());
+                message.append("Multiple values ");
+                message.append(" aren't allowed. Found values: \n");
+            }
+            else
+            {
+                message.append("Multiple implementations for ");
+                message.append(targetType.getName());
+                message.append(" aren't allowed. Found implementations: \n");
+            }
+
+            for(T artifact : results)
+            {
+                if(artifact instanceof String)
+                {
+                    message.append("'");
+                    message.append(artifact);
+                    message.append("'");
+                }
+                else
+                {
+                    message.append(artifact.getClass().getName());
+                }
                 message.append("\n");
             }
 

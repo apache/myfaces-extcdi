@@ -79,6 +79,11 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
             configuredValue = cache.get(configKey);
         }
 
+        if("".equals(configuredValue))
+        {
+            return Collections.emptyList();
+        }
+
         if(configuredValue != null)
         {
             add(configuredValue);
@@ -153,11 +158,13 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
 
                 if (configuredValue == null)
                 {
+                    cache.put(configKey, "");
                     return Collections.emptyList();
                 }
             }
             catch (Exception e)
             {
+                cache.put(configKey, "");
                 return Collections.emptyList();
             }
         }
