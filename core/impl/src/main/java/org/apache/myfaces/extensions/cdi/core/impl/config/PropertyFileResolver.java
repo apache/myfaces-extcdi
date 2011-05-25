@@ -23,10 +23,13 @@ import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescript
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.inject.Typed;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Properties;
 import java.util.ResourceBundle;
 
 /**
@@ -37,6 +40,8 @@ import java.util.ResourceBundle;
 public class PropertyFileResolver extends AbstractConfiguredValueResolver
 {
     private static final String BASE_NAME = "org.apache.myfaces.extensions.cdi.";
+
+    private static final String FILE_NAME = "myfaces-extcdi";
 
     /**
      * {@inheritDoc}
@@ -52,7 +57,7 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
         }
 
         //TODO
-        if(key.endsWith("_"))
+        if (key.endsWith("_"))
         {
             key = key.substring(0, key.length() - 1);
         }
@@ -60,14 +65,14 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
         String bundleName;
 
         //TODO
-        if(key.contains("@") && key.lastIndexOf("@") < key.indexOf("."))
+        if (key.contains("@") && key.lastIndexOf("@") < key.indexOf("."))
         {
             bundleName = key.substring(0, key.indexOf("."));
             bundleName = bundleName.replace("@", ".");
         }
         else
         {
-            bundleName= BASE_NAME + key.substring(0, key.indexOf("."));
+            bundleName = BASE_NAME + key.substring(0, key.indexOf("."));
         }
 
         ResourceBundle resourceBundle;
@@ -81,26 +86,86 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
             }
             catch (MissingResourceException e)
             {
-                resourceBundle = ResourceBundle.getBundle("myfaces-extcdi");
+                resourceBundle = null;
             }
+
+            if (resourceBundle == null)
+            {
+                try
+                {
+                    resourceBundle = ResourceBundle.getBundle(FILE_NAME);
+                }
+                catch (MissingResourceException e2)
+                {
+                    resourceBundle = null;
+                }
+            }
+
+            String configKey = key.substring(key.indexOf(".") + 1);
+            String configuredValue = null;
 
             if (resourceBundle != null)
             {
-                String configuredValue = resourceBundle.getString(key.substring(key.indexOf(".") + 1));
-
-                add(configuredValue);
-
-                if (configuredValue == null)
+                try
                 {
-                    return Collections.emptyList();
+                    configuredValue = resourceBundle.getString(configKey);
+                    add(configuredValue);
+                }
+                catch (MissingResourceException e)
+                {
+                    resourceBundle = null;
                 }
             }
+
+            if (resourceBundle == null)
+            {
+                Properties properties = getProperties("META-INF/" + FILE_NAME + ".properties");
+
+                if (properties != null)
+                {
+                    configuredValue = properties.getProperty(configKey);
+                    add(configuredValue);
+                }
+            }
+
+            if (configuredValue == null)
+            {
+                return Collections.emptyList();
+            }
         }
-        catch (MissingResourceException e2)
+        catch (Exception e)
         {
             return Collections.emptyList();
         }
 
         return getConfiguredValues(descriptor.getTargetType());
+    }
+
+    /**
+     * Load properties from a configuration file with the given resourceName.
+     *
+     * @param resourceName name of the resource
+     * @return Properties or <code>null</code> if the given property file doesn't exist
+     */
+    //TODO
+    private static Properties getProperties(String resourceName)
+    {
+        Properties properties = null;
+        ClassLoader classLoader = ClassUtils.getClassLoader(resourceName);
+        InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+        if (inputStream != null)
+        {
+            properties = new Properties();
+            try
+            {
+                properties.load(inputStream);
+            }
+            catch (IOException e)
+            {
+                return null;
+            }
+        }
+
+        return properties;
     }
 }
