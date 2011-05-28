@@ -38,7 +38,10 @@ class InjectableValidator implements Validator, Serializable
 
     private transient Validator wrapped;
 
-    public InjectableValidator()
+    /**
+     * Constructor used by proxy libs
+     */
+    protected InjectableValidator()
     {
     }
 

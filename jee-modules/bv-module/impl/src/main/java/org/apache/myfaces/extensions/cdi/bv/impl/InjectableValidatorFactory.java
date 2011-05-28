@@ -41,9 +41,9 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
     private transient ValidatorFactory wrapped;
 
     /**
-     * Default constructor
+     * Constructor used by proxy libs
      */
-    public InjectableValidatorFactory()
+    protected InjectableValidatorFactory()
     {
     }
 

@@ -36,6 +36,13 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
 
     private transient ConstraintValidatorFactory wrapped;
 
+    /**
+     * Constructor used by proxy libs
+     */
+    protected InjectableConstraintValidatorFactory()
+    {
+    }
+
     InjectableConstraintValidatorFactory(ConstraintValidatorFactory constraintValidatorFactory)
     {
         this.wrapped = constraintValidatorFactory;

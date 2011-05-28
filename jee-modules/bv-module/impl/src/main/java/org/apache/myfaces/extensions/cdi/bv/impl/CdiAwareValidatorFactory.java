@@ -38,6 +38,13 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
     private ValidatorFactory wrappedValidatorFactory;
     private boolean customContextUsed;
 
+    /**
+     * Constructor used by proxy libs
+     */
+    protected CdiAwareValidatorFactory()
+    {
+    }
+
     protected CdiAwareValidatorFactory(ValidatorFactory wrappedValidatorFactory)
     {
         this.wrappedValidatorFactory = wrappedValidatorFactory;

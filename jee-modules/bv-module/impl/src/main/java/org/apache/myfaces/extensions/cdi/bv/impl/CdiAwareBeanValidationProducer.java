@@ -24,13 +24,10 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 
-import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
-import javax.validation.ConstraintValidatorFactory;
-import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import javax.validation.MessageInterpolator;
 import javax.inject.Named;
 
 /**
@@ -39,6 +36,9 @@ import javax.inject.Named;
 @ApplicationScoped
 public class CdiAwareBeanValidationProducer
 {
+    /**
+     * Constructor used by proxy libs
+     */
     protected CdiAwareBeanValidationProducer()
     {
     }
@@ -50,10 +50,10 @@ public class CdiAwareBeanValidationProducer
      * @return injectable validator-factory
      */
     @Produces
-    @Dependent
+    @RequestScoped //TODO test ApplicationScoped with mojarra
     @Advanced
     @Named(VALIDATOR_FACTORY)
-    public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
+    public InjectableValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
         ValidatorFactory validatorFactory =
                 CodiUtils.getContextualReferenceByName(BeanManagerProvider.getInstance().getBeanManager(),
@@ -68,28 +68,29 @@ public class CdiAwareBeanValidationProducer
     }
 
     /**
-     * Creates an injectable {@link Validator} which supports cdi based dependency injection for
+     * Creates an injectable {@link javax.validation.Validator} which supports cdi based dependency injection for
      * {@link javax.validation.ConstraintValidator}s
      * @return injectable validator
      */
     @Produces
-    @Dependent
+    @RequestScoped
     @Advanced
-    public Validator createValidatorForDependencyInjectionAwareConstraintValidators()
+    public InjectableValidator createValidatorForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableValidator(
                 createValidatorFactoryForDependencyInjectionAwareConstraintValidators().getValidator());
     }
 
     /**
-     * Creates an injectable {@link ConstraintValidatorFactory} which supports cdi based dependency injection for
-     * {@link javax.validation.ConstraintValidator}s
+     * Creates an injectable {@link javax.validation.ConstraintValidatorFactory}
+     * which supports cdi based dependency injection for {@link javax.validation.ConstraintValidator}s
      * @return injectable constraint-validator-factory
      */
     @Produces
-    @Dependent
+    @RequestScoped
     @Advanced
-    public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators()
+    public InjectableConstraintValidatorFactory
+        createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableConstraintValidatorFactory(
                 createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
@@ -97,13 +98,13 @@ public class CdiAwareBeanValidationProducer
     }
 
     /**
-     * Creates an injectable {@link MessageInterpolator}
+     * Creates an injectable {@link javax.validation.MessageInterpolator}
      * @return injectable message-interpolator
      */
     @Produces
-    @Dependent
+    @RequestScoped
     @Advanced
-    public MessageInterpolator createMessageInterpolator()
+    public InjectableMessageInterpolator createMessageInterpolator()
     {
         return new InjectableMessageInterpolator(
                 createValidatorFactoryForDependencyInjectionAwareConstraintValidators()

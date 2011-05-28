@@ -36,6 +36,13 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
 
     private transient MessageInterpolator wrapped;
 
+    /**
+     * Constructor used by proxy libs
+     */
+    protected InjectableMessageInterpolator()
+    {
+    }
+
     InjectableMessageInterpolator(MessageInterpolator wrapped)
     {
         this.wrapped = wrapped;
