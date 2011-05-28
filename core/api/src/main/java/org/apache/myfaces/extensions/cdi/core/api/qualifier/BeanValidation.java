@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier;
+package org.apache.myfaces.extensions.cdi.core.api.qualifier;
 
 import javax.inject.Qualifier;
 import java.lang.annotation.Target;
@@ -31,7 +31,6 @@ import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Qualifier which allows to decouple the bean-validation module and the other modules like the jsf module.
- * It can be used in combination with {@link org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver}
  *
  * @author Gerhard Petracek
  */

@@ -19,8 +19,9 @@
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
+import org.apache.myfaces.extensions.cdi.core.api.qualifier.BeanValidationLiteral;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 
 import javax.enterprise.context.Dependent;
@@ -45,7 +46,6 @@ public class CdiAwareBeanValidationProducer
     /**
      * Creates an injectable {@link ValidatorFactory} which supports cdi based dependency injection for
      * {@link javax.validation.ConstraintValidator}s
-     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
      * for wrapping it
      * @return injectable validator-factory
      */
@@ -53,10 +53,11 @@ public class CdiAwareBeanValidationProducer
     @Dependent
     @Advanced
     @Named(VALIDATOR_FACTORY)
-    public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
+    public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
-        ValidatorFactory validatorFactory = validatorFactoryResolver.resolve();
+        ValidatorFactory validatorFactory =
+                CodiUtils.getContextualReferenceByClass(ValidatorFactory.class, true, new BeanValidationLiteral());
+
         if (validatorFactory == null)
         {
             validatorFactory = ValidatorFactoryStorage.getOrCreateValidatorFactory();
@@ -68,53 +69,43 @@ public class CdiAwareBeanValidationProducer
     /**
      * Creates an injectable {@link Validator} which supports cdi based dependency injection for
      * {@link javax.validation.ConstraintValidator}s
-     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
-     * which should be used as wrapped factory
      * @return injectable validator
      */
     @Produces
     @Dependent
     @Advanced
-    public Validator createValidatorForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
+    public Validator createValidatorForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableValidator(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-                    validatorFactoryResolver).getValidator());
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators().getValidator());
     }
 
     /**
      * Creates an injectable {@link ConstraintValidatorFactory} which supports cdi based dependency injection for
      * {@link javax.validation.ConstraintValidator}s
-     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
-     * which should be used as wrapped factory
      * @return injectable constraint-validator-factory
      */
     @Produces
     @Dependent
     @Advanced
-    public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
+    public ConstraintValidatorFactory createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableConstraintValidatorFactory(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(validatorFactoryResolver)
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
                         .getConstraintValidatorFactory());
     }
 
     /**
      * Creates an injectable {@link MessageInterpolator}
-     * @param validatorFactoryResolver resolver for resolving a custom configured {@link ValidatorFactory}
-     * which should be used as wrapped factory
      * @return injectable message-interpolator
      */
     @Produces
     @Dependent
     @Advanced
-    public MessageInterpolator createMessageInterpolator(
-            @BeanValidation GenericResolver<ValidatorFactory> validatorFactoryResolver)
+    public MessageInterpolator createMessageInterpolator()
     {
         return new InjectableMessageInterpolator(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators(validatorFactoryResolver)
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
                         .getMessageInterpolator());
     }
 }

@@ -18,46 +18,36 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.bv.resolver;
 
-import org.apache.myfaces.extensions.cdi.core.api.resolver.GenericResolver;
-import org.apache.myfaces.extensions.cdi.core.api.resolver.qualifier.BeanValidation;
-
+import org.apache.myfaces.extensions.cdi.core.api.qualifier.BeanValidation;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
-import javax.inject.Inject;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Produces;
 import javax.validation.ValidatorFactory;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-@BeanValidation
-public class JsfValidatorFactoryResolver implements GenericResolver<ValidatorFactory>
+@ApplicationScoped
+public class JsfValidatorFactoryProducer implements Serializable
 {
-    private boolean invalidValueAwareMessageInterpolatorEnabled;
+    private static final long serialVersionUID = -4307637449713503965L;
 
     /**
      * Default constructor required by proxy libs
      */
-    protected JsfValidatorFactoryResolver()
+    protected JsfValidatorFactoryProducer()
     {
     }
 
-    /**
-     * Constructor which will be used by the CDI container for creating the {@link GenericResolver}
-     * @param jsfModuleConfig current jsf-module-config
-     */
-    @Inject
-    public JsfValidatorFactoryResolver(JsfModuleConfig jsfModuleConfig)
+    @Produces
+    @Dependent
+    @BeanValidation
+    public ValidatorFactory createValidatorFactory(JsfModuleConfig jsfModuleConfig)
     {
-        this.invalidValueAwareMessageInterpolatorEnabled
-                = jsfModuleConfig.isInvalidValueAwareMessageInterpolatorEnabled();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public ValidatorFactory resolve()
-    {
-        if(this.invalidValueAwareMessageInterpolatorEnabled)
+        if(jsfModuleConfig.isInvalidValueAwareMessageInterpolatorEnabled())
         {
             return new InvalidValueAwareValidatorFactory();
         }
