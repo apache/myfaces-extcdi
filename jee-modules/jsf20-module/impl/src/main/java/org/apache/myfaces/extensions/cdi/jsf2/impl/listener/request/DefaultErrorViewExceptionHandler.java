@@ -48,6 +48,13 @@ class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
     @Inject
     private ViewNavigationHandler viewNavigationHandler;
 
+    /**
+     * Constructor used by proxy libs
+     */
+    protected DefaultErrorViewExceptionHandler()
+    {
+    }
+
     DefaultErrorViewExceptionHandler(ExceptionHandler wrapped)
     {
         this.wrapped = wrapped;
