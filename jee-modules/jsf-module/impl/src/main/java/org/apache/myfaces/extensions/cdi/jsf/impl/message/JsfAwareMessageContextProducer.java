@@ -40,16 +40,16 @@ public class JsfAwareMessageContextProducer
 {
     /**
      * Creates a specialized {@link MessageContext} for JSF which delegates to jsf mechanisms (as fallback)
-     * @param defaultMessageContext pre-configured message-context
+     *
+     * @param defaultMessageContext  pre-configured message-context
      * @param messageFactoryInstance current message-factory (optional)
-     * @param elProviderInstance current el-provider (optional)
+     * @param elProviderInstance     current el-provider (optional)
      * @param argumentFilterInstance current argument-filter (optional)
      * @return optimized message-context for jsf-applications
      */
     @Produces
     @Dependent
     @Jsf
-    @Named(MESSAGE_CONTEXT)
     public MessageContext createContext(MessageContext defaultMessageContext,
                                         Instance<MessageFactory> messageFactoryInstance,
                                         Instance<ELProvider> elProviderInstance,
@@ -76,10 +76,10 @@ public class JsfAwareMessageContextProducer
 
         MessageContext result = defaultMessageContext.config()
                 .use()
-                    .localeResolver(new JsfAwareLocaleResolver())
-                    .messageResolver(new JsfAwareApplicationMessagesMessageResolver())
-                    .messageInterpolator(new FacesMessageInterpolator(elProvider, argumentFilter))
-                    .addMessageHandler(new JsfAwareMessageHandler())
+                .localeResolver(new JsfAwareLocaleResolver())
+                .messageResolver(new JsfAwareApplicationMessagesMessageResolver())
+                .messageInterpolator(new FacesMessageInterpolator(elProvider, argumentFilter))
+                .addMessageHandler(new JsfAwareMessageHandler())
                 .create();
 
         if (messageFactory != null)
@@ -88,5 +88,18 @@ public class JsfAwareMessageContextProducer
         }
 
         return result;
+    }
+
+    /**
+     * Creates a map for using the el-map-trick.
+     * @param messageContext jsf specific {@link MessageContext}
+     * @return helper map for el-expressions
+     */
+    @Produces
+    @Dependent
+    @Named(MESSAGE_CONTEXT)
+    public MessageHelperMap createContextForEL(final @Jsf MessageContext messageContext)
+    {
+        return new MessageHelperMap(messageContext);
     }
 }
