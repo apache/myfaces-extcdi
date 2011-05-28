@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
-import org.apache.myfaces.extensions.cdi.core.api.qualifier.BeanValidationLiteral;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
@@ -56,7 +56,8 @@ public class CdiAwareBeanValidationProducer
     public ValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
         ValidatorFactory validatorFactory =
-                CodiUtils.getContextualReferenceByClass(ValidatorFactory.class, true, new BeanValidationLiteral());
+                CodiUtils.getContextualReferenceByName(BeanManagerProvider.getInstance().getBeanManager(),
+                        "jsfBeanValidationValidatorFactory", true, ValidatorFactory.class);
 
         if (validatorFactory == null)
         {

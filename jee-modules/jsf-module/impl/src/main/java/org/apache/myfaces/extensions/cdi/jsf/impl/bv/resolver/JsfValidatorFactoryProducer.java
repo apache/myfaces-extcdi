@@ -18,14 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.bv.resolver;
 
-import org.apache.myfaces.extensions.cdi.core.api.qualifier.BeanValidation;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 import javax.validation.ValidatorFactory;
 import java.io.Serializable;
+
+import static org.apache.myfaces.extensions.cdi.jsf.api.JsfModuleBeanNames.BEAN_VALIDATION_VALIDATOR_FACTORY;
 
 /**
  * @author Gerhard Petracek
@@ -44,7 +46,7 @@ public class JsfValidatorFactoryProducer implements Serializable
 
     @Produces
     @Dependent
-    @BeanValidation
+    @Named(BEAN_VALIDATION_VALIDATOR_FACTORY)
     public ValidatorFactory createValidatorFactory(JsfModuleConfig jsfModuleConfig)
     {
         if(jsfModuleConfig.isInvalidValueAwareMessageInterpolatorEnabled())

@@ -81,12 +81,36 @@ public abstract class CodiUtils
     public static <T> T getContextualReferenceByName(
             BeanManager beanManager, String beanName, Class<T> targetClass)
     {
+        return getContextualReferenceByName(beanManager, beanName, false, targetClass);
+    }
+
+    /**
+     * Creates a scoped instance (a proxy for normal scoped beans) for the given bean-name and class
+     * @param beanManager current bean-manager
+     * @param beanName name of the bean
+     * @param optionalBeanAllowed flag which indicates if it's an optional bean
+     * @param targetClass class of the bean
+     * @param <T> target type
+     * @return created or resolved instance
+     */
+    public static <T> T getContextualReferenceByName(
+            BeanManager beanManager, String beanName, boolean optionalBeanAllowed, Class<T> targetClass)
+    {
         Set<Bean<?>> foundBeans = beanManager.getBeans(beanName);
 
-        Bean<?> bean = beanManager.resolve(foundBeans); 
+        if(foundBeans.size() >= 1)
+        {
+            Bean<?> bean = beanManager.resolve(foundBeans);
 
-        //noinspection unchecked
-        return (T) getContextualReference(beanManager, targetClass, bean);
+            //noinspection unchecked
+            return (T) getContextualReference(beanManager, targetClass, bean);
+        }
+        if(!optionalBeanAllowed)
+        {
+            throw new IllegalStateException("No bean found for type: " + targetClass.getName() +
+                    " and name " + beanName);
+        }
+        return null;
     }
 
     /**
@@ -312,7 +336,7 @@ public abstract class CodiUtils
         // now both values are != null
 
         Class<?> valueClass = value1.getClass();
-        
+
         if (!valueClass.equals(value2.getClass()))
         {
             return false;
@@ -413,7 +437,7 @@ public abstract class CodiUtils
     /**
      * Return a List of all methods of the qualifier,
      * which are not annotated with {@link Nonbinding}.
-     * 
+     *
      * @param qualifierAnnotationType annotation class which has to be inspected
      * @return methods which aren't annotated with Nonbinding
      */

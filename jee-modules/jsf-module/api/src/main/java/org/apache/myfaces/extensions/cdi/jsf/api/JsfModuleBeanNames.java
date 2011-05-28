@@ -28,4 +28,9 @@ import org.apache.myfaces.extensions.cdi.core.api.BeanNames;
 public interface JsfModuleBeanNames extends BeanNames
 {
     String MESSAGE_CONTEXT = "messageContext";
+
+    /**
+     * used by the bv module to resolve the bv validator-factory configured for jsf (if both codi modules are used)
+     */
+    String BEAN_VALIDATION_VALIDATOR_FACTORY = "jsfBeanValidationValidatorFactory";
 }
