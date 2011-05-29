@@ -18,9 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.AdvancedLiteral;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-
 import javax.validation.ValidatorFactory;
 import javax.validation.Validator;
 import javax.validation.ValidatorContext;
@@ -38,7 +35,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
 {
     private static final long serialVersionUID = 2200415478496396632L;
 
-    private transient ValidatorFactory wrapped;
+    private SerializableValidatorFactory serializableValidatorFactory;
 
     /**
      * Constructor used by proxy libs
@@ -47,23 +44,14 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
     {
     }
 
-    InjectableValidatorFactory(ValidatorFactory validatorFactory)
+    InjectableValidatorFactory(SerializableValidatorFactory serializableValidatorFactory)
     {
-        this.wrapped = validatorFactory;
+        this.serializableValidatorFactory = serializableValidatorFactory;
     }
 
-    protected ValidatorFactory getWrapped()
+    protected ValidatorFactory getValidatorFactory()
     {
-        if(this.wrapped == null)
-        {
-            this.wrapped = CodiUtils.getContextualReferenceByClass(ValidatorFactory.class, new AdvancedLiteral());
-
-            if(this.wrapped instanceof InjectableValidatorFactory)
-            {
-                this.wrapped = ((InjectableValidatorFactory)this.wrapped).getWrapped();
-            }
-        }
-        return this.wrapped;
+        return this.serializableValidatorFactory;
     }
 
     /*
@@ -75,7 +63,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public Validator getValidator()
     {
-        return getWrapped().getValidator();
+        return getValidatorFactory().getValidator();
     }
 
     /**
@@ -83,7 +71,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public ValidatorContext usingContext()
     {
-        return getWrapped().usingContext();
+        return getValidatorFactory().usingContext();
     }
 
     /**
@@ -91,7 +79,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public MessageInterpolator getMessageInterpolator()
     {
-        return getWrapped().getMessageInterpolator();
+        return getValidatorFactory().getMessageInterpolator();
     }
 
     /**
@@ -99,7 +87,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public TraversableResolver getTraversableResolver()
     {
-        return getWrapped().getTraversableResolver();
+        return getValidatorFactory().getTraversableResolver();
     }
 
     /**
@@ -107,7 +95,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public ConstraintValidatorFactory getConstraintValidatorFactory()
     {
-        return getWrapped().getConstraintValidatorFactory();
+        return getValidatorFactory().getConstraintValidatorFactory();
     }
 
     /**
@@ -115,7 +103,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public <T> T unwrap(Class<T> tClass)
     {
-        return getWrapped().unwrap(tClass);
+        return getValidatorFactory().unwrap(tClass);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

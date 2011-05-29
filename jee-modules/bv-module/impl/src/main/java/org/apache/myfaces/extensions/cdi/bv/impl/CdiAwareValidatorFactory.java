@@ -33,10 +33,11 @@ import javax.validation.ConstraintValidator;
  * @author Gerhard Petracek
  */
 @Typed()
-public class CdiAwareValidatorFactory implements ValidatorFactory
+class CdiAwareValidatorFactory extends SerializableValidatorFactory
 {
-    private ValidatorFactory wrappedValidatorFactory;
-    private boolean customContextUsed;
+    private static final long serialVersionUID = 5066880057488085949L;
+
+    private ValidatorFactoryResolver validatorFactoryResolver;
 
     /**
      * Constructor used by proxy libs
@@ -45,9 +46,9 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
     {
     }
 
-    protected CdiAwareValidatorFactory(ValidatorFactory wrappedValidatorFactory)
+    protected CdiAwareValidatorFactory(ValidatorFactoryResolver validatorFactoryResolver)
     {
-        this.wrappedValidatorFactory = wrappedValidatorFactory;
+        this.validatorFactoryResolver = validatorFactoryResolver;
     }
 
     /**
@@ -55,14 +56,12 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
      */
     public Validator getValidator()
     {
-        if(this.customContextUsed)
-        {
-            return this.wrappedValidatorFactory.getValidator();
-        }
-        return this.usingContext()
+        ValidatorFactory validatorFactory = this.validatorFactoryResolver.getValidatorFactory();
+
+        return validatorFactory.usingContext()
                 .constraintValidatorFactory(getConstraintValidatorFactory())
-                .messageInterpolator(this.wrappedValidatorFactory.getMessageInterpolator())
-                .traversableResolver(this.wrappedValidatorFactory.getTraversableResolver())
+                .messageInterpolator(validatorFactory.getMessageInterpolator())
+                .traversableResolver(validatorFactory.getTraversableResolver())
                 .getValidator();
     }
 
@@ -71,8 +70,7 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
      */
     public ValidatorContext usingContext()
     {
-        this.customContextUsed = true;
-        return wrappedValidatorFactory.usingContext();
+        return this.validatorFactoryResolver.getValidatorFactory().usingContext();
     }
 
     /**
@@ -80,7 +78,7 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
      */
     public MessageInterpolator getMessageInterpolator()
     {
-        return wrappedValidatorFactory.getMessageInterpolator();
+        return this.validatorFactoryResolver.getValidatorFactory().getMessageInterpolator();
     }
 
     /**
@@ -88,7 +86,7 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
      */
     public TraversableResolver getTraversableResolver()
     {
-        return wrappedValidatorFactory.getTraversableResolver();
+        return this.validatorFactoryResolver.getValidatorFactory().getTraversableResolver();
     }
 
     /**
@@ -104,7 +102,8 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
             @SuppressWarnings({"unchecked"})
             public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> targetClass)
             {
-                T validator = wrappedValidatorFactory.getConstraintValidatorFactory().getInstance(targetClass);
+                T validator = validatorFactoryResolver.getValidatorFactory()
+                        .getConstraintValidatorFactory().getInstance(targetClass);
 
                 return injectFields(validator, false);
             }
@@ -116,6 +115,6 @@ public class CdiAwareValidatorFactory implements ValidatorFactory
      */
     public <T> T unwrap(Class<T> tClass)
     {
-        return wrappedValidatorFactory.unwrap(tClass);
+        return this.validatorFactoryResolver.getValidatorFactory().unwrap(tClass);
     }
 }

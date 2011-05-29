@@ -18,9 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.AdvancedLiteral;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-
 import javax.validation.MessageInterpolator;
 import java.io.Serializable;
 import java.io.ObjectInputStream;
@@ -34,7 +31,7 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
 {
     private static final long serialVersionUID = -68329117991255147L;
 
-    private transient MessageInterpolator wrapped;
+    private InjectableValidatorFactory injectableValidatorFactory;
 
     /**
      * Constructor used by proxy libs
@@ -43,24 +40,14 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
     {
     }
 
-    InjectableMessageInterpolator(MessageInterpolator wrapped)
+    InjectableMessageInterpolator(InjectableValidatorFactory injectableValidatorFactory)
     {
-        this.wrapped = wrapped;
+        this.injectableValidatorFactory = injectableValidatorFactory;
     }
 
-    protected MessageInterpolator getWrapped()
+    protected MessageInterpolator getMessageInterpolator()
     {
-        if(this.wrapped == null)
-        {
-            this.wrapped = CodiUtils
-                    .getContextualReferenceByClass(MessageInterpolator.class, new AdvancedLiteral());
-
-            if(this.wrapped instanceof InjectableMessageInterpolator)
-            {
-                this.wrapped = ((InjectableMessageInterpolator)this.wrapped).getWrapped();
-            }
-        }
-        return this.wrapped;
+        return this.injectableValidatorFactory.getMessageInterpolator();
     }
 
     /*
@@ -72,7 +59,7 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
      */
     public String interpolate(String s, Context context)
     {
-        return getWrapped().interpolate(s, context);
+        return getMessageInterpolator().interpolate(s, context);
     }
 
     /**
@@ -80,7 +67,7 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
      */
     public String interpolate(String s, Context context, Locale locale)
     {
-        return getWrapped().interpolate(s, context, locale);
+        return getMessageInterpolator().interpolate(s, context, locale);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

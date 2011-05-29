@@ -19,15 +19,12 @@
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import static org.apache.myfaces.extensions.cdi.bv.api.BeanValidationModuleBeanNames.VALIDATOR_FACTORY;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
-import javax.validation.ValidatorFactory;
 import javax.inject.Named;
 
 /**
@@ -44,27 +41,19 @@ public class CdiAwareBeanValidationProducer
     }
 
     /**
-     * Creates an injectable {@link ValidatorFactory} which supports cdi based dependency injection for
+     * Creates an injectable {@link javax.validation.ValidatorFactory} which supports cdi based dependency injection for
      * {@link javax.validation.ConstraintValidator}s
      * for wrapping it
      * @return injectable validator-factory
      */
     @Produces
-    @RequestScoped //TODO test ApplicationScoped with mojarra
+    @Dependent
     @Advanced
     @Named(VALIDATOR_FACTORY)
     public InjectableValidatorFactory createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
-        ValidatorFactory validatorFactory =
-                CodiUtils.getContextualReferenceByName(BeanManagerProvider.getInstance().getBeanManager(),
-                        "jsfBeanValidationValidatorFactory", true, ValidatorFactory.class);
-
-        if (validatorFactory == null)
-        {
-            validatorFactory = ValidatorFactoryStorage.getOrCreateValidatorFactory();
-        }
-
-        return new InjectableValidatorFactory(new CdiAwareValidatorFactory(validatorFactory));
+        //TODO
+        return new InjectableValidatorFactory(new CdiAwareValidatorFactory(new ValidatorFactoryResolver()));
     }
 
     /**
@@ -73,12 +62,12 @@ public class CdiAwareBeanValidationProducer
      * @return injectable validator
      */
     @Produces
-    @RequestScoped
+    @Dependent
     @Advanced
     public InjectableValidator createValidatorForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableValidator(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators().getValidator());
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators());
     }
 
     /**
@@ -87,14 +76,13 @@ public class CdiAwareBeanValidationProducer
      * @return injectable constraint-validator-factory
      */
     @Produces
-    @RequestScoped
+    @Dependent
     @Advanced
     public InjectableConstraintValidatorFactory
         createConstraintValidatorFactoryForDependencyInjectionAwareConstraintValidators()
     {
         return new InjectableConstraintValidatorFactory(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
-                        .getConstraintValidatorFactory());
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators());
     }
 
     /**
@@ -102,12 +90,11 @@ public class CdiAwareBeanValidationProducer
      * @return injectable message-interpolator
      */
     @Produces
-    @RequestScoped
+    @Dependent
     @Advanced
     public InjectableMessageInterpolator createMessageInterpolator()
     {
         return new InjectableMessageInterpolator(
-                createValidatorFactoryForDependencyInjectionAwareConstraintValidators()
-                        .getMessageInterpolator());
+                createValidatorFactoryForDependencyInjectionAwareConstraintValidators());
     }
 }

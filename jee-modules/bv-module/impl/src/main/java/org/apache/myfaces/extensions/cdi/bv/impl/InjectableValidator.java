@@ -18,9 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.AdvancedLiteral;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.metadata.BeanDescriptor;
@@ -36,7 +33,7 @@ class InjectableValidator implements Validator, Serializable
 {
     private static final long serialVersionUID = 7925077169313672595L;
 
-    private transient Validator wrapped;
+    private InjectableValidatorFactory injectableValidatorFactory;
 
     /**
      * Constructor used by proxy libs
@@ -45,23 +42,14 @@ class InjectableValidator implements Validator, Serializable
     {
     }
 
-    InjectableValidator(Validator validator)
+    InjectableValidator(InjectableValidatorFactory injectableValidatorFactory)
     {
-        this.wrapped = validator;
+        this.injectableValidatorFactory = injectableValidatorFactory;
     }
 
-    protected Validator getWrapped()
+    protected Validator getValidator()
     {
-        if(this.wrapped == null)
-        {
-            this.wrapped = CodiUtils.getContextualReferenceByClass(Validator.class, new AdvancedLiteral());
-
-            if(this.wrapped instanceof InjectableValidator)
-            {
-                this.wrapped = ((InjectableValidator)this.wrapped).getWrapped();
-            }
-        }
-        return this.wrapped;
+        return this.injectableValidatorFactory.getValidator();
     }
 
     /*
@@ -73,7 +61,7 @@ class InjectableValidator implements Validator, Serializable
      */
     public <T> Set<ConstraintViolation<T>> validate(T t, Class<?>... classes)
     {
-        return getWrapped().validate(t, classes);
+        return getValidator().validate(t, classes);
     }
 
     /**
@@ -81,7 +69,7 @@ class InjectableValidator implements Validator, Serializable
      */
     public <T> Set<ConstraintViolation<T>> validateProperty(T t, String s, Class<?>... classes)
     {
-        return getWrapped().validateProperty(t, s, classes);
+        return getValidator().validateProperty(t, s, classes);
     }
 
     /**
@@ -89,7 +77,7 @@ class InjectableValidator implements Validator, Serializable
      */
     public <T> Set<ConstraintViolation<T>> validateValue(Class<T> tClass, String s, Object o, Class<?>... classes)
     {
-        return getWrapped().validateValue(tClass, s, o, classes);
+        return getValidator().validateValue(tClass, s, o, classes);
     }
 
     /**
@@ -97,7 +85,7 @@ class InjectableValidator implements Validator, Serializable
      */
     public BeanDescriptor getConstraintsForClass(Class<?> aClass)
     {
-        return getWrapped().getConstraintsForClass(aClass);
+        return getValidator().getConstraintsForClass(aClass);
     }
 
     /**
@@ -105,7 +93,7 @@ class InjectableValidator implements Validator, Serializable
      */
     public <T> T unwrap(Class<T> tClass)
     {
-        return getWrapped().unwrap(tClass);
+        return getValidator().unwrap(tClass);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})

@@ -18,9 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
-import org.apache.myfaces.extensions.cdi.core.impl.util.AdvancedLiteral;
-import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
@@ -34,7 +31,7 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
 {
     private static final long serialVersionUID = -4851853797257005554L;
 
-    private transient ConstraintValidatorFactory wrapped;
+    private InjectableValidatorFactory injectableValidatorFactory;
 
     /**
      * Constructor used by proxy libs
@@ -43,24 +40,9 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
     {
     }
 
-    InjectableConstraintValidatorFactory(ConstraintValidatorFactory constraintValidatorFactory)
+    InjectableConstraintValidatorFactory(InjectableValidatorFactory injectableValidatorFactory)
     {
-        this.wrapped = constraintValidatorFactory;
-    }
-
-    protected ConstraintValidatorFactory getWrapped()
-    {
-        if(this.wrapped == null)
-        {
-            this.wrapped = CodiUtils
-                    .getContextualReferenceByClass(ConstraintValidatorFactory.class, new AdvancedLiteral());
-
-            if(this.wrapped instanceof InjectableConstraintValidatorFactory)
-            {
-                this.wrapped = ((InjectableConstraintValidatorFactory)this.wrapped).getWrapped();
-            }
-        }
-        return this.wrapped;
+        this.injectableValidatorFactory = injectableValidatorFactory;
     }
 
     /*
@@ -72,7 +54,8 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
      */
     public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> tClass)
     {
-        return getWrapped().getInstance(tClass);
+        return this.injectableValidatorFactory.getValidatorFactory()
+                .getConstraintValidatorFactory().getInstance(tClass);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
