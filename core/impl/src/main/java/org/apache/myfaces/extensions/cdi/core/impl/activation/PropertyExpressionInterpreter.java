@@ -22,9 +22,12 @@ import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated
 import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 public class PropertyExpressionInterpreter implements ExpressionInterpreter<String, Boolean>
 {
     /**

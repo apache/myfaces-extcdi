@@ -132,6 +132,14 @@ class CodiLifecycleWrapper extends Lifecycle
         //just an !additional! check to improve the performance
         if(applicationInitialized == null)
         {
+            initApplication();
+        }
+    }
+
+    private synchronized void initApplication()
+    {
+        if(applicationInitialized == null)
+        {
             applicationInitialized = true;
             ApplicationStartupBroadcaster applicationStartupBroadcaster =
                     CodiUtils.getContextualReferenceByClass(ApplicationStartupBroadcaster.class);
