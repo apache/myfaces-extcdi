@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.alternative.implementation;
+package org.apache.myfaces.extensions.cdi.alternative.implementation.api;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;

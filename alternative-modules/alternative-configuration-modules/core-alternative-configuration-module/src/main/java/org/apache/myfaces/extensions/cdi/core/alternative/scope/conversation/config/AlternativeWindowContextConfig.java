@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config;
 
-import org.apache.myfaces.extensions.cdi.alternative.implementation.AlternativeImplementation;
+import org.apache.myfaces.extensions.cdi.alternative.implementation.api.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;

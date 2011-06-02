@@ -16,8 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.alternative.implementation;
+package org.apache.myfaces.extensions.cdi.alternative.implementation.impl;
 
+import org.apache.myfaces.extensions.cdi.alternative.implementation.api.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 
 import javax.enterprise.inject.Typed;

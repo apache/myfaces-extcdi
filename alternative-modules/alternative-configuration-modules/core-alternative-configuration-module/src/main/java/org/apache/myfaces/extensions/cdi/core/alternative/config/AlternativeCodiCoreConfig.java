@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.alternative.config;
 
-import org.apache.myfaces.extensions.cdi.alternative.implementation.AlternativeImplementation;
+import org.apache.myfaces.extensions.cdi.alternative.implementation.api.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
