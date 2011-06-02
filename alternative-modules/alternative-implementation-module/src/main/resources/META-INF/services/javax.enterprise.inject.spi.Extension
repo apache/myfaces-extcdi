@@ -17,4 +17,4 @@
 # under the License.
 #####################################################################################
 
-org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementationExtension
+org.apache.myfaces.extensions.cdi.alternative.implementation.AlternativeImplementationExtension

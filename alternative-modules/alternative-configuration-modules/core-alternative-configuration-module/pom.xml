@@ -40,7 +40,7 @@
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-            <artifactId>myfaces-extcdi-alternative-spi-module</artifactId>
+            <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
         </dependency>
     </dependencies>
 

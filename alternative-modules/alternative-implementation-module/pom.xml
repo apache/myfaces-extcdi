@@ -27,10 +27,10 @@
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-    <artifactId>myfaces-extcdi-alternative-spi-module</artifactId>
+    <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Alternative-SPI Module</name>
+    <name>MyFaces Extensions-CDI Alternative-Implementation Module</name>
 
     <dependencies>
         <dependency>

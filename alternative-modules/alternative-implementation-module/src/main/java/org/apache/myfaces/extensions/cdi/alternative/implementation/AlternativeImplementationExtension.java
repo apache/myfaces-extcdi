@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.alternative.spi;
+package org.apache.myfaces.extensions.cdi.alternative.implementation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;

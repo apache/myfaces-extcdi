@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.alternative.spi;
+package org.apache.myfaces.extensions.cdi.alternative.implementation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -26,6 +26,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
+ * Only for the config and SPI of CODI!
+ *
  * Annotate a bean which implements a SPI of CODI or extends a config class of CODI.
  * In case of implementing a SPI it's required to register the custom class.
  * So it will be checked by the {@link java.util.ServiceLoader}.

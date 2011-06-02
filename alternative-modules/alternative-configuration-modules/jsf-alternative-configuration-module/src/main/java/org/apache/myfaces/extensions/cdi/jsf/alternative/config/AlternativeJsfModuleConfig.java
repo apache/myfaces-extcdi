@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.alternative.config;
 
-import org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementation;
+import org.apache.myfaces.extensions.cdi.alternative.implementation.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
