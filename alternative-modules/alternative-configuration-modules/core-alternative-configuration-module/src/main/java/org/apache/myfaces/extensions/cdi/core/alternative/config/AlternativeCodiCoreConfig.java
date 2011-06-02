@@ -18,18 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.core.alternative.config;
 
+import org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
-import javax.enterprise.inject.Typed;
+import javax.annotation.PostConstruct;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-@Typed()
+@AlternativeImplementation
 public class AlternativeCodiCoreConfig extends CodiCoreConfig
 {
     private static final long serialVersionUID = -1471628272055334673L;
@@ -37,7 +38,8 @@ public class AlternativeCodiCoreConfig extends CodiCoreConfig
     /**
      * Logs the activation of the config
      */
-    public AlternativeCodiCoreConfig()
+    @PostConstruct
+    protected void init()
     {
         Class configClass = AlternativeCodiCoreConfig.class; //don't use getClass - would lead to a proxy
 

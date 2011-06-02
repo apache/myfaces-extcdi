@@ -18,18 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config;
 
+import org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
-import javax.enterprise.inject.Typed;
+import javax.annotation.PostConstruct;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-@Typed()
+@AlternativeImplementation
 public class AlternativeConversationConfig extends ConversationConfig
 {
     private static final long serialVersionUID = 6346216228706018316L;
@@ -37,7 +38,8 @@ public class AlternativeConversationConfig extends ConversationConfig
     /**
      * Logs the activation of the config
      */
-    public AlternativeConversationConfig()
+    @PostConstruct
+    protected void init()
     {
         Class configClass = AlternativeConversationConfig.class; //don't use getClass - would lead to a proxy
 

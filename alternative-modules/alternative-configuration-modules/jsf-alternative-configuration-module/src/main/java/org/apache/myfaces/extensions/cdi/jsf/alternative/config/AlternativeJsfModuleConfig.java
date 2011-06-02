@@ -18,18 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.alternative.config;
 
+import org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 
-import javax.enterprise.inject.Typed;
+import javax.annotation.PostConstruct;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-@Typed()
+@AlternativeImplementation
 public class AlternativeJsfModuleConfig extends JsfModuleConfig
 {
     private static final long serialVersionUID = 2385134740850201120L;
@@ -37,7 +38,8 @@ public class AlternativeJsfModuleConfig extends JsfModuleConfig
     /**
      * Logs the activation of the config
      */
-    public AlternativeJsfModuleConfig()
+    @PostConstruct
+    protected void init()
     {
         Class configClass = AlternativeJsfModuleConfig.class; //don't use getClass - would lead to a proxy
 

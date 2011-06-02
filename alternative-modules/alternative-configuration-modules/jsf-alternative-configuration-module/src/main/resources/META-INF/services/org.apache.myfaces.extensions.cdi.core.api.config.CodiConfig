@@ -17,8 +17,4 @@
 # under the License.
 #####################################################################################
 
-# this file is only useful for alternative-implementation modules (required for weld)
-# with owb or (hopefully) cdi 1.1 it's possible to configure the content of this file via
-# cdi std.-mechanisms (see @Alternative)
-
 org.apache.myfaces.extensions.cdi.jsf.alternative.config.AlternativeJsfModuleConfig

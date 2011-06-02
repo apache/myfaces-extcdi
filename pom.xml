@@ -322,18 +322,9 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- alternative module - esp. required for weld -->
-
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                <artifactId>myfaces-extcdi-core-alternative</artifactId>
-                <version>1.0.0-SNAPSHOT</version>
-                <scope>provided</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                <artifactId>myfaces-extcdi-jsf-alternative</artifactId>
+                <artifactId>myfaces-extcdi-alternative-spi-module</artifactId>
                 <version>1.0.0-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>

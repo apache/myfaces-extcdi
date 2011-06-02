@@ -17,5 +17,4 @@
 # under the License.
 #####################################################################################
 
-This module is needed as workaround to several weld issues.
-Furthermore, this module requires a module which bundles the alternative-implementation modules.
+org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementationExtension

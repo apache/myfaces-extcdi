@@ -35,8 +35,8 @@
 
 
     <modules>
-        <module>alternative-implementation-modules</module>
         <module>alternative-configuration-modules</module>
+        <module>alternative-spi-module</module>
     </modules>
 
 </project>

@@ -18,18 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config;
 
+import org.apache.myfaces.extensions.cdi.alternative.spi.AlternativeImplementation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
-import javax.enterprise.inject.Typed;
+import javax.annotation.PostConstruct;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
  */
-@Typed()
+@AlternativeImplementation
 public class AlternativeWindowContextConfig extends WindowContextConfig
 {
     private static final long serialVersionUID = 8616591700809645827L;
@@ -37,7 +38,8 @@ public class AlternativeWindowContextConfig extends WindowContextConfig
     /**
      * Logs the activation of the config
      */
-    public AlternativeWindowContextConfig()
+    @PostConstruct
+    protected void init()
     {
         Class configClass = AlternativeWindowContextConfig.class; //don't use getClass - would lead to a proxy
 

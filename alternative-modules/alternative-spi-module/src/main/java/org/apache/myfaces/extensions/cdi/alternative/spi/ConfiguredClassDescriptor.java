@@ -16,17 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.alternative.auto.scope.conversation.config;
+package org.apache.myfaces.extensions.cdi.alternative.spi;
 
-import javax.enterprise.inject.Alternative;
+import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
+
+import javax.enterprise.inject.Typed;
 
 /**
  * @author Gerhard Petracek
  */
-//further information is available in the readme-file
-@Alternative
-public class AlternativeWindowContextConfig
-    extends org.apache.myfaces.extensions.cdi.core.alternative.scope.conversation.config.AlternativeWindowContextConfig
+@Typed()
+class ConfiguredClassDescriptor implements ConfiguredValueDescriptor<Class, Object>
 {
-    private static final long serialVersionUID = 8315843294036645626L;
+    private Class configuredClass;
+
+    ConfiguredClassDescriptor()
+    {
+    }
+
+    ConfiguredClassDescriptor(Class configuredClass)
+    {
+        this.configuredClass = configuredClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class getKey()
+    {
+        return this.configuredClass;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class<Object> getTargetType()
+    {
+        return this.configuredClass;
+    }
 }

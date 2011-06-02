@@ -22,25 +22,21 @@
 
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-        <artifactId>alternative-configuration-project</artifactId>
+        <artifactId>alternative-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-    <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
+    <artifactId>myfaces-extcdi-alternative-spi-module</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Core Alternative Config Module</name>
+    <name>MyFaces Extensions-CDI Alternative-SPI Module</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-impl</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-            <artifactId>myfaces-extcdi-alternative-spi-module</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
