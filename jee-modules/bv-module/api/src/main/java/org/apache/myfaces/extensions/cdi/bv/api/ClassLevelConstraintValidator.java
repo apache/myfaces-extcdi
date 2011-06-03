@@ -31,7 +31,8 @@ import java.lang.reflect.Method;
  *
  * @author Gerhard Petracek
  */
-public abstract class ClassLevelValidator<A extends Annotation, T> implements ConstraintValidator<A, T>, Serializable
+public abstract class ClassLevelConstraintValidator<A extends Annotation, T>
+        implements ConstraintValidator<A, T>, Serializable
 {
     protected A constraint;
 

@@ -71,7 +71,7 @@ class InjectableValidatorFactory implements ValidatorFactory, Serializable
      */
     public ValidatorContext usingContext()
     {
-        return getValidatorFactory().usingContext();
+        return new AdvancedValidatorContext(this, getValidatorFactory().usingContext());
     }
 
     /**
