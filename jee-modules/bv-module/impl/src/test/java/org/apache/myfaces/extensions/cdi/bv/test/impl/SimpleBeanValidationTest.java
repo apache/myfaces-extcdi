@@ -24,16 +24,25 @@ import org.apache.myfaces.extensions.cdi.bv.test.impl.validation.TestBean;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.test.junit4.AbstractCdiAwareTest;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.inject.Inject;
-import javax.validation.*;
+import javax.inject.Named;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidatorFactory;
+import javax.validation.ConstraintViolation;
+import javax.validation.MessageInterpolator;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Locale;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Test impl
@@ -50,8 +59,16 @@ public class SimpleBeanValidationTest extends AbstractCdiAwareTest
     private ValidatorFactory validatorFactory;
 
     @Inject
+    @Named("contextAwareValidatorFactory")
+    private ValidatorFactory namedValidatorFactory;
+
+    @Inject
     @Advanced
     private ConstraintValidatorFactory constraintValidatorFactory;
+
+    @Inject
+    @Advanced
+    private MessageInterpolator messageInterpolator;
 
     /**
      */
@@ -107,9 +124,45 @@ public class SimpleBeanValidationTest extends AbstractCdiAwareTest
     /**
      */
     @Test
+    public void testMessageInterpolatorInjection()
+    {
+        assertNotNull(this.messageInterpolator);
+    }
+
+    /**
+     */
+    @Test
     public void testInvalidValueInMessage()
     {
         Validator validator = this.validatorFactory.usingContext().messageInterpolator(new MessageInterpolator()
+        {
+            public String interpolate(String messageTemplate, Context context)
+            {
+                return interpolate(messageTemplate, context, null);
+            }
+
+            public String interpolate(String messageTemplate, Context context, Locale locale)
+            {
+                //simplified version of the interpolator provided by the jsf module
+                String invalidValue = messageTemplate.substring(0, messageTemplate.indexOf("$"));
+                String message = messageTemplate.substring(messageTemplate.lastIndexOf("$") + 1);
+
+                return message.replace("{invalidValue}", invalidValue);
+            }
+        }).getValidator();
+        Set<ConstraintViolation<TestBean>> violations = validator.validate(new TestBean("Tester", "Tester"));
+
+        assertEquals(1, violations.size());
+
+        assertEquals("The same name 'Tester' isn't allowed.", violations.iterator().next().getMessage());
+    }
+
+    /**
+     */
+    @Test
+    public void testNamedValidatorFactory()
+    {
+        Validator validator = this.namedValidatorFactory.usingContext().messageInterpolator(new MessageInterpolator()
         {
             public String interpolate(String messageTemplate, Context context)
             {
