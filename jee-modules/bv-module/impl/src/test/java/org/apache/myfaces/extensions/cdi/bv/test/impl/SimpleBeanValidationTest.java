@@ -18,18 +18,18 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.test.impl;
 
+import org.apache.myfaces.extensions.cdi.bv.test.impl.validation.DifferentName;
+import org.apache.myfaces.extensions.cdi.bv.test.impl.validation.DifferentNameValidator;
 import org.apache.myfaces.extensions.cdi.bv.test.impl.validation.TestBean;
 import org.apache.myfaces.extensions.cdi.core.api.Advanced;
+import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import org.apache.myfaces.extensions.cdi.test.junit4.AbstractCdiAwareTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import javax.inject.Inject;
-import javax.validation.ConstraintViolation;
-import javax.validation.MessageInterpolator;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+import javax.validation.*;
 import java.util.Locale;
 import java.util.Set;
 
@@ -49,6 +49,10 @@ public class SimpleBeanValidationTest extends AbstractCdiAwareTest
     @Advanced
     private ValidatorFactory validatorFactory;
 
+    @Inject
+    @Advanced
+    private ConstraintValidatorFactory constraintValidatorFactory;
+
     /**
      */
     @Test
@@ -57,6 +61,47 @@ public class SimpleBeanValidationTest extends AbstractCdiAwareTest
         Set<ConstraintViolation<TestBean>> violations = this.validator.validate(new TestBean("Tester", "Tester"));
 
         assertEquals(1, violations.size());
+    }
+
+    /**
+     */
+    @Test
+    public void testInjectionAwareConstraintValidatorFactory()
+    {
+        ConstraintValidator<DifferentName, TestBean> constraintValidator =
+                this.constraintValidatorFactory.getInstance(DifferentNameValidator.class);
+
+        constraintValidator.initialize(DefaultAnnotation.of(DifferentName.class));
+        boolean result = constraintValidator.isValid(new TestBean("Tester", "Tester"),
+                        new ConstraintValidatorContext()
+                        {
+                            public void disableDefaultConstraintViolation()
+                            {
+                                //
+                            }
+
+                            public String getDefaultConstraintMessageTemplate()
+                            {
+                                return "";
+                            }
+
+                            public ConstraintViolationBuilder buildConstraintViolationWithTemplate(String msgTemplate)
+                            {
+                                return new ConstraintViolationBuilder()
+                                {
+                                    public NodeBuilderDefinedContext addNode(String name)
+                                    {
+                                        return null;
+                                    }
+
+                                    public ConstraintValidatorContext addConstraintViolation()
+                                    {
+                                        return null;
+                                    }
+                                };
+                            }
+                        });
+        assertEquals(false, result);
     }
 
     /**

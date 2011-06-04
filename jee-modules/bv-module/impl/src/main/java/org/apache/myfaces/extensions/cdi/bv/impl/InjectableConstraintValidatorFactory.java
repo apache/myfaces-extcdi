@@ -24,6 +24,8 @@ import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.IOException;
 
+import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
+
 /**
  * @author Gerhard Petracek
  */
@@ -54,8 +56,10 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
      */
     public <T extends ConstraintValidator<?, ?>> T getInstance(Class<T> tClass)
     {
-        return this.injectableValidatorFactory.getValidatorFactory()
+        T validator = this.injectableValidatorFactory.getValidatorFactory()
                 .getConstraintValidatorFactory().getInstance(tClass);
+
+        return injectFields(validator, false);
     }
 
     @SuppressWarnings({"UnusedDeclaration"})
