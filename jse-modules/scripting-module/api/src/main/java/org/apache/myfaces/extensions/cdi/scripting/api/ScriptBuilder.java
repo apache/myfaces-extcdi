@@ -19,11 +19,12 @@
 package org.apache.myfaces.extensions.cdi.scripting.api;
 
 import javax.script.Bindings;
+import java.io.Serializable;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ScriptBuilder
+public interface ScriptBuilder extends Serializable
 {
     /**
      * Adds a script to the current builder instance

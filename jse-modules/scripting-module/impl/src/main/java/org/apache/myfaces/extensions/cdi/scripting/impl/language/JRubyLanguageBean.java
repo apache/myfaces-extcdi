@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 @Singleton
 public class JRubyLanguageBean extends AbstractLanguageBean
 {
+    private static final long serialVersionUID = -7902402921059353743L;
+
     protected JRubyLanguageBean()
     {
     }

@@ -21,8 +21,11 @@ package org.apache.myfaces.extensions.cdi.scripting.impl;
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptBuilder;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ExceptionUtils.overrideBuilderState;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
+
+import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+import org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils;
 
 import javax.script.Bindings;
 import javax.script.SimpleBindings;
@@ -36,14 +39,22 @@ import java.util.HashMap;
  */
 class DefaultScriptBuilder implements ScriptBuilder
 {
-    private ScriptEngine scriptEngine;
-    private Map<String, Object> arguments;
-    private String script;
-    private Bindings bindings;
+    private static final long serialVersionUID = -7746031361776472273L;
 
-    DefaultScriptBuilder(ScriptEngine scriptEngine)
+    private transient ScriptEngine scriptEngine;
+    private Class<? extends Language> language;
+    private transient Map<String, Object> arguments;
+    private transient String script;
+    private transient Bindings bindings;
+
+    private DefaultScriptBuilder()
+    {
+    }
+
+    DefaultScriptBuilder(ScriptEngine scriptEngine, Class<? extends Language> language)
     {
         this.scriptEngine = scriptEngine;
+        this.language = language;
     }
 
     /**
@@ -51,7 +62,7 @@ class DefaultScriptBuilder implements ScriptBuilder
      */
     public ScriptBuilder script(String script)
     {
-        DefaultScriptBuilder newScriptBuilder = new DefaultScriptBuilder(this.scriptEngine);
+        DefaultScriptBuilder newScriptBuilder = new DefaultScriptBuilder(getScriptEngine(), this.language);
         newScriptBuilder.script = script;
         return newScriptBuilder;
     }
@@ -107,7 +118,7 @@ class DefaultScriptBuilder implements ScriptBuilder
 
             if(this.bindings == null && this.arguments == null)
             {
-                return (T)scriptEngine.eval(this.script);
+                return (T)getScriptEngine().eval(this.script);
             }
 
             Bindings scriptBindings = this.bindings;
@@ -117,7 +128,7 @@ class DefaultScriptBuilder implements ScriptBuilder
                 scriptBindings = new SimpleBindings(this.arguments);
             }
 
-            return (T)scriptEngine.eval(this.script, scriptBindings);
+            return (T)getScriptEngine().eval(this.script, scriptBindings);
         }
         catch (ScriptException e)
         {
@@ -129,5 +140,14 @@ class DefaultScriptBuilder implements ScriptBuilder
     {
         ExternalExpressionInterpreter externalExpressionInterpreter = resolveExternalExpressionInterpreter();
         return externalExpressionInterpreter.transform(script);
+    }
+
+    private ScriptEngine getScriptEngine()
+    {
+        if(this.scriptEngine == null)
+        {
+            this.scriptEngine = ScriptingUtils.createScriptEngine(this.language);
+        }
+        return this.scriptEngine;
     }
 }

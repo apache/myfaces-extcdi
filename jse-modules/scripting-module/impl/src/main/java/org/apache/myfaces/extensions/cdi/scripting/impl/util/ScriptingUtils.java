@@ -20,16 +20,21 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.scripting.api.LanguageManager;
+import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
+import javax.enterprise.inject.Typed;
+import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 /**
  * @author Gerhard Petracek
  */
-public class ScriptingUtils
+@Typed()
+public abstract class ScriptingUtils
 {
-    protected ScriptingUtils()
+    private ScriptingUtils()
     {
     }
 
@@ -73,5 +78,19 @@ public class ScriptingUtils
         return externalExpressionInterpreter != null ?
                 externalExpressionInterpreter :
                 new DefaultExternalExpressionInterpreter();
+    }
+
+
+    /**
+     * Resolves the {@link ScriptEngine} based on the given language definition
+     * @param language current language
+     * @return script-engine for the given language
+     */
+    public static ScriptEngine createScriptEngine(Class<? extends Language> language)
+    {
+        LanguageManager languageManager = CodiUtils.getContextualReferenceByClass(LanguageManager.class);
+
+        String languageName = languageManager.getLanguageName(language);
+        return getCurrentScriptEngineManager().getEngineByName(languageName);
     }
 }

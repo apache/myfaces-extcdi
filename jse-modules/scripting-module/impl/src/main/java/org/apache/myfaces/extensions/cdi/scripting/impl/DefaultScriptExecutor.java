@@ -19,10 +19,13 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl;
 
 import org.apache.myfaces.extensions.cdi.scripting.api.ScriptExecutor;
+import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+import org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils;
 
+import javax.enterprise.inject.Typed;
 import javax.script.Bindings;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
@@ -32,17 +35,23 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
-public class DefaultScriptExecutor implements ScriptExecutor
+@Typed()
+class DefaultScriptExecutor implements ScriptExecutor
 {
-    private ScriptEngine scriptEngine;
+    private static final long serialVersionUID = 1340953486786561148L;
+
+    private transient ScriptEngine scriptEngine;
+    private Class<? extends Language> language;
 
     /**
      * Constructor which creates the executor which is awae of the current script-engine
      * @param scriptEngine script-engine which should be used
+     * @param language current language
      */
-    public DefaultScriptExecutor(ScriptEngine scriptEngine)
+    DefaultScriptExecutor(ScriptEngine scriptEngine, Class<? extends Language> language)
     {
         this.scriptEngine = scriptEngine;
+        this.language = language;
     }
 
     /**
@@ -77,12 +86,22 @@ public class DefaultScriptExecutor implements ScriptExecutor
         try
         {
             script = interpreteScript(script);
-            return (T)scriptEngine.eval(script);
+            //noinspection unchecked
+            return (T)getScriptEngine().eval(script);
         }
         catch (ScriptException e)
         {
             throw new UnhandledException(e);
         }
+    }
+
+    private ScriptEngine getScriptEngine()
+    {
+        if(this.scriptEngine == null)
+        {
+            this.scriptEngine = ScriptingUtils.createScriptEngine(this.language);
+        }
+        return this.scriptEngine;
     }
 
     /**
@@ -101,7 +120,8 @@ public class DefaultScriptExecutor implements ScriptExecutor
         try
         {
             script = interpreteScript(script);
-            return (T)scriptEngine.eval(script, bindings);
+            //noinspection unchecked
+            return (T)getScriptEngine().eval(script, bindings);
         }
         catch (ScriptException e)
         {

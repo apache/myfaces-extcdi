@@ -18,11 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.impl.util;
 
+import javax.enterprise.inject.Typed;
 import java.util.HashMap;
 
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class ArgumentAwareScriptHelperMap extends ScriptHelperMap
 {
     private static final long serialVersionUID = 393871900655666197L;

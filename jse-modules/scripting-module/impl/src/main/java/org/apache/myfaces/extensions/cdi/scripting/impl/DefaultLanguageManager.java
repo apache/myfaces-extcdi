@@ -40,6 +40,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @ApplicationScoped
 public class DefaultLanguageManager implements LanguageManager
 {
+    private static final long serialVersionUID = 7133935225989053503L;
+
     private ConcurrentHashMap<Class<? extends Language>, Language> languageCache;
 
     protected DefaultLanguageManager()

@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 @Singleton
 public class JythonLanguageBean extends AbstractLanguageBean
 {
+    private static final long serialVersionUID = 6708430354049043401L;
+
     protected JythonLanguageBean()
     {
     }

@@ -24,6 +24,7 @@ import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUti
 import static org.apache.myfaces.extensions.cdi.scripting.impl.util.ScriptingUtils.resolveExternalExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionInterpreter;
 
+import javax.enterprise.inject.Typed;
 import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 import javax.script.Bindings;
@@ -32,6 +33,7 @@ import java.util.Map;
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class ScriptHelperMap extends UnmodifiableMap<String, Object>
 {
     private static final long serialVersionUID = 393871900655666197L;

@@ -90,12 +90,15 @@ public class ScriptEngineManagerProducer
     {
         ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
 
-        return createScriptExecutor(scriptEngine);
+        return createScriptExecutorForScriptEngine(scriptEngine, injectionPoint);
     }
 
-    private ScriptExecutor createScriptExecutor(ScriptEngine scriptEngine)
+    private ScriptExecutor createScriptExecutorForScriptEngine(ScriptEngine scriptEngine, InjectionPoint injectionPoint)
     {
-        return new DefaultScriptExecutor(scriptEngine);
+        Class<? extends Language> language =
+                injectionPoint.getAnnotated().getAnnotation(ScriptLanguage.class).value();
+
+        return new DefaultScriptExecutor(scriptEngine, language);
     }
 
     /**
@@ -111,12 +114,15 @@ public class ScriptEngineManagerProducer
     {
         ScriptEngine scriptEngine = createScriptEngineByLanguageName(injectionPoint, languageManager);
 
-        return createScriptBuilder(scriptEngine);
+        return createScriptBuilderForEngine(scriptEngine, injectionPoint);
     }
 
-    private ScriptBuilder createScriptBuilder(ScriptEngine scriptEngine)
+    private ScriptBuilder createScriptBuilderForEngine(ScriptEngine scriptEngine, InjectionPoint injectionPoint)
     {
-        return new DefaultScriptBuilder(scriptEngine);
+        Class<? extends Language> language =
+                injectionPoint.getAnnotated().getAnnotation(ScriptLanguage.class).value();
+
+        return new DefaultScriptBuilder(scriptEngine, language);
     }
 
     /**
@@ -128,14 +134,18 @@ public class ScriptEngineManagerProducer
     @Produces
     @ScriptLanguage(PlaceHolderLanguage.class)
     @Dependent
-    public ScriptEngine createScriptEngineByLanguageName(InjectionPoint injectionPoint, LanguageManager languageManager)
+    public InjectableScriptEngine createScriptEngineByLanguageName(InjectionPoint injectionPoint,
+                                                                   LanguageManager languageManager)
     {
         Class<? extends Language> language =
                 injectionPoint.getAnnotated().getAnnotation(ScriptLanguage.class).value();
 
         String languageName = languageManager.getLanguageName(language);
 
-        return checkedScriptEngine(getCurrentScriptEngineManager().getEngineByName(languageName), languageName);
+        ScriptEngine result = checkedScriptEngine(
+                getCurrentScriptEngineManager().getEngineByName(languageName), languageName);
+
+        return new InjectableScriptEngine(result, language);
     }
 
     /*

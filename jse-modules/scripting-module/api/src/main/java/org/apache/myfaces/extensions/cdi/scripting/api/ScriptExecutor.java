@@ -19,12 +19,13 @@
 package org.apache.myfaces.extensions.cdi.scripting.api;
 
 import javax.script.Bindings;
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Gerhard Petracek
  */
-public interface ScriptExecutor
+public interface ScriptExecutor extends Serializable
 {
     /**
      * Executes the given script

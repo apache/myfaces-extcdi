@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 @Singleton
 public class BeanShellLanguageBean extends AbstractLanguageBean
 {
+    private static final long serialVersionUID = -3345599726467336243L;
+
     protected BeanShellLanguageBean()
     {
     }

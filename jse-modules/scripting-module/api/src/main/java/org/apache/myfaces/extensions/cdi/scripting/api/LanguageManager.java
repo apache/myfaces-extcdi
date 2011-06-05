@@ -20,10 +20,12 @@ package org.apache.myfaces.extensions.cdi.scripting.api;
 
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface LanguageManager
+public interface LanguageManager extends Serializable
 {
     /**
      * Calculates the script-language-name for the given {@link Language} definition.

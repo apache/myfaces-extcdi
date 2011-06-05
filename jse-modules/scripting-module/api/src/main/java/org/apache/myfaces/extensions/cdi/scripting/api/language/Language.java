@@ -18,10 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.scripting.api.language;
 
+import java.io.Serializable;
+
 /**
  * @author Gerhard Petracek
  */
-public interface Language
+public interface Language extends Serializable
 {
     /**
      * Name of the language which will be used for the {@link javax.script.ScriptEngineManager#getEngineByName}

@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 @Singleton
 public class GroovyLanguageBean extends AbstractLanguageBean
 {
+    private static final long serialVersionUID = -5606352201847472309L;
+
     protected GroovyLanguageBean()
     {
     }

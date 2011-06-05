@@ -29,6 +29,8 @@ import javax.inject.Singleton;
 @Singleton
 public class FreeMarkerLanguageBean extends AbstractLanguageBean
 {
+    private static final long serialVersionUID = 7309871998750257286L;
+
     protected FreeMarkerLanguageBean()
     {
     }
