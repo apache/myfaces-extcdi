@@ -128,7 +128,53 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.7.1</version>
+                <configuration>
+                    <!--parallel>methods</parallel-->
+                    <threadCount>1</threadCount>
+                    <properties>
+                        <property>
+                            <name>junit</name>
+                            <value>true</value>
+                        </property>
+                    </properties>
+                    <excludes>
+                        <exclude>**/Test*.java</exclude>
+                        <exclude>**/Abstract*.java</exclude>
+                        <exclude>**/impl/validation/*.java</exclude>
+                        <exclude>**/*$*.java</exclude>
+                    </excludes>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.7.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
+        <testResources>
+            <testResource>
+                <directory>src/test/java</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+            <!-- TODO that's different from the scripting module - there it works without - here it doesn't -> check it  -->
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+            </testResource>
+        </testResources>
     </build>
 
 </project>
