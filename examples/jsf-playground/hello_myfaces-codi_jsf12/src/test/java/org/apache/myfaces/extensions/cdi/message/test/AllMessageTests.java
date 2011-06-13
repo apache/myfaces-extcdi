@@ -18,28 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
+import junit.framework.TestCase;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+
 /**
  * @author Gerhard Petracek
  */
-class TestStorage
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        ArgumentDescriptorTest.class,
+        LocalizableMessageArgumentTest.class,
+        ParametrizedMessageInterpolationTest.class
+})
+public class AllMessageTests extends TestCase
 {
-    private String key;
-
-    private String args;
-
-    public TestStorage(String key, String args)
-    {
-        this.key = key;
-        this.args = args;
-    }
-
-    public String getKey()
-    {
-        return key;
-    }
-
-    public String getArgs()
-    {
-        return args;
-    }
 }

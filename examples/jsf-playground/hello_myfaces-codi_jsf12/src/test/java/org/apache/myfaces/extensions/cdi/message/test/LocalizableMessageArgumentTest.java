@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * @author Gerhard Petracek
  */
-public class LocalizableMessageArgumentTest extends AbstractMessageContextAwareTest
+public class LocalizableMessageArgumentTest extends AbstractMessageTest
 {
     @Test
     public void createMessageWithLocalizableNumberedAttributeTest()

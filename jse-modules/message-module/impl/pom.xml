@@ -44,8 +44,8 @@
         </dependency>
 
         <dependency>
-            <groupId>juel</groupId>
-            <artifactId>juel</artifactId>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-el_1.0_spec</artifactId>
             <scope>provided</scope>
         </dependency>
 

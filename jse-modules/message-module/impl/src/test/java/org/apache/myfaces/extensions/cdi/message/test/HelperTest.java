@@ -21,7 +21,6 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContextConfigAware;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessage;
-import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.NamedArguments;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
@@ -40,8 +39,6 @@ public class HelperTest extends AbstractMessageContextAwareTest
     @Test
     public void namedArgumentBuilderTest()
     {
-        this.messageContext.config().change().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider()));
-
         Number arg1 = new BigDecimal("123.4567");
         Date arg2 = new Date();
         String text = "#1: {arg1} and #2: {arg2}";
@@ -60,8 +57,6 @@ public class HelperTest extends AbstractMessageContextAwareTest
     @Test
     public void convertNamedArgumentTest()
     {
-        this.messageContext.config().change().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider()));
-
         Number arg1 = new BigDecimal("123.4567");
         Date arg2 = new Date();
         String text = "#1: {arg1} and #2: {arg2}";

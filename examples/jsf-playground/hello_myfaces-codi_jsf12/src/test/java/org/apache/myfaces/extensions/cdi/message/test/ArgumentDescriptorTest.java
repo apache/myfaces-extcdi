@@ -21,24 +21,26 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.impl.NumberedArgumentAwareMessageInterpolator;
 import org.apache.myfaces.extensions.cdi.message.impl.ELAwareMessageInterpolator;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * @author Gerhard Petracek
  */
-public class ArgumentDescriptorTest extends AbstractMessageContextAwareTest
+public class ArgumentDescriptorTest extends AbstractMessageTest
 {
     @Test
     public void lazyNumberedArgumentsTest()
     {
         TestArgument dynArgument = new TestArgument("brand_key");
 
-        assertEquals("{brand_key}", dynArgument.getKey());
+        Assert.assertEquals("{brand_key}", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator()).create()
                 .message().text("{info}").argument(dynArgument.getKey()).toText();
 
-        assertEquals("jCar", dynArgument.toString(this.messageContext));
+        Assert.assertEquals("jCar", dynArgument.toString(this.messageContext));
         assertEquals("value: jCar", messageText);
     }
 
@@ -47,12 +49,12 @@ public class ArgumentDescriptorTest extends AbstractMessageContextAwareTest
     {
         TestArgument dynArgument = new TestArgument("brand_key");
 
-        assertEquals("{brand_key}", dynArgument.getKey());
+        Assert.assertEquals("{brand_key}", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider())).create()
                 .message().text("{brand_info}").namedArgument("brand", dynArgument.getKey()).toText();
 
-        assertEquals("jCar", dynArgument.toString(this.messageContext));
+        Assert.assertEquals("jCar", dynArgument.toString(this.messageContext));
         assertEquals("value: jCar", messageText);
     }
 
@@ -69,7 +71,7 @@ public class ArgumentDescriptorTest extends AbstractMessageContextAwareTest
             }
         };
 
-        assertEquals("brand-value", dynArgument.getKey());
+        Assert.assertEquals("brand-value", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new NumberedArgumentAwareMessageInterpolator()).create()
                 .message().text("{info}").argument(dynArgument.getKey()).toText();
@@ -90,7 +92,7 @@ public class ArgumentDescriptorTest extends AbstractMessageContextAwareTest
             }
         };
 
-        assertEquals("brand-value", dynArgument.getKey());
+        Assert.assertEquals("brand-value", dynArgument.getKey());
 
         String messageText = this.messageContext.config().use().messageInterpolator(new ELAwareMessageInterpolator(new TestELProvider())).create()
                 .message().text("{brand_info}").namedArgument("brand", dynArgument.getKey()).toText();

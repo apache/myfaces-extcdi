@@ -18,23 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import junit.framework.TestCase;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
+
+import java.util.Locale;
 
 /**
  * @author Gerhard Petracek
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        SimpleMessageTest.class,
-        MessageSeverityTest.class,
-        FormattedMessageArgumentTest.class,
-        PayloadTest.class,
-        ExtensibilityTest.class,
-        MessageFilterTest.class,
-        HelperTest.class,
-        SerializationTest.class})
-public class AllTests extends TestCase
+class SimpleLocaleResolver implements LocaleResolver
 {
+    private static final long serialVersionUID = 1927000487639667773L;
+
+    public Locale getLocale()
+    {
+        return Locale.ENGLISH;
+    }
 }

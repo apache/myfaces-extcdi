@@ -18,23 +18,24 @@
  */
 package org.apache.myfaces.extensions.cdi.message.test;
 
-import junit.framework.TestCase;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
+import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
+import org.junit.Before;
 
 /**
  * @author Gerhard Petracek
  */
-@RunWith(Suite.class)
-@Suite.SuiteClasses({
-        SimpleMessageTest.class,
-        MessageSeverityTest.class,
-        FormattedMessageArgumentTest.class,
-        PayloadTest.class,
-        ExtensibilityTest.class,
-        MessageFilterTest.class,
-        HelperTest.class,
-        SerializationTest.class})
-public class AllTests extends TestCase
+public abstract class AbstractMessageTest
 {
+    protected MessageContext messageContext;
+
+    @SuppressWarnings({"serial"})
+    @Before
+    public void setupFactory()
+    {
+        this.messageContext = new DefaultMessageContext(){}.config().use()
+                .messageResolver(new SimpleMessageResolver())
+                .localeResolver(new SimpleLocaleResolver())
+                .create();
+    }
 }
