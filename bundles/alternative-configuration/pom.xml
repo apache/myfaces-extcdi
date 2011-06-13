@@ -30,7 +30,7 @@
     <artifactId>myfaces-extcdi-bundle-alternative-configuration</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Distribution [A] for Configs</name>
+    <name>MyFaces Extensions-CDI Bundle [A] for Configs</name>
 
 
     <dependencies>

@@ -31,7 +31,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>MyFaces Extensions-CDI Distribution Project</name>
+    <name>MyFaces Extensions-CDI Bundles Project</name>
 
     <modules>
         <module>jsf12</module>

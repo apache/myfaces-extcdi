@@ -30,7 +30,7 @@
     <artifactId>myfaces-extcdi-bundle-jsf12</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Distribution for JSF 1.2</name>
+    <name>MyFaces Extensions-CDI Bundle for JSF 1.2</name>
 
 
     <dependencies>
