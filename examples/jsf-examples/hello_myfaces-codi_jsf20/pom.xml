@@ -40,8 +40,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.myfaces.extensions.cdi</groupId>
-            <artifactId>myfaces-extcdi-dist-jsf20</artifactId>
+            <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
+            <artifactId>myfaces-extcdi-bundle-jsf20</artifactId>
             <scope>compile</scope>
         </dependency>
 

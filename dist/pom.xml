@@ -26,8 +26,8 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.apache.myfaces.extensions.cdi</groupId>
-    <artifactId>dist-project</artifactId>
+    <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
+    <artifactId>bundle-project</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
