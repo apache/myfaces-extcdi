@@ -153,14 +153,14 @@
                                 <!-- alternative modules -->
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                                    <artifactId>myfaces-extcdi-core-alternative</artifactId>
+                                    <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>javadoc</classifier>
                                 </artifactItem>
 
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                                    <artifactId>myfaces-extcdi-jsf-alternative</artifactId>
+                                    <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>javadoc</classifier>
                                 </artifactItem>
@@ -283,14 +283,14 @@
                                 <!-- alternative modules -->
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                                    <artifactId>myfaces-extcdi-core-alternative</artifactId>
+                                    <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>sources</classifier>
                                 </artifactItem>
 
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                                    <artifactId>myfaces-extcdi-jsf-alternative</artifactId>
+                                    <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>sources</classifier>
                                 </artifactItem>
@@ -419,13 +419,13 @@
         <!-- alternative modules -->
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-            <artifactId>myfaces-extcdi-core-alternative</artifactId>
+            <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-            <artifactId>myfaces-extcdi-jsf-alternative</artifactId>
+            <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
             <scope>compile</scope>
         </dependency>
 
