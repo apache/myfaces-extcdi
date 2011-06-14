@@ -275,6 +275,22 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                     // them already
                     if (firstException == null)
                     {
+                        // first flush all EntityManagers
+                        for (EntityManager currentEntityManager : entityManagerMap.get().values())
+                        {
+                            try
+                            {
+                                currentEntityManager.flush();
+                            }
+                            catch (Exception e)
+                            {
+                                firstException = e;
+                                commitFailed = true;
+                                break;
+                            }
+                        }
+
+                        // and finally do all the commits
                         for (EntityManager currentEntityManager : entityManagerMap.get().values())
                         {
                             transaction = currentEntityManager.getTransaction();
