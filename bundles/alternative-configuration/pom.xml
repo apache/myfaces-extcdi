@@ -52,6 +52,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- needed for javadoc generation -->
+        <dependency>
+            <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
+            <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
@@ -129,5 +136,47 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <!-- override apache-release profile for custom javadoc configuration -->
+            <id>apache-release</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <!-- overrides attach-javadocs from apache-parent -->
+                                <id>attach-javadocs</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <!-- switch on dependency-driven aggregation -->
+                                    <includeDependencySources>true</includeDependencySources>
+
+                                    <dependencySourceExcludes>
+                                        <!-- exclude org.apache.geronimo.specs artifacts -->
+                                        <dependencySourceExclude>org.apache.geronimo.specs:*</dependencySourceExclude>
+
+                                        <!-- exclude provided dependencies of this module -->
+                                        <dependencySourceExclude>org.apache.myfaces.extensions.cdi.core:*</dependencySourceExclude>
+                                        <dependencySourceExclude>org.apache.myfaces.extensions.cdi.modules:*</dependencySourceExclude>
+                                        <dependencySourceExclude>org.apache.myfaces.extensions.cdi.modules.alternative:myfaces-extcdi-alternative-implementation-module</dependencySourceExclude>
+                                    </dependencySourceExcludes>
+
+                                    <encoding>UTF-8</encoding>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
