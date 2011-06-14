@@ -39,6 +39,7 @@
         <module>jsf12-osgi</module>
         <module>jsf20-osgi</module>
         <module>alternative-configuration</module>
+        <module>alternative-configuration-osgi</module>
     </modules>
 
 </project>
