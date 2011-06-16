@@ -30,7 +30,7 @@
     <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>MyFaces Extensions-CDI Alternative-Implementation Module</name>
+    <name>MyFaces Extensions-CDI Alternative-Impl Module</name>
 
     <dependencies>
         <dependency>

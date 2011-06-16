@@ -35,7 +35,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * In case of extending a config class of CODI, you have to do the same.
  * However, since the config classes aren't abstract or have a special interface,
  * it's required to register the custom class in a file called:
- * MEtA-INF/services/org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig
+ * META-INF/services/org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig
  *
  * @author Gerhard Petracek
  */
