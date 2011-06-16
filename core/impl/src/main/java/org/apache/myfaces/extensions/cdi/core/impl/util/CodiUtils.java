@@ -42,7 +42,6 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.Collections;
 import java.util.Arrays;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This is a collection of a few useful static helper functions.
@@ -484,65 +483,6 @@ public abstract class CodiUtils
 
         // annotation has no methods
         return Collections.emptyList();
-    }
-
-    /**
-     * Resolves a custom configuration which is configured via a ServiceLoader config
-     * @param configurationType type of the configuration
-     * @param <T> target type
-     * @return resolved configuration
-     */
-    public static <T extends CodiConfig> T lookupAlternativeConfig(Class<T> configurationType)
-    {
-        final List<CodiConfig> configs = new CopyOnWriteArrayList<CodiConfig>();
-        CodiUtils.lookupFromEnvironment(CodiConfig.class, new Aggregatable<CodiConfig>()
-        {
-            /**
-             * {@inheritDoc}
-             */
-            public void add(CodiConfig codiConfig)
-            {
-                configs.add(codiConfig);
-            }
-
-            /**
-             * {@inheritDoc}
-             */
-            public CodiConfig create()
-            {
-                return null;
-            }
-        });
-
-        //remove other configs
-        for(CodiConfig codiConfig : configs)
-        {
-            if(!configurationType.isAssignableFrom(codiConfig.getClass()))
-            {
-                configs.remove(codiConfig);
-            }
-        }
-
-        if(configs.size() > 1)
-        {
-            //user provided a custom implementation -> remove codi implementations
-            for(CodiConfig codiConfig : configs)
-            {
-                if(!codiConfig.getClass().getName().startsWith("org.apache.myfaces.extensions.cdi."))
-                {
-                    configs.remove(codiConfig);
-                }
-            }
-        }
-        else if(configs.size() == 0)
-        {
-            RuntimeException runtimeException = new RuntimeException();
-            throw new IllegalStateException("no alternative configuration found for " + configurationType
-                + " please add a module with an alternative configuration implementation or remove the jar file"
-                + " which contains " + runtimeException.getStackTrace()[1].getClassName());
-        }
-
-        return (T)configs.iterator().next();
     }
 
     /**

@@ -148,28 +148,6 @@ public class ScriptEngineManagerProducer
         return new InjectableScriptEngine(result, language);
     }
 
-    /*
-    @Produces
-    @ScriptExtension("")
-    public ScriptEngine createScriptEngineByExtension(InjectionPoint injectionPoint,
-                                                      ScriptEngineManager scriptEngineManager)
-    {
-        String extension = injectionPoint.getAnnotated().getAnnotation(ScriptExtension.class).value();
-
-        return checkedScriptEngine(scriptEngineManager.getEngineByExtension(extension), extension);
-    }
-
-    @Produces
-    @ScriptMimeType("")
-    public ScriptEngine createScriptEngineByMimeType(InjectionPoint injectionPoint,
-                                                     ScriptEngineManager scriptEngineManager)
-    {
-        String mimeType = injectionPoint.getAnnotated().getAnnotation(ScriptMimeType.class).value();
-
-        return checkedScriptEngine(scriptEngineManager.getEngineByMimeType(mimeType), mimeType);
-    }
-    */
-
     private ScriptEngine checkedScriptEngine(ScriptEngine scriptEngine, String type)
     {
         if (scriptEngine != null)
