@@ -56,11 +56,22 @@ public class SystemPropertyResolver extends AbstractConfiguredValueResolver
         
         if(!String.class.isAssignableFrom(descriptor.getTargetType()))
         {
-            Class<T> targetClass = ClassUtils.tryToLoadClassForName(configuredValue, descriptor.getTargetType());
-
-            if(targetClass != null)
+            if(Boolean.class.isAssignableFrom(descriptor.getTargetType()))
             {
-                add(targetClass);
+                add(descriptor.getTargetType().cast(Boolean.parseBoolean(configuredValue)));
+            }
+            else if(Integer.class.isAssignableFrom(descriptor.getTargetType()))
+            {
+                add(descriptor.getTargetType().cast(Integer.parseInt(configuredValue)));
+            }
+            else
+            {
+                Class<T> targetClass = ClassUtils.tryToLoadClassForName(configuredValue, descriptor.getTargetType());
+
+                if(targetClass != null)
+                {
+                    add(targetClass);
+                }
             }
         }
         else

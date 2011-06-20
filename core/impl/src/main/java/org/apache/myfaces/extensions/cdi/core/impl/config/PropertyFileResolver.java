@@ -68,7 +68,7 @@ public class PropertyFileResolver extends AbstractConfiguredValueResolver
         }
 
         String configKey = key.substring(key.indexOf(".") + 1);
-        String configuredValue = null;
+        String configuredValue;
 
         Map<String, String> cache = getPropertyCache();
 
