@@ -55,13 +55,13 @@ public class SimpleScriptingTest extends AbstractCdiAwareTest
     @Test
     public void testSimpleScriptEval()
     {
-        assertEquals(new Double(14), this.scriptExecutor.eval("10 + 4", Double.class));
+        assertEquals(new Double(14d), new Double(this.scriptExecutor.eval("10 + 4").toString()));
     }
 
     @Test
     public void testScriptBuilder()
     {
-        assertEquals(new Double(14), add(10d, 4d));
+        assertEquals(new Double(14d), new Double(add(10d, 4d)));
     }
 
     private Double add(Double a, Double b)
@@ -78,7 +78,7 @@ public class SimpleScriptingTest extends AbstractCdiAwareTest
     {
         try
         {
-            assertEquals(14d, this.scriptEngine.eval("10 + 4"));
+            assertEquals(new Double(14d), new Double(this.scriptEngine.eval("10 + 4").toString()));
         }
         catch (ScriptException e)
         {
