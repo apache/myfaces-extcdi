@@ -106,6 +106,7 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- needed for the javadoc generation -->
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
             <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
