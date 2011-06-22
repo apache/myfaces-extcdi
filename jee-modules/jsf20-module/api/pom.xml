@@ -139,9 +139,9 @@
                                         <!-- exclude org.apache.geronimo.specs artifacts -->
                                         <dependencySourceExclude>org.apache.geronimo.specs:*</dependencySourceExclude>
                                         <dependencySourceExclude>org.apache.myfaces.core:*</dependencySourceExclude>
-                                        <dependencySourceExclude>org.apache.myfaces.extensions.cdi.core:*</dependencySourceExclude>
                                     </dependencySourceExcludes>
 
+                                    <excludePackageNames>org.apache.myfaces.extensions.cdi.core.*</excludePackageNames>
                                     <encoding>UTF-8</encoding>
                                 </configuration>
                             </execution>
