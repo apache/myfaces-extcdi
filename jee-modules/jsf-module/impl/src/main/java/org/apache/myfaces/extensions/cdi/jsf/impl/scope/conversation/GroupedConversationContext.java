@@ -67,18 +67,25 @@ class GroupedConversationContext extends AbstractGroupedConversationContext
      */
     public boolean isActive()
     {
-        if(FacesContext.getCurrentInstance().getExternalContext().getSession(false) != null)
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+
+        if(facesContext == null)
+        {
+            return false;
+        }
+
+        if(facesContext.getExternalContext().getSession(false) != null)
         {
             return true;
         }
 
         //workaround for mojarra
-        if(FacesContext.getCurrentInstance().getExternalContext().getRequest() != null)
+        if(facesContext.getExternalContext().getRequest() != null)
         {
             if(!Boolean.FALSE.equals(CodiUtils.lookupFromEnvironment("FORCE_SESSION_CREATION", Boolean.class)))
             {
                 //we need a the session for the contexts -> force it
-                FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                facesContext.getExternalContext().getSession(true);
             }
             return true;
         }
