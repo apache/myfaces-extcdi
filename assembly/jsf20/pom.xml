@@ -64,7 +64,8 @@
                                 <!-- JSF 2.0 -->
                                 <!--
                                     TODO JSF 2.0 API has no source and thus no Javadoc
-                                    using JSF 1.2 API javadoc instead   
+                                    using JSF 1.2 API javadoc instead
+                                    TODO FIX: use javadoc-plugin with includeDependencySources=true on jsf20-api
                                  -->
                                 <artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
