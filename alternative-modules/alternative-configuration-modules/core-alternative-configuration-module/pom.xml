@@ -36,11 +36,13 @@
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
             <artifactId>myfaces-extcdi-core-impl</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
