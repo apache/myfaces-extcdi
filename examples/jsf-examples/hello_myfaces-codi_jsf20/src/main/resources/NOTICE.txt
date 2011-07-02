@@ -1,4 +1,8 @@
-MyFaces CODI Demo
+Apache MyFaces Extensions CDI (aka MyFaces CODI) Demo
+Copyright 2010 The Apache Software Foundation
+
+This product includes software developed by
+The Apache Software Foundation (http://www.apache.org/).
 
 ------------------------------------------------------------------------
 See the file LICENSE.txt
