@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
     <artifactId>myfaces-extcdi-cargo-support-module</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>MyFaces Extensions-CDI Cargo-Support Module</name>
 
