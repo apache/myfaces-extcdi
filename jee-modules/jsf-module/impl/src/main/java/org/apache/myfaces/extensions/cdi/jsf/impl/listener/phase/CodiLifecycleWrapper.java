@@ -18,9 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationStartupBroadcaster;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
@@ -52,7 +55,7 @@ class CodiLifecycleWrapper extends Lifecycle
     {
         this.wrapped = wrapped;
 
-        for(PhaseListener phaseListener : phaseListeners)
+        for (PhaseListener phaseListener : phaseListeners)
         {
             this.wrapped.addPhaseListener(phaseListener);
         }
@@ -70,7 +73,7 @@ class CodiLifecycleWrapper extends Lifecycle
      * Broadcasts {@link org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEvent} and
      * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.BeforeFacesRequest} btw.
      * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.request.AfterFacesRequest}
-     *
+     * <p/>
      * {@inheritDoc}
      */
     public void execute(FacesContext facesContext)
@@ -111,7 +114,7 @@ class CodiLifecycleWrapper extends Lifecycle
 
     /**
      * Performs cleanup tasks after the rendering process
-     *
+     * <p/>
      * {@inheritDoc}
      */
     public void render(FacesContext facesContext)
@@ -129,7 +132,7 @@ class CodiLifecycleWrapper extends Lifecycle
     private void broadcastApplicationStartupBroadcaster()
     {
         //just an !additional! check to improve the performance
-        if(applicationInitialized == null)
+        if (applicationInitialized == null)
         {
             initApplication();
         }
@@ -137,7 +140,7 @@ class CodiLifecycleWrapper extends Lifecycle
 
     private synchronized void initApplication()
     {
-        if(applicationInitialized == null)
+        if (applicationInitialized == null)
         {
             applicationInitialized = true;
             ApplicationStartupBroadcaster applicationStartupBroadcaster =
@@ -149,15 +152,26 @@ class CodiLifecycleWrapper extends Lifecycle
     private void broadcastBeforeFacesRequestEvent(FacesContext facesContext)
     {
         lazyInit();
-        if(this.beforeAfterFacesRequestBroadcaster != null)
+        if (this.beforeAfterFacesRequestBroadcaster != null)
         {
+            BeanManagerProvider beanManagerProvider = BeanManagerProvider.getInstance();
+            EditableWindowContextManager windowContextManager =
+                    beanManagerProvider.getContextualReference(EditableWindowContextManager.class);
+            WindowHandler windowHandler =
+                    beanManagerProvider.getContextualReference(WindowHandler.class);
+            WindowContextConfig windowContextConfig =
+                    beanManagerProvider.getContextualReference(WindowContextConfig.class);
+
+            ConversationUtils.tryToRestoreTheWindowIdEagerly(facesContext,
+                    windowContextManager, windowHandler, windowContextConfig);
+
             this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(facesContext);
         }
     }
 
     private void lazyInit()
     {
-        if(this.initialized == null)
+        if (this.initialized == null)
         {
             init();
         }
@@ -166,9 +180,9 @@ class CodiLifecycleWrapper extends Lifecycle
     private synchronized void init()
     {
         // switch into paranoia mode
-        if(this.initialized == null)
+        if (this.initialized == null)
         {
-            if(ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
+            if (ClassDeactivation.isClassActivated(BeforeAfterFacesRequestBroadcaster.class))
             {
                 this.beforeAfterFacesRequestBroadcaster =
                         CodiUtils.getContextualReferenceByClass(BeforeAfterFacesRequestBroadcaster.class);

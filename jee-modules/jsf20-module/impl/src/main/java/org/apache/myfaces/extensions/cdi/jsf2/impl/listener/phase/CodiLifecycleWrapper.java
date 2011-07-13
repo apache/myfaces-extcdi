@@ -18,10 +18,13 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.phase;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.BeforeAfterFacesRequestBroadcaster;
 import org.apache.myfaces.extensions.cdi.jsf.impl.listener.startup.ApplicationStartupBroadcaster;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.LifecycleAwareWindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationRequiredUtils;
@@ -152,6 +155,17 @@ class CodiLifecycleWrapper extends Lifecycle
         lazyInit();
         if(this.beforeAfterFacesRequestBroadcaster != null)
         {
+            BeanManagerProvider beanManagerProvider = BeanManagerProvider.getInstance();
+            EditableWindowContextManager windowContextManager =
+                    beanManagerProvider.getContextualReference(EditableWindowContextManager.class);
+            WindowHandler windowHandler =
+                    beanManagerProvider.getContextualReference(WindowHandler.class);
+            WindowContextConfig windowContextConfig =
+                    beanManagerProvider.getContextualReference(WindowContextConfig.class);
+
+            ConversationUtils.tryToRestoreTheWindowIdEagerly(facesContext,
+                    windowContextManager, windowHandler, windowContextConfig);
+
             this.beforeAfterFacesRequestBroadcaster.broadcastBeforeFacesRequestEvent(facesContext);
         }
     }

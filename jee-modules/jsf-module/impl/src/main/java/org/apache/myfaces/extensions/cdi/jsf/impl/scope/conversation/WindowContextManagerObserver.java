@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.Editabl
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.EditableWindowContextManager;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowHandler;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
+
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.resolveWindowContextId;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
@@ -47,7 +47,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
         .AUTOMATED_ENTRY_POINT_PARAMETER_KEY;
 import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager
         .WINDOW_CONTEXT_ID_PARAMETER_KEY;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 
 /**
  * Observe some JSF phase events and set the appropriate
@@ -72,30 +71,8 @@ public class WindowContextManagerObserver
                                              WindowHandler windowHandler,
                                              WindowContextConfig windowContextConfig)
     {
-        if(!windowContextConfig.isEagerWindowContextDetectionEnabled() ||
-                RequestCache.getCurrentWindowContext() != null /*skip the process if there is a custom mechanism*/)
-        {
-            return;
-        }
-
-        //don't use: windowContextManager.getCurrentWindowContext(); it would create a new window-id immediately and
-        //it would break other features.
-        String windowId = resolveWindowContextId(windowHandler,
-                                                 windowContextConfig.isUrlParameterSupported(),
-                                                 windowContextConfig.isUnknownWindowIdsAllowed());
-
-        if(windowId != null)
-        {
-            boolean active = windowContextManager.isWindowContextActive(windowId);
-
-            if(active)
-            {
-                RequestCache.setCurrentWindowContext(windowContextManager.getWindowContext(windowId));
-                //don't remove it - e.g. needed as marker for the view-handler
-                phaseEvent.getFacesContext().getExternalContext().getRequestMap()
-                        .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
-            }
-        }
+        ConversationUtils.tryToRestoreTheWindowIdEagerly(phaseEvent.getFacesContext(),
+                windowContextManager, windowHandler, windowContextConfig);
     }
 
     //don't change/optimize this observer!!!

@@ -679,4 +679,35 @@ public abstract class ConversationUtils
         //-> don't remove:
         RequestCache.resetCache();
     }
+
+    public static void tryToRestoreTheWindowIdEagerly(FacesContext facesContext,
+                                                      EditableWindowContextManager windowContextManager,
+                                                      WindowHandler windowHandler,
+                                                      WindowContextConfig windowContextConfig)
+    {
+
+        if (RequestCache.getCurrentWindowContext() == null &&
+                windowContextConfig.isEagerWindowContextDetectionEnabled())
+        {
+            //don't use: windowContextManager.getCurrentWindowContext();
+            //it would create a new window-id immediately and
+            //it would break other features.
+            String windowId = resolveWindowContextId(windowHandler,
+                                                     windowContextConfig.isUrlParameterSupported(),
+                                                     windowContextConfig.isUnknownWindowIdsAllowed());
+
+            if (windowId != null)
+            {
+                boolean active = windowContextManager.isWindowContextActive(windowId);
+
+                if (active)
+                {
+                    RequestCache.setCurrentWindowContext(windowContextManager.getWindowContext(windowId));
+                    //don't remove it - e.g. needed as marker for the view-handler
+                    facesContext.getExternalContext().getRequestMap()
+                            .put(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY, windowId);
+                }
+            }
+        }
+    }
 }
