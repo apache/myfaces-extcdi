@@ -36,8 +36,8 @@
 
 
     <properties>
-        <webapptest.version>1.0.1-SNAPSHOT</webapptest.version>
-        <arquillian.version>1.0.1-SNAPSHOT</arquillian.version>
+        <webapptest.version>1.0.0-SNAPSHOT</webapptest.version>
+        <arquillian.version>1.0.0-SNAPSHOT</arquillian.version>
         <tomcat.version>6.0.26</tomcat.version>
         <config.addon.version>1.0.0-alpha</config.addon.version>
     </properties>
