@@ -64,6 +64,11 @@ class BeanStorage implements Serializable
         return beanEntry;
     }
 
+    public BeanEntry<Serializable> removeBean(Class<Serializable> beanClass)
+    {
+        return this.beanMap.remove(beanClass);
+    }
+
     //TODO don't reset window scoped beans
     void resetStorage()
     {

@@ -42,14 +42,14 @@ public interface WindowContext extends AttributeAware, Serializable
      * @param qualifiers optional qualifiers for the conversation
      * @return the removed conversation - null otherwise
      */
-    Conversation closeConversation(Class conversationGroup, Annotation... qualifiers);
+    Conversation closeConversation(Class<?> conversationGroup, Annotation... qualifiers);
 
     /**
      * destroys all conversation of a group independent of the qualifiers
      * @param conversationGroup group of the conversation in question
      * @return the removed conversation - null otherwise
      */
-    Set<Conversation> closeConversationGroup(Class conversationGroup);
+    Set<Conversation> closeConversationGroup(Class<?> conversationGroup);
 
     /**
      * invalidate all conversations immediately

@@ -175,6 +175,14 @@ public class DefaultConversation implements EditableConversation
         this.beanStorage.addBean((BeanEntry<Serializable>) beanEntry);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public <T> BeanEntry<T> removeBean(Class<T> type)
+    {
+        return (BeanEntry<T>) this.beanStorage.removeBean((Class<Serializable>) type);
+    }
+
     private boolean isConversationExpired()
     {
         return this.expirationEvaluator.isExpired();

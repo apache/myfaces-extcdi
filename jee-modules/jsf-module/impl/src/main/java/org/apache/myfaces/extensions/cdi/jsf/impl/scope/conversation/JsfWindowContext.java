@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationSubGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
@@ -43,7 +44,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.isQualifierEqual;
-import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.convertToScope;
+import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 
 /**
@@ -123,7 +124,7 @@ class JsfWindowContext implements EditableWindowContext
     {
         for (Map.Entry<ConversationKey, EditableConversation> conversationEntry : this.groupedConversations.entrySet())
         {
-            closeAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), forceEnd);
+            closeAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), null, forceEnd);
         }
         JsfUtils.resetConversationCache();
     }
@@ -131,8 +132,16 @@ class JsfWindowContext implements EditableWindowContext
     /**
      * {@inheritDoc}
      */
-    public EditableConversation getConversation(Class conversationGroupKey, Annotation... qualifiers)
+    public EditableConversation getConversation(Class<?> conversationGroupKey, Annotation... qualifiers)
     {
+        ConversationSubGroup conversationSubGroup = conversationGroupKey.getAnnotation(ConversationSubGroup.class);
+        Class<?>[] subGroups = null;
+        if(conversationSubGroup != null)
+        {
+            subGroups = conversationSubGroup.value();
+            conversationGroupKey = convertToSubGroup(conversationGroupKey);
+        }
+
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
@@ -147,7 +156,7 @@ class JsfWindowContext implements EditableWindowContext
             //TODO
             if (conversation != null && !conversation.isActive())
             {
-                closeAndRemoveConversation(conversationKey, conversation, true);
+                closeAndRemoveConversation(conversationKey, conversation, subGroups, true);
                 conversation = null;
             }
 
@@ -189,8 +198,16 @@ class JsfWindowContext implements EditableWindowContext
     /**
      * {@inheritDoc}
      */
-    public Conversation closeConversation(Class conversationGroupKey, Annotation... qualifiers)
+    public Conversation closeConversation(Class<?> conversationGroupKey, Annotation... qualifiers)
     {
+        ConversationSubGroup conversationSubGroup = conversationGroupKey.getAnnotation(ConversationSubGroup.class);
+        Class<?>[] subGroups = null;
+        if(conversationSubGroup != null)
+        {
+            subGroups = conversationSubGroup.value();
+            conversationGroupKey = convertToSubGroup(conversationGroupKey);
+        }
+
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 
         ConversationKey conversationKey =
@@ -198,21 +215,30 @@ class JsfWindowContext implements EditableWindowContext
 
         EditableConversation conversation = getConversationForKey(conversationKey, true);
 
-        return closeAndRemoveConversation(conversationKey, conversation, true);
+        return closeAndRemoveConversation(conversationKey, conversation, subGroups, true);
     }
 
     /**
      * {@inheritDoc}
      */
-    public Set<Conversation> closeConversationGroup(Class conversationGroupKey)
+    public Set<Conversation> closeConversationGroup(Class<?> conversationGroupKey)
     {
+        ConversationSubGroup conversationSubGroup = conversationGroupKey.getAnnotation(ConversationSubGroup.class);
+        Class<?>[] subGroups = null;
+        if(conversationSubGroup != null)
+        {
+            subGroups = conversationSubGroup.value();
+            conversationGroupKey = convertToSubGroup(conversationGroupKey);
+        }
+
         Set<Conversation> removedConversations = new HashSet<Conversation>();
         for(Map.Entry<ConversationKey, EditableConversation> conversationEntry : this.groupedConversations.entrySet())
         {
             if(conversationGroupKey.isAssignableFrom(conversationEntry.getKey().getConversationGroup()))
             {
                 removedConversations.add(
-                        closeAndRemoveConversation(conversationEntry.getKey(), conversationEntry.getValue(), true));
+                        closeAndRemoveConversation(
+                                conversationEntry.getKey(), conversationEntry.getValue(), subGroups, true));
             }
         }
         return removedConversations;
@@ -220,12 +246,25 @@ class JsfWindowContext implements EditableWindowContext
 
     private EditableConversation closeAndRemoveConversation(ConversationKey conversationKey,
                                                             EditableConversation conversation,
+                                                            Class<?>[] subGroups,
                                                             boolean forceEnd)
     {
         logInformationAboutConversations("before JsfWindowContext#endAndRemoveConversation");
 
         try
         {
+            if(subGroups != null)
+            {
+                EditableConversation editableConversation = this.groupedConversations.get(conversationKey);
+
+                for(Class<?> subGroup : subGroups)
+                {
+                    editableConversation.removeBean(subGroup);
+                }
+
+                return editableConversation;
+            }
+
             if (forceEnd)
             {
                 conversation.close();
@@ -252,7 +291,7 @@ class JsfWindowContext implements EditableWindowContext
     /**
      * {@inheritDoc}
      */
-    public EditableConversation createConversation(Class conversationGroupKey, Annotation... qualifiers)
+    public EditableConversation createConversation(Class<?> conversationGroupKey, Annotation... qualifiers)
     {
         Class<? extends Annotation> scopeType = convertToScope(this.beanManager, conversationGroupKey, qualifiers);
 

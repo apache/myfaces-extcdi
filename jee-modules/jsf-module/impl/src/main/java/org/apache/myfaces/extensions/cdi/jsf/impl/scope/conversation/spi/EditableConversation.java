@@ -55,4 +55,12 @@ public interface EditableConversation extends Conversation
      * @return an instance of the requested bean if the conversation is active - null otherwise
      */
     <T> T getBean(Class<T> key);
+
+    /**
+     * Allows to remove a bean of the given type
+     * @param type type of the bean
+     * @param <T> target type
+     * @return the bean entry of the removed bean or null if there was no bean in the conversation
+     */
+    <T> BeanEntry<T> removeBean(Class<T> type);
 }

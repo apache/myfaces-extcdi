@@ -710,4 +710,15 @@ public abstract class ConversationUtils
             }
         }
     }
+
+    public static Class<?> convertToSubGroup(Class<?> conversationGroupKey)
+    {
+        Class<?> result = conversationGroupKey.getSuperclass();
+
+        if(result == null && conversationGroupKey.getInterfaces().length == 1)
+        {
+            result = conversationGroupKey.getInterfaces()[0];
+        }
+        return result;
+    }
 }

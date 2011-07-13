@@ -108,6 +108,14 @@ public class InjectableConversation implements EditableConversation
         return findConversation().getBean(key);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public <T> BeanEntry<T> removeBean(Class<T> type)
+    {
+        return findConversation().removeBean(type);
+    }
+
     protected EditableConversation findConversation()
     {
         if(this.editableWindowContext == null)
