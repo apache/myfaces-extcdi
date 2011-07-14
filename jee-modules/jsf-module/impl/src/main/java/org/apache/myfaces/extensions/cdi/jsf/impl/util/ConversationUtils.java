@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationSubGroup;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
@@ -713,11 +714,26 @@ public abstract class ConversationUtils
 
     public static Class<?> convertToSubGroup(Class<?> conversationGroupKey)
     {
-        Class<?> result = conversationGroupKey.getSuperclass();
+        ConversationSubGroup conversationSubGroup = conversationGroupKey.getAnnotation(ConversationSubGroup.class);
 
-        if(result == null && conversationGroupKey.getInterfaces().length == 1)
+        Class<?> result = conversationSubGroup.of();
+
+        if(!ConversationSubGroup.class.equals(result))
+        {
+            return result;
+        }
+
+        result = conversationGroupKey.getSuperclass();
+
+        if((result == null || Object.class.getName().equals(result.getName())) &&
+                conversationGroupKey.getInterfaces().length == 1)
         {
             result = conversationGroupKey.getInterfaces()[0];
+        }
+
+        if(Object.class.getName().equals(result.getName()))
+        {
+            return null;
         }
         return result;
     }

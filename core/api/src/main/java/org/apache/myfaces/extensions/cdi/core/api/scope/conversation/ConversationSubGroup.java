@@ -55,8 +55,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface ConversationSubGroup
 {
     /**
+     * Optionally defines the base conversation group
+     * @return base conversation group or ConversationSubGroup if the subgroup inherits from the base conversation group
+     */
+    Class<?> of() default ConversationSubGroup.class;
+
+    /**
      * Beans of the group which should be closed
      * @return beans of the group which should be closed
      */
-    Class<?>[] value();
+    Class<?>[] groups();
 }
