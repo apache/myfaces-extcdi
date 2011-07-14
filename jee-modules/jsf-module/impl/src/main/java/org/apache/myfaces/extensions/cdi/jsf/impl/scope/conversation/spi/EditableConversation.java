@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 
+import java.util.Set;
+
 /**
  * TODO
  * @author Gerhard Petracek
@@ -57,10 +59,20 @@ public interface EditableConversation extends Conversation
     <T> T getBean(Class<T> key);
 
     /**
+     * @param key class of the requested sub-group
+     * @param <T> type of the requested group
+     * @return a set of bean-types which are stored in the current conversation for the given group
+     */
+    <T> Set<Class<T>> getBeanSubGroup(Class<T> key);
+
+    /**
      * Allows to remove a bean of the given type
      * @param type type of the bean
      * @param <T> target type
      * @return the bean entry of the removed bean or null if there was no bean in the conversation
      */
-    <T> BeanEntry<T> removeBean(Class<T> type);
+    <T> BeanEntry<T> removeBeanEntry(Class<T> type);
+
+    //TODO
+    //Set<BeanEntry<?>> getBeans();
 }

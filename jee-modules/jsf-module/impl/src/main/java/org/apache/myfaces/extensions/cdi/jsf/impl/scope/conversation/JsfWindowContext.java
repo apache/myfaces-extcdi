@@ -34,10 +34,12 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.BeanManager;
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -255,14 +257,7 @@ class JsfWindowContext implements EditableWindowContext
         {
             if(subGroups != null)
             {
-                EditableConversation editableConversation = this.groupedConversations.get(conversationKey);
-
-                for(Class<?> subGroup : subGroups)
-                {
-                    editableConversation.removeBean(subGroup);
-                }
-
-                return editableConversation;
+                return closeSubGroups(conversationKey, subGroups);
             }
 
             if (forceEnd)
@@ -286,6 +281,48 @@ class JsfWindowContext implements EditableWindowContext
         }
 
         return null;
+    }
+
+    private EditableConversation closeSubGroups(ConversationKey conversationKey, Class<?>[] subGroups)
+    {
+        EditableConversation editableConversation = this.groupedConversations.get(conversationKey);
+
+        if(editableConversation == null)
+        {
+            throw new IllegalStateException(conversationKey.toString() +
+                    " is no valid key for an existing conversation");
+        }
+
+        List<Class<?>> implicitSubGroupCandidates = new ArrayList<Class<?>>();
+        for(Class<?> subGroup : subGroups)
+        {
+            if(editableConversation.removeBeanEntry(subGroup) == null)
+            {
+                //no bean was scoped -> try to use the sub-group as sub-group-type
+                implicitSubGroupCandidates.add(subGroup);
+            }
+        }
+
+        tryToCloseImplicitConversationSubGroup(editableConversation, implicitSubGroupCandidates);
+
+        return editableConversation;
+    }
+
+    private void tryToCloseImplicitConversationSubGroup(EditableConversation editableConversation, List<Class<?>> subGroupTypes)
+    {
+        if(!subGroupTypes.isEmpty())
+        {
+            Set<Class<?>> concreteBeanClasses;
+            for(Class subGroupType : subGroupTypes)
+            {
+                concreteBeanClasses = editableConversation.getBeanSubGroup(subGroupType);
+
+                for(Class<?> beanClass : concreteBeanClasses)
+                {
+                    editableConversation.removeBeanEntry(beanClass);
+                }
+            }
+        }
     }
 
     /**

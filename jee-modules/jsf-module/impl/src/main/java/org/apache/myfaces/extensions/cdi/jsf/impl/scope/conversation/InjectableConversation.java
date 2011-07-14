@@ -111,9 +111,17 @@ public class InjectableConversation implements EditableConversation
     /**
      * {@inheritDoc}
      */
-    public <T> BeanEntry<T> removeBean(Class<T> type)
+    public <T> Set<Class<T>> getBeanSubGroup(Class<T> key)
     {
-        return findConversation().removeBean(type);
+        return findConversation().getBeanSubGroup(key);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T> BeanEntry<T> removeBeanEntry(Class<T> type)
+    {
+        return findConversation().removeBeanEntry(type);
     }
 
     protected EditableConversation findConversation()

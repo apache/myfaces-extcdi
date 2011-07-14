@@ -30,6 +30,8 @@ import javax.inject.Named;
 import java.io.Serializable;
 import java.io.ObjectInputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
@@ -56,6 +58,20 @@ class BeanStorage implements Serializable
         return this.beanMap.get(beanClass);
     }
 
+    <T> Set<Class<T>> getBeanSubGroup(Class<T> key)
+    {
+        Set<Class<T>> result = new HashSet<Class<T>>();
+
+        for(Class beanClass : this.beanMap.keySet())
+        {
+            if(key.isAssignableFrom(beanClass))
+            {
+                result.add(beanClass);
+            }
+        }
+        return result;
+    }
+
     BeanEntry addBean(BeanEntry<Serializable> beanEntry)
     {
         Class beanClass = beanEntry.getBean().getBeanClass();
@@ -64,7 +80,7 @@ class BeanStorage implements Serializable
         return beanEntry;
     }
 
-    public BeanEntry<Serializable> removeBean(Class<Serializable> beanClass)
+    BeanEntry<Serializable> removeBean(Class<Serializable> beanClass)
     {
         return this.beanMap.remove(beanClass);
     }

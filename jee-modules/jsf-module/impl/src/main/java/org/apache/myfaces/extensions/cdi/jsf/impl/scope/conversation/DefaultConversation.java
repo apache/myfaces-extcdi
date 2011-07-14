@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.util.RequestCache;
 import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.BeanManager;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * @author Gerhard Petracek
@@ -162,6 +163,11 @@ public class DefaultConversation implements EditableConversation
         return (T) scopedBean.getBeanInstance();
     }
 
+    public <T> Set<Class<T>> getBeanSubGroup(Class<T> key)
+    {
+        return this.beanStorage.getBeanSubGroup(key);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -178,7 +184,7 @@ public class DefaultConversation implements EditableConversation
     /**
      * {@inheritDoc}
      */
-    public <T> BeanEntry<T> removeBean(Class<T> type)
+    public <T> BeanEntry<T> removeBeanEntry(Class<T> type)
     {
         return (BeanEntry<T>) this.beanStorage.removeBean((Class<Serializable>) type);
     }
