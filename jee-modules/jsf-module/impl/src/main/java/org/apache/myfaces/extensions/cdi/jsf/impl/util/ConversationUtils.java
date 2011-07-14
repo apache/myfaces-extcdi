@@ -731,7 +731,7 @@ public abstract class ConversationUtils
             result = conversationGroupKey.getInterfaces()[0];
         }
 
-        if(Object.class.getName().equals(result.getName()))
+        if(result != null && Object.class.getName().equals(result.getName()))
         {
             return null;
         }
