@@ -308,7 +308,8 @@ class JsfWindowContext implements EditableWindowContext
         return editableConversation;
     }
 
-    private void tryToCloseImplicitConversationSubGroup(EditableConversation editableConversation, List<Class<?>> subGroupTypes)
+    private void tryToCloseImplicitConversationSubGroup(
+            EditableConversation editableConversation, List<Class<?>> subGroupTypes)
     {
         if(!subGroupTypes.isEmpty())
         {
