@@ -64,5 +64,5 @@ public @interface ConversationSubGroup
      * Beans of the group which should be closed
      * @return beans of the group which should be closed
      */
-    Class<?>[] groups();
+    Class<?>[] subGroup();
 }

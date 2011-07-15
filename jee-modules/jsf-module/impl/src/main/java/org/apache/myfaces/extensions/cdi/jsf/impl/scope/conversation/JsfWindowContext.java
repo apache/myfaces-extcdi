@@ -140,7 +140,7 @@ class JsfWindowContext implements EditableWindowContext
         Class<?>[] subGroups = null;
         if(conversationSubGroup != null)
         {
-            subGroups = conversationSubGroup.groups();
+            subGroups = conversationSubGroup.subGroup();
             conversationGroupKey = convertToSubGroup(conversationGroupKey);
         }
 
@@ -206,7 +206,7 @@ class JsfWindowContext implements EditableWindowContext
         Class<?>[] subGroups = null;
         if(conversationSubGroup != null)
         {
-            subGroups = conversationSubGroup.groups();
+            subGroups = conversationSubGroup.subGroup();
             conversationGroupKey = convertToSubGroup(conversationGroupKey);
         }
 
@@ -229,7 +229,7 @@ class JsfWindowContext implements EditableWindowContext
         Class<?>[] subGroups = null;
         if(conversationSubGroup != null)
         {
-            subGroups = conversationSubGroup.groups();
+            subGroups = conversationSubGroup.subGroup();
             conversationGroupKey = convertToSubGroup(conversationGroupKey);
         }
 
