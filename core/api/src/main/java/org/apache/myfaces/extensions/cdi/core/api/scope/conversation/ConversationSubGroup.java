@@ -41,7 +41,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * @ConversationGroup(MyGroup.class)
  * public class BeanC {}
  * <p/>
- * @ConversationSubGroup({BeanA.class, BeanB.class})
+ * @ConversationSubGroup(of = MyGroup.class, subGroup = {BeanA.class, BeanB.class})
+ * public class MySubGroup {}
+ * <br/>or</br>
+ * @ConversationSubGroup(subGroup = {BeanA.class, BeanB.class})
  * public class MySubGroup extends MyGroup {}
  * <p/>
  * //...
