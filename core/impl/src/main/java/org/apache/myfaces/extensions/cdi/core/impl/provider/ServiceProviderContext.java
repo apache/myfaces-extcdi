@@ -39,9 +39,9 @@ public class ServiceProviderContext<T>
     }
 
     @Override
-    public T postConstruct(T instance, boolean containerBootstrapped)
+    public T postConstruct(T instance, boolean deploymentFinished)
     {
-        if(containerBootstrapped)
+        if(deploymentFinished)
         {
             CodiUtils.injectFields(instance, true);
         }

@@ -28,7 +28,7 @@ public abstract class ServiceProviderContext<T>
 {
     public abstract ClassLoader getClassLoader();
 
-    public abstract T postConstruct(T instance, boolean containerBootstrapped);
+    public abstract T postConstruct(T instance, boolean deploymentFinished);
 
     public abstract boolean filterService(Class<T> serviceClass);
 

@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider<T>
 {
     protected List<Class<?>> foundServiceClasses = new ArrayList<Class<?>>();
-    private static Map<ClassLoader, Boolean> allowInjection = new ConcurrentHashMap<ClassLoader, Boolean>();
+    private static Map<ClassLoader, Boolean> deploymentFinished = new ConcurrentHashMap<ClassLoader, Boolean>();
     private static Map<Class<?>, List<Class<?>>> serviceCache = new ConcurrentHashMap<Class<?>, List<Class<?>>>();
 
     protected ServiceProvider(Class<T> serviceType, ServiceProviderContext serviceProviderContext)
@@ -91,7 +91,7 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
 
     protected void activateInjectionSupport(@Observes AfterDeploymentValidation afterDeploymentValidation)
     {
-        allowInjection.put(ClassUtils.getClassLoader(null), Boolean.TRUE);
+        deploymentFinished.put(ClassUtils.getClassLoader(null), Boolean.TRUE);
     }
 
     private List<URL> getConfigFileList()
@@ -254,7 +254,7 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
             constructor.setAccessible(true);
             T instance = (T)constructor.newInstance();
 
-            this.serviceProviderContext.postConstruct(instance, isInjectionAllowed());
+            this.serviceProviderContext.postConstruct(instance, isDeploymentFinished());
 
             return instance;
         }
@@ -264,9 +264,9 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
         }
     }
 
-    private boolean isInjectionAllowed()
+    private boolean isDeploymentFinished()
     {
-        return Boolean.TRUE.equals(allowInjection.get(ClassUtils.getClassLoader(null)));
+        return Boolean.TRUE.equals(deploymentFinished.get(ClassUtils.getClassLoader(null)));
     }
 
     protected void reset()
