@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.startup;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEventBroadcaster;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
@@ -27,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.io.ObjectInputStream;
@@ -66,7 +67,7 @@ public abstract class CodiStartupBroadcaster
         }
     }
 
-    private static synchronized void invokeStartupEventBroadcaster(ClassLoader classLoader)
+    private static synchronized void invokeStartupEventBroadcaster(final ClassLoader classLoader)
     {
         // switch into paranoia mode
         if (initialized.containsKey(classLoader))
@@ -74,8 +75,36 @@ public abstract class CodiStartupBroadcaster
             return;
         }
 
-        ServiceLoader<StartupEventBroadcaster> eventBroadcasterServiceLoader =
-                ServiceLoader.load(StartupEventBroadcaster.class, classLoader);
+        List<StartupEventBroadcaster> startupEventBroadcasterList =
+                ServiceProvider.loadServices(StartupEventBroadcaster.class,
+                        new ServiceProviderContext<StartupEventBroadcaster>() {
+                    @Override
+                    public ClassLoader getClassLoader()
+                    {
+                        return classLoader;
+                    }
+
+                    @Override
+                    public StartupEventBroadcaster postConstruct(
+                            StartupEventBroadcaster instance, boolean containerBootstrapped)
+                    {
+                        //do nothing
+                        return instance;
+                    }
+
+                    @Override
+                    public boolean filterService(Class<StartupEventBroadcaster> serviceClass)
+                    {
+                        //do nothing
+                        return false;
+                    }
+
+                    @Override
+                    public void preInstallServices(List<Class<?>> foundServiceClasses)
+                    {
+                        //do nothing
+                    }
+                });
 
         List<Class<? extends StartupEventBroadcaster>> filter = broadcasterFilter.get(classLoader);
         if (filter == null)
@@ -86,7 +115,7 @@ public abstract class CodiStartupBroadcaster
 
         List<StartupEventBroadcaster> broadcasters = new ArrayList<StartupEventBroadcaster>();
 
-        for (StartupEventBroadcaster startupEventBroadcaster : eventBroadcasterServiceLoader)
+        for (StartupEventBroadcaster startupEventBroadcaster : startupEventBroadcasterList)
         {
             if (!filter.contains(startupEventBroadcaster.getClass()))
             {

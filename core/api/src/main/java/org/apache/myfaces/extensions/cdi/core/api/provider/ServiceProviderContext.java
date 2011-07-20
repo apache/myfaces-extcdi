@@ -16,17 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.api.provider;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
+import java.util.List;
 
-@ExpressionActivated("env==prod")
-public class TestImpl implements TestInterface
+/**
+ * @author Gerhard Petracek
+ */
+//TODO
+public abstract class ServiceProviderContext<T>
 {
-    private static final long serialVersionUID = -9190258825414992052L;
+    public abstract ClassLoader getClassLoader();
 
-    public String getValue()
-    {
-        return getClass().getSimpleName();
-    }
+    public abstract T postConstruct(T instance, boolean containerBootstrapped);
+
+    public abstract boolean filterService(Class<T> serviceClass);
+
+    public abstract void preInstallServices(List<Class<?>> foundServiceClasses);
 }

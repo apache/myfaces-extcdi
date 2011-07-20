@@ -16,35 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.activation;
+package org.apache.myfaces.extensions.cdi.core.impl.provider;
+
+import org.apache.myfaces.extensions.cdi.core.api.tools.AbstractPropertyExpressionInterpreter;
 
 /**
  * @author Gerhard Petracek
  */
-enum SimpleOperationEnum
+public class SystemPropertyExpressionInterpreter extends AbstractPropertyExpressionInterpreter
 {
-    IS("=="), NOT("!=");
-
-    private final String value;
-
-    SimpleOperationEnum(String value)
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected String getConfiguredValue(String key)
     {
-        this.value = value;
-    }
+        String result = System.getProperty(key);
 
-    String getValue()
-    {
-        return value;
-    }
-
-    static String getOperations()
-    {
-        String operations = "";
-
-        for(SimpleOperationEnum operation : SimpleOperationEnum.values())
+        if(result != null)
         {
-            operations += operation.getValue() + " ";
+            return result;
         }
-        return operations;
+        return System.getenv(key);
     }
 }

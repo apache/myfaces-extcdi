@@ -16,17 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.custom.provider;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 
-@ExpressionActivated("env==prod")
-public class TestImpl implements TestInterface
+/**
+ * @author Gerhard Petracek
+ */
+public class ServiceProvider extends org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider
 {
-    private static final long serialVersionUID = -9190258825414992052L;
-
-    public String getValue()
+    protected ServiceProvider(Class serviceType, ServiceProviderContext serviceProviderContext)
     {
-        return getClass().getSimpleName();
+        super(serviceType, serviceProviderContext);
+        reset(); //just for testing
     }
 }

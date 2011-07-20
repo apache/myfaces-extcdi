@@ -18,12 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.test.impl.config;
 
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 
 import java.util.List;
 import java.util.Collections;
 
+@InvocationOrder(150)
 public class TestConfiguredValueResolver implements ConfiguredValueResolver
 {
     private static boolean called = false;

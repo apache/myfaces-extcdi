@@ -18,8 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.activation;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
-import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter;
+import org.apache.myfaces.extensions.cdi.core.api.tools.AbstractPropertyExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.inject.Typed;
@@ -28,82 +27,14 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public class PropertyExpressionInterpreter implements ExpressionInterpreter<String, Boolean>
+public class PropertyExpressionInterpreter extends AbstractPropertyExpressionInterpreter
 {
     /**
      * {@inheritDoc}
      */
-    //TODO
-    public Boolean evaluate(String expressions)
+    @Override
+    protected String getConfiguredValue(String key)
     {
-        boolean result = false;
-        String[] foundExpressions = expressions.split(";");
-        String configFileName = null;
-
-        SimpleOperationEnum operation;
-        for(String expression : foundExpressions)
-        {
-            result = false;
-            if(expression.contains(SimpleOperationEnum.IS.getValue()))
-            {
-                operation = SimpleOperationEnum.IS;
-            }
-            else if(expression.contains(SimpleOperationEnum.NOT.getValue()))
-            {
-                operation = SimpleOperationEnum.NOT;
-            }
-            else if(expression.startsWith("configName:"))
-            {
-                configFileName = expression.split(":")[1];
-                //TODO refactor it - current impl. ensures backward compatibility (see PropertyFileResolver)
-                configFileName = configFileName.replace(".", "@");
-                continue;
-            }
-            else
-            {
-                throw new IllegalStateException("expression: " + expression + " isn't supported by " +
-                        ExpressionActivated.class.getName() +
-                        " supported operations: " + SimpleOperationEnum.getOperations() + "separator: ';'");
-            }
-
-            String[] keyValue = expression.split(operation.getValue());
-
-            String configuredValue = CodiUtils.lookupConfigFromEnvironment(keyValue[0], String.class, "");
-
-            configuredValue = configuredValue.trim();
-
-            if("".equals(configuredValue))
-            {
-                //TODO refactor it - current impl. ensures backward compatibility (see PropertyFileResolver)
-                String internalKey = keyValue[0] + "_";
-
-                configuredValue = CodiUtils
-                        .lookupConfigFromEnvironment(configFileName + "." + internalKey, String.class, "");
-                configuredValue = configuredValue.trim();
-            }
-
-            if(!"*".equals(keyValue[1]) && "".equals(configuredValue))
-            {
-                continue;
-            }
-
-            if("*".equals(keyValue[1]) && !"".equals(configuredValue))
-            {
-                result = true;
-                continue;
-            }
-
-            if(SimpleOperationEnum.IS.equals(operation) && !keyValue[1].equalsIgnoreCase(configuredValue))
-            {
-                return false;
-            }
-            else if(SimpleOperationEnum.NOT.equals(operation) && keyValue[1].equalsIgnoreCase(configuredValue))
-            {
-                return false;
-            }
-            result = true;
-        }
-
-        return result;
+        return CodiUtils.lookupConfigFromEnvironment(key, String.class, "");
     }
 }

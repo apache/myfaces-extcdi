@@ -16,17 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.custom.provider;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
+import java.util.List;
 
-@ExpressionActivated("env==prod")
-public class TestImpl implements TestInterface
+/**
+ * @author Gerhard Petracek
+ */
+@Deprecated
+public class ServiceProviderContext<T> extends org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext<T>
 {
-    private static final long serialVersionUID = -9190258825414992052L;
-
-    public String getValue()
+    @Override
+    public ClassLoader getClassLoader()
     {
-        return getClass().getSimpleName();
+        return getClass().getClassLoader();
+    }
+
+    @Override
+    public T postConstruct(T instance, boolean containerBootstrapped)
+    {
+        //do nothing
+        return instance;
+    }
+
+    @Override
+    public boolean filterService(Class<T> serviceClass)
+    {
+        //do nothing
+        return false;
+    }
+
+    @Override
+    public void preInstallServices(List<Class<?>> foundServiceClasses)
+    {
+        //do nothing
     }
 }

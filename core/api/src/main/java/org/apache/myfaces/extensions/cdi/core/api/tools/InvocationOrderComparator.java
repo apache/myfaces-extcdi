@@ -37,16 +37,37 @@ public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
      */
     public int compare(T t1, T t2)
     {
-        if (hasPriority(t1) && hasPriority(t2))
+        Class<?> t1Class;
+        Class<?> t2Class;
+
+        if(t1 instanceof Class)
         {
-            return isPriorityHigher(t1.getClass().getAnnotation(InvocationOrder.class),
-                    t2.getClass().getAnnotation(InvocationOrder.class));
+            t1Class = (Class)t1;
         }
-        if (!hasPriority(t1) && !hasPriority(t2))
+        else
+        {
+            t1Class = t1.getClass();
+        }
+
+        if(t2 instanceof Class)
+        {
+            t2Class = (Class)t2;
+        }
+        else
+        {
+            t2Class = t2.getClass();
+        }
+
+        if (hasPriority(t1Class) && hasPriority(t2Class))
+        {
+            return isPriorityHigher(t1Class.getAnnotation(InvocationOrder.class),
+                    t2Class.getAnnotation(InvocationOrder.class));
+        }
+        if (!hasPriority(t1Class) && !hasPriority(t2Class))
         {
             return 0;
         }
-        return hasPriority(t1) ? -1 : 1;
+        return hasPriority(t1Class) ? -1 : 1;
     }
 
     private int isPriorityHigher(InvocationOrder priority1, InvocationOrder priority2)
@@ -59,8 +80,8 @@ public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
         return priority1.value() < priority2.value() ? -1 : 1;
     }
 
-    private boolean hasPriority(Object o)
+    private boolean hasPriority(Class o)
     {
-        return o.getClass().isAnnotationPresent(InvocationOrder.class);
+        return o.isAnnotationPresent(InvocationOrder.class);
     }
 }

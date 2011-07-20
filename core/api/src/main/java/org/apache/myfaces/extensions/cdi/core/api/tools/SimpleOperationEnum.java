@@ -16,17 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.test.impl.config;
+package org.apache.myfaces.extensions.cdi.core.api.tools;
 
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
-
-@ExpressionActivated("env==prod")
-public class TestImpl implements TestInterface
+/**
+ * @author Gerhard Petracek
+ */
+enum SimpleOperationEnum
 {
-    private static final long serialVersionUID = -9190258825414992052L;
+    IS("=="), NOT("!=");
 
-    public String getValue()
+    private final String value;
+
+    SimpleOperationEnum(String value)
     {
-        return getClass().getSimpleName();
+        this.value = value;
+    }
+
+    String getValue()
+    {
+        return value;
+    }
+
+    static String getOperations()
+    {
+        String operations = "";
+
+        for(SimpleOperationEnum operation : SimpleOperationEnum.values())
+        {
+            operations += operation.getValue() + " ";
+        }
+        return operations;
     }
 }

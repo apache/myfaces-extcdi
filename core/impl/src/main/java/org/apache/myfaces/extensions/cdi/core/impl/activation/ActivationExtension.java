@@ -18,23 +18,18 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.activation;
 
+import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
+import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
+import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ActivationUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterDeploymentValidation;
 import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.ProcessAnnotatedType;
-
-import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated;
-import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
-import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter;
-import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
-import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
-import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -70,6 +65,9 @@ public class ActivationExtension implements Extension, Deactivatable
         checkProjectStageActivated(processAnnotatedType);
 
         checkExpressionActivated(processAnnotatedType);
+
+        //placed here to ensue that no validation of a deactivated class will be performance
+        validateCodiImplementationRules(processAnnotatedType);
     }
 
     private void checkProjectStageActivated(ProcessAnnotatedType<Object> processAnnotatedType)
@@ -89,40 +87,11 @@ public class ActivationExtension implements Extension, Deactivatable
 
     private void checkExpressionActivated(ProcessAnnotatedType<Object> processAnnotatedType)
     {
-        if (processAnnotatedType.getAnnotatedType().getJavaClass().isAnnotationPresent(ExpressionActivated.class))
+        Class<?> annotatedClass = processAnnotatedType.getAnnotatedType().getJavaClass();
+
+        if(!ActivationUtils.isActivated(annotatedClass, PropertyExpressionInterpreter.class))
         {
-            ExpressionActivated expressionActivated = processAnnotatedType.getAnnotatedType().getJavaClass()
-                            .getAnnotation(ExpressionActivated.class);
-
-            String expressions = expressionActivated.value();
-
-            Class<? extends ExpressionInterpreter> interpreter = expressionActivated.interpreter();
-
-            if(interpreter.equals(ExpressionInterpreter.class))
-            {
-                interpreter = PropertyExpressionInterpreter.class;
-            }
-
-            ExpressionInterpreter<String, Boolean> expressionInterpreter =
-                    ClassUtils.tryToInstantiateClass(interpreter);
-
-            if(expressionInterpreter == null)
-            {
-                Logger logger = Logger.getLogger(getClass().getName());
-
-                if(logger.isLoggable(Level.WARNING))
-                {
-                    logger.warning("can't instantiate " + interpreter.getClass().getName());
-                }
-                return;
-            }
-
-            expressions = "configName:" + expressionActivated.configName() + ";" + expressions;
-            if (!expressionInterpreter.evaluate(expressions))
-            {
-                // this alternative shall not get used
-                processAnnotatedType.veto();
-            }
+            processAnnotatedType.veto();
         }
     }
 
@@ -141,6 +110,11 @@ public class ActivationExtension implements Extension, Deactivatable
         }
 
         return false;
+    }
+
+    private void validateCodiImplementationRules(ProcessAnnotatedType<Object> processAnnotatedType)
+    {
+        //TODO
     }
 
     /**

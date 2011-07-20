@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
 
 import javax.enterprise.inject.Typed;
 import java.lang.reflect.Field;
@@ -33,7 +34,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Collections;
-import java.util.ServiceLoader;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.Serializable;
@@ -116,7 +116,7 @@ public abstract class ConfiguredArtifactUtils
                                               T defaultImplementation)
     {
         List<T> results = new ArrayList<T>();
-        List<T> resolverResult = null;
+        List<T> resolverResult;
 
         List<ConfiguredValueResolver> resolvers = getConfiguredValueResolvers();
 
@@ -204,8 +204,8 @@ public abstract class ConfiguredArtifactUtils
 
     private static List<ConfiguredValueResolver> getConfiguredValueResolvers()
     {
-        ServiceLoader<ConfiguredValueResolver> configuredValueResolvers =
-                ServiceLoader.load(ConfiguredValueResolver.class, ClassUtils.getClassLoader(null));
+        List<ConfiguredValueResolver> configuredValueResolvers =
+                ServiceProvider.loadServices(ConfiguredValueResolver.class);
 
         List<ConfiguredValueResolver> resolvers = new ArrayList<ConfiguredValueResolver>();
         Comparator<ConfiguredValueResolver> comparator = new InvocationOrderComparator<ConfiguredValueResolver>();
