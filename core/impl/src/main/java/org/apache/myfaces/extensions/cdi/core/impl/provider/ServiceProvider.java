@@ -35,8 +35,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Gerhard Petracek
@@ -136,14 +134,7 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
                 serviceClassName = extractConfiguredServiceClassName(serviceClassName);
                 if (!"".equals(serviceClassName))
                 {
-                    boolean optionalService = false;
-                    if(serviceClassName.endsWith(":optional")) //TODO
-                    {
-                        optionalService = true;
-                        serviceClassName = serviceClassName.replace(":optional", "");
-                    }
-
-                    loadService(serviceClassName, optionalService);
+                    loadService(serviceClassName);
                 }
             }
         }
@@ -178,7 +169,7 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
         return currentConfigLine.trim();
     }
 
-    private void loadService(String serviceClassName, boolean isOptional)
+    private void loadService(String serviceClassName)
     {
         Class<T> serviceClass = (Class<T>) loadClass(serviceClassName);
 
@@ -189,21 +180,9 @@ public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.a
         }
         else if(serviceClass == null)
         {
-            if(isOptional)
-            {
-                Logger logger = Logger.getLogger(serviceClassName);
-
-                if(logger.isLoggable(Level.INFO))
-                {
-                    logger.info("Optional service " + serviceClassName + " not loaded.");
-                }
-            }
-            else
-            {
-                throw new IllegalStateException(serviceClassName + " couldn't be loaded. " +
-                        "Please ensure that this class is in the classpath or remove the entry from "
-                        + getConfigFileLocation() + ". Or mark it as optional.");
-            }
+            throw new IllegalStateException(serviceClassName + " couldn't be loaded. " +
+                    "Please ensure that this class is in the classpath or remove the entry from "
+                    + getConfigFileLocation() + ". Or mark it as optional.");
         }
     }
 

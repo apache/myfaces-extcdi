@@ -78,16 +78,6 @@ public class ServiceProviderTest
         Assert.assertEquals(extensionList.size(), 1);
     }
 
-    //TODO
-    @Test
-    public void testOptionalExtensions()
-    {
-        System.setProperty("env", "prod");
-        List<TestInterface> extensionList = ServiceProvider.loadServices(TestInterface.class);
-
-        Assert.assertEquals(extensionList.size(), 1);
-    }
-
     @Test
     public void testOrderedExtensions()
     {

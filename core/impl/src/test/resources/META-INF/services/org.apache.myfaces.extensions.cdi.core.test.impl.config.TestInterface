@@ -18,4 +18,3 @@
 #####################################################################################
 
 org.apache.myfaces.extensions.cdi.core.test.impl.config.TestImpl
-org.apache.myfaces.extensions.cdi.core.test.impl.config.TestImpl2:optional

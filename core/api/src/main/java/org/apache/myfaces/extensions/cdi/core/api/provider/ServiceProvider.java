@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 /**
  * Replacement for the service-loader to support java 5 and to provide additional features like
  * sorting and a basic version of {@link org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated}
- * and injection as soon as it is available and demo.MyClass:optional
+ * and injection as soon as it is available
  *
  * @author Gerhard Petracek
  */
