@@ -18,17 +18,19 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.provider;
 
+import javax.enterprise.inject.Typed;
 import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
 //TODO
+@Typed()
 public abstract class ServiceProviderContext<T>
 {
     public abstract ClassLoader getClassLoader();
 
-    public abstract T postConstruct(T instance, boolean deploymentFinished);
+    public abstract T postConstruct(T instance);
 
     public abstract boolean filterService(Class<T> serviceClass);
 

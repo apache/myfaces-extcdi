@@ -27,33 +27,51 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 
+import javax.enterprise.inject.Typed;
+
 /**
  * @author Gerhard Petracek
  */
+@Typed
 public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
 {
+    protected boolean deploymentFinished = false;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ClassLoader getClassLoader()
     {
         return ClassUtils.getClassLoader(null);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public T postConstruct(T instance, boolean deploymentFinished)
+    public T postConstruct(T instance)
     {
-        if(deploymentFinished)
+        if(this.deploymentFinished)
         {
+            //deactivated by default - register the ServiceProvider as cdi extension to activate it
             CodiUtils.injectFields(instance, true);
         }
         return instance;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean filterService(Class<T> serviceClass)
     {
         return !ActivationUtils.isActivated(serviceClass, SystemPropertyExpressionInterpreter.class);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void preInstallServices(List<Class<?>> foundServiceClasses)
     {
@@ -61,5 +79,10 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
         {
             Collections.sort(foundServiceClasses, new InvocationOrderComparator<Object>());
         }
+    }
+
+    protected void setDeploymentFinished(boolean deploymentFinished)
+    {
+        this.deploymentFinished = deploymentFinished;
     }
 }

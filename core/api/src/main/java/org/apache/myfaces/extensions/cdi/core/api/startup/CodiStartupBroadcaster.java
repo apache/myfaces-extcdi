@@ -85,8 +85,7 @@ public abstract class CodiStartupBroadcaster
                     }
 
                     @Override
-                    public StartupEventBroadcaster postConstruct(
-                            StartupEventBroadcaster instance, boolean deploymentFinished)
+                    public StartupEventBroadcaster postConstruct(StartupEventBroadcaster instance)
                     {
                         //do nothing
                         return instance;

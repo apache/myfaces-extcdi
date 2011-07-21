@@ -49,8 +49,17 @@ public class DefaultServiceProvider<T> extends ServiceProvider<T>
     protected DefaultServiceProvider(Class<T> serviceType, ServiceProviderContext serviceProviderContext)
     {
         super(serviceType, serviceProviderContext);
+
+        //TODO
+        if(serviceProviderContext instanceof DefaultServiceProviderContext)
+        {
+            ((DefaultServiceProviderContext)serviceProviderContext).setDeploymentFinished(isDeploymentFinished());
+        }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected List<T> loadServiceImplementations()
     {
         List<Class<?>> result = serviceCache.get(this.serviceType);
@@ -234,7 +243,7 @@ public class DefaultServiceProvider<T> extends ServiceProvider<T>
             constructor.setAccessible(true);
             T instance = (T)constructor.newInstance();
 
-            this.serviceProviderContext.postConstruct(instance, isDeploymentFinished());
+            this.serviceProviderContext.postConstruct(instance);
 
             return instance;
         }
@@ -244,6 +253,7 @@ public class DefaultServiceProvider<T> extends ServiceProvider<T>
         }
     }
 
+    //deactivated by default - register this class as cdi extension to activate it
     private boolean isDeploymentFinished()
     {
         return Boolean.TRUE.equals(deploymentFinished.get(ClassUtils.getClassLoader(null)));
