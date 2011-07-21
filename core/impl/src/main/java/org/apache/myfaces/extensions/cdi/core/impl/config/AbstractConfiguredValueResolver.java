@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.config;
 import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,7 @@ public abstract class AbstractConfiguredValueResolver implements ConfiguredValue
     protected AbstractConfiguredValueResolver()
     {
         List<ClassDeactivator> serviceLoader =
-                ServiceProvider.loadServices(ClassDeactivator.class);
+                DefaultServiceProvider.loadServices(ClassDeactivator.class);
 
         for(ClassDeactivator currentInstance : serviceLoader)
         {

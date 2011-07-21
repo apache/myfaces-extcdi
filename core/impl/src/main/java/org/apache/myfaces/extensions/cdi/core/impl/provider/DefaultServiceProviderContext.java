@@ -25,12 +25,12 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import java.util.Collections;
 import java.util.List;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 
 /**
  * @author Gerhard Petracek
  */
-public class ServiceProviderContext<T>
-        extends org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext<T>
+public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
 {
     @Override
     public ClassLoader getClassLoader()

@@ -20,13 +20,14 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.serviceloader;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.CodiDeactivatorExtension;
 import org.apache.myfaces.extensions.cdi.core.impl.activation.ActivationExtension;
 import org.apache.myfaces.extensions.cdi.core.impl.config.LocalJndiResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.PropertyFileResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.SystemPropertyResolver;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestInterface;
 import org.testng.Assert;
@@ -92,6 +93,14 @@ public class ServiceProviderTest
         Assert.assertTrue(iterator.next() instanceof ServiceLoaderResolver);
         Assert.assertTrue(iterator.next() instanceof LocalJndiResolver);
         Assert.assertTrue(iterator.next() instanceof PropertyFileResolver);
+    }
 
+    @Test
+    public void testDefaultImplementations()
+    {
+        Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
+                "org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider"));
+        Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
+                "org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProviderContext"));
     }
 }

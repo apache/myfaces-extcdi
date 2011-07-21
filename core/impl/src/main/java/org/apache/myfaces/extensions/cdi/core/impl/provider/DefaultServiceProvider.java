@@ -35,17 +35,18 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider;
 
 /**
  * @author Gerhard Petracek
  */
-public class ServiceProvider<T> extends org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider<T>
+public class DefaultServiceProvider<T> extends ServiceProvider<T>
 {
     protected List<Class<?>> foundServiceClasses = new ArrayList<Class<?>>();
     private static Map<ClassLoader, Boolean> deploymentFinished = new ConcurrentHashMap<ClassLoader, Boolean>();
     private static Map<Class<?>, List<Class<?>>> serviceCache = new ConcurrentHashMap<Class<?>, List<Class<?>>>();
 
-    protected ServiceProvider(Class<T> serviceType, ServiceProviderContext serviceProviderContext)
+    protected DefaultServiceProvider(Class<T> serviceType, ServiceProviderContext serviceProviderContext)
     {
         super(serviceType, serviceProviderContext);
     }

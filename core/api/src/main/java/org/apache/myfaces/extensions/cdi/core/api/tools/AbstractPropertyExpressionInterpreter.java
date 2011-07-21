@@ -27,6 +27,7 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
+//TODO move to impl
 public abstract class AbstractPropertyExpressionInterpreter implements ExpressionInterpreter<String, Boolean>
 {
     /**

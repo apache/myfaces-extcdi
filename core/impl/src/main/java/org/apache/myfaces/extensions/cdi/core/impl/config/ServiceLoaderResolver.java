@@ -20,8 +20,8 @@ package org.apache.myfaces.extensions.cdi.core.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProviderContext;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProviderContext;
 
 import javax.enterprise.inject.Typed;
 import java.util.List;
@@ -45,7 +45,8 @@ public class ServiceLoaderResolver extends AbstractConfiguredValueResolver
         if(Modifier.isAbstract(targetType.getModifiers()) || Modifier.isInterface(targetType.getModifiers()))
         {
             @SuppressWarnings({"unchecked"})
-            List<T> services = ServiceProvider.loadServices(targetType, new ServiceProviderContext() {
+            List<T> services = DefaultServiceProvider.loadServices(targetType, new DefaultServiceProviderContext()
+            {
                 @Override
                 public boolean filterService(Class serviceClass)
                 {

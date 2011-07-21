@@ -20,13 +20,13 @@ package org.apache.myfaces.extensions.cdi.core.test.impl.serviceloader;
 
 import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
 
 /**
  * @author Gerhard Petracek
  */
 @InvocationOrder(Integer.MIN_VALUE)
-public class TestServiceProvider extends ServiceProvider
+public class TestServiceProvider extends DefaultServiceProvider
 {
     protected TestServiceProvider(Class serviceType, ServiceProviderContext serviceProviderContext)
     {

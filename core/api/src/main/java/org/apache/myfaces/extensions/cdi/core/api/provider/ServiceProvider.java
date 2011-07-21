@@ -39,6 +39,8 @@ import java.util.logging.Logger;
  */
 public abstract class ServiceProvider<T>
 {
+    private static final Logger LOGGER = Logger.getLogger(ServiceProvider.class.getName());
+
     protected static final String SERVICE_CONFIG = "META-INF/services/";
     protected static final String FILE_ENCODING = "UTF-8";
 
@@ -49,13 +51,15 @@ public abstract class ServiceProvider<T>
             ServiceProvider.class.getName().replace(".api.", ".custom.");
 
     private static final String DEFAULT_SERVICE_PROVIDER_NAME =
-            ServiceProvider.class.getName().replace(".api.", ".impl.");
+            ServiceProvider.class.getName().replace(".api.", ".impl.")
+                    .replace(".ServiceProvider", ".DefaultServiceProvider");
 
     private static final String CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME =
             ServiceProviderContext.class.getName().replace(".api.", ".custom.");
 
     private static final String DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME =
-            ServiceProviderContext.class.getName().replace(".api.", ".impl.");
+            ServiceProviderContext.class.getName().replace(".api.", ".impl.")
+                    .replace(".ServiceProviderContext", ".DefaultServiceProviderContext");
 
     protected static final Class<? extends ServiceProvider> SERVICE_PROVIDER_CLASS;
 
@@ -67,12 +71,21 @@ public abstract class ServiceProvider<T>
         Class<? extends ServiceProviderContext> serviceProviderContextClass = null;
         try
         {
-            serviceProviderClass = initServiceProvider();
-            serviceProviderContextClass = initServiceProviderContext();
+            serviceProviderClass =
+                    resolveImplementation(ServiceProvider.class, CUSTOM_SERVICE_PROVIDER_NAME);
+
+            serviceProviderContextClass =
+                    resolveImplementation(ServiceProviderContext.class, CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME);
         }
         catch (Exception e)
         {
-            //fallback - TODO log a warning
+            if (LOGGER.isLoggable(Level.WARNING))
+            {
+                LOGGER.log(Level.WARNING, "An exception occurred during the initialization of the service provider", e);
+            }
+        }
+        finally
+        {
             try
             {
                 if (serviceProviderClass == null)
@@ -80,7 +93,10 @@ public abstract class ServiceProvider<T>
                     serviceProviderClass = ClassUtils.loadClassForName(DEFAULT_SERVICE_PROVIDER_NAME);
                 }
 
-                serviceProviderContextClass = ClassUtils.loadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
+                if(serviceProviderContextClass == null)
+                {
+                    serviceProviderContextClass = ClassUtils.loadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
+                }
             }
             catch (Exception exception)
             {
@@ -125,16 +141,8 @@ public abstract class ServiceProvider<T>
         }
         catch (Exception e)
         {
-            Logger logger = Logger.getLogger(SERVICE_PROVIDER_CLASS.getName());
-
-            if (logger.isLoggable(Level.WARNING))
-            {
-                logger.log(Level.WARNING, "Can't instantiate " + SERVICE_PROVIDER_CLASS.getName(), e);
-            }
+            throw new IllegalStateException(e);
         }
-
-        //TODO
-        return null;
     }
 
     protected ServiceProvider(Class<T> serviceType, ServiceProviderContext serviceProviderContext)
@@ -149,101 +157,48 @@ public abstract class ServiceProvider<T>
     /*
      * private
      */
-    private static Class<? extends ServiceProvider> initServiceProvider()
+    private static <S> Class<S> resolveImplementation(Class<S> type, String customName)
     {
-        List<String> serviceProviderClassNames = new ArrayList<String>();
-        serviceProviderClassNames.add(CUSTOM_SERVICE_PROVIDER_NAME);
+        List<String> classNames = new ArrayList<String>();
+        classNames.add(customName);
 
-        List<String> configuredServiceProviders =
-                ConfigUtils.getConfiguredValue("ServiceProvider." + ServiceProvider.class.getName());
+        List<String> configuredClassNames =
+                ConfigUtils.getConfiguredValue(type.getSimpleName() + "." + type.getName());
 
-        if (configuredServiceProviders != null)
+        if (configuredClassNames != null)
         {
-            serviceProviderClassNames.addAll(configuredServiceProviders);
+            classNames.addAll(configuredClassNames);
         }
 
-        List<Class<? extends ServiceProvider>> serviceProviderClassList =
-                new ArrayList<Class<? extends ServiceProvider>>(serviceProviderClassNames.size());
+        List<Class<S>> classList = new ArrayList<Class<S>>(classNames.size());
 
-        Class<? extends ServiceProvider> currentServiceProviderClass = null;
-        for (String currentServiceProviderName : serviceProviderClassNames)
+        Class<S> currentClass = null;
+        for (String currentClassName : classNames)
         {
             try
             {
-                currentServiceProviderClass =
-                        ClassUtils.tryToLoadClassForName(currentServiceProviderName);
+                currentClass = ClassUtils.tryToLoadClassForName(currentClassName);
             }
             catch (Exception e)
             {
-                //TODO logging
+                if(LOGGER.isLoggable(Level.WARNING))
+                {
+                    LOGGER.warning("Couldn't load class: " + currentClassName);
+                }
             }
 
-            if (currentServiceProviderClass != null)
+            if (currentClass != null)
             {
-                serviceProviderClassList.add(currentServiceProviderClass);
+                classList.add(currentClass);
             }
         }
 
-        Class serviceProviderClass = null;
-        if (!serviceProviderClassList.isEmpty())
+        Class<S> result = null;
+        if (!classList.isEmpty())
         {
-            Collections.sort(serviceProviderClassList, new InvocationOrderComparator<Object>());
-            serviceProviderClass = serviceProviderClassList.iterator().next();
+            Collections.sort(classList, new InvocationOrderComparator<Object>());
+            result = classList.iterator().next();
         }
-
-        if (serviceProviderClass == null)
-        {
-            serviceProviderClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_NAME);
-        }
-        return serviceProviderClass;
-    }
-
-    private static Class<? extends ServiceProviderContext> initServiceProviderContext()
-    {
-        List<String> serviceProviderContextClassNames = new ArrayList<String>();
-        serviceProviderContextClassNames.add(CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME);
-
-        List<String> configuredServiceProviderContextList =
-                ConfigUtils.getConfiguredValue("ServiceProviderContext." + ServiceProviderContext.class.getName());
-
-        if (configuredServiceProviderContextList != null)
-        {
-            serviceProviderContextClassNames.addAll(configuredServiceProviderContextList);
-        }
-
-        List<Class<? extends ServiceProviderContext>> serviceProviderContextClassList =
-                new ArrayList<Class<? extends ServiceProviderContext>>(serviceProviderContextClassNames.size());
-
-        Class<? extends ServiceProviderContext> currentServiceProviderContextClass = null;
-        for (String currentServiceProviderContextName : serviceProviderContextClassNames)
-        {
-            try
-            {
-                currentServiceProviderContextClass =
-                        ClassUtils.tryToLoadClassForName(currentServiceProviderContextName);
-            }
-            catch (Exception e)
-            {
-                //TODO logging
-            }
-
-            if (currentServiceProviderContextClass != null)
-            {
-                serviceProviderContextClassList.add(currentServiceProviderContextClass);
-            }
-        }
-
-        Class serviceProviderContextClass = null;
-        if (!serviceProviderContextClassList.isEmpty())
-        {
-            Collections.sort(serviceProviderContextClassList, new InvocationOrderComparator<Object>());
-            serviceProviderContextClass = serviceProviderContextClassList.iterator().next();
-        }
-
-        if (serviceProviderContextClass == null)
-        {
-            serviceProviderContextClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
-        }
-        return serviceProviderContextClass;
+        return result;
     }
 }

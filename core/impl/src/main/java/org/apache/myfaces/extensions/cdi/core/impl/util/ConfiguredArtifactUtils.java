@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
 
 import javax.enterprise.inject.Typed;
 import java.lang.reflect.Field;
@@ -205,7 +205,7 @@ public abstract class ConfiguredArtifactUtils
     private static List<ConfiguredValueResolver> getConfiguredValueResolvers()
     {
         List<ConfiguredValueResolver> configuredValueResolvers =
-                ServiceProvider.loadServices(ConfiguredValueResolver.class);
+                DefaultServiceProvider.loadServices(ConfiguredValueResolver.class);
 
         List<ConfiguredValueResolver> resolvers = new ArrayList<ConfiguredValueResolver>();
         Comparator<ConfiguredValueResolver> comparator = new InvocationOrderComparator<ConfiguredValueResolver>();
