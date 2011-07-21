@@ -18,9 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.provider;
 
+import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
+import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.api.util.ConfigUtils;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -58,24 +63,32 @@ public abstract class ServiceProvider<T>
 
     static
     {
-        Class serviceProviderClass = ClassUtils.tryToLoadClassForName(CUSTOM_SERVICE_PROVIDER_NAME);
-
-        if(serviceProviderClass == null)
+        Class<? extends ServiceProvider> serviceProviderClass = null;
+        Class<? extends ServiceProviderContext> serviceProviderContextClass = null;
+        try
         {
-            serviceProviderClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_NAME);
+            serviceProviderClass = initServiceProvider();
+            serviceProviderContextClass = initServiceProviderContext();
+        }
+        catch (Exception e)
+        {
+            //fallback - TODO log a warning
+            try
+            {
+                if (serviceProviderClass == null)
+                {
+                    serviceProviderClass = ClassUtils.loadClassForName(DEFAULT_SERVICE_PROVIDER_NAME);
+                }
+
+                serviceProviderContextClass = ClassUtils.loadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
+            }
+            catch (Exception exception)
+            {
+                throw new UnhandledException(exception);
+            }
         }
 
-        //TODO add null check
         SERVICE_PROVIDER_CLASS = serviceProviderClass;
-
-        Class serviceProviderContextClass = ClassUtils.tryToLoadClassForName(CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME);
-
-        if(serviceProviderContextClass == null)
-        {
-            serviceProviderContextClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
-        }
-
-        //TODO add null check
         SERVICE_PROVIDER_CONTEXT_CLASS = serviceProviderContextClass;
     }
 
@@ -114,7 +127,7 @@ public abstract class ServiceProvider<T>
         {
             Logger logger = Logger.getLogger(SERVICE_PROVIDER_CLASS.getName());
 
-            if(logger.isLoggable(Level.WARNING))
+            if (logger.isLoggable(Level.WARNING))
             {
                 logger.log(Level.WARNING, "Can't instantiate " + SERVICE_PROVIDER_CLASS.getName(), e);
             }
@@ -131,4 +144,106 @@ public abstract class ServiceProvider<T>
     }
 
     protected abstract List<T> loadServiceImplementations();
+
+
+    /*
+     * private
+     */
+    private static Class<? extends ServiceProvider> initServiceProvider()
+    {
+        List<String> serviceProviderClassNames = new ArrayList<String>();
+        serviceProviderClassNames.add(CUSTOM_SERVICE_PROVIDER_NAME);
+
+        List<String> configuredServiceProviders =
+                ConfigUtils.getConfiguredValue("ServiceProvider." + ServiceProvider.class.getName());
+
+        if (configuredServiceProviders != null)
+        {
+            serviceProviderClassNames.addAll(configuredServiceProviders);
+        }
+
+        List<Class<? extends ServiceProvider>> serviceProviderClassList =
+                new ArrayList<Class<? extends ServiceProvider>>(serviceProviderClassNames.size());
+
+        Class<? extends ServiceProvider> currentServiceProviderClass = null;
+        for (String currentServiceProviderName : serviceProviderClassNames)
+        {
+            try
+            {
+                currentServiceProviderClass =
+                        ClassUtils.tryToLoadClassForName(currentServiceProviderName);
+            }
+            catch (Exception e)
+            {
+                //TODO logging
+            }
+
+            if (currentServiceProviderClass != null)
+            {
+                serviceProviderClassList.add(currentServiceProviderClass);
+            }
+        }
+
+        Class serviceProviderClass = null;
+        if (!serviceProviderClassList.isEmpty())
+        {
+            Collections.sort(serviceProviderClassList, new InvocationOrderComparator<Object>());
+            serviceProviderClass = serviceProviderClassList.iterator().next();
+        }
+
+        if (serviceProviderClass == null)
+        {
+            serviceProviderClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_NAME);
+        }
+        return serviceProviderClass;
+    }
+
+    private static Class<? extends ServiceProviderContext> initServiceProviderContext()
+    {
+        List<String> serviceProviderContextClassNames = new ArrayList<String>();
+        serviceProviderContextClassNames.add(CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME);
+
+        List<String> configuredServiceProviderContextList =
+                ConfigUtils.getConfiguredValue("ServiceProviderContext." + ServiceProviderContext.class.getName());
+
+        if (configuredServiceProviderContextList != null)
+        {
+            serviceProviderContextClassNames.addAll(configuredServiceProviderContextList);
+        }
+
+        List<Class<? extends ServiceProviderContext>> serviceProviderContextClassList =
+                new ArrayList<Class<? extends ServiceProviderContext>>(serviceProviderContextClassNames.size());
+
+        Class<? extends ServiceProviderContext> currentServiceProviderContextClass = null;
+        for (String currentServiceProviderContextName : serviceProviderContextClassNames)
+        {
+            try
+            {
+                currentServiceProviderContextClass =
+                        ClassUtils.tryToLoadClassForName(currentServiceProviderContextName);
+            }
+            catch (Exception e)
+            {
+                //TODO logging
+            }
+
+            if (currentServiceProviderContextClass != null)
+            {
+                serviceProviderContextClassList.add(currentServiceProviderContextClass);
+            }
+        }
+
+        Class serviceProviderContextClass = null;
+        if (!serviceProviderContextClassList.isEmpty())
+        {
+            Collections.sort(serviceProviderContextClassList, new InvocationOrderComparator<Object>());
+            serviceProviderContextClass = serviceProviderContextClassList.iterator().next();
+        }
+
+        if (serviceProviderContextClass == null)
+        {
+            serviceProviderContextClass = ClassUtils.tryToLoadClassForName(DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME);
+        }
+        return serviceProviderContextClass;
+    }
 }

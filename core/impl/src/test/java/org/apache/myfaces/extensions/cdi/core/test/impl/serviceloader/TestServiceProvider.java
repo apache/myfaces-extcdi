@@ -16,16 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.custom.provider;
+package org.apache.myfaces.extensions.cdi.core.test.impl.serviceloader;
 
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider;
 
 /**
  * @author Gerhard Petracek
  */
-public class ServiceProvider extends org.apache.myfaces.extensions.cdi.core.impl.provider.ServiceProvider
+@InvocationOrder(Integer.MIN_VALUE)
+public class TestServiceProvider extends ServiceProvider
 {
-    protected ServiceProvider(Class serviceType, ServiceProviderContext serviceProviderContext)
+    protected TestServiceProvider(Class serviceType, ServiceProviderContext serviceProviderContext)
     {
         super(serviceType, serviceProviderContext);
         reset(); //just for testing
