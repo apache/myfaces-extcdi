@@ -54,7 +54,7 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
     {
         if(this.deploymentFinished)
         {
-            //deactivated by default - register the ServiceProvider as cdi extension to activate it
+            //deactivated by default - register the DefaultServiceProvider as cdi extension to activate it
             CodiUtils.injectFields(instance, true);
         }
         return instance;
@@ -72,6 +72,7 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
     /**
      * {@inheritDoc}
      */
+    //TODO remove all usages of InvocationOrderComparator which aren't needed any more
     @Override
     public void preInstallServices(List<Class<?>> foundServiceClasses)
     {

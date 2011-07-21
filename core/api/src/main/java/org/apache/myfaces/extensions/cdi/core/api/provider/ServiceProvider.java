@@ -106,6 +106,12 @@ public abstract class ServiceProvider<T>
 
         SERVICE_PROVIDER_CLASS = serviceProviderClass;
         SERVICE_PROVIDER_CONTEXT_CLASS = serviceProviderContextClass;
+
+        if(LOGGER.isLoggable(Level.INFO))
+        {
+            LOGGER.info(SERVICE_PROVIDER_CLASS.getName() + " installed successfully.");
+            LOGGER.info(SERVICE_PROVIDER_CONTEXT_CLASS.getName() + " installed successfully.");
+        }
     }
 
     public static <S> List<S> loadServices(Class<S> serviceType)
