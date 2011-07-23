@@ -28,6 +28,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.config.LocalJndiResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.PropertyFileResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.SystemPropertyResolver;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestInterface;
 import org.testng.Assert;
@@ -40,9 +42,63 @@ import java.util.List;
 public class ServiceProviderTest
 {
     @Test
-    public void testExtensions()
+    @SuppressWarnings({"unchecked"})
+    public void testExtensionsWithDefaultServiceProvider()
     {
         List<Extension> extensionList = ServiceProvider.loadServices(Extension.class);
+        Assert.assertEquals(extensionList.size(), 3);
+
+        Iterator<Extension> iterator = extensionList.iterator();
+
+        Extension extension;
+        while (iterator.hasNext())
+        {
+            extension = iterator.next();
+            Assert.assertTrue(extension instanceof ActivationExtension ||
+                extension instanceof BeanManagerProvider ||
+                extension instanceof CodiDeactivatorExtension);
+
+            iterator.remove();
+        }
+
+        Assert.assertEquals(extensionList.size(), 0);
+    }
+
+    @Test
+    @SuppressWarnings({"unchecked"})
+    public void testExtensionsWithDefaultServiceProviderWithSimple()
+    {
+        List<Extension> extensionList =
+                ServiceProvider.loadServices(Extension.class, new SimpleServiceProviderContext<Extension>());
+        Assert.assertEquals(extensionList.size(), 3);
+
+        Iterator<Extension> iterator = extensionList.iterator();
+
+        Extension extension;
+        while (iterator.hasNext())
+        {
+            extension = iterator.next();
+            Assert.assertTrue(extension instanceof ActivationExtension ||
+                extension instanceof BeanManagerProvider ||
+                extension instanceof CodiDeactivatorExtension);
+
+            iterator.remove();
+        }
+
+        Assert.assertEquals(extensionList.size(), 0);
+    }
+
+    @Test
+    @SuppressWarnings({"unchecked"})
+    public void testExtensionsWithSimpleServiceProvider()
+    {
+        List<Extension> extensionList = new SimpleServiceProvider(Extension.class, new SimpleServiceProviderContext<Extension>()) {
+            @Override
+            public List<Extension> loadServiceImplementations()
+            {
+                return super.loadServiceImplementations();
+            }
+        }.loadServiceImplementations();
         Assert.assertEquals(extensionList.size(), 3);
 
         Iterator<Extension> iterator = extensionList.iterator();
@@ -101,6 +157,10 @@ public class ServiceProviderTest
         Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
                 "org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider"));
         Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
+                "org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProvider"));
+        Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
                 "org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProviderContext"));
+        Assert.assertNotNull(ClassUtils.tryToLoadClassForName(
+                "org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProviderContext"));
     }
 }

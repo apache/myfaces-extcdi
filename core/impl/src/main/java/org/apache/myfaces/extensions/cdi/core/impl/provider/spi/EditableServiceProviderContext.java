@@ -16,19 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.provider;
+package org.apache.myfaces.extensions.cdi.core.impl.provider.spi;
 
 import javax.enterprise.inject.Typed;
+import java.util.List;
 
 /**
  * @author Gerhard Petracek
  */
 @Typed()
-public abstract class ServiceProviderContext<T>
+//TODO
+public interface EditableServiceProviderContext<T>
 {
-    /**
-     * Allows to provide a custom {@link ClassLoader}
-     * @return the class-loader which should be used for the first try
-     */
-    public abstract ClassLoader getClassLoader();
+    T postConstruct(T instance);
+
+    boolean filterService(Class<T> serviceClass);
+
+    void preInstallServices(List<Class<?>> foundServiceClasses);
 }

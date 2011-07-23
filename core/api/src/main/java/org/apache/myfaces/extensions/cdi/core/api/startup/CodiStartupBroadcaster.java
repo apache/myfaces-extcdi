@@ -83,26 +83,6 @@ public abstract class CodiStartupBroadcaster
                     {
                         return classLoader;
                     }
-
-                    @Override
-                    public StartupEventBroadcaster postConstruct(StartupEventBroadcaster instance)
-                    {
-                        //do nothing
-                        return instance;
-                    }
-
-                    @Override
-                    public boolean filterService(Class<StartupEventBroadcaster> serviceClass)
-                    {
-                        //do nothing
-                        return false;
-                    }
-
-                    @Override
-                    public void preInstallServices(List<Class<?>> foundServiceClasses)
-                    {
-                        //do nothing
-                    }
                 });
 
         List<Class<? extends StartupEventBroadcaster>> filter = broadcasterFilter.get(classLoader);

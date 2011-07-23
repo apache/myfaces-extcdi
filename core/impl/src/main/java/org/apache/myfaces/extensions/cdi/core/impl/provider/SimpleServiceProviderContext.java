@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.provider;
+package org.apache.myfaces.extensions.cdi.core.impl.provider;
+
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
+import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
 import javax.enterprise.inject.Typed;
 
@@ -24,11 +27,13 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public abstract class ServiceProviderContext<T>
+public class SimpleServiceProviderContext<T> extends ServiceProviderContext<T>
 {
     /**
-     * Allows to provide a custom {@link ClassLoader}
-     * @return the class-loader which should be used for the first try
+     * {@inheritDoc}
      */
-    public abstract ClassLoader getClassLoader();
+    public ClassLoader getClassLoader()
+    {
+        return ClassUtils.getClassLoader(null);
+    }
 }

@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.provider;
 
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.spi.EditableServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ActivationUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
@@ -33,7 +34,8 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed
-public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
+public class DefaultServiceProviderContext<T>
+        extends ServiceProviderContext<T> implements EditableServiceProviderContext<T>
 {
     protected boolean deploymentFinished = false;
 
@@ -49,7 +51,6 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
     /**
      * {@inheritDoc}
      */
-    @Override
     public T postConstruct(T instance)
     {
         if(this.deploymentFinished)
@@ -63,7 +64,6 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
     /**
      * {@inheritDoc}
      */
-    @Override
     public boolean filterService(Class<T> serviceClass)
     {
         return !ActivationUtils.isActivated(serviceClass, SystemPropertyExpressionInterpreter.class);
@@ -73,7 +73,6 @@ public class DefaultServiceProviderContext<T> extends ServiceProviderContext<T>
      * {@inheritDoc}
      */
     //TODO remove all usages of InvocationOrderComparator which aren't needed any more
-    @Override
     public void preInstallServices(List<Class<?>> foundServiceClasses)
     {
         if(foundServiceClasses != null && !foundServiceClasses.isEmpty())
