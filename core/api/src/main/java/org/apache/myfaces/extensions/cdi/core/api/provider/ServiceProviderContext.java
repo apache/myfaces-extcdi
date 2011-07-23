@@ -18,12 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.provider;
 
-import javax.enterprise.inject.Typed;
-
 /**
  * @author Gerhard Petracek
  */
-@Typed()
 public interface ServiceProviderContext
 {
     /**
