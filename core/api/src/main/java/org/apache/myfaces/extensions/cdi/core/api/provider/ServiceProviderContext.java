@@ -24,11 +24,11 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public abstract class ServiceProviderContext<T>
+public interface ServiceProviderContext
 {
     /**
      * Allows to provide a custom {@link ClassLoader}
      * @return the class-loader which should be used for the first try
      */
-    public abstract ClassLoader getClassLoader();
+    ClassLoader getClassLoader();
 }

@@ -77,13 +77,13 @@ public abstract class CodiStartupBroadcaster
 
         List<StartupEventBroadcaster> startupEventBroadcasterList =
                 ServiceProvider.loadServices(StartupEventBroadcaster.class,
-                        new ServiceProviderContext<StartupEventBroadcaster>() {
-                    @Override
-                    public ClassLoader getClassLoader()
-                    {
-                        return classLoader;
-                    }
-                });
+                        new ServiceProviderContext()
+                        {
+                            public ClassLoader getClassLoader()
+                            {
+                                return classLoader;
+                            }
+                        });
 
         List<Class<? extends StartupEventBroadcaster>> filter = broadcasterFilter.get(classLoader);
         if (filter == null)

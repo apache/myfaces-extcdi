@@ -69,7 +69,7 @@ public class ServiceProviderTest
     public void testExtensionsWithDefaultServiceProviderWithSimple()
     {
         List<Extension> extensionList =
-                ServiceProvider.loadServices(Extension.class, new SimpleServiceProviderContext<Extension>());
+                ServiceProvider.loadServices(Extension.class, new SimpleServiceProviderContext());
         Assert.assertEquals(extensionList.size(), 3);
 
         Iterator<Extension> iterator = extensionList.iterator();
@@ -92,7 +92,7 @@ public class ServiceProviderTest
     @SuppressWarnings({"unchecked"})
     public void testExtensionsWithSimpleServiceProvider()
     {
-        List<Extension> extensionList = new SimpleServiceProvider(Extension.class, new SimpleServiceProviderContext<Extension>()) {
+        List<Extension> extensionList = new SimpleServiceProvider(Extension.class, new SimpleServiceProviderContext()) {
             @Override
             public List<Extension> loadServiceImplementations()
             {

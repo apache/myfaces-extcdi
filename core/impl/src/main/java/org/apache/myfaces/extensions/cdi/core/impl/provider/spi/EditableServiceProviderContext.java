@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.provider.spi;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
+
 import javax.enterprise.inject.Typed;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import java.util.List;
  */
 @Typed()
 //TODO
-public interface EditableServiceProviderContext<T>
+public interface EditableServiceProviderContext<T> extends ServiceProviderContext
 {
     T postConstruct(T instance);
 

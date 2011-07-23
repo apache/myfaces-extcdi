@@ -20,8 +20,10 @@ package org.apache.myfaces.extensions.cdi.core.impl.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescriptor;
-import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider;
+import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProviderContext;
+import org.apache.myfaces.extensions.cdi.core.impl.provider.spi.EditableServiceProviderContext;
 
 import javax.enterprise.inject.Typed;
 import java.util.List;
@@ -41,17 +43,49 @@ public class ServiceLoaderResolver extends AbstractConfiguredValueResolver
     public <K, T> List<T> resolveInstances(ConfiguredValueDescriptor<K, T> descriptor)
     {
         List<T> result = new ArrayList<T>();
-        Class targetType = descriptor.getTargetType();
+        final Class targetType = descriptor.getTargetType();
         if(Modifier.isAbstract(targetType.getModifiers()) || Modifier.isInterface(targetType.getModifiers()))
         {
             @SuppressWarnings({"unchecked"})
-            List<T> services = DefaultServiceProvider.loadServices(targetType, new DefaultServiceProviderContext()
+            List<T> services = ServiceProvider.loadServices(targetType, new EditableServiceProviderContext<T>()
             {
-                @Override
+                private ServiceProviderContext serviceProviderContext =
+                        ServiceProvider.createServiceProviderContext(targetType);
+
+                public T postConstruct(T instance)
+                {
+                    if(serviceProviderContext instanceof EditableServiceProviderContext)
+                    {
+                        return ((EditableServiceProviderContext<T>)serviceProviderContext)
+                                .postConstruct(instance);
+                    }
+                    return instance;
+                }
+
                 public boolean filterService(Class serviceClass)
                 {
+                    if(serviceProviderContext instanceof EditableServiceProviderContext &&
+                            !(serviceProviderContext instanceof DefaultServiceProviderContext))
+                    {
+                        return ((EditableServiceProviderContext<T>)serviceProviderContext)
+                                .filterService(serviceClass);
+                    }
                     //do nothing
                     return false;
+                }
+
+                public void preInstallServices(List<Class<?>> foundServiceClasses)
+                {
+                    if(serviceProviderContext instanceof EditableServiceProviderContext)
+                    {
+                        ((EditableServiceProviderContext<T>)serviceProviderContext)
+                                .preInstallServices(foundServiceClasses);
+                    }
+                }
+
+                public ClassLoader getClassLoader()
+                {
+                    return serviceProviderContext.getClassLoader();
                 }
             });
 

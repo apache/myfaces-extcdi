@@ -27,7 +27,7 @@ import javax.enterprise.inject.Typed;
  * @author Gerhard Petracek
  */
 @Typed()
-public class SimpleServiceProviderContext<T> extends ServiceProviderContext<T>
+public class SimpleServiceProviderContext implements ServiceProviderContext
 {
     /**
      * {@inheritDoc}

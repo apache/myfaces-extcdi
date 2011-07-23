@@ -26,7 +26,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import java.util.Collections;
 import java.util.List;
-import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 
 import javax.enterprise.inject.Typed;
 
@@ -35,14 +34,13 @@ import javax.enterprise.inject.Typed;
  */
 @Typed
 public class DefaultServiceProviderContext<T>
-        extends ServiceProviderContext<T> implements EditableServiceProviderContext<T>
+        implements EditableServiceProviderContext<T>
 {
     protected boolean deploymentFinished = false;
 
     /**
      * {@inheritDoc}
      */
-    @Override
     public ClassLoader getClassLoader()
     {
         return ClassUtils.getClassLoader(null);

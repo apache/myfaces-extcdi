@@ -116,13 +116,17 @@ public abstract class ServiceProvider<T>
 
     public static <S> List<S> loadServices(Class<S> serviceType)
     {
-        ServiceProviderContext<S> serviceProviderContext =
-                ClassUtils.tryToInstantiateClass(SERVICE_PROVIDER_CONTEXT_CLASS);
+        ServiceProviderContext serviceProviderContext = createServiceProviderContext(serviceType);
 
         return loadServices(serviceType, serviceProviderContext);
     }
 
-    public static <S> List<S> loadServices(Class<S> serviceType, ServiceProviderContext<S> serviceProviderContext)
+    public static <S> ServiceProviderContext createServiceProviderContext(Class<S> serviceType)
+    {
+        return ClassUtils.tryToInstantiateClass(SERVICE_PROVIDER_CONTEXT_CLASS);
+    }
+
+    public static <S> List<S> loadServices(Class<S> serviceType, ServiceProviderContext serviceProviderContext)
     {
         //no fallback - would be possible via an add-on and a custom ServiceProvider
         ServiceProvider<S> serviceProvider = getServiceProvider(serviceType, serviceProviderContext);
