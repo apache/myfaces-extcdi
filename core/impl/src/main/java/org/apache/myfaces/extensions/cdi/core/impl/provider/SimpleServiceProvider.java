@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.provider;
 
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.UnhandledException;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
@@ -38,6 +39,7 @@ import java.util.List;
  * @author Gerhard Petracek
  */
 @Typed()
+@InvocationOrder(100)
 public class SimpleServiceProvider<T> extends ServiceProvider<T>
 {
     protected List<Class<?>> foundServiceClasses = new ArrayList<Class<?>>();

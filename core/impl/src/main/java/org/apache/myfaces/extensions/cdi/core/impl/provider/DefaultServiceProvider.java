@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.provider;
 
+import org.apache.myfaces.extensions.cdi.core.api.InvocationOrder;
 import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.provider.spi.EditableServiceProviderContext;
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Typed()
 @SuppressWarnings({"unchecked"})
+@InvocationOrder(200)
 public class DefaultServiceProvider<T> extends SimpleServiceProvider<T>
 {
     private static Map<ClassLoader, Boolean> deploymentFinished = new ConcurrentHashMap<ClassLoader, Boolean>();
