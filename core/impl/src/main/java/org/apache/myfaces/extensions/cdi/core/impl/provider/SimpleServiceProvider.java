@@ -170,7 +170,7 @@ public class SimpleServiceProvider<T> extends ServiceProvider<T>
         {
             throw new IllegalStateException(serviceClassName + " couldn't be loaded. " +
                     "Please ensure that this class is in the classpath or remove the entry from "
-                    + getConfigFileLocation() + ". Or mark it as optional.");
+                    + getConfigFileLocation() + ".");
         }
     }
 
