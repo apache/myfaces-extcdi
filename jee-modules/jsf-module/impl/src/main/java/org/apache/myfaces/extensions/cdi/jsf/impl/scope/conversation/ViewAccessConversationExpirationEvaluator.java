@@ -48,7 +48,7 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
     //see EXTCDI-49
     void observeRenderedView(String viewId)
     {
-        if(!viewId.equals(this.lastViewId))
+        if(viewId != null /*in case of an invalid view*/ && !viewId.equals(this.lastViewId))
         {
             if(this.conversation != null)
             {
@@ -81,7 +81,14 @@ class ViewAccessConversationExpirationEvaluator implements ConversationExpiratio
         {
             this.lastViewId = getNewViewId();
         }
-        boolean result = !getCurrentViewId().equals(this.lastViewId);
+
+        String currentViewId = getCurrentViewId();
+
+        if(currentViewId == null) //in case of an invalid view
+        {
+            return false;
+        }
+        boolean result = !currentViewId.equals(this.lastViewId);
         return result;
     }
 
