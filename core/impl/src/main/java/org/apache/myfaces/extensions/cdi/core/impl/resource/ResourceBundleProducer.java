@@ -35,11 +35,10 @@ import java.util.Set;
 public class ResourceBundleProducer
 {
     @Produces
-    @Bundle
     @Dependent
     protected ResourceBundle injectableResourceBundle(InjectionPoint injectionPoint)
     {
-        Bundle bundle = getBundleClass(injectionPoint.getQualifiers());
+        Bundle bundle = getBundleClass(injectionPoint.getAnnotated().getAnnotations());
 
         if(bundle != null)
         {

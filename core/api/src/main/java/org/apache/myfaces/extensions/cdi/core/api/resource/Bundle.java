@@ -18,8 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.core.api.resource;
 
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -34,17 +32,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  */
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, CONSTRUCTOR, METHOD, FIELD})
+@Target({TYPE, CONSTRUCTOR, METHOD, FIELD, PARAMETER})
 
-//cdi annotations
-@Qualifier
 public @interface Bundle
 {
     /**
      * Allows to specify the class which is mapped to the resource-bundle
      * @return class which represents the resource-bundle
      */
-    @Nonbinding
     Class<?> value() default Class.class;
 
     /**
@@ -52,6 +47,5 @@ public @interface Bundle
      * and can't be mapped to the bundle via convention. #name allows to explicitly specify the name of the bundle.
      * @return the overridden name which should be used to identify the resource-bundle
      */
-    @Nonbinding
     String name() default "";
 }

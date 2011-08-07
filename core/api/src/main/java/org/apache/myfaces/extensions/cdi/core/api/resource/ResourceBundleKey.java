@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.api.resource;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 
+import java.lang.annotation.Annotation;
+
 /**
  * Base class which has to be extended if a key should be injected.
  *
@@ -29,6 +31,21 @@ import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 public abstract class ResourceBundleKey implements BundleKey
 {
     private transient ResourceBundle resourceBundle;
+
+    private static Class<? extends Annotation> qualifierClass;
+
+    static
+    {
+        try
+        {
+            qualifierClass = (Class<? extends Annotation>)
+                    Class.forName("org.apache.myfaces.extensions.cdi.jsf.api.Jsf");
+        }
+        catch (Exception e)
+        {
+            qualifierClass = null;
+        }
+    }
 
     /**
      * Returns the value of the resource-bundle represented by this key
@@ -66,8 +83,16 @@ public abstract class ResourceBundleKey implements BundleKey
                         "which is annotated with @" + Bundle.class.getName());
             }
 
-            this.resourceBundle = BeanManagerProvider.getInstance()
-                    .getContextualReference(ResourceBundle.class, DefaultAnnotation.of(Bundle.class));
+            if(qualifierClass != null)
+            {
+                this.resourceBundle = BeanManagerProvider.getInstance()
+                        .getContextualReference(ResourceBundle.class, DefaultAnnotation.of(qualifierClass));
+            }
+            else
+            {
+                this.resourceBundle = BeanManagerProvider.getInstance()
+                        .getContextualReference(ResourceBundle.class);
+            }
             this.resourceBundle.useBundle(bundleClass);
         }
         return resourceBundle;
