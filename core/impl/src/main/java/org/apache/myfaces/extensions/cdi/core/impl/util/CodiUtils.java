@@ -562,23 +562,6 @@ public abstract class CodiUtils
 
             baseKey = baseKey.substring(0, 1).toLowerCase() + baseKey.substring(1);
 
-            StringBuilder dynamicKey = new StringBuilder(baseKey.length());
-
-            Character current;
-            for(int i = 0; i < baseKey.length(); i++)
-            {
-                current = baseKey.charAt(i);
-                if(Character.isUpperCase(current))
-                {
-                    dynamicKey.append("_");
-                    dynamicKey.append(Character.toLowerCase(current));
-                }
-                else
-                {
-                    dynamicKey.append(current);
-                }
-            }
-
             String className = runtimeException.getStackTrace()[1].getClassName();
 
             Class configClass = ClassUtils.tryToLoadClassForName(className);
@@ -593,7 +576,8 @@ public abstract class CodiUtils
                 className = className.substring(className.lastIndexOf(".") + 1);
             }
 
-            key = className + "." + dynamicKey.toString();
+            String convertedKey = StringUtils.replaceUpperCaseCharactersWithUnderscores(baseKey);
+            key = className + "." + convertedKey;
         }
 
         String result = lookupFromEnvironment(key, String.class, null, null);

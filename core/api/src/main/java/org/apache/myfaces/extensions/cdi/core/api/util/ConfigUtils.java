@@ -184,7 +184,7 @@ public abstract class ConfigUtils
      * @return Properties or <code>null</code> if the given property file doesn't exist
      */
     //TODO
-    private static Properties getProperties(String resourceName)
+    public static Properties getProperties(String resourceName)
     {
         Properties properties = null;
         ClassLoader classLoader = ClassUtils.getClassLoader(resourceName);
