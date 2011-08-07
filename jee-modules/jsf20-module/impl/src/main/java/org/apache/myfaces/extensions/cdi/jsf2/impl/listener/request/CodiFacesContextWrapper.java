@@ -31,7 +31,6 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.Application;
 import javax.faces.context.ExceptionHandler;
-import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
@@ -78,9 +77,9 @@ class CodiFacesContextWrapper extends FacesContextWrapper
 
         if(this.defaultErrorViewExceptionHandlerActivated)
         {
-            exceptionHandler = new DefaultErrorViewExceptionHandler(exceptionHandler);
+            exceptionHandler = new DefaultErrorViewExceptionHandler(
+                    exceptionHandler, this.advancedQualifierRequiredForDependencyInjection);
         }
-        tryToInjectFields(exceptionHandler);
         return exceptionHandler;
     }
 
@@ -151,16 +150,6 @@ class CodiFacesContextWrapper extends FacesContextWrapper
             this.defaultErrorViewExceptionHandlerActivated =
                     ViewConfigCache.getDefaultErrorViewConfigDescriptor() != null &&
                             ClassDeactivation.isClassActivated(ExceptionHandler.class);
-        }
-    }
-
-    private void tryToInjectFields(ExceptionHandler exceptionHandler)
-    {
-        CodiUtils.injectFields(exceptionHandler, this.advancedQualifierRequiredForDependencyInjection);
-
-        if(exceptionHandler instanceof ExceptionHandlerWrapper)
-        {
-            tryToInjectFields(((ExceptionHandlerWrapper) exceptionHandler).getWrapped());
         }
     }
 

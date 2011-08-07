@@ -18,10 +18,10 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
-import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.navigation.ViewNavigationHandler;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.context.ContextNotActiveException;
 import javax.faces.FacesException;
@@ -34,18 +34,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
-import javax.inject.Inject;
 import java.util.Iterator;
 
 /**
  * @author Gerhard Petracek
  */
-@Advanced
 class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
 {
     private ExceptionHandler wrapped;
+    private boolean advancedQualifierRequiredForDependencyInjection;
 
-    @Inject
     private ViewNavigationHandler viewNavigationHandler;
 
     /**
@@ -55,9 +53,10 @@ class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
     {
     }
 
-    DefaultErrorViewExceptionHandler(ExceptionHandler wrapped)
+    DefaultErrorViewExceptionHandler(ExceptionHandler wrapped, boolean advancedQualifierRequiredForDependencyInjection)
     {
         this.wrapped = wrapped;
+        this.advancedQualifierRequiredForDependencyInjection = advancedQualifierRequiredForDependencyInjection;
     }
 
     /**
@@ -66,6 +65,7 @@ class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
     @Override
     public void handle() throws FacesException
     {
+        lazyInit();
         Iterator<ExceptionQueuedEvent> exceptionQueuedEventIterator = getUnhandledExceptionQueuedEvents().iterator();
 
         while (exceptionQueuedEventIterator.hasNext())
@@ -132,11 +132,31 @@ class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
         this.wrapped.handle();
     }
 
+    private void lazyInit()
+    {
+        if(this.viewNavigationHandler == null)
+        {
+            tryToInjectFields(this.wrapped);
+            this.viewNavigationHandler = CodiUtils.getContextualReferenceByClass(ViewNavigationHandler.class);
+        }
+    }
+
+    private void tryToInjectFields(ExceptionHandler exceptionHandler)
+    {
+        CodiUtils.injectFields(exceptionHandler, this.advancedQualifierRequiredForDependencyInjection);
+
+        if(exceptionHandler instanceof ExceptionHandlerWrapper)
+        {
+            tryToInjectFields(((ExceptionHandlerWrapper) exceptionHandler).getWrapped());
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
     public ExceptionHandler getWrapped()
     {
+        lazyInit();
         return wrapped;
     }
 }
