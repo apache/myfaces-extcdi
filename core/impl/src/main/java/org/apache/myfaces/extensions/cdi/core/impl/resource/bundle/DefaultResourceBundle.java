@@ -16,13 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.resource;
+package org.apache.myfaces.extensions.cdi.core.impl.resource.bundle;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.resource.Bundle;
-import org.apache.myfaces.extensions.cdi.core.api.resource.BundleKey;
-import org.apache.myfaces.extensions.cdi.core.api.resource.BundleValue;
-import org.apache.myfaces.extensions.cdi.core.api.resource.ResourceBundle;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.Bundle;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.BundleKey;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.BundleValue;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.ResourceBundle;
 import org.apache.myfaces.extensions.cdi.core.api.util.ConfigUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
 import org.apache.myfaces.extensions.cdi.core.impl.util.StringUtils;

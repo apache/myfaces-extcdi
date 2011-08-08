@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.resource;
+package org.apache.myfaces.extensions.cdi.jsf.impl.resource.bundle;
 
-import org.apache.myfaces.extensions.cdi.core.api.resource.ResourceBundle;
-import org.apache.myfaces.extensions.cdi.core.impl.resource.ResourceBundleProducer;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.ResourceBundle;
+import org.apache.myfaces.extensions.cdi.core.impl.resource.bundle.ResourceBundleProducer;
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 import org.apache.myfaces.extensions.cdi.jsf.impl.message.JsfAwareLocaleResolver;
 

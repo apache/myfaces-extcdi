@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.resource;
+package org.apache.myfaces.extensions.cdi.core.api.resource.bundle;
 
 import java.io.Serializable;
 import java.util.Locale;

@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.resource;
+package org.apache.myfaces.extensions.cdi.core.impl.resource.bundle;
 
-import org.apache.myfaces.extensions.cdi.core.api.resource.Bundle;
-import org.apache.myfaces.extensions.cdi.core.api.resource.ResourceBundle;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.Bundle;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.ResourceBundle;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;

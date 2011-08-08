@@ -16,16 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.resource;
+package org.apache.myfaces.extensions.cdi.core.test.impl.resource.bundle;
 
-import java.io.Serializable;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.BundleKey;
+import org.apache.myfaces.extensions.cdi.core.api.resource.bundle.BundleValue;
 
-/**
- * Base interface which can be used for simple keys (if there is no need to inject the key directly).
- * The key can be used as type-safe argument for {@link ResourceBundle#getValue(Class)}
- *
- * @author Gerhard Petracek
- */
-public interface BundleKey extends Serializable
+import javax.enterprise.inject.Typed;
+import javax.inject.Named;
+
+@Typed()
+public interface Testbundle
 {
+    public static class MyValue implements Testbundle, BundleKey {}
+
+    @Named("my.value")
+    public static class MyValue1 implements Testbundle, BundleKey {}
+
+    public static class MyValue2 extends BundleValue implements Testbundle {}
+
+    @Named("my.value2")
+    public static class MyValue3 extends BundleValue implements Testbundle {}
 }
