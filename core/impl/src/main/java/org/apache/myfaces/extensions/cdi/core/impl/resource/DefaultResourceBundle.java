@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.resource;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.resource.Bundle;
 import org.apache.myfaces.extensions.cdi.core.api.resource.BundleKey;
+import org.apache.myfaces.extensions.cdi.core.api.resource.BundleValue;
 import org.apache.myfaces.extensions.cdi.core.api.resource.ResourceBundle;
 import org.apache.myfaces.extensions.cdi.core.api.util.ConfigUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.projectstage.ProjectStageProducer;
@@ -28,6 +29,8 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.StringUtils;
 
 import javax.enterprise.inject.Typed;
 import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -89,6 +92,12 @@ class DefaultResourceBundle implements ResourceBundle
      */
     public String getValue(Class<? extends BundleKey> key)
     {
+        //in case of an inner class
+        if("".equals(key.getSimpleName()) && BundleKey.class.isAssignableFrom(key.getSuperclass()))
+        {
+            key = (Class<? extends BundleKey>) key.getSuperclass();
+        }
+
         Named named = key.getAnnotation(Named.class);
 
         String resourceKey = null;
@@ -105,9 +114,38 @@ class DefaultResourceBundle implements ResourceBundle
         }
 
         Class<?> bundleClass = key.getSuperclass();
-        if(this.bundleName == null && !Object.class.getName().equals(bundleClass.getName()))
+        if(this.bundleName == null &&
+                !Object.class.getName().equals(bundleClass.getName()) &&
+                !BundleValue.class.isAssignableFrom(bundleClass))
         {
             useBundle(bundleClass);
+        }
+        else
+        {
+            List<Class> bundleClassCandidates = new ArrayList<Class>();
+
+            for(Class interfaceClass : key.getInterfaces())
+            {
+                if(interfaceClass.isAnnotationPresent(Bundle.class))
+                {
+                    useBundle(interfaceClass);
+                    break;
+                }
+                if(!BundleKey.class.isAssignableFrom(interfaceClass))
+                {
+                    bundleClassCandidates.add(interfaceClass);
+                }
+            }
+
+            if(this.bundleName == null && bundleClassCandidates.size() == 1)
+            {
+                useBundle(bundleClassCandidates.iterator().next());
+            }
+            else if(this.bundleName == null && bundleClassCandidates.size() > 1)
+            {
+                throw new IllegalStateException(key.getName() + " implements multiple custom interfaces and " +
+                        "non of them is annotated with @" + Bundle.class);
+            }
         }
         return getValue(resourceKey);
     }

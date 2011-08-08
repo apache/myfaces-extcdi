@@ -30,19 +30,38 @@ public class ResourceBundleTest
     @Test
     public void testNonTypesafeBundleKey() throws Exception
     {
-        ResourceBundle resourceBundle = getResourceBundle();
+        ResourceBundle resourceBundle = getTestResourceBundle();
         Assert.assertEquals(resourceBundle.useBundle(getClass().getPackage().getName() + ".testBundle").getValue("value1"), "1");
     }
 
     @Test
     public void testTypesafeBundleKey() throws Exception
     {
-        ResourceBundle resourceBundle = getResourceBundle();
-        Assert.assertEquals(resourceBundle.getValue(Testbundle.MyValue.class), "2");
-        Assert.assertEquals(resourceBundle.getValue(Testbundle.MyValue1.class), "3");
+        ResourceBundle resourceBundle = getTestResourceBundle();
+        Assert.assertEquals(resourceBundle.getValue(Testbundle.MyValue.class), "2.1");
+        Assert.assertEquals(resourceBundle.getValue(Testbundle.MyValue1.class), "2.2");
     }
 
-    private ResourceBundle getResourceBundle()
+    @Test
+    public void testTypesafeBundleValue() throws Exception
+    {
+        Assert.assertEquals(new Testbundle.MyValue2(){
+            @Override
+            protected ResourceBundle getResourceBundle()
+            {
+                return getTestResourceBundle();
+            }
+        }.toString(), "3.1");
+        Assert.assertEquals(new Testbundle.MyValue3(){
+            @Override
+            protected ResourceBundle getResourceBundle()
+            {
+                return getTestResourceBundle();
+            }
+        }.toString(), "3.2");
+    }
+
+    private ResourceBundle getTestResourceBundle()
     {
         return new ResourceBundleProducer()
         {

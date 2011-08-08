@@ -19,17 +19,21 @@
 package org.apache.myfaces.extensions.cdi.core.test.impl.resource;
 
 import org.apache.myfaces.extensions.cdi.core.api.resource.BundleKey;
+import org.apache.myfaces.extensions.cdi.core.api.resource.BundleValue;
 
 import javax.enterprise.inject.Typed;
 import javax.inject.Named;
 
 @Typed()
-public class Testbundle
+public interface Testbundle
 {
-    public static class MyValue extends Testbundle implements BundleKey
-    {}
+    public static class MyValue implements Testbundle, BundleKey {}
 
     @Named("my.value")
-    public static class MyValue1 extends Testbundle implements BundleKey
-    {}
+    public static class MyValue1 implements Testbundle, BundleKey {}
+
+    public static class MyValue2 extends BundleValue implements Testbundle {}
+
+    @Named("my.value2")
+    public static class MyValue3 extends BundleValue implements Testbundle {}
 }

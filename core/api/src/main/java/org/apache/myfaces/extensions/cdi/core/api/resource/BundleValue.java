@@ -24,11 +24,13 @@ import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import java.lang.annotation.Annotation;
 
 /**
- * Base class which has to be extended if a key should be injected.
+ * Base class which has to be extended if a key resolves directly to the value.
+ * Compared to {@link BundleKey} it isn't needed to use the {@link ResourceBundle} manually
+ * for resolving the value. It's possible to call #toString in-/directly.
  *
  * @author Gerhard Petracek
  */
-public abstract class ResourceBundleKey implements BundleKey
+public abstract class BundleValue implements BundleKey
 {
     private transient ResourceBundle resourceBundle;
 
@@ -58,7 +60,8 @@ public abstract class ResourceBundleKey implements BundleKey
         return getResourceBundle().getValue(getClass());
     }
 
-    private ResourceBundle getResourceBundle()
+    //override it e.g. for test-cases
+    protected ResourceBundle getResourceBundle()
     {
         if(this.resourceBundle == null)
         {
