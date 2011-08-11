@@ -60,16 +60,16 @@ public class JsfProjectStageProducer extends ProjectStageProducer
 
         if(stageName == null)
         {
-            CodiUtils.lookupFromEnvironment(PROJECT_STAGE_JNDI_NAME, String.class);
+            stageName = CodiUtils.lookupFromEnvironment(PROJECT_STAGE_JNDI_NAME, String.class);
         }
 
         if(stageName != null)
         {
             Class jsfProjectStageClass = ClassUtils.tryToLoadClassForName("javax.faces.application.ProjectStage");
 
-            if(jsfProjectStageClass == null && this.LOG.isLoggable(Level.WARNING))
+            if(jsfProjectStageClass == null && LOG.isLoggable(Level.WARNING))
             {
-                this.LOG.warning("a jsf2 project stage is used but jsf2 isn't in the classpath");
+                LOG.warning("a jsf2 project stage is used but jsf2 isn't in the classpath");
             }
 
             //check if the jsf project-stage should be ignored
