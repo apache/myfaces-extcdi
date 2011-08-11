@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 public class CodiDeactivatorExtension implements Extension, Deactivatable
 {
-    //don't use a static logger
+    //don't use a static LOG
     private Logger logger =  Logger.getLogger(CodiDeactivatorExtension.class.getName());
 
     /**

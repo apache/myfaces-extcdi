@@ -27,8 +27,6 @@ import javax.enterprise.context.Dependent;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
@@ -54,14 +52,13 @@ import java.util.logging.Logger;
  * }
  * </pre>
  *
- * TODO move jsf specific parts
  */
 @ApplicationScoped
 public class ProjectStageProducer implements Serializable
 {
     private static final long serialVersionUID = -2987762608635612074L;
 
-    protected transient Logger logger = Logger.getLogger(getClass().getName());
+    protected static final Logger LOG = Logger.getLogger(ProjectStageProducer.class.getName());
 
     /**
      * ProjectStageProducers must only be created by subclassing producers
@@ -195,13 +192,10 @@ public class ProjectStageProducer implements Serializable
                 {
                     projectStage = ProjectStage.Production;
                 }
+
+                LOG.info("Computed the following CODI ProjectStage: " + projectStage);
             }
         }
     }
 
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
-    {
-        in.defaultReadObject();
-    }
 }

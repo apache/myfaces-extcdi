@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.core.impl.activation;
 
+import java.util.logging.Logger;
+
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.activation.ProjectStageActivated;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
@@ -43,6 +45,9 @@ import javax.enterprise.inject.spi.ProcessAnnotatedType;
  */
 public class ActivationExtension implements Extension, Deactivatable
 {
+    private static final Logger LOG = Logger.getLogger(ActivationExtension.class.getName());
+
+
     protected void initProjectStage(@Observes AfterDeploymentValidation afterDeploymentValidation)
     {
         //trigger initialization
@@ -81,6 +86,9 @@ public class ActivationExtension implements Extension, Deactivatable
             {
                 // this alternative shall not get used
                 processAnnotatedType.veto();
+
+                LOG.finer("ProjectState Veto for bean with type: "
+                          + processAnnotatedType.getAnnotatedType().getJavaClass() );
             }
         }
     }
@@ -92,6 +100,9 @@ public class ActivationExtension implements Extension, Deactivatable
         if(!ActivationUtils.isActivated(annotatedClass, PropertyExpressionInterpreter.class))
         {
             processAnnotatedType.veto();
+
+            LOG.finer("Expression Veto for bean with type: "
+                      + processAnnotatedType.getAnnotatedType().getJavaClass() );
         }
     }
 

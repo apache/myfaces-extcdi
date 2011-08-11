@@ -67,9 +67,9 @@ public class JsfProjectStageProducer extends ProjectStageProducer
         {
             Class jsfProjectStageClass = ClassUtils.tryToLoadClassForName("javax.faces.application.ProjectStage");
 
-            if(jsfProjectStageClass == null && this.logger.isLoggable(Level.WARNING))
+            if(jsfProjectStageClass == null && this.LOG.isLoggable(Level.WARNING))
             {
-                this.logger.warning("a jsf2 project stage is used but jsf2 isn't in the classpath");
+                this.LOG.warning("a jsf2 project stage is used but jsf2 isn't in the classpath");
             }
 
             //check if the jsf project-stage should be ignored
