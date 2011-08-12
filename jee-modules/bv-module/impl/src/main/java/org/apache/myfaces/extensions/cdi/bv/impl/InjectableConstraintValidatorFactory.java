@@ -21,8 +21,6 @@ package org.apache.myfaces.extensions.cdi.bv.impl;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
@@ -60,11 +58,5 @@ class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory
                 .getConstraintValidatorFactory().getInstance(tClass);
 
         return injectFields(validator, false);
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }

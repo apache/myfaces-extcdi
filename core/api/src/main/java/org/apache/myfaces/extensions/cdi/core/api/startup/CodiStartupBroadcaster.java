@@ -31,8 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 /**
  * This broadcaster has to be part of the api module because
@@ -51,7 +49,7 @@ public abstract class CodiStartupBroadcaster
 
     private static volatile Map<ClassLoader, Boolean> initialized = new HashMap<ClassLoader, Boolean>();
 
-    private static transient Map<ClassLoader, List<Class<? extends StartupEventBroadcaster>>> broadcasterFilter =
+    private static Map<ClassLoader, List<Class<? extends StartupEventBroadcaster>>> broadcasterFilter =
             new ConcurrentHashMap<ClassLoader, List<Class<? extends StartupEventBroadcaster>>>();
 
 
@@ -111,11 +109,5 @@ public abstract class CodiStartupBroadcaster
         }
 
         initialized.put(classLoader, Boolean.TRUE);
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }

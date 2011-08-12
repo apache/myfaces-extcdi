@@ -22,8 +22,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.metadata.BeanDescriptor;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -94,11 +92,5 @@ class InjectableValidator implements Validator, Serializable
     public <T> T unwrap(Class<T> tClass)
     {
         return getValidator().unwrap(tClass);
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }

@@ -21,8 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.impl.logging;
 import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 
 import javax.enterprise.inject.Typed;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ResourceBundle;
 import java.util.logging.Filter;
 import java.util.logging.Handler;
@@ -462,12 +460,6 @@ public class DefaultLogger implements Logger
     public Factory getFactory()
     {
         return new DefaultLoggerFactory();
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
-    {
-        in.defaultReadObject();
     }
 
     private void lazyInitLogger()

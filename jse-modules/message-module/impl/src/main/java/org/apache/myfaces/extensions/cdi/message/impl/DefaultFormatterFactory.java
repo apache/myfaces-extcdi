@@ -28,9 +28,8 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 /**
  * TODO change to producer
@@ -42,7 +41,7 @@ public class DefaultFormatterFactory implements FormatterFactory
 {
     private static final long serialVersionUID = -7462205386564870045L;
 
-    private transient Logger logger = getLogger();
+    private static final Logger LOGGER = Logger.getLogger(DefaultFormatterFactory.class.getName());
 
     private CopyOnWriteArrayList<Formatter> formatters = new CopyOnWriteArrayList<Formatter>();
     private ConcurrentHashMap<Class<?>, Formatter> formatterCache = null;
@@ -95,7 +94,10 @@ public class DefaultFormatterFactory implements FormatterFactory
 
             if (found == null)
             {
-                getLogger().info("default formatter used for: " + type.getName());
+                if(LOGGER.isLoggable(Level.INFO))
+                {
+                    LOGGER.info("default formatter used for: " + type.getName());
+                }
                 found = FormatterBuilder.createFormatter(type);
             }
 
@@ -152,20 +154,5 @@ public class DefaultFormatterFactory implements FormatterFactory
     private FormatterConfigKey createKey(Class<?> type, Locale locale)
     {
         return new FormatterConfigKey(type, locale);
-    }
-
-    protected Logger getLogger()
-    {
-        if(this.logger == null)
-        {
-            this.logger = Logger.getLogger(getClass().getName());
-        }
-        return this.logger;
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }

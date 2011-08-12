@@ -43,8 +43,6 @@ import java.util.Set;
 import java.util.HashSet;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 
 /**
  * @author Mark Struberg
@@ -64,7 +62,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
-    private transient Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger LOGGER = Logger.getLogger(DefaultTransactionalInterceptorStrategy.class.getName());
 
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
@@ -240,7 +238,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                     }
                     catch (Exception eRollback)
                     {
-                        this.logger.log(Level.SEVERE, "Got additional Exception while subsequently " +
+                        LOGGER.log(Level.SEVERE, "Got additional Exception while subsequently " +
                                 "rolling back other SQL transactions", eRollback);
                     }
                 }
@@ -491,11 +489,5 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
                 + target + " Please check the documentation for the correct usage or contact the mailing list. " +
                 "Hint: @Transactional just allows one qualifier -> using multiple Entity-Managers " +
                 "(-> different qualifiers) within ONE intercepted method isn't supported.");
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }

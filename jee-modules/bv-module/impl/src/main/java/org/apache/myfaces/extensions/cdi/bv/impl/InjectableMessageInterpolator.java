@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.bv.impl;
 
 import javax.validation.MessageInterpolator;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.IOException;
 import java.util.Locale;
 
 /**
@@ -68,11 +66,5 @@ class InjectableMessageInterpolator implements MessageInterpolator, Serializable
     public String interpolate(String s, Context context, Locale locale)
     {
         return getMessageInterpolator().interpolate(s, context, locale);
-    }
-
-    @SuppressWarnings({"UnusedDeclaration"})
-    private void readObject(ObjectInputStream objectInputStream) throws IOException, ClassNotFoundException
-    {
-        objectInputStream.defaultReadObject();
     }
 }
