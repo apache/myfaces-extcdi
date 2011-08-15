@@ -50,6 +50,22 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * //...
  * this.windowContext.closeConversation(MySubGroup.class)
  *
+ * OR it's possible to use implicit sub-groups:
+ * public interface MyUseCase {}
+ *
+ * @ConversationSubGroup(of = MyGroup.class, subGroup = MyUseCase.class)
+ * public class ImplicitSubGroup {}
+ *
+ * @Named("myController")
+ * @ConversationScoped
+ * @ConversationGroup(MyGroup.class)
+ * public class MyController implements Serializable, MyUseCase
+ * {
+ *    //...
+ * }
+ * //...
+ * this.windowContext.closeConversation(ImplicitSubGroup.class)
+ *
  * @author Gerhard Petracek
  */
 @Target(TYPE)
