@@ -25,8 +25,6 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ConfigUtils;
 import javax.enterprise.inject.Typed;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Gerhard Petracek
@@ -35,13 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @InvocationOrder(400)
 public class PropertyFileResolver extends AbstractConfiguredValueResolver
 {
-    private static final String BASE_NAME = "org.apache.myfaces.extensions.cdi.";
-
-    private static final String FILE_NAME = "myfaces-extcdi";
-
-    private static Map<ClassLoader, Map<String, String>> propertyCache =
-            new ConcurrentHashMap<ClassLoader, Map<String, String>>();
-
     /**
      * {@inheritDoc}
      */
