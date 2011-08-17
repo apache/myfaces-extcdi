@@ -31,7 +31,7 @@ public class ResourceBundleTest
     public void testNonTypesafeBundleKey() throws Exception
     {
         ResourceBundle resourceBundle = getTestResourceBundle();
-        Assert.assertEquals(resourceBundle.useBundle(getClass().getPackage().getName() + ".testBundle").getValue("value1"), "1");
+        Assert.assertEquals(resourceBundle.useBundle(getClass().getPackage().getName() + ".testbundle").getValue("value1"), "1");
     }
 
     @Test
