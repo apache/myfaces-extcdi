@@ -33,6 +33,12 @@ class InterceptedRenderKit extends RenderKit
 {
     private final RenderKit wrapped;
 
+    //needed if the renderkit gets proxied - see EXTCDI-215
+    protected InterceptedRenderKit()
+    {
+        this.wrapped = null;
+    }
+
     InterceptedRenderKit(RenderKit wrapped)
     {
         this.wrapped = wrapped;
