@@ -18,6 +18,11 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.navigation;
 
+import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.navigation.ViewConfigAwareNavigationHandler;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
@@ -31,6 +36,9 @@ import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
@@ -39,6 +47,8 @@ import java.util.HashMap;
  */
 public class CodiNavigationHandler extends ConfigurableNavigationHandler implements Deactivatable
 {
+    private Set<String> otherOutcomes = new CopyOnWriteArraySet<String>();
+
     private final NavigationHandler wrapped;
     private final boolean deactivated;
     private final boolean addViewConfigsAsNavigationCase;
@@ -100,6 +110,47 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
     {
         if (this.wrapped instanceof ConfigurableNavigationHandler)
         {
+            if(action == null && outcome != null && outcome.contains(".") && outcome.startsWith("class ") &&
+                    !otherOutcomes.contains(outcome))
+            {
+                String originalOutcome = outcome;
+
+                outcome = outcome.substring(6);
+
+                ViewConfigDescriptor entry = null;
+
+                if(DefaultErrorView.class.getName().equals(originalOutcome))
+                {
+                    entry = ViewConfigCache.getDefaultErrorViewConfigDescriptor();
+                }
+
+                if(entry == null)
+                {
+                    Object loadedClass = tryToLoadClassForName(outcome);
+
+                    if(loadedClass == null)
+                    {
+                        this.otherOutcomes.add(originalOutcome);
+                    }
+                    else if(ViewConfig.class.isAssignableFrom((Class)loadedClass))
+                    {
+                        //noinspection unchecked
+                        entry = ViewConfigCache.getViewConfigDescriptor((Class<? extends ViewConfig>) loadedClass);
+                    }
+                }
+
+                if(entry != null)
+                {
+                    return new NavigationCase("*",
+                                              null,
+                                              null,
+                                              null,
+                                              entry.getViewId(),
+                                              null,
+                                              Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
+                                              false);
+                }
+            }
             return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCase(context, action, outcome);
         }
         //TODO add support for implicit navigation in combination with view-config based typesafe navigation
