@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>jsf-examples-project</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
     <artifactId>hello-myfaces-codi-jsf20-example</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.1</version>
     <packaging>war</packaging>
 
     <name>MyFaces Extensions-CDI Hello-CODI for JSF 2.0 Example</name>
