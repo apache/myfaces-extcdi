@@ -28,6 +28,7 @@ import javax.enterprise.inject.Typed;
 import javax.inject.Inject;
 import javax.validation.MessageInterpolator;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -128,7 +129,8 @@ public class InvalidValueAwareMessageInterpolator implements MessageInterpolator
 
     private void logWarning(Context context)
     {
-        String constraintName = context.getConstraintDescriptor().getAnnotation().annotationType().getName();
+        String constraintName = ((Annotation)context.getConstraintDescriptor().getAnnotation())
+                .annotationType().getName(); //cast needed for jdk 1.5 - don't remove it
         String warnMessage = constraintName + " uses 'invalidValue' as custom constraint attribute." +
                 "So it isn't possible to use it as implicit key in the violation message.";
 
