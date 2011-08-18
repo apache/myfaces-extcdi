@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
         <artifactId>alternative-project</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <name>MyFaces Extensions-CDI Alternative Config Project</name>
-    <version>1.0.1</version>
+    <version>1.0.2-SNAPSHOT</version>
 
     <modules>
         <module>core-alternative-configuration-module</module>
