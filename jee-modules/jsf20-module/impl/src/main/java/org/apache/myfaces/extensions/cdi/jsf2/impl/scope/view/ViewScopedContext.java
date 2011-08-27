@@ -18,6 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.view;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,6 +30,8 @@ import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.PassivationCapable;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -41,7 +45,7 @@ import javax.faces.event.SystemEventListener;
  */
 public class ViewScopedContext implements Context, SystemEventListener
 {
-    private static final String COMPONENT_MAP_NAME ="codi.componentInstanceMap";
+    private static final String COMPONENT_ID_MAP_NAME ="codi.componentIdMap";
     private static final String CREATIONAL_MAP_NAME ="codi.creationalInstanceMap";
     private static final String UNCHECKED = "unchecked";
 
@@ -64,17 +68,15 @@ public class ViewScopedContext implements Context, SystemEventListener
         Map<String, Object> viewMap = getViewMap();
 
         @SuppressWarnings(UNCHECKED)
-        ConcurrentHashMap<Contextual<?>, Object> componentInstanceMap
-                = (ConcurrentHashMap<Contextual<?>, Object>) viewMap.get(COMPONENT_MAP_NAME);
+        Map<String, Object> componentIdMap = (Map<String, Object>) viewMap.get(COMPONENT_ID_MAP_NAME);
 
-        if(componentInstanceMap == null)
+        if(componentIdMap == null)
         {
             return null;
         }
 
         @SuppressWarnings(UNCHECKED)
-        T instance = (T) componentInstanceMap.get(component);
-
+        T instance = (T)componentIdMap.get(((PassivationCapable)component).getId());
         return instance;
     }
 
@@ -83,33 +85,28 @@ public class ViewScopedContext implements Context, SystemEventListener
      */
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
+        if(!(component instanceof PassivationCapable))
+        {
+            throw new IllegalStateException(component.toString() +
+                    " doesn't implement " + PassivationCapable.class.getName());
+        }
+
         checkActive();
 
         Map<String, Object> viewMap = getViewMap();
 
         @SuppressWarnings(UNCHECKED)
-        ConcurrentHashMap<Contextual<?>, Object> componentInstanceMap
-                = (ConcurrentHashMap<Contextual<?>, Object>) viewMap.get(COMPONENT_MAP_NAME);
+        Map<String, Object> componentIdMap = (Map<String, Object>) viewMap.get(COMPONENT_ID_MAP_NAME);
 
-        if(componentInstanceMap == null)
+        if(componentIdMap == null)
         {
             // TODO we now need to start being carefull with reentrancy...
-            componentInstanceMap = new ConcurrentHashMap<Contextual<?>, Object>();
-            viewMap.put(COMPONENT_MAP_NAME, componentInstanceMap);
+            componentIdMap = new ConcurrentHashMap<String, Object>();
+            viewMap.put(COMPONENT_ID_MAP_NAME, componentIdMap);
         }
 
         @SuppressWarnings(UNCHECKED)
-        ConcurrentHashMap<Contextual<?>, CreationalContext<?>> creationalContextMap
-                = (ConcurrentHashMap<Contextual<?>, CreationalContext<?>>) viewMap.get(CREATIONAL_MAP_NAME);
-        if(creationalContextMap == null)
-        {
-            // TODO we now need to start being carefull with reentrancy...
-            creationalContextMap = new ConcurrentHashMap<Contextual<?>, CreationalContext<?>>();
-            viewMap.put(CREATIONAL_MAP_NAME, creationalContextMap);
-        }
-
-        @SuppressWarnings(UNCHECKED)
-        T instance = (T) componentInstanceMap.get(component);
+        T instance = (T) componentIdMap.get(((PassivationCapable)component).getId());
         if (instance != null)
         {
             return instance;
@@ -120,25 +117,25 @@ public class ViewScopedContext implements Context, SystemEventListener
             return null;
         }
 
-        //noinspection SynchronizationOnLocalVariableOrMethodParameter
-        synchronized (componentInstanceMap)
+        instance = component.create(creationalContext);
+
+        if (instance == null)
         {
-            // just to make sure...
-            @SuppressWarnings(UNCHECKED)
-            T i = (T)componentInstanceMap.get(component);
-            if (i != null)
-            {
-                return i;
-            }
-
-            instance = component.create(creationalContext);
-
-            if (instance != null)
-            {
-                componentInstanceMap.put(component, instance);
-                creationalContextMap.put(component, creationalContext);
-            }
+            return null;
         }
+
+        @SuppressWarnings(UNCHECKED)
+        Map<String, CreationalContext<?>> creationalContextMap
+                = (Map<String, CreationalContext<?>>) viewMap.get(CREATIONAL_MAP_NAME);
+
+        if(creationalContextMap == null)
+        {
+            creationalContextMap = new ConcurrentHashMap<String, CreationalContext<?>>();
+            viewMap.put(CREATIONAL_MAP_NAME, creationalContextMap);
+        }
+
+        componentIdMap.put(((PassivationCapable)component).getId(), instance);
+        creationalContextMap.put(((PassivationCapable)component).getId(), creationalContext);
 
         return  instance;
     }
@@ -196,21 +193,23 @@ public class ViewScopedContext implements Context, SystemEventListener
             // better use the viewmap we get from the event to prevent concurrent modification problems
             Map<String, Object> viewMap = ((UIViewRoot) event.getSource()).getViewMap();
 
-            ConcurrentHashMap<Contextual<?>, Object> componentInstanceMap
-                    = (ConcurrentHashMap<Contextual<?>, Object>) viewMap.get(COMPONENT_MAP_NAME);
+            Map<String, Object> componentIdMap
+                    = (Map<String, Object>) viewMap.get(COMPONENT_ID_MAP_NAME);
 
-            ConcurrentHashMap<Contextual<?>, CreationalContext<?>> creationalContextMap
-                    = (ConcurrentHashMap<Contextual<?>, CreationalContext<?>>) viewMap.get(CREATIONAL_MAP_NAME);
+            Map<String, CreationalContext<?>> creationalContextMap
+                    = (Map<String, CreationalContext<?>>) viewMap.get(CREATIONAL_MAP_NAME);
 
-            if(componentInstanceMap != null)
+            if(componentIdMap != null)
             {
-                for ( Entry<Contextual<?>, Object> componentEntry : componentInstanceMap.entrySet())
+                BeanManager beanManager = BeanManagerProvider.getInstance().getBeanManager();
+                for ( Entry<String, Object> componentEntry : componentIdMap.entrySet())
                 {
+                    String beanId = componentEntry.getKey();
                     // there is no nice way to explain the Java Compiler that we are handling the same type T,
                     // therefore we need completely drop the type information :(
-                    Contextual contextual = componentEntry.getKey();
+                    Contextual contextual = beanManager.getPassivationCapableBean(beanId);
                     Object instance = componentEntry.getValue();
-                    CreationalContext creational = creationalContextMap.get(contextual);
+                    CreationalContext creational = creationalContextMap.get(beanId);
 
                     contextual.destroy(instance, creational);
                 }
