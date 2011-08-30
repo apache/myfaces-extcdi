@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.WindowContextConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.event.CloseWindowContextEvent;
-import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationKey;
@@ -297,15 +296,10 @@ class JsfWindowContext implements EditableWindowContext
         List<Class<?>> implicitSubGroupCandidates = new ArrayList<Class<?>>();
         for(Class<?> subGroup : subGroups)
         {
-            BeanEntry<?> beanEntry = editableConversation.removeBeanEntry(subGroup);
-            if(beanEntry == null)
+            if(editableConversation.removeBeanEntry(subGroup) == null)
             {
                 //no bean was scoped -> try to use the sub-group as sub-group-type
                 implicitSubGroupCandidates.add(subGroup);
-            }
-            else
-            {
-                destroyBean(beanEntry);
             }
         }
 
@@ -326,18 +320,9 @@ class JsfWindowContext implements EditableWindowContext
 
                 for(Class<?> beanClass : concreteBeanClasses)
                 {
-                    BeanEntry<?> beanEntry = editableConversation.removeBeanEntry(beanClass);
-                    destroyBean(beanEntry);
+                    editableConversation.removeBeanEntry(beanClass);
                 }
             }
-        }
-    }
-
-    private <T> void destroyBean(BeanEntry<T> beanEntry)
-    {
-        if (beanEntry != null)
-        {
-            beanEntry.getBean().destroy(beanEntry.getBeanInstance(), beanEntry.getCreationalContext());
         }
     }
 

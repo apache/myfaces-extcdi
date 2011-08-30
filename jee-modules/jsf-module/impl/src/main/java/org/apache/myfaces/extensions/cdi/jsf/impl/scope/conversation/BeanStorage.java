@@ -80,24 +80,30 @@ class BeanStorage implements Serializable
 
     BeanEntry<Serializable> removeBean(Class<Serializable> beanClass)
     {
-        return this.beanMap.remove(beanClass);
+        BeanEntry<Serializable> beanEntryToRemove = this.beanMap.remove(beanClass);
+        removeBeanEntry(beanEntryToRemove);
+        return beanEntryToRemove;
     }
 
     //TODO don't reset window scoped beans
     void resetStorage()
     {
-        Serializable oldBeanInstance;
-        for (BeanEntry<Serializable> beanHolder : this.beanMap.values())
+        for (BeanEntry<Serializable> beanEntry : this.beanMap.values())
         {
-            oldBeanInstance = beanHolder.resetBeanInstance();
-
-            if(beanHolder.isUnscopeBeanEventEnabled())
-            {
-                fireUnscopeBeanEvent(oldBeanInstance);
-            }
-
-            beanHolder.getBean().destroy(oldBeanInstance, beanHolder.getCreationalContext());
+            removeBeanEntry(beanEntry);
         }
+    }
+
+    private void removeBeanEntry(BeanEntry<Serializable> beanEntry)
+    {
+        Serializable oldBeanInstance = beanEntry.resetBeanInstance();
+
+        if(beanEntry.isUnscopeBeanEventEnabled())
+        {
+            fireUnscopeBeanEvent(oldBeanInstance);
+        }
+
+        beanEntry.getBean().destroy(oldBeanInstance, beanEntry.getCreationalContext());
     }
 
     private <T extends Serializable> void fireUnscopeBeanEvent(T instance)
