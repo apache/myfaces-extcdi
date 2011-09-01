@@ -24,11 +24,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
-
-    <head><title>CODI JSF 2.0 Demo</title></head>
-
-    <body>
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
         <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
 
         <h:form>
@@ -42,5 +41,6 @@
         <h:outputLink value="converter/index.xhtml">Advanced Converter sample</h:outputLink>
         
         <h:messages globalOnly="true"/>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

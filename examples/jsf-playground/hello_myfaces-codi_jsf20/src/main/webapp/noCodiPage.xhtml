@@ -26,9 +26,9 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
-
-    <body>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
         <h:outputText value="This page doesn't contain a CODI scoped bean!"/>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

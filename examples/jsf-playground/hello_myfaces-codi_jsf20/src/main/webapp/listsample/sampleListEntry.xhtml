@@ -24,31 +24,28 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 List Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
 
-    <f:metadata>
+    <ui:define name="metadata">
         <f:viewParam name="entryId" value="#{sampleListEntry.id}"/>
-    </f:metadata>
+    </ui:define>
 
-    <body>
-        <f:view>
+    <ui:define name="content">
 
-            <h:form>
-                <h3>A sample List Entry</h3>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="id"/>
-                    <h:outputText value="#{sampleListEntry.id}"/>
+        <h:form>
+            <h3>A sample List Entry</h3>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="id"/>
+                <h:outputText value="#{sampleListEntry.id}"/>
 
-                    <h:outputLabel value="value"/>
-                    <h:inputText value="#{sampleListEntry.value}"/>
-                </h:panelGrid>
+                <h:outputLabel value="value"/>
+                <h:inputText value="#{sampleListEntry.value}"/>
+            </h:panelGrid>
 
-                <h:commandButton action="#{sampleListEntry.back}" value="back"/>
-                <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
-            </h:form>
+            <h:commandButton action="#{sampleListEntry.back}" value="back"/>
+            <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
+        </h:form>
 
-            <h:messages globalOnly="true"/>
-
-        </f:view>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

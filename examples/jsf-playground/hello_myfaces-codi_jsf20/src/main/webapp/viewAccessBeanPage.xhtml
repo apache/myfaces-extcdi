@@ -26,35 +26,35 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
-
-    <body>
-        <f:view>
-
-            <h:form>
-                <h3>values of ViewAccessScoped bean 1:</h3>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="value"/> <h:outputText value="#{vaBean1.value}"/>
-                    <h:outputLabel value="createdAt"/> <h:outputText value="#{vaBean1.createdAt}"/>
-                    <h:outputLabel value="sample"/> <h:outputText value="#{vaBean1.sampleField}"/>
-                    <h:outputLabel value="viewParam"/> <h:outputText value="#{vaBean1.viewParam}"/>
-                </h:panelGrid>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <h3>values of ViewAccessScoped bean 1:</h3>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="value" for="value1"/> <h:outputText id="value1" value="#{vaBean1.value}"/>
+                <h:outputLabel value="createdAt" for="createdAt1"/> <h:outputText id="createdAt1" value="#{vaBean1.createdAt}"/>
+                <h:outputLabel value="sample" for="sample1"/> <h:outputText id="sample1" value="#{vaBean1.sampleField}"/>
+                <h:outputLabel value="viewParam" for="viewParam1"/> <h:outputText id="viewParam1" value="#{vaBean1.viewParam}"/>
+            </h:panelGrid>
 
 
-                <h3>values of ViewAccessScoped bean 2:</h3>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="value"/> <h:outputText value="#{vaBean2.value}"/>
-                    <h:outputLabel value="createdAt"/> <h:outputText value="#{vaBean2.createdAt}"/>
-                    <h:outputLabel value="sample"/> <h:outputText value="#{vaBean2.sampleField}"/>
-                    <h:outputLabel value="viewParam"/> <h:outputText value="#{vaBean2.viewParam}"/>
-                </h:panelGrid>
+            <h3>values of ViewAccessScoped bean 2:</h3>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="value" for="value2"/> <h:outputText id="value2" value="#{vaBean2.value}"/>
+                <h:outputLabel value="createdAt" for="createdAt2"/> <h:outputText id="createdAt2" value="#{vaBean2.createdAt}"/>
+                <h:outputLabel value="sample" for="sample2"/> <h:outputText id="sample2" value="#{vaBean2.sampleField}"/>
+                <h:outputLabel value="viewParam" for="viewParam2"/> <h:outputText id="viewParam2" value="#{vaBean2.viewParam}"/>
+            </h:panelGrid>
 
+            <h:panelGrid columns="1">
                 <h:commandButton value="forward" action="#{vaBean1.forward}"/><br/>
                 <h:commandButton value="stay on page" action="#{vaBean1.stay}"/>
-            </h:form>
+                <h:link outcome="viewAccessBeanPage.xhtml" value="viewAccessBeanPage"/>
+                <h:link outcome="listsample/sampleList.xhtml" value="listSample"/>
+            </h:panelGrid>
 
-            <h:messages globalOnly="true"/>
+        </h:form>
 
-        </f:view>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

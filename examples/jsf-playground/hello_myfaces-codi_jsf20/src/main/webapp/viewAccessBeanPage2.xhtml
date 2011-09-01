@@ -26,29 +26,25 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <h3>values of ViewAccessScoped bean 1:</h3>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="value" for="value1"/> <h:outputText id="value1" value="#{vaBean1.value}"/>
+                <h:outputLabel value="createdAt" for="createdAt1"/> <h:outputText id="createdAt1" value="#{vaBean1.createdAt}"/>
+                <h:outputLabel value="sample" for="sample1"/> <h:outputText id="sample1" value="#{vaBean1.sampleField}"/>
+                <h:outputLabel value="viewParam" for="viewParam1"/> <h:outputText id="viewParam1" value="#{vaBean1.viewParam}"/>
+            </h:panelGrid>
 
-    <body>
-        <f:view>
-            <h:form>
-                <h3>values of ViewAccessScoped bean 1:</h3>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="value"/> <h:outputText value="#{vaBean1.value}"/>
-                    <h:outputLabel value="createdAt"/> <h:outputText value="#{vaBean1.createdAt}"/>
-                    <h:outputLabel value="sample"/> <h:outputText value="#{vaBean1.sampleField}"/>
-                    <h:outputLabel value="viewParam"/> <h:outputText value="#{vaBean1.viewParam}"/>
-                </h:panelGrid>
+            <h3>bean 2 will not get touched on this page</h3>
+            This means it gets another instance on page 1!
 
-                <h3>bean 2 will not get touched on this page</h3>
-                This means it gets another instance on page 1!
+            <br/><br/>
 
-                <br/><br/>
-
-                <h:commandButton value="back" action="#{vaBean1.back}"/><br/>
-                <h:commandButton value="stay on page" action="#{vaBean1.stay}"/>
-                                
-                <h:messages globalOnly="true"/>
-            </h:form>
-        </f:view>
-    </body>
+            <h:commandButton value="back" action="#{vaBean1.back}"/><br/>
+            <h:commandButton value="stay on page" action="#{vaBean1.stay}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
 </html>

@@ -24,26 +24,22 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 List Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="content">
 
-    <body>
-        <f:view>
+        <h:form>
+            <h3>A sample List </h3>
+            <h:dataTable value="#{sampleList.entryIds}" id="list" var="entryId">
+                <h:column>
+                    <h:link outcome="sampleListEntry">
+                        <h:outputText value="#{entryId}"/>
+                        <f:param name="entryId" value="#{entryId}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
 
-            <h:form>
-                <h3>A sample List </h3>
-                <h:dataTable value="#{sampleList.entryIds}" id="list" var="entryId">
-                    <h:column>
-                        <h:link outcome="sampleListEntry">
-                            <h:outputText value="#{entryId}"/>
-                            <f:param name="entryId" value="#{entryId}"/>
-                        </h:link>
-                    </h:column>
-                </h:dataTable>
+        </h:form>
 
-            </h:form>
-
-            <h:messages globalOnly="true"/>
-
-        </f:view>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

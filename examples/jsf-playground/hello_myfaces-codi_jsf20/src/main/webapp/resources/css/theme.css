@@ -1,0 +1,38 @@
+HTML {
+    BORDER-TOP-WIDTH: 0px;
+    PADDING-RIGHT: 0px;
+    PADDING-LEFT: 0px;
+    BORDER-LEFT-WIDTH: 0px;
+    BORDER-BOTTOM-WIDTH: 0px;
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    PADDING-TOP: 0px;
+    BORDER-RIGHT-WIDTH: 0px;
+    background-color: #ffffff;
+    FONT-FAMILY: Verdana, Helvetica, Geneva, sans-serif;
+        color: #000000;
+}
+
+BODY {
+    BORDER-TOP-WIDTH: 0px;
+    PADDING-RIGHT: 0px;
+    PADDING-LEFT: 0px;
+    BORDER-LEFT-WIDTH: 0px;
+    BORDER-BOTTOM-WIDTH: 0px;
+    PADDING-BOTTOM: 0px;
+    MARGIN: 0px;
+    PADDING-TOP: 0px;
+    BORDER-RIGHT-WIDTH: 0px;
+}
+
+#contentContainer {
+    MARGIN: 10px 5px 15px;
+    FLOAT: left;
+    WIDTH: 950px;
+    border: none;
+    border-color: #666666;
+    border-width: 2px;
+    padding: 10px 15px;
+    background-color: #cccccc;
+}
+

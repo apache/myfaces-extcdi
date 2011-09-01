@@ -237,7 +237,8 @@
                                 <artifactId>jsp-2.1-jetty</artifactId>
                                 <version>${maven.jetty.plugin.version}</version>
                                 <type>jar</type>
-                                <scope>test</scope>
+                                <scope>runtime</scope>
+                                <optional>true</optional>
                             </dependency>
                             <dependency>
                                 <groupId>org.apache.geronimo.bundles</groupId>
