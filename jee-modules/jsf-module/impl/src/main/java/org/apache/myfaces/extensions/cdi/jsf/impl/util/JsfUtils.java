@@ -147,7 +147,7 @@ public abstract class JsfUtils
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
-        boolean urlContainsWindowId = url.contains("windowId=");
+        boolean urlContainsWindowId = url.contains(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY + "=");
 
         for(RequestParameter requestParam : getRequestParameters(externalContext, true))
         {
