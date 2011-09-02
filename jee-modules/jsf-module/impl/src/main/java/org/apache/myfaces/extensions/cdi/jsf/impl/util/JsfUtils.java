@@ -35,6 +35,8 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+
 /**
  * keep in sync with extval!
  *
@@ -152,7 +154,7 @@ public abstract class JsfUtils
             String key = requestParam.getKey();
 
             //TODO eval if we should also filter the other params
-            if("windowId".equals(key) && urlContainsWindowId)
+            if(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY.equals(key) && urlContainsWindowId)
             {
                 continue;
             }
