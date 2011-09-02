@@ -145,10 +145,17 @@ public abstract class JsfUtils
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
+        boolean urlContainsWindowId = url.contains("windowId=");
 
         for(RequestParameter requestParam : getRequestParameters(externalContext, true))
         {
             String key = requestParam.getKey();
+
+            //TODO eval if we should also filter the other params
+            if("windowId".equals(key) && urlContainsWindowId)
+            {
+                continue;
+            }
 
             for(String parameterValue : requestParam.getValues())
             {
