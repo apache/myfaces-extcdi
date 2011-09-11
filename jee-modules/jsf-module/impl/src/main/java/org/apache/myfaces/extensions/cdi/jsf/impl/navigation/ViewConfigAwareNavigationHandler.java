@@ -22,13 +22,16 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewParameter;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 import org.apache.myfaces.extensions.cdi.core.api.navigation.PreViewConfigNavigateEvent;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigParameterContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
@@ -57,6 +60,8 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
     private boolean implicitNavigationSupported;
 
     private BeanManager beanManager;
+
+    private ViewConfigParameterContext viewConfigParameterContext;
 
     /**
      * Constructor which allows to use the given {@link NavigationHandler}
@@ -95,17 +100,27 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                         entry = ViewConfigCache.getDefaultErrorViewConfigDescriptor();
                     }
                 }
-                
+
+                boolean allowCaching = true;
                 if(entry == null)
                 {
-                    Object loadedClass = tryToLoadClassForName(outcome);
+                    Class<?> loadedClass = tryToLoadClassForName(outcome);
 
                     if(loadedClass == null)
                     {
                         this.otherOutcomes.add(originalOutcome);
                     }
-                    else if(ViewConfig.class.isAssignableFrom((Class)loadedClass))
+                    else if(ViewConfig.class.isAssignableFrom(loadedClass))
                     {
+                        //a sub-classed page-config for annotating it with different view params
+                        if(loadedClass.getAnnotation(Page.class) == null &&
+                                loadedClass.getSuperclass().getAnnotation(Page.class) != null)
+                        {
+                            allowCaching = false;
+                            addConfiguredViewParameters(loadedClass);
+
+                            loadedClass = loadedClass.getSuperclass();
+                        }
                         //noinspection unchecked
                         entry = ViewConfigCache.getViewConfigDescriptor((Class<? extends ViewConfig>) loadedClass);
                     }
@@ -113,7 +128,11 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
                 if(entry != null)
                 {
-                    this.viewConfigs.put(outcome, entry);
+                    if(allowCaching)
+                    {
+                        this.viewConfigs.put(outcome, entry);
+                        addConfiguredViewParameters(entry.getViewConfig()); //in case of false it has been added already
+                    }
 
                     PreViewConfigNavigateEvent navigateEvent = firePreViewConfigNavigateEvent(oldViewId, entry);
 
@@ -138,6 +157,36 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         }
 
         this.navigationHandler.handleNavigation(facesContext, fromAction, outcome);
+    }
+
+    private void addConfiguredViewParameters(Class<?> viewConfigClass)
+    {
+        if(this.viewConfigParameterContext != null)
+        {
+            ViewParameter viewParameter = viewConfigClass.getAnnotation(ViewParameter.class);
+
+            if(viewParameter != null)
+            {
+                addConfiguredViewParameter(viewParameter);
+            }
+            else
+            {
+                ViewParameter.List viewParameterList = viewConfigClass.getAnnotation(ViewParameter.List.class);
+
+                if(viewParameterList != null)
+                {
+                    for(ViewParameter currentViewParameter : viewParameterList.value())
+                    {
+                        addConfiguredViewParameter(currentViewParameter);
+                    }
+                }
+            }
+        }
+    }
+
+    private void addConfiguredViewParameter(ViewParameter viewParameter)
+    {
+        this.viewConfigParameterContext.addViewParameter(viewParameter.key(), viewParameter.value());
     }
 
     private String convertEntryToOutcome(ExternalContext externalContext, ViewConfigDescriptor entry)
@@ -169,10 +218,10 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             }
             result.append("includeViewParams=true");
 
-            return JsfUtils.addRequestParameter(externalContext, result.toString());
+            return JsfUtils.addParameters(externalContext, result.toString(), true, true);
         }
 
-        return result.toString();
+        return JsfUtils.addParameters(externalContext, result.toString(), false, performRedirect);
     }
 
     private ViewConfigDescriptor tryToUpdateEntry(ViewConfigDescriptor viewConfigDescriptor,
@@ -217,6 +266,8 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         if(this.beanManager == null)
         {
             this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
+            this.viewConfigParameterContext =
+                    CodiUtils.getContextualReferenceByClass(this.beanManager, ViewConfigParameterContext.class, true);
         }
     }
 
@@ -240,6 +291,8 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
             try
             {
+                //there are no jsf2 view-params, but codi view-config params should be added (if present)
+                redirectPath = JsfUtils.addParameters(externalContext, redirectPath, false, true);
                 externalContext.redirect(externalContext.encodeActionURL(redirectPath));
             }
             catch (IOException e)

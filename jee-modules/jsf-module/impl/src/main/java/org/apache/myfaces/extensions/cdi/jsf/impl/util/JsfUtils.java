@@ -36,6 +36,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigParameterContext;
 
 /**
  * keep in sync with extval!
@@ -141,15 +143,19 @@ public abstract class JsfUtils
      * Adds the current request-parameters to the given url
      * @param externalContext current external-context
      * @param url current url
+     * @param addRequestParameter flag which indicates if the request params should be added or not
+     * @param addCodiViewParameter flag which indicates if the view params should be added or not {@see ViewParameter}
      * @return url with request-parameters
      */
-    public static String addRequestParameter(ExternalContext externalContext, String url)
+    public static String addParameters(ExternalContext externalContext, String url,
+                                       boolean addRequestParameter, boolean addCodiViewParameter)
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
         boolean urlContainsWindowId = url.contains(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY + "=");
 
-        for(RequestParameter requestParam : getRequestParameters(externalContext, true))
+        for(RequestParameter requestParam :
+                getParameters(externalContext, true, addRequestParameter, addCodiViewParameter))
         {
             String key = requestParam.getKey();
 
@@ -185,9 +191,14 @@ public abstract class JsfUtils
      * Exposes all request-parameters (including or excluding the view-state)
      * @param externalContext current external-context
      * @param filterViewState flag which indicates if the view-state should be added or not
+     * @param addRequestParameter flag which indicates if the request params should be added or not
+     * @param addCodiViewParameter flag which indicates if the view params should be added or not {@see ViewParameter}
      * @return current request-parameters
      */
-    public static Set<RequestParameter> getRequestParameters(ExternalContext externalContext, boolean filterViewState)
+    public static Set<RequestParameter> getParameters(ExternalContext externalContext,
+                                                      boolean filterViewState,
+                                                      boolean addRequestParameter,
+                                                      boolean addCodiViewParameter)
     {
         Set<RequestParameter> result = new HashSet<RequestParameter>();
 
@@ -196,18 +207,49 @@ public abstract class JsfUtils
             return result;
         }
 
-        String key;
-        for(Map.Entry<String, String[]> entry : externalContext.getRequestParameterValuesMap().entrySet())
+        if(addRequestParameter)
         {
-            key = entry.getKey();
-            if(filterViewState && "javax.faces.ViewState".equals(key))
+            String key;
+            for(Map.Entry<String, String[]> entry : externalContext.getRequestParameterValuesMap().entrySet())
             {
-                continue;
-            }
+                key = entry.getKey();
+                if(filterViewState && "javax.faces.ViewState".equals(key))
+                {
+                    continue;
+                }
 
-            result.add(new RequestParameter(key, entry.getValue()));
+                result.add(new RequestParameter(key, entry.getValue()));
+            }
+        }
+
+        if(addCodiViewParameter)
+        {
+            ViewConfigParameterContext viewConfigParameterContext =
+                    CodiUtils.getContextualReferenceByClass(ViewConfigParameterContext.class, true);
+
+            if(viewConfigParameterContext != null)
+            {
+                for(Map.Entry<String, String> entry : viewConfigParameterContext.getViewParameters().entrySet())
+                {
+                    //TODO add multi-value support - see comment in ViewConfigParameterContext
+                    result.add(new RequestParameter(entry.getKey(), new String[] {entry.getValue()}));
+                }
+            }
         }
 
         return result;
+    }
+
+    public static <T> T getValueOfExpression(String expression, Class<T> targetType)
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        return (T)facesContext.getApplication().evaluateExpressionGet(facesContext, expression, targetType);
+    }
+
+    public static String getValueOfExpressionAsString(String expression)
+    {
+        Object result = getValueOfExpression(expression, Object.class);
+
+        return result != null ? result.toString() : "null";
     }
 }

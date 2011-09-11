@@ -106,7 +106,7 @@ class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
 
         ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 
-        for(RequestParameter parameter : JsfUtils.getRequestParameters(externalContext, true))
+        for(RequestParameter parameter : JsfUtils.getParameters(externalContext, true, true, true))
         {
             parameters.put(parameter.getKey(), parameter.getValueList());
         }
