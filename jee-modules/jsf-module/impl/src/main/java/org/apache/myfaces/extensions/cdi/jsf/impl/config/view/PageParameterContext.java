@@ -30,20 +30,20 @@ import java.util.Map;
  */
 //currently internal - in case of community feedback we could introduce a spi for it
 @RequestScoped
-public class ViewConfigParameterContext
+public class PageParameterContext
 {
     private Map<String, String> parameters = new HashMap<String, String>();
 
-    protected ViewConfigParameterContext()
+    protected PageParameterContext()
     {
     }
 
-    public Map<String, String> getViewParameters()
+    public Map<String, String> getPageParameters()
     {
         return Collections.unmodifiableMap(this.parameters);
     }
 
-    public void addViewParameter(String key, String value)
+    public void addPageParameter(String key, String value)
     {
         if(value == null)
         {

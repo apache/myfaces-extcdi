@@ -37,7 +37,7 @@ import java.util.Set;
 
 import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.WindowContextManager;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigParameterContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterContext;
 
 /**
  * keep in sync with extval!
@@ -144,18 +144,18 @@ public abstract class JsfUtils
      * @param externalContext current external-context
      * @param url current url
      * @param addRequestParameter flag which indicates if the request params should be added or not
-     * @param addCodiViewParameter flag which indicates if the view params should be added or not {@see ViewParameter}
+     * @param addPageParameter flag which indicates if the view params should be added or not {@see ViewParameter}
      * @return url with request-parameters
      */
     public static String addParameters(ExternalContext externalContext, String url,
-                                       boolean addRequestParameter, boolean addCodiViewParameter)
+                                       boolean addRequestParameter, boolean addPageParameter)
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
         boolean urlContainsWindowId = url.contains(WindowContextManager.WINDOW_CONTEXT_ID_PARAMETER_KEY + "=");
 
         for(RequestParameter requestParam :
-                getParameters(externalContext, true, addRequestParameter, addCodiViewParameter))
+                getParameters(externalContext, true, addRequestParameter, addPageParameter))
         {
             String key = requestParam.getKey();
 
@@ -192,13 +192,13 @@ public abstract class JsfUtils
      * @param externalContext current external-context
      * @param filterViewState flag which indicates if the view-state should be added or not
      * @param addRequestParameter flag which indicates if the request params should be added or not
-     * @param addCodiViewParameter flag which indicates if the view params should be added or not {@see ViewParameter}
+     * @param addPageParameter flag which indicates if the view params should be added or not {@see ViewParameter}
      * @return current request-parameters
      */
     public static Set<RequestParameter> getParameters(ExternalContext externalContext,
                                                       boolean filterViewState,
                                                       boolean addRequestParameter,
-                                                      boolean addCodiViewParameter)
+                                                      boolean addPageParameter)
     {
         Set<RequestParameter> result = new HashSet<RequestParameter>();
 
@@ -222,16 +222,16 @@ public abstract class JsfUtils
             }
         }
 
-        if(addCodiViewParameter)
+        if(addPageParameter)
         {
-            ViewConfigParameterContext viewConfigParameterContext =
-                    CodiUtils.getContextualReferenceByClass(ViewConfigParameterContext.class, true);
+            PageParameterContext pageParameterContext =
+                    CodiUtils.getContextualReferenceByClass(PageParameterContext.class, true);
 
-            if(viewConfigParameterContext != null)
+            if(pageParameterContext != null)
             {
-                for(Map.Entry<String, String> entry : viewConfigParameterContext.getViewParameters().entrySet())
+                for(Map.Entry<String, String> entry : pageParameterContext.getPageParameters().entrySet())
                 {
-                    //TODO add multi-value support - see comment in ViewConfigParameterContext
+                    //TODO add multi-value support - see comment in PageParameterContext
                     result.add(new RequestParameter(entry.getKey(), new String[] {entry.getValue()}));
                 }
             }

@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewParameter;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageParameter;
 
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -27,9 +27,9 @@ import javax.interceptor.InvocationContext;
 /**
  * @author Gerhard Petracek
  */
-@ViewParameter.List({})
+@PageParameter.List({})
 @Interceptor
-public class ViewParameterListInterceptor extends ViewParameterInterceptor
+public class PageParameterListInterceptor extends PageParameterInterceptor
 {
     private static final long serialVersionUID = 7673273779460871224L;
 
@@ -40,11 +40,11 @@ public class ViewParameterListInterceptor extends ViewParameterInterceptor
     @AroundInvoke
     public Object addParameter(InvocationContext invocationContext) throws Exception
     {
-        for(ViewParameter requestParameter : invocationContext.getMethod()
-                .getAnnotation(ViewParameter.List.class).value())
+        for(PageParameter pageParameter : invocationContext.getMethod()
+                .getAnnotation(PageParameter.List.class).value())
         {
-            addViewParameter(requestParameter);
+            addPageParameter(pageParameter);
         }
-        return this.viewConfigParameterStrategy.execute(invocationContext);
+        return this.pageParameterStrategy.execute(invocationContext);
     }
 }

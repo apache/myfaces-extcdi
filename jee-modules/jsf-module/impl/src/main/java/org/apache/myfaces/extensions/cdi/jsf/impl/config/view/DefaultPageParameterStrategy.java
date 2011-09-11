@@ -18,7 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigParameterStrategy;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageParameterStrategy;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
@@ -28,19 +28,19 @@ import javax.interceptor.InvocationContext;
  * @author Gerhard Petracek
  */
 @Dependent
-public class DefaultViewConfigParameterStrategy implements ViewConfigParameterStrategy
+public class DefaultPageParameterStrategy implements PageParameterStrategy
 {
     private static final long serialVersionUID = 898321901578229292L;
 
     @Inject
-    private ViewConfigParameterContext viewConfigParameterContext;
+    private PageParameterContext pageParameterContext;
 
     /**
      * {@inheritDoc}
      */
     public void addParameter(String key, String value)
     {
-        this.viewConfigParameterContext.addViewParameter(key, value);
+        this.pageParameterContext.addPageParameter(key, value);
     }
 
     /**

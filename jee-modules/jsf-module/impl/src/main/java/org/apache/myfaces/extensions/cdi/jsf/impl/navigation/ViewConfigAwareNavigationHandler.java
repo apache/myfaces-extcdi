@@ -22,7 +22,7 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewParameter;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageParameter;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
@@ -31,7 +31,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigParameterContext;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterContext;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
@@ -61,7 +61,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
     private BeanManager beanManager;
 
-    private ViewConfigParameterContext viewConfigParameterContext;
+    private PageParameterContext pageParameterContext;
 
     /**
      * Constructor which allows to use the given {@link NavigationHandler}
@@ -161,32 +161,32 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
 
     private void addConfiguredViewParameters(Class<?> viewConfigClass)
     {
-        if(this.viewConfigParameterContext != null)
+        if(this.pageParameterContext != null)
         {
-            ViewParameter viewParameter = viewConfigClass.getAnnotation(ViewParameter.class);
+            PageParameter pageParameter = viewConfigClass.getAnnotation(PageParameter.class);
 
-            if(viewParameter != null)
+            if(pageParameter != null)
             {
-                addConfiguredViewParameter(viewParameter);
+                addConfiguredPageParameter(pageParameter);
             }
             else
             {
-                ViewParameter.List viewParameterList = viewConfigClass.getAnnotation(ViewParameter.List.class);
+                PageParameter.List pageParameterList = viewConfigClass.getAnnotation(PageParameter.List.class);
 
-                if(viewParameterList != null)
+                if(pageParameterList != null)
                 {
-                    for(ViewParameter currentViewParameter : viewParameterList.value())
+                    for(PageParameter currentPageParameter : pageParameterList.value())
                     {
-                        addConfiguredViewParameter(currentViewParameter);
+                        addConfiguredPageParameter(currentPageParameter);
                     }
                 }
             }
         }
     }
 
-    private void addConfiguredViewParameter(ViewParameter viewParameter)
+    private void addConfiguredPageParameter(PageParameter viewParameter)
     {
-        this.viewConfigParameterContext.addViewParameter(viewParameter.key(), viewParameter.value());
+        this.pageParameterContext.addPageParameter(viewParameter.key(), viewParameter.value());
     }
 
     private String convertEntryToOutcome(ExternalContext externalContext, ViewConfigDescriptor entry)
@@ -266,8 +266,8 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         if(this.beanManager == null)
         {
             this.beanManager = BeanManagerProvider.getInstance().getBeanManager();
-            this.viewConfigParameterContext =
-                    CodiUtils.getContextualReferenceByClass(this.beanManager, ViewConfigParameterContext.class, true);
+            this.pageParameterContext =
+                    CodiUtils.getContextualReferenceByClass(this.beanManager, PageParameterContext.class, true);
         }
     }
 

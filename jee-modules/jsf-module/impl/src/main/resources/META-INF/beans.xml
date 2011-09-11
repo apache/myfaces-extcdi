@@ -25,7 +25,7 @@
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityInterceptor</class>
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.ViewControllerInterceptor</class>
         <class>org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CloseConversationGroupInterceptor</class>
-        <class>org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewParameterInterceptor</class>
-        <class>org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewParameterListInterceptor</class>
+        <class>org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterInterceptor</class>
+        <class>org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterListInterceptor</class>
     </interceptors>
 </beans>

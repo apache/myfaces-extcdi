@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.config.view;
+package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
 import javax.enterprise.util.Nonbinding;
 import javax.interceptor.InterceptorBinding;
@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 
 @InterceptorBinding
-public @interface ViewParameter
+public @interface PageParameter
 {
     /**
      * Key of the parameter
@@ -71,6 +71,6 @@ public @interface ViewParameter
          * @return parameters
          */
         @Nonbinding
-        ViewParameter[] value();
+        PageParameter[] value();
     }
 }

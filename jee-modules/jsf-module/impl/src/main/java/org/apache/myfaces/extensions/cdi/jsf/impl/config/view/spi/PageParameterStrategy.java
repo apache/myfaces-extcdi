@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.spi.InterceptorStrategy;
 /**
  * @author Gerhard Petracek
  */
-public interface ViewConfigParameterStrategy extends InterceptorStrategy
+public interface PageParameterStrategy extends InterceptorStrategy
 {
     /**
      * Allows to add the parameter to an (internal) context

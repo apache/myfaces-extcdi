@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.config.view;
 
-import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewParameter;
-import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigParameterStrategy;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageParameter;
+import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageParameterStrategy;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
@@ -31,24 +31,24 @@ import java.io.Serializable;
  * @author Gerhard Petracek
  */
 
-@ViewParameter(key = "", value = "")
+@PageParameter(key = "", value = "")
 @Interceptor
-public class ViewParameterInterceptor implements Serializable
+public class PageParameterInterceptor implements Serializable
 {
     private static final long serialVersionUID = 8762625956958428994L;
 
     @Inject
-    protected ViewConfigParameterStrategy viewConfigParameterStrategy;
+    protected PageParameterStrategy pageParameterStrategy;
 
     @AroundInvoke
     public Object addParameter(InvocationContext invocationContext) throws Exception
     {
-        addViewParameter(invocationContext.getMethod().getAnnotation(ViewParameter.class));
-        return this.viewConfigParameterStrategy.execute(invocationContext);
+        addPageParameter(invocationContext.getMethod().getAnnotation(PageParameter.class));
+        return this.pageParameterStrategy.execute(invocationContext);
     }
 
-    protected void addViewParameter(ViewParameter viewParameter)
+    protected void addPageParameter(PageParameter pageParameter)
     {
-        this.viewConfigParameterStrategy.addParameter(viewParameter.key(), viewParameter.value());
+        this.pageParameterStrategy.addParameter(pageParameter.key(), pageParameter.value());
     }
 }
