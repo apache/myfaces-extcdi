@@ -292,7 +292,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             try
             {
                 //there are no jsf2 view-params, but codi view-config params should be added (if present)
-                redirectPath = JsfUtils.addParameters(externalContext, redirectPath, false, true, false);
+                redirectPath = JsfUtils.addParameters(externalContext, redirectPath, false, true, true);
                 externalContext.redirect(externalContext.encodeActionURL(redirectPath));
             }
             catch (IOException e)
