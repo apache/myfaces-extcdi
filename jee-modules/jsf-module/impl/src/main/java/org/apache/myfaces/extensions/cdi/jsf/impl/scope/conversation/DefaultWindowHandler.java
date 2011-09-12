@@ -91,11 +91,11 @@ public class DefaultWindowHandler implements WindowHandler
 
         if(addRequestParameter)
         {
-            url = JsfUtils.addParameters(externalContext, url, true, true);
+            url = JsfUtils.addParameters(externalContext, url, true, true, true);
         }
         else
         {
-            url = JsfUtils.addParameters(externalContext, url, false, true);
+            url = JsfUtils.addParameters(externalContext, url, false, true, true);
         }
 
         // call encodeActionURL() after all parameters have been added

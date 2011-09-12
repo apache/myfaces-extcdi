@@ -218,10 +218,10 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             }
             result.append("includeViewParams=true");
 
-            return JsfUtils.addParameters(externalContext, result.toString(), true, true);
+            return JsfUtils.addParameters(externalContext, result.toString(), true, true, false);
         }
 
-        return JsfUtils.addParameters(externalContext, result.toString(), false, performRedirect);
+        return JsfUtils.addParameters(externalContext, result.toString(), false, performRedirect, false);
     }
 
     private ViewConfigDescriptor tryToUpdateEntry(ViewConfigDescriptor viewConfigDescriptor,
@@ -292,7 +292,7 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
             try
             {
                 //there are no jsf2 view-params, but codi view-config params should be added (if present)
-                redirectPath = JsfUtils.addParameters(externalContext, redirectPath, false, true);
+                redirectPath = JsfUtils.addParameters(externalContext, redirectPath, false, true, false);
                 externalContext.redirect(externalContext.encodeActionURL(redirectPath));
             }
             catch (IOException e)

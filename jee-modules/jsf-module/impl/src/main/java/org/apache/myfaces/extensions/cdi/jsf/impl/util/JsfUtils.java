@@ -145,10 +145,11 @@ public abstract class JsfUtils
      * @param url current url
      * @param addRequestParameter flag which indicates if the request params should be added or not
      * @param addPageParameter flag which indicates if the view params should be added or not {@see ViewParameter}
+     * @param encodeValues flag which indicates if parameter values should be encoded or not
      * @return url with request-parameters
      */
     public static String addParameters(ExternalContext externalContext, String url,
-                                       boolean addRequestParameter, boolean addPageParameter)
+                                       boolean addRequestParameter, boolean addPageParameter, boolean encodeValues)
     {
         StringBuilder finalUrl = new StringBuilder(url);
         boolean existingParameters = url.contains("?");
@@ -167,7 +168,8 @@ public abstract class JsfUtils
 
             for(String parameterValue : requestParam.getValues())
             {
-                if(!url.contains(key + "=" + parameterValue))
+                if(!url.contains(key + "=" + parameterValue) &&
+                        !url.contains(key + "=" + encodeURLParameterValue(parameterValue, externalContext)))
                 {
                     if(!existingParameters)
                     {
@@ -180,7 +182,15 @@ public abstract class JsfUtils
                     }
                     finalUrl.append(key);
                     finalUrl.append("=");
-                    finalUrl.append(JsfUtils.encodeURLParameterValue(parameterValue, externalContext));
+
+                    if(encodeValues)
+                    {
+                        finalUrl.append(JsfUtils.encodeURLParameterValue(parameterValue, externalContext));
+                    }
+                    else
+                    {
+                        finalUrl.append(parameterValue);
+                    }
                 }
             }
         }

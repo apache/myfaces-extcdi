@@ -233,7 +233,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
 
         // add request parameter
-        url = JsfUtils.addParameters(externalContext, url, true, true);
+        url = JsfUtils.addParameters(externalContext, url, true, true, true);
 
         // add noscript parameter
         if (url.contains("?"))

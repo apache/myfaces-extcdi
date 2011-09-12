@@ -86,11 +86,11 @@ public class ServerSideWindowHandler extends DefaultWindowHandler
 
         if(addRequestParameter)
         {
-            url = JsfUtils.addParameters(externalContext, url, true, true);
+            url = JsfUtils.addParameters(externalContext, url, true, true, true);
         }
         else
         {
-            url = JsfUtils.addParameters(externalContext, url, false, true);
+            url = JsfUtils.addParameters(externalContext, url, false, true, true);
         }
 
         externalContext.redirect(url);
