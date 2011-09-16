@@ -30,7 +30,6 @@ import java.io.Serializable;
 /**
  * Interceptor for wrapping transactional database requests.
  *
- * @author Gerhard Petracek
  */
 @Interceptor
 @Transactional

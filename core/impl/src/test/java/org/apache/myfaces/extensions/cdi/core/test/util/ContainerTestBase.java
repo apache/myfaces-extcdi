@@ -30,6 +30,7 @@ import java.lang.annotation.Annotation;
 import java.util.logging.Logger;
 
 /**
+ * Base class  for CDI container based tests
  */
 public class ContainerTestBase
 {

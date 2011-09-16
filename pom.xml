@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>9</version>
+        <version>11-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
@@ -127,6 +127,11 @@
             <dependency>
                 <groupId>org.apache.openwebbeans</groupId>
                 <artifactId>openwebbeans-spi</artifactId>
+                <version>${owb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.openwebbeans</groupId>
+                <artifactId>openwebbeans-resource</artifactId>
                 <version>${owb.version}</version>
             </dependency>
             <dependency>
@@ -420,6 +425,30 @@
             <version>5.14.10</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.openwebbeans.test</groupId>
+            <artifactId>cditest</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.openwebbeans.test</groupId>
+            <artifactId>cditest-owb</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            We currently need this for the CDI test container to emulate the @SessionScoped.
+            TODO: Finally this should not be necessary anymore.
+        -->
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-servlet_2.5_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-el_2.2_spec</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
@@ -495,7 +524,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.2</version>
                 <executions>
                     <execution>
                         <id>verify-style</id>
@@ -575,8 +603,8 @@
                 <version>2.3</version>
                 <configuration>
                     <rulesets>
-                        <ruleset>/rulesets/basic.xml</ruleset>
-                        <ruleset>/rulesets/unusedcode.xml</ruleset>
+                        <ruleset>rulesets/basic.xml</ruleset>
+                        <ruleset>rulesets/unusedcode.xml</ruleset>
                     </rulesets>
                     <minimumTokens>100</minimumTokens>
                     <targetJdk>1.5</targetJdk>
@@ -585,7 +613,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <configLocation>default/myfaces-checks-standard.xml</configLocation>
                     <headerLocation>default/myfaces-header.txt</headerLocation>

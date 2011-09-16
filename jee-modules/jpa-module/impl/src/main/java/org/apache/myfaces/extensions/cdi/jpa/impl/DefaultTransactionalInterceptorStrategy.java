@@ -45,8 +45,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * @author Mark Struberg
- * @author Gerhard Petracek
+ *
  */
 @Dependent
 public class DefaultTransactionalInterceptorStrategy implements PersistenceStrategy
@@ -56,9 +55,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
     //don't use final in interceptors
     private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
 
-    //all implementations will be serializable
-    @Inject
-    private BeanManager beanManager;
+    private @Inject BeanManager beanManager;
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
@@ -71,11 +68,6 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
     private static transient volatile Map<ClassLoader, Map<String, PersistenceContextMetaEntry>>
             persistenceContextMetaEntries =
             new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
-
-    //TODO for mark
-    /** 1 ms  in nanoTime ticks */
-    //static final long LONG_MILLISECOND = 1000000L;
-    //static final long LONG_RUNNING_THRESHOLD = 300L * LONG_MILLISECOND;
 
     /**
      * {@inheritDoc}
@@ -114,8 +106,8 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
         }
         else
         {
-            entityManager = (EntityManager) this.beanManager.getReference(entityManagerBean, EntityManager.class,
-                    this.beanManager.createCreationalContext(entityManagerBean));
+            entityManager = (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
+                                                           beanManager.createCreationalContext(entityManagerBean));
         }
 
         if (entityManagerMap.get() == null)
@@ -123,7 +115,6 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
             entityManagerMap.set(new HashMap<String, EntityManager>());
         }
         entityManagerMap.get().put(entityManagerId, entityManager);
-        // log.info("growing: " + ems.get().size());
 
         if (refCount.get() == null)
         {
