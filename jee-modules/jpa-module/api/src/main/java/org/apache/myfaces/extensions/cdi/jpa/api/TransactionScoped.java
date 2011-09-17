@@ -35,22 +35,20 @@ import javax.enterprise.context.NormalScope;
  *
  * <p>The classic use-case is for producing JPA EntityManagers.
  * <pre>
- *  &#064;RequestScoped
+ *  &#064;Dependent
  *  public class EntityManagerProducer
  *  {
- *      private &#064;PersistenceUnit EntityManagerFactory emf;
+ *      private &#064;PersistenceContext(unitName = "test") EntityManager entityManager;
  *
- *      &#064;Produces &#064;TransactionScoped &#064;Core
- *      public EntityManager createEntityManager()
+ *      public &#064;Produces &#064;TransactionScoped EntityManager createEntityManager()
  *      {
- *          return emf.createEntityManager();
+ *          return entityManager;
  *      }
  *
- *      public void dispose(&#064;Disposes EntityManager entityManager)
+ *      public void closeEntityManager(&#064;Disposes EntityManager em)
  *      {
- *          entityManager.close();
+ *          em.close();
  *      }
- *
  *  }
  * </pre>
  * </p>

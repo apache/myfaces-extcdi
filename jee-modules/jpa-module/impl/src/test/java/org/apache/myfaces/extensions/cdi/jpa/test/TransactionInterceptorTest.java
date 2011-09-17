@@ -23,6 +23,8 @@ import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.enterprise.context.ContextNotActiveException;
+import javax.enterprise.util.AnnotationLiteral;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
@@ -33,9 +35,9 @@ import javax.persistence.EntityTransaction;
 public class TransactionInterceptorTest extends ContainerTestBase
 {
     @Test
-    public void testTransactionInterceptor()
+    public void testRequestScopedTransactionInterceptor()
     {
-        TestServiceImpl testService = getBeanInstance(TestServiceImpl.class);
+        RequestScopedEmTestServiceImpl testService = getBeanInstance(RequestScopedEmTestServiceImpl.class);
         Assert.assertNotNull(testService);
 
         Assert.assertEquals(testService.doThis(), "this");
@@ -45,5 +47,26 @@ public class TransactionInterceptorTest extends ContainerTestBase
         Assert.assertNotNull(em);
         EntityTransaction trans = em.getTransaction();
         Assert.assertNotNull(trans);
+    }
+
+    @Test(enabled = false)
+    public void testTransactionScopedTransactionInterceptor()
+    {
+        TransactionScopedEmTestServiceImpl testService = getBeanInstance(TransactionScopedEmTestServiceImpl.class);
+        Assert.assertNotNull(testService);
+
+        Assert.assertEquals(testService.doThis(), "this");
+        Assert.assertEquals(testService.doThat(), "that");
+
+        try
+        {
+            EntityManager em = getBeanInstance(EntityManager.class, new AnnotationLiteral<TransactionScopeAware>(){});
+            Assert.fail("ContextNotActiveException expected!");
+        }
+        catch(ContextNotActiveException cnae)
+        {
+            // all ok
+        }
+
     }
 }

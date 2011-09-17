@@ -57,6 +57,9 @@ import java.lang.reflect.Field;
  * gets thrown inside the intercepted method chain and <i>not</i> gets catched
  * until the outermost &#064;Transactional interceptor gets reached, then all
  * open transactions will get rollbacked.</p>
+ *
+ * <p>If you like to implement your own PersistenceStrategy, then use the
+ * standard CDI &#064;Alternative mechanism.</p>
  */
 @Dependent
 public class DefaultTransactionalInterceptorStrategy implements PersistenceStrategy

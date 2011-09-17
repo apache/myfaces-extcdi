@@ -20,13 +20,15 @@ package org.apache.myfaces.extensions.cdi.jpa.test;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-@Transactional
-public class TestServiceImpl
+@ApplicationScoped
+@Transactional(qualifier=TransactionScopeAware.class)
+public class TransactionScopedEmTestServiceImpl
 {
-    private @Inject EntityManager entityManager;
+    private @Inject @TransactionScopeAware EntityManager entityManager;
 
     public String doThis()
     {

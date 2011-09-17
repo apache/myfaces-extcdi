@@ -41,7 +41,7 @@ import javax.faces.event.SystemEventListener;
 
 /**
  * This class provides the contexts lifecycle for the
- * new JSF-2 &#064;ViewScoped Context
+ * new JSF-2 &#064;ViewScoped Context.
  */
 public class ViewScopedContext implements Context, SystemEventListener
 {
