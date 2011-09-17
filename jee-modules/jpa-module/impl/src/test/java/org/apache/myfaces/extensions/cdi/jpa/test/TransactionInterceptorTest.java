@@ -49,7 +49,7 @@ public class TransactionInterceptorTest extends ContainerTestBase
         Assert.assertNotNull(trans);
     }
 
-    @Test(enabled = false)
+    @Test
     public void testTransactionScopedTransactionInterceptor()
     {
         TransactionScopedEmTestServiceImpl testService = getBeanInstance(TransactionScopedEmTestServiceImpl.class);
@@ -61,6 +61,7 @@ public class TransactionInterceptorTest extends ContainerTestBase
         try
         {
             EntityManager em = getBeanInstance(EntityManager.class, new AnnotationLiteral<TransactionScopeAware>(){});
+            em.getTransaction();
             Assert.fail("ContextNotActiveException expected!");
         }
         catch(ContextNotActiveException cnae)

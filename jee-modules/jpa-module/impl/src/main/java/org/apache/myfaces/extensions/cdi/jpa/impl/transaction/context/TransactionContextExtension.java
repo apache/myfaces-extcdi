@@ -25,12 +25,13 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.Extension;
 
 /**
  * CDI Extension which registers and manages the {@link TransactionContext}.
  *
  */
-public class TransactionContextExtension implements Deactivatable
+public class TransactionContextExtension implements Extension, Deactivatable
 {
     /**
      * Register the TransactionContext as a CDI Context

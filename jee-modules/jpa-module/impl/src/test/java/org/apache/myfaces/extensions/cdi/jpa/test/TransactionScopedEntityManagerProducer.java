@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jpa.test;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionScoped;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -29,6 +30,7 @@ import javax.persistence.PersistenceContext;
 /**
  * producer for a simple &#064;Default EntityManager
  */
+@Dependent
 public class TransactionScopedEntityManagerProducer {
 
     private @PersistenceContext(unitName = "test") EntityManager entityManager;

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jpa.impl;
+package org.apache.myfaces.extensions.cdi.jpa.impl.transaction;
 
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;

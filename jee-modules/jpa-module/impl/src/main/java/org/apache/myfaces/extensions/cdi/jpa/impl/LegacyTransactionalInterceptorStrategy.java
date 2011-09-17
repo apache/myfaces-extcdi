@@ -22,7 +22,9 @@ import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.TransactionalInterceptor;
 
+import javax.enterprise.inject.Alternative;
 import javax.inject.Inject;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Bean;
@@ -45,7 +47,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
- * <p>Default implementation of our pluggable PersistenceStrategy.
+ * <p><b>Attention!</b> although this impl is called 'Default...' it is <b>not</b>
+ * used anymore! If you still like to use it, then enable it as Alternative in
+ * your bean.xml!</p>
+ *
+ * <p>Old implementation of our pluggable PersistenceStrategy.
  * It supports nested Transactions with the MANDATORY behaviour.</p>
  *
  * <p>The outermost &#064;Transactional interceptor for the given
@@ -60,9 +66,11 @@ import java.lang.reflect.Field;
  *
  * <p>If you like to implement your own PersistenceStrategy, then use the
  * standard CDI &#064;Alternative mechanism.</p>
+ *
  */
 @Dependent
-public class DefaultTransactionalInterceptorStrategy implements PersistenceStrategy
+@Alternative
+public class LegacyTransactionalInterceptorStrategy implements PersistenceStrategy
 {
     private static final long serialVersionUID = -1432802805095533499L;
 
@@ -73,7 +81,7 @@ public class DefaultTransactionalInterceptorStrategy implements PersistenceStrat
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
 
-    private static final Logger LOGGER = Logger.getLogger(DefaultTransactionalInterceptorStrategy.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(LegacyTransactionalInterceptorStrategy.class.getName());
 
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =

@@ -18,8 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context;
 
+import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
-import javax.enterprise.inject.spi.Bean;
 
 /**
  * Holds the information we need store to manage
@@ -27,18 +27,18 @@ import javax.enterprise.inject.spi.Bean;
  */
 public class TransactionBeanBag<T>
 {
-    private Bean<T> bean;
+    private Contextual<T> bean;
     private T contextualInstance;
     private CreationalContext<T> creationalContext;
 
-    public TransactionBeanBag(Bean<T> bean, T contextualInstance, CreationalContext<T> creationalContext)
+    public TransactionBeanBag(Contextual<T> bean, T contextualInstance, CreationalContext<T> creationalContext)
     {
         this.bean = bean;
         this.contextualInstance = contextualInstance;
         this.creationalContext = creationalContext;
     }
 
-    public Bean<T> getBean()
+    public Contextual<T> getBean()
     {
         return bean;
     }

@@ -26,6 +26,7 @@ import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import java.lang.annotation.Annotation;
+import java.util.Map;
 
 /**
  * CDI Context for managing &#064;{@link TransactionScoped} contextual instances.
@@ -44,7 +45,43 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component)
     {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveBeans();
+
+        if (beanBags == null)
+        {
+            throw new ContextNotActiveException();
+        }
+
+        TransactionBeanBag beanBag = beanBags.get(component);
+        if (beanBag != null)
+        {
+            return (T) beanBag.getContextualInstance();
+        }
+
+        return null;
+    }
+
+    public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
+    {
+        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveBeans();
+
+        if (beanBags == null)
+        {
+            throw new ContextNotActiveException();
+        }
+
+        TransactionBeanBag beanBag = beanBags.get(component);
+        if (beanBag != null)
+        {
+            return (T) beanBag.getContextualInstance();
+        }
+
+        // if it doesn't yet exist, we need to create it now!
+        T instance = component.create(creationalContext);
+        beanBag = new TransactionBeanBag(component, instance, creationalContext);
+        beanBags.put(component, beanBag);
+
+        return instance;
     }
 
     public Class<? extends Annotation> getScope()
@@ -52,17 +89,11 @@ public class TransactionContext implements Context
         return TransactionScoped.class;
     }
 
-    public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
-    {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     public boolean isActive()
     {
         try
         {
-            //X TODO beanStorage....
-            return true;
+            return beanStorage.getActiveBeans() != null;
         }
         catch(ContextNotActiveException cnae)
         {

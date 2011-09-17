@@ -22,6 +22,6 @@
        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
 
     <interceptors>
-        <class>org.apache.myfaces.extensions.cdi.jpa.impl.TransactionalInterceptor</class>
+        <class>org.apache.myfaces.extensions.cdi.jpa.impl.transaction.TransactionalInterceptor</class>
     </interceptors>
 </beans>
