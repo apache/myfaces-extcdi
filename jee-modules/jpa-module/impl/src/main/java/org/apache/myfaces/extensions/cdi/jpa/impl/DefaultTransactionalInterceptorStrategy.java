@@ -45,7 +45,18 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
+ * <p>Default implementation of our pluggable PersistenceStrategy.
+ * It supports nested Transactions with the MANDATORY behaviour.</p>
  *
+ * <p>The outermost &#064;Transactional interceptor for the given
+ * {@link javax.inject.Qualifier} will open an {@link EntityTransaction}
+ * and the outermost &#064;Transactional interceptor for <b>all</b>
+ * EntityManagers will flush and subsequently close all open transactions.</p>
+ *
+ * <p>If an Exception occurs in flushing the EntityManagers or any other Exception
+ * gets thrown inside the intercepted method chain and <i>not</i> gets catched
+ * until the outermost &#064;Transactional interceptor gets reached, then all
+ * open transactions will get rollbacked.</p>
  */
 @Dependent
 public class DefaultTransactionalInterceptorStrategy implements PersistenceStrategy
