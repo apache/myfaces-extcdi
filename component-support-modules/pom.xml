@@ -35,6 +35,7 @@
 
     <modules>
         <module>trinidad-support</module>
+        <module>trinidad20-support</module>
     </modules>
 
 </project>

@@ -48,7 +48,7 @@ public class TrinidadSupportModuleStartupObserver extends AbstractStartupObserve
             String moduleVersion = detectModuleVersion();
 
             //module info
-            StringBuilder info = new StringBuilder("[Started] MyFaces CODI Trinidad-Support-Module");
+            StringBuilder info = new StringBuilder("[Started] MyFaces CODI " + getModuleName());
             info.append(moduleVersion);
             info.append(separator);
 
@@ -65,12 +65,21 @@ public class TrinidadSupportModuleStartupObserver extends AbstractStartupObserve
 
     protected String detectModuleVersion()
     {
-        String version = ClassUtils.getJarVersion(TrinidadSupportModuleStartupObserver.class);
+        String version = ClassUtils.getJarVersion(getClass());
 
         if(version != null && !version.startsWith("null"))
         {
             return " v" + version;
         }
         return "";
+    }
+
+    /**
+     * Provides the name of the module
+     * @return name of the module
+     */
+    protected String getModuleName()
+    {
+        return "Trinidad-Support-Module";
     }
 }

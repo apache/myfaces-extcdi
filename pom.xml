@@ -101,6 +101,7 @@
         <mojarra1.version>1.2_14</mojarra1.version>
 
         <trinidad1.version>1.2.12</trinidad1.version>
+        <trinidad2.version>2.0.0</trinidad2.version>
 
         <maven.jetty.plugin.version>7.1.5.v20100705</maven.jetty.plugin.version>
     </properties>
