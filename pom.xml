@@ -40,6 +40,13 @@
         <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/trunk/</url>
     </scm>
 
+    <repositories>
+        <repository>
+            <id>Apache Snapshot Repository</id>
+            <url>https://repository.apache.org/content/repositories/snapshots</url>
+        </repository>
+    </repositories>
+
     <distributionManagement>
         <site>
             <id>apache.website</id>
