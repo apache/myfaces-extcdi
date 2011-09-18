@@ -30,7 +30,6 @@ import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -57,7 +56,7 @@ import java.util.logging.Logger;
  * <p>If you like to implement your own PersistenceStrategy, then use the
  * standard CDI &#064;Alternative mechanism.</p>
  */
-public class TransactionalInterceptorStrategy implements PersistenceStrategy, Serializable
+public class TransactionalInterceptorStrategy implements PersistenceStrategy
 {
     private static final long serialVersionUID = -1432802805095533499L;
 

@@ -35,11 +35,16 @@ public class TransactionContextExtension implements Extension, Deactivatable
 {
     /**
      * Register the TransactionContext as a CDI Context
-     * @param afterBeanDiscovery
-     * @param beanManager
+     * @param afterBeanDiscovery after-bean-discovery event
+     * @param beanManager current bean-manager
      */
     public void registerTransactionContext(@Observes AfterBeanDiscovery afterBeanDiscovery, BeanManager beanManager)
     {
+        if(!isActivated())
+        {
+            return;
+        }
+
         // We get a proxy for the RequestScoped TransactionBeanStorage and hand it over to the TransactionContext
         // This way we avoid the need of later having to synchronize the access on lazy initialization.
         Bean<?> beanStorageBean = beanManager.resolve(beanManager.getBeans(TransactionBeanStorage.class));
