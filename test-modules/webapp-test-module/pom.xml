@@ -228,13 +228,11 @@
                        <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
                        <artifactId>myfaces-extcdi-core-impl</artifactId>
                        <version>${project.version}</version>
-                       <scope>test</scope>
                    </dependency>
                    <dependency>
                        <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                        <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
                        <version>${project.version}</version>
-                       <scope>test</scope>
                    </dependency>
 
                    <!-- config-test dependencies-->
@@ -250,31 +248,26 @@
                        <groupId>org.apache.openwebbeans</groupId>
                        <artifactId>openwebbeans-impl</artifactId>
                        <version>${owb.version}</version>
-                       <scope>test</scope>
                    </dependency>
                    <dependency>
                        <groupId>org.apache.openwebbeans</groupId>
                        <artifactId>openwebbeans-spi</artifactId>
                        <version>${owb.version}</version>
-                       <scope>test</scope>
                    </dependency>
                    <dependency>
                        <groupId>org.apache.openwebbeans</groupId>
                        <artifactId>openwebbeans-jsf</artifactId>
                        <version>${owb.version}</version>
-                       <scope>test</scope>
                    </dependency>
                    <dependency>
                        <groupId>org.apache.openwebbeans</groupId>
                        <artifactId>openwebbeans-resource</artifactId>
                        <version>${owb.version}</version>
-                       <scope>test</scope>
                    </dependency>
                    <dependency>
                        <groupId>org.apache.openwebbeans</groupId>
                        <artifactId>openwebbeans-web</artifactId>
                        <version>${owb.version}</version>
-                       <scope>test</scope>
                    </dependency>
                </dependencies>
            </plugin>
