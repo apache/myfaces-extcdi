@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.myfaces</groupId>
         <artifactId>myfaces</artifactId>
-        <version>9</version>
+        <version>11-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
@@ -532,7 +532,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.2</version>
                 <executions>
                     <execution>
                         <id>verify-style</id>
@@ -622,7 +621,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.2</version>
                 <configuration>
                     <configLocation>default/myfaces-checks-standard.xml</configLocation>
                     <headerLocation>default/myfaces-header.txt</headerLocation>
