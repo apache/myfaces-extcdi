@@ -33,7 +33,7 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * see EXTCDI-127
@@ -100,7 +100,7 @@ public class RestoreInjectionPointsObserver
         processComponents(uiViewRoot.getChildren(), advancedQualifierRequiredForDependencyInjection);
     }
 
-    private void processComponents(List<UIComponent> uiComponents,
+    private void processComponents(Collection<UIComponent> uiComponents,
                                    boolean advancedQualifierRequiredForDependencyInjection)
     {
         if(uiComponents == null)
@@ -111,6 +111,7 @@ public class RestoreInjectionPointsObserver
         for(UIComponent uiComponent : uiComponents)
         {
             inject(uiComponent, advancedQualifierRequiredForDependencyInjection);
+            processComponents(uiComponent.getFacets().values(), advancedQualifierRequiredForDependencyInjection);
             processComponents(uiComponent.getChildren(), advancedQualifierRequiredForDependencyInjection);
         }
     }
