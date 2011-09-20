@@ -23,6 +23,7 @@ import org.apache.myfaces.trinidad.render.DialogRenderKitService;
 import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
 import org.apache.myfaces.trinidad.util.Service;
 
+import javax.enterprise.inject.Typed;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
@@ -38,6 +39,7 @@ import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
 
+@Typed()
 class TrinidadRenderKitWrapper extends RenderKit
         implements Service.Provider, DialogRenderKitService, ExtendedRenderKitService
 {

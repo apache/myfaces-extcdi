@@ -23,6 +23,7 @@ import org.apache.myfaces.trinidad.render.DialogRenderKitService;
 import org.apache.myfaces.trinidad.render.ExtendedRenderKitService;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.InterceptedResponseWriter;
 
+import javax.enterprise.inject.Typed;
 import javax.faces.render.RenderKit;
 import javax.faces.render.Renderer;
 import javax.faces.render.ResponseStateManager;
@@ -39,6 +40,7 @@ import java.io.OutputStream;
 /**
  * @author Gerhard Petracek
  */
+@Typed()
 class TrinidadRenderKitWrapper extends RenderKit
                                implements Service.Provider, DialogRenderKitService, ExtendedRenderKitService
 {

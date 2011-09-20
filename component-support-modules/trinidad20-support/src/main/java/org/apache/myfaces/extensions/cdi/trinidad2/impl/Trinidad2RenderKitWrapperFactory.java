@@ -18,19 +18,22 @@
  */
 package org.apache.myfaces.extensions.cdi.trinidad2.impl;
 
-import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.RenderKitWrapperFactory;
+import org.apache.myfaces.extensions.cdi.trinidad.impl.TrinidadRenderKitWrapperFactory;
 
+import javax.enterprise.inject.Specializes;
 import javax.faces.render.RenderKit;
 import javax.inject.Singleton;
 
 @Singleton
-public class TrinidadRenderKitWrapperFactory implements RenderKitWrapperFactory
+@Specializes
+public class Trinidad2RenderKitWrapperFactory extends TrinidadRenderKitWrapperFactory
 {
     private static final long serialVersionUID = -1182925270780281194L;
 
     /**
      * {@inheritDoc}
      */
+    @Override
     public RenderKit create(RenderKit renderKit)
     {
         return new TrinidadRenderKitWrapper(renderKit);
