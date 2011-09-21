@@ -60,12 +60,11 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
 {
     private static final long serialVersionUID = -1432802805095533499L;
 
+    private static final Logger LOGGER = Logger.getLogger(TransactionalInterceptorStrategy.class.getName());
 
     private @Inject BeanManager beanManager;
 
     private @Inject TransactionBeanStorage transactionBeanStorage;
-
-    private static final Logger LOGGER = Logger.getLogger(TransactionalInterceptorStrategy.class.getName());
 
 
     /** key=qualifier name, value= reference counter */
@@ -91,10 +90,7 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
             // 0 indicates that a new Context needs to get started
             transactionBeanStorage.startTransactionScope(qualifierKey);
         }
-        else
-        {
-            transactionBeanStorage.activateTransactionScope(qualifierKey);
-        }
+        String previousTransactionKey = transactionBeanStorage.activateTransactionScope(qualifierKey);
 
         Bean<EntityManager> entityManagerBean = resolveEntityManagerBean(qualifierClass);
 
@@ -146,11 +142,6 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                             LOGGER.log(Level.SEVERE,
                                        "Got additional Exception while subsequently " +
                                        "rolling back other SQL transactions", eRollback);
-                        }
-                        finally
-                        {
-                            // close the TransactionContext
-                            transactionBeanStorage.endTransactionScope(emsEntry.getKey());
                         }
                     }
                 }
@@ -227,22 +218,22 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                                 firstException = e;
                                 commitFailed = true;
                             }
-                            finally
-                            {
-                                // close the TransactionContext
-                                transactionBeanStorage.endTransactionScope(emEntry.getKey());
-                            }
-
                         }
                     }
+
+                    // and now we close all open transactionscopes
+                    transactionBeanStorage.endAllTransactionScopes();
+
                 }
 
             }
-
-            if (! isOutermostInterceptor())
+            else
             {
-                transactionBeanStorage.deactivateTransactionScope(qualifierKey);
+                // we are not the outermost TransactionInterceptor
+                // so we have to re-activate the previous transaction
+                transactionBeanStorage.activateTransactionScope(previousTransactionKey);
             }
+
             decrementRefCounter(qualifierKey);
 
             if (commitFailed)

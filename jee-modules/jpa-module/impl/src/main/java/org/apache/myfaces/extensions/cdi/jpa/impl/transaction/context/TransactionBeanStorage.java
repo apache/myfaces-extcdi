@@ -25,6 +25,7 @@ import javax.enterprise.context.spi.Contextual;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
+import java.util.logging.Logger;
 
 /**
  * <p>This bean stores information about
@@ -40,6 +41,8 @@ import java.util.Stack;
 @RequestScoped
 public class TransactionBeanStorage
 {
+    private static final Logger LOGGER = Logger.getLogger(TransactionBeanStorage.class.getName());
+
 
     /**
      * This is the actual bean storage.
@@ -51,12 +54,12 @@ public class TransactionBeanStorage
      * </ol>
      *
      */
-    private Map<String, Stack<Map<Contextual, TransactionBeanBag>>> storedBeans =
+    private Map<String, Stack<Map<Contextual, TransactionBeanBag>>> storedTransactionContexts =
             new HashMap<String, Stack<Map<Contextual, TransactionBeanBag>>>();
 
-    private Map<Contextual, TransactionBeanBag> activeBeans;
+    private Map<Contextual, TransactionBeanBag> activeTransactionContext;
 
-    private Stack<String> transactionKeys = new Stack<String>();
+    private String activeTransactionKey = null;
 
     /**
      * Start the TransactionScope with the given qualifier
@@ -64,17 +67,16 @@ public class TransactionBeanStorage
      */
     public void startTransactionScope(String transactionKey)
     {
-        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedBeans.get(transactionKey);
+        LOGGER.finer( "starting TransactionScope " + transactionKey);
+        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedTransactionContexts.get(transactionKey);
 
         if (transStack == null)
         {
             transStack = new Stack<Map<Contextual, TransactionBeanBag>>();
-            storedBeans.put(transactionKey, transStack);
+            storedTransactionContexts.put(transactionKey, transStack);
         }
 
-        activeBeans = new HashMap<Contextual, TransactionBeanBag>();
-        transStack.push(activeBeans);
-        transactionKeys.push(transactionKey);
+        transStack.push(new HashMap<Contextual, TransactionBeanBag>());
     }
 
     /**
@@ -85,93 +87,83 @@ public class TransactionBeanStorage
      */
     public void endTransactionScope(String transactionKey)
     {
-        String expectedTransactionKey = transactionKeys.pop();
-        if (!transactionKey.equals(expectedTransactionKey))
-        {
-            throw new ContextNotActiveException("Error at deactivating TransactionScope with key " + transactionKey
-                                                + " expected: " + expectedTransactionKey);
-        }
-
-        destroyBeans(activeBeans);
-        activeBeans = null;
+        LOGGER.finer( "ending TransactionScope " + transactionKey);
 
         // drop the context from the storage
-        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedBeans.get(transactionKey);
-        transStack.pop();
+        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedTransactionContexts.get(transactionKey);
+        Map<Contextual, TransactionBeanBag> beans = transStack.pop();
+        destroyBeans(beans);
 
         if (transStack.size() == 0)
         {
-            storedBeans.remove(transactionKey);
+            storedTransactionContexts.remove(transactionKey);
         }
 
-        if (!transactionKeys.isEmpty())
-        {
-            String oldTransactionKey = transactionKeys.peek();
-            Stack<Map<Contextual, TransactionBeanBag>> transactionStack = storedBeans.get(oldTransactionKey);
-            if (transactionStack != null)
-            {
-                activeBeans = transactionStack.peek();
-            }
-        }
     }
 
     /**
      * Activate the TransactionScope with the given qualifier.
      * This is needed if a subsequently invoked &#064;Transactional
      * method will switch to another persistence unit.
-     * This method shall not be invoked when the transaction just got started
+     * This method must also be invoked when the transaction just got started
      * with {@link #startTransactionScope(String)}.
      *
      * @param transactionKey
+     * @return the transactionKey of the previously activated transaction or <code>null</code> if non exists
      */
-    public void activateTransactionScope(String transactionKey)
+    public String activateTransactionScope(String transactionKey)
     {
-        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedBeans.get(transactionKey);
+        LOGGER.finer( "activating TransactionScope " + transactionKey);
+
+        if (transactionKey == null)
+        {
+            activeTransactionKey = null;
+            activeTransactionContext = null;
+            return null;
+        }
+
+        Stack<Map<Contextual, TransactionBeanBag>> transStack = storedTransactionContexts.get(transactionKey);
         if (transStack == null)
         {
             throw new ContextNotActiveException("Cannot activate TransactionScope with key " + transactionKey);
         }
 
-        activeBeans =  transStack.peek();
-        transactionKeys.push(transactionKey);
+        activeTransactionContext =  transStack.peek();
+        String oldTransactionContextKey = activeTransactionKey;
+        activeTransactionKey = transactionKey;
+        return oldTransactionContextKey;
     }
+
 
     /**
-     * Deactivate the TransactionScope with the given qualifier.
-     * This is needed if a subsequently invoked &#064;Transactional
-     * method will switch to another persistence unit.
-     * This method shall not be invoked when the transaction gets ended
-     * with {@link #endTransactionScope(String)}.
+     * This will destroy all stored transaction contexts.
      *
-     * @param transactionKey
      */
-    public void deactivateTransactionScope(String transactionKey)
+    public void endAllTransactionScopes()
     {
-        String expectedTransactionKey = transactionKeys.pop();
-        if (!transactionKey.equals(expectedTransactionKey))
-        {
-            throw new ContextNotActiveException("Error at deactivating TransactionScope with key " + transactionKey
-                                                + " expected: " + expectedTransactionKey);
-        }
+        LOGGER.finer( "destroying all TransactionScopes");
 
-
-        if (!transactionKeys.isEmpty())
+        for (Stack<Map<Contextual, TransactionBeanBag>> transStack : storedTransactionContexts.values())
         {
-            String oldTransactionKey = transactionKeys.peek();
-            Stack<Map<Contextual, TransactionBeanBag>> transactionStack = storedBeans.get(oldTransactionKey);
-            if (transactionStack != null)
+            while (!transStack.isEmpty())
             {
-                activeBeans = transactionStack.peek();
+                Map<Contextual, TransactionBeanBag> beans = transStack.pop();
+                destroyBeans(beans);
             }
         }
+
+        // we also need to clean our active context info
+        activeTransactionContext = null;
+        activeTransactionKey = null;
     }
+
 
     /**
      * @return the Map which represents the currently active Context content.
      */
-    public Map<Contextual, TransactionBeanBag> getActiveBeans()
+    public Map<Contextual, TransactionBeanBag> getActiveTransactionContext()
     {
-        return activeBeans;
+        return activeTransactionContext;
     }
 
     /**
@@ -181,7 +173,7 @@ public class TransactionBeanStorage
     @PreDestroy
     public void requestEnded()
     {
-        //X TODO
+       endAllTransactionScopes();
     }
 
     /**

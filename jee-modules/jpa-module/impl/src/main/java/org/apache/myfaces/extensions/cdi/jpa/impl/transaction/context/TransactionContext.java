@@ -45,7 +45,7 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component)
     {
-        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveBeans();
+        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveTransactionContext();
 
         if (beanBags == null)
         {
@@ -63,7 +63,7 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
-        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveBeans();
+        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveTransactionContext();
 
         if (beanBags == null)
         {
@@ -93,7 +93,7 @@ public class TransactionContext implements Context
     {
         try
         {
-            return beanStorage.getActiveBeans() != null;
+            return beanStorage.getActiveTransactionContext() != null;
         }
         catch(ContextNotActiveException cnae)
         {
