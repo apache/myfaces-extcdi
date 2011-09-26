@@ -19,14 +19,18 @@
 package org.apache.myfaces.extensions.cdi.jpa.test;
 
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
+import org.apache.myfaces.extensions.cdi.jpa.api.TransactionHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import sun.rmi.rmic.iiop.Type;
 
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import java.util.concurrent.Callable;
 
 
 /**
@@ -69,5 +73,54 @@ public class TransactionInterceptorTest extends ContainerTestBase
             // all ok
         }
 
+    }
+
+    @Test
+    public void testTransactionHelper() throws Exception
+    {
+        try
+        {
+            resolveEntityManager();
+            Assert.fail("ContextNotActiveException expected!");
+        }
+        catch(ContextNotActiveException cnae)
+        {
+            // this was expected, all is fine!
+        }
+
+        Integer retVal = TransactionHelper.getInstance().executeTransactional( new Callable<Integer>() {
+
+            public Integer call() throws Exception
+            {
+                resolveEntityManager();
+
+                return Integer.valueOf(3);
+            }
+        });
+
+        Assert.assertEquals(retVal, Integer.valueOf(3));
+
+
+        try
+        {
+            resolveEntityManager();
+            Assert.fail("ContextNotActiveException expected!");
+        }
+        catch(ContextNotActiveException cnae)
+        {
+            // this was expected, all is fine!
+        }
+    }
+
+    private void resolveEntityManager()
+    {
+        EntityManager em = BeanManagerProvider.getInstance().
+                getContextualReference(EntityManager.class,
+                        new AnnotationLiteral<TransactionScopeAware>()
+                                            {
+                                            });
+        Assert.assertNotNull(em);
+        EntityTransaction et = em.getTransaction();
+        Assert.assertNotNull(et);
     }
 }
