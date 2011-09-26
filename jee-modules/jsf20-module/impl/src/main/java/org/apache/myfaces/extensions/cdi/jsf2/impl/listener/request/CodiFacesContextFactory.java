@@ -20,9 +20,11 @@ package org.apache.myfaces.extensions.cdi.jsf2.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
+import javax.faces.context.FacesContextWrapper;
 import javax.faces.lifecycle.Lifecycle;
 
 /**
@@ -87,12 +89,45 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
      */
     public static FacesContext wrapFacesContext(FacesContext facesContext)
     {
-        if(facesContext instanceof CodiFacesContextWrapper)
+        if(isWrappedAlreadyByCodi(facesContext))
         {
             return facesContext;
         }
+
+        facesContext.getExternalContext().getRequestMap()
+                .put(JsfUtils.FACES_CONTEXT_MANUAL_WRAPPER_KEY, Boolean.TRUE);
+
         //TODO has to be deactivatable
         return new CodiFacesContextWrapper(facesContext);
+    }
+
+    private static boolean isWrappedAlreadyByCodi(FacesContext facesContext)
+    {
+        if(facesContext instanceof FacesContextWrapper)
+        {
+            return containsCodiFacesContextWrapper((FacesContextWrapper) facesContext);
+        }
+        return false;
+    }
+
+    private static boolean containsCodiFacesContextWrapper(FacesContextWrapper facesContext)
+    {
+        if(facesContext == null)
+        {
+            return false;
+        }
+
+        if(facesContext instanceof CodiFacesContextWrapper)
+        {
+            return true;
+        }
+
+        if(facesContext.getWrapped() instanceof FacesContextWrapper)
+        {
+            return containsCodiFacesContextWrapper((FacesContextWrapper)facesContext.getWrapped());
+        }
+
+        return false;
     }
 
     /**

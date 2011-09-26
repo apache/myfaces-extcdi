@@ -47,6 +47,9 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterConte
 @Typed()
 public abstract class JsfUtils
 {
+    public static final String FACES_CONTEXT_MANUAL_WRAPPER_KEY =
+            FacesContext.class.getName() + ":manuallyWrappedByCodi";
+
     private JsfUtils()
     {
         // prevent instantiation

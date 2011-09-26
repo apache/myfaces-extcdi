@@ -400,13 +400,24 @@ public abstract class ConversationUtils
                                     String url,
                                     WindowHandler windowHandler) throws IOException
     {
-        if(isMultipleRedirectDetected(externalContext) || FacesContext.getCurrentInstance().getResponseComplete())
+        //might get called multiple times due to manual wrapping in AccessScopeAwareNavigationHandler#wrapFacesContext
+        //which might happen twice e.g. because
+        //  (with jsf2) there is a wrapper in between which doesn't implement FacesContextWrapper
+        //  (with jsf1.2) there is no way to detected already wrapped instances in a portable way
+        if(isFacesContextManuallyWrapped(externalContext) && isRedirectInterceptedAlready(externalContext) &&
+                !FacesContext.getCurrentInstance().getResponseComplete())
+        {
+            externalContext.redirect(url);
+            return;
+        }
+
+        if(isRedirectInterceptedAlready(externalContext) || FacesContext.getCurrentInstance().getResponseComplete())
         {
             return;
         }
         else
         {
-            redirectPerformed(externalContext);
+            redirectIntercepted(externalContext);
         }
 
         storeCurrentViewIdAsOldViewId(FacesContext.getCurrentInstance());
@@ -426,6 +437,11 @@ public abstract class ConversationUtils
             //TODO log warning in case of project stage dev.
             externalContext.redirect(url);
         }
+    }
+
+    private static boolean isFacesContextManuallyWrapped(ExternalContext externalContext)
+    {
+        return Boolean.TRUE.equals(externalContext.getRequestMap().get(JsfUtils.FACES_CONTEXT_MANUAL_WRAPPER_KEY));
     }
 
     private static void saveFacesMessages(ExternalContext externalContext)
@@ -449,12 +465,12 @@ public abstract class ConversationUtils
         }
     }
 
-    private static boolean isMultipleRedirectDetected(ExternalContext externalContext)
+    private static boolean isRedirectInterceptedAlready(ExternalContext externalContext)
     {
         return externalContext.getRequestMap().containsKey(REDIRECT_PERFORMED_KEY);
     }
 
-    private static void redirectPerformed(ExternalContext externalContext)
+    private static void redirectIntercepted(ExternalContext externalContext)
     {
         externalContext.getRequestMap().put(REDIRECT_PERFORMED_KEY, Boolean.TRUE);
     }

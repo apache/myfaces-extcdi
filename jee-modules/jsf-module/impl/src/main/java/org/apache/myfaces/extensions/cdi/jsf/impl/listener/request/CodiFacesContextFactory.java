@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.listener.request;
 
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils;
 
 import javax.faces.context.FacesContextFactory;
 import javax.faces.context.FacesContext;
@@ -83,7 +84,13 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
         {
             return facesContext;
         }
+
+        facesContext.getExternalContext().getRequestMap()
+                .put(JsfUtils.FACES_CONTEXT_MANUAL_WRAPPER_KEY, Boolean.TRUE);
+
         //TODO has to be deactivatable
+        //might lead to double wrapping (in case of jsf 1.2 and other libs which also wrap the faces-context)
+        //we might need a lazy double wrapper detection + flag in CodiFacesContextWrapper if we see side-effects
         return new CodiFacesContextWrapper(facesContext);
     }
 
