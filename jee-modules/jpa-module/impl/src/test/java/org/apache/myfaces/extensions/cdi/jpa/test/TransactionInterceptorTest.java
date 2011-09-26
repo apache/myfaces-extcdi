@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionHelper;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import sun.rmi.rmic.iiop.Type;
 
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.util.AnnotationLiteral;
