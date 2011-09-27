@@ -22,9 +22,11 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolationHandler;
 import org.apache.myfaces.extensions.cdi.core.api.tools.DefaultAnnotation;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByClass;
 
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
@@ -130,7 +132,18 @@ public abstract class SecurityUtils
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
 
-        addViolationsAsMessage(exception.getViolations());
+        SecurityViolationHandler securityViolationHandler =
+                CodiUtils.getContextualReferenceByClass(SecurityViolationHandler.class, true);
+
+        if(securityViolationHandler != null)
+        {
+            //optional (custom handler) - allows to handle custom implementations of SecurityViolation
+            securityViolationHandler.processSecurityViolations(exception.getViolations());
+        }
+        else
+        {
+            addViolationsAsMessage(exception.getViolations());
+        }
 
         if(allowNavigation)
         {
