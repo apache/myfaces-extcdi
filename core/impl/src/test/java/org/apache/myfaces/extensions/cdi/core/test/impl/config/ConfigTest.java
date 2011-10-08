@@ -63,7 +63,7 @@ public class ConfigTest
                 super.reset();
             }
         }.reset();
-        System.setProperty("org.apache.myfaces.extensions.cdi.ProjectStage", "Production");
+        System.getProperties().remove("org.apache.myfaces.extensions.cdi.ProjectStage");
         System.setProperty("org.apache.myfaces.extensions.cdi.CustomValue", "");
         System.setProperty("ext.test.CustomValue", "");
     }
@@ -174,6 +174,27 @@ public class ConfigTest
     public void testLookupConfigByConventionDefaultValue()
     {
         assertEquals(isCustomValue(), "true");
+    }
+
+    @Test
+    public void testProjectStageSetPropertyFileAndCustomResolver() throws Exception
+    {
+        try
+        {
+            assertEquals(ProjectStageProducer.getInstance().getProjectStage(), ProjectStage.Production);
+
+            reset();
+
+            PropertyFileResolverForProjectStage.activate();
+            assertEquals(ProjectStageProducer.getInstance().getProjectStage(), ProjectStage.IntegrationTest);
+        }
+        finally
+        {
+            PropertyFileResolverForProjectStage.deactivate();
+        }
+
+        reset();
+        assertEquals(ProjectStageProducer.getInstance().getProjectStage(), ProjectStage.Production);
     }
 
     private String isCustomValue()

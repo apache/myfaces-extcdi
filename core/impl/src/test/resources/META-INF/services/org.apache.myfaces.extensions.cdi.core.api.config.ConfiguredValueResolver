@@ -18,3 +18,4 @@
 #####################################################################################
 
 org.apache.myfaces.extensions.cdi.core.test.impl.config.TestConfiguredValueResolver
+org.apache.myfaces.extensions.cdi.core.test.impl.config.PropertyFileResolverForProjectStage

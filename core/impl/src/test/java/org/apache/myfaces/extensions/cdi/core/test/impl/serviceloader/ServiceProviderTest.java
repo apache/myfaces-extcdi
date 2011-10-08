@@ -30,6 +30,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.config.ServiceLoaderResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.config.SystemPropertyResolver;
 import org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.provider.SimpleServiceProviderContext;
+import org.apache.myfaces.extensions.cdi.core.test.impl.config.PropertyFileResolverForProjectStage;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestConfiguredValueResolver;
 import org.apache.myfaces.extensions.cdi.core.test.impl.config.TestInterface;
 import org.testng.Assert;
@@ -142,13 +143,14 @@ public class ServiceProviderTest
 
         Iterator<ConfiguredValueResolver> iterator = extensionList.iterator();
 
-        Assert.assertEquals(extensionList.size(), 5);
+        Assert.assertEquals(extensionList.size(), 6);
 
         Assert.assertTrue(iterator.next() instanceof SystemPropertyResolver);
         Assert.assertTrue(iterator.next() instanceof TestConfiguredValueResolver);
         Assert.assertTrue(iterator.next() instanceof ServiceLoaderResolver);
         Assert.assertTrue(iterator.next() instanceof LocalJndiResolver);
         Assert.assertTrue(iterator.next() instanceof PropertyFileResolver);
+        Assert.assertTrue(iterator.next() instanceof PropertyFileResolverForProjectStage);
     }
 
     @Test
