@@ -177,7 +177,7 @@ public class ConfigTest
     }
 
     @Test
-    public void testProjectStageSetPropertyFileAndCustomResolver() throws Exception
+    public void testProjectStageSetViaPropertyFileAndCustomResolver() throws Exception
     {
         try
         {
