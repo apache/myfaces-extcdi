@@ -164,7 +164,6 @@ public class ProjectStageProducer implements Serializable
 
     /**
      * Resolves the project-stage configured for codi
-     * For more information see <a href="https://issues.apache.org/jira/browse/MYFACES-2545">MYFACES-2545</a>
      * @return the resolved {@link ProjectStage} or <code>null</code> if none defined.
      */
     protected ProjectStage resolveProjectStage()

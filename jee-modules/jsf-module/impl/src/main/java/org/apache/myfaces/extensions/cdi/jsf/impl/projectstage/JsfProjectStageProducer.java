@@ -38,7 +38,10 @@ public class JsfProjectStageProducer extends ProjectStageProducer
     /** web.xml Property to set the ProjectStage */
     private static final String JSF_PROJECT_STAGE_CONFIG_PROPERTY_NAME = "javax.faces.PROJECT_STAGE";
 
-    /** System Property to set the ProjectStage, if not present via the standard way */
+    /**
+     * System Property to set the ProjectStage, if not present via the standard way
+     * For more information see <a href="https://issues.apache.org/jira/browse/MYFACES-2545">MYFACES-2545</a>
+     */
     private static final String JSF_PROJECT_STAGE_SYSTEM_PROPERTY_NAME = "faces.PROJECT_STAGE";
 
     /** JNDI path for the ProjectStage */
