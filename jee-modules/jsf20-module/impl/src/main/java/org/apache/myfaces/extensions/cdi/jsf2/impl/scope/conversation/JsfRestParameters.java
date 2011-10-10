@@ -73,7 +73,10 @@ public class JsfRestParameters extends RestParameters implements Serializable
         if (!currentViewParams.equals(oldViewParams))
         {
             viewParametersForViewId.put(viewId, currentViewParams);
-            return true;
+
+            // only reset the rest context if the oldViewParamaeters were different
+            // but not if they didn't got set yet
+            return oldViewParams != null;
         }
 
         return false;
