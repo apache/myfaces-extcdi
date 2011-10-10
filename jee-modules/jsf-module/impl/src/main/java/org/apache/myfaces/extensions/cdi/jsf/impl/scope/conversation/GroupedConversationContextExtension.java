@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationScoped;
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.RestScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ConversationGroup;
@@ -62,6 +63,7 @@ public class GroupedConversationContextExtension implements Extension, Deactivat
         event.addContext(new ConversationContextAdapter(WindowScoped.class, codiConversationContext, manager));
         event.addContext(new ConversationContextAdapter(ConversationScoped.class, codiConversationContext, manager));
         event.addContext(new ConversationContextAdapter(ViewAccessScoped.class, codiConversationContext, manager));
+        event.addContext(new ConversationContextAdapter(RestScoped.class, codiConversationContext, manager));
     }
 
     /**
@@ -87,7 +89,8 @@ public class GroupedConversationContextExtension implements Extension, Deactivat
             annotationType = qualifier.annotationType();
 
             if(ConversationGroup.class.isAssignableFrom(annotationType) &&
-                    !ConversationScoped.class.isAssignableFrom(bean.getScope()))
+               !(ConversationScoped.class.isAssignableFrom(bean.getScope()) ||
+                 RestScoped.class.isAssignableFrom(bean.getScope())))
             {
                 String errorMessage = "Definition error in class: " + bean.getBeanClass().getName() +
                         "\nIt isn't allowed to use @" + ConversationGroup.class.getName() +

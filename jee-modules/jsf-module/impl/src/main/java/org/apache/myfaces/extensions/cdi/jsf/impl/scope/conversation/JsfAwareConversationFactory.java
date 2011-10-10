@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.RestScoped;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.ConversationFactory;
@@ -71,6 +72,16 @@ public class JsfAwareConversationFactory implements ConversationFactory
             return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
         }
 
+        if(RestScoped.class.isAssignableFrom(conversationKey.getScope()))
+        {
+            conversation = new DefaultConversation(conversationKey,
+                                                   createAndRegisterRestConversationEvaluator(),
+                                                   configuration,
+                                                   this.beanManager);
+
+            return processCreatedConversation(conversation, configuration.isStartConversationEventEnabled());
+        }
+
         conversation = new DefaultConversation(conversationKey,
                                                new TimeoutConversationExpirationEvaluator(
                                                        configuration.getConversationTimeoutInMinutes()),
@@ -91,6 +102,17 @@ public class JsfAwareConversationFactory implements ConversationFactory
         CodiUtils.getContextualReferenceByClass(
                 this.beanManager, ViewAccessConversationExpirationEvaluatorRegistry.class)
                 .addViewAccessConversationExpirationEvaluator(evaluator);
+        return evaluator;
+    }
+
+    private RestConversationExpirationEvaluator createAndRegisterRestConversationEvaluator()
+    {
+        AccessDecisionVoterContext accessDecisionVoterContext =
+                CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
+
+        RestConversationExpirationEvaluator evaluator =
+                new RestConversationExpirationEvaluator(beanManager, accessDecisionVoterContext);
+
         return evaluator;
     }
 

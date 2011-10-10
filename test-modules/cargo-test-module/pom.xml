@@ -316,7 +316,7 @@
                         <artifactId>jetty-maven-plugin</artifactId>
                         <version>${maven.jetty.plugin.version}</version>
                         <configuration>
-                            <scanIntervalSeconds>10</scanIntervalSeconds>
+                            <scanIntervalSeconds>5</scanIntervalSeconds>
                             <webAppConfig>
                                 <contextPath>/${cargo.context}</contextPath>
                             </webAppConfig>                            

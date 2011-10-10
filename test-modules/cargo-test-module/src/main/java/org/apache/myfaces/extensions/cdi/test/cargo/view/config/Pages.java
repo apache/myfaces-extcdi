@@ -51,4 +51,13 @@ public interface Pages extends ViewConfig
         {
         }
     }
+
+    public interface Restscoped extends Pages
+    {
+        @Page
+        public class RestScoped1 implements Restscoped
+        {
+        }
+    }
 }
+
