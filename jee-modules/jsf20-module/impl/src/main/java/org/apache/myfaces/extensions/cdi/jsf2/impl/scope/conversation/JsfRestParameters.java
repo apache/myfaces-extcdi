@@ -65,6 +65,12 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return false;
         }
 
+        if (facesContext.isPostback())
+        {
+            // we ignore POST requests
+            return false;
+        }
+
         String viewId = facesContext.getViewRoot().getViewId();
 
         String currentViewParams = getViewParams(facesContext, viewId);
