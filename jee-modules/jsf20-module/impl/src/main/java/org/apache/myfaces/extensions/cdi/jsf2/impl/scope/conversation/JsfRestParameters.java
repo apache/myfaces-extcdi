@@ -40,6 +40,8 @@ import java.util.HashMap;
 @Specializes
 public class JsfRestParameters extends RestParameters implements Serializable
 {
+    private static final long serialVersionUID = 1349109309042072780L;
+
     /**
      * key= viewId
      * value= concatenated viewParam names + values
@@ -89,6 +91,8 @@ public class JsfRestParameters extends RestParameters implements Serializable
     }
 
     /**
+     * @param facesContext current faces-context
+     * @param viewId current question
      * @return the concatenated String of all viewParamName=viewParamValue of the given viewId
      */
     private String getViewParams(FacesContext facesContext, String viewId)

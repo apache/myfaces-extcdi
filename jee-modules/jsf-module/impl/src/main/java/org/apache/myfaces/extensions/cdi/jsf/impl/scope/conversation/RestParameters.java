@@ -29,6 +29,8 @@ import java.io.Serializable;
 @RequestScoped
 public class RestParameters implements Serializable
 {
+    private static final long serialVersionUID = 3066621432740911704L;
+
     /**
      * Check and update the view parameters of the given viewId.
      *
@@ -38,5 +40,4 @@ public class RestParameters implements Serializable
     {
         return false;
     }
-
 }
