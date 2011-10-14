@@ -34,10 +34,21 @@ public class RestParameters implements Serializable
     /**
      * Check and update the view parameters of the given viewId.
      *
-     * @return <code>true</code> if the viewParameters are now different than at the last invocation
+     *
+     * @return <code>true</code> if the viewParameters are now different than at the last invocation.
+     *         In this default implementation it always returns false!
      */
     public boolean checkForNewViewParameters()
     {
         return false;
     }
+
+    /**
+     * This method will get called to reset the stored viewParameters
+     */
+    public void reset()
+    {
+        // do nothing by default
+    }
+
 }

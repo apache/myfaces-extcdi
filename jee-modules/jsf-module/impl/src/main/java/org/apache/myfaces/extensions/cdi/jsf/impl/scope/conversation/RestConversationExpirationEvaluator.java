@@ -72,7 +72,7 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
      */
     public void expire()
     {
-        // do nothing
+        restParameters.reset();
     }
 
 }

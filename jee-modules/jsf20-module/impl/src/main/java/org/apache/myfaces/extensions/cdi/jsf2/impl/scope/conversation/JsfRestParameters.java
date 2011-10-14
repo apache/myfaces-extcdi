@@ -43,6 +43,11 @@ public class JsfRestParameters extends RestParameters implements Serializable
     private static final long serialVersionUID = 1349109309042072780L;
 
     /**
+     * This flag will be used to remember a storage request;
+     */
+    private boolean resetPending;
+
+    /**
      * key= viewId
      * value= concatenated viewParam names + values
      *
@@ -67,6 +72,7 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return false;
         }
 
+
         if (facesContext.isPostback())
         {
             // we ignore POST requests
@@ -82,10 +88,19 @@ public class JsfRestParameters extends RestParameters implements Serializable
         {
             viewParametersForViewId.put(viewId, currentViewParams);
 
+            if (resetPending)
+            {
+                // if a reset is pending, then we need to expire the context
+                resetPending = false;
+                return true;
+            }
+
             // only reset the rest context if the oldViewParamaeters were different
             // but not if they didn't got set yet
             return oldViewParams != null;
         }
+
+        resetPending = false;
 
         return false;
     }
@@ -115,6 +130,13 @@ public class JsfRestParameters extends RestParameters implements Serializable
         return sb.toString();
     }
 
+    @Override
+    public void reset()
+    {
+        viewParametersForViewId.clear();
+        resetPending = true;
+    }
+
     /**
      * We need to store the view params after render response because
      * we do not get them in the first initial view invocation when
@@ -122,6 +144,12 @@ public class JsfRestParameters extends RestParameters implements Serializable
      */
     public void afterRenderResponse(@Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
     {
+        if (resetPending)
+        {
+            resetPending = false;
+            return;
+        }
+
         FacesContext facesContext = FacesContext.getCurrentInstance();
         String viewId = facesContext.getViewRoot().getViewId();
         viewParametersForViewId.put(viewId, getViewParams(facesContext, viewId));
