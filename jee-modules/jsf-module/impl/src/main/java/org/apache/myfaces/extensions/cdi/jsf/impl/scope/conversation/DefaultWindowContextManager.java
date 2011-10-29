@@ -42,6 +42,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi.WindowH
 import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import java.util.Iterator;
@@ -349,7 +350,14 @@ public class DefaultWindowContextManager implements EditableWindowContextManager
     private void removeWindowContextIdHolderComponent(FacesContext facesContext)
     {
         JsfUtils.resetCaches();
-        Iterator<UIComponent> uiComponents = facesContext.getViewRoot().getChildren().iterator();
+        UIViewRoot viewRoot = facesContext.getViewRoot();
+        if (viewRoot == null)
+        {
+            // if the viewRoot is not yet set, then we don't have anything to remove.
+            return;
+        }
+
+        Iterator<UIComponent> uiComponents = viewRoot.getChildren().iterator();
 
         UIComponent uiComponent;
         while (uiComponents.hasNext())
