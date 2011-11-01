@@ -31,6 +31,7 @@ import javax.faces.view.ViewMetadata;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 /**
  * This class holds information about the last used RestParameters for a given JSF view.
@@ -112,9 +113,18 @@ public class JsfRestParameters extends RestParameters implements Serializable
     {
         Collection<UIViewParameter> currentViewParams = ViewMetadata.getViewParameters(facesContext.getViewRoot());
         StringBuilder sb = new StringBuilder();
+
+        // for sorting the view params
+        TreeSet<String> viewParamNames = new TreeSet<String>();
+
         for (UIViewParameter viewParameter : currentViewParams)
         {
             String viewParamName = viewParameter.getName();
+            viewParamNames.add(viewParamName);
+        }
+
+        for (String viewParamName : viewParamNames)
+        {
             String viewParamValue = facesContext.getExternalContext().getRequestParameterMap().get(viewParamName);
             if (viewParamValue == null)
             {
