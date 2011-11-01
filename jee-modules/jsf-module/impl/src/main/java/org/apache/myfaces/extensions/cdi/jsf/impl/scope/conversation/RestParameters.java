@@ -18,19 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
-import javax.enterprise.context.RequestScoped;
-import java.io.Serializable;
-
-
 /**
  * This class holds information about the last used RestParameters for a given window.
  */
 // this could be @WindowScoped, but due to a bug in OpenWebBeans 1.1.1 and below, we get passivation errors
-@RequestScoped
-public class RestParameters implements Serializable
+public abstract class RestParameters
 {
-    private static final long serialVersionUID = 3066621432740911704L;
-
     /**
      * Check and update the view parameters of the given viewId.
      *
@@ -38,17 +31,10 @@ public class RestParameters implements Serializable
      * @return <code>true</code> if the viewParameters are now different than at the last invocation.
      *         In this default implementation it always returns false!
      */
-    public boolean checkForNewViewParameters()
-    {
-        return false;
-    }
+    public abstract boolean checkForNewViewParameters();
 
     /**
      * This method will get called to reset the stored viewParameters
      */
-    public void reset()
-    {
-        // do nothing by default
-    }
-
+    public abstract void reset();
 }

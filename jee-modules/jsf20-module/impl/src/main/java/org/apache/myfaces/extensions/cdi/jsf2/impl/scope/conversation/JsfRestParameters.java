@@ -24,7 +24,6 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RestParameters;
 
 import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Specializes;
 import javax.faces.component.UIViewParameter;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -37,7 +36,6 @@ import java.util.HashMap;
  * This class holds information about the last used RestParameters for a given JSF view.
  */
 @WindowScoped
-@Specializes
 public class JsfRestParameters extends RestParameters implements Serializable
 {
     private static final long serialVersionUID = 1349109309042072780L;
