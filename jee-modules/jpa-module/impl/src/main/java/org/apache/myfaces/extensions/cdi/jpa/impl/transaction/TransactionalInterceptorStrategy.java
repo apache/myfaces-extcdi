@@ -62,9 +62,11 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
 
     private static final Logger LOGGER = Logger.getLogger(TransactionalInterceptorStrategy.class.getName());
 
-    private @Inject BeanManager beanManager;
+    @Inject
+    private BeanManager beanManager;
 
-    private @Inject TransactionBeanStorage transactionBeanStorage;
+    @Inject
+    private TransactionBeanStorage transactionBeanStorage;
 
 
     /** key=qualifier name, value= reference counter */
@@ -85,24 +87,18 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
 
         // the 'layer' of the transactional invocation, aka the refCounter for the current qualifier
         int transactionLayer = incrementRefCounter(qualifierKey);
+
         if (transactionLayer == 0)
         {
             // 0 indicates that a new Context needs to get started
             transactionBeanStorage.startTransactionScope(qualifierKey);
         }
+
         String previousTransactionKey = transactionBeanStorage.activateTransactionScope(qualifierKey);
 
-        Bean<EntityManager> entityManagerBean = resolveEntityManagerBean(qualifierClass);
+        EntityManager entityManager = resolveEntityManagerForQualifier(qualifierClass);
 
-        EntityManager entityManager = (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
-                                                                beanManager.createCreationalContext(entityManagerBean));
-
-        if (ems.get() == null)
-        {
-            ems.set(new HashMap<String, EntityManager>());
-        }
-        ems.get().put(qualifierKey, entityManager);
-
+        storeEntityManagerForQualifier(qualifierKey, entityManager);
 
         EntityTransaction transaction = entityManager.getTransaction();
 
@@ -139,9 +135,12 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                         }
                         catch (Exception eRollback)
                         {
-                            LOGGER.log(Level.SEVERE,
-                                       "Got additional Exception while subsequently " +
-                                       "rolling back other SQL transactions", eRollback);
+                            if(LOGGER.isLoggable(Level.SEVERE))
+                            {
+                                LOGGER.log(Level.SEVERE,
+                                        "Got additional Exception while subsequently " +
+                                                "rolling back other SQL transactions", eRollback);
+                            }
                         }
                     }
                 }
@@ -238,10 +237,28 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
 
             if (commitFailed)
             {
+                //noinspection ThrowFromFinallyBlock
                 throw firstException;
             }
         }
+    }
 
+    private EntityManager resolveEntityManagerForQualifier(Class<? extends Annotation> qualifierClass)
+    {
+        Bean<EntityManager> entityManagerBean = resolveEntityManagerBean(qualifierClass);
+
+        return (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
+                                                                beanManager.createCreationalContext(entityManagerBean));
+    }
+
+    private void storeEntityManagerForQualifier(String qualifierKey, EntityManager entityManager)
+    {
+        if (ems.get() == null)
+        {
+            ems.set(new HashMap<String, EntityManager>());
+        }
+
+        ems.get().put(qualifierKey, entityManager);
     }
 
     /**
@@ -360,9 +377,7 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
         {
             entityManagerBeans = new HashSet<Bean<?>>();
         }
-        Bean<EntityManager> entityManagerBean = null;
 
-        it:
         for (Bean<?> currentEntityManagerBean : entityManagerBeans)
         {
             Set<Annotation> foundQualifierAnnotations = currentEntityManagerBean.getQualifiers();
@@ -371,12 +386,10 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
             {
                 if (currentQualifierAnnotation.annotationType().equals(qualifierClass))
                 {
-                    entityManagerBean = (Bean<EntityManager>) currentEntityManagerBean;
-                    break it;
+                    return (Bean<EntityManager>) currentEntityManagerBean;
                 }
             }
         }
-        return entityManagerBean;
+        return null;
     }
-
 }

@@ -25,13 +25,13 @@ import javax.enterprise.context.spi.CreationalContext;
  * Holds the information we need store to manage
  * the beans in the {@link TransactionContext}.
  */
-public class TransactionBeanBag<T>
+public class TransactionBeanEntry<T>
 {
     private Contextual<T> bean;
     private T contextualInstance;
     private CreationalContext<T> creationalContext;
 
-    public TransactionBeanBag(Contextual<T> bean, T contextualInstance, CreationalContext<T> creationalContext)
+    public TransactionBeanEntry(Contextual<T> bean, T contextualInstance, CreationalContext<T> creationalContext)
     {
         this.bean = bean;
         this.contextualInstance = contextualInstance;

@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context;
 
 
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionScoped;
+import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 
 import javax.enterprise.context.ContextNotActiveException;
 import javax.enterprise.context.spi.Context;
@@ -45,17 +46,18 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component)
     {
-        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveTransactionContext();
+        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = beanStorage.getActiveTransactionContext();
 
-        if (beanBags == null)
+        if (transactionBeanEntryMap == null)
         {
-            throw new ContextNotActiveException();
+            throw new ContextNotActiveException("Not accessed within a transactional method - use @" +
+                    Transactional.class.getName());
         }
 
-        TransactionBeanBag beanBag = beanBags.get(component);
-        if (beanBag != null)
+        TransactionBeanEntry transactionBeanEntry = transactionBeanEntryMap.get(component);
+        if (transactionBeanEntry != null)
         {
-            return (T) beanBag.getContextualInstance();
+            return (T) transactionBeanEntry.getContextualInstance();
         }
 
         return null;
@@ -63,23 +65,24 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
-        Map<Contextual, TransactionBeanBag> beanBags = beanStorage.getActiveTransactionContext();
+        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = beanStorage.getActiveTransactionContext();
 
-        if (beanBags == null)
+        if (transactionBeanEntryMap == null)
         {
-            throw new ContextNotActiveException();
+            throw new ContextNotActiveException("Not accessed within a transactional method - use @" +
+                    Transactional.class.getName());
         }
 
-        TransactionBeanBag beanBag = beanBags.get(component);
-        if (beanBag != null)
+        TransactionBeanEntry transactionBeanEntry = transactionBeanEntryMap.get(component);
+        if (transactionBeanEntry != null)
         {
-            return (T) beanBag.getContextualInstance();
+            return (T) transactionBeanEntry.getContextualInstance();
         }
 
         // if it doesn't yet exist, we need to create it now!
         T instance = component.create(creationalContext);
-        beanBag = new TransactionBeanBag(component, instance, creationalContext);
-        beanBags.put(component, beanBag);
+        transactionBeanEntry = new TransactionBeanEntry(component, instance, creationalContext);
+        transactionBeanEntryMap.put(component, transactionBeanEntry);
 
         return instance;
     }
@@ -95,12 +98,11 @@ public class TransactionContext implements Context
         {
             return beanStorage.getActiveTransactionContext() != null;
         }
-        catch(ContextNotActiveException cnae)
+        catch (ContextNotActiveException e)
         {
             return false;
         }
     }
-
 
 
 }
