@@ -89,8 +89,7 @@ public class GroupedConversationContextExtension implements Extension, Deactivat
             annotationType = qualifier.annotationType();
 
             if(ConversationGroup.class.isAssignableFrom(annotationType) &&
-               !(ConversationScoped.class.isAssignableFrom(bean.getScope()) ||
-                 RestScoped.class.isAssignableFrom(bean.getScope())))
+                    !ConversationScoped.class.isAssignableFrom(bean.getScope()))
             {
                 String errorMessage = "Definition error in class: " + bean.getBeanClass().getName() +
                         "\nIt isn't allowed to use @" + ConversationGroup.class.getName() +
