@@ -25,7 +25,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Tests for message-filters
  */
 public class MessageFilterTest extends AbstractMessageContextAwareTest
 {

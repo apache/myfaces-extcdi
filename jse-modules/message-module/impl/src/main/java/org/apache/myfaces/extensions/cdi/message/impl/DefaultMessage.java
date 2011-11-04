@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class DefaultMessage extends AbstractMessageWithSeverity
 {

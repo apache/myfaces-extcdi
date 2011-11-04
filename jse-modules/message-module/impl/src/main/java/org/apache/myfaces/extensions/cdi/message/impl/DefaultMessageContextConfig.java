@@ -33,7 +33,7 @@ import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultMessageContextConfig implements MessageContextConfig
 {

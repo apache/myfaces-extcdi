@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.api;
 
 /**
- * @author Manfred Geiler
+ * Classes which implement it can provide the message-text based on the given {@link MessageContext}
  */
 public interface Localizable
 {

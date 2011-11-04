@@ -28,7 +28,7 @@ import org.junit.Test;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Contains all tests for extensibility
  */
 public class ExtensibilityTest extends AbstractMessageContextAwareTest
 {

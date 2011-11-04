@@ -41,8 +41,6 @@ package org.apache.myfaces.extensions.cdi.message.api.payload;
  * if we restore and resolve the final text the result should be: hello: codi
  *
  * this interface is a marker payload
- *
- * @author Gerhard Petracek
  */
 public final class ArgumentDescriptor extends AbstractMessagePayload
 {

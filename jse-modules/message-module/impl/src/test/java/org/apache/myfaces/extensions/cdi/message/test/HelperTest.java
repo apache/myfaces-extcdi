@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Tests for helper classes
  */
 public class HelperTest extends AbstractMessageContextAwareTest
 {

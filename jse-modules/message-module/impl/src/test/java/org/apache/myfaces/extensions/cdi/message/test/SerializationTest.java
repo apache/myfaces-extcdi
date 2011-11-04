@@ -27,7 +27,7 @@ import org.junit.Test;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Tests for the serializable parts
  */
 public class SerializationTest extends AbstractMessageContextAwareTest
 {

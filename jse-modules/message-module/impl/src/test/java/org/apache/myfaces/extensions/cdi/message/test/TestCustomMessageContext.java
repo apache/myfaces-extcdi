@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestCustomMessageContext extends DefaultMessageContext
 {

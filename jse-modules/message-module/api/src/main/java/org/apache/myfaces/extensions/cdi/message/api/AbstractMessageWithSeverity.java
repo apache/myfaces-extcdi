@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Adds severities to the basic behaviour of messages
  */
 public abstract class AbstractMessageWithSeverity extends AbstractMessage implements MessageWithSeverity
 {

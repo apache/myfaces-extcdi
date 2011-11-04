@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.message.api.payload;
 
 /**
  * marker to indicate that a message shouldn't be displayed e.g. to the user
- *
- * @author Gerhard Petracek
  */
 public final class InternalMessage extends AbstractMessagePayload
 {

@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Implementations have to provide the current locale
  */
 public interface LocaleResolver extends Serializable
 {

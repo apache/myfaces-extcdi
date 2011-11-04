@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.message.api;
 
 /**
  * allows to store e.g. messages with the original config (if it is serializable)
- *
- * @author Gerhard Petracek
  */
 public interface MessageContextConfigAware<T>
 {

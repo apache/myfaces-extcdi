@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import org.apache.myfaces.extensions.cdi.message.api.payload.AbstractMessagePayload;
 
 /**
- * @author Gerhard Petracek
+ * Custom message-payload
  */
 class Label extends AbstractMessagePayload
 {

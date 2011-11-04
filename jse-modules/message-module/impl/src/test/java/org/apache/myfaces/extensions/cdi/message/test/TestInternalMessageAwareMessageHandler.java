@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.payload.InternalMessage;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestInternalMessageAwareMessageHandler extends TestInMemoryMessageHandler
 {

@@ -21,8 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import java.io.Serializable;
 
 /**
- * @author Manfred Geiler
- * @author Gerhard Petracek
+ * Implementations are responsible to replace placeholders in a message with the final value
  */
 public interface MessageInterpolator extends Serializable
 {

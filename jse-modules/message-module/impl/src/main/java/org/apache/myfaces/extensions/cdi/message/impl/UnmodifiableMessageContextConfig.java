@@ -27,8 +27,6 @@ import org.apache.myfaces.extensions.cdi.message.api.FormatterFactory;
 
 /**
  * generated
- *
- * @author Gerhard Petracek
  */
 class UnmodifiableMessageContextConfig implements MessageContextConfig
 {

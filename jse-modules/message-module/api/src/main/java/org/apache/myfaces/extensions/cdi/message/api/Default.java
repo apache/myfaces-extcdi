@@ -26,8 +26,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * marker for default implementations (e.g. formatters) to allow a different handling (if needed)
- *
- * @author Gerhard Petracek
  */
 @Target({TYPE})
 @Retention(RUNTIME)

@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.api.payload;
 
 /**
- * @author Gerhard Petracek
+ * Stores {@link MessagePayload} instances for the supported severities
  */
 public interface MessageSeverity
 {

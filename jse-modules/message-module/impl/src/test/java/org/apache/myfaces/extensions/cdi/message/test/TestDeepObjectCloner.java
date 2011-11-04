@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.test;
 import java.io.*;
 
 /**
- * @author Gerhard Petracek
+ * Helper for cloning object graphs
  */
 class TestDeepObjectCloner
 {

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Allows to use names instead of ordinals as placeholder in messages
  */
 public class NamedArgumentMessageInterpolator implements MessageInterpolator
 {

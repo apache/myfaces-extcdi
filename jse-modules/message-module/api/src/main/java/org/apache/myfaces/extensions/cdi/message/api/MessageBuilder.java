@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Helper for building instances of {@link Message}
  */
 public interface MessageBuilder extends Serializable
 {

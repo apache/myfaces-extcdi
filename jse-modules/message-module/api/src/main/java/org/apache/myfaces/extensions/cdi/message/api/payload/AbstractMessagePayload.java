@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.api.payload;
 
 /**
- * @author Gerhard Petracek
+ * Base class as helper for custom implementations of {@link MessagePayload}
  */
 public abstract class AbstractMessagePayload implements MessagePayload
 {

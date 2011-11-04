@@ -22,7 +22,7 @@ import javax.el.ELContext;
 import javax.el.ValueExpression;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public abstract class SimpleELContext extends ELContext
 {

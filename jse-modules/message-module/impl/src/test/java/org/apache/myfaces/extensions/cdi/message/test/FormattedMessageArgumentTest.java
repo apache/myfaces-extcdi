@@ -26,7 +26,7 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Tests for formatters
  */
 public class FormattedMessageArgumentTest extends AbstractMessageContextAwareTest
 {

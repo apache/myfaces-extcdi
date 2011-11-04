@@ -25,8 +25,6 @@ import org.apache.myfaces.extensions.cdi.message.api.Message;
 
 /**
  * just for manual usages (see the test-case)
- *
- * @author Gerhard Petracek
  */
 public class SimpleMessageBuilder extends DefaultMessageBuilder
 {

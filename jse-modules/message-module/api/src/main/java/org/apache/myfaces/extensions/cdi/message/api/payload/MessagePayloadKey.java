@@ -25,8 +25,6 @@ import java.lang.annotation.Target;
 
 /**
  * optional marker to group payload implementations
- *
- * @author Gerhard Petracek
  */
 @Target({TYPE})
 @Retention(RUNTIME)

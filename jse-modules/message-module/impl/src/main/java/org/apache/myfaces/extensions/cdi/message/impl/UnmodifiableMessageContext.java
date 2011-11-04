@@ -29,7 +29,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@link MessageContext} which doesn't support changes
  */
 class UnmodifiableMessageContext implements MessageContext
 {

@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultMessageInterpolator implements MessageInterpolator, Serializable
 {

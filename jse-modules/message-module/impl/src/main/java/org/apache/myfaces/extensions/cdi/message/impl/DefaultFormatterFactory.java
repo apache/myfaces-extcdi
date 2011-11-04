@@ -33,9 +33,6 @@ import java.util.logging.Logger;
 
 /**
  * TODO change to producer
- *
- * @author Manfred Geiler
- * @author Gerhard Petracek
  */
 public class DefaultFormatterFactory implements FormatterFactory
 {

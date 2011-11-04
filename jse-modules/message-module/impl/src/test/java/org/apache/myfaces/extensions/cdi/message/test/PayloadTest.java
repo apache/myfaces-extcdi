@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Tests which check message-payload
  */
 public class PayloadTest extends AbstractMessageContextAwareTest
 {

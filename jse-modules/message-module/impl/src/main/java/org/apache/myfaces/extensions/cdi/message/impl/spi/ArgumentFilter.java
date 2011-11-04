@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.impl.spi;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Allows to filter restricted arguments
  */
 public interface ArgumentFilter extends Serializable
 {

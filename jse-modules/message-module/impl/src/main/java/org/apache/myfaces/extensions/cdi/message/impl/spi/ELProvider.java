@@ -24,8 +24,6 @@ import java.io.Serializable;
 
 /**
  * Decouples codi from an el-implementation which provides a simple-el-context e.g. like juel
- *
- * @author Gerhard Petracek
  */
 public interface ELProvider extends Serializable
 {

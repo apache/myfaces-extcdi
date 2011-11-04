@@ -42,7 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultMessageBuilder implements MessageBuilder
 {

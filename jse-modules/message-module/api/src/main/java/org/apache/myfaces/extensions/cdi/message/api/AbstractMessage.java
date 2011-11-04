@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * @author Gerhard Petracek
+ * Basic behaviour for message implementations
  */
 public abstract class AbstractMessage implements Message, MessageContextConfigAware<Message>
 {

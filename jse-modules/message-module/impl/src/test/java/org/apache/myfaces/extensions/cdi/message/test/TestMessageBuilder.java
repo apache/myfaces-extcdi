@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageBuilder;
 import org.apache.myfaces.extensions.cdi.message.impl.SimpleMessageBuilder;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestMessageBuilder extends SimpleMessageBuilder
 {

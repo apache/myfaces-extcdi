@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.impl;
 import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class DefaultArgumentFilter implements ArgumentFilter
 {

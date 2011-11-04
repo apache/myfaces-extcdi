@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestInMemoryMessageHandler extends AbstractMessageHandler
 {

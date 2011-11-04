@@ -32,8 +32,6 @@ import java.util.Set;
 /**
  * to create a new instance inject the singleton and call cloneContext -
  * so it's possible to use it e.g. in producer methods
- *
- * @author Gerhard Petracek
  */
 public class DefaultMessageContext implements MessageContext
 {

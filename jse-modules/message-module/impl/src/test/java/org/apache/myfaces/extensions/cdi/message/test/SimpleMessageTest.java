@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Tests for all simple use-cases
  */
 public class SimpleMessageTest extends AbstractMessageContextAwareTest
 {

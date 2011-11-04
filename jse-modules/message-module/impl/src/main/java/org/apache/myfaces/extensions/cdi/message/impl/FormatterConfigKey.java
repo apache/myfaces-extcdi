@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Key for storing formatter-configs
  */
 class FormatterConfigKey implements Serializable
 {

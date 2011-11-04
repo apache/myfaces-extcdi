@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultLocaleResolver implements LocaleResolver, Serializable
 {

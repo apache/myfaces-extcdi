@@ -24,8 +24,6 @@ import java.io.Serializable;
 
 /**
  * an implementation is allowed to store messages directly or to forward messages
- *
- * @author Gerhard Petracek
  */
 public interface MessageHandler extends Serializable
 {

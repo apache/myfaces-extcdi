@@ -22,8 +22,6 @@ import java.util.List;
 
 /**
  * generic interface to add configs (for all artifacts which are configureable)
- *
- * @author Gerhard Petracek
  */
 public interface ConfigRegistry<T, B>
 {

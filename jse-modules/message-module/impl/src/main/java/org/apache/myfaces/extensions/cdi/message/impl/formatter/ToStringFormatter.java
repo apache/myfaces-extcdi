@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Default {@link Formatter} which is aware of {@link Localizable} values
  */
 @Default
 class ToStringFormatter implements Formatter<Object>, Serializable

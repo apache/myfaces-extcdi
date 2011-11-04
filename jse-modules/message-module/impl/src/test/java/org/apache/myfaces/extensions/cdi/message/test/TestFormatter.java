@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class TestFormatter implements Formatter<Object>, Serializable
 {

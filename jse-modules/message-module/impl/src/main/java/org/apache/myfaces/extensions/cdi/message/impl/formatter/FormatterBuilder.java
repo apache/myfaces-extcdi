@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.impl.formatter;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 
 /**
- * @author Gerhard Petracek
+ * Helper for building {@link Formatter} instances for the given type
  */
 public class FormatterBuilder
 {

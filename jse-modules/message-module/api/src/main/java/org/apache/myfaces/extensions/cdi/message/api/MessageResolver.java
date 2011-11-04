@@ -24,7 +24,7 @@ import java.util.Map;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Implementations have to resolve the text stored for a given key in the message-source they are aware of
  */
 public interface MessageResolver extends Serializable
 {

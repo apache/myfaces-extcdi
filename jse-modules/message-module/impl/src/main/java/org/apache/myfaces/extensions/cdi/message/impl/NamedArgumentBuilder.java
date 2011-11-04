@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Helper for creating named-arguments
  */
 public class NamedArgumentBuilder
 {

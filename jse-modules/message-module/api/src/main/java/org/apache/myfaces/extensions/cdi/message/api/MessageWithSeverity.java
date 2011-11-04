@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**
  * convenience interface
- * 
- * @author Gerhard Petracek
  */
 public interface MessageWithSeverity extends Message
 {

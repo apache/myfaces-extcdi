@@ -33,8 +33,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Manfred Geiler
- * @author Gerhard Petracek
+ * Allows to use EL-expressions in messages
  */
 public class ELAwareMessageInterpolator extends AbstractFormatterAwareMessageInterpolator
 {

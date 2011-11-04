@@ -23,8 +23,6 @@ import java.util.Locale;
 
 /**
  * creates and initialize a formatter for a given type
- *
- * @author Gerhard Petracek
  */
 public interface FormatterFactory extends ConfigRegistry<Formatter, FormatterFactory>, Serializable
 {

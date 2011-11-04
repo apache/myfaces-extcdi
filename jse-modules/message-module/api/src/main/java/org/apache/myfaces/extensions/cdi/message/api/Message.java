@@ -24,8 +24,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Manfred Geiler
- * @author Gerhard Petracek
+ * Basic interface for all message-types
  */
 public interface Message extends Localizable, Serializable
 {

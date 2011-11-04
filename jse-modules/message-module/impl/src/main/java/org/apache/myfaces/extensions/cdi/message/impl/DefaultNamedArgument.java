@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.api.NamedArgument;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultNamedArgument implements NamedArgument
 {

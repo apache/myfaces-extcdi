@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.api.Localizable;
 import org.apache.myfaces.extensions.cdi.message.api.Formatter;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 abstract class AbstractFormatterAwareMessageInterpolator implements MessageInterpolator
 {

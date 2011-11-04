@@ -28,8 +28,6 @@ import java.io.Serializable;
  * ({@link org.apache.myfaces.extensions.cdi.message.api.MessageBuilder})
  * in all other cases you can also use {@link org.apache.myfaces.extensions.cdi.message.api.MessageResolver}
  * e.g. to customize messages e.g. based on payload
- *
- * @author Gerhard Petracek
  */
 public interface MessageFactory extends Serializable
 {

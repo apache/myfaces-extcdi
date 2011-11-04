@@ -22,11 +22,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
- */
-
-/**
- * @author Gerhard Petracek
+ * Helper for creating named-arguments
  */
 public final class NamedArguments
 {

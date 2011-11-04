@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @author Gerhard Petracek
+ * Basic behaviour for message-handler implementations
  */
 public abstract class AbstractMessageHandler implements MessageHandler
 {

@@ -29,8 +29,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
- * @author Manfred Geiler
- * @author Gerhard Petracek
+ * {@link Formatter} which is responsible for numbers
  */
 class DefaultNumberFormatter implements Formatter<Number>
 {

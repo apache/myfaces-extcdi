@@ -22,8 +22,6 @@ import java.io.Serializable;
 
 /**
  * a key/value based config
- *
- * @author Gerhard Petracek
  */
 public interface GenericConfig extends Serializable
 {

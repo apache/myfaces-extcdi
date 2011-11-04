@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.impl.DefaultMessageContext;
 import org.junit.Before;
 
 /**
- * @author Gerhard Petracek
+ * Base implementation for message-tests
  */
 public abstract class AbstractMessageContextAwareTest
 {

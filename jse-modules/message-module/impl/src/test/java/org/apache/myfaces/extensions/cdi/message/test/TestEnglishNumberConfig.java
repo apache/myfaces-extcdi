@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestEnglishNumberConfig implements GenericConfig
 {

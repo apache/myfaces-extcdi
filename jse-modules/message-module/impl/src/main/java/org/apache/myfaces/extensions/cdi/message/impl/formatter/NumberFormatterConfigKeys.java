@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.message.impl.formatter;
 
 /**
- * @author Gerhard Petracek
+ * Config for {@link org.apache.myfaces.extensions.cdi.message.api.Formatter} implementations which handle numbers
  */
 public interface NumberFormatterConfigKeys
 {

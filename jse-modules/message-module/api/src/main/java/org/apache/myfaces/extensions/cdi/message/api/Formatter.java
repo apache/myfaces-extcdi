@@ -23,9 +23,6 @@ import java.io.Serializable;
 /**
  * usually a formatter is responsible for one type and allows to format
  * this type as string
- *
- * @author Gerhard Petracek
- * @author Manfred Geiler
  */
 public interface Formatter<T> extends Serializable
 {

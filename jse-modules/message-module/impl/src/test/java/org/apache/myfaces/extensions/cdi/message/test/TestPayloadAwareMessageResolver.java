@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.message.api.payload.MessageSeverity;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestPayloadAwareMessageResolver implements MessageResolver
 {

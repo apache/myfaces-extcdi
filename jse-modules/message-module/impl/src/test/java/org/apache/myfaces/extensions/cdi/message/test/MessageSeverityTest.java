@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Tests which check the message-severity payload
  */
 public class MessageSeverityTest extends AbstractMessageContextAwareTest
 {

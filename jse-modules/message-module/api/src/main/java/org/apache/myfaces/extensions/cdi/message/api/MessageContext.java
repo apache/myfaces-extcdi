@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.message.api;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Central context for handling messages
  */
 public interface MessageContext extends LocaleResolver, MessageHandler, Serializable
 {

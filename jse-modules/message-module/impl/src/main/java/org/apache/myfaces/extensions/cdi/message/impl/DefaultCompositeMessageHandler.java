@@ -32,7 +32,7 @@ import java.util.HashSet;
 import java.util.Collections;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultCompositeMessageHandler implements CompositeMessageHandler, Serializable
 {

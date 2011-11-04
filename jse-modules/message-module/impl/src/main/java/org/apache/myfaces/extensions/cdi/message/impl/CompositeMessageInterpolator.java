@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageInterpolator;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class CompositeMessageInterpolator implements MessageInterpolator, Serializable
 {

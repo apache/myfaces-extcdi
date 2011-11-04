@@ -23,8 +23,6 @@ import java.util.List;
 /**
  * allows to add message filters to all message handlers via the fluent api easily
  * (just one handler is exposed via the api)
- *
- * @author Gerhard Petracek
  */
 public interface CompositeMessageHandler extends MessageHandler
 {

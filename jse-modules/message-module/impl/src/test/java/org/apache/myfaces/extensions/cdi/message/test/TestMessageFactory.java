@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.api.MessageFactory;
 import org.apache.myfaces.extensions.cdi.message.api.payload.MessagePayload;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TestMessageFactory implements MessageFactory
 {

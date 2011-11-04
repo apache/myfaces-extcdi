@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.message.api;
 
 /**
  * TODO add to config (multiple message handlers are possible)
- *
- * @author Gerhard Petracek
  */
 public interface MessageFilter
 {

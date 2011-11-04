@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Config for customizing a {@link MessageContext}
  */
 public interface MessageContextConfig extends Serializable
 {
