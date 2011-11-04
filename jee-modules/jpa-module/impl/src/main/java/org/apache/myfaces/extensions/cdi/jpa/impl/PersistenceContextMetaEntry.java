@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jpa.impl;
 
 /**
- * @author Gerhard Petracek
+ * Entry which stores information about a {@link javax.persistence.PersistenceContext}
  */
 class PersistenceContextMetaEntry
 {

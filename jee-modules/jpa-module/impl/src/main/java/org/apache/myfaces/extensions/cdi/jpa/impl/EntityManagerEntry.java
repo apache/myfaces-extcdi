@@ -24,8 +24,6 @@ import javax.persistence.EntityManager;
  * separated from {@link PersistenceContextMetaEntry}
  * to allow the usage of {@link PersistenceContextMetaEntry} in the cache
  * (without a reference to the entity manager)
- * 
- * @author Gerhard Petracek
  */
 class EntityManagerEntry
 {

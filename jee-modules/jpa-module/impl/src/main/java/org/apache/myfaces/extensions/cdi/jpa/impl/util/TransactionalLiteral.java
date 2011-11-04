@@ -28,8 +28,6 @@ import java.lang.annotation.Annotation;
  * can be used by add-ons
  * 
  * Literal for the {@link org.apache.myfaces.extensions.cdi.jpa.api.Transactional} annotation.
- *
- * @author Gerhard Petracek
  */
 public class TransactionalLiteral extends AnnotationLiteral<Transactional> implements Transactional
 {
