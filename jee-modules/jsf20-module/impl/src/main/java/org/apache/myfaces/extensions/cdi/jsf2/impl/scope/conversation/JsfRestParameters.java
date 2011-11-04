@@ -25,6 +25,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RestParamet
 
 import javax.enterprise.event.Observes;
 import javax.faces.component.UIViewParameter;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.view.ViewMetadata;
@@ -82,7 +83,12 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return false;
         }
 
-        String viewId = facesContext.getViewRoot().getViewId();
+        String viewId = getViewId(facesContext);
+
+        if (viewId == null)
+        {
+            return false;
+        }
 
         String currentViewParams = getViewParams(facesContext, viewId);
         String oldViewParams = viewParametersForViewId.get(viewId);
@@ -169,7 +175,27 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return;
         }
 
-        String viewId = facesContext.getViewRoot().getViewId();
-        viewParametersForViewId.put(viewId, getViewParams(facesContext, viewId));
+        String viewId = getViewId(facesContext);
+        if (viewId != null)
+        {
+            viewParametersForViewId.put(viewId, getViewParams(facesContext, viewId));
+        }
     }
+
+
+    private String getViewId(FacesContext facesContext)
+    {
+        String viewId = null;
+        if (facesContext != null)
+        {
+            UIViewRoot viewRoot = facesContext.getViewRoot();
+            if (viewRoot != null)
+            {
+                viewId = viewRoot.getViewId();
+            }
+        }
+
+        return viewId;
+    }
+
 }
