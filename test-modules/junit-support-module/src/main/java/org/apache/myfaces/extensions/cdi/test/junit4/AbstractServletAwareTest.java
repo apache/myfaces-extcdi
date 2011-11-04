@@ -23,7 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * @author Gerhard Petracek
+ * {@link AbstractServletAwareTestStrategy} with JUnit lifecycle callbacks
  */
 public abstract class AbstractServletAwareTest extends AbstractServletAwareTestStrategy
 {
