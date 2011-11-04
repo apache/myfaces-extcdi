@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.Window
 import java.util.Collection;
 
 /**
- * @author Gerhard Petracek
+ * Allows to implement custom implementations of {@link WindowContextManager}
  */
 public interface EditableWindowContextManager extends WindowContextManager
 {
