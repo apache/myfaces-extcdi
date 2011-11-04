@@ -26,10 +26,8 @@ import javax.enterprise.inject.Typed;
 
 /**
  * Removes support of dependency injection for a higher performances if it isn't needed.
- *
- * @author Gerhard Petracek
  */
-//TODO
+//TODO cleanup
 @Typed()
 public abstract class AbstractSimpleCargoTestStrategy extends AbstractContainerAwareCargoTestStrategy
 {

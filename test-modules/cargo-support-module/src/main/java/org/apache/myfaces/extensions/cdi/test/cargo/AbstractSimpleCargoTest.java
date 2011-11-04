@@ -23,7 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * @author Gerhard Petracek
+ * Base class for cargo tests
  */
 public abstract class AbstractSimpleCargoTest extends AbstractSimpleCargoTestStrategy
 {

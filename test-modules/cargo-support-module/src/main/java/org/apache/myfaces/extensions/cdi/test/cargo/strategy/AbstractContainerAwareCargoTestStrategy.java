@@ -27,10 +27,9 @@ import org.apache.myfaces.extensions.cdi.test.strategy.AbstractJsfAwareTestStrat
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
- * @author Jakob Korherr
+ * Defines the basic env. for Cargo tests for JSF applications
  */
-//TODO
+//TODO cleanup
 @Typed()
 public abstract class AbstractContainerAwareCargoTestStrategy extends AbstractJsfAwareTestStrategy
 {

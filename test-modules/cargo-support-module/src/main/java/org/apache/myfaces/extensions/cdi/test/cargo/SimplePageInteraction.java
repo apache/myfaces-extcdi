@@ -40,7 +40,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * @author Gerhard Petracek
+ * Helper for interacting with HTML-Unit
  */
 @Typed()
 public class SimplePageInteraction

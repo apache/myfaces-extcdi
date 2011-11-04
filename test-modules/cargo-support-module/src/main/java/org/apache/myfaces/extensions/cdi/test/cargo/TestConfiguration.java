@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.test.cargo;
 import com.gargoylesoftware.htmlunit.WebClient;
 
 /**
- * @author Gerhard Petracek
+ * Interface for Cargo-configs
  */
 public interface TestConfiguration
 {

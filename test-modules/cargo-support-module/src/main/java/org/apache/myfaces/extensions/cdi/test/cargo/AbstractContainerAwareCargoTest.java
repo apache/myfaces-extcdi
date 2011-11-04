@@ -23,7 +23,7 @@ import org.junit.After;
 import org.junit.Before;
 
 /**
- * @author Gerhard Petracek
+ * {@link AbstractContainerAwareCargoTestStrategy} with JUnit lifecycle callbacks
  */
 public abstract class AbstractContainerAwareCargoTest extends AbstractContainerAwareCargoTestStrategy
 {
