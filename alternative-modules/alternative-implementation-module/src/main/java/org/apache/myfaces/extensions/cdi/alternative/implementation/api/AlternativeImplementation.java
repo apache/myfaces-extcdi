@@ -36,8 +36,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * However, since the config classes aren't abstract or have a special interface,
  * it's required to register the custom class in a file called:
  * META-INF/services/org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig
- *
- * @author Gerhard Petracek
  */
 @Target({TYPE})
 @Retention(RUNTIME)

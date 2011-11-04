@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueDescript
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Implementation descriptor
  */
 @Typed()
 class ConfiguredClassDescriptor implements ConfiguredValueDescriptor<Class, Object>

@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Extension for filtering beans in a portable manner
  */
 public class AlternativeImplementationExtension implements Extension
 {

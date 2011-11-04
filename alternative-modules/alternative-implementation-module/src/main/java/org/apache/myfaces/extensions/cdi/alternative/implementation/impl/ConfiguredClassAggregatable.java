@@ -25,7 +25,7 @@ import javax.enterprise.inject.Typed;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Helper for collecting multiple implementations
  */
 @Typed()
 class ConfiguredClassAggregatable<T> implements Aggregatable<T>
