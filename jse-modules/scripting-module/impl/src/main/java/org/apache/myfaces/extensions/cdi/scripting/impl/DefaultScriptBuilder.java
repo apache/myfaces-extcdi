@@ -35,7 +35,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * @author Gerhard Petracek
+ * Simple script builder
  */
 class DefaultScriptBuilder implements ScriptBuilder
 {

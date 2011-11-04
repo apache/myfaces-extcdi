@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.UnmodifiableMap;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Helper for using server-side scripting within EL-expressions
  */
 @Typed()
 class ExpressionLanguageSelectionMap extends UnmodifiableMap<String, Object>

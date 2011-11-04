@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.scripting.api.language;
 
 /**
- * @author Gerhard Petracek
+ * Type-safe language key
  */
 public interface JavaScript extends Language
 {

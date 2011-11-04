@@ -22,7 +22,7 @@ import javax.enterprise.inject.Typed;
 import java.util.HashMap;
 
 /**
- * @author Gerhard Petracek
+ * Helper used by {@link ScriptHelperMap}
  */
 @Typed()
 class ArgumentAwareScriptHelperMap extends ScriptHelperMap

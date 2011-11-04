@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.language;
 import org.apache.myfaces.extensions.cdi.scripting.impl.spi.LanguageBean;
 
 /**
- * @author Gerhard Petracek
+ * Base implementation of {@link LanguageBean}
  */
 public abstract class AbstractLanguageBean implements LanguageBean
 {

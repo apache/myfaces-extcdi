@@ -36,7 +36,7 @@ import javax.inject.Named;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Producer for scripting artifacts
  */
 //TODO producers have to create serializable instances
 

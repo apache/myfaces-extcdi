@@ -29,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.*;
 
 /**
- * @author Gerhard Petracek
+ * Qualifier for injecting a {@link ScriptExecutor}
  */
 @Qualifier
 

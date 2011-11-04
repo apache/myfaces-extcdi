@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * A language manager returns the name for the script-engine for a given type-safe language key
  */
 public interface LanguageManager extends Serializable
 {

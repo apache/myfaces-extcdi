@@ -35,7 +35,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Extensible default implementation of {@link LanguageManager}
  */
 @ApplicationScoped
 public class DefaultLanguageManager implements LanguageManager

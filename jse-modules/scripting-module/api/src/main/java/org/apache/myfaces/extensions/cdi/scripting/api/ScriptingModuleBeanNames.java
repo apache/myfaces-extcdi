@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.scripting.api;
 
 /**
- * @author Gerhard Petracek
+ * Names of CODI-beans resolvable by name
  */
 public interface ScriptingModuleBeanNames
 {

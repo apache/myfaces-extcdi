@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.scripting.impl.spi.ExternalExpressionIn
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Placeholder which returns the script as it is
  */
 @Typed()
 class DefaultExternalExpressionInterpreter implements ExternalExpressionInterpreter

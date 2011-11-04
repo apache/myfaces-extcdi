@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Helper for executing scripts
  */
 public interface ScriptExecutor extends Serializable
 {

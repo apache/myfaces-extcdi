@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 import javax.inject.Singleton;
 
 /**
- * @author Gerhard Petracek
+ * Type-safe language configuration
  */
 @Singleton
 public class FreeMarkerLanguageBean extends AbstractLanguageBean

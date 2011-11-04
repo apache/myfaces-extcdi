@@ -30,7 +30,7 @@ import javax.script.ScriptException;
 import java.io.Reader;
 
 /**
- * @author Gerhard Petracek
+ * Serializable {@link ScriptEngine}
  */
 @Typed()
 class InjectableScriptEngine implements ScriptEngine

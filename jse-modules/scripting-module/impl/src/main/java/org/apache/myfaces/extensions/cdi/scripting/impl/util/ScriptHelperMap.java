@@ -31,7 +31,7 @@ import javax.script.Bindings;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Basic helper for using server-side scripting within EL-expressions
  */
 @Typed()
 class ScriptHelperMap extends UnmodifiableMap<String, Object>

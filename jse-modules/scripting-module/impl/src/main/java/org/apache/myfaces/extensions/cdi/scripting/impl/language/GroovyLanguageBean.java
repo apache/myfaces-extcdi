@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Groovy;
 import javax.inject.Singleton;
 
 /**
- * @author Gerhard Petracek
+ * Type-safe language configuration
  */
 @Singleton
 public class GroovyLanguageBean extends AbstractLanguageBean

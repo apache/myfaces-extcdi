@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.scripting.api.language.Java;
 import javax.inject.Singleton;
 
 /**
- * @author Gerhard Petracek
+ * Type-safe language configuration
  */
 @Singleton
 public class BeanShellLanguageBean extends AbstractLanguageBean

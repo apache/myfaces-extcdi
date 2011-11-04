@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.scripting.impl.spi;
 import org.apache.myfaces.extensions.cdi.scripting.api.language.Language;
 
 /**
- * @author Gerhard Petracek
+ * Allows to provide custom configurations for scripting languages
  */
 public interface LanguageBean extends Language
 {

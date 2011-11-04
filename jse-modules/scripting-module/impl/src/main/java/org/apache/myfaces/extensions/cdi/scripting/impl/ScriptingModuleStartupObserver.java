@@ -27,7 +27,7 @@ import javax.enterprise.event.Observes;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
+ * Startup observer
  */
 @ApplicationScoped
 public class ScriptingModuleStartupObserver extends AbstractStartupObserver

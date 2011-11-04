@@ -22,7 +22,7 @@ import javax.script.Bindings;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Helper for building scripts
  */
 public interface ScriptBuilder extends Serializable
 {

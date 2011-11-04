@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.scripting.impl.spi;
 
 /**
- * @author Gerhard Petracek
+ * Allows to pre-process scripts e.g. for replacing EL-expressions with the evaluated values
  */
 public interface ExternalExpressionInterpreter
 {

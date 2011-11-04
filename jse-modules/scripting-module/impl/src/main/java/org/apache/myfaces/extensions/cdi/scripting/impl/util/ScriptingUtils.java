@@ -29,7 +29,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
 /**
- * @author Gerhard Petracek
+ * Helper methods for scripting artifacts
  */
 @Typed()
 public abstract class ScriptingUtils

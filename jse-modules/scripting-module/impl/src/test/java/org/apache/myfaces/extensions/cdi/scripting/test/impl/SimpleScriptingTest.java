@@ -35,7 +35,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 /**
- * @author Gerhard Petracek
+ * Tests of injecting scripting artifacts
  */
 @RunWith(JUnit4.class)
 public class SimpleScriptingTest extends AbstractCdiAwareTest

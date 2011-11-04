@@ -33,7 +33,7 @@ import javax.script.ScriptEngine;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Simple script executor
  */
 @Typed()
 class DefaultScriptExecutor implements ScriptExecutor

@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.scripting.api.language;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Type-safe language key
  */
 public interface Language extends Serializable
 {
