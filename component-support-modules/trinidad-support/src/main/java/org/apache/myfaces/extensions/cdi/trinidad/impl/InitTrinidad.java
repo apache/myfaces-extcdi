@@ -28,8 +28,6 @@ import javax.enterprise.event.Observes;
 
 /**
  * Workaround for initializing the RenderingContext of Trinidad
- *
- * @author Gerhard Petracek
  */
 public class InitTrinidad
 {

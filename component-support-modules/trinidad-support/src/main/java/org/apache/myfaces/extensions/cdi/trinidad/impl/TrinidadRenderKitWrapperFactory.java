@@ -24,7 +24,7 @@ import javax.inject.Singleton;
 import javax.faces.render.RenderKit;
 
 /**
- * @author Gerhard Petracek
+ * {@link RenderKitWrapperFactory} for wrapping the {@link RenderKit} with {@link TrinidadRenderKitWrapper}
  */
 @Singleton
 public class TrinidadRenderKitWrapperFactory implements RenderKitWrapperFactory

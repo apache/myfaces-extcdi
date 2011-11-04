@@ -38,7 +38,7 @@ import java.io.Writer;
 import java.io.OutputStream;
 
 /**
- * @author Gerhard Petracek
+ * Intercepted {@link RenderKit} for Trinidad
  */
 @Typed()
 class TrinidadRenderKitWrapper extends RenderKit
