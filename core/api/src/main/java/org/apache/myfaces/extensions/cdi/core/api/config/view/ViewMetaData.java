@@ -26,8 +26,6 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 
 /**
  * This meta-annotation allows to create custom meta-data which can be used for view-configs.
- *
- * @author Gerhard Petracek
  */
 @Target({ANNOTATION_TYPE})
 @Retention(RUNTIME)

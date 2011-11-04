@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterCo
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 
 /**
- * @author Gerhard Petracek
+ * Interface which allows to provide a custom {@link AccessDecisionVoterContext} implementation
  */
 public interface EditableAccessDecisionVoterContext extends AccessDecisionVoterContext
 {

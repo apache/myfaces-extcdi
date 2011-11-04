@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.Advanced;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * @author Gerhard Petracek
+ * Allows to create instances of {@link Advanced}
  */
 public class AdvancedLiteral extends AnnotationLiteral<Advanced> implements Advanced
 {

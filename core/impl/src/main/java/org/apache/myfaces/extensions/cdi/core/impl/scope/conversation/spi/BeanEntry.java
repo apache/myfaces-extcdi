@@ -23,7 +23,7 @@ import javax.enterprise.inject.spi.Bean;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Stores a conversation scoped bean instance and it's configuration
  */
 public interface BeanEntry<T> extends Serializable
 {

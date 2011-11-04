@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 
 /**
  * Base class for all events related to {@link WindowContext}.
- *
- * @author Gerhard Petracek
  */
 public abstract class WindowContextEvent
 {

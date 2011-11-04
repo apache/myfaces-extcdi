@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Service-provider with additional features
  */
 @Typed()
 @SuppressWarnings({"unchecked"})

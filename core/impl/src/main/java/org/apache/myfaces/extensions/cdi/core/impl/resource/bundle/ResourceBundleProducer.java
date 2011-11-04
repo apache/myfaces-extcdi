@@ -29,7 +29,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Producer for type-safe {@link ResourceBundle}
  */
 @ApplicationScoped
 public class ResourceBundleProducer

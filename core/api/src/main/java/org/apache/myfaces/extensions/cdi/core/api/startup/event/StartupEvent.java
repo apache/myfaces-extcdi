@@ -23,8 +23,6 @@ import java.util.Map;
 
 /**
  * Event which will be fired during the startup-process as soon as the target environment is up and running.
- *
- * @author Gerhard Petracek
  */
 public interface StartupEvent
 {

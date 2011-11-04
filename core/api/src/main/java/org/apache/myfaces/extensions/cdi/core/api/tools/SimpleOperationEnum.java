@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.tools;
 
 /**
- * @author Gerhard Petracek
+ * Operations supported by {@link AbstractPropertyExpressionInterpreter}
  */
 enum SimpleOperationEnum
 {

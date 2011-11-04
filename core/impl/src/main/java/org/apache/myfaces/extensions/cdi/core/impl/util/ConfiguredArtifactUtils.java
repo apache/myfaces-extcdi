@@ -41,7 +41,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Helper for the lookup of configured values
  */
 @Typed()
 public abstract class ConfiguredArtifactUtils

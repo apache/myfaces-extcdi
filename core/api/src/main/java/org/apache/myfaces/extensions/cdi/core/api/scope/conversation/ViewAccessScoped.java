@@ -30,8 +30,6 @@ import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * The scope is active as long as it's accessed by a view.
- *
- * @author Gerhard Petracek
  */
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)

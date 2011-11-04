@@ -22,8 +22,6 @@ import java.util.Set;
 
 /**
  * Allows to handle custom implementations of {@link SecurityViolation}
- *
- * @author Gerhard Petracek
  */
 public interface SecurityViolationHandler
 {

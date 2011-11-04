@@ -28,8 +28,6 @@ import java.io.Serializable;
  * to use the service-loader approach. Furthermore, {@link AbstractClassDeactivator} is a convenience class which
  * allows an easier implementation. All classes which implement {@link Deactivatable} in-/directly, can be deactivated
  * with this mechanism. For all other classes/beans, you can use the veto mechanism provided by CDI.
- *
- * @author Gerhard Petracek
  */
 public interface ClassDeactivator extends Serializable
 {

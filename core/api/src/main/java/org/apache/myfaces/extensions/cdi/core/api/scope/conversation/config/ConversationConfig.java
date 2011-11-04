@@ -26,8 +26,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Configuration for CODI conversations - it's customizable via the @Alternative or @Specializes mechanism of CDI.
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class ConversationConfig extends AbstractAttributeAware implements CodiConfig

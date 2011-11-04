@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Helper for handling strings
  */
 @Typed()
 public class StringUtils

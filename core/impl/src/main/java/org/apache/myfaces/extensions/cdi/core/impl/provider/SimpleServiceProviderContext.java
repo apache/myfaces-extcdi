@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Simple {@link ServiceProviderContext} which unifies the handling of class-loaders
  */
 @Typed()
 public class SimpleServiceProviderContext implements ServiceProviderContext

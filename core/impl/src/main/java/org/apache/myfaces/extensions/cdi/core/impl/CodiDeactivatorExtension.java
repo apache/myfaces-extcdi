@@ -33,8 +33,6 @@ import java.util.logging.Logger;
 
 /**
  * Allows the deactivation of interceptors
- * 
- * @author Gerhard Petracek
  */
 public class CodiDeactivatorExtension implements Extension, Deactivatable
 {

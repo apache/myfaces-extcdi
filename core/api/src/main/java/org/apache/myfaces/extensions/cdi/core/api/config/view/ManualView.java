@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.api.config.view;
 
 /**
  * Alternative marker which has to be used in case it's required to specify the view via a string.
- *
- * @author Gerhard Petracek
  */
 public final class ManualView implements ViewConfig
 {

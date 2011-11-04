@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
  * Interface which marks all interfaces which provide bean-names. 
- *
- * @author Gerhard Petracek
  */
 public interface BeanNames
 {

@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Base implementation for internal implementations of {@link ConfiguredValueResolver}
  */
 public abstract class AbstractConfiguredValueResolver implements ConfiguredValueResolver
 {

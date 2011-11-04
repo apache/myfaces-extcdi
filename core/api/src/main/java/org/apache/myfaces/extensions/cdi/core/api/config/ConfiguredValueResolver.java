@@ -25,8 +25,6 @@ import java.util.List;
 /**
  * Allows to customize CODI in case of extension points which aren't supported by CDI.
  * E.g. for artifacts which are needed before the bootstrapping process is finished.
- *
- * @author Gerhard Petracek
  */
 public interface ConfiguredValueResolver extends Deactivatable
 {

@@ -30,7 +30,8 @@ import java.util.List;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Service-provider-context with additional features like support for
+ * {@link org.apache.myfaces.extensions.cdi.core.api.InvocationOrder}, dependency injection
  */
 @Typed
 public class DefaultServiceProviderContext<T>

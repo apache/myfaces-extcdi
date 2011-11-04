@@ -30,7 +30,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Class which specifies the basic handling of conversations and handles the config for conversations
  */
 public abstract class AbstractGroupedConversationContext
 {

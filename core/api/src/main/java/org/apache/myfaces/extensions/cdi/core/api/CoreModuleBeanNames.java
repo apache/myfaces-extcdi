@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.core.api;
 
 /**
  * Core-impl has to provide beans for the names specified below.
- *
- * @author Gerhard Petracek
  */
 public interface CoreModuleBeanNames extends BeanNames
 {

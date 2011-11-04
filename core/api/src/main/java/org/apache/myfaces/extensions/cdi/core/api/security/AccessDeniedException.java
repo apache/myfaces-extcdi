@@ -26,8 +26,6 @@ import java.util.Set;
 /**
  * Exception occurs in case of a security-violation.
  * It's aware of the reason for the violation as well as the error-view which should be used to display the restriction.
- * 
- * @author Gerhard Petracek
  */
 public class AccessDeniedException extends SecurityException
 {

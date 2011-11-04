@@ -33,8 +33,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Test class for CodiUtils.
- *
- * @author Jakob Korherr
  */
 public class CodiUtilsTest
 {

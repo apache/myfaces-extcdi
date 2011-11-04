@@ -24,8 +24,6 @@ import java.io.Serializable;
  * The central interface for a conversation which is a container for 1-n beans
  * (which share the same time for destruction).
  * A conversation is started automatically with the first access
- *
- * @author Gerhard Petracek
  */
 public interface Conversation extends Serializable
 {

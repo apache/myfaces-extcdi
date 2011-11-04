@@ -26,7 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Helper methods for handling {@link ExpressionActivated}
  */
 public class ActivationUtils
 {

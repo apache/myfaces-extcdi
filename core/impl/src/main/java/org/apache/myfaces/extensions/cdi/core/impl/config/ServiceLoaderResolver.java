@@ -31,7 +31,8 @@ import java.util.ArrayList;
 import java.lang.reflect.Modifier;
 
 /**
- * @author Gerhard Petracek
+ * {@link org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver} for implementations configured in
+ * service-loader files
  */
 @Typed()
 @InvocationOrder(200)

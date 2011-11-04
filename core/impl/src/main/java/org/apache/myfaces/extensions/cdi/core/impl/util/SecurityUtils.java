@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Helper for using {@link AccessDecisionVoter}
  */
 @Typed()
 public abstract class SecurityUtils

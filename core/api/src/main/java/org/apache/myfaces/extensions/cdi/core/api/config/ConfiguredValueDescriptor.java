@@ -21,8 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.api.config;
 /**
  * Descriptor for resolving a configured value based on a special key.
  * Furthermore it specifies the type of the configured value.
- *
- * @author Gerhard Petracek
  */
 public interface ConfiguredValueDescriptor<K, T>
 {

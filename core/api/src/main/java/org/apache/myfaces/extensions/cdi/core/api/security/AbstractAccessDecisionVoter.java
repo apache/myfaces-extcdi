@@ -24,8 +24,6 @@ import java.util.HashSet;
 
 /**
  * Base implementation which provides helper methods.
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractAccessDecisionVoter
         extends AbstractDecisionVoter implements AccessDecisionVoter

@@ -29,8 +29,6 @@ package org.apache.myfaces.extensions.cdi.core.api.config.view;
  * The class which extends this class will also be used as error-view in case of security violations
  * (if there is no special error-view configured via
  * {@link org.apache.myfaces.extensions.cdi.core.api.security.Secured#errorView()})
- *
- * @author Gerhard Petracek
  */
 public abstract class DefaultErrorView implements ViewConfig
 {

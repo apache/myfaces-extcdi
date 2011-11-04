@@ -26,8 +26,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Gerhard Petracek
- * @author Mark Struberg
+ * Allows to activate beans based on expressions with a customizable syntax
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})

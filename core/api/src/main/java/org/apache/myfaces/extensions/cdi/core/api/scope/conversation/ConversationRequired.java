@@ -29,7 +29,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
 /**
- * @author Gerhard Petracek
+ * Restricts access to beans only if the conversation of the bean has been started already
  */
 @Target({TYPE})
 @Retention(RUNTIME)

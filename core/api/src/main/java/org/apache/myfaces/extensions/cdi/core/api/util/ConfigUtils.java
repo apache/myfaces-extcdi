@@ -32,7 +32,7 @@ import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Util methods for configs
  */
 @Typed()
 public abstract class ConfigUtils

@@ -23,8 +23,6 @@ import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * Literal for the {@link javax.inject.Named} annotation.
- *
- * @author Gerhard Petracek
  */
 public class NamedLiteral extends AnnotationLiteral<Named> implements Named
 {

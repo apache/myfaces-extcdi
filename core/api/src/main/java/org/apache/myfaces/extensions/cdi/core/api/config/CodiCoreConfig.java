@@ -22,8 +22,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Configuration for the core of CODI - it's customizable via the @Alternative or @Specializes mechanism of CDI.
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class CodiCoreConfig extends AbstractAttributeAware implements CodiConfig

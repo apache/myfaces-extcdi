@@ -25,8 +25,6 @@ import java.util.Set;
 /**
  * This feature is optional and has to be activated via
  * {@link org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig#isInvalidBeanCreationEventEnabled()}
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractBeanCreationDecisionVoter
         extends AbstractDecisionVoter implements BeanCreationDecisionVoter

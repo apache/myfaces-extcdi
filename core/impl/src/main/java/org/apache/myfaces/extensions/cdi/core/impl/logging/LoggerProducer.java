@@ -29,8 +29,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import java.lang.reflect.Field;
 
 /**
- * @author Gerhard Petracek
- * @author Werner Punz
+ * Producer for injectable loggers and logger factories
  */
 @ApplicationScoped
 public class LoggerProducer

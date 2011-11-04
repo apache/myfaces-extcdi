@@ -24,10 +24,10 @@ import javax.enterprise.inject.Typed;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * {@link ServiceProviderContext} which can be customized
  */
 @Typed()
-//TODO
+//TODO review
 public interface EditableServiceProviderContext<T> extends ServiceProviderContext
 {
     T postConstruct(T instance);

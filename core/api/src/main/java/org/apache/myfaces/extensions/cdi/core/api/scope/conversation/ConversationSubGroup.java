@@ -65,8 +65,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * }
  * //...
  * this.windowContext.closeConversation(ImplicitSubGroup.class)
- *
- * @author Gerhard Petracek
  */
 @Target(TYPE)
 @Retention(RUNTIME)

@@ -27,8 +27,7 @@ import java.util.List;
 import java.util.Collections;
 
 /**
- * @author Gerhard Petracek
- * @author Jakob Korherr
+ * {@link org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver} for JNDI
  */
 @Typed()
 @InvocationOrder(300)

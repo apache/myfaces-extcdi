@@ -24,8 +24,6 @@ package org.apache.myfaces.extensions.cdi.core.api.startup.event;
  * container is up and running. E.g. add-ons like the controlled bootstrapping add-on can implement this interface
  * in order to force the bootstrapping of the CDI container before CODI continues with the startup process.
  * Further details are available at {@link org.apache.myfaces.extensions.cdi.core.api.startup.CodiStartupBroadcaster}
- *
- * @author Gerhard Petracek
  */
 public interface StartupEventBroadcaster
 {

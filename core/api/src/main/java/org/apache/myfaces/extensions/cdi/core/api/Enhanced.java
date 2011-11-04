@@ -27,8 +27,6 @@ import static java.lang.annotation.ElementType.*;
 
 /**
  * Qualifier which is just used for add-ons which produce enhanced implementations of CODI beans.
- *
- * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)

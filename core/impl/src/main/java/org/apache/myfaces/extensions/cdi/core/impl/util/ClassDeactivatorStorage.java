@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Cache for {@link ClassDeactivator} implementations
  */
 @Typed()
 class ClassDeactivatorStorage

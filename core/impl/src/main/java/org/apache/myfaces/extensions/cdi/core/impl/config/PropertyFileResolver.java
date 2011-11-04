@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * {@link org.apache.myfaces.extensions.cdi.core.api.config.ConfiguredValueResolver} for property files
  */
 @Typed()
 @InvocationOrder(400)

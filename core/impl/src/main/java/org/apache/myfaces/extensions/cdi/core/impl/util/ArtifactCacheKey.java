@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.util;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Key for implementation caches
  */
 class ArtifactCacheKey<K extends Serializable>
 {

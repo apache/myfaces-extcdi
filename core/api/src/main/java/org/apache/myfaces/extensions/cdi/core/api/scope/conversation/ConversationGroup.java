@@ -38,8 +38,6 @@ import static java.lang.annotation.ElementType.CONSTRUCTOR;
  * it's possible to use this special qualifier for grouping such beans.
  *
  * Operations like {@link Conversation#close()} will be performed on the whole group.
- *
- * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)

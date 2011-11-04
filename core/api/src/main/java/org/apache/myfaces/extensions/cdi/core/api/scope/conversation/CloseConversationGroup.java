@@ -31,8 +31,6 @@ import static java.lang.annotation.ElementType.METHOD;
 /**
  * Interceptor which allows to close a conversation-group after the invocation of the intercepted method.
  * If a custom {@link RuntimeException} is specified, the conversation is just closed if the exception occurred.
- * 
- * @author Gerhard Petracek
  */
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})

@@ -26,7 +26,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * @author Gerhard Petracek
+ * Lookup helper for {@link ClassDeactivator} implementations
  */
 @Typed()
 class ClassDeactivatorAggregator implements Aggregatable<ClassDeactivator>, ClassDeactivator

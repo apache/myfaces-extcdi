@@ -25,8 +25,6 @@ import java.io.Serializable;
 
 /**
  * {@link Comparator} which allows to sort artifacts based on {@link InvocationOrder}
- *
- * @author Gerhard Petracek
  */
 public class InvocationOrderComparator<T> implements Comparator<T>, Serializable
 {

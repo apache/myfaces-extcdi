@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
 /**
- * @author Gerhard Petracek
+ * State-enum for {@link AccessDecisionVoterContext}
  */
 public enum AccessDecisionState
 {

@@ -28,8 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 
 /**
- * @author Gerhard Petracek
- * @author Werner Punz
+ * Injectable logger
  */
 @Typed()
 public class DefaultLogger implements Logger

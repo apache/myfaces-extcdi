@@ -33,8 +33,6 @@ import static java.lang.annotation.ElementType.METHOD;
 /**
  * Interceptor for securing beans.
  * It's also possible to use it as meta-annotation for type-safe view-configs.
- * 
- * @author Gerhard Petracek
  */
 @Target({TYPE, METHOD})
 @Retention(RUNTIME)

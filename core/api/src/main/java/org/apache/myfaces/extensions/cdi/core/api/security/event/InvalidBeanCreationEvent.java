@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.api.security.event;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 
 /**
- * @author Gerhard Petracek
+ * Event which gets fired if it isn't allowed to create a bean
  */
 public class InvalidBeanCreationEvent
 {

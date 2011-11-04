@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpre
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Base implementation for simple (property) expressions
  */
 @Typed()
 //TODO move to impl

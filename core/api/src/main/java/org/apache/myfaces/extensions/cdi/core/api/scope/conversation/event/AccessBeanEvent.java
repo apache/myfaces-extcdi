@@ -24,8 +24,6 @@ import java.io.Serializable;
  * Event which gets fired as soon as a bean within a CODI scope is accessed.<p/>
  * Attention:
  * It's deactivated per default. Since it introduces a significant overhead, just activate it for special cases.
- *
- * @author Gerhard Petracek
  */
 public final class AccessBeanEvent extends BeanEvent
 {

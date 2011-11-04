@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 /**
  * Event which gets fired directly after a conversation was started.<p/>
  * Attention: It's deactivated per default.
- *
- * @author Gerhard Petracek
  */
 public final class StartConversationEvent extends ConversationEvent
 {

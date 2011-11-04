@@ -38,7 +38,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Default implementation for type-safe {@link ResourceBundle}
  */
 @Typed()
 class DefaultResourceBundle implements ResourceBundle

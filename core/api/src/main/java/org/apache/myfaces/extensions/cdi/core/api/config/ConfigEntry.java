@@ -28,8 +28,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * This marker annotation can be used e.g. for marking config-methods which should be logged during startup.
  * Needed due to different approaches used by proxy libs which would produce strange log entries.
  * Furthermore this annotation allows add-ons an easier detection of active config entries.
- *
- * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)

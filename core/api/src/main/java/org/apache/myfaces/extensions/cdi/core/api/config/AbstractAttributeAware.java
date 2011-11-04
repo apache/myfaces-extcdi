@@ -24,8 +24,6 @@ import java.util.HashMap;
 /**
  * Base implementation which implements {@link org.apache.myfaces.extensions.cdi.core.api.config.AttributeAware}
  * to support custom attributes.
- *  
- * @author Gerhard Petracek
  */
 public abstract class AbstractAttributeAware implements AttributeAware
 {

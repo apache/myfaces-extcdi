@@ -24,8 +24,6 @@ import java.util.List;
 /**
  * Optional context which allows to get the current state as well as the results of the security check.
  * (Optional because it requires a useful scope which depends on the environment.)
- *
- * @author Gerhard Petracek
  */
 public interface AccessDecisionVoterContext extends Serializable
 {

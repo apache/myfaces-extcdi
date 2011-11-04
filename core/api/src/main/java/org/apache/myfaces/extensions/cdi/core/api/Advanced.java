@@ -30,8 +30,6 @@ import static java.lang.annotation.ElementType.*;
  *
  * Furthermore, it's a marker for classes to signal the framework that
  * it's allowed to perform dependency injection on instances of supported types.
- *
- * @author Gerhard Petracek
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR, TYPE})
 @Retention(RUNTIME)

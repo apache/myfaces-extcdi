@@ -24,8 +24,6 @@ import javax.enterprise.util.AnnotationLiteral;
 
 /**
  * Literal for the {@link org.apache.myfaces.extensions.cdi.core.api.Enhanced} annotation.
- *
- * @author Gerhard Petracek
  */
 public class EnhancedLiteral extends AnnotationLiteral<Enhanced> implements Enhanced
 {

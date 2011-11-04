@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Interpreter which uses the lookup chain for of CODI for configured values
  */
 @Typed()
 public class PropertyExpressionInterpreter extends AbstractPropertyExpressionInterpreter

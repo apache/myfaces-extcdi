@@ -27,8 +27,6 @@ import java.net.URL;
 
 /**
  * Util methods for classes, {@link ClassLoader} and {@link Manifest} handling
- *
- * @author Gerhard Petracek
  */
 @Typed()
 public abstract class ClassUtils

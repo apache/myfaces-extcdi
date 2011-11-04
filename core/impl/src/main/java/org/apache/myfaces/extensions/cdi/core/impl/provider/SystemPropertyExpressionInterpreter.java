@@ -21,7 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.impl.provider;
 import org.apache.myfaces.extensions.cdi.core.api.tools.AbstractPropertyExpressionInterpreter;
 
 /**
- * @author Gerhard Petracek
+ * {@link org.apache.myfaces.extensions.cdi.core.impl.activation.PropertyExpressionInterpreter} which resolves
+ * system/env. properties
  */
 public class SystemPropertyExpressionInterpreter extends AbstractPropertyExpressionInterpreter
 {

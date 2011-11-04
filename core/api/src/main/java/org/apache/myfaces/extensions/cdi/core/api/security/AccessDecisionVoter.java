@@ -31,8 +31,6 @@ import java.util.Set;
  * A voter can use every scope which is active. It's recommended to use
  * {@link javax.enterprise.context.ApplicationScoped} for stateless voters and e.g.
  * {@link javax.enterprise.context.RequestScoped} otherwise.
- * 
- * @author Gerhard Petracek
  */
 public interface AccessDecisionVoter extends Serializable
 {

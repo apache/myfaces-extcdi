@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.core.impl;
 import org.apache.myfaces.extensions.cdi.core.api.BeanNames;
 
 /**
- * @author Gerhard Petracek
+ * Names of CODI-beans resolvable by name
  */
 public interface CoreModuleBeanNames extends BeanNames
 {

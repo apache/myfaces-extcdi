@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Test resolver for configured values
  */
 @Typed()
 @InvocationOrder(600)

@@ -25,7 +25,7 @@ import javax.enterprise.inject.Typed;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Helper methods for {@link ClassDeactivator}
  */
 @Typed()
 public class ClassDeactivation

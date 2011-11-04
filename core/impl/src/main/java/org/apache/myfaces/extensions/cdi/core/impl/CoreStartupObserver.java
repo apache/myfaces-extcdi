@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
+ * Startup observer
  */
 @ApplicationScoped
 public class CoreStartupObserver extends AbstractStartupObserver

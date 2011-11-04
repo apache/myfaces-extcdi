@@ -19,7 +19,8 @@
 package org.apache.myfaces.extensions.cdi.core.api.interpreter;
 
 /**
- * @author Gerhard Petracek
+ * Interface for interpreting an expression provided by
+ * {@link org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated}
  */
 public interface ExpressionInterpreter<E, R>
 {

@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversatio
 
 /**
  * Base class for all events related to conversations.
- *
- * @author Gerhard Petracek
  */
 public abstract class ConversationEvent
 {

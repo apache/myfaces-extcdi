@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProviderContex
 import org.apache.myfaces.extensions.cdi.core.impl.provider.DefaultServiceProvider;
 
 /**
- * @author Gerhard Petracek
+ * Service-provider for unit-tests
  */
 @InvocationOrder(Integer.MIN_VALUE)
 public class TestServiceProvider extends DefaultServiceProvider

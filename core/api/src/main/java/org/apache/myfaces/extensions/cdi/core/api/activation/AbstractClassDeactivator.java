@@ -23,8 +23,6 @@ import java.util.HashSet;
 
 /**
  * Base implementation which allows an easier class-deactivator implementation
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractClassDeactivator implements ClassDeactivator
 {

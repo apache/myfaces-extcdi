@@ -23,8 +23,6 @@ import java.io.Serializable;
 /**
  * Base interface which can be used for simple keys (if there is no need to inject the key directly).
  * The key can be used as type-safe argument for {@link ResourceBundle#getValue(Class)}
- *
- * @author Gerhard Petracek
  */
 public interface BundleKey extends Serializable
 {

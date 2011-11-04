@@ -22,7 +22,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.context.spi.CreationalContext;
 
 /**
- * @author Gerhard Petracek
+ * Factory which allows to provide custom implementations of {@link BeanEntry}
  */
 public interface BeanEntryFactory
 {

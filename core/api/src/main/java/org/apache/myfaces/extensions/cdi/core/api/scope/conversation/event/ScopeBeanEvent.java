@@ -24,8 +24,6 @@ import java.io.Serializable;
  * Event which gets fired as soon as a bean gets added to one of the CODI scopes.<p/>
  * Attention:
  * It's deactivated per default.
- *
- * @author Gerhard Petracek
  */
 public final class ScopeBeanEvent extends BeanEvent
 {

@@ -21,8 +21,6 @@ package org.apache.myfaces.extensions.cdi.core.api;
 /**
  * Exception wrapper for checked exception for throwing them as {@link RuntimeException} and processing them
  * on a different level of the call-stack.
- *
- * @author Gerhard Petracek
  */
 public class UnhandledException extends RuntimeException
 {

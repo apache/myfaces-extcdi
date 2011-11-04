@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.security;
 
 /**
- * @author Gerhard Petracek
+ * Base class for decision-voters
  */
 public abstract class AbstractDecisionVoter
 {

@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Basic contract for a manager which handles {@link WindowContext} instances
  */
 public interface WindowContextManager extends Serializable
 {

@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Adapter for all CODI conversation scopes
  */
 public class ConversationContextAdapter implements Context
 {

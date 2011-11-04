@@ -27,8 +27,6 @@ import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * Forces the invocation order of artifacts which don't support ordered invocation by default (e.g. jsf phase-listeners)
- *
- * @author Gerhard Petracek
  */
 @Target(TYPE)
 @Retention(RUNTIME)

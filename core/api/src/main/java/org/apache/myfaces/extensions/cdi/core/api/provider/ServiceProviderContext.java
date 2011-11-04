@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.api.provider;
 
 /**
- * @author Gerhard Petracek
+ * Provides the current context for a {@link ServiceProvider}
  */
 public interface ServiceProviderContext
 {

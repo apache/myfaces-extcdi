@@ -27,8 +27,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Optional to specify a different bundle name
- *
- * @author Gerhard Petracek
  */
 @Documented
 @Retention(RUNTIME)

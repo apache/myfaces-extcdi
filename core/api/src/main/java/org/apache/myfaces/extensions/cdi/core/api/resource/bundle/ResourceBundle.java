@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Allows to implement type-safe resource-bundles
  */
 public interface ResourceBundle extends Serializable
 {

@@ -30,8 +30,6 @@ import static java.lang.annotation.ElementType.FIELD;
 
 /**
  * Beans which use this scope are bound to a window (or tab).
- *
- * @author Gerhard Petracek
  */
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)

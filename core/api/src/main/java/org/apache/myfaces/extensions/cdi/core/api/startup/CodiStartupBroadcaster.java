@@ -38,8 +38,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * has to use it. You don't have to use it directly. It's possible to register a
  * {@link org.apache.myfaces.extensions.cdi.core.api.startup.event.StartupEventBroadcaster}
  * for broadcasting custom events.
- * 
- * @author Gerhard Petracek
  */
 public abstract class CodiStartupBroadcaster
 {

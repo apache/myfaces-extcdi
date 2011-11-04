@@ -22,8 +22,6 @@ import java.io.Serializable;
 
 /**
  * Marker interface for all type-safe framework configs.
- * 
- * @author Gerhard Petracek
  */
 public interface CodiConfig extends Serializable
 {

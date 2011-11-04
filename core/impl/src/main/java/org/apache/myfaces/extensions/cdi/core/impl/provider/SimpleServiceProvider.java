@@ -36,7 +36,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Simple {@link ServiceProvider} which allows to use the service-loader pattern with Java 1.5
  */
 @Typed()
 @InvocationOrder(100)

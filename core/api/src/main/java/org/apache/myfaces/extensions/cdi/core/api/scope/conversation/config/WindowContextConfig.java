@@ -27,8 +27,6 @@ import javax.enterprise.context.ApplicationScoped;
 /**
  * Configuration for the {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext}
  * - it's customizable via the @Alternative or @Specializes mechanism of CDI.
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class WindowContextConfig extends AbstractAttributeAware implements CodiConfig

@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Base implementation for startup observers
  */
 public abstract class AbstractStartupObserver
 {

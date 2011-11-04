@@ -50,8 +50,6 @@ import java.lang.annotation.Target;
  *
  * leads to the invocation of the pre-render-view logic before page1 gets rendered and
  * it won't be called for other pages.
- *
- * @author Gerhard Petracek
  */
 
 @Target({TYPE, METHOD})

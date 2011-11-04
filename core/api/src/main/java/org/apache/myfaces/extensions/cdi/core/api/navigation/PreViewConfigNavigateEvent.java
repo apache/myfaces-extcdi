@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 /**
  * Event will be fired before the navigation (from and to a view-config based page) occurs.
  * With {@link #navigateTo(Class)} it's possible to change the navigation target.
- * 
- * @author Gerhard Petracek
  */
 public class PreViewConfigNavigateEvent
 {

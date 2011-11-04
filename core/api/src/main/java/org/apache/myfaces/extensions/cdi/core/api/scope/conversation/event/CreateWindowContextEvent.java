@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowConte
 /**
  * Event which gets fired as soon as a {@link WindowContext} was created.<p/>
  * Attention: It's deactivated per default.
- *
- * @author Gerhard Petracek
  */
 public final class CreateWindowContextEvent extends WindowContextEvent
 {

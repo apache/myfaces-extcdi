@@ -23,8 +23,6 @@ import java.util.Map;
 
 /**
  * Helper for the JSF-Map trick in case of expressions which are read-only.
- *
- * @author Gerhard Petracek
  */
 public abstract class UnmodifiableMap<K, V> extends HashMap<K, V>
 {

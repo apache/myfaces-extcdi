@@ -22,8 +22,6 @@ import java.io.Serializable;
 
 /**
  * Base class for all events related to beans.
- *
- * @author Gerhard Petracek
  */
 public abstract class BeanEvent
 {

@@ -23,8 +23,6 @@ package org.apache.myfaces.extensions.cdi.core.api.activation;
  * These classes are activated by default (e.g. via CDI config).
  * Since CDI, JSF,... currently don't allow to deactivate default implementations,
  * CODI has to introduce a proprietary mechanism.
- *
- * @author Gerhard Petracek
  */
 public interface Deactivatable
 {
