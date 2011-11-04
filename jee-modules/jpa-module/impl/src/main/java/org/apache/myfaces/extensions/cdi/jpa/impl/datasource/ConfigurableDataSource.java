@@ -203,7 +203,7 @@ public class ConfigurableDataSource implements DataSource
         }
     }
 
-    private void setProperty(Object instance, String key, String value)
+    protected void setProperty(Object instance, String key, String value)
             throws InvocationTargetException, IllegalAccessException
     {
         if (key.length()== 0)
@@ -211,7 +211,7 @@ public class ConfigurableDataSource implements DataSource
             throw new IllegalArgumentException("property name must not be empty!");
         }
 
-        String setterName = "get" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
+        String setterName = "set" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
         Method setter = null;
         try
         {
@@ -225,7 +225,9 @@ public class ConfigurableDataSource implements DataSource
             }
             catch (NoSuchMethodException e1)
             {
-                throw new IllegalArgumentException("Cannot find setter with name " + setterName);
+                //X TODO probably search for fields to set
+
+                throw new IllegalArgumentException("Cannot set property with name " + setterName);
             }
         }
 
