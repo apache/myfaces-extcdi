@@ -18,13 +18,14 @@
  */
 package org.apache.myfaces.extensions.cdi.jpa.impl.datasource;
 
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.JndiUtils;
 import org.apache.myfaces.extensions.cdi.jpa.api.datasource.DataSourceConfig;
 
 import javax.sql.DataSource;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
@@ -187,7 +188,7 @@ public class ConfigurableDataSource implements DataSource
             Map<String, String> config = dataSourceConfig.getConnectionProperties(connectionId);
             for (Map.Entry<String, String> configOption : config.entrySet())
             {
-                BeanUtils.setProperty(wrappedDataSource, configOption.getKey(), configOption.getValue());
+                setProperty(wrappedDataSource, configOption.getKey(), configOption.getValue());
             }
         }
         catch (Exception e)
@@ -200,6 +201,40 @@ public class ConfigurableDataSource implements DataSource
             }
             throw new SQLException(e);
         }
+    }
+
+    private void setProperty(Object instance, String key, String value)
+            throws InvocationTargetException, IllegalAccessException
+    {
+        if (key.length()== 0)
+        {
+            throw new IllegalArgumentException("property name must not be empty!");
+        }
+
+        String setterName = "get" + Character.toUpperCase(key.charAt(0)) + key.substring(1);
+        Method setter = null;
+        try
+        {
+            setter = instance.getClass().getMethod(setterName, String.class);
+        }
+        catch (NoSuchMethodException e)
+        {
+            try
+            {
+                setter = instance.getClass().getMethod(setterName, Object.class);
+            }
+            catch (NoSuchMethodException e1)
+            {
+                throw new IllegalArgumentException("Cannot find setter with name " + setterName);
+            }
+        }
+
+        if (!setter.isAccessible())
+        {
+            setter.setAccessible(true);
+        }
+
+        setter.invoke(instance, value);
     }
 
 }
