@@ -23,9 +23,10 @@ import javax.validation.ValidatorFactory;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@link ValidatorFactory} which can be serialized
  */
 @Typed()
+//TODO review
 abstract class SerializableValidatorFactory implements ValidatorFactory, Serializable
 {
 }

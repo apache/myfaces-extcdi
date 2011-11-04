@@ -30,7 +30,7 @@ import javax.validation.ConstraintValidatorFactory;
 import javax.validation.ConstraintValidator;
 
 /**
- * @author Gerhard Petracek
+ * {@link ValidatorFactory} which can be serialized
  */
 @Typed()
 class CdiAwareValidatorFactory extends SerializableValidatorFactory

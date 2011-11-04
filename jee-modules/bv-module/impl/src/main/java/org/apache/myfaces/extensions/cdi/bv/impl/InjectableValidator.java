@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@link Validator} which can be serialized
  */
 class InjectableValidator implements Validator, Serializable
 {

@@ -28,7 +28,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
 /**
- * @author Gerhard Petracek
+ * Producer for BV artifacts
  */
 @ApplicationScoped
 public class CdiAwareBeanValidationProducer

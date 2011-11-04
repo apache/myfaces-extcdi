@@ -27,7 +27,7 @@ import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * {@link ValidatorFactory} which can be serialized
  */
 class InjectableValidatorFactory implements ValidatorFactory, Serializable
 {

@@ -27,7 +27,7 @@ import javax.validation.ValidatorContext;
 import javax.validation.ValidatorFactory;
 
 /**
- * @author Gerhard Petracek
+ * {@link ValidatorContext} for supporting {@link org.apache.myfaces.extensions.cdi.core.api.Advanced}
  */
 @Typed()
 class AdvancedValidatorContext implements ValidatorContext

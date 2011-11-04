@@ -25,7 +25,8 @@ import java.io.Serializable;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 /**
- * @author Gerhard Petracek
+ * {@link ConstraintValidatorFactory} which can be serialized and adds support for dependency injection in
+ * {@link ConstraintValidator} instances.
  */
 class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory, Serializable
 {

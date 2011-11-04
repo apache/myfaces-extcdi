@@ -26,7 +26,7 @@ import javax.validation.ValidatorFactory;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Allows to resolve a {@link ValidatorFactory} provided by the JSF module
  */
 @Typed()
 class ValidatorFactoryResolver implements Serializable

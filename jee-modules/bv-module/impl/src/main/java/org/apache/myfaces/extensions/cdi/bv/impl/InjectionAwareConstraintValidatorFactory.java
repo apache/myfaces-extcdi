@@ -25,8 +25,9 @@ import javax.validation.ConstraintValidatorFactory;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectFields;
 
 /**
- * @author Gerhard Petracek
+ * {@link ConstraintValidatorFactory} which adds support for dependency injection in {@link ConstraintValidator}
  */
+//TODO review
 @Typed()
 class InjectionAwareConstraintValidatorFactory implements ConstraintValidatorFactory
 {

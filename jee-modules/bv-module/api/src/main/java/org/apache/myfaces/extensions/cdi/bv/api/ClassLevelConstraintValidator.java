@@ -28,8 +28,6 @@ import java.lang.reflect.Method;
 
 /**
  * Required if 'invalidValue' should be used for violation messages for class-level validation.
- *
- * @author Gerhard Petracek
  */
 public abstract class ClassLevelConstraintValidator<A extends Annotation, T>
         implements ConstraintValidator<A, T>, Serializable

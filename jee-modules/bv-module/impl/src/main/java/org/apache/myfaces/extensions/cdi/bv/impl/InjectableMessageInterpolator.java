@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * {@link MessageInterpolator} which can be serialized
  */
 class InjectableMessageInterpolator implements MessageInterpolator, Serializable
 {
