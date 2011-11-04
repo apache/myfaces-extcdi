@@ -80,8 +80,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for EXTCDI-67 jsf2 scopes should be mapped to cdi scopes automatically
- *
- * @author Jakob Korherr
  */
 public class ScopeMappingTest
 {

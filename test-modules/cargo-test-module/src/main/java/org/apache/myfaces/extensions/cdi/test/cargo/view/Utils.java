@@ -26,8 +26,6 @@ import javax.inject.Named;
 
 /**
  * Utility action methods for the HtmlUnit test cases.
- *
- * @author Jakob Korherr
  */
 @Named
 @ApplicationScoped

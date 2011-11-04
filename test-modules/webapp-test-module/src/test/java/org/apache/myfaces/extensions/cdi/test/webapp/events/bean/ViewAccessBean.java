@@ -27,7 +27,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 /**
- * @author Jakob Korherr
+ * View-access scoped page-bean
  */
 @Named
 @ViewAccessScoped

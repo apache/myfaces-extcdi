@@ -75,8 +75,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI UnscopeBeanEvent, if it is deactivated (default).
- *
- * @author Jakob Korherr
  */
 public class UnscopeBeanEventDeactivatedTest
 {

@@ -79,8 +79,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI UnscopeBeanEvent.
- *
- * @author Jakob Korherr
  */
 public class UnscopeBeanEventTest
 {

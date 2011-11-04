@@ -25,8 +25,6 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
  * Deactivates the MappedJsf2ScopeExtension.
  *
  * This ClassDeactivator is set via env-entry in the related web.xml file.
- *
- * @author Jakob Korherr
  */
 public class ScopeMappingDeactivator extends AbstractClassDeactivator
 {

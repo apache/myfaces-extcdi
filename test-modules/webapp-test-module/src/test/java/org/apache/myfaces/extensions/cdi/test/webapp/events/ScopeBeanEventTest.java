@@ -79,8 +79,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI ScopeBeanEvent.
- *
- * @author Jakob Korherr
  */
 public class ScopeBeanEventTest
 {

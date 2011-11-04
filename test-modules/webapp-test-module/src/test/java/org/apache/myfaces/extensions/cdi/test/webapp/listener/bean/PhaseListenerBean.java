@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jakob Korherr
+ * Observers for request-lifecycle callbacks
  */
 @Named
 @ApplicationScoped

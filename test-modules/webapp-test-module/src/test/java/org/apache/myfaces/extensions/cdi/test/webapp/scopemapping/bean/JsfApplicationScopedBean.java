@@ -23,7 +23,7 @@ import javax.faces.bean.ManagedBean;
 import java.io.Serializable;
 
 /**
- * @author Jakob Korherr
+ * Test-bean for testing the mapped application-scope
  */
 @ManagedBean(name = "applicationBean")
 @javax.faces.bean.ApplicationScoped    // annotation from JSF

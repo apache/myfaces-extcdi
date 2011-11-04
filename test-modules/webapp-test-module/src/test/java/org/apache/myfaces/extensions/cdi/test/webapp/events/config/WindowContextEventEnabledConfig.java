@@ -23,8 +23,6 @@ import javax.enterprise.inject.Alternative;
 
 /**
  * Enables the WindowContext events.
- *
- * @author Jakob Korherr
  */
 @Alternative
 @ApplicationScoped

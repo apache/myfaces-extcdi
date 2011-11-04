@@ -69,8 +69,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI WindowContext Events.
- *
- * @author Jakob Korherr
  */
 public class WindowContextEventTest
 {

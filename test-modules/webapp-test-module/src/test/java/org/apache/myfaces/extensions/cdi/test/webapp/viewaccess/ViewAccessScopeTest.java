@@ -74,8 +74,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI ViewAccessScope.
- *
- * @author Jakob Korherr
  */
 public class ViewAccessScopeTest
 {

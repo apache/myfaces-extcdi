@@ -31,7 +31,7 @@ import java.io.Serializable;
 
 
 /**
- * @author Jakob Korherr
+ * Producer for conversation scoped beans with different qualifiers
  */
 @Dependent
 public class ConversationBeanWithQualifier implements Serializable

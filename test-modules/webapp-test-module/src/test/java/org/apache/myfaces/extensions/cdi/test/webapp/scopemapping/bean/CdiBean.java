@@ -23,7 +23,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
- * @author Jakob Korherr
+ * Bean with injection points for beans in different scopes
  */
 @Named
 @RequestScoped

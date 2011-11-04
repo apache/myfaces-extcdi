@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.test.webapp.conversation.group;
 
 /**
- * @author Jakob Korherr
+ * Key for specifying a conversation group
  */
 public interface ConversationGroup1
 {

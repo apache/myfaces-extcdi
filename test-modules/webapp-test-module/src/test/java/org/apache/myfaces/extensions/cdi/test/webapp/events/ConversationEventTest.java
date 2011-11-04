@@ -75,8 +75,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI ConversationEvents.
- *
- * @author Jakob Korherr
  */
 public class ConversationEventTest
 {

@@ -73,8 +73,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI AccessBeanEvent.
- *
- * @author Jakob Korherr
  */
 public class AccessBeanEventTest
 {

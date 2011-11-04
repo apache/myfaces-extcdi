@@ -65,8 +65,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI WindowContext Events, if they're deactivated (default).
- *
- * @author Jakob Korherr
  */
 public class WindowContextEventDeactivatedTest
 {

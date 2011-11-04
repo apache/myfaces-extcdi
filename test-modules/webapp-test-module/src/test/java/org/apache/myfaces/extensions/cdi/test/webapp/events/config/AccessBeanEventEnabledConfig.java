@@ -23,8 +23,6 @@ import javax.enterprise.inject.Alternative;
 
 /**
  * Enables the access-bean event.
- *
- * @author Jakob Korherr
  */
 @Alternative
 @ApplicationScoped

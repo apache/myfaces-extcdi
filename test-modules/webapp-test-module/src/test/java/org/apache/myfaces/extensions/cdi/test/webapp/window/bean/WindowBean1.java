@@ -28,7 +28,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 /**
- * @author Jakob Korherr
+ * Window-scoped page-bean
  */
 @Named
 @WindowScoped

@@ -30,7 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Jakob Korherr
+ * JSF {@link PhaseListener} configured via
+ * {@link org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener}
  */
 @JsfPhaseListener
 public class ValidationPhaseListener implements PhaseListener

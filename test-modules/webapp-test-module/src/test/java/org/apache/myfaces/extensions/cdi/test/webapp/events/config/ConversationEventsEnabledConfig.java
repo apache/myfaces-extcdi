@@ -23,8 +23,6 @@ import javax.enterprise.inject.Alternative;
 
 /**
  * Enables all Conversation events.
- *
- * @author Jakob Korherr
  */
 @Alternative
 @ApplicationScoped

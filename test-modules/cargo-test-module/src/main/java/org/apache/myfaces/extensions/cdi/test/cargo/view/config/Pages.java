@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode.REDIRECT;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Page(navigation = REDIRECT)
 public interface Pages extends ViewConfig

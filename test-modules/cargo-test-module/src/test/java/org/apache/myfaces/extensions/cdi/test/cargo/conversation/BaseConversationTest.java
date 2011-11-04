@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.test.cargo.AbstractSimpleCargoTest;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Gerhard Petracek
+ * Base class for internal cargo tests
  */
 @Typed()
 abstract class BaseConversationTest extends AbstractSimpleCargoTest

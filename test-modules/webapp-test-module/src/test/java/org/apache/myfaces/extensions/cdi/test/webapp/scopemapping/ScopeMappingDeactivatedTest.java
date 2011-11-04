@@ -84,8 +84,6 @@ import javax.faces.event.PhaseId;
  * Test cases for the deactivation of EXTCDI-67 jsf2 scopes should be mapped
  * to cdi scopes automatically.
  * If this feature is deactivated, it should not map the scopes!
- *
- * @author Jakob Korherr
  */
 public class ScopeMappingDeactivatedTest
 {

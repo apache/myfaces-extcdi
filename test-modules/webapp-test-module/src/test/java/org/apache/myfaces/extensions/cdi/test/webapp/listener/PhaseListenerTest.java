@@ -72,8 +72,6 @@ import java.util.Map;
 
 /**
  * Test cases for the CODI PhaseListener support.
- *
- * @author Jakob Korherr
  */
 public class PhaseListenerTest
 {

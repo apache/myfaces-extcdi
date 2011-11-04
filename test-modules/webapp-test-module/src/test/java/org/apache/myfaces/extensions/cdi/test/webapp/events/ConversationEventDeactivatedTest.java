@@ -71,8 +71,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI ConversationEvents, if they are deactivated.
- *
- * @author Jakob Korherr
  */
 public class ConversationEventDeactivatedTest
 {

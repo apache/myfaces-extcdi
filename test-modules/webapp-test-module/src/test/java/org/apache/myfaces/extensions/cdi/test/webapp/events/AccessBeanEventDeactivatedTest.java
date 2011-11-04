@@ -69,8 +69,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI AccessBeanEvent, if it is deactivated (default).
- *
- * @author Jakob Korherr
  */
 public class AccessBeanEventDeactivatedTest
 {

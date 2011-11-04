@@ -27,7 +27,7 @@ import org.junit.runners.JUnit4;
 import javax.enterprise.inject.Typed;
 
 /**
- * @author Jakob Korherr
+ * Tests of different use-cases of CODI conversations
  */
 @RunWith(JUnit4.class)
 @Typed()

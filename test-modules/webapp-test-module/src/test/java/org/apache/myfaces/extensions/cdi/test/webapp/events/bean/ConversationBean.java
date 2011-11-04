@@ -28,7 +28,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 /**
- * @author Jakob Korherr
+ * Conversation scoped page-bean
  */
 @Named
 @ConversationScoped

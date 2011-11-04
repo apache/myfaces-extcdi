@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Wind
 /**
  * Custom WindowContextConfig to enable/disable certain events for the test cases.
  * Subclasses of this class are installed via @Alternative and an entry in beans.xml.
- *
- * @author Jakob Korherr
  */
 public class DefaultWindowContextConfig extends WindowContextConfig
 {

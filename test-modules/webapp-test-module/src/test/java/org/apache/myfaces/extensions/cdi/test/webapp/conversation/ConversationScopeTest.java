@@ -91,8 +91,6 @@ import javax.faces.event.PhaseId;
 
 /**
  * Test cases for the CODI ConversationScope.
- *
- * @author Jakob Korherr
  */
 public class ConversationScopeTest
 {
