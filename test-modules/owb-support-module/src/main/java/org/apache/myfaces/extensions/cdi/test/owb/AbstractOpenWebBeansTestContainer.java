@@ -28,7 +28,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionTarget;
 
 /**
- * @author Gerhard Petracek
+ * {@link CdiTestContainer} for OWB
  */
 public abstract class AbstractOpenWebBeansTestContainer implements CdiTestContainer
 {

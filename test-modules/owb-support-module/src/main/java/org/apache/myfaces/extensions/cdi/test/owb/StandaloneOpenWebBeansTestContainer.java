@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.test.owb;
 import org.apache.webbeans.cditest.CdiTestContainerLoader;
 
 /**
- * @author Gerhard Petracek
+ * Test-container for Java-SE applications
  */
 public class StandaloneOpenWebBeansTestContainer extends AbstractOpenWebBeansTestContainer
 {

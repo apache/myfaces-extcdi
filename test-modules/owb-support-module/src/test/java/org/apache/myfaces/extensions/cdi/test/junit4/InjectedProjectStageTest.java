@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import static org.testng.Assert.assertEquals;
 
 /**
- * @author Gerhard Petracek
+ * Test of dependency injection in unit tests
  */
 
 @RunWith(JUnit4.class)

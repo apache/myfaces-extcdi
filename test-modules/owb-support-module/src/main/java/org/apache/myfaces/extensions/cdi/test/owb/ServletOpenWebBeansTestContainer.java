@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.test.spi.ServletContainerAwareCdiTestCo
 import org.apache.webbeans.cditest.CdiTestContainerLoader;
 
 /**
- * @author Gerhard Petracek
+ * {@link AbstractOpenWebBeansTestContainer} with callbacks for servlet containers
  */
 public class ServletOpenWebBeansTestContainer
         extends AbstractOpenWebBeansTestContainer implements ServletContainerAwareCdiTestContainer
