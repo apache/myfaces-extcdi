@@ -162,7 +162,7 @@ public abstract class AbstractConfigurableDataSource implements DataSource
         throw new SQLFeatureNotSupportedException();
     }
 
-    protected void initDataSource() throws SQLException
+    protected synchronized void initDataSource() throws SQLException
     {
         // double check lock idiom on volatile member is ok as of Java5
         if (wrappedDataSource != null)

@@ -22,6 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.JndiUtils;
 import org.apache.myfaces.extensions.cdi.jpa.api.datasource.AbstractConfigurableDataSource;
 
+import javax.enterprise.context.Dependent;
 import javax.sql.DataSource;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -29,6 +30,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Dependent
 public class DefaultConfigurableDataSource extends AbstractConfigurableDataSource
 {
     /**
