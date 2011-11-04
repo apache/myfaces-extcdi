@@ -49,7 +49,7 @@ import java.net.URLClassLoader;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * Testcontainer for JSF applications which uses mocks provided by MyFaces-Test
  */
 public class MyFacesCore12WebAppTestContainer implements WebAppTestContainer
 {
