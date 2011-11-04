@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Test of simple message interpolation
  */
 public class LocalizableMessageArgumentTest extends AbstractMessageTest
 {

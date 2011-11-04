@@ -28,7 +28,7 @@ import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
 /**
- * @author Jakob Korherr
+ * Dependency injection aware JSF converter
  */
 @Advanced
 @FacesConverter("pojoConverter")

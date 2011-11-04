@@ -24,7 +24,7 @@ import javax.enterprise.inject.Model;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Page controller
  */
 @Model
 public class ConversationControllerDemoBean implements Serializable

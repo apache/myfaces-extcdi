@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Bean with BV constraints
  */
 @Model
 public class BeanValidationDemoBean

@@ -26,7 +26,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @author Gerhard Petracek
+ * Test for message arguments
  */
 public class ArgumentDescriptorTest extends AbstractMessageTest
 {

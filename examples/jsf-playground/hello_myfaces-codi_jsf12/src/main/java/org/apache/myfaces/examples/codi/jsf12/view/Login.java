@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extension.JSP;
 
 /**
- * @author Gerhard Petracek
+ * View-config
  */
 @Page(extension = JSP)
 public final class Login extends DefaultErrorView

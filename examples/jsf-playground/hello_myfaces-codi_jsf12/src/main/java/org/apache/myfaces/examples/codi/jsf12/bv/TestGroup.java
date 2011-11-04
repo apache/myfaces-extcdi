@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.bv;
 
 /**
- * @author Gerhard Petracek
+ * Key for grouping a conversation
  */
 public interface TestGroup
 {

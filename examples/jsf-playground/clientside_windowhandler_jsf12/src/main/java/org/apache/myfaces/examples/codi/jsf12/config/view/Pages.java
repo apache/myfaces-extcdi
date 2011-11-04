@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
 /**
  * Allows implicit and typesafe navigaton
- * @author Gerhard Petracek
  */
 public interface Pages extends ViewConfig
 {

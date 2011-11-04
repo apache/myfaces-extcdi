@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Jakob Korherr
+ * Global page bean
  */
 @Singleton
 @Named

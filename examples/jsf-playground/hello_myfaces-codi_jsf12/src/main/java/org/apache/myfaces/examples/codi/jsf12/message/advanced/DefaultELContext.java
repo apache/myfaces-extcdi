@@ -27,7 +27,7 @@ import javax.el.FunctionMapper;
 import javax.el.VariableMapper;
 
 /**
- * @author Gerhard Petracek
+ * Simple EL-Context wrapper
  */
 class DefaultELContext extends SimpleELContext
 {

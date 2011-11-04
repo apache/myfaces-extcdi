@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.conversation.grouped;
 
 /**
- * @author Gerhard Petracek
+ * Key for grouping a conversation
  */
 interface ConversationGroup1
 {

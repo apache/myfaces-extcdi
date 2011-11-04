@@ -25,7 +25,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Extensi
 import org.apache.myfaces.examples.codi.jsf12.security.ForcedViolationVoter;
 
 /**
- * @author Gerhard Petracek
+ * View-config
  */
 @Page(extension = JSP)
 @Secured(ForcedViolationVoter.class)

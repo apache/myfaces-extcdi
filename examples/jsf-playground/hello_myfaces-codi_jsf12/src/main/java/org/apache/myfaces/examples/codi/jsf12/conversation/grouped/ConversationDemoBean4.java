@@ -31,7 +31,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
+ * View-access scoped bean
  */
 @Named
 @ViewAccessScoped

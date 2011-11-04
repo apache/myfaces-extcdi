@@ -30,7 +30,7 @@ import javax.inject.Named;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Page controller
  */
 @View(DemoPages.HelloMyFacesCodi3.class)
 @Named

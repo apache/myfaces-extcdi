@@ -26,7 +26,7 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * @author Gerhard Petracek
+ * Secured page bean
  */
 @Named
 @RequestScoped

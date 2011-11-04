@@ -27,7 +27,7 @@ import javax.el.ValueExpression;
 import javax.el.VariableMapper;
 
 /**
- * @author Manfred Geiler
+ * EL-Context for unit tests
  */
 class TestELContext extends SimpleELContext
 {

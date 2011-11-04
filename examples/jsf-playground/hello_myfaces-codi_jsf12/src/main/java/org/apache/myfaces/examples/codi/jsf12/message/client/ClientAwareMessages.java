@@ -26,7 +26,7 @@ import javax.inject.Named;
 import javax.inject.Inject;
 
 /**
- * @author Gerhard Petracek
+ * Bean which allows to use client specific messages within a JSF page.
  */
 @Named("clientMessages")
 @Singleton

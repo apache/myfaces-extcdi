@@ -27,7 +27,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
+ * Grouped conversation scoped bean
  */
 @Named
 @ConversationScoped

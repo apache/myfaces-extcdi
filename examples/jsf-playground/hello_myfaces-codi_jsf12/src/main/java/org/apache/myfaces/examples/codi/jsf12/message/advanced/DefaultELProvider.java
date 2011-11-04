@@ -28,8 +28,6 @@ import javax.el.ExpressionFactory;
 
 /**
  * Provides the implementations which allow to use el-expressions in messages
- *
- * @author Gerhard Petracek
  */
 public class DefaultELProvider implements ELProvider
 {

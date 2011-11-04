@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.Collection;
 
 /**
- * @author Gerhard Petracek
+ * Helper for using parameters in JSF 1.x pages
  */
 abstract class MapHelper<K, V> implements Map<K, V>
 {

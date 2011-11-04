@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
+ * Window scoped bean
  */
 @Named
 @WindowScoped

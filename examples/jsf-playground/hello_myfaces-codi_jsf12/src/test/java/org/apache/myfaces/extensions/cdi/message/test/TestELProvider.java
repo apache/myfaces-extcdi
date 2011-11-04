@@ -27,7 +27,7 @@ import javax.el.ELResolver;
 import javax.el.ExpressionFactory;
 
 /**
- * @author Manfred Geiler
+ * ELProvider for unit tests
  */
 class TestELProvider implements ELProvider
 {

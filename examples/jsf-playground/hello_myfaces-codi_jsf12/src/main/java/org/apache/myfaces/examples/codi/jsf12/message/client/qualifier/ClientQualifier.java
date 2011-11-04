@@ -29,7 +29,7 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 
 /**
- * @author Gerhard Petracek
+ * Qualifier for business clients
  */
 @Target({PARAMETER, FIELD, METHOD, CONSTRUCTOR})
 @Retention(RUNTIME)

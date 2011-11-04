@@ -28,8 +28,6 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseListener
 
 /**
  * Performance tuning based on http://wiki.apache.org/myfaces/Extensions/Validator/JSR303/Advanced
- * 
- * @author Gerhard Petracek
  */
 @JsfPhaseListener
 public class TuneExtValStartupListener extends AbstractStartupListener

@@ -21,7 +21,7 @@ package org.apache.myfaces.examples.codi.jsf12.view.inline;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 
 /**
- * @author Gerhard Petracek
+ * Marker for the root-package for inline view-configs
  */
 @InlineViewConfigRoot(basePath = "/", pageBeanPostfix = "PageBean")
 public interface InlineViewConfigRootMarker

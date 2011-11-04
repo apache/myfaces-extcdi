@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * AccessDecisionVoter which throws a violation in any case
  */
 @ApplicationScoped
 public class ForcedViolationVoter extends AbstractAccessDecisionVoter

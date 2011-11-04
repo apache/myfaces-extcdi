@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.application.FacesMessage;
 
 /**
- * @author Gerhard Petracek
+ * Custom constraint validator
  */
 public class CodiNotNullConstraintValidator extends NotNullValidator
 {

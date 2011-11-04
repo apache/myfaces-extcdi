@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * @author Gerhard Petracek
+ * Bean which evaluates JS on the server-side
  */
 @Named
 @RequestScoped

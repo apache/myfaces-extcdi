@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.jsf20.converter;
 
 /**
- * @author Jakob Korherr
+ * Simple class with properties
  */
 public class Pojo
 {

@@ -27,7 +27,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * @author Gerhard Petracek
+ * MessageResolver for unit tests
  */
 class SimpleMessageResolver implements MessageResolver
 {

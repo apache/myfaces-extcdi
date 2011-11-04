@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Bean which stores the currently selected client
  */
 @Named
 @SessionScoped

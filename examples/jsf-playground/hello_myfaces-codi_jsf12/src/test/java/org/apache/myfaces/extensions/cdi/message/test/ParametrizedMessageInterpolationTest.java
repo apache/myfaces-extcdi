@@ -30,7 +30,7 @@ import org.junit.Test;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Tests of different argument types
  */
 public class ParametrizedMessageInterpolationTest extends AbstractMessageTest
 {

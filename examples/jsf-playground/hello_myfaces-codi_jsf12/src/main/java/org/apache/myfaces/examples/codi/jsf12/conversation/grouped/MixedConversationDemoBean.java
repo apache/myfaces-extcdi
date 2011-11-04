@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
+ * Bean with multiple producers
  */
 @Dependent
 public class MixedConversationDemoBean implements Serializable

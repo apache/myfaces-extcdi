@@ -25,7 +25,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Navigat
 import org.apache.myfaces.examples.codi.jsf12.conversation.grouped.ConversationDemoBean1;
 
 /**
- * @author Gerhard Petracek
+ * View-config
  */
 @Page(basePath = "" /*override default to ignore path level*/,
       navigation = Page.NavigationMode.REDIRECT, extension = Page.Extension.JSP)

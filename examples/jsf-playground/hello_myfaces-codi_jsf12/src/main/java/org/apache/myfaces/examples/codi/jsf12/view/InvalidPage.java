@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
 /**
- * @author Gerhard Petracek
+ * View-config
  */
 @Page(name = "invalid") //interpreted as /invalid.xhtml
 public class InvalidPage implements ViewConfig

@@ -30,7 +30,7 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Grouped conversation scoped page bean
  */
 @Named
 @ConversationScoped

@@ -26,7 +26,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import javax.enterprise.inject.Model;
 
 /**
- * @author Gerhard Petracek
+ * View-config
  */
 @Page(extension = JSP)
 @Model

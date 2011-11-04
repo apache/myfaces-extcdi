@@ -24,8 +24,7 @@ import javax.enterprise.inject.Typed;
 /**
  * optional
  *
- * @author Jakob Korherr
- * @author Gerhard Petracek
+ * Class which allows instances of a qualifier-annotation
  */
 @Typed()
 public class QualifierInstances

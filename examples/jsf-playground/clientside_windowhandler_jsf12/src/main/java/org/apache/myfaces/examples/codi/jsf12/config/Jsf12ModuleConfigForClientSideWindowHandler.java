@@ -27,8 +27,6 @@ import javax.enterprise.inject.Specializes;
  * You also have to activate
  * {@link org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.ClientSideWindowHandler}
  * in beans.xml
- * 
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 @Specializes

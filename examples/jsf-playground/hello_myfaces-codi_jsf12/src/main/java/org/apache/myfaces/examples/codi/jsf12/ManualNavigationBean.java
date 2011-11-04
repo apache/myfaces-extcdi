@@ -27,7 +27,7 @@ import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 
 /**
- * @author Gerhard Petracek
+ * Navigation handler based on view-configs
  */
 @Model
 public class ManualNavigationBean

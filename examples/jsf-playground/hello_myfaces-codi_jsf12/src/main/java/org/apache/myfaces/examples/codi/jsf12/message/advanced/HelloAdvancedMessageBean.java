@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.enterprise.context.RequestScoped;
 
 /**
- * @author Gerhard Petracek
+ * Page controller
  */
 @Named
 @RequestScoped

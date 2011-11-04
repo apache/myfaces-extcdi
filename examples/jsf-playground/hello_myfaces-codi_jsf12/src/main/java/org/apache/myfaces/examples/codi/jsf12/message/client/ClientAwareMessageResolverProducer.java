@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 
 /**
- * @author Gerhard Petracek
+ * Producer for a customized message-context per client
  */
 @Dependent
 public class ClientAwareMessageResolverProducer

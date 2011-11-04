@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.message.api.LocaleResolver;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * LocaleResolver for reproducible results
  */
 class SimpleLocaleResolver implements LocaleResolver
 {

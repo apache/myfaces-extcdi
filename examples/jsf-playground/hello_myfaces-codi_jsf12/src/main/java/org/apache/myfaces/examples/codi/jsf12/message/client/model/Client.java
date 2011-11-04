@@ -22,7 +22,7 @@ import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Business client
  */
 @Typed()
 public class Client implements Serializable

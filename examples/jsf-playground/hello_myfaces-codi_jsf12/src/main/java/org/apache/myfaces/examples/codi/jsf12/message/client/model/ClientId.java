@@ -19,7 +19,7 @@
 package org.apache.myfaces.examples.codi.jsf12.message.client.model;
 
 /**
- * @author Gerhard Petracek
+ * Ids of different business clients
  */
 public enum ClientId
 {

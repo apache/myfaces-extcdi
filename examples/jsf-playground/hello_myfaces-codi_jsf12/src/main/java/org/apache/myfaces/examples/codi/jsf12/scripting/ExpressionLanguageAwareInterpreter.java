@@ -32,8 +32,6 @@ import java.util.regex.Pattern;
 /**
  * very simple impl. just for demo cases!
  * currently we don't have a default impl. out-of-the-box due to the handling of null values...
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class ExpressionLanguageAwareInterpreter implements ExternalExpressionInterpreter

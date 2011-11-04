@@ -28,7 +28,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Startup observer
  */
 @ApplicationScoped
 public class StartupObserver

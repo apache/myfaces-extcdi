@@ -28,7 +28,7 @@ import javax.enterprise.inject.Produces;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Bean with bean-producer
  */
 @Dependent
 public class ConversationDemoBeanWithQualifier implements Serializable

@@ -28,7 +28,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 /**
- * @author Gerhard Petracek
+ * Navigation observer
  */
 @Model
 public class ViewConfigNavigationObserver

@@ -21,7 +21,7 @@ package org.apache.myfaces.examples.codi.jsf12.message.advanced;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Simple bean with a property
  */
 public class TestBean implements Serializable
 {

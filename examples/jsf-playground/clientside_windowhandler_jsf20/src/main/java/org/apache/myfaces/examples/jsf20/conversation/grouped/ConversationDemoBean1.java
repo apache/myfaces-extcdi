@@ -30,7 +30,7 @@ import java.util.Date;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Conversation scoped bean
  */
 @Named
 @ConversationScoped
