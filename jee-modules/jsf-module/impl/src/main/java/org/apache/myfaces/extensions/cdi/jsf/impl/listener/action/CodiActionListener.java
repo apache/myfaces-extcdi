@@ -27,7 +27,7 @@ import javax.faces.event.ActionListener;
 import javax.faces.event.ActionEvent;
 
 /**
- * @author Gerhard Petracek
+ * Aggregates {@link ActionListener} implementations provided by CODI to ensure a deterministic behaviour
  */
 public class CodiActionListener implements ActionListener, Deactivatable
 {

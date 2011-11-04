@@ -30,7 +30,7 @@ import javax.inject.Inject;
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
- * @author Gerhard Petracek
+ * PhaseListener for triggering {@link JsfRequestLifecycleBroadcaster}
  */
 
 //This class is no cdi-bean, there will be a #veto during the bootstrapping process

@@ -48,8 +48,6 @@ import java.util.HashSet;
 
 /**
  * jsf specific parts for managing grouped conversations
- *
- * @author Gerhard Petracek
  */
 class GroupedConversationContext extends AbstractGroupedConversationContext
 {

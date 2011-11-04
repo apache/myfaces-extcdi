@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Request scoped storage for page-parameters
  */
 //currently internal - in case of community feedback we could introduce a spi for it
 @RequestScoped

@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.api.config.view;
 
 /**
- * @author Gerhard Petracek
+ * Descriptor for page-beans
  */
 public interface PageBeanDescriptor
 {

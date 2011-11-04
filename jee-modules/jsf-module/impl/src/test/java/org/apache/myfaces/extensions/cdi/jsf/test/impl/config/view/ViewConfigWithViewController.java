@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PageBean;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @PageBean(value = TestPageBean1.class) //won't get picked up!
 abstract class ViewConfigWithViewController implements ViewConfig

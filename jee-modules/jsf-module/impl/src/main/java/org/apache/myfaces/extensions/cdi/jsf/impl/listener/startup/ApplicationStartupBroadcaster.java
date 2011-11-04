@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Broadcaster for {@link JsfStartupEvent}
  */
 @ApplicationScoped
 public class ApplicationStartupBroadcaster

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class SecurityAwareViewHandler
         extends org.apache.myfaces.extensions.cdi.jsf.impl.security.SecurityAwareViewHandler

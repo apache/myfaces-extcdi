@@ -41,8 +41,6 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterConte
 
 /**
  * keep in sync with extval!
- *
- * @author Gerhard Petracek
  */
 @Typed()
 public abstract class JsfUtils

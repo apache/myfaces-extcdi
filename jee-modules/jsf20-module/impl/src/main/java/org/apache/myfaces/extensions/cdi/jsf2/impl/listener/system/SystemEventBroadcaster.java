@@ -26,7 +26,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.context.Dependent;
 
 /**
- * @author Gerhard Petracek
+ * Broadcaster used by {@link CodiJsf2SystemEventListener}
  */
 @Dependent
 @Named

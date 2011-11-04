@@ -30,7 +30,7 @@ import org.apache.myfaces.extensions.cdi.message.impl.spi.ArgumentFilter;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Interpolator which supports EL-expressions as parameters
  */
 class FacesMessageInterpolator implements MessageInterpolator
 {

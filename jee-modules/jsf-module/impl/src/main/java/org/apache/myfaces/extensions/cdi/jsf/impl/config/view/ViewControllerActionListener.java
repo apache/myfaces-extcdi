@@ -28,7 +28,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * ActionListener which invokes {@link org.apache.myfaces.extensions.cdi.jsf.api.config.view.PrePageAction} callbacks
+ * of page-beans
  */
 public class ViewControllerActionListener implements ActionListener, Deactivatable
 {

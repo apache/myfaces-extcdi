@@ -22,7 +22,6 @@ import javax.enterprise.inject.spi.Bean;
 
 /**
  * This class is needed just for a workaround for a Weld v1.1.1 bug (see EXTCDI-191)
- * @author Gerhard Petracek
  */
 //TODO
 public class WeldCache

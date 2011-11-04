@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Page(basePath = "", navigation = NavigationMode.FORWARD)
 abstract class NavigationOverriding2 implements ViewConfig

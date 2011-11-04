@@ -32,7 +32,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ApplicationScoped
 public class DefaultWindowContextQuotaHandler implements WindowContextQuotaHandler

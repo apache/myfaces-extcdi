@@ -19,7 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 /**
- * @author Gerhard Petracek
+ * {@link ConversationExpirationEvaluator} for
+ * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped}
  */
 class WindowConversationExpirationEvaluator implements ConversationExpirationEvaluator
 {

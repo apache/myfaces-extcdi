@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * @author Gerhard Petracek
+ * Helper which allows to create instances of {@link BeforePhase}
  */
 abstract class BeforePhaseBinding extends AnnotationLiteral<BeforePhase> implements BeforePhase
 {

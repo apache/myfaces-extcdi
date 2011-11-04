@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi;
 import org.apache.myfaces.extensions.cdi.core.impl.spi.InterceptorStrategy;
 
 /**
- * @author Gerhard Petracek
+ * Allows to provide a custom {@link InterceptorStrategy}
  */
 public interface PageParameterStrategy extends InterceptorStrategy
 {

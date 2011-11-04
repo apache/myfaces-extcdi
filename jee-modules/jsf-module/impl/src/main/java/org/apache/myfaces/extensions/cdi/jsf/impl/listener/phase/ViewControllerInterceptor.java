@@ -29,7 +29,7 @@ import javax.interceptor.InvocationContext;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * interceptor for {@link View} - details see {@link ViewControllerStrategy}
  */
 
 @View(ViewControllerInterceptor.PlaceHolderConfig.class)

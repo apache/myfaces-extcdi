@@ -34,8 +34,6 @@ import java.util.Iterator;
  * {@link javax.faces.FacesWrapper} interface.
  *
  * !!!keep both implementations in sync!!!
- * 
- * @author Gerhard Petracek
  */
 public class CodiRenderKitFactory extends RenderKitFactory implements Deactivatable
 {

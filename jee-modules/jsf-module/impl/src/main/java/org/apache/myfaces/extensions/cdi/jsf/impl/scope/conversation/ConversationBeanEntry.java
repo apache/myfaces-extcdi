@@ -23,7 +23,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
- * @author Gerhard Petracek
+ * {@link org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEntry} for serializable beans
  */
 class ConversationBeanEntry<T> extends AbstractConversationBeanEntry<T>
 {

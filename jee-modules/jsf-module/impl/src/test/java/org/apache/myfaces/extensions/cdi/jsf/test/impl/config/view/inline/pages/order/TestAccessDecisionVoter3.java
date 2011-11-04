@@ -25,7 +25,7 @@ import javax.interceptor.InvocationContext;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Empty {@link AccessDecisionVoter}
  */
 class TestAccessDecisionVoter3 implements AccessDecisionVoter
 {

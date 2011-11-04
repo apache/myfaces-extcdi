@@ -23,7 +23,8 @@ import java.io.IOException;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Allows to customize the basic window integration.
+ * E.g. needed for adapters for component libs which already provide a window-id concept
  */
 public interface WindowHandler extends Serializable
 {

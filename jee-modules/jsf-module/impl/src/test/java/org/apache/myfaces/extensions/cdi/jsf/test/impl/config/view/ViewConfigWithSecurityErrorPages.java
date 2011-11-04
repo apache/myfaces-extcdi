@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Secured(value = TestAccessDecisionVoter1.class, errorView = SimpleView.class)
 abstract class ViewConfigWithSecurityErrorPages implements ViewConfig

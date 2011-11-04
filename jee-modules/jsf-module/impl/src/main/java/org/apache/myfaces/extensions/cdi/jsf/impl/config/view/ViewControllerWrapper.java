@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Helper used by {@link ViewConfigExtension} for filtering annotations
  */
 class ViewControllerWrapper implements AnnotatedType<Object>
 {

@@ -25,7 +25,7 @@ import java.util.Date;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
+ * Allows to implement custom implementations of {@link WindowContext}
  */
 public interface EditableWindowContext extends WindowContext
 {

@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Allows to implement a custom extractor which for custom view-config concepts
  */
 public interface ViewConfigExtractor extends Serializable
 {

@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Wind
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.ConversationConfig;
 
 /**
- * @author Gerhard Petracek
+ * Factory which allows to create custom instances of {@link EditableWindowContext}
  */
 public interface WindowContextFactory
 {

@@ -37,7 +37,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.getWindowContextIdHolderComponent;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ApplicationScoped
 public class DefaultWindowHandler implements WindowHandler

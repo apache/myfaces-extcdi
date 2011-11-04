@@ -35,7 +35,7 @@ import java.util.logging.Logger;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
+ * Maps JSF2 scopes to CDI scopes
  */
 public class MappedJsf2ScopeExtension implements Extension, Deactivatable
 {

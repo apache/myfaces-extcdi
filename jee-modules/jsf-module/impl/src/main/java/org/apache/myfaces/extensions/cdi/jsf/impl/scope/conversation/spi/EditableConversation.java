@@ -24,8 +24,7 @@ import org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi.BeanEn
 import java.util.Set;
 
 /**
- * TODO
- * @author Gerhard Petracek
+ * Allows to implement custom implementations of {@link Conversation}
  */
 public interface EditableConversation extends Conversation
 {

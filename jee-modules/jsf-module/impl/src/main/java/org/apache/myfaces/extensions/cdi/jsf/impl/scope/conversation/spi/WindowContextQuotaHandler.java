@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.spi;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Allows to create a custom handler for a custom window-quota
  */
 public interface WindowContextQuotaHandler extends Serializable
 {

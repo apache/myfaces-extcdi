@@ -23,7 +23,7 @@ import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * Producer for JSF artifacts
  */
 @RequestScoped
 public class FacesInformationProducer

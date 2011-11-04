@@ -24,7 +24,7 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class AccessScopeAwareNavigationHandler extends
         org.apache.myfaces.extensions.cdi.jsf.impl.navigation.AccessScopeAwareNavigationHandler

@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Resolver for view-configs
  */
 public interface ViewConfigResolver extends Serializable
 {

@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 
 /**
- * @author Gerhard Petracek
+ * Helper which is used by {@link DefaultViewConfigExtractor}
  */
 class ExtractedInlineViewConfigDefinitionEntry extends ExtractedViewConfigDefinitionEntry
 {

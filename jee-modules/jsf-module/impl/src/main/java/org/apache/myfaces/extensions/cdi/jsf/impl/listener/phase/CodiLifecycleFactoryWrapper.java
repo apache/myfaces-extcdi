@@ -26,7 +26,7 @@ import javax.faces.lifecycle.Lifecycle;
 import java.util.Iterator;
 
 /**
- * @author Gerhard Petracek
+ * Factory for wrapping {@link Lifecycle} with {@link CodiLifecycleWrapper}
  */
 public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Deactivatable
 {

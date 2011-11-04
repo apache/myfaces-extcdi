@@ -60,7 +60,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * internal! utils
- * @author Gerhard Petracek
  */
 @Typed()
 public abstract class ConversationUtils

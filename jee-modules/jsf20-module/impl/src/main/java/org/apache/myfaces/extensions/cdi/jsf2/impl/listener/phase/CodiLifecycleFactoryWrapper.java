@@ -27,7 +27,7 @@ import javax.faces.lifecycle.Lifecycle;
 import java.util.Iterator;
 
 /**
- * @author Gerhard Petracek
+ * keep in sync with org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.CodiLifecycleFactoryWrapper
  */
 public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Deactivatable
 {

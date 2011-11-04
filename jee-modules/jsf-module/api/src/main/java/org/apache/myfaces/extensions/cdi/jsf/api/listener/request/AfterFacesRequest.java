@@ -34,8 +34,6 @@ import java.lang.annotation.Target;
  *
  * Attention: referencing @ApplicationScoped or @Singleton scoped beans might lead to issues with a CDI implementation
  * (e.g. if the ServletRequestListener of OWB gets called earlier)
- *
- * @author Gerhard Petracek
  */
 
 @Target({PARAMETER, FIELD})

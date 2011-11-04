@@ -24,7 +24,7 @@ import javax.enterprise.inject.Typed;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Helper for handling {@link NamedArgument}s
  */
 @Typed()
 class SimpleNamedArgument implements NamedArgument

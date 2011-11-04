@@ -53,7 +53,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
  * states in the EditableWindowContextManager.
  * We also use it to cleanup unused or obsolete
  * WindowContexts if needed.
- * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
 @ApplicationScoped

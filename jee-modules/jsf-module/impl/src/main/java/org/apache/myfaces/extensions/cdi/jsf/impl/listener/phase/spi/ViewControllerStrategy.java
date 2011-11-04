@@ -22,8 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.spi.InterceptorStrategy;
 
 /**
  * Marker interface for a pluggable strategy for {@link org.apache.myfaces.extensions.cdi.core.api.config.view.View}
- *
- * @author Gerhard Petracek
  */
 public interface ViewControllerStrategy extends InterceptorStrategy
 {

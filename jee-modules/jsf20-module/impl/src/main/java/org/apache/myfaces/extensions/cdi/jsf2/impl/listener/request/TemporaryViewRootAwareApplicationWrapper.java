@@ -27,9 +27,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.PreDestroyViewMapEvent;
 import javax.faces.event.SystemEvent;
 
-//needed due to EXTCDI-167
 /**
- * @author Gerhard Petracek
+ * needed due to EXTCDI-167
  */
 class TemporaryViewRootAwareApplicationWrapper extends ApplicationWrapper
 {

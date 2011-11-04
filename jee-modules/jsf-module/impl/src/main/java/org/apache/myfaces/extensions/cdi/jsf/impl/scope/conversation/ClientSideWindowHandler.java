@@ -40,9 +40,6 @@ import java.io.OutputStream;
 
 /**
  * WindowHandler which uses JavaScript to store the windowId.
- *
- * @author Mark Struberg
- * @author Jakob Korherr
  */
 @Alternative
 @ApplicationScoped

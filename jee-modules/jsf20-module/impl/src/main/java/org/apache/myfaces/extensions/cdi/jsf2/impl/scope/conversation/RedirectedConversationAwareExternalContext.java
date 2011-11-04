@@ -30,7 +30,8 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.sendRedirect;
 
 /**
- * @author Gerhard Petracek
+ * keep in sync with
+ * org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RedirectedConversationAwareExternalContext
  */
 public class RedirectedConversationAwareExternalContext extends ExternalContextWrapper
 {

@@ -37,7 +37,7 @@ import javax.faces.event.ExceptionQueuedEventContext;
 import java.util.Iterator;
 
 /**
- * @author Gerhard Petracek
+ * Needed for autom. usage of {@link DefaultErrorView}
  */
 class DefaultErrorViewExceptionHandler extends ExceptionHandlerWrapper
 {

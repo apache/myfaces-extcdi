@@ -31,8 +31,6 @@ import java.util.Iterator;
 
 /**
  * !!!keep in sync with org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.CodiRenderKitFactory!!!
- *
- * @author Gerhard Petracek
  */
 public class CodiRenderKitFactory extends RenderKitFactory implements Deactivatable
 {

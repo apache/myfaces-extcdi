@@ -38,7 +38,7 @@ import javax.enterprise.inject.Typed;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Helper for {@link org.apache.myfaces.extensions.cdi.core.api.security.Secured}
  */
 @Typed()
 public abstract class SecurityUtils

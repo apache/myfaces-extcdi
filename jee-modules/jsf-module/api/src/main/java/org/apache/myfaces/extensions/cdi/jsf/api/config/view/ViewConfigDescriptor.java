@@ -25,7 +25,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Descriptor for view-configs
  */
 public interface ViewConfigDescriptor
 {

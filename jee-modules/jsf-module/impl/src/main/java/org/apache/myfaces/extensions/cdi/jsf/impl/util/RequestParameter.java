@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Arrays;
 
 /**
- * @author Gerhard Petracek
+ * Helper for request-parameters
  */
 public class RequestParameter
 {

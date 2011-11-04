@@ -30,7 +30,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * @author Gerhard Petracek
+ * Caches information for a request
  */
 @Typed()
 public class RequestCache

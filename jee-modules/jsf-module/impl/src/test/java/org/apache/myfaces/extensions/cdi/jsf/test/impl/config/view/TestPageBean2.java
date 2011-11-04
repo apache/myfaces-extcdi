@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view;
 
 /**
- * @author Gerhard Petracek
+ * Page-bean
  */
 class TestPageBean2
 {

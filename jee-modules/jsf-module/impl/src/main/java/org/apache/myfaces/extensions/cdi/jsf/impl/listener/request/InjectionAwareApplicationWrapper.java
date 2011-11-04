@@ -44,11 +44,9 @@ import java.util.Iterator;
 import java.util.Collection;
 
 /**
- * TODO move it to a meaningful package
- *
- * @author Gerhard Petracek
  * @see org.apache.myfaces.extensions.cdi.jsf.impl.listener.phase.RestoreInjectionPointsObserver
  */
+//TODO move it to a meaningful package
 @Typed()
 class InjectionAwareApplicationWrapper extends Application
 {

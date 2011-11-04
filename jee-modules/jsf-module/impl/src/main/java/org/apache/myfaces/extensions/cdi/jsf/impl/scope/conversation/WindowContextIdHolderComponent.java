@@ -24,7 +24,7 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * Server-side holder for the window-id
  */
 public class WindowContextIdHolderComponent extends UIOutput
 {

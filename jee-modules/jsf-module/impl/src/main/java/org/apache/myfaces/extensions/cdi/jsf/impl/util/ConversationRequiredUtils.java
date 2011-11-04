@@ -40,7 +40,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * Helper methods for {@link ConversationRequired}
  */
 @Typed()
 public abstract class ConversationRequiredUtils

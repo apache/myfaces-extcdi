@@ -32,7 +32,7 @@ import java.lang.reflect.Type;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
+ * Helper used by {@link MappedJsf2ScopeExtension}
  */
 class Jsf2BeanWrapper implements AnnotatedType<Object>
 {

@@ -31,8 +31,6 @@ import javax.faces.context.FacesContext;
 /**
  * Allows a better performance and a fine-grained deactivation of the sub-view handlers
  * btw. extending them or a stand-alone usage.
- *
- * @author Gerhard Petracek
  */
 public class CodiViewHandler extends ViewHandlerWrapper implements Deactivatable
 {

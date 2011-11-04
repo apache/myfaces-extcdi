@@ -25,7 +25,7 @@ import javax.enterprise.inject.Specializes;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Specializes
 @RequestScoped

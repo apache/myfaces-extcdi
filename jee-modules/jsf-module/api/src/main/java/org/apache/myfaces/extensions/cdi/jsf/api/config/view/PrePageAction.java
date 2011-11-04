@@ -27,8 +27,6 @@ import static java.lang.annotation.ElementType.METHOD;
 /**
  * View-controller annotation for page-beans.
  * Methods annotated with this annotation will be invoked before the method binding gets invoked.
- *
- * @author Gerhard Petracek
  */
 @Target(METHOD)
 @Retention(RUNTIME)

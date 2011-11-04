@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf2.impl.security.SecurityAwareViewHan
 import javax.faces.application.ViewHandler;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class CodiViewHandler extends org.apache.myfaces.extensions.cdi.jsf.impl.CodiViewHandler
 {

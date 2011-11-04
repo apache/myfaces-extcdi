@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author Gerhard Petracek
+ * keep in sync with org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.CodiFacesContextWrapper
  */
 class CodiFacesContextWrapper extends FacesContextWrapper
 {

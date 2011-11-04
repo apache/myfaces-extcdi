@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 
 /**
  * Interfaces are primarily supported for multiple nesting.
- *
- * @author Gerhard Petracek
  */
 interface MultipleSimpleNestedConfigs extends ViewConfig
 {

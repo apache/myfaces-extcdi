@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Secured(value = TestAccessDecisionVoter3.class)
 public interface SecuredPage extends ViewConfig

@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.test.impl.config.view.inline.pages
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.InlineViewConfigRoot;
 
 /**
- * @author Gerhard Petracek
+ * Marker for inline view-configs
  */
 @InlineViewConfigRoot(pageBeanPostfix = {"Page", "PageBean"})
 public interface BasefolderViewConfigRootMarker

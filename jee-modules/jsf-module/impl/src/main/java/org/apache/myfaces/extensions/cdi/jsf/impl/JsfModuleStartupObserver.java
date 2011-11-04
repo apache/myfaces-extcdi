@@ -35,7 +35,7 @@ import javax.inject.Inject;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
+ * Startup observer
  */
 @ApplicationScoped
 public class JsfModuleStartupObserver extends AbstractStartupObserver

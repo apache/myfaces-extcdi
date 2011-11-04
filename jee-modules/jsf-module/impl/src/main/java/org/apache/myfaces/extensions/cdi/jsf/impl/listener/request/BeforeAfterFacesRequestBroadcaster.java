@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * Broadcaster for {@link BeforeFacesRequest} and {@link AfterFacesRequest}
  */
 public class BeforeAfterFacesRequestBroadcaster
 {

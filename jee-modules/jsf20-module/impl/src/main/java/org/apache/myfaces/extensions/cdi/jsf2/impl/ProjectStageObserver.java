@@ -32,7 +32,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ProjectStageActivated({Production.class, Development.class, UnitTest.class, SystemTest.class})
 @ApplicationScoped

@@ -25,7 +25,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.PreRenderView;
 import javax.enterprise.inject.Model;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Page
 @Model

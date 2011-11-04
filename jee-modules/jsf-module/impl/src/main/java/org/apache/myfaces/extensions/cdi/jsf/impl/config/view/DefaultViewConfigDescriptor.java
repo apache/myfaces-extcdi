@@ -41,7 +41,7 @@ import java.util.List;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.getContextualReferenceByName;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class DefaultViewConfigDescriptor implements EditableViewConfigDescriptor
 {

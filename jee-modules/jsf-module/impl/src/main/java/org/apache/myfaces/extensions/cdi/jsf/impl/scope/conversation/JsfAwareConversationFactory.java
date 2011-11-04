@@ -34,7 +34,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ApplicationScoped
 public class JsfAwareConversationFactory implements ConversationFactory

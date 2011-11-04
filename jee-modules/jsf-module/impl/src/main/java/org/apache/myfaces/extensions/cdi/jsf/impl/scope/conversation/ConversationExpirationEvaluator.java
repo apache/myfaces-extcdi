@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Evaluator which calculates if a conversation has been expired
  */
 public interface ConversationExpirationEvaluator extends Serializable
 {

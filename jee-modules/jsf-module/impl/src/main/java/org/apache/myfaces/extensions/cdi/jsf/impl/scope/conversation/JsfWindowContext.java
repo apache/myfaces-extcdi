@@ -52,7 +52,7 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 /**
  * TODO
  *
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Typed()
 class JsfWindowContext implements EditableWindowContext

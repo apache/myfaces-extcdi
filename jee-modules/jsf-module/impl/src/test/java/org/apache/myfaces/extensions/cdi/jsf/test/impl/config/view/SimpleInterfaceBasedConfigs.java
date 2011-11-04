@@ -26,8 +26,6 @@ import static org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.Navigat
 
 /**
  * Interfaces are primarily supported for multiple nesting.
- *
- * @author Gerhard Petracek
  */
 @Page(basePath = "/pages")
 interface SimpleInterfaceBasedConfigs extends ViewConfig

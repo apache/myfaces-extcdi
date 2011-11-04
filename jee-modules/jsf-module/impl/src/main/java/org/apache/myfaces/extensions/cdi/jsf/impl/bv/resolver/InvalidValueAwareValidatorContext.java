@@ -29,8 +29,9 @@ import javax.validation.Validator;
 
 
 /**
- * @author Gerhard Petracek
+ * {@link ValidatorContext} which allows to use 'invalidValue' as placeholder in violation messages
  */
+//TODO move to a different package
 class InvalidValueAwareValidatorContext implements ValidatorContext
 {
     private ValidatorContext wrapped;

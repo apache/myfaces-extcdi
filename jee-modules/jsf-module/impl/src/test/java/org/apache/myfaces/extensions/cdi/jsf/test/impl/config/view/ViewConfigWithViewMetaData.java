@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @ViewMetaData1
 @ViewMetaData2(level = 0)

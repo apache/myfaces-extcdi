@@ -39,7 +39,7 @@ import java.util.Collection;
 import static org.apache.myfaces.extensions.cdi.core.impl.CoreModuleBeanNames.WINDOW_CONTEXT_MANAGER_BEAN_NAME;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @SessionScoped
 @Named(WINDOW_CONTEXT_MANAGER_BEAN_NAME)

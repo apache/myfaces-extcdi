@@ -28,8 +28,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Stereotype for marking a class as page for type-safe view-configs.
- *
- * @author Gerhard Petracek
  */
 @Stereotype
 

@@ -32,7 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ApplicationScoped
 class DefaultBeanEntryFactory implements BeanEntryFactory

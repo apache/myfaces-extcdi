@@ -33,7 +33,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Named;
 
 /**
- * @author Gerhard Petracek
+ * Producer for I18n artifacts
  */
 @ApplicationScoped
 public class JsfAwareMessageContextProducer

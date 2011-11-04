@@ -39,8 +39,6 @@ import java.util.List;
 /**
  * intermediate workaround for
  * {@link org.apache.myfaces.extensions.cdi.jsf.impl.util.JsfUtils#registerPhaseListener}
- *
- * @author Gerhard Petracek
  */
 class CodiLifecycleWrapper extends Lifecycle
 {

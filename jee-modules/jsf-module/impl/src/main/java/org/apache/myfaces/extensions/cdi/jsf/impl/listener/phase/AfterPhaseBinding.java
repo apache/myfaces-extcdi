@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import javax.enterprise.util.AnnotationLiteral;
 
 /**
- * @author Gerhard Petracek
+ * Helper which allows to create instances of {@link AfterPhase}
  */
 abstract class AfterPhaseBinding extends AnnotationLiteral<AfterPhase> implements AfterPhase
 {

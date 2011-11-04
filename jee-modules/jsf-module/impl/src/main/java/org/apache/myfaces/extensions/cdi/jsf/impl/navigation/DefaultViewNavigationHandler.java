@@ -25,7 +25,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * Navigation handler for view-configs
  */
 @ApplicationScoped
 public class DefaultViewNavigationHandler implements ViewNavigationHandler

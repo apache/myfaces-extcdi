@@ -24,8 +24,6 @@ import java.io.Serializable;
 /**
  * Component libs like Trinidad use very special renderkits.
  * This factory allows support modules to customize the default behavior of CODI.
- * 
- * @author Gerhard Petracek
  */
 public interface RenderKitWrapperFactory extends Serializable
 {

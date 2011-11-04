@@ -35,7 +35,7 @@ import javax.inject.Named;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Producer for window aware artifacts
  */
 @ApplicationScoped
 public class WindowBeanProducers

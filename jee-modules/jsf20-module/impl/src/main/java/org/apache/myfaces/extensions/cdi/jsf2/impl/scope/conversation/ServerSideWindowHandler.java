@@ -34,8 +34,6 @@ import java.io.IOException;
 /**
  * use this implementation to avoid tokens in the url.
  * attention: e.g. manual window refreshes aren't supported due to browser restrictions
- *
- * @author Gerhard Petracek
  */
 @SuppressWarnings({"UnusedDeclaration"})
 @Alternative

@@ -29,7 +29,7 @@ import javax.interceptor.InvocationContext;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Interceptor for {@link Secured} - details see {@link SecurityStrategy}
  */
 @Secured(SecurityInterceptor.PlaceHolderVoter.class)
 @Interceptor

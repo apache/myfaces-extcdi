@@ -30,7 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Helper methods using reflection
  */
 public class ReflectionUtils
 {

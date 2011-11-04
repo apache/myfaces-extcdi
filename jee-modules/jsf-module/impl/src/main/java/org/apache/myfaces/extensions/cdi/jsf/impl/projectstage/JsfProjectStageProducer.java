@@ -28,7 +28,7 @@ import javax.enterprise.inject.Typed;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
+ * {@link ProjectStageProducer} which allows the compatibility with JSF project-stages
  */
 @Typed()
 public class JsfProjectStageProducer extends ProjectStageProducer

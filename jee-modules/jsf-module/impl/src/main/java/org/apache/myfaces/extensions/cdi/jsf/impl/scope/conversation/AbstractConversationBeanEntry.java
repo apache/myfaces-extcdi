@@ -29,7 +29,7 @@ import java.io.Serializable;
 import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.createNewInstanceOfBean;
 
 /**
- * @author Gerhard Petracek
+ * Basic implementation of {@link BeanEntry}
  */
 abstract class AbstractConversationBeanEntry<T> implements BeanEntry<T>
 {

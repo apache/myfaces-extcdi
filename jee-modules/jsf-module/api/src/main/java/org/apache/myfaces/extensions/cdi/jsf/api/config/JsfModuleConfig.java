@@ -26,8 +26,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 /**
  * Config for all JSF specific configurations.
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfig

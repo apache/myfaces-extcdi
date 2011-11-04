@@ -34,7 +34,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Allows to use 'invalidValue' as placeholder in violation messages
  */
 @Typed()
 public class InvalidValueAwareMessageInterpolator implements MessageInterpolator

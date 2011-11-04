@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.config.Conv
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Factory which allows to create custom {@link EditableConversation} implementations
  */
 public interface ConversationFactory extends Serializable
 {

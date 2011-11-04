@@ -24,7 +24,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Specializes;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Specializes
 @ApplicationScoped

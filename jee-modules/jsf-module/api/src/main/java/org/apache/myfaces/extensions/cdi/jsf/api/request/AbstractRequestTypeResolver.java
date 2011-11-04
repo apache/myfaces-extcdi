@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.api.request;
 
 /**
  * Base implementation which adds the possibility to provide a custom implementation.
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractRequestTypeResolver implements RequestTypeResolver
 {

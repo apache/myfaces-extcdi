@@ -40,8 +40,6 @@ import java.util.Set;
 
 /**
  * extension for registering the adapter for grouped conversations
- *
- * @author Gerhard Petracek
  */
 public class GroupedConversationContextExtension implements Extension, Deactivatable
 {

@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.api.listener.phase;
 
 /**
  * Allows to detect the current request-lifecycle-phase in a bean.
- *
- * @author Gerhard Petracek
  */
 public interface JsfLifecyclePhaseInformation
 {

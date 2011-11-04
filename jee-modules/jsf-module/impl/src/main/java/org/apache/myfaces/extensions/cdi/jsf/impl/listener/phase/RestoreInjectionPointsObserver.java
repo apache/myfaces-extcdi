@@ -37,8 +37,6 @@ import java.util.Collection;
 
 /**
  * see EXTCDI-127
- *
- * @author Gerhard Petracek
  */
 @ApplicationScoped
 public class RestoreInjectionPointsObserver

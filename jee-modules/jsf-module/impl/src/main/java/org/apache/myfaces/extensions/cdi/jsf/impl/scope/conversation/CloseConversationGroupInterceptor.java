@@ -32,8 +32,6 @@ import java.io.Serializable;
  * It's an alternative for injecting and using the
  * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} or
  * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation} directly.
- * 
- * @author Gerhard Petracek
  */
 @CloseConversationGroup
 @Interceptor

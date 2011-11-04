@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 
 /**
- * @author Gerhard Petracek
+ * Allows to provide a custom {@link ViewConfigDescriptor}
  */
 public interface EditableViewConfigDescriptor extends ViewConfigDescriptor
 {

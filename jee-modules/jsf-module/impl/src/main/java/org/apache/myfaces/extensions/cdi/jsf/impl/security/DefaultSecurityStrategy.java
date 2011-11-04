@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.lang.reflect.Method;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Dependent
 public class DefaultSecurityStrategy implements SecurityStrategy

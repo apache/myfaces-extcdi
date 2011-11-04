@@ -38,8 +38,6 @@ import java.util.Map;
 /**
  * If you don't need it or there is any issue, deactivate it via a CDI extension via
  * {@link javax.enterprise.inject.spi.ProcessAnnotatedType#veto()} .
- * 
- * @author Gerhard Petracek
  */
 public class SecurityViewListener
 {

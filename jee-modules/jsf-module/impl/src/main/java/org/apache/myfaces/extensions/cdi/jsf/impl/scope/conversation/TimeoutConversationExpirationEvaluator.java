@@ -19,7 +19,7 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class TimeoutConversationExpirationEvaluator extends TimeoutExpirationEvaluator
         implements ConversationExpirationEvaluator

@@ -34,8 +34,6 @@ import javax.faces.component.UIViewRoot;
 /**
  * ATTENTION:
  * add all new methods to {@link org.apache.myfaces.extensions.cdi.jsf.impl.CodiViewHandler}
- *
- * @author Gerhard Petracek
  */
 public class WindowContextAwareViewHandler extends ViewHandlerWrapper implements Deactivatable
 {

@@ -27,7 +27,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 /**
- * @author Gerhard Petracek
+ * {@link RenderKit} for wrapping the {@link ResponseWriter} with {@link InterceptedResponseWriter}
  */
 class InterceptedRenderKit extends RenderKit
 {

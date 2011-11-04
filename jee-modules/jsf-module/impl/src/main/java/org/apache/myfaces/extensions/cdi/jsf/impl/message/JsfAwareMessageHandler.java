@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * {@link org.apache.myfaces.extensions.cdi.message.api.MessageHandler} which adds the added messages as
+ * {@link FacesMessage} to the current {@link FacesContext}
  */
 class JsfAwareMessageHandler extends AbstractMessageHandler
 {

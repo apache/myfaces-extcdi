@@ -21,7 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.Conversation;
 
 /**
- * @author Gerhard Petracek
+ * Internal interface
  */
 interface ConversationAware
 {

@@ -26,7 +26,7 @@ import java.io.Writer;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.addWindowContextIdHolderComponent;
 
 /**
- * @author Gerhard Petracek
+ * keep in sync with org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.InterceptedRenderKit
  */
 class InterceptedRenderKit extends RenderKitWrapper
 {

@@ -32,8 +32,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * This annotation can be used as interceptor for JSF action methods or
  * as simple annotation at View-Configs annotated with {@see Page} or
  * sub-classes of such classes. These parameters have to be added for a navigation
- *
- * @author Gerhard Petracek
  */
 @Target({METHOD, TYPE})
 @Retention(RUNTIME)

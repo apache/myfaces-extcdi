@@ -23,7 +23,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import javax.inject.Named;
 
 /**
- * @author Gerhard Petracek
+ * view-config
  */
 @Page
 @Named

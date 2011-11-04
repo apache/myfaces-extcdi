@@ -37,10 +37,9 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.*;
 import javax.enterprise.inject.Typed;
 
 /**
- * TODO move exceptions to util class
- *
- * @author Gerhard Petracek
+ * Internal cache for view-configs
  */
+//TODO move exceptions to util class
 @Typed()
 public class ViewConfigCache
 {

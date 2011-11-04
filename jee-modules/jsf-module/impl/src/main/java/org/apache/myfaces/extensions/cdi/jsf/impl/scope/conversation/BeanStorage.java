@@ -34,7 +34,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
+ * Storage for {@link BeanEntry}s
  */
 class BeanStorage implements Serializable
 {

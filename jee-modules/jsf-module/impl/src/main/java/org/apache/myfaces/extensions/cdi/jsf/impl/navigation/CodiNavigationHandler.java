@@ -26,8 +26,6 @@ import javax.faces.context.FacesContext;
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
- *
- * @author Gerhard Petracek
  */
 public class CodiNavigationHandler extends NavigationHandler implements Deactivatable
 {

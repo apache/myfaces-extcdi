@@ -37,7 +37,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@link ExternalContext} which is needed for the window-id support
  */
 public class RedirectedConversationAwareExternalContext extends ExternalContext
 {

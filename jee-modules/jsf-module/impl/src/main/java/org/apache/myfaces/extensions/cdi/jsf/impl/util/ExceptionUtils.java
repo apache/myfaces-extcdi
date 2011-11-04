@@ -35,7 +35,7 @@ import javax.enterprise.inject.Typed;
 import java.lang.reflect.Method;
 
 /**
- * @author Gerhard Petracek
+ * Helper for exceptions
  */
 //TODO create CODI exceptions
 @Typed()

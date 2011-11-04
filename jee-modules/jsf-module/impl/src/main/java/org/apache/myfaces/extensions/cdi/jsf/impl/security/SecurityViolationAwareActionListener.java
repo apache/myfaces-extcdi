@@ -27,7 +27,8 @@ import javax.faces.event.ActionEvent;
 import javax.faces.FacesException;
 
 /**
- * @author Gerhard Petracek
+ * {@link ActionListener} which handles
+ * {@link org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException}
  */
 public class SecurityViolationAwareActionListener implements ActionListener, Deactivatable
 {

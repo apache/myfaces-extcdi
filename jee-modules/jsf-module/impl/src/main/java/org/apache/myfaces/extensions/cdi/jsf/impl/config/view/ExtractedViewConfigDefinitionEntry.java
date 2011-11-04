@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * @author Gerhard Petracek
+ * Helper used by {@link DefaultViewConfigExtractor}
  */
 class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
 {

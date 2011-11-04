@@ -36,7 +36,7 @@ import java.util.Collection;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.missingInlineViewConfigRootMarkerException;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultViewConfigExtractor implements ViewConfigExtractor
 {

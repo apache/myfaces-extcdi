@@ -28,7 +28,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
 
 /**
- * @author Gerhard Petracek
+ * Qualifier for after-phase observers
  */
 
 @Target({PARAMETER, FIELD, METHOD})

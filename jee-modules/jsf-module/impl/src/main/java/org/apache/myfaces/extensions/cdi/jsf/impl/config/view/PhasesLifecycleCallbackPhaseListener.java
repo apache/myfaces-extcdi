@@ -44,7 +44,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * @author Gerhard Petracek
+ * PhaseListener which calls the view-controller callbacks
  */
 //This class is no cdi-bean, there will be a #veto during the bootstrapping process
 @Advanced

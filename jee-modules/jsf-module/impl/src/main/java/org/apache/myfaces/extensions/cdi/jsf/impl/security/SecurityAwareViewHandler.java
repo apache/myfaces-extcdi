@@ -39,8 +39,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.SecurityUtils.inv
 /**
  * ATTENTION:
  * add all new methods to {@link org.apache.myfaces.extensions.cdi.jsf.impl.CodiViewHandler}
- *
- * @author Gerhard Petracek
  */
 public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deactivatable
 {

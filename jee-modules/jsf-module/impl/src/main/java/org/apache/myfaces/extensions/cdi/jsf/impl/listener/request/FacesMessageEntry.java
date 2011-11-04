@@ -23,7 +23,7 @@ import javax.faces.application.FacesMessage;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Entry for {@link FacesMessage} which have to be stored longer than a request
  */
 @Typed()
 public class FacesMessageEntry implements Serializable

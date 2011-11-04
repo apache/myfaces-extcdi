@@ -38,7 +38,7 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page.NavigationMode
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Tests for view-configs
  */
 public class ViewConfigTest
 {

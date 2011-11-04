@@ -29,8 +29,6 @@ import java.io.IOException;
  * Adds
  * {@link WindowContextIdHolderComponent}
  * to the tree before the call of {@link #startDocument}
- *
- * @author Gerhard Petracek
  */
 public class InterceptedResponseWriter extends ResponseWriterWrapper
 {

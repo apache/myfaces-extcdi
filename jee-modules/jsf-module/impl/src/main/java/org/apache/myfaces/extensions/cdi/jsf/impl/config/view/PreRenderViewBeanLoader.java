@@ -32,7 +32,7 @@ import javax.faces.event.PhaseEvent;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Resolves page-beans and trigger {@link javax.annotation.PostConstruct} callbacks before the rendering process starts
  */
 @ApplicationScoped
 public class PreRenderViewBeanLoader

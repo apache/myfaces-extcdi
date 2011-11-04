@@ -42,8 +42,6 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 
 /**
  * We have to ensure the invocation order for the type-safe navigation feature/s.
- * 
- * @author Gerhard Petracek
  */
 public class CodiNavigationHandler extends ConfigurableNavigationHandler implements Deactivatable
 {

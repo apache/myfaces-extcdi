@@ -31,7 +31,7 @@ import javax.faces.application.Application;
 import javax.enterprise.inject.spi.BeanManager;
 
 /**
- * @author Gerhard Petracek
+ * Attention: currently not used due to issues with the current JSF implementations
  */
 public class CodiJsf2SystemEventListener implements SystemEventListener, Deactivatable
 {

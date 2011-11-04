@@ -43,8 +43,6 @@ import java.util.Map;
  * <br/>
  * for named arguments:<br/>
  * #{messageContext['msgKey']['argKey:#{bean.value}'].toText}
- *
- * @author Gerhard Petracek
  */
 @Typed()
 class MessageHelperMap extends UnmodifiableMap<String, Object>

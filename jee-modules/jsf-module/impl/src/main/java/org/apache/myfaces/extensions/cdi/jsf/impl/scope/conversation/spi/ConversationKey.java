@@ -23,7 +23,7 @@ import java.util.Set;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Key which identifies a conversation
  */
 public interface ConversationKey extends Serializable
 {

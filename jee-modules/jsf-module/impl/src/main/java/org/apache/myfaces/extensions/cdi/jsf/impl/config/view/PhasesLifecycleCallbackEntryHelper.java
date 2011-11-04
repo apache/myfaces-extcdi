@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * @author Gerhard Petracek
+ * Helper for {@link DefaultPageBeanDescriptor}
  */
 class PhasesLifecycleCallbackEntryHelper
 {

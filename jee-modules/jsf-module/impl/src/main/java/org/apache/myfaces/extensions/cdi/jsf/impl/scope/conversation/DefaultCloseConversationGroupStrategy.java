@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import java.lang.reflect.Method;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Dependent
 public class DefaultCloseConversationGroupStrategy implements CloseConversationGroupStrategy

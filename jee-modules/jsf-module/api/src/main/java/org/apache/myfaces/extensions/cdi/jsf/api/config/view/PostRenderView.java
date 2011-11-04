@@ -28,8 +28,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * View-controller annotation for page-beans.
  * Methods annotated with this annotation will be invoked after the view gets rendered.
- * 
- * @author Gerhard Petracek
  */
 @Target(METHOD)
 @Retention(RUNTIME)

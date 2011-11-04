@@ -49,7 +49,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * @author Gerhard Petracek
+ * {@link NavigationHandler} which allows to use view-configs for JSF navigation
  */
 public class ViewConfigAwareNavigationHandler extends NavigationHandler
 {

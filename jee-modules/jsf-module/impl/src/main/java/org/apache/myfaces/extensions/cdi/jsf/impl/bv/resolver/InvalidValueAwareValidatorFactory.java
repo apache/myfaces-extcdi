@@ -26,8 +26,10 @@ import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorContext;
 
 /**
- * @author Gerhard Petracek
+ * Serializable {@link javax.validation.ValidatorFactory}
+ * which allows the usage of 'invalidValue' as placeholder in violation messages
  */
+//TODO move to a different package
 @Typed()
 class InvalidValueAwareValidatorFactory extends SerializableValidatorFactory
 {

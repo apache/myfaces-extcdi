@@ -22,7 +22,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Entry for phase-listener-methods
  */
 public interface RequestLifecycleCallbackEntry
 {

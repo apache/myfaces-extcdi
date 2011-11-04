@@ -26,7 +26,8 @@ import java.io.Serializable;
 import java.util.Map;
 
 /**
- * @author Gerhard Petracek
+ * Event which gets triggered lazily as soon as the JSF container is up and running.
+ * Attention: the concrete point depends on the JSF implementation
  */
 @Typed()
 class JsfStartupEvent implements StartupEvent

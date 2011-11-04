@@ -32,7 +32,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 /**
- * @author Gerhard Petracek
+ * Strategy which allows to restrict calls to phase-listener-methods
  */
 @Dependent
 public class DefaultViewControllerStrategy implements ViewControllerStrategy

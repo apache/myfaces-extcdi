@@ -28,7 +28,7 @@ import javax.interceptor.InvocationContext;
 import java.io.Serializable;
 
 /**
- * @author Gerhard Petracek
+ * Extensible interceptor for {@link PageParameter} - details see {@link PageParameterStrategy}
  */
 
 @PageParameter(key = "", value = "")

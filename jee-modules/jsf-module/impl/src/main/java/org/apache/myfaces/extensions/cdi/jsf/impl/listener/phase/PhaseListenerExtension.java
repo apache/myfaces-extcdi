@@ -47,7 +47,6 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectF
  * beans for later registration as PhaseListeners.
  * We have to maintain this separately for each ContextClassLoader since it
  * is possible that multiple WebApps start up in parallel.
- * @author Gerhard Petracek
  */
 public class PhaseListenerExtension implements Extension
 {

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 public class DefaultRequestLifecycleCallbackEntry implements RequestLifecycleCallbackEntry
 {

@@ -29,7 +29,7 @@ import java.io.Serializable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author Gerhard Petracek
+ * Helper for the workaround for EXTCDI-49
  */
 @WindowScoped
 public class ViewAccessConversationExpirationEvaluatorRegistry implements Serializable

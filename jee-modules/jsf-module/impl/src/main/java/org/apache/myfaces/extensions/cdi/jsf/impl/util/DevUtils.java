@@ -24,7 +24,7 @@ import javax.enterprise.event.Observes;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * Helper for handling special constellations in case of project-stage dev.
  */
 public class DevUtils
 {

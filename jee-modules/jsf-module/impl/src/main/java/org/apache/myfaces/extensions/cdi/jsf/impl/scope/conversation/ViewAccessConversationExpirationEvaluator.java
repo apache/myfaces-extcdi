@@ -28,7 +28,8 @@ import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ConversationUtils.
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * {@link ConversationExpirationEvaluator} for
+ * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped}
  */
 class ViewAccessConversationExpirationEvaluator implements ConversationExpirationEvaluator, ConversationAware
 {

@@ -51,7 +51,7 @@ import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Typed()
 @SuppressWarnings({"UnusedDeclaration"})

@@ -22,8 +22,6 @@ import javax.faces.context.FacesContext;
 
 /**
  *  A WindowHandler that is aware of the JSF lifecycle.
- *
- * @author Jakob Korherr
  */
 public interface LifecycleAwareWindowHandler extends WindowHandler
 {

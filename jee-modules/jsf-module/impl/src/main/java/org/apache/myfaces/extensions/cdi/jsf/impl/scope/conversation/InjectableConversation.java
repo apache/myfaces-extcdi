@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Typed()
 public class InjectableConversation implements EditableConversation

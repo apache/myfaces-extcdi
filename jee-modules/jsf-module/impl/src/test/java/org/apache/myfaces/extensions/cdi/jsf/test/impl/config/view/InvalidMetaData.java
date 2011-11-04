@@ -25,7 +25,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.TYPE;
 
 /**
- * @author Gerhard Petracek
+ * Meta-data without {@link org.apache.myfaces.extensions.cdi.core.api.config.view.ViewMetaData}
  */
 @Target({TYPE})
 @Retention(RUNTIME)

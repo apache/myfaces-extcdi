@@ -29,8 +29,6 @@ import java.lang.annotation.Target;
  * Annotation for implementations of {@link javax.faces.event.PhaseListener}.
  * Use {@link org.apache.myfaces.extensions.cdi.core.api.InvocationOrder} if it is required to specify the order
  * of your {@link javax.faces.event.PhaseListener}s.
- *  
- * @author Gerhard Petracek
  */
 
 @Target(TYPE)

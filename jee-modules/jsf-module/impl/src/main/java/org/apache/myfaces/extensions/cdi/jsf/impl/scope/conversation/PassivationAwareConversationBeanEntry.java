@@ -24,8 +24,6 @@ import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * Fallback e.g. for Weld
- *
- * @author Gerhard Petracek
  */
 class PassivationAwareConversationBeanEntry<T> extends AbstractConversationBeanEntry<T>
 {

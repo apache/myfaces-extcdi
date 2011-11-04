@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * @author Gerhard Petracek
+ * {@link FacesContext} which is needed for wrapping {@link ExternalContext} and which provides additional features
  */
 @Typed()
 class CodiFacesContextWrapper extends FacesContext

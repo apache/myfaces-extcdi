@@ -25,7 +25,8 @@ import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 
 /**
- * @author Gerhard Petracek
+ * Extensible interceptor for {@link PageParameter.List} - details see
+ * {@link org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.PageParameterStrategy}
  */
 @PageParameter.List({})
 @Interceptor

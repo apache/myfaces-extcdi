@@ -26,12 +26,6 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * @author Gerhard Petracek
- */
-@Target(TYPE)
-@Retention(RUNTIME)
-@Documented
-/**
  * Only required for inline view-configs!
  *
  * Annotate a marker class or interface with this annotation for marking the package of the marker as base package.
@@ -48,6 +42,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * my.customPackage.view.registration.RegistrationStep01 //annotated with @Page and implements ViewConfig
  * -> view-id: /registration/registrationStep01.xhtml
  */
+@Target(TYPE)
+@Retention(RUNTIME)
+@Documented
 public @interface InlineViewConfigRoot
 {
     /**

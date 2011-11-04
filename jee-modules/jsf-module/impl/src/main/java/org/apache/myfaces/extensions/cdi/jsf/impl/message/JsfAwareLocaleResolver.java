@@ -24,7 +24,7 @@ import javax.faces.context.FacesContext;
 import java.util.Locale;
 
 /**
- * @author Gerhard Petracek
+ * {@link LocaleResolver} which uses the locale used for the current request
  */
 public class JsfAwareLocaleResolver implements LocaleResolver
 {

@@ -27,7 +27,8 @@ import javax.faces.application.NavigationHandler;
 import javax.faces.context.FacesContext;
 
 /**
- * @author Gerhard Petracek
+ * {@link NavigationHandler} needed for the
+ * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped}
  */
 public class AccessScopeAwareNavigationHandler extends NavigationHandler
 {

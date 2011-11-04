@@ -30,7 +30,7 @@ import java.util.HashSet;
 import java.util.Collections;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultConversationKey implements ConversationKey
 {

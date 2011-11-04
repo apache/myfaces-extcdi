@@ -39,7 +39,7 @@ import static javax.faces.event.PhaseId.*;
 import static org.apache.myfaces.extensions.cdi.jsf.impl.util.ExceptionUtils.unsupportedPhasesLifecycleCallback;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
 {

@@ -33,8 +33,6 @@ import java.util.Map;
 /**
  * Might be needed by startup listeners (which use artifacts which have @Advanced ValidatorFactory) for
  * creating sample data. For such sample data it's ok to have a factory which isn't aware of JSF.
- *
- * @author Gerhard Petracek
  */
 @Typed()
 class SerializableValidatorFactory implements ValidatorFactory, Serializable

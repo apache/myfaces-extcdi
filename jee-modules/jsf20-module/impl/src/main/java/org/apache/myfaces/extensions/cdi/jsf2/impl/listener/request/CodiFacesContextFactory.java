@@ -28,7 +28,7 @@ import javax.faces.context.FacesContextWrapper;
 import javax.faces.lifecycle.Lifecycle;
 
 /**
- * @author Gerhard Petracek
+ * keep in sync with org.apache.myfaces.extensions.cdi.jsf.impl.listener.request.CodiFacesContextFactory
  */
 public class CodiFacesContextFactory extends FacesContextFactory implements Deactivatable
 {

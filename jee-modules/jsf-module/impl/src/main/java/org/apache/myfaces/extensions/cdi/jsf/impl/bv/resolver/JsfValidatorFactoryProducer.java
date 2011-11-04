@@ -30,7 +30,7 @@ import java.io.Serializable;
 import static org.apache.myfaces.extensions.cdi.jsf.api.JsfModuleBeanNames.BEAN_VALIDATION_VALIDATOR_FACTORY;
 
 /**
- * @author Gerhard Petracek
+ * Producer for {@link ValidatorFactory} optimized for JSF
  */
 @ApplicationScoped
 public class JsfValidatorFactoryProducer implements Serializable

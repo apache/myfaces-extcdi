@@ -32,7 +32,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Typed()
 public class DefaultConversation implements EditableConversation

@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigExtension;
 
 /**
- * @author Gerhard Petracek
+ * {@link ViewConfigExtension} for unit-tests
  */
 class TestableViewConfigExtension extends ViewConfigExtension
 {

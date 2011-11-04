@@ -29,7 +29,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * @author Gerhard Petracek
+ * {@link MessageResolver} which uses the configured resource-bundle of a JSF application
  */
 class JsfAwareApplicationMessagesMessageResolver implements MessageResolver
 {

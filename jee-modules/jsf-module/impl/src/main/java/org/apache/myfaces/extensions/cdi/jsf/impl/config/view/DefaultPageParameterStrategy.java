@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @Dependent
 public class DefaultPageParameterStrategy implements PageParameterStrategy

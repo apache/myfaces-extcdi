@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.spi.InterceptorStrategy;
 /**
  * Marker interface for a pluggable strategy for
  * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.CloseConversationGroup}
- *
- * @author Gerhard Petracek
  */
 public interface CloseConversationGroupStrategy extends InterceptorStrategy
 {

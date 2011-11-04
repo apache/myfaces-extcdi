@@ -31,7 +31,7 @@ import javax.inject.Named;
 import java.lang.annotation.Annotation;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 
 @RequestScoped

@@ -38,8 +38,6 @@ import java.util.Collection;
 /**
  * Destructive operations aren't supported (compared to the SubKeyMap used in MyFaces).
  * Reason: It isn't allowed to remove navigation cases btw. View-Configs
- * 
- * @author Gerhard Petracek
  */
 class NavigationCaseMapWrapper implements Map<String, Set<NavigationCase>>
 {

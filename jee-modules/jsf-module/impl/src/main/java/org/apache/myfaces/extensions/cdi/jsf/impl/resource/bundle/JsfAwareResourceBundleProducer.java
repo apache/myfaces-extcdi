@@ -28,7 +28,7 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 
 /**
- * @author Gerhard Petracek
+ * Producer for {@link ResourceBundle} which produces {@link ResourceBundle}s optimized for JSF applications
  */
 @Dependent
 public class JsfAwareResourceBundleProducer extends ResourceBundleProducer

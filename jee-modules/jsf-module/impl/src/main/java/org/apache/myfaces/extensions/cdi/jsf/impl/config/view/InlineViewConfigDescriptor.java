@@ -22,7 +22,7 @@ import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
 /**
- * @author Gerhard Petracek
+ * Data-holder used by {@link ViewConfigCache}
  */
 class InlineViewConfigDescriptor
 {

@@ -26,8 +26,6 @@ import java.io.Serializable;
  * this implementation will be used by the
  * {@link org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowContext} but
  * there is no need for implementing the whole {@link ConversationExpirationEvaluator} interface.
- *
- * @author Gerhard Petracek
  */
 //TODO re-visit it
 public class TimeoutExpirationEvaluator implements Serializable

@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @ApplicationScoped
 public class DefaultViewConfigResolver implements ViewConfigResolver

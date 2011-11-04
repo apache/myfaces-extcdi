@@ -24,7 +24,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewCo
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.ViewConfigExtractor;
 
 /**
- * @author Gerhard Petracek
+ * {@link ViewConfigExtractor} with an injected instance of the default implementation (by convention)
  */
 @Advanced
 public class TestViewConfigExtractor implements ViewConfigExtractor

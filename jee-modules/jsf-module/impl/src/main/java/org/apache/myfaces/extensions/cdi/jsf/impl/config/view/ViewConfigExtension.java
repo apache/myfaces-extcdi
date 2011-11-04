@@ -41,7 +41,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 
 /**
- * @author Gerhard Petracek
+ * Extension for building the config for the application based on interfaces and classes
  */
 @SuppressWarnings({"UnusedDeclaration"})
 public class ViewConfigExtension implements Extension, Deactivatable

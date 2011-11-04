@@ -28,7 +28,7 @@ import javax.faces.render.RenderKit;
 import javax.faces.render.RenderKitFactory;
 
 /**
- * @author Gerhard Petracek
+ * {@inheritDoc}
  */
 @RequestScoped
 public class DefaultRequestTypeResolver extends AbstractRequestTypeResolver
