@@ -30,11 +30,15 @@ import javax.faces.event.PhaseEvent;
 import javax.faces.view.ViewMetadata;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class holds information about the last used RestParameters for a given JSF view.
+ *
+ * It will expire the conversation when any of those Views get accessed via GET with
+ * a different set of &lt;f:viewParam&gt;s.
  */
 @WindowScoped
 public class JsfRestParameters extends RestParameters implements Serializable
@@ -54,7 +58,7 @@ public class JsfRestParameters extends RestParameters implements Serializable
      *
      * TODO we might change this to only store a hashKey.
      */
-    private HashMap<String, String> viewParametersForViewId = new HashMap<String, String>();
+    private Map<String, String> viewParametersForViewId = new ConcurrentHashMap<String, String>();
 
     /**
      * Check and update the view parameters of the given viewId.
@@ -131,7 +135,6 @@ public class JsfRestParameters extends RestParameters implements Serializable
                 viewParamValue = "";
             }
 
-            //X TODO it might be necessary to sort this first according to the viewParamNames.
             sb.append(viewParamName).append("=").append(viewParamValue).append("+/+");
         }
 
@@ -158,7 +161,14 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return;
         }
 
-        FacesContext facesContext = FacesContext.getCurrentInstance();
+        FacesContext facesContext = phaseEvent.getFacesContext();
+
+        // we ignore postbacks
+        if (facesContext.isPostback())
+        {
+            return;
+        }
+
         String viewId = facesContext.getViewRoot().getViewId();
         viewParametersForViewId.put(viewId, getViewParams(facesContext, viewId));
     }
