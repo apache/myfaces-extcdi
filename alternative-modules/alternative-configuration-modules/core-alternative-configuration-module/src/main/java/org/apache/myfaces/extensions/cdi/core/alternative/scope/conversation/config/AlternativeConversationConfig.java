@@ -28,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Alternative implementation of {@link ConversationConfig}
  */
 @AlternativeImplementation
 public class AlternativeConversationConfig extends ConversationConfig

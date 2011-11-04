@@ -28,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Gerhard Petracek
+ * Alternative implementation of {@link WindowContextConfig}
  */
 @AlternativeImplementation
 public class AlternativeWindowContextConfig extends WindowContextConfig
