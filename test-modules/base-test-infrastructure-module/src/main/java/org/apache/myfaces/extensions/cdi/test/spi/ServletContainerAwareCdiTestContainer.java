@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
  * CDI container which is aware of servlet based applications.
- *
- * @author Gerhard Petracek
  */
 public interface ServletContainerAwareCdiTestContainer extends CdiTestContainer
 {

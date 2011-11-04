@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.test.strategy;
 
 /**
  * Decouples the default implementations from a concrete test framework
- *
- * @author Gerhard Petracek
  */
 public interface TestStrategy
 {

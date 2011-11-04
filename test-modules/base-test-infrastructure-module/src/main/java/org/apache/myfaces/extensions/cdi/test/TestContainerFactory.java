@@ -28,7 +28,7 @@ import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
 import java.util.List;
 
 /**
- * @author Gerhard Petracek
+ * Factory for test-containers
  */
 public class TestContainerFactory
 {

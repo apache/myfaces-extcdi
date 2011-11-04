@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
  * Base interface for all containers
- *
- * @author Gerhard Petracek
  */
 public interface TestContainer
 {

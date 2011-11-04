@@ -28,8 +28,6 @@ import java.util.logging.Logger;
 
 /**
  * Allows dependency injection in JUnit tests and implementing JUnit tests in web-projects.
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractServletAwareTestStrategy implements TestStrategy
 {

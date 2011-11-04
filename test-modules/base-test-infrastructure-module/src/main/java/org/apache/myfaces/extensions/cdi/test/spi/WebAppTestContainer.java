@@ -20,8 +20,6 @@ package org.apache.myfaces.extensions.cdi.test.spi;
 
 /**
  * Marker interface for web-app containers like a mocked container for JSF apps.
- *
- * @author Gerhard Petracek
  */
 public interface WebAppTestContainer extends TestContainer
 {

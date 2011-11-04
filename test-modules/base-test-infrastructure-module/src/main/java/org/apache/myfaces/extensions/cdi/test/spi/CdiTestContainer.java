@@ -22,8 +22,6 @@ import javax.enterprise.inject.spi.BeanManager;
 
 /**
  * Interface for handling a CDI container
- *
- * @author Gerhard Petracek
  */
 public interface CdiTestContainer extends TestContainer
 {

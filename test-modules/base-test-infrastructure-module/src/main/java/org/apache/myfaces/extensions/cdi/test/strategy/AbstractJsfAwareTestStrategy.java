@@ -23,8 +23,6 @@ import org.apache.myfaces.extensions.cdi.test.spi.WebAppTestContainer;
 
 /**
  * Base class which can be used for CODI unit-tests
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractJsfAwareTestStrategy extends AbstractServletAwareTestStrategy
 {

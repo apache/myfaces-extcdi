@@ -29,8 +29,6 @@ import java.util.logging.Logger;
  * Allows dependency injection in (standalone) JUnit tests.
  * For implementing unit tests with servlet-scopes or CODI unit tests use
  * {@link AbstractServletAwareTestStrategy} or {@link AbstractJsfAwareTestStrategy}
- *
- * @author Gerhard Petracek
  */
 public abstract class AbstractCdiAwareTestStrategy implements TestStrategy
 {
