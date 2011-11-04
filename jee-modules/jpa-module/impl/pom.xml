@@ -50,6 +50,19 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.8.3</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+            <version>1.1.1</version>
+            <optional>true</optional>
+        </dependency>
+
         <!-- JPA API -->
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
@@ -84,6 +97,7 @@
         </dependency>
 
 
+
     </dependencies>
 
     <build>
@@ -101,6 +115,40 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <createSourcesJar>true</createSourcesJar>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <minimizeJar>true</minimizeJar>
+                    <artifactSet>
+                        <includes>
+                            <include>commons-beanutils:commons-beanutils</include>
+                            <include>commons-logging:commons-logging</include>
+                        </includes>
+                    </artifactSet>
+                    <relocations>
+                        <relocation>
+                            <pattern>org.apache.commons.beanutils</pattern>
+                            <shadedPattern>org.apache.myfaces.codi.shaded.commons.beanutils</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.apache.commons.logging</pattern>
+                            <shadedPattern>org.apache.myfaces.codi.shaded.commons.logging</shadedPattern>
+                        </relocation>
+                    </relocations>
+                </configuration>
             </plugin>
         </plugins>
     </build>
