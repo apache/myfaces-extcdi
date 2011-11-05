@@ -27,9 +27,11 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 /**
@@ -47,7 +49,7 @@ public class ConfigurableDataSource implements DataSource
     /**
      * config and settings are loaded only once.
      */
-    private boolean loaded;
+    private volatile boolean loaded;
 
     /**
      * The connectionId allows to configure multiple databases.
@@ -62,9 +64,26 @@ public class ConfigurableDataSource implements DataSource
     private DataSourceConfig dataSourceConfig;
 
     /**
-     *  The underlying 'real' DataSource
+     * In case of an underlying JDBC connection, we need to provide the connection URL;
      */
-    private volatile DataSource wrappedDataSource;
+    private String jdbcConnectionURL;
+
+    /**
+     * In case of an underlying JDBC connection, we need to provide some configured properties
+     */
+    private Properties connectionProperties;
+
+    /**
+     *  The underlying 'real' DataSource if we got a DataSource either via JNDI
+     *  or as class name.
+     */
+    private DataSource wrappedDataSource = null;
+
+    /**
+     *  The underlying jdbcDriver if configured.
+     */
+    private Driver wrappedJdbcDriver = null;
+
 
     public ConfigurableDataSource()
     {
@@ -88,16 +107,27 @@ public class ConfigurableDataSource implements DataSource
 
     public Connection getConnection(String userName, String password) throws SQLException
     {
-        if (wrappedDataSource == null)
+        if (!loaded)
         {
             initDataSource();
         }
 
-        if (userName == null && password == null)
+        if (wrappedDataSource != null)
         {
-            return wrappedDataSource.getConnection();
+            // if we got a DataSource as underlying connector
+            if (userName == null && password == null )
+            {
+                return wrappedDataSource.getConnection();
+            }
+            return wrappedDataSource.getConnection(userName, password);
         }
-        return wrappedDataSource.getConnection(userName, password);
+        else if (wrappedJdbcDriver != null)
+        {
+            // if we got a native JDBC Driver class as underlying connector
+            return wrappedJdbcDriver.connect(jdbcConnectionURL, connectionProperties);
+        }
+
+        return null;
     }
 
 
@@ -147,15 +177,17 @@ public class ConfigurableDataSource implements DataSource
     }
 
     /**
-     *
+     *  Initialize the DataSource either from JNDI or via JDBC Driver.
+     *  This method does not actually create a connection yet.
      */
     protected synchronized void initDataSource() throws SQLException
     {
         // double check lock idiom on volatile member is ok as of Java5
-        if (wrappedDataSource != null)
+        if (loaded)
         {
             return;
         }
+        loaded = true;
 
         String jndiLookupName = dataSourceConfig.getJndiResourceName(connectionId);
         if (jndiLookupName != null && jndiLookupName.length() > 0)
@@ -165,30 +197,48 @@ public class ConfigurableDataSource implements DataSource
         }
 
         // no JNDI, so we take the direct JDBC route.
-        String jdbcDriverClass = dataSourceConfig.getDriverClassName(connectionId);
-        if (jdbcDriverClass == null && jdbcDriverClass.length() == 0)
+        String dataSourceClass = dataSourceConfig.getConnectionClassName(connectionId);
+        if (dataSourceClass == null && dataSourceClass.length() == 0)
         {
             throw new SQLException("Neither a JNDI location nor a JDBC driver class name is configured!");
         }
 
+
+        connectionProperties = dataSourceConfig.getConnectionProperties(connectionId);
+
         try
         {
             // we explicitely use class.forName and NOT the ThreadContextClassLoader!
-            Class clazz =  Class.forName(jdbcDriverClass);
+            Class clazz =  Class.forName(dataSourceClass);
 
             // the given driver classname must be a DataSource
-            if (!DataSource.class.isAssignableFrom(clazz))
+            if (DataSource.class.isAssignableFrom(clazz))
             {
-                throw new SQLException("Configured DriverClassName is not a javax.sql.DataSource: "
-                                       + jdbcDriverClass);
+                wrappedDataSource = (DataSource) clazz.newInstance();
+
+                for (Map.Entry configOption : connectionProperties.entrySet())
+                {
+                    String name = (String) configOption.getKey();
+                    String value = (String) configOption.getValue();
+                    setProperty(wrappedDataSource, name, value);
+                }
             }
-
-            wrappedDataSource = (DataSource) clazz.newInstance();
-
-            Map<String, String> config = dataSourceConfig.getConnectionProperties(connectionId);
-            for (Map.Entry<String, String> configOption : config.entrySet())
+            else if(Driver.class.isAssignableFrom(clazz))
             {
-                setProperty(wrappedDataSource, configOption.getKey(), configOption.getValue());
+                // if we have a javax.sql.Driver then we also need an explicite connection URL
+                jdbcConnectionURL = dataSourceConfig.getJdbcConnectionUrl(connectionId);
+                if (jdbcConnectionURL == null)
+                {
+                    throw new SQLException("Neither a JNDI location nor a JDBC connection URL is configured!");
+                }
+
+                wrappedJdbcDriver = (Driver) clazz.newInstance();
+            }
+            else
+            {
+                throw new SQLException("Configured DriverClassName is not a javax.sql.DataSource "
+                                       + "nor a javax.sql.Driver: "
+                                       + dataSourceClass);
             }
         }
         catch (Exception e)
@@ -227,7 +277,8 @@ public class ConfigurableDataSource implements DataSource
             {
                 //X TODO probably search for fields to set
 
-                throw new IllegalArgumentException("Cannot set property with name " + setterName);
+                //
+
             }
         }
 

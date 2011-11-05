@@ -28,11 +28,9 @@
 
         <properties>
             <property name="openjpa.jdbc.DBDictionary" value="hsql" />
-            <property name="openjpa.ConnectionDriverName" value="org.hsqldb.jdbcDriver" />
-            <property name="openjpa.ConnectionURL" value="jdbc:hsqldb:mem:test" />
-            <property name="openjpa.ConnectionUserName" value="sa" />
-            <property name="openjpa.ConnectionPassword" value="" />
-            <property name="openjpa.Log" value="DefaultLevel=TRACE"/>
+            <property name="openjpa.ConnectionDriverName" value="org.apache.myfaces.extensions.cdi.jpa.impl.datasource.ConfigurableDataSource"/>
+            <property name="openjpa.ConnectionProperties" value="connectionId=core"/>
+
             <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)"/>
 
             <!-- Enhancement via subclassing. This is not suggested for production! -->

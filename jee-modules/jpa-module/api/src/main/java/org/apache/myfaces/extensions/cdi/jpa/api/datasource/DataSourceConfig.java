@@ -20,14 +20,14 @@ package org.apache.myfaces.extensions.cdi.jpa.api.datasource;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * <p>Configuration for the DataSource.
  * The <code>connectionId</code> parameter can be used to distinguish
  * between different databases.</p>
  *
- * <p>There are 2 ways to configure a DataSource
+ * <p>There are 3 ways to configure a DataSource
  *
  * <ol>
  *     <li>
@@ -35,9 +35,18 @@ import java.util.Map;
  *         {@link #getJndiResourceName(String)}
  *     </li>
  *     <li>
- *         via JDBC connecion properties - This will be used if {@link #getJndiResourceName(String)}
- *         returns <code>null</code>. In this case you must specify the {@link #getDriverClassName(String)}
- *         and {@link #getConnectionProperties(String)}.
+ *         via a DataSource class name plus properties - This will be used if {@link #getJndiResourceName(String)}
+ *         returns <code>null</code>. In this case you must specify the {@link #getConnectionClassName(String)}
+ *         to contain the class name of a DataSource, e.g.
+ *         <code>&quot";com.mchange.v2.c3p0.ComboPooledDataSource&quot";</code>
+ *         and return additional configuration via {@link #getConnectionProperties(String)}.
+ *     </li>
+ *     <li>
+ *         via a JDBC Driver class name plus properties - This will be used if {@link #getJndiResourceName(String)}
+ *         returns <code>null</code>. In this case you must specify the {@link #getConnectionClassName(String)}
+ *         to contain the class name of a javax.sql.Driver, e.g.
+ *         <code>&quot";org.hsqldb.jdbcDriver&quot";</code>
+ *         and return additional configuration via {@link #getConnectionProperties(String)}.
  *     </li>
  * </ol>
  *
@@ -52,7 +61,7 @@ public interface DataSourceConfig extends CodiConfig
      * Return the JNDI resource name if the DataSource should get retrieved via JNDI.
      * If a native JDBC connection should get used, this method must return <code>null</code>.
      * And the JDBC connection properties must get set via
-     * {@link #getDriverClassName(String)} and {@link #getConnectionProperties(String)}.
+     * {@link #getConnectionClassName(String)} and {@link #getConnectionProperties(String)}.
      *
      * @param connectionId used to distinguish between different databases.
      *
@@ -63,17 +72,31 @@ public interface DataSourceConfig extends CodiConfig
 
     /**
      * @param connectionId used to distinguish between different databases.
+     *
      * @return the fully qualified class name of the JDBC driver for the underlying connection
+     *      or <code>null</code> if {@link #getJndiResourceName(String)} is not being used
      */
-    public String getDriverClassName(String connectionId);
+    public String getConnectionClassName(String connectionId);
 
     /**
      * @param connectionId used to distinguish between different databases.
      *
      * @return allows to configure additional connection properties which will
-     *      get applied to the underlying JDBC driver.
+     *      get applied to the underlying JDBC driver or <code>null</code>
+     *      if {@link #getJndiResourceName(String)} is not being used
      */
-    public Map<String, String> getConnectionProperties(String connectionId);
+    public Properties getConnectionProperties(String connectionId);
 
+    /**
+     * This will only get used if {@link #getConnectionClassName(String)} is a javax.sql.Driver.
+     * Foor Datasources, the underlying connection url must get configured via
+     * {@link #getConnectionProperties(String)}.
+     *
+     * @param connectionId used to distinguish between different databases.
+     *
+     * @return the connection url, e.g. &quot;jdbc://...&quot;
+     *      or <code>null</code> if {@link #getJndiResourceName(String)} is not being used
+     */
+    public String getJdbcConnectionUrl(String connectionId);
 
 }
