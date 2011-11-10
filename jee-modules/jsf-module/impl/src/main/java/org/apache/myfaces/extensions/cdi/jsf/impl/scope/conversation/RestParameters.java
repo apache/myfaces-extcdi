@@ -26,6 +26,7 @@ public abstract class RestParameters
 {
     /**
      * Check and update the view parameters of the given viewId.
+     * The restId must also contain the viewId!
      *
      *
      * @return <code>true</code> if the viewParameters are now different than at the last invocation.

@@ -80,8 +80,9 @@ public class JsfRestParameters extends RestParameters implements Serializable
             return restId;
         }
 
-        restId = getViewParams(facesContext);
         oldViewId = viewId;
+
+        restId = viewId + "//" + getViewParams(facesContext);
         return restId;
     }
 

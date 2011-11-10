@@ -63,10 +63,13 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
         }
 
         // if the view params changed, then our Conversation must expire.
-        return checkRestId();
+        return isNewRestId();
     }
 
-    public boolean checkRestId()
+    /**
+     * @return <code>true</code> if either the view or any viewParam of a GET request has changed.
+     */
+    protected boolean isNewRestId()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null)
