@@ -18,22 +18,16 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation;
 
-import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.WindowScoped;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
-import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId;
 import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.RestParameters;
 
-import javax.enterprise.event.Observes;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.component.UIViewParameter;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseEvent;
 import javax.faces.view.ViewMetadata;
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Map;
 import java.util.TreeSet;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This class holds information about the last used RestParameters for a given JSF view.
@@ -41,88 +35,69 @@ import java.util.concurrent.ConcurrentHashMap;
  * It will expire the conversation when any of those Views get accessed via GET with
  * a different set of &lt;f:viewParam&gt;s.
  */
-@WindowScoped
+@RequestScoped
 public class JsfRestParameters extends RestParameters implements Serializable
 {
     private static final long serialVersionUID = 1349109309042072780L;
 
     /**
+     * We cache the viewParams values as long as the viewId remains the same
+     * for this very request. We do this because evaluating the
+     * viewParams with every bean invocation is very expensive.
+     */
+    private String restId = null;
+
+    /**
+     * Used to determine when we need to recalculate {@link #restId}
+     */
+    private String oldViewId = null;
+
+    /**
      * This flag will be used to remember a storage request;
      */
-    private boolean resetPending;
-
-    /**
-     * key= viewId
-     * value= concatenated viewParam names + values
-     *
-     * We use @WindowScoped to automatically include the windowId in a correct way.
-     *
-     * TODO we might change this to only store a hashKey.
-     */
-    private Map<String, String> viewParametersForViewId = new ConcurrentHashMap<String, String>();
-
-    /**
-     * Check and update the view parameters of the given viewId.
-     *
-     * @return <code>true</code> if the viewParameters are now different than at the last invocation
-     */
-    public boolean checkForNewViewParameters()
+    public boolean isPostback()
     {
         FacesContext facesContext = FacesContext.getCurrentInstance();
+        return facesContext != null && facesContext.isPostback();
+    }
 
+    public String getRestId()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
         if (facesContext == null)
         {
-            // this might happen if we are outside the JSF-Servlet, e.g. in a ServletFilter.
-            return false;
+            return null;
         }
-
-
-        if (facesContext.isPostback())
-        {
-            // we ignore POST requests
-            return false;
-        }
-
         String viewId = getViewId(facesContext);
-
         if (viewId == null)
         {
-            return false;
+            return null;
         }
 
-        String currentViewParams = getViewParams(facesContext, viewId);
-        String oldViewParams = viewParametersForViewId.get(viewId);
-
-        if (!currentViewParams.equals(oldViewParams))
+        if (oldViewId != null && oldViewId.equals(viewId))
         {
-            viewParametersForViewId.put(viewId, currentViewParams);
-
-            if (resetPending)
-            {
-                // if a reset is pending, then we need to expire the context
-                resetPending = false;
-                return true;
-            }
-
-            // only reset the rest context if the oldViewParamaeters were different
-            // but not if they didn't got set yet
-            return oldViewParams != null;
+            // use the already calculated restId
+            return restId;
         }
 
-        resetPending = false;
-
-        return false;
+        restId = getViewParams(facesContext);
+        oldViewId = viewId;
+        return restId;
     }
 
     /**
      * @param facesContext current faces-context
-     * @param viewId current question
      * @return the concatenated String of all viewParamName=viewParamValue of the given viewId
      */
-    private String getViewParams(FacesContext facesContext, String viewId)
+    private String getViewParams(FacesContext facesContext)
     {
         Collection<UIViewParameter> currentViewParams = ViewMetadata.getViewParameters(facesContext.getViewRoot());
-        StringBuilder sb = new StringBuilder();
+        String viewId = getViewId(facesContext);
+        if (viewId == null)
+        {
+            return null;
+        }
+        StringBuilder sb = new StringBuilder(viewId).append("?");
 
         // for sorting the view params
         TreeSet<String> viewParamNames = new TreeSet<String>();
@@ -143,45 +118,8 @@ public class JsfRestParameters extends RestParameters implements Serializable
 
             sb.append(viewParamName).append("=").append(viewParamValue).append("+/+");
         }
-
         return sb.toString();
     }
-
-    @Override
-    public void reset()
-    {
-        viewParametersForViewId.clear();
-        resetPending = true;
-    }
-
-    /**
-     * We need to store the view params after render response because
-     * we do not get them in the first initial view invocation when
-     * a new windowid got detected.
-     */
-    public void afterRenderResponse(@Observes @AfterPhase(JsfPhaseId.RENDER_RESPONSE) PhaseEvent phaseEvent)
-    {
-        if (resetPending)
-        {
-            resetPending = false;
-            return;
-        }
-
-        FacesContext facesContext = phaseEvent.getFacesContext();
-
-        // we ignore postbacks
-        if (facesContext.isPostback())
-        {
-            return;
-        }
-
-        String viewId = getViewId(facesContext);
-        if (viewId != null)
-        {
-            viewParametersForViewId.put(viewId, getViewParams(facesContext, viewId));
-        }
-    }
-
 
     private String getViewId(FacesContext facesContext)
     {

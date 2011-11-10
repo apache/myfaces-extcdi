@@ -16,23 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
+function urlWithoutWindowId(base) {
+    var query = base;
+    var vars = query.split(/&|\?/g);
+    var newQuery = "";
+    var iParam = 0;
+    for (var i=0; vars != null && i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair.length == 1) {
+            newQuery = pair[0];
+        }
+        else {
+            if (pair[0] != "windowId") {
+                var amp = iParam++ > 0 ? "&" : "?";
+                newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
+            }
+        }
+    }
+    return newQuery;
+}
 
-/**
- * This class holds information about the last used RestParameters for a given window.
- */
-// this could be @WindowScoped, but due to a bug in OpenWebBeans 1.1.1 and below, we get passivation errors
-public abstract class RestParameters
-{
-    /**
-     * Check and update the view parameters of the given viewId.
-     *
-     *
-     * @return <code>true</code> if the viewParameters are now different than at the last invocation.
-     *         In this default implementation it always returns false!
-     */
-    public abstract String getRestId();
-
-    public abstract boolean isPostback();
-
+function assertWindowId() {
+    var freshWindow = window.name.length < 1;
+    if (freshWindow) {
+        url = urlWithoutWindowId(window.location.href);
+        window.name = "window";
+        window.location = url;
+    }
 }

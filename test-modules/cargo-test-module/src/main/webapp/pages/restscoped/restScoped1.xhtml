@@ -24,30 +24,36 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-<f:metadata>
-    <f:viewParam name="param" value="#{restscoped.param}"/>
-    <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{restscoped.preRender}"/>
-</f:metadata>
+<f:view>
+    <h:outputScript library="js" name="windowId.js"/>
+    <script type="text/javascript">
+        assertWindowId()
+    </script>
+    <f:metadata>
+        <f:viewParam name="param" value="#{restscoped.param}"/>
+        <f:event type="javax.faces.event.PreRenderViewEvent" listener="#{restscoped.preRender}"/>
+    </f:metadata>
 
-<h:head>
-    <title>Apache MyFaces CODI - RestScoped1</title>
-</h:head>
-<h:body>
+    <h:head>
+        <title>Apache MyFaces CODI - RestScoped1</title>
+    </h:head>
+    <h:body>
 
-    <h2>RestScoped1</h2>
+        <h2>RestScoped1</h2>
 
-    <h:form id="restscoped1">
-        <p>
-            Name from REST: <h:outputText value="#{restscoped.param}" />
-        </p>
-        <p>
-            Invocation Counter: <h:outputText value="#{restscoped.invocationCount}" />
-        </p>
+        <h:form id="restscoped1">
+            <p>
+                Name from REST: <h:outputText value="#{restscoped.param}" />
+            </p>
+            <p>
+                Invocation Counter: <h:outputText value="#{restscoped.invocationCount}" />
+            </p>
 
-        <h:link id="nextPage" value="Same Page" outcome="restScoped1.xhtml">
-            <f:param name="param" value="#{restscoped.param}"/>
-        </h:link>
-    </h:form>
+            <h:link id="nextPage" value="Same Page" outcome="restScoped1.xhtml">
+                <f:param name="param" value="#{restscoped.param}"/>
+            </h:link>
+        </h:form>
 
-</h:body>
+    </h:body>
+</f:view>
 </html>

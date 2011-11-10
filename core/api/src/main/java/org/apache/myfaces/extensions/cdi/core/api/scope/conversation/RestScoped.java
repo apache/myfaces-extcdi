@@ -32,7 +32,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * The scope is similar to &#064;ConversationScoped but it will
  * automatically end once the view get's invoked with a GET and the
- * viewParams are different than on the previous invoke
+ * viewParams are different than on the previous invoke.
+ * The conversation will also get resetted when you hit a different
+ * View via a GET request.
  */
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)

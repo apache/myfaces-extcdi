@@ -24,9 +24,14 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.faces.context.FacesContext;
 
 /**
  * Evaluates when a &#064;RestScoped Conversation context needs to get restarted.
+ * Each Conversation gets it's own ExpirationEvaluator. We just use the RestParameters
+ * to get the actual viewParams depending on the underlying technology.
+ * This can be done evaluating JSF-2 &lt;f:viewParam&gt; or an
+ * own implementation (e.g. for PrettyFaces).
  */
 @Typed() // this is not a CDI bean
 class RestConversationExpirationEvaluator implements ConversationExpirationEvaluator
@@ -36,6 +41,8 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
     private AccessDecisionVoterContext accessDecisionVoterContext;
 
     private RestParameters restParameters;
+
+    private String oldRestId;
 
     RestConversationExpirationEvaluator(BeanManager beanManager, AccessDecisionVoterContext accessDecisionVoterContext)
     {
@@ -56,7 +63,28 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
         }
 
         // if the view params changed, then our Conversation must expire.
-        return restParameters.checkForNewViewParameters();
+        return checkRestId();
+    }
+
+    public boolean checkRestId()
+    {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext == null)
+        {
+            // this might happen if we are outside the JSF-Servlet, e.g. in a ServletFilter.
+            return false;
+        }
+
+
+        if (restParameters.isPostback())
+        {
+            // we ignore POST requests
+            return false;
+        }
+
+        String currentRestId = restParameters.getRestId();
+
+        return currentRestId != null && !currentRestId.equals(oldRestId);
     }
 
     /**
@@ -64,7 +92,15 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
      */
     public void touch()
     {
-        // do nothing
+        if (oldRestId == null)
+        {
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (facesContext == null)
+            {
+                return;
+            }
+            oldRestId = restParameters.getRestId();
+        }
     }
 
     /**
@@ -72,7 +108,7 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
      */
     public void expire()
     {
-        restParameters.reset();
+        oldRestId = null;
     }
 
 }
