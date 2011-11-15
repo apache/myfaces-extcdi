@@ -23,6 +23,7 @@ import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;
 import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context.TransactionBeanStorage;
 
+import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Default;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
@@ -56,6 +57,7 @@ import java.util.logging.Logger;
  * <p>If you like to implement your own PersistenceStrategy, then use the
  * standard CDI &#064;Alternative mechanism.</p>
  */
+@Dependent
 public class TransactionalInterceptorStrategy implements PersistenceStrategy
 {
     private static final long serialVersionUID = -1432802805095533499L;
