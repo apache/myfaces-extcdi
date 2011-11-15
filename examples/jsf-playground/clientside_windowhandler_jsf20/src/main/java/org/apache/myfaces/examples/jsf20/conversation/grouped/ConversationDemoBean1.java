@@ -68,6 +68,15 @@ public class ConversationDemoBean1 implements Serializable
 
     public String getValue()
     {
+        // sleep 3 seconds just for testing the flickering
+        try
+        {
+            Thread.sleep(3000);
+        }
+        catch (InterruptedException e)
+        {
+            // do nothing
+        }
         return value + createdAt.toLocaleString();
     }
 }

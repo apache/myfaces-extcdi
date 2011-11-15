@@ -20,49 +20,145 @@
  under the License.
 -->
 <html>
-    <head>
-        <meta http-equiv="cache-control" content="no-cache">
-        <meta http-equiv="pragma" content="no-cache">
-        <script type="text/javascript" >
-            window.onload = function()
-            {
-                document.getElementById('message').textContent = "Loading...";
 
-                // this will be replaced in the phase listener
-                var windowId = '$$windowIdValue$$';
-
-                if (windowId == 'uninitializedWindowId')
-                {
-                    windowId = window.name
-                }
-
-                if (!windowId || windowId.length < 3)
-                {
-                    // request a new windowId
-                    windowId = 'automatedEntryPoint';
-                }
-                
-                window.name = windowId;
-
-                // 2 seconds expiry time
-                var expdt = new Date();
-                expdt.setTime(expdt.getTime()+(2*1000));
-                var expires = "; expires="+expdt.toGMTString();
-
-                // include pathName (without "/"s) in cookie name
-                var pathName = encodeURIComponent(window.location.pathname.replace(/\//g, ""));
-
-                document.cookie = pathName + '-codiWindowId=' + windowId + expires;
-
-                // resubmit the page but now with the cookie
-                window.location.reload();
-            }
-        </script>
-    </head>
+<head>
+    <title>Loading...</title>
+</head>
 <body>
-    <div id="message" style="position:absolute;left:40%;top:40%;" >
-        Your browser does not support JavaScript!<br/><br/>
-        Click <a href="$$noscriptUrl$$">here to continue without JavaScript</a>.
-    </div>
+<div id="message" style="position:absolute;left:40%;top:40%">
+    Your browser does not support JavaScript.
+    Click <a href="$$noscriptUrl$$">here</a> to continue without JavaScript.
+</div>
 </body>
+
+
+<script type="text/javascript" >
+function isHtml5() {
+    try {
+        return !!localStorage.getItem;
+    } catch(e) {
+        return false;
+    }
+}
+function unstringify(serialized) {
+    if (JSON) {
+        return JSON.parse(serialized);
+    }
+    return serialized.split("|||");
+}
+function getOldBody() {
+    if (window.name.length != null) {
+        return localStorage.getItem(window.name + '_body');
+    }
+}
+function getOldBodyAttrs() {
+    if (window.name.length != null) {
+        return localStorage.getItem(window.name + '_bodyAttrs');
+    }
+}
+function getOldCss() {
+    if (window.name.length != null) {
+        return unstringify(localStorage.getItem(window.name + '_css'));
+    }
+}
+
+function addCss(url) {
+    var newSS = document.createElement("style");
+
+    newSS.setAttribute("rel", "stylesheet");
+    newSS.setAttribute("type", "text/css");
+    newSS.appendChild(document.createTextNode("@import url(" +url + ");"));
+    document.getElementsByTagName("head")[0].appendChild(newSS);
+}
+
+function loadCss(clean)
+{
+    if (!isHtml5()) {
+        // only do this stuff on html browsers
+        return;
+    }
+
+    var oldCss  = getOldCss();
+
+    if (window.name && oldCss)
+    {
+        for (i=0; oldCss && i< oldCss.length; i++) {
+            addCss(oldCss[i]);
+        }
+
+        if (clean) {
+            localStorage.removeItem(window.name + '_css');
+        }
+    }
+
+}
+
+function replaceContent() {
+    if (!isHtml5()) {
+        // only do this stuff on html browsers
+        document.getElementById('message').textContent = "Loading...";
+        return;
+    }
+    loadCss(false);
+
+    var oldBody = getOldBody();
+
+    if (window.name && oldBody) {
+        document.body.innerHTML = oldBody;
+
+        //X TODO should restore all attribs of the body tag
+        document.body.setAttribute("class", getOldBodyAttrs());
+
+        localStorage.removeItem(window.name + '_body');
+        localStorage.removeItem(window.name + '_bodyAttrs');
+    }
+    else {
+        document.getElementById('message').textContent = "Loading...";
+    }
+}
+
+replaceContent();
+
+window.onload = function() {
+
+    loadCss(true);
+
+    // this will be replaced in the phase listener
+    var windowId = '$$windowIdValue$$';
+
+    if (windowId == 'uninitializedWindowId')
+    {
+        windowId = window.name
+    }
+
+    if (!windowId || windowId.length < 3)
+    {
+        // request a new windowId
+        windowId = 'automatedEntryPoint';
+    }
+
+    window.name = windowId;
+
+    /* used to debug the intermediate page
+    if (!confirm('reload?')) {
+        return true;
+    }
+    */
+
+    // 2 seconds expiry time
+    var expdt = new Date();
+    expdt.setTime(expdt.getTime()+(2*1000));
+    var expires = "; expires="+expdt.toGMTString();
+
+    // include pathName (without "/"s) in cookie name
+    var pathName = encodeURIComponent(window.location.pathname.replace(/\//g, ""));
+
+    document.cookie = pathName + '-codiWindowId=' + windowId + expires;
+
+    // resubmit the page but now with the cookie
+    window.location.reload();
+}
+</script>
+
 </html>
+

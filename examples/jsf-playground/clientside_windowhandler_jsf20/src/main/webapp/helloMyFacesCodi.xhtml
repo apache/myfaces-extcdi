@@ -26,7 +26,11 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Client Side WindowHandler Demo</title></head>
+    <head>
+        <title>CODI JSF 2.0 Client Side WindowHandler Demo</title>
+        <h:outputScript library="javax.faces" name="jsf.js"/>
+        <h:outputScript library="js" name="windowhandler.js"/>
+    </head>
 
     <body>
         <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
