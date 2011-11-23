@@ -26,41 +26,39 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head>
-        <title>CODI JSF 2.0 Client Side WindowHandler Demo</title>
-        <h:outputScript library="javax.faces" name="jsf.js"/>
-        <h:outputScript library="js" name="windowhandler.js"/>
-    </head>
+    <ui:composition template="/WEB-INF/templates/layout.xhtml">
+        <ui:define name="title">CODI JSF 2.0 Client Side WindowHandler Demo</ui:define>
 
-    <body>
-        <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
+        <ui:define name="content">
+            <h1 style="color:red">Dev-Demo (purpose: only for tests during development)</h1>
 
-        <p>
-            This example shows you the powerful functions of the new
-            client side window handler.
-        </p>
-        <p>
-            It determines the identity of a browsers window or tab by
-            using the <b>window.name</b> to hold a unique identifier.
-            This windowId will be transfered to the server with a small
-            JavaScript page which gets served upfront to the original
-            page. You don't even need to add the windowId parameter
-            to the URL!
-        </p>
+            <p>
+                This example shows you the powerful functions of the new
+                client side window handler.
+            </p>
+            <p>
+                It determines the identity of a browsers window or tab by
+                using the <b>window.name</b> to hold a unique identifier.
+                This windowId will be transfered to the server with a small
+                JavaScript page which gets served upfront to the original
+                page. You don't even need to add the windowId parameter
+                to the URL!
+            </p>
 
-        <p>
-            The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
-        </p>
+            <p>
+                The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
+            </p>
 
-        <h:form>
-            <h:commandLink value="next" action="next"/>
-        </h:form>
-        <h:outputText value="#{conversationDemoBean1.value}"/><br/>
+            <h:form>
+                <h:commandLink value="next" action="next"/>
+            </h:form>
+            <h:outputText value="#{conversationDemoBean1.value}"/><br/>
 
-        <h:link value="ViewAccessScoped example" outcome="viewAccessBeanPage.xhtml"/><br/>
-        <h:outputLink value="noCodiPage.xhtml">Page without Codi scoped beans</h:outputLink><br/>
-        <h:outputLink value="listsample/sampleList.xhtml">List sample</h:outputLink>
-        
-        <h:messages globalOnly="true"/>
-    </body>
+            <h:link value="ViewAccessScoped example" outcome="viewAccessBeanPage.xhtml"/><br/>
+            <h:outputLink value="noCodiPage.xhtml">Page without Codi scoped beans</h:outputLink><br/>
+            <h:outputLink value="listsample/sampleList.xhtml">List sample</h:outputLink>
+
+            <h:messages globalOnly="true"/>
+        </ui:define>
+    </ui:composition>
 </html>

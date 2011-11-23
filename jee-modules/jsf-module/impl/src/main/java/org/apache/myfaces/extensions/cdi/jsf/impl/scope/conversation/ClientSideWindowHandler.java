@@ -48,10 +48,12 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     private static final long serialVersionUID = 5293942986187078113L;
 
     private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
+    private static final String CODI_REQUEST_TOKEN = "codiToken";
+
     private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
     private static final String WINDOW_ID_REPLACE_PATTERN = "$$windowIdValue$$";
     private static final String NOSCRIPT_URL_REPLACE_PATTERN = "$$noscriptUrl$$";
-    private static final String NOSCRIPT_PARAMETER = "noscript";
+    private static final String NOSCRIPT_PARAMETER = "codiNoWh";
 
     @Inject
     private ClientConfig clientConfig;
@@ -117,7 +119,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
      */
     public void beforeLifecycleExecute(FacesContext facesContext)
     {
-        if (!isClientSideWindowHandlerRequest())
+        if (!isClientSideWindowHandlerRequest(facesContext))
         {
             return;
         }
@@ -161,11 +163,11 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         }
     }
 
-    private boolean isClientSideWindowHandlerRequest()
+    private boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
     {
         // no POST request and javascript enabled
         // NOTE that for POST-requests the windowId is saved in the state (see WindowContextIdHolderComponent)
-        return !this.requestTypeResolver.isPostRequest() && this.clientConfig.isJavaScriptEnabled();
+        return !this.requestTypeResolver.isPostRequest() && clientConfig.isClientSideWindowHandlerRequest(facesContext);
     }
 
     private boolean isNoscriptRequest(ExternalContext externalContext)
@@ -254,15 +256,8 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
     private String getWindowIdFromCookie(ExternalContext externalContext)
     {
-        String cookieName = getEncodedPathName(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
+        String cookieName = getRequestToken(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
         Cookie cookie = (Cookie) externalContext.getRequestCookieMap().get(cookieName);
-
-        if (cookie == null)
-        {
-            // if the current request went to a welcome page, we should only consider the contextPath
-            cookieName = getEncodedContextPath(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
-            cookie = (Cookie) externalContext.getRequestCookieMap().get(cookieName);
-        }
 
         if (cookie != null)
         {
@@ -272,32 +267,15 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         return null;
     }
 
-    private String getEncodedPathName(ExternalContext externalContext)
+    private String getRequestToken(ExternalContext externalContext)
     {
-        StringBuilder sb = new StringBuilder();
-
-        String contextPath = externalContext.getRequestContextPath();
-        if (contextPath != null)
+        String requestToken = externalContext.getRequestParameterMap().get(CODI_REQUEST_TOKEN);
+        if (requestToken != null)
         {
-            sb.append(contextPath);
+            return requestToken;
         }
 
-        String servletPath = externalContext.getRequestServletPath();
-        if (servletPath != null)
-        {
-            sb.append(servletPath);
-        }
-
-        String pathInfo = externalContext.getRequestPathInfo();
-        if (pathInfo != null)
-        {
-            sb.append(pathInfo);
-        }
-
-        // remove all "/", because they can be different in JavaScript
-        String pathName = sb.toString().replace("/", "");
-
-        return JsfUtils.encodeURLParameterValue(pathName, externalContext);
+        return "";
     }
 
     private String getEncodedContextPath(ExternalContext externalContext)

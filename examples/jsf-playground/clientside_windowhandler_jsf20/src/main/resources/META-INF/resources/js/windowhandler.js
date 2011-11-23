@@ -94,10 +94,23 @@ function applyOnClick()
     }
 }
 
+function assertWindowId() {
+    var freshWindow = window.name.length < 1;
+    if (freshWindow) {
+        url = urlWithoutWindowId(window.location.href);
+        window.name = "window";
+        window.location = url;
+    }
+}
+
+
 window.onload = function()
 {
     if (isHtml5())
     {
         applyOnClick();
     }
+
+    // this ensures that even without the ClientSideWindowHandler
+    assertWindowId();
 }

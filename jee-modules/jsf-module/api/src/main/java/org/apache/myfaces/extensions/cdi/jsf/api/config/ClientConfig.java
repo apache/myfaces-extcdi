@@ -20,12 +20,15 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
+import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Contains information about whether the user has
@@ -47,6 +50,10 @@ public class ClientConfig implements Serializable
 
     @Inject
     private ProjectStage projectStage;
+
+    @Inject
+    private RequestTypeResolver requestTypeResolver;
+
 
     /**
      * The location of the default windowhandler resource
@@ -119,4 +126,48 @@ public class ClientConfig implements Serializable
         windowHandlerHtml = sb.toString();
         return windowHandlerHtml;
     }
+
+    /**
+     * Users can overload this method to define in which scenarios a request should result
+     * in an 'intercepted' page with proper windowId detection. This can e.g. contain
+     * blacklisting some userAgents.
+     * By default the following User-Agents will be served directly:
+     * <ul>
+     *     <li>.*bot.*</li>
+     *     <li>.*Bot.*</li>
+     *     <li>.*Slurp.*</li>
+     *     <li>.*Crawler.*</li>
+     * </ul>
+     * @return <code>true</code> if the Request should get 'intercepted' and the intermediate
+     *        windowhandler.html page should get rendered first. By returning <code>false</code>
+     *        the requested page will get rendered intermediately.
+     */
+    public boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
+    {
+        if (!isJavaScriptEnabled())
+        {
+            return false;
+        }
+
+        Map<String, String[]> requestHeaders = facesContext.getExternalContext().getRequestHeaderValuesMap();
+
+        if (requestHeaders != null &&
+            requestHeaders.containsKey("User-Agent"))
+        {
+            String[] userAgents = requestHeaders.get("User-Agent");
+            String userAgent = userAgents.length > 0 ? userAgents[0] : null;
+
+            if (userAgent.indexOf("bot")     >= 0 || // Googlebot, etc
+                userAgent.indexOf("Bot")     >= 0 || // BingBot, etc
+                userAgent.indexOf("Slurp")   >= 0 || // Yahoo Slurp
+                userAgent.indexOf("Crawler") >= 0    // various other Crawlers
+               )
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
 }

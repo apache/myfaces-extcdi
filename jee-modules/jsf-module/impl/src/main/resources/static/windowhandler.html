@@ -117,7 +117,41 @@ function replaceContent() {
     }
 }
 
+function setUrlParam(baseUrl, paramName, paramValue) {
+    var query = baseUrl;
+    var vars = query.split(/&|\?/g);
+    var newQuery = "";
+    var iParam = 0;
+    var paramFound = false;
+    for (var i=0; vars != null && i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair.length == 1) {
+            newQuery = pair[0];
+        }
+        else {
+            if (pair[0] != paramName) {
+                var amp = iParam++ > 0 ? "&" : "?";
+                newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
+            }
+            else {
+                paramFound = true;
+                var amp = iParam++ > 0 ? "&" : "?";
+                newQuery =  newQuery + amp + paramName + "=" + paramValue;
+            }
+        }
+    }
+
+    if (!paramFound) {
+        var amp = iParam++ > 0 ? "&" : "?";
+        newQuery =  newQuery + amp + paramName + "=" + paramValue;
+    }
+    return newQuery;
+}
+
+
 replaceContent();
+
+
 
 window.onload = function() {
 
@@ -150,13 +184,12 @@ window.onload = function() {
     expdt.setTime(expdt.getTime()+(2*1000));
     var expires = "; expires="+expdt.toGMTString();
 
-    // include pathName (without "/"s) in cookie name
-    var pathName = encodeURIComponent(window.location.pathname.replace(/\//g, ""));
+    var requestToken = Math.floor(Math.random()*100000001);
+    var newUrl = setUrlParam(window.location.href, "codiToken", requestToken);
 
-    document.cookie = pathName + '-codiWindowId=' + windowId + expires;
+    document.cookie = requestToken + '-codiWindowId=' + windowId + expires;
 
-    // resubmit the page but now with the cookie
-    window.location.reload();
+    window.location = newUrl;
 }
 </script>
 

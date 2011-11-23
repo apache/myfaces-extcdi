@@ -26,11 +26,10 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
+    <ui:composition template="/WEB-INF/templates/layout.xhtml">
+        <ui:define name="title">CODI JSF 2.0 Demo</ui:define>
 
-    <body>
-        <f:view>
-
+        <ui:define name="content">
             <h:form>
                 <h3>values of ViewAccessScoped bean 1:</h3>
                 <h:panelGrid columns="2">
@@ -55,6 +54,6 @@
 
             <h:messages globalOnly="true"/>
 
-        </f:view>
-    </body>
+        </ui:define>
+    </ui:composition>
 </html>

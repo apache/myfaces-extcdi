@@ -26,13 +26,15 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">CODI JSF 2.0 Demo</ui:define>
 
-    <body>
+    <ui:define name="content">
         <h:form>
             <h:commandLink value="back" action="/helloMyFacesCodi.xhtml"/>
         </h:form>
         <h:outputText value="#{conversationDemoBean1.value}"/>
         <h:messages globalOnly="true"/>
-    </body>
+    </ui:define>
+</ui:composition>
 </html>

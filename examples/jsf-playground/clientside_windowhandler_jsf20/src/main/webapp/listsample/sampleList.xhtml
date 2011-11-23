@@ -1,6 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<!--
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!--
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -18,36 +18,32 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
-
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 List Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">CODI JSF 2.0 List Demo</ui:define>
 
-    <body>
-        <f:view>
+    <ui:define name="content">
+        <p>
+            The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
+        </p>
+        <h:form>
+            <h3>A sample List </h3>
+            <h:dataTable value="#{sampleList.entryIds}" id="list" var="entryId">
+                <h:column>
+                    <h:link outcome="sampleListEntry">
+                        <h:outputText value="#{entryId}"/>
+                        <f:param name="entryId" value="#{entryId}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
 
-            <p>
-                The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
-            </p>
-            
-            <h:form>
-                <h3>A sample List </h3>
-                <h:dataTable value="#{sampleList.entryIds}" id="list" var="entryId">
-                    <h:column>
-                        <h:link outcome="sampleListEntry">
-                            <h:outputText value="#{entryId}"/>
-                            <f:param name="entryId" value="#{entryId}"/>
-                        </h:link>
-                    </h:column>
-                </h:dataTable>
+        </h:form>
 
-            </h:form>
-
-            <h:messages globalOnly="true"/>
-
-        </f:view>
-    </body>
+        <h:messages globalOnly="true"/>
+    </ui:define>
+</ui:composition>
 </html>

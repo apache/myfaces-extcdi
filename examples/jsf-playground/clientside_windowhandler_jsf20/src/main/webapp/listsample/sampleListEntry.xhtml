@@ -24,34 +24,35 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:ui="http://java.sun.com/jsf/facelets">
 
-    <head><title>CODI JSF 2.0 List Demo</title></head>
+<ui:composition template="/WEB-INF/templates/layout.xhtml">
+    <ui:define name="title">CODI JSF 2.0 List Demo</ui:define>
 
-    <f:metadata>
-        <f:viewParam name="entryId" value="#{sampleListEntry.id}"/>
-    </f:metadata>
+    <ui:define name="metadata">
+        <f:metadata>
+            <f:viewParam name="entryId" value="#{sampleListEntry.id}"/>
+        </f:metadata>
+    </ui:define>
 
-    <body>
-        <f:view>
-            <p>
-                The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
-            </p>
-                    
-            <h:form>
-                <h3>A sample List Entry</h3>
-                <h:panelGrid columns="2">
-                    <h:outputLabel value="id"/>
-                    <h:outputText value="#{sampleListEntry.id}"/>
+    <ui:define name="content">
+        <p>
+            The current windowId is: <h:outputText value="#{currentWindowContext.id}"/><br/><br/>
+        </p>
 
-                    <h:outputLabel value="value"/>
-                    <h:inputText value="#{sampleListEntry.value}"/>
-                </h:panelGrid>
+        <h:form>
+            <h3>A sample List Entry</h3>
+            <h:panelGrid columns="2">
+                <h:outputLabel value="id"/>
+                <h:outputText value="#{sampleListEntry.id}"/>
 
-                <h:commandButton action="#{sampleListEntry.back}" value="back"/>
-                <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
-            </h:form>
+                <h:outputLabel value="value"/>
+                <h:inputText value="#{sampleListEntry.value}"/>
+            </h:panelGrid>
 
-            <h:messages globalOnly="true"/>
+            <h:commandButton action="#{sampleListEntry.back}" value="back"/>
+            <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
+        </h:form>
 
-        </f:view>
-    </body>
+        <h:messages globalOnly="true"/>
+    </ui:define>
+</ui:composition>
 </html>
