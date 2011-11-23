@@ -184,8 +184,8 @@ window.onload = function() {
     expdt.setTime(expdt.getTime()+(2*1000));
     var expires = "; expires="+expdt.toGMTString();
 
-    var requestToken = Math.floor(Math.random()*100000001);
-    var newUrl = setUrlParam(window.location.href, "codiToken", requestToken);
+    var requestToken = Math.floor(Math.random()*10001);
+    var newUrl = setUrlParam(window.location.href, "mfRid", requestToken);
 
     document.cookie = requestToken + '-codiWindowId=' + windowId + expires;
 

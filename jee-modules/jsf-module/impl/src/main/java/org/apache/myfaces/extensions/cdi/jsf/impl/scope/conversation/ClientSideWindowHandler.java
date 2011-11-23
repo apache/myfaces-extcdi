@@ -48,12 +48,12 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     private static final long serialVersionUID = 5293942986187078113L;
 
     private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
-    private static final String CODI_REQUEST_TOKEN = "codiToken";
+    private static final String CODI_REQUEST_TOKEN = "mfRid";
 
     private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
     private static final String WINDOW_ID_REPLACE_PATTERN = "$$windowIdValue$$";
     private static final String NOSCRIPT_URL_REPLACE_PATTERN = "$$noscriptUrl$$";
-    private static final String NOSCRIPT_PARAMETER = "codiNoWh";
+    private static final String NOSCRIPT_PARAMETER = "mfDirect";
 
     @Inject
     private ClientConfig clientConfig;
@@ -77,24 +77,6 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
     protected ClientSideWindowHandler(WindowContextConfig config)
     {
         super(config);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String encodeURL(String url)
-    {
-        if (this.clientConfig.isJavaScriptEnabled())
-        {
-            // do not add the windowId
-            return url;
-        }
-        else
-        {
-            // fallback - we have to add the windowId to the URL if JavaScript is disabled
-            return addWindowIdIfNecessary(url, getCurrentWindowId());
-        }
     }
 
     /**
@@ -273,20 +255,6 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
         if (requestToken != null)
         {
             return requestToken;
-        }
-
-        return "";
-    }
-
-    private String getEncodedContextPath(ExternalContext externalContext)
-    {
-        String contextPath = externalContext.getRequestContextPath();
-        if (contextPath != null)
-        {
-            // remove all "/", because they can be different in JavaScript
-            contextPath = contextPath.replace("/", "");
-
-            return JsfUtils.encodeURLParameterValue(contextPath, externalContext);
         }
 
         return "";
