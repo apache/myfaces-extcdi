@@ -160,7 +160,9 @@ public abstract class ConversationUtils
             id = tryToRestoreWindowIdFromRequestParameterMap(requestParameterSupported, requestParameterMap);
         }
 
-        if(id != null && id.length() > 0 && !cacheWindowId(externalContext, id, allowUnknownWindowIds))
+        if(id != null && id.length() > 0 &&
+           (!cacheWindowId(externalContext, id, allowUnknownWindowIds) ||
+            WindowContextManager.AUTOMATED_ENTRY_POINT_PARAMETER_KEY.equals(id)))
         {
             id = null;
         }

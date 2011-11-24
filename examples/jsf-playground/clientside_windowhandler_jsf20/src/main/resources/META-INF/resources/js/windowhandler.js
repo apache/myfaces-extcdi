@@ -61,6 +61,10 @@ function storeWindowTree()
     //X TODO: store ALL attributes of the body tag
     localStorage.setItem(window.name + '_bodyAttrs', body.getAttribute("class"));
 
+    // store x and y scroll positions
+    localStorage.setItem(window.name + '_x', window.pageXOffset);
+    localStorage.setItem(window.name + '_y', window.pageYOffset);
+
     return true;
 }
 

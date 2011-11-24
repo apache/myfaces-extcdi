@@ -108,9 +108,16 @@ function replaceContent() {
 
         //X TODO should restore all attribs of the body tag
         document.body.setAttribute("class", getOldBodyAttrs());
+        document.body.setAttribute("style", " cursor: wait !important;");
 
         localStorage.removeItem(window.name + '_body');
         localStorage.removeItem(window.name + '_bodyAttrs');
+
+        // overlay the doc with an un-clickable full-size div
+        var newDiv = document.createElement("div");
+        newDiv.setAttribute("style", "position:absolute; z-index:1000; background-color:transparent; top:0; left:0; width:100%; height: 100%");
+        newDiv.setAttribute("class", "fulldiv");
+        document.body.appendChild(newDiv);
     }
     else {
         document.getElementById('message').textContent = "Loading...";
@@ -148,14 +155,24 @@ function setUrlParam(baseUrl, paramName, paramValue) {
     return newQuery;
 }
 
+function scrollToOldPosition() {
+    if (isHtml5()) {
+        var x = localStorage.getItem(window.name + '_x');
+        var y = localStorage.getItem(window.name + '_y');
+        window.scrollTo(x, y);
+
+        var x = localStorage.removeItem(window.name + '_x');
+        var y = localStorage.removeItem(window.name + '_y');
+    }
+}
 
 replaceContent();
-
 
 
 window.onload = function() {
 
     loadCss(true);
+    //X scrollToOldPosition();
 
     // this will be replaced in the phase listener
     var windowId = '$$windowIdValue$$';
@@ -186,6 +203,7 @@ window.onload = function() {
 
     var requestToken = Math.floor(Math.random()*10001);
     var newUrl = setUrlParam(window.location.href, "mfRid", requestToken);
+    newUrl = setUrlParam(newUrl, "windowId", windowId);
 
     document.cookie = requestToken + '-codiWindowId=' + windowId + expires;
 
