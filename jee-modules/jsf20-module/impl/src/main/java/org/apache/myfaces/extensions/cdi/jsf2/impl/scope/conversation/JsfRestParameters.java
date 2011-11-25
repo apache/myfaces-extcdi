@@ -44,13 +44,9 @@ public class JsfRestParameters extends RestParameters implements Serializable
      * We cache the viewParams values as long as the viewId remains the same
      * for this very request. We do this because evaluating the
      * viewParams with every bean invocation is very expensive.
+     * This String also contains the viewId!
      */
     private String restId = null;
-
-    /**
-     * Used to determine when we need to recalculate {@link #restId}
-     */
-    private String oldViewId = null;
 
     /**
      * This flag will be used to remember a storage request;
@@ -63,26 +59,22 @@ public class JsfRestParameters extends RestParameters implements Serializable
 
     public String getRestId()
     {
-        FacesContext facesContext = FacesContext.getCurrentInstance();
-        if (facesContext == null)
+        if (restId == null)
         {
-            return null;
-        }
-        String viewId = getViewId(facesContext);
-        if (viewId == null)
-        {
-            return null;
+            FacesContext facesContext = FacesContext.getCurrentInstance();
+            if (facesContext == null)
+            {
+                return null;
+            }
+            String viewId = getViewId(facesContext);
+            if (viewId == null)
+            {
+                return null;
+            }
+
+            restId = viewId + "//" + getViewParams(facesContext);
         }
 
-        if (oldViewId != null && oldViewId.equals(viewId))
-        {
-            // use the already calculated restId
-            return restId;
-        }
-
-        oldViewId = viewId;
-
-        restId = viewId + "//" + getViewParams(facesContext);
         return restId;
     }
 

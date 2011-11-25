@@ -42,7 +42,16 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
 
     private RestParameters restParameters;
 
+    /**
+     * The restId (viewId + parameters + values) of the first GET
+     * request of this view.
+     */
     private String oldRestId;
+
+    /**
+     * This flag will be used to remember a reset storage request;
+     */
+    private boolean resetPending = false;
 
     RestConversationExpirationEvaluator(BeanManager beanManager, AccessDecisionVoterContext accessDecisionVoterContext)
     {
@@ -55,6 +64,11 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
      */
     public boolean isExpired()
     {
+        if (resetPending)
+        {
+            return true;
+        }
+
         // check for bean access via ViewConfig
         if(this.accessDecisionVoterContext != null &&
                 AccessDecisionState.VOTE_IN_PROGRESS.equals(this.accessDecisionVoterContext.getState()))
@@ -111,7 +125,7 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
      */
     public void expire()
     {
-        oldRestId = null;
+        resetPending = true;
     }
 
 }
