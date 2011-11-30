@@ -30,6 +30,7 @@ import javax.enterprise.inject.spi.Extension;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.lang.annotation.Annotation;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -135,6 +136,12 @@ public class BeanManagerProvider implements Extension
         BeanManager beanManager = getBeanManager();
         Set<Bean<?>> beans = beanManager.getBeans(type, qualifiers);
 
+        if (beans == null || beans.isEmpty())
+        {
+            throw new IllegalStateException("Could not find beans for Type=" + type
+                                            + " and qualifiers:" + Arrays.toString(qualifiers));
+        }
+
         return getReference(type, beanManager, beans);
     }
 
@@ -171,6 +178,7 @@ public class BeanManagerProvider implements Extension
     private <T> T getReference(Class<T> type, BeanManager beanManager, Set<Bean<?>> beans)
     {
         Bean<?> bean = beanManager.resolve(beans);
+
         CreationalContext<?> creationalContext = beanManager.createCreationalContext(bean);
 
         @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
