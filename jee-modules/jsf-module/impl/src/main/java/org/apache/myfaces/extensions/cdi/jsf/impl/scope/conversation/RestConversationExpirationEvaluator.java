@@ -105,6 +105,7 @@ class RestConversationExpirationEvaluator implements ConversationExpirationEvalu
     }
 
     /**
+     * On the first usage of a bean, we store the {@link #oldRestId}.
      * {@inheritDoc}
      */
     public void touch()

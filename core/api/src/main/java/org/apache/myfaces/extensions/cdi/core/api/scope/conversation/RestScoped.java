@@ -35,6 +35,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * viewParams are different than on the previous invoke.
  * The conversation will also get resetted when you hit a different
  * View via a GET request.
+ *
+ * Be aware that PostRedirectGet (faces-redirect=true) might cause
+ * the conversation to end. If you use PRG only to display a result-page
+ * then it should not have immediate effect because all the information
+ * will also get transported via GET parameters. But be aware that
+ * the target page might again execute any bean initialization.
  */
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)

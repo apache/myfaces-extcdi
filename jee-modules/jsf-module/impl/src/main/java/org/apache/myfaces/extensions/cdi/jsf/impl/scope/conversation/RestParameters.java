@@ -18,22 +18,27 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation;
 
+import javax.enterprise.context.Dependent;
+
 /**
  * This class holds information about the last used RestParameters for a given window.
  */
-// this could be @WindowScoped, but due to a bug in OpenWebBeans 1.1.1 and below, we get passivation errors
+@Dependent // the final implementation might be RequestScoped
 public abstract class RestParameters
 {
     /**
-     * Check and update the view parameters of the given viewId.
-     * The restId must also contain the viewId!
+     * Check the view parameters of the given viewId.
+     * The restId must also contain the viewId itself!
+     * The restId must be different if either the view or
+     * any of it's parameters get changed.
      *
-     *
-     * @return <code>true</code> if the viewParameters are now different than at the last invocation.
-     *         In this default implementation it always returns false!
+     * @return a key which uniquely identifies the view and all it's GET parameters
      */
     public abstract String getRestId();
 
+    /**
+     * @return <code>true</code> if the current request is a POST request.
+     */
     public abstract boolean isPostback();
 
 }

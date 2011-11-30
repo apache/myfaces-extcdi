@@ -29,18 +29,22 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.FIELD;
 
 /**
- * The scope is active as long as it's accessed by a view.
+ * The scope is active as long as it's bean is accessed by a view.
+ * Basically &#064;ViewAccessScoped is a CODI Conversation which
+ * automatically gets ended when the next view tree gets restored
+ * without hitting the bean.
+ *
+ * &#064;ViewAccessScoped currently doesn't support Conversation-groups,
+ * thus the {@link Conversation} always only contains the bean itself.
  */
+//internal hint:
+//this scope doesn't support conversation-groups.
+//if such a support is requested, we lose one of the caches.
+//cdi annotations
 @Target({METHOD,TYPE,FIELD})
 @Retention(RUNTIME)
 @Inherited
 @Documented
-
-//internal hint:
-//this scope doesn't support conversation-groups.
-//if such a support is requested, we lose one of the caches.
-
-//cdi annotations
 @NormalScope(passivating=true)
 public @interface ViewAccessScoped
 {

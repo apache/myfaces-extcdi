@@ -32,7 +32,7 @@ import java.util.TreeSet;
 /**
  * This class holds information about the last used RestParameters for a given JSF view.
  *
- * It will expire the conversation when any of those Views get accessed via GET with
+ * It will expire the conversation when the View get accessed via GET with
  * a different set of &lt;f:viewParam&gt;s.
  */
 @RequestScoped
@@ -57,6 +57,9 @@ public class JsfRestParameters extends RestParameters implements Serializable
         return facesContext != null && facesContext.isPostback();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public String getRestId()
     {
         if (restId == null)
