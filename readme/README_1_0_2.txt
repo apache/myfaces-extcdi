@@ -11,7 +11,6 @@ Release Notes - MyFaces CODI - Version 1.0.2
 
 ** Improvement
     * [EXTCDI-217] - use BeanManager#getPassivationCapableBean in ViewScopedContext as workaround for weld 
-    * [EXTCDI-225] - upgrade to myfaces-parent-10
     * [EXTCDI-229] - Optional SecurityViolationHandler
     * [EXTCDI-243] - add better logging if bean canot be resolved
 
