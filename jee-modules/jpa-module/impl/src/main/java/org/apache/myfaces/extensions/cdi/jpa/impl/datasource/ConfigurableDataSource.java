@@ -38,6 +38,7 @@ import java.util.logging.Logger;
  * <p>This class can be used instead of a real DataSource.
  * It is a simple wrapper to hide any database configuration details
  * and make it configurable via CDI.</p>
+ * <p>See {@link DataSourceConfig} on how to configure it!</p>
  *
  * <p>The configuration itself will be provided via CDI mechanics.
  * To distinguish different databases, users can specify a

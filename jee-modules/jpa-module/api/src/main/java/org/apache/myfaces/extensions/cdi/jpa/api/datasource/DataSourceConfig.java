@@ -23,8 +23,12 @@ import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import java.util.Properties;
 
 /**
- * <p>Configuration for the DataSource.
- * The <code>connectionId</code> parameter can be used to distinguish
+ * <h3>Configuration for the DataSource.</h3>
+ * <p>If you use the ConfigurableDataSource then this interface needs
+ * to be implemented in customer projects to return
+ * the proper values to connect to the database.</p>
+ *
+ * <p>The <code>connectionId</code> parameter can be used to distinguish
  * between different databases.</p>
  *
  * <p>There are 3 ways to configure a DataSource
@@ -49,9 +53,39 @@ import java.util.Properties;
  *         and return additional configuration via {@link #getConnectionProperties(String)}.
  *     </li>
  * </ol>
- *
  * </p>
  *
+ * <h3>Usage</h3>
+ * <p>Instead of configuring any hardcoded DataSource provider, JDBC driver
+ * or JNDI location of the DataSource you just configure our <i>ConfigurableDataSource</i>
+ * in your persistence.xml. This class is an implementation of DataSource and acts as
+ * kind of a proxy to determine the underlying database configuration for your usage
+ * scenarios.</p>
+ * <p>A possible persistence.xml configuration would look like the following:
+ * <pre>
+ * &lt;persistence xmlns=&quot;http://java.sun.com/xml/ns/persistence&quot;
+ *              xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+ *              xsi:schemaLocation=&quot;http://java.sun.com/xml/ns/persistence
+ *                         http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd&quot;
+ *              version=&quot;1.0&quot;&gt;
+ *
+ *     &lt;persistence-unit name=&quot;test&quot; &gt;
+ *         &lt;provider&gt;org.apache.openjpa.persistence.PersistenceProviderImpl&lt;/provider&gt;
+ *
+ *         &lt;class&gt;org.apache.myfaces.extensions.cdi.jpa.test.TestEntity&lt;/class&gt;
+ *
+ *         &lt;properties&gt;
+ *             &lt;property name=&quot;openjpa.ConnectionDriverName&quot;
+ *                  value=&quot;org.apache.myfaces.extensions.cdi.jpa.impl.datasource.ConfigurableDataSource&quot;/&gt;
+ *             &lt;property name=&quot;openjpa.ConnectionProperties&quot;
+ *                  value=&quot;connectionId=core&quot;/&gt;
+ *         &lt;/properties&gt;
+ *
+ *     &lt;/persistence-unit&gt;
+ * &lt;/persistence&gt;
+ * </pre>
+ *
+ * </p>
  *
  */
 public interface DataSourceConfig extends CodiConfig
