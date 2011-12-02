@@ -46,7 +46,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.PageParameterConte
 public abstract class JsfUtils
 {
     public static final String FACES_CONTEXT_MANUAL_WRAPPER_KEY =
-            FacesContext.class.getName() + ":manuallyWrappedByCodi";
+            "javax.faces.context.FacesContext:manuallyWrappedByCodi";
 
     private JsfUtils()
     {
