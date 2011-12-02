@@ -29,3 +29,4 @@ Release Notes - MyFaces CODI - Version 1.0.2
     * [EXTCDI-226] - upgrade codi to use OWB-1.1.2
     * [EXTCDI-233] - update test dependencies
     * [EXTCDI-238] - cleanup javadoc
+    * [EXTCDI-244] - preparations for v1.0.2
