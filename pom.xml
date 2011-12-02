@@ -89,7 +89,7 @@
     </modules>
 
     <properties>
-        <owb.version>1.1.1</owb.version>
+        <owb.version>1.1.2</owb.version>
 
         <!-- JSF-2.0 implementations-->
         <myfaces2.version>2.0.5</myfaces2.version>
