@@ -242,15 +242,20 @@ public class ConfigurableDataSource implements DataSource
                                        + dataSourceClass);
             }
         }
+        catch (RuntimeException e)
+        {
+            wrappedDataSource = null;
+            throw e;
+        }
+        catch (SQLException e)
+        {
+            wrappedDataSource = null;
+            throw e;
+        }
         catch (Exception e)
         {
             wrappedDataSource = null;
-
-            if (e instanceof SQLException)
-            {
-                throw (SQLException) e;
-            }
-            throw new SQLException(e);
+            throw new RuntimeException(e);
         }
     }
 
