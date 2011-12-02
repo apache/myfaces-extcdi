@@ -145,6 +145,7 @@
                                         <!-- exclude org.apache.geronimo.specs artifacts -->
                                         <dependencySourceExclude>org.apache.geronimo.specs:*</dependencySourceExclude>
                                         <dependencySourceExclude>org.apache.myfaces.core:*</dependencySourceExclude>
+                                        <dependencySourceExclude>org.apache.myfaces.trinidad:*</dependencySourceExclude>
                                     </dependencySourceExcludes>
 
                                     <excludePackageNames>org.apache.myfaces.extensions.cdi.core.*:org.apache.myfaces.extensions.cdi.message.*</excludePackageNames>
