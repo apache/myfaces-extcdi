@@ -22,12 +22,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
         <artifactId>alternative-configuration-project</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>1.0.2</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
     <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>1.0.2</version>
 
     <name>MyFaces Extensions-CDI JSF Alternative Config Module</name>
 
