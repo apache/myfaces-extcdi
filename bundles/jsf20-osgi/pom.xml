@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
         <artifactId>bundle-project</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
     <artifactId>myfaces-extcdi-bundle-jsf20-osgi</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>MyFaces Extensions-CDI OSGi-Bundle for JSF 2.0</name>

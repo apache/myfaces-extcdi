@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
         <artifactId>myfaces-extcdi-test-project</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
     <artifactId>myfaces-extcdi-junit-support-module</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI JUnit-Support Module</name>
 
