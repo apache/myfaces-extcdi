@@ -91,9 +91,18 @@ function applyOnClick()
         }
         else
         {
-            var oldClick = links[i].getAttribute('onclick').replace(/\'/g,'\\\'');
-            var onclickCode = "jsf.util.chain(this, event, storeWindowTree(), '" + oldClick + "');";
-            links[i].setAttribute('onclick', onclickCode);
+            //the function wrapper is important
+            //otherwise the last onclick handler would be assigned
+            //to oldonclick
+            (function storeEvent() {
+                var oldonclick = links[i].onclick;
+                links[i].onclick = function(evt) {
+                    //ie handling added
+                    evt = evt || window.event;
+                    var target = evt.target || evt.source;
+                    return storeWindowTree() && oldonclick(evt);
+                };
+            })();
         }
     }
 }
