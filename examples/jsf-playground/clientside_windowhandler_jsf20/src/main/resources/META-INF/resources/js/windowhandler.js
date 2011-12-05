@@ -40,7 +40,7 @@
         var headNodes = document.getElementsByTagName("head")[0].childNodes;
         var oldSS = new Array();
         var j = 0;
-        for (i = 0; i < headNodes.length; i++) {
+        for (var i = 0; i < headNodes.length; i++) {
             var tagName = headNodes[i].tagName;
             if (tagName && equalsIgnoreCase(tagName, "link") &&
                     equalsIgnoreCase(headNodes[i].getAttribute("type"), "text/css")) {
@@ -95,7 +95,7 @@
                     links[i].onclick = function(evt) {
                         //ie handling added
                         evt = evt || window.event;
-                        var target = evt.target || evt.source;
+
                         return storeWindowTree() && oldonclick(evt);
                     };
                 })();
@@ -106,7 +106,7 @@
     function assertWindowId() {
         var freshWindow = window.name.length < 1;
         if (freshWindow) {
-            url = urlWithoutWindowId(window.location.href);
+            var url = urlWithoutWindowId(window.location.href);
             window.name = "window";
             window.location = url;
         }
