@@ -26,6 +26,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.BeforeShutdown;
 import javax.enterprise.inject.spi.Extension;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -222,6 +223,15 @@ public class BeanManagerProvider implements Extension
         bmpFirst.bms.put(cl, beanManager);
 
         CodiStartupBroadcaster.broadcastStartup();
+    }
+
+    /**
+     * Cleanup on container shutdown
+     * @param beforeShutdown cdi shutdown event
+     */
+    public void cleanupStoredBeanManagerOnShutdown(@Observes BeforeShutdown beforeShutdown)
+    {
+        bms.remove(ClassUtils.getClassLoader(null));
     }
 
     /**
