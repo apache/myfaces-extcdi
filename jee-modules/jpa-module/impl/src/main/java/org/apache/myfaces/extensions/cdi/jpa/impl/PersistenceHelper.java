@@ -30,7 +30,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Gerhard Petracek
+ * Helper which provides util methods for
+ * {@link org.apache.myfaces.extensions.cdi.jpa.impl.transaction.TransactionalInterceptorStrategy} and
+ * {@link LegacyTransactionalInterceptorStrategy}
  */
 @Typed()
 public class PersistenceHelper
@@ -47,6 +49,12 @@ public class PersistenceHelper
         //prevent instantiation
     }
 
+    /**
+     * Analyzes the given instance and returns the found reference to an injected {@link EntityManager}
+     * or null otherwise
+     * @param target instance to analyze
+     * @return the injected entity-manager or null otherwise
+     */
     public static EntityManager tryToFindEntityManagerReference(Object target)
     {
         EntityManagerEntry entityManagerEntry = tryToFindEntityManagerEntryInTarget(target);
