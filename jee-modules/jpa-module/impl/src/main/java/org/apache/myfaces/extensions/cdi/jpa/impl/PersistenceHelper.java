@@ -37,12 +37,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @Typed()
 public class PersistenceHelper
 {
-    //don't use final in interceptors
-    private static String noFieldMarker = PersistenceHelper.class.getName() + ":DEFAULT_FIELD";
+    private static final String NO_FIELD_MARKER = PersistenceHelper.class.getName() + ":DEFAULT_FIELD";
 
     private static transient volatile Map<ClassLoader, Map<String, PersistenceContextMetaEntry>>
             persistenceContextMetaEntries =
-            new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
+                new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     private PersistenceHelper()
     {
@@ -67,8 +66,8 @@ public class PersistenceHelper
     }
 
     /*
-    * needed for special add-ons - don't change it!
-    */
+     * needed for special add-ons - don't change it!
+     */
     static EntityManagerEntry tryToFindEntityManagerEntryInTarget(Object target)
     {
         Map<String, PersistenceContextMetaEntry> mapping = persistenceContextMetaEntries.get(getClassLoader());
@@ -78,7 +77,7 @@ public class PersistenceHelper
         String key = target.getClass().getName();
         PersistenceContextMetaEntry persistenceContextEntry = mapping.get(key);
 
-        if( persistenceContextEntry != null && noFieldMarker.equals(persistenceContextEntry.getFieldName()))
+        if( persistenceContextEntry != null && NO_FIELD_MARKER.equals(persistenceContextEntry.getFieldName()))
         {
             return null;
         }
@@ -90,7 +89,7 @@ public class PersistenceHelper
             if(persistenceContextEntry == null)
             {
                 mapping.put(key, new PersistenceContextMetaEntry(
-                        Object.class, noFieldMarker, Default.class.getName(), false));
+                        Object.class, NO_FIELD_MARKER, Default.class.getName(), false));
                 return null;
             }
 
