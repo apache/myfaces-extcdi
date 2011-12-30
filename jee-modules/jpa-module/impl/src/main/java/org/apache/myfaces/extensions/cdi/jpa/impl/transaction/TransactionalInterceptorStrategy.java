@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jpa.impl.transaction;
 
 import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
+import org.apache.myfaces.extensions.cdi.jpa.impl.PersistenceHelper;
 import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;
 import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context.TransactionBeanStorage;
 
@@ -99,6 +100,12 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
         String previousTransactionKey = transactionBeanStorage.activateTransactionScope(qualifierKey);
 
         EntityManager entityManager = resolveEntityManagerForQualifier(qualifierClass);
+
+        if(entityManager == null)
+        {
+            //fallback to support direct injection via @PersistenceContext
+            entityManager = PersistenceHelper.tryToFindEntityManagerReference(invocationContext.getTarget());
+        }
 
         storeEntityManagerForQualifier(qualifierKey, entityManager);
 
@@ -248,6 +255,11 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
     private EntityManager resolveEntityManagerForQualifier(Class<? extends Annotation> qualifierClass)
     {
         Bean<EntityManager> entityManagerBean = resolveEntityManagerBean(qualifierClass);
+
+        if(entityManagerBean == null)
+        {
+            return null;
+        }
 
         return (EntityManager) beanManager.getReference(entityManagerBean, EntityManager.class,
                                                                 beanManager.createCreationalContext(entityManagerBean));

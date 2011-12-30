@@ -18,33 +18,26 @@
  */
 package org.apache.myfaces.extensions.cdi.jpa.impl;
 
-import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;
-import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 import org.apache.myfaces.extensions.cdi.core.impl.util.AnyLiteral;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.TransactionalInterceptor;
+import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
+import org.apache.myfaces.extensions.cdi.jpa.impl.spi.PersistenceStrategy;
 
-import javax.enterprise.inject.Alternative;
-import javax.inject.Inject;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.Default;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.inject.Alternative;
+import javax.enterprise.inject.Default;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
+import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
-import javax.interceptor.InvocationContext;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
-import java.util.logging.Level;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <p><b>Attention!</b> although this impl is called 'Default...' it is <b>not</b>
@@ -74,9 +67,6 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
 {
     private static final long serialVersionUID = -1432802805095533499L;
 
-    //don't use final in interceptors
-    private static String noFieldMarker = TransactionalInterceptor.class.getName() + ":DEFAULT_FIELD";
-
     private @Inject BeanManager beanManager;
 
     private static transient ThreadLocal<AtomicInteger> refCount = new ThreadLocal<AtomicInteger>();
@@ -86,10 +76,6 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
     /** key=qualifier name, value= EntityManager */
     private static transient ThreadLocal<HashMap<String, EntityManager>> entityManagerMap =
             new ThreadLocal<HashMap<String, EntityManager>>();
-
-    private static transient volatile Map<ClassLoader, Map<String, PersistenceContextMetaEntry>>
-            persistenceContextMetaEntries =
-            new ConcurrentHashMap<ClassLoader, Map<String, PersistenceContextMetaEntry>>();
 
     /**
      * {@inheritDoc}
@@ -109,7 +95,7 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
         if (entityManagerBean == null)
         {
             //support for special add-ons which introduce backward compatibility - resolves the injected entity manager
-            entityManagerEntry = tryToFindEntityManagerEntryInTarget(context.getTarget());
+            entityManagerEntry = PersistenceHelper.tryToFindEntityManagerEntryInTarget(context.getTarget());
 
             if(entityManagerEntry == null)
             {
@@ -388,103 +374,6 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
                 entityManager.clear();
             }
         }
-    }
-
-    /*
-     * needed for special add-ons - don't change it!
-     */
-    private EntityManagerEntry tryToFindEntityManagerEntryInTarget(Object target)
-    {
-        Map<String, PersistenceContextMetaEntry> mapping = persistenceContextMetaEntries.get(getClassLoader());
-
-        mapping = initMapping(mapping);
-
-        String key = target.getClass().getName();
-        PersistenceContextMetaEntry persistenceContextEntry = mapping.get(key);
-
-        if( persistenceContextEntry != null && noFieldMarker.equals(persistenceContextEntry.getFieldName()))
-        {
-            return null;
-        }
-
-        if(persistenceContextEntry == null)
-        {
-            persistenceContextEntry = findPersistenceContextEntry(target.getClass());
-
-            if(persistenceContextEntry == null)
-            {
-                mapping.put(key, new PersistenceContextMetaEntry(
-                        Object.class, noFieldMarker, Default.class.getName(), false));
-                return null;
-            }
-
-            mapping.put(key, persistenceContextEntry);
-        }
-
-        Field entityManagerField;
-        try
-        {
-            entityManagerField = persistenceContextEntry.getSourceClass()
-                    .getDeclaredField(persistenceContextEntry.getFieldName());
-        }
-        catch (NoSuchFieldException e)
-        {
-            //TODO add logging in case of project stage dev.
-            return null;
-        }
-
-        entityManagerField.setAccessible(true);
-        try
-        {
-            EntityManager entityManager = (EntityManager)entityManagerField.get(target);
-            return new EntityManagerEntry(entityManager, persistenceContextEntry);
-        }
-        catch (IllegalAccessException e)
-        {
-            //TODO add logging in case of project stage dev.
-            return null;
-        }
-    }
-
-    private synchronized Map<String, PersistenceContextMetaEntry> initMapping(
-            Map<String, PersistenceContextMetaEntry> mapping)
-    {
-        if(mapping == null)
-        {
-            mapping = new ConcurrentHashMap<String, PersistenceContextMetaEntry>();
-            persistenceContextMetaEntries.put(getClassLoader(), mapping);
-        }
-        return mapping;
-    }
-
-    private PersistenceContextMetaEntry findPersistenceContextEntry(Class target)
-    {
-        //TODO support other injection types
-        Class currentParamClass = target;
-        PersistenceContext persistenceContext;
-        while (currentParamClass != null && !Object.class.getName().equals(currentParamClass.getName()))
-        {
-            for(Field currentField : currentParamClass.getDeclaredFields())
-            {
-                persistenceContext = currentField.getAnnotation(PersistenceContext.class);
-                if(persistenceContext != null)
-                {
-                    return new PersistenceContextMetaEntry(
-                                   currentParamClass,
-                                   currentField.getName(),
-                                   persistenceContext.unitName(),
-                                   PersistenceContextType.EXTENDED.equals(persistenceContext.type()));
-                }
-            }
-            currentParamClass = currentParamClass.getSuperclass();
-        }
-
-        return null;
-    }
-
-    private ClassLoader getClassLoader()
-    {
-        return ClassUtils.getClassLoader(null);
     }
 
     private IllegalStateException unsupportedUsage(InvocationContext context)
