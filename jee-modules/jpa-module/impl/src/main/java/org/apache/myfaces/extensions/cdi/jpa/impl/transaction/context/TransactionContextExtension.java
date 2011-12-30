@@ -23,7 +23,6 @@ import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
-import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
 
@@ -45,14 +44,7 @@ public class TransactionContextExtension implements Extension, Deactivatable
             return;
         }
 
-        // We get a proxy for the RequestScoped TransactionBeanStorage and hand it over to the TransactionContext
-        // This way we avoid the need of later having to synchronize the access on lazy initialization.
-        Bean<?> beanStorageBean = beanManager.resolve(beanManager.getBeans(TransactionBeanStorage.class));
-        TransactionBeanStorage beanStorage = (TransactionBeanStorage)
-                beanManager.getReference(beanStorageBean, TransactionBeanStorage.class,
-                                         beanManager.createCreationalContext(beanStorageBean));
-
-        TransactionContext transactionContext = new TransactionContext(beanStorage);
+        TransactionContext transactionContext = new TransactionContext();
         afterBeanDiscovery.addContext(transactionContext);
     }
 
