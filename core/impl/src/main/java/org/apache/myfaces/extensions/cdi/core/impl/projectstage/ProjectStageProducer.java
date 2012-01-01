@@ -19,8 +19,8 @@
 package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 
+import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
-import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.context.Dependent;
@@ -133,15 +133,44 @@ public class ProjectStageProducer implements Serializable
         }
 
         ProjectStageProducer defaultProjectStageProducer = new ProjectStageProducer();
-        projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class, defaultProjectStageProducer);
+        projectStageProducer = CodiUtils.lookupFromEnvironment(ProjectStageProducer.class,
+                new Aggregatable<ProjectStageProducer>()
+                {
+                    private ProjectStageProducer specializedCodiProjectStageProducer;
+                    private ProjectStageProducer customConfiguredProjectStageProducer;
 
-        if(projectStageProducer == null)
-        {
-            //workaround to avoid the usage of a service loader
-            projectStageProducer = ClassUtils.tryToInstantiateClassForName(
-                    "org.apache.myfaces.extensions.cdi.jsf.impl.projectstage.JsfProjectStageProducer",
-                    ProjectStageProducer.class);
-        }
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public void add(ProjectStageProducer projectStageProducer)
+                    {
+                        if(projectStageProducer.getClass().getName().startsWith("org.apache.myfaces."))
+                        {
+                            specializedCodiProjectStageProducer = projectStageProducer;
+                        }
+                        else
+                        {
+                            customConfiguredProjectStageProducer = projectStageProducer;
+                        }
+                    }
+
+                    /**
+                     * {@inheritDoc}
+                     */
+                    public ProjectStageProducer create()
+                    {
+                        if(customConfiguredProjectStageProducer != null)
+                        {
+                            return this.customConfiguredProjectStageProducer;
+                        }
+
+                        if(specializedCodiProjectStageProducer != null)
+                        {
+                            return this.specializedCodiProjectStageProducer;
+                        }
+                        return null;
+                    }
+                }, defaultProjectStageProducer);
 
         if (projectStageProducer == null)
         {
