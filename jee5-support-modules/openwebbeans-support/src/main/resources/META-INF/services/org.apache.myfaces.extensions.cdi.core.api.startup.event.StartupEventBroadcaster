@@ -17,4 +17,4 @@
 # under the License.
 #####################################################################################
 
-org.apache.myfaces.extensions.cdi.openwebbeans.startup.OwbAwareConfigurationListener
+org.apache.myfaces.extensions.cdi.openwebbeans.startup.WebBeansAwareConfigurationListener

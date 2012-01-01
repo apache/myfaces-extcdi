@@ -39,7 +39,7 @@ import java.util.logging.Logger;
  * Allows to bootstrap the JavaEE5 + OpenWebBeans environment in a controlled manner.
  */
 @InvocationOrder(1)
-public class OwbAwareConfigurationListener extends WebBeansConfigurationListener
+public class WebBeansAwareConfigurationListener extends WebBeansConfigurationListener
         implements StartupEventBroadcaster, Deactivatable
 {
     protected final Logger logger = Logger.getLogger(getClass().getName());
