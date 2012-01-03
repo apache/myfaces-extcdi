@@ -33,7 +33,6 @@ import javax.faces.component.EditableValueHolder;
 import javax.faces.component.ValueHolder;
 import javax.faces.validator.Validator;
 import javax.faces.context.FacesContext;
-import java.util.Collection;
 
 /**
  * see EXTCDI-127
@@ -95,25 +94,38 @@ public class RestoreInjectionPointsObserver
 
         boolean advancedQualifierRequiredForDependencyInjection =
                 codiCoreConfig.isAdvancedQualifierRequiredForDependencyInjection();
-        processComponents(uiViewRoot.getChildren(), advancedQualifierRequiredForDependencyInjection);
+        processComponents(uiViewRoot, advancedQualifierRequiredForDependencyInjection);
     }
 
-    private void processComponents(Collection<UIComponent> uiComponents,
-                                   boolean advancedQualifierRequiredForDependencyInjection)
+    private void processComponents(UIComponent uiComponent,
+            boolean advancedQualifierRequiredForDependencyInjection)
     {
-        if(uiComponents == null)
+        if(uiComponent == null)
         {
             return;
         }
-
-        for(UIComponent uiComponent : uiComponents)
+        
+        // performance improvement - don't change - see EXTCDI-256 : 
+        if (uiComponent.getFacetCount() > 0)
         {
-            inject(uiComponent, advancedQualifierRequiredForDependencyInjection);
-            processComponents(uiComponent.getFacets().values(), advancedQualifierRequiredForDependencyInjection);
-            processComponents(uiComponent.getChildren(), advancedQualifierRequiredForDependencyInjection);
+            for (UIComponent facet : uiComponent.getFacets().values())
+            {
+                inject(facet, advancedQualifierRequiredForDependencyInjection);
+                processComponents(facet, advancedQualifierRequiredForDependencyInjection);
+            }
+        }
+        int childCount = uiComponent.getChildCount();
+        if (childCount > 0)
+        {
+            for (int i = 0 ; i < childCount; i++)
+            {
+                UIComponent child = uiComponent.getChildren().get(i);
+                inject(child, advancedQualifierRequiredForDependencyInjection);
+                processComponents(child, advancedQualifierRequiredForDependencyInjection);
+            }
         }
     }
-
+    
     private void inject(UIComponent uiComponent, boolean advancedQualifierRequiredForDependencyInjection)
     {
         if(uiComponent instanceof ValueHolder)

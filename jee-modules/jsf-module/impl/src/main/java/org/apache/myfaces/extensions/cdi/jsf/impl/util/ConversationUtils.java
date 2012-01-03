@@ -345,8 +345,10 @@ public abstract class ConversationUtils
         }
 
         List<UIComponent> uiComponents = uiViewRoot.getChildren();
-        for (UIComponent uiComponent : uiComponents)
+        // performance improvement - don't change - see EXTCDI-256 :
+        for (int i = 0, size = uiComponents.size(); i < size; i++)
         {
+            UIComponent uiComponent = uiComponents.get(i);
             if (uiComponent instanceof WindowContextIdHolderComponent)
             {
                 return ((WindowContextIdHolderComponent) uiComponent);
@@ -370,8 +372,10 @@ public abstract class ConversationUtils
         }
 
         List<UIComponent> uiComponents = uiViewRoot.getChildren();
-        for (UIComponent uiComponent : uiComponents)
+        // performance improvement - don't change - see EXTCDI-256 :        
+        for (int i = 0, size = uiComponents.size(); i < size; i++)
         {
+            UIComponent uiComponent = uiComponents.get(i);
             if (uiComponent instanceof WindowContextIdHolderComponent)
             {
                 //in this case we have the same view-root
