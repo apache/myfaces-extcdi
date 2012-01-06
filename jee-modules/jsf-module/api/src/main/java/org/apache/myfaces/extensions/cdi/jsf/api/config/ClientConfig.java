@@ -20,7 +20,6 @@ package org.apache.myfaces.extensions.cdi.jsf.api.config;
 
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
-import org.apache.myfaces.extensions.cdi.jsf.api.request.RequestTypeResolver;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -51,14 +50,10 @@ public class ClientConfig implements Serializable
     @Inject
     private ProjectStage projectStage;
 
-    @Inject
-    private RequestTypeResolver requestTypeResolver;
-
-
     /**
      * The location of the default windowhandler resource
      */
-    String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
+    private static final String DEFAULT_WINDOW_HANDLER_HTML_FILE = "static/windowhandler.html";
 
     /**
      * Defaults to <code>true</code>.

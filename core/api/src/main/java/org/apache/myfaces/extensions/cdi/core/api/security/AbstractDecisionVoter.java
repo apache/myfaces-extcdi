@@ -31,19 +31,8 @@ public abstract class AbstractDecisionVoter
      * @return A new instance of {@link org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation}
      * which provides details about the found restriction.
      */
-    protected SecurityViolation newSecurityViolation(final String reason)
+    protected SecurityViolation newSecurityViolation(String reason)
     {
-        return new SecurityViolation()
-        {
-            private static final long serialVersionUID = -382472852735452131L;
-
-            /**
-             * {@inheritDoc}
-             */
-            public String getReason()
-            {
-                return reason;
-            }
-        };
+        return new SimpleSecurityViolation(reason);
     }
 }

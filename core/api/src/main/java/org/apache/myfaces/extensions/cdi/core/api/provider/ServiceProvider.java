@@ -45,18 +45,22 @@ public abstract class ServiceProvider<T>
     protected Class<T> serviceType;
     protected ServiceProviderContext serviceProviderContext;
 
+    private static final String API_PACKAGE = ".api.";
+    private static final String IMPL_PACKAGE = ".impl.";
+    private static final String CUSTOM_PACKAGE = ".custom.";
+
     private static final String CUSTOM_SERVICE_PROVIDER_NAME =
-            ServiceProvider.class.getName().replace(".api.", ".custom.");
+            ServiceProvider.class.getName().replace(API_PACKAGE, CUSTOM_PACKAGE);
 
     private static final String DEFAULT_SERVICE_PROVIDER_NAME =
-            ServiceProvider.class.getName().replace(".api.", ".impl.")
+            ServiceProvider.class.getName().replace(API_PACKAGE, IMPL_PACKAGE)
                     .replace(".ServiceProvider", ".DefaultServiceProvider");
 
     private static final String CUSTOM_SERVICE_PROVIDER_CONTEXT_NAME =
-            ServiceProviderContext.class.getName().replace(".api.", ".custom.");
+            ServiceProviderContext.class.getName().replace(API_PACKAGE, CUSTOM_PACKAGE);
 
     private static final String DEFAULT_SERVICE_PROVIDER_CONTEXT_NAME =
-            ServiceProviderContext.class.getName().replace(".api.", ".impl.")
+            ServiceProviderContext.class.getName().replace(API_PACKAGE, IMPL_PACKAGE)
                     .replace(".ServiceProviderContext", ".DefaultServiceProviderContext");
 
     protected static final Class<? extends ServiceProvider> SERVICE_PROVIDER_CLASS;

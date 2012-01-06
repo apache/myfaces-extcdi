@@ -62,10 +62,10 @@ class DefaultResourceBundle implements ResourceBundle
      */
     public ResourceBundle useBundle(Class<?> bundleClass)
     {
-        Bundle bundleName = bundleClass.getAnnotation(Bundle.class);
-        if(bundleName != null)
+        Bundle currentBundle = bundleClass.getAnnotation(Bundle.class);
+        if(currentBundle != null)
         {
-            this.bundleName = bundleName.name();
+            this.bundleName = currentBundle.name();
         }
 
         if(this.bundleName == null || "".equals(this.bundleName))
@@ -191,10 +191,6 @@ class DefaultResourceBundle implements ResourceBundle
         }
         try
         {
-            if(this.locale == null)
-            {
-                return java.util.ResourceBundle.getBundle(this.bundleName).getString(key);
-            }
             return java.util.ResourceBundle.getBundle(this.bundleName, this.locale).getString(key);
         }
         catch (MissingResourceException e)

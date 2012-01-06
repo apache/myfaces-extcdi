@@ -18,15 +18,22 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.util;
 
+import javax.enterprise.inject.Typed;
 import javax.enterprise.inject.spi.Bean;
 
 /**
  * This class is needed just for a workaround for a Weld v1.1.1 bug (see EXTCDI-191)
  */
 //TODO
+@Typed()
 public class WeldCache
 {
     private static ThreadLocal<Bean<?>> currentBean = new ThreadLocal<Bean<?>>();
+
+    private WeldCache()
+    {
+        // prevent instantiation
+    }
 
     /**
      * @param bean currently active bean which can't be passed to the api

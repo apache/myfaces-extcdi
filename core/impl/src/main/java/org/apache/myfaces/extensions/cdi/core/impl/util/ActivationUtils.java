@@ -22,14 +22,21 @@ import org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated
 import org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 
+import javax.enterprise.inject.Typed;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  * Helper methods for handling {@link ExpressionActivated}
  */
+@Typed()
 public class ActivationUtils
 {
+    private ActivationUtils()
+    {
+        // prevent instantiation
+    }
+
     public static boolean isActivated(Class<?> annotatedClass, Class defaultExpressionInterpreterClass)
     {
         ExpressionActivated expressionActivated = annotatedClass.getAnnotation(ExpressionActivated.class);

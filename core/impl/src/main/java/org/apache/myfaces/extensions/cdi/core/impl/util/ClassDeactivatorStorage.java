@@ -34,6 +34,11 @@ class ClassDeactivatorStorage
     private static Map<ClassLoader, ClassDeactivator> classDeactivatorMap
             = new ConcurrentHashMap<ClassLoader, ClassDeactivator>();
 
+    private ClassDeactivatorStorage()
+    {
+        // prevent instantiation
+    }
+
     static void setClassDeactivator(ClassDeactivator classDeactivator)
     {
         if(classDeactivator != null)

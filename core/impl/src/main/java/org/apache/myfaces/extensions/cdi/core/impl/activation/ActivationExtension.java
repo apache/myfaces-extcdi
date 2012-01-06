@@ -72,7 +72,7 @@ public class ActivationExtension implements Extension, Deactivatable
         checkExpressionActivated(processAnnotatedType);
 
         //placed here to ensue that no validation of a deactivated class will be performance
-        validateCodiImplementationRules(processAnnotatedType);
+        //TODO validateCodiImplementationRules(processAnnotatedType);
     }
 
     private void checkProjectStageActivated(ProcessAnnotatedType<Object> processAnnotatedType)
@@ -121,11 +121,6 @@ public class ActivationExtension implements Extension, Deactivatable
         }
 
         return false;
-    }
-
-    private void validateCodiImplementationRules(ProcessAnnotatedType<Object> processAnnotatedType)
-    {
-        //TODO
     }
 
     /**

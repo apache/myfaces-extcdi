@@ -16,36 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.api.tools;
+package org.apache.myfaces.extensions.cdi.core.api.security;
 
 /**
- * Operations supported by {@link AbstractPropertyExpressionInterpreter}
+ * Implementation which just returns the given reason
  */
-enum SimpleOperationEnum
+class SimpleSecurityViolation implements SecurityViolation
 {
-    IS("=="), NOT("!=");
+    private static final long serialVersionUID = -5017812464381395966L;
 
-    private final String value;
+    private final String reason;
 
-    SimpleOperationEnum(String value)
+    SimpleSecurityViolation(String reason)
     {
-        this.value = value;
+        this.reason = reason;
     }
 
-    String getValue()
+    /**
+     * {@inheritDoc}
+     */
+    public String getReason()
     {
-        return value;
-    }
-
-    static String getOperations()
-    {
-        StringBuilder operations = new StringBuilder();
-
-        for(SimpleOperationEnum operation : SimpleOperationEnum.values())
-        {
-            operations.append(operation);
-            operations.append(" ");
-        }
-        return operations.toString();
+        return reason;
     }
 }

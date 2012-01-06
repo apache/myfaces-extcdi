@@ -48,7 +48,8 @@ public class TrinidadSupportModuleStartupObserver extends AbstractStartupObserve
             String moduleVersion = detectModuleVersion();
 
             //module info
-            StringBuilder info = new StringBuilder("[Started] MyFaces CODI " + getModuleName());
+            StringBuilder info = new StringBuilder("[Started] MyFaces CODI ");
+            info.append(getModuleName());
             info.append(moduleVersion);
             info.append(separator);
 

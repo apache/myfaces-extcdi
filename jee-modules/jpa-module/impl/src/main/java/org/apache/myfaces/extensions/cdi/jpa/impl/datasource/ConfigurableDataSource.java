@@ -199,11 +199,11 @@ public class ConfigurableDataSource implements DataSource
 
         // no JNDI, so we take the direct JDBC route.
         String dataSourceClass = dataSourceConfig.getConnectionClassName(connectionId);
-        if (dataSourceClass == null && dataSourceClass.length() == 0)
+
+        if (dataSourceClass == null || dataSourceClass.length() == 0)
         {
             throw new SQLException("Neither a JNDI location nor a JDBC driver class name is configured!");
         }
-
 
         connectionProperties = dataSourceConfig.getConnectionProperties(connectionId);
 
@@ -286,6 +286,11 @@ public class ConfigurableDataSource implements DataSource
                 //
 
             }
+        }
+
+        if(setter == null)
+        {
+            return;
         }
 
         if (!setter.isAccessible())

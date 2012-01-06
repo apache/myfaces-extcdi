@@ -183,8 +183,6 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
                                   EntityManagerEntry entityManagerEntry,
                                   EntityManager entityManager) throws Exception
     {
-        EntityTransaction transaction = entityManager.getTransaction();
-
         if(entityManagerEntry != null)
         {
             //only in case of add-ons synchronize
@@ -194,21 +192,18 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
             {
                 return proceedMethodInTransaction(context,
                                                   entityManagerEntry,
-                                                  entityManager,
-                                                  transaction);
+                                                  entityManager);
             }
         }
         //we don't have a shared entity manager
         return proceedMethodInTransaction(context,
                                           entityManagerEntry,
-                                          entityManager,
-                                          transaction);
+                                          entityManager);
     }
 
     protected Object proceedMethodInTransaction(InvocationContext context,
                                                 EntityManagerEntry entityManagerEntry,
-                                                EntityManager entityManager,
-                                                EntityTransaction transaction) throws Exception
+                                                EntityManager entityManager) throws Exception
     {
         // used to store any exception we get from the services
         Exception firstException = null;
@@ -287,6 +282,7 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
                             }
                         }
 
+                        EntityTransaction transaction;
                         // and finally do all the commits
                         for (EntityManager currentEntityManager : entityManagerMap.get().values())
                         {

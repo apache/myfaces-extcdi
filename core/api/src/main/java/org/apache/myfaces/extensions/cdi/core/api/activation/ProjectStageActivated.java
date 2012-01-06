@@ -47,7 +47,7 @@ public @interface ProjectStageActivated
 {
     /**
      * The {@link org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage}s
-     * the which lead to activating this alternative bean.
+     * which lead to activating this alternative bean.
      * If the current ProjectStage is not in this list, the bean will get vetoed.
      * @return 1-n project-stages which are allowed for the annotated artifact
      */
