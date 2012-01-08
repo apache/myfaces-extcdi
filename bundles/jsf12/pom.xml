@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
         <artifactId>bundle-project</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
     <artifactId>myfaces-extcdi-bundle-jsf12</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Bundle for JSF 1.2</name>
 

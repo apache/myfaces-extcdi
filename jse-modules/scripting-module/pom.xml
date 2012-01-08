@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jse-modules-project</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
     <artifactId>scripting-module-project</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>MyFaces Extensions-CDI Scripting Module</name>
