@@ -283,6 +283,19 @@
                 <version>1.0.3-SNAPSHOT</version>
             </dependency>
 
+            <!-- java-ee support modules -->
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
+                <artifactId>myfaces-extcdi-jee5-openwebbeans-support</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
+                <artifactId>myfaces-extcdi-jee5-weld-support</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
+            </dependency>
+
             <!-- Base test infrastructure modules -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
