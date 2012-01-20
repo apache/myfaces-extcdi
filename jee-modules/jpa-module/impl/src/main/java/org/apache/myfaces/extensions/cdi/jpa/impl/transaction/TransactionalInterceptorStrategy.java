@@ -68,10 +68,6 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
     @Inject
     private BeanManager beanManager;
 
-    @Inject
-    private TransactionBeanStorage transactionBeanStorage;
-
-
     /** key=qualifier name, value= reference counter */
     private static transient ThreadLocal<HashMap<String, AtomicInteger>> refCounterMaps =
             new ThreadLocal<HashMap<String, AtomicInteger>>();
@@ -93,11 +89,16 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
 
         if (transactionLayer == 0)
         {
+            if (TransactionBeanStorage.getStorage() == null)
+            {
+                TransactionBeanStorage.activateNewStorage();
+            }
+
             // 0 indicates that a new Context needs to get started
-            transactionBeanStorage.startTransactionScope(qualifierKey);
+            TransactionBeanStorage.getStorage().startTransactionScope(qualifierKey);
         }
 
-        String previousTransactionKey = transactionBeanStorage.activateTransactionScope(qualifierKey);
+        String previousTransactionKey = TransactionBeanStorage.getStorage().activateTransactionScope(qualifierKey);
 
         EntityManager entityManager = resolveEntityManagerForQualifier(qualifierClass);
 
@@ -229,17 +230,16 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                         }
                     }
 
-                    // and now we close all open transactionscopes
-                    transactionBeanStorage.endAllTransactionScopes();
-
+                    // and now we close all open transactionscopes and reset the storage
+                    TransactionBeanStorage.getStorage().endAllTransactionScopes();
+                    TransactionBeanStorage.resetStorage();
                 }
-
             }
             else
             {
-                // we are not the outermost TransactionInterceptor
+                // we are NOT the outermost TransactionInterceptor
                 // so we have to re-activate the previous transaction
-                transactionBeanStorage.activateTransactionScope(previousTransactionKey);
+                TransactionBeanStorage.getStorage().activateTransactionScope(previousTransactionKey);
             }
 
             decrementRefCounter(qualifierKey);

@@ -19,7 +19,6 @@
 package org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context;
 
 
-import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionScoped;
 import org.apache.myfaces.extensions.cdi.jpa.api.Transactional;
 
@@ -37,18 +36,13 @@ import java.util.Map;
 @Typed()
 public class TransactionContext implements Context
 {
-    // Attention! this is not a normal instance but a PROXY
-    // thus it resolves the correct contextual instance every time
-    private TransactionBeanStorage beanStorage;
-
     public <T> T get(Contextual<T> component)
     {
-        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = getBeanStorage().getActiveTransactionContext();
+        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = getTransactionBeanEntryMap();
 
         if (transactionBeanEntryMap == null)
         {
-            throw new ContextNotActiveException("Not accessed within a transactional method - use @" +
-                    Transactional.class.getName());
+            return null;
         }
 
         TransactionBeanEntry transactionBeanEntry = transactionBeanEntryMap.get(component);
@@ -62,7 +56,8 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
-        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = getBeanStorage().getActiveTransactionContext();
+        TransactionBeanStorage.activateNewStorage();
+        Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = getTransactionBeanEntryMap();
 
         if (transactionBeanEntryMap == null)
         {
@@ -84,6 +79,18 @@ public class TransactionContext implements Context
         return instance;
     }
 
+    private Map<Contextual, TransactionBeanEntry> getTransactionBeanEntryMap()
+    {
+        TransactionBeanStorage transactionBeanStorage = TransactionBeanStorage.getStorage();
+
+        if(transactionBeanStorage != null)
+        {
+            transactionBeanStorage.activateTransactionScope(null);
+            return transactionBeanStorage.getActiveTransactionContext();
+        }
+        return null;
+    }
+
     public Class<? extends Annotation> getScope()
     {
         return TransactionScoped.class;
@@ -91,32 +98,6 @@ public class TransactionContext implements Context
 
     public boolean isActive()
     {
-        try
-        {
-            return getBeanStorage().getActiveTransactionContext() != null;
-        }
-        catch (ContextNotActiveException e)
-        {
-            return false;
-        }
-    }
-
-    private TransactionBeanStorage getBeanStorage()
-    {
-        if(this.beanStorage == null)
-        {
-            lazyInitBeanStoreProxy();
-        }
-        return this.beanStorage;
-    }
-
-    private synchronized void lazyInitBeanStoreProxy()
-    {
-        if(this.beanStorage != null)
-        {
-            return;
-        }
-
-        this.beanStorage = BeanManagerProvider.getInstance().getContextualReference(TransactionBeanStorage.class);
+        return TransactionBeanStorage.getStorage() != null;
     }
 }

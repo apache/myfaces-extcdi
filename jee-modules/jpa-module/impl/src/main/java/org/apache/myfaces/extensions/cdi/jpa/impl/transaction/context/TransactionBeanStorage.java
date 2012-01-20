@@ -18,9 +18,8 @@
  */
 package org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context;
 
-import javax.annotation.PreDestroy;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.context.spi.Contextual;
+import javax.enterprise.inject.Typed;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Stack;
@@ -38,11 +37,44 @@ import java.util.logging.Logger;
  * but who knows). We also don't need to do any fancy synchronization stuff since
  * we are sure that we are always in the same Thread.</p>
  */
-@RequestScoped
+@Typed()
 public class TransactionBeanStorage
 {
     private static final Logger LOGGER = Logger.getLogger(TransactionBeanStorage.class.getName());
 
+    private static ThreadLocal<TransactionBeanStorage> currentStorage = new ThreadLocal<TransactionBeanStorage>();
+
+    private TransactionBeanStorage()
+    {
+    }
+
+    /**
+     * @return the storage for the current thread if there is one - null otherwise
+     */
+    public static TransactionBeanStorage getStorage()
+    {
+        return currentStorage.get();
+    }
+
+    /**
+     * Creates a new storage for the current thread
+     * @return the storage which was associated with the thread before - null if there was no storage
+     */
+    public static TransactionBeanStorage activateNewStorage()
+    {
+        TransactionBeanStorage previousStorage = currentStorage.get();
+        currentStorage.set(new TransactionBeanStorage());
+        return previousStorage;
+    }
+
+    /**
+     * Removes the current storage
+     */
+    public static void resetStorage()
+    {
+        currentStorage.remove();
+        currentStorage.set(null);
+    }
 
     /**
      * This is the actual bean storage.
@@ -129,7 +161,7 @@ public class TransactionBeanStorage
         {
             //TODO refactor it to a reset method
             activeTransactionKey = null;
-            activeTransactionContext = null;
+            activeTransactionContext = new HashMap<Contextual, TransactionBeanEntry>();
             return null;
         }
 
@@ -180,16 +212,6 @@ public class TransactionBeanStorage
     public Map<Contextual, TransactionBeanEntry> getActiveTransactionContext()
     {
         return activeTransactionContext;
-    }
-
-    /**
-     * At the end of the request we will destroy all beans still
-     * stored in the context.
-     */
-    @PreDestroy
-    public void requestEnded()
-    {
-       endAllTransactionScopes();
     }
 
     /**

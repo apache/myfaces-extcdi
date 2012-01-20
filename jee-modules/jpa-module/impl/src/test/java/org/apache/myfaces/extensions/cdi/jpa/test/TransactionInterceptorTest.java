@@ -22,6 +22,7 @@ package org.apache.myfaces.extensions.cdi.jpa.test;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionHelper;
+import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context.TransactionBeanStorage;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -50,6 +51,8 @@ public class TransactionInterceptorTest extends ContainerTestBase
         Assert.assertNotNull(em);
         EntityTransaction trans = em.getTransaction();
         Assert.assertNotNull(trans);
+
+        Assert.assertNull(TransactionBeanStorage.getStorage());
     }
 
     @Test
@@ -72,6 +75,7 @@ public class TransactionInterceptorTest extends ContainerTestBase
             // all ok
         }
 
+        Assert.assertNull(TransactionBeanStorage.getStorage());
     }
 
     @Test
@@ -99,7 +103,6 @@ public class TransactionInterceptorTest extends ContainerTestBase
 
         Assert.assertEquals(retVal, Integer.valueOf(3));
 
-
         try
         {
             resolveEntityManager();
@@ -109,6 +112,8 @@ public class TransactionInterceptorTest extends ContainerTestBase
         {
             // this was expected, all is fine!
         }
+
+        Assert.assertNull(TransactionBeanStorage.getStorage());
     }
 
     private void resolveEntityManager()
