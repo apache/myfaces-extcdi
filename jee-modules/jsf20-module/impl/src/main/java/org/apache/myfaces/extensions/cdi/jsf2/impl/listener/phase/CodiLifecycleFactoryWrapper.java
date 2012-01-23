@@ -80,7 +80,7 @@ public class CodiLifecycleFactoryWrapper extends LifecycleFactory implements Dea
      */
     public LifecycleFactory getWrapped()
     {
-        return wrapped.getWrapped();
+        return wrapped;
     }
 
     /**

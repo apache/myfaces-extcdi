@@ -79,7 +79,7 @@ public class CodiFacesContextFactory extends FacesContextFactory implements Deac
     @Override
     public FacesContextFactory getWrapped()
     {
-        return wrappedFacesContextFactory.getWrapped();
+        return wrappedFacesContextFactory;
     }
 
     /**
