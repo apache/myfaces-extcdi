@@ -213,7 +213,8 @@ public abstract class JsfUtils
     {
         Set<RequestParameter> result = new HashSet<RequestParameter>();
 
-        if(externalContext == null || externalContext.getRequestParameterValuesMap() == null)
+        if(externalContext == null || //detection of early config for different mojarra versions
+                externalContext.getRequestParameterValuesMap() == null || externalContext.getRequest() == null)
         {
             return result;
         }
