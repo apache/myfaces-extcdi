@@ -19,6 +19,8 @@
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.AfterPhase;
 import org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.BeforePhase;
 import static org.apache.myfaces.extensions.cdi.jsf.api.listener.phase.JsfPhaseId.*;
@@ -102,11 +104,14 @@ public class SecurityViewListener
         {
             Class<? extends ViewConfig> errorView = null;
 
+            AccessDecisionVoterContext voterContext =
+                    CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
+
             if(entry instanceof EditableViewConfigDescriptor)
             {
                 errorView = ((EditableViewConfigDescriptor)entry).getErrorView();
             }
-            invokeVoters(null, beanManager, entry.getAccessDecisionVoters(), errorView);
+            invokeVoters(null, beanManager, voterContext, entry.getAccessDecisionVoters(), errorView);
         }
         catch (AccessDeniedException accessDeniedException)
         {

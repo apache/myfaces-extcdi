@@ -18,6 +18,9 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
+import org.apache.myfaces.extensions.cdi.core.impl.security.spi.EditableAccessDecisionVoterContext;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.security.spi.SecurityStrategy;
 import org.apache.myfaces.extensions.cdi.core.api.security.Secured;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoter;
@@ -27,8 +30,11 @@ import javax.inject.Inject;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.context.Dependent;
 import javax.interceptor.InvocationContext;
+import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * {@inheritDoc}
@@ -47,29 +53,66 @@ public class DefaultSecurityStrategy implements SecurityStrategy
      */
     public Object execute(InvocationContext invocationContext) throws Exception
     {
-        Secured secured = getSecuredAnnotation(invocationContext);
+        AccessDecisionVoterContext voterContext =
+                CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
 
-        Class<? extends AccessDecisionVoter>[] voterClasses = secured.value();
+        Secured secured = null;
 
-        invokeVoters(invocationContext, this.beanManager, Arrays.asList(voterClasses), secured.errorView());
+        List<Annotation> annotatedTypeMetadata = extractMetadata(invocationContext);
+
+        for (Annotation annotation : annotatedTypeMetadata)
+        {
+            if(Secured.class.isAssignableFrom(annotation.annotationType()))
+            {
+                secured = (Secured)annotation;
+            }
+            else if(voterContext instanceof EditableAccessDecisionVoterContext)
+            {
+                ((EditableAccessDecisionVoterContext)voterContext)
+                        .addMetaData(annotation.annotationType().getName(), annotation);
+            }
+        }
+
+        if(secured != null)
+        {
+            Class<? extends AccessDecisionVoter>[] voterClasses = secured.value();
+
+            invokeVoters(invocationContext, this.beanManager, voterContext,
+                    Arrays.asList(voterClasses), secured.errorView());
+        }
 
         return invocationContext.proceed();
     }
 
-    //TODO refactor it to a generic impl. and move it to an util class
-    private Secured getSecuredAnnotation(InvocationContext invocationContext)
+    private List<Annotation> extractMetadata(InvocationContext invocationContext)
     {
-        Secured secured;
+        List<Annotation> result = new ArrayList<Annotation>();
+
         Method method = invocationContext.getMethod();
 
-        if(method.isAnnotationPresent(Secured.class))
+        result.addAll(getAllAnnotations(method.getAnnotations()));
+        result.addAll(getAllAnnotations(method.getDeclaringClass().getAnnotations()));
+
+        return result;
+    }
+
+    private List<Annotation> getAllAnnotations(Annotation[] annotations)
+    {
+        List<Annotation> result = new ArrayList<Annotation>();
+
+        String annotationName;
+        for(Annotation annotation : annotations)
         {
-            secured = method.getAnnotation(Secured.class);
+            annotationName = annotation.annotationType().getName();
+            if(annotationName.startsWith("java.") || annotationName.startsWith("javax."))
+            {
+                continue;
+            }
+
+            result.add(annotation);
+            result.addAll(getAllAnnotations(annotation.annotationType().getAnnotations()));
         }
-        else
-        {
-            secured = method.getDeclaringClass().getAnnotation(Secured.class);
-        }
-        return secured;
+
+        return result;
     }
 }

@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.api.security;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Optional context which allows to get the current state as well as the results of the security check.
@@ -38,4 +39,19 @@ public interface AccessDecisionVoterContext extends Serializable
      * @return found violations
      */
     List<SecurityViolation> getViolations();
+
+    /**
+     * Exposes the found meta-data
+     * @return found meta-data
+     */
+    Map<String, Object> getMetaData();
+
+    /**
+     * Exposes meta-data for the given key
+     * @param key meta-data key
+     * @param targetType target type
+     * @param <T> target type
+     * @return meta-data for the given key or null if there is no value for the given key
+     */
+    <T> T getMetaDataFor(String key, Class<T> targetType);
 }

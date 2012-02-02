@@ -21,8 +21,10 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.security;
 import org.apache.myfaces.extensions.cdi.core.api.activation.Deactivatable;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.ViewConfig;
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterContext;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
+import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
@@ -92,6 +94,9 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
             {
                 lazyInit();
 
+                AccessDecisionVoterContext voterContext =
+                        CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
+
                 Class<? extends ViewConfig> errorView = null;
 
                 if(entry instanceof EditableViewConfigDescriptor)
@@ -99,7 +104,7 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
                     errorView = ((EditableViewConfigDescriptor)entry).getErrorView();
                 }
 
-                invokeVoters(null /*TODO*/, this.beanManager, entry.getAccessDecisionVoters(), errorView);
+                invokeVoters(null /*TODO*/, this.beanManager, voterContext, entry.getAccessDecisionVoters(), errorView);
             }
         }
         catch (AccessDeniedException accessDeniedException)

@@ -50,11 +50,13 @@ public abstract class SecurityUtils
      * Helper for invoking the given {@link AccessDecisionVoter}s
      * @param invocationContext current invocation-context (might be null in case of secured views)
      * @param beanManager current bean-manager
+     * @param voterContext current access-decision-voter-context
      * @param accessDecisionVoters current access-decision-voters
      * @param errorView optional inline error view
      */
     public static void invokeVoters(InvocationContext invocationContext,
                                     BeanManager beanManager,
+                                    AccessDecisionVoterContext voterContext,
                                     List<Class<? extends AccessDecisionVoter>> accessDecisionVoters,
                                     Class<? extends ViewConfig> errorView)
     {
@@ -62,9 +64,6 @@ public abstract class SecurityUtils
         {
             return;
         }
-
-        AccessDecisionVoterContext voterContext =
-                CodiUtils.getContextualReferenceByClass(beanManager, AccessDecisionVoterContext.class, true);
 
         AccessDecisionState voterState = AccessDecisionState.VOTE_IN_PROGRESS;
         try

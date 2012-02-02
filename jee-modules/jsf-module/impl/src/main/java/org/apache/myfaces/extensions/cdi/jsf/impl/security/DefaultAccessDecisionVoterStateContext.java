@@ -25,7 +25,9 @@ import org.apache.myfaces.extensions.cdi.core.impl.security.spi.EditableAccessDe
 import javax.enterprise.context.RequestScoped;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@inheritDoc}
@@ -38,6 +40,8 @@ public class DefaultAccessDecisionVoterStateContext implements EditableAccessDec
     private AccessDecisionState state = AccessDecisionState.INITIAL;
 
     private List<SecurityViolation> securityViolations;
+
+    private Map<String, Object> metaData = new HashMap<String, Object>();
 
     /**
      * {@inheritDoc}
@@ -62,13 +66,45 @@ public class DefaultAccessDecisionVoterStateContext implements EditableAccessDec
     /**
      * {@inheritDoc}
      */
+    public Map<String, Object> getMetaData()
+    {
+        return Collections.unmodifiableMap(this.metaData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public <T> T getMetaDataFor(String key, Class<T> targetType)
+    {
+        return (T)this.metaData.get(key);
+    }
+
+    public void addMetaData(String key, Object metaData)
+    {
+        //TODO specify nested security calls
+        this.metaData.put(key, metaData);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void setState(AccessDecisionState accessDecisionVoterState)
     {
         if(AccessDecisionState.VOTE_IN_PROGRESS.equals(accessDecisionVoterState))
         {
             this.securityViolations = new ArrayList<SecurityViolation>(); //lazy init
         }
+
         this.state = accessDecisionVoterState;
+
+        if(AccessDecisionState.INITIAL.equals(accessDecisionVoterState) ||
+                AccessDecisionState.VOTE_IN_PROGRESS.equals(accessDecisionVoterState))
+        {
+            return;
+        }
+
+        //meta-data is only needed until the end of a voting process
+        this.metaData.clear();
     }
 
     /**

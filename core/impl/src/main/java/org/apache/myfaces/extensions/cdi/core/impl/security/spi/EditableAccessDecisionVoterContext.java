@@ -28,6 +28,14 @@ import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
 public interface EditableAccessDecisionVoterContext extends AccessDecisionVoterContext
 {
     /**
+     * Allows to add custom meta-data. The default security strategy adds custom annotations of the intercepted method
+     * as well as class-level annotations. (Currently inherited annotations aren't supported)
+     * @param key key for the meta-data
+     * @param metaData meta-data which should be added
+     */
+    void addMetaData(String key, Object metaData);
+
+    /**
      * Updates the state of the context
      * @param accessDecisionVoterState current state
      */
