@@ -67,9 +67,17 @@ public class ActivationExtension implements Extension, Deactivatable
 
         CodiStartupBroadcaster.broadcastStartup();
 
-        checkProjectStageActivated(processAnnotatedType);
+        try
+        {
+            checkProjectStageActivated(processAnnotatedType);
 
-        checkExpressionActivated(processAnnotatedType);
+            checkExpressionActivated(processAnnotatedType);
+        }
+        catch (RuntimeException e)
+        {
+            throw new IllegalStateException("Invalid bean detected: " +
+                    processAnnotatedType.getAnnotatedType().getJavaClass().getName(), e);
+        }
 
         //placed here to ensue that no validation of a deactivated class will be performance
         //TODO validateCodiImplementationRules(processAnnotatedType);
@@ -113,6 +121,12 @@ public class ActivationExtension implements Extension, Deactivatable
             ProjectStage ps = ProjectStageProducer.getInstance().getProjectStage();
             for (Class<? extends ProjectStage> activated : activatedIn)
             {
+                if (ProjectStage.class.getName().equals(activated.getName()))
+                {
+                    throw new IllegalStateException(
+                            "Using " + ProjectStage.class.getName() + " directly isn't allowed.");
+                }
+
                 if (ps.getClass().equals(activated))
                 {
                     return true;
