@@ -16,15 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.apache.myfaces.extensions.cdi.core.impl.provider;
-
-import org.apache.myfaces.extensions.cdi.core.api.tools.AbstractPropertyExpressionInterpreter;
+package org.apache.myfaces.extensions.cdi.core.api.tools;
 
 /**
- * {@link org.apache.myfaces.extensions.cdi.core.impl.activation.PropertyExpressionInterpreter} which resolves
- * system/env. properties
+ * {@link org.apache.myfaces.extensions.cdi.core.api.interpreter.ExpressionInterpreter} which resolves
+ * system/env. properties.
+ * <p/>
+ * Furthermore, this interpreter is the default interpreter for services configured via the
+ * {@link org.apache.myfaces.extensions.cdi.core.api.provider.ServiceProvider} and annotated with
+ * {@link org.apache.myfaces.extensions.cdi.core.api.activation.ExpressionActivated}
  */
-public class SystemPropertyExpressionInterpreter extends AbstractPropertyExpressionInterpreter
+public class SystemAwareExpressionInterpreter extends AbstractPropertyExpressionInterpreter
 {
     /**
      * {@inheritDoc}

@@ -19,6 +19,7 @@
 package org.apache.myfaces.extensions.cdi.core.impl.provider;
 
 import org.apache.myfaces.extensions.cdi.core.api.tools.InvocationOrderComparator;
+import org.apache.myfaces.extensions.cdi.core.api.tools.SystemAwareExpressionInterpreter;
 import org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils;
 import org.apache.myfaces.extensions.cdi.core.impl.provider.spi.EditableServiceProviderContext;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ActivationUtils;
@@ -65,7 +66,7 @@ public class DefaultServiceProviderContext<T>
      */
     public boolean filterService(Class<T> serviceClass)
     {
-        return !ActivationUtils.isActivated(serviceClass, SystemPropertyExpressionInterpreter.class);
+        return !ActivationUtils.isActivated(serviceClass, SystemAwareExpressionInterpreter.class);
     }
 
     /**
