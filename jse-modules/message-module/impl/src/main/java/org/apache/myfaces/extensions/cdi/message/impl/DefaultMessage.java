@@ -88,18 +88,4 @@ public class DefaultMessage extends AbstractMessageWithSeverity
                 .payload(getMessagePayload())
                 .toText();
     }
-
-    private MessagePayload[] getMessagePayload()
-    {
-        MessagePayload[] result = new MessagePayload[getPayload().size()];
-
-        int i = 0;
-        for(MessagePayload payload : getPayload().values())
-        {
-            result[i] = payload;
-            i++;
-        }
-        //noinspection unchecked
-        return result;
-    }
 }

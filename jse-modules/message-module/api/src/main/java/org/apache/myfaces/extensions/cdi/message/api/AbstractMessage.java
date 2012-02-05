@@ -45,6 +45,11 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     //currently not used - would be useful for messages which are aware of the original context they were created in
     private MessageContextConfig messageContextConfig;
 
+    //needed in case of jpa proxies
+    protected AbstractMessage()
+    {
+    }
+
     public AbstractMessage(Message message)
     {
         this(message.getDescriptor(), message.getArguments());
@@ -301,6 +306,20 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         }
     }
 
+    protected MessagePayload[] getMessagePayload()
+    {
+        MessagePayload[] result = new MessagePayload[getPayload().size()];
+
+        int i = 0;
+        for(MessagePayload payload : getPayload().values())
+        {
+            result[i] = payload;
+            i++;
+        }
+        //noinspection unchecked
+        return result;
+    }
+
     /*
     * generated
     */
@@ -326,7 +345,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
         {
             return false;
         }
-        if (!messageDescriptor.equals(that.messageDescriptor))
+        if (!getDescriptor().equals(that.getDescriptor()))
         {
             return false;
         }
@@ -349,7 +368,7 @@ public abstract class AbstractMessage implements Message, MessageContextConfigAw
     @Override
     public int hashCode()
     {
-        int result = messageDescriptor.hashCode();
+        int result = getDescriptor().hashCode();
         result = 31 * result + (namedArguments != null ? namedArguments.hashCode() : 0);
         result = 31 * result + (arguments != null ? arguments.hashCode() : 0);
         result = 31 * result + (messagePayload != null ? messagePayload.hashCode() : 0);
