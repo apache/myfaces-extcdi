@@ -56,7 +56,11 @@ public class TransactionContext implements Context
 
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
-        TransactionBeanStorage.activateNewStorage();
+        if(TransactionBeanStorage.getStorage().getActiveTransactionContext() == null)
+        {
+            TransactionBeanStorage.activateNewStorage();
+        }
+
         Map<Contextual, TransactionBeanEntry> transactionBeanEntryMap = getTransactionBeanEntryMap();
 
         if (transactionBeanEntryMap == null)

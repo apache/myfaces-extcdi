@@ -157,12 +157,19 @@ public class TransactionBeanStorage
         }
 
         //can be null on the topmost stack-layer
-        if (transactionKey == null)
+        if (transactionKey == null && this.activeTransactionKey == null)
         {
             //TODO refactor it to a reset method
             activeTransactionKey = null;
             activeTransactionContext = new HashMap<Contextual, TransactionBeanEntry>();
             return null;
+        }
+
+        String oldTransactionContextKey = activeTransactionKey;
+
+        if (transactionKey == null)
+        {
+            transactionKey = this.activeTransactionKey;
         }
 
         Stack<Map<Contextual, TransactionBeanEntry>> transStack = storedTransactionContexts.get(transactionKey);
@@ -173,7 +180,6 @@ public class TransactionBeanStorage
         }
 
         activeTransactionContext =  transStack.peek();
-        String oldTransactionContextKey = activeTransactionKey;
         activeTransactionKey = transactionKey;
         return oldTransactionContextKey;
     }
