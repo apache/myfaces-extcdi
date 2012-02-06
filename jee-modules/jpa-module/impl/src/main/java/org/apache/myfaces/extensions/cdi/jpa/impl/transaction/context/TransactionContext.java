@@ -48,6 +48,7 @@ public class TransactionContext implements Context
         TransactionBeanEntry transactionBeanEntry = transactionBeanEntryMap.get(component);
         if (transactionBeanEntry != null)
         {
+            checkTransactionBeanEntry(transactionBeanEntry);
             return (T) transactionBeanEntry.getContextualInstance();
         }
 
@@ -72,6 +73,7 @@ public class TransactionContext implements Context
         TransactionBeanEntry transactionBeanEntry = transactionBeanEntryMap.get(component);
         if (transactionBeanEntry != null)
         {
+            checkTransactionBeanEntry(transactionBeanEntry);
             return (T) transactionBeanEntry.getContextualInstance();
         }
 
@@ -80,7 +82,41 @@ public class TransactionContext implements Context
         transactionBeanEntry = new TransactionBeanEntry(component, instance, creationalContext);
         transactionBeanEntryMap.put(component, transactionBeanEntry);
 
+        checkTransactionBeanEntry(transactionBeanEntry);
         return instance;
+    }
+
+    private void checkTransactionBeanEntry(TransactionBeanEntry<?> transactionBeanEntry)
+    {
+        String activeTransactionKey = TransactionBeanStorage.getStorage().getActiveTransactionKey();
+
+        for(Annotation qualifier : transactionBeanEntry.getQualifiers())
+        {
+            if(qualifier.annotationType().getName().endsWith(activeTransactionKey))
+            {
+                return;
+            }
+        }
+
+        throw new IllegalStateException("Transaction qualifier of the intercepted bean or method and " +
+                "the injected entity-manager has to be the same. Active transaction qualifier: " +
+                activeTransactionKey + " qualifier/s of the entity-manager: " +
+                extractQualifiers(transactionBeanEntry));
+    }
+
+    private String extractQualifiers(TransactionBeanEntry<?> transactionBeanEntry)
+    {
+        StringBuilder result = new StringBuilder();
+        for(Annotation annotation : transactionBeanEntry.getQualifiers())
+        {
+            if(result.length() != 0)
+            {
+                result.append(";");
+            }
+
+            result.append(annotation.annotationType().getName());
+        }
+        return result.toString();
     }
 
     private Map<Contextual, TransactionBeanEntry> getTransactionBeanEntryMap()

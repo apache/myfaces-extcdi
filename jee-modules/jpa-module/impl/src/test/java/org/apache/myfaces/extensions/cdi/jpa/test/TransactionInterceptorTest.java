@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.jpa.test;
 
 
 import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+import org.apache.myfaces.extensions.cdi.core.impl.util.DefaultLiteral;
 import org.apache.myfaces.extensions.cdi.core.test.util.ContainerTestBase;
 import org.apache.myfaces.extensions.cdi.jpa.api.TransactionHelper;
 import org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context.TransactionBeanStorage;
@@ -91,7 +92,7 @@ public class TransactionInterceptorTest extends ContainerTestBase
             // this was expected, all is fine!
         }
 
-        Integer retVal = TransactionHelper.getInstance().executeTransactional( new Callable<Integer>() {
+        Integer retVal = TestTransactionHelper.getInstance().executeTransactional( new Callable<Integer>() {
 
             public Integer call() throws Exception
             {
@@ -114,6 +115,49 @@ public class TransactionInterceptorTest extends ContainerTestBase
         }
 
         Assert.assertNull(TransactionBeanStorage.getStorage());
+    }
+
+    @Test
+    public void testTransactionHelperWithOtherQualifierThanCurrentTransaction() throws Exception
+    {
+        try
+        {
+            TransactionHelper.getInstance().executeTransactional( new Callable<Integer>() {
+
+                public Integer call() throws Exception
+                {
+                    resolveEntityManager();
+
+                    return Integer.valueOf(3);
+                }
+            });
+        }
+        catch (IllegalStateException e)
+        {
+            //expected: TransactionHelper has different transaction qualifier than the injected/resolved entity-manager
+        }
+
+        Integer retVal = TransactionHelper.getInstance().executeTransactional( new Callable<Integer>() {
+
+            public Integer call() throws Exception
+            {
+                resolveDefaultEntityManager();
+
+                return Integer.valueOf(3);
+            }
+        });
+        Assert.assertEquals(retVal, Integer.valueOf(3));
+
+        Assert.assertNull(TransactionBeanStorage.getStorage());
+    }
+
+    private void resolveDefaultEntityManager()
+    {
+        EntityManager em = BeanManagerProvider.getInstance().
+                getContextualReference(EntityManager.class, new DefaultLiteral());
+        Assert.assertNotNull(em);
+        EntityTransaction et = em.getTransaction();
+        Assert.assertNotNull(et);
     }
 
     private void resolveEntityManager()

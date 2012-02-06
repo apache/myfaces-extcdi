@@ -136,22 +136,32 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                 for (Map.Entry<String, EntityManager> emsEntry: emsEntries.entrySet())
                 {
                     EntityManager em = emsEntry.getValue();
-                    transaction = em.getTransaction();
-                    if (transaction != null && transaction.isActive())
+
+                    try
                     {
-                        try
+                        transaction = em.getTransaction();
+
+                        if (transaction != null && transaction.isActive())
                         {
-                            transaction.rollback();
-                        }
-                        catch (Exception eRollback)
-                        {
-                            if(LOGGER.isLoggable(Level.SEVERE))
+                            try
                             {
-                                LOGGER.log(Level.SEVERE,
-                                        "Got additional Exception while subsequently " +
-                                                "rolling back other SQL transactions", eRollback);
+                                transaction.rollback();
+                            }
+                            catch (Exception eRollback)
+                            {
+                                if(LOGGER.isLoggable(Level.SEVERE))
+                                {
+                                    LOGGER.log(Level.SEVERE,
+                                            "Got additional Exception while subsequently " +
+                                                    "rolling back other SQL transactions", eRollback);
+                                }
                             }
                         }
+                    }
+                    catch (IllegalStateException e2)
+                    {
+                        //just happens if the setup is wrong -> we can't do a proper cleanup
+                        //but we have to continue to cleanup the scope
                     }
                 }
 
@@ -231,6 +241,12 @@ public class TransactionalInterceptorStrategy implements PersistenceStrategy
                     }
 
                     // and now we close all open transactionscopes and reset the storage
+                    TransactionBeanStorage.getStorage().endAllTransactionScopes();
+                    TransactionBeanStorage.resetStorage();
+                }
+                else
+                {
+                    //just happens if the wrong qualifier is used in an application
                     TransactionBeanStorage.getStorage().endAllTransactionScopes();
                     TransactionBeanStorage.resetStorage();
                 }

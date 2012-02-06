@@ -184,6 +184,10 @@ public class TransactionBeanStorage
         return oldTransactionContextKey;
     }
 
+    public String getActiveTransactionKey()
+    {
+        return activeTransactionKey;
+    }
 
     /**
      * This will destroy all stored transaction contexts.

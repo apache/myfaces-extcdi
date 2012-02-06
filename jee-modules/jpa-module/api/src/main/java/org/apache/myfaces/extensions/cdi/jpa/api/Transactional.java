@@ -34,6 +34,8 @@ import java.lang.annotation.Annotation;
  * The optional qualifier can be used to specify different entity managers.
  */
 
+//TODO instead of using #qualifier it should be possible to use a custom qualifier annotated with @TransactionQualifier
+
 @InterceptorBinding
 @Documented
 @Inherited
