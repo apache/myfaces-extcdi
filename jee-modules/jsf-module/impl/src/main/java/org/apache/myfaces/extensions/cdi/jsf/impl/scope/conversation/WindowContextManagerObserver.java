@@ -83,9 +83,16 @@ public class WindowContextManagerObserver
     {
         if (!requestTypeResolver.isPostRequest() && !requestTypeResolver.isPartialRequest())
         {
+            FacesContext facesContext = phaseEvent.getFacesContext();
+
+            if(facesContext.getViewRoot() == null || facesContext.getViewRoot().getViewId() == null)
+            {
+                return;
+            }
+
             //don't use the config of the current window context - it would trigger a touch
             boolean continueRequest =
-                    processGetRequest(phaseEvent.getFacesContext(), windowContextConfig, jsfModuleConfig);
+                    processGetRequest(facesContext, windowContextConfig, jsfModuleConfig);
             
             if (!continueRequest)
             {
