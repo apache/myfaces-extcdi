@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
         <artifactId>jee5-support-modules-project</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.4</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
     <artifactId>myfaces-extcdi-jee5-weld-support</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.4</version>
 
     <name>MyFaces Extensions-CDI Weld Support Module</name>
 
