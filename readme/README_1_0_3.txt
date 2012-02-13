@@ -12,9 +12,9 @@ Release Notes - MyFaces CODI - Version 1.0.3
     * [EXTCDI-255] - decouple ProjectStageProducer from JsfProjectStageProducer
     * [EXTCDI-256] - [PERF] Avoid unnecessary AbstractList$Itr instances
 
-New Feature
+** New Feature
     * [EXTCDI-237] - java-ee5 support modules
     * [EXTCDI-254] - support entity-manager injected via @PersistenceContext
 
-Task
+** Task
     * [EXTCDI-257] - preparations for v1.0.3
