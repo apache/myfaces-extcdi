@@ -72,12 +72,12 @@ import javax.faces.event.PhaseId;
 
 @WebappDependency.List
 ({
-    @WebappDependency("org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-api:jar:1.0.4-SNAPSHOT"),
-    @WebappDependency("org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl:jar:1.0.4-SNAPSHOT"),
-    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-api:jar:1.0.4-SNAPSHOT"),
-    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl:jar:1.0.4-SNAPSHOT"),
-    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-api:jar:1.0.4-SNAPSHOT"),
-    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl:jar:1.0.4-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-api:jar:1.0.5-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.core:myfaces-extcdi-core-impl:jar:1.0.5-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-api:jar:1.0.5-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-jsf20-module-impl:jar:1.0.5-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-api:jar:1.0.5-SNAPSHOT"),
+    @WebappDependency("org.apache.myfaces.extensions.cdi.modules:myfaces-extcdi-message-module-impl:jar:1.0.5-SNAPSHOT"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-impl:jar:1.1.0"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-spi:jar:1.1.0"),
     @WebappDependency("org.apache.openwebbeans:openwebbeans-jsf:jar:1.1.0"),

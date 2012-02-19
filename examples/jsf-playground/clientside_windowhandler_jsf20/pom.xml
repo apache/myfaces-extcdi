@@ -25,12 +25,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>jsf-playground-project</artifactId>
-        <version>1.0.4-SNAPSHOT</version>
+        <version>1.0.5-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
     <artifactId>playground-windowhandler-jsf20</artifactId>
-    <version>1.0.4-SNAPSHOT</version>
+    <version>1.0.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Internal MyFaces Extensions-CDI JSF 2.0-Examples Client-Side Window Handler MyFaces CODI</name>
