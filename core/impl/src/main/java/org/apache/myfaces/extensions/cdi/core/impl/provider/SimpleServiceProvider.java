@@ -230,7 +230,7 @@ public class SimpleServiceProvider<T> extends ServiceProvider<T>
         }
         catch (Exception e)
         {
-            return null;
+            throw new IllegalStateException(e);
         }
     }
 
