@@ -87,8 +87,16 @@ public class SimpleServiceProvider<T> extends ServiceProvider<T>
 
         try
         {
+            String configFileLocation = getConfigFileLocation();
+
             Enumeration<URL> serviceFileEnumerator =
-                    this.serviceProviderContext.getClassLoader().getResources(getConfigFileLocation());
+                    this.serviceProviderContext.getClassLoader().getResources(configFileLocation);
+
+            //fallback - see EXTCDI-268
+            if (!serviceFileEnumerator.hasMoreElements())
+            {
+                serviceFileEnumerator = getClass().getClassLoader().getResources(configFileLocation);
+            }
 
             while (serviceFileEnumerator.hasMoreElements())
             {

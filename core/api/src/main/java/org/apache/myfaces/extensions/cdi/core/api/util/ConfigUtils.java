@@ -106,9 +106,18 @@ public abstract class ConfigUtils
                     resourceBundle = ResourceBundle
                             .getBundle(bundleName, Locale.getDefault(), ClassUtils.getClassLoader(null));
                 }
+                //fallback - see EXTCDI-268
                 catch (MissingResourceException e)
                 {
-                    resourceBundle = null;
+                    try
+                    {
+                        resourceBundle = ResourceBundle
+                                .getBundle(bundleName, Locale.getDefault(), ConfigUtils.class.getClassLoader());
+                    }
+                    catch (MissingResourceException e2)
+                    {
+                        resourceBundle = null;
+                    }
                 }
 
                 if (resourceBundle == null)
@@ -117,9 +126,18 @@ public abstract class ConfigUtils
                     {
                         resourceBundle = ResourceBundle.getBundle(FILE_NAME);
                     }
+                    //fallback - see EXTCDI-268
                     catch (MissingResourceException e2)
                     {
-                        resourceBundle = null;
+                        try
+                        {
+                            resourceBundle = ResourceBundle
+                                    .getBundle(FILE_NAME, Locale.getDefault(), ConfigUtils.class.getClassLoader());
+                        }
+                        catch (MissingResourceException e3)
+                        {
+                            resourceBundle = null;
+                        }
                     }
                 }
 
@@ -189,6 +207,13 @@ public abstract class ConfigUtils
         Properties properties = null;
         ClassLoader classLoader = ClassUtils.getClassLoader(resourceName);
         InputStream inputStream = classLoader.getResourceAsStream(resourceName);
+
+        //fallback - see EXTCDI-268
+        if (inputStream == null)
+        {
+            inputStream = ClassUtils.class.getClassLoader().getResourceAsStream(resourceName);
+        }
+
         if (inputStream != null)
         {
             properties = new Properties();
