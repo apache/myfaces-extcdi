@@ -69,6 +69,15 @@ public abstract class AbstractCdiAwareTestStrategy implements TestStrategy
     //@Before
     public void before()
     {
+        new BeanManagerProvider()
+        {
+            @Override
+            public void setTestMode()
+            {
+                super.setTestMode();
+            }
+        }.setTestMode();
+
         this.testContainer = TestContainerFactory.createTestContainer(CdiTestContainer.class);
         this.testContainer.initEnvironment();
         this.testContainer.startContainer();

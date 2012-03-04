@@ -50,6 +50,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class BeanManagerProvider implements Extension
 {
+    private static Boolean testMode;
+
     private static BeanManagerProvider bmp = null;
 
     private volatile Map<ClassLoader, BeanManagerHolder> bms = new ConcurrentHashMap<ClassLoader, BeanManagerHolder>();
@@ -266,6 +268,23 @@ public class BeanManagerProvider implements Extension
             bmpFirst.bms.put(cl, beanManagerHolder);
         }
 
+        //override in any case in test-mode
+        /*
+         * use:
+         * new BeanManagerProvider() {
+         * @Override
+         * public void setTestMode() {
+         *     super.setTestMode();
+         *   }
+         * }.setTestMode();
+         *
+         * to activate it
+         */
+        if (Boolean.TRUE.equals(testMode))
+        {
+            bmpFirst.bms.put(cl, beanManagerHolder);
+        }
+
         CodiStartupBroadcaster.broadcastStartup();
     }
 
@@ -292,5 +311,15 @@ public class BeanManagerProvider implements Extension
         }
 
         return bmp;
+    }
+
+    protected void setTestMode()
+    {
+        activateTestMode();
+    }
+
+    private static void activateTestMode()
+    {
+        testMode = true;
     }
 }
