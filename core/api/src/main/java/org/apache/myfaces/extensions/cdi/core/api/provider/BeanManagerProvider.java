@@ -129,6 +129,12 @@ public class BeanManagerProvider implements Extension
             }
         }
 
+        if (result == null)
+        {
+            throw new IllegalStateException("Unable to find BeanManager. " +
+                    "Please ensure that you configured the CDI implementation of your choice properly.");
+        }
+
         return result;
     }
 
