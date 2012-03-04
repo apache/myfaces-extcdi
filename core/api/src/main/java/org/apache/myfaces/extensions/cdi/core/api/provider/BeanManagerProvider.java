@@ -226,7 +226,7 @@ public class BeanManagerProvider implements Extension
      *
      * @return current {@link javax.enterprise.inject.spi.BeanManager} which is provided via jndi
      */
-    private BeanManager resolveBeanManagerViaJndi()
+    BeanManager resolveBeanManagerViaJndi()
     {
         try
         {
@@ -269,20 +269,9 @@ public class BeanManagerProvider implements Extension
         }
 
         //override in any case in test-mode
-        /*
-         * use:
-         * new BeanManagerProvider() {
-         * @Override
-         * public void setTestMode() {
-         *     super.setTestMode();
-         *   }
-         * }.setTestMode();
-         *
-         * to activate it
-         */
         if (Boolean.TRUE.equals(testMode))
         {
-            bmpFirst.bms.put(cl, beanManagerHolder);
+            bmpFirst.bms.put(cl, new TestBeanManagerHolder(beanManagerHolder.getBeanManager()));
         }
 
         CodiStartupBroadcaster.broadcastStartup();

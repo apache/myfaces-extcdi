@@ -69,7 +69,10 @@ public class ActivationExtension implements Extension, Deactivatable
 
         try
         {
-            checkProjectStageActivated(processAnnotatedType);
+            //also forces deterministic project-stage initialization
+            ProjectStage projectStage = ProjectStageProducer.getInstance().getProjectStage();
+
+            checkProjectStageActivated(processAnnotatedType, projectStage);
 
             checkExpressionActivated(processAnnotatedType);
         }
@@ -83,14 +86,15 @@ public class ActivationExtension implements Extension, Deactivatable
         //TODO validateCodiImplementationRules(processAnnotatedType);
     }
 
-    private void checkProjectStageActivated(ProcessAnnotatedType<Object> processAnnotatedType)
+    private void checkProjectStageActivated(ProcessAnnotatedType<Object> processAnnotatedType,
+                                            ProjectStage currentlyConfiguredProjectStage)
     {
         if (processAnnotatedType.getAnnotatedType().getJavaClass().isAnnotationPresent(ProjectStageActivated.class))
         {
             Class<? extends ProjectStage>[] activatedIn = processAnnotatedType.getAnnotatedType().getJavaClass()
                             .getAnnotation(ProjectStageActivated.class).value();
 
-            if (!isInProjectStage(activatedIn))
+            if (!isInProjectStage(activatedIn, currentlyConfiguredProjectStage))
             {
                 // this alternative shall not get used
                 processAnnotatedType.veto();
@@ -114,11 +118,11 @@ public class ActivationExtension implements Extension, Deactivatable
         }
     }
 
-    private boolean isInProjectStage(Class<? extends ProjectStage>[] activatedIn)
+    private boolean isInProjectStage(Class<? extends ProjectStage>[] activatedIn,
+                                     ProjectStage currentlyConfiguredProjectStage)
     {
         if (activatedIn != null && activatedIn.length > 0)
         {
-            ProjectStage ps = ProjectStageProducer.getInstance().getProjectStage();
             for (Class<? extends ProjectStage> activated : activatedIn)
             {
                 if (ProjectStage.class.getName().equals(activated.getName()))
@@ -127,7 +131,7 @@ public class ActivationExtension implements Extension, Deactivatable
                             "Using " + ProjectStage.class.getName() + " directly isn't allowed.");
                 }
 
-                if (ps.getClass().equals(activated))
+                if (currentlyConfiguredProjectStage.getClass().equals(activated))
                 {
                     return true;
                 }

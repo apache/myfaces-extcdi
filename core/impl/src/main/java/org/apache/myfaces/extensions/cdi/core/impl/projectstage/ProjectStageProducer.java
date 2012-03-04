@@ -21,6 +21,8 @@ package org.apache.myfaces.extensions.cdi.core.impl.projectstage;
 
 import org.apache.myfaces.extensions.cdi.core.api.Aggregatable;
 import org.apache.myfaces.extensions.cdi.core.api.projectstage.ProjectStage;
+import org.apache.myfaces.extensions.cdi.core.api.projectstage.TestStage;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 
 import javax.enterprise.context.Dependent;
@@ -219,6 +221,18 @@ public class ProjectStageProducer implements Serializable
                 if(projectStage == null)
                 {
                     projectStage = ProjectStage.Production;
+                }
+
+                if (TestStage.class.isAssignableFrom(projectStage.getClass()))
+                {
+                    new BeanManagerProvider()
+                    {
+                        @Override
+                        public void setTestMode()
+                        {
+                            super.setTestMode();
+                        }
+                    }.setTestMode();
                 }
 
                 LOG.info("Computed the following CODI ProjectStage: " + projectStage);
