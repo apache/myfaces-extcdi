@@ -52,7 +52,7 @@ public class BeanManagerProvider implements Extension
 {
     private static BeanManagerProvider bmp = null;
 
-    private volatile Map<ClassLoader, BeanManager> bms = new ConcurrentHashMap<ClassLoader, BeanManager>();
+    private volatile Map<ClassLoader, BeanManagerHolder> bms = new ConcurrentHashMap<ClassLoader, BeanManagerHolder>();
 
     /**
      * Returns if the {@link BeanManagerProvider} has been initialized
@@ -96,17 +96,39 @@ public class BeanManagerProvider implements Extension
     {
         ClassLoader classLoader = ClassUtils.getClassLoader(null);
 
-        BeanManager result = bms.get(classLoader);
+        BeanManagerHolder resultHolder = bms.get(classLoader);
+        BeanManager result;
 
-        if (result == null)
+        if (resultHolder == null)
         {
             result = resolveBeanManagerViaJndi();
 
             if(result != null)
             {
-                bms.put(classLoader, result);
+                bms.put(classLoader, new RootBeanManagerHolder(result));
             }
         }
+        else
+        {
+            result = resultHolder.getBeanManager();
+
+            if (!(resultHolder instanceof RootBeanManagerHolder))
+            {
+                BeanManager jndiBeanManager = resolveBeanManagerViaJndi();
+
+                if (jndiBeanManager != null && /*same instance check:*/jndiBeanManager != result)
+                {
+                    setRootBeanManager(jndiBeanManager);
+
+                    result = jndiBeanManager;
+                }
+                else
+                {
+                    setRootBeanManager(result);
+                }
+            }
+        }
+
         return result;
     }
 
@@ -217,10 +239,26 @@ public class BeanManagerProvider implements Extension
      */
     public void setBeanManager(@Observes AfterBeanDiscovery afterBeanDiscovery, BeanManager beanManager)
     {
+        setBeanManager(new BeanManagerHolder(beanManager));
+    }
+
+    public void setRootBeanManager(BeanManager beanManager)
+    {
+        setBeanManager(new RootBeanManagerHolder(beanManager));
+    }
+
+    private void setBeanManager(BeanManagerHolder beanManagerHolder)
+    {
         BeanManagerProvider bmpFirst = setBeanManagerProvider(this);
 
         ClassLoader cl = ClassUtils.getClassLoader(null);
-        bmpFirst.bms.put(cl, beanManager);
+
+        if (beanManagerHolder instanceof RootBeanManagerHolder ||
+                //the lat bm wins - as before, but don't replace a root-bmh with a normal bmh
+                (!(bmpFirst.bms.get(cl) instanceof RootBeanManagerHolder)))
+        {
+            bmpFirst.bms.put(cl, beanManagerHolder);
+        }
 
         CodiStartupBroadcaster.broadcastStartup();
     }

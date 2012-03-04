@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.test.strategy;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.test.TestContainerFactory;
 import org.apache.myfaces.extensions.cdi.test.spi.CdiTestContainer;
 
@@ -82,6 +83,7 @@ public abstract class AbstractCdiAwareTestStrategy implements TestStrategy
     //@After
     public void after()
     {
+        BeanManagerProvider.getInstance().cleanupStoredBeanManagerOnShutdown(null);
         this.testContainer.stopContexts();
         this.testContainer.stopContainer();
     }
