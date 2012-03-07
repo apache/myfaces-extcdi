@@ -86,7 +86,6 @@
 
         <module>test-modules</module>
         <module>examples</module>
-        <module>alternative-modules</module>
     </modules>
 
     <properties>
@@ -644,6 +643,13 @@
     </reporting>    
 
     <profiles>
+        <profile>
+            <id>deprecated</id>
+            <modules>
+                <module>alternative-modules</module>
+            </modules>
+        </profile>
+
         <profile>
             <!-- use this profile to test CODI with mojarra-->
             <id>mojarra</id>

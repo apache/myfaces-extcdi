@@ -133,7 +133,7 @@
                                 </artifactItem>
 
                                 <!-- alternative modules -->
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                                     <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
                                     <version>${project.version}</version>
@@ -152,7 +152,7 @@
                                     <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>javadoc</classifier>
-                                </artifactItem>
+                                </artifactItem-->
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/javadoc</outputDirectory>
                         </configuration>
@@ -246,7 +246,7 @@
                                 </artifactItem>
 
                                 <!-- alternative modules -->
-                                <artifactItem>
+                                <!--artifactItem>
                                     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                                     <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
                                     <version>${project.version}</version>
@@ -265,7 +265,7 @@
                                     <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
                                     <version>${project.version}</version>
                                     <classifier>sources</classifier>
-                                </artifactItem>
+                                </artifactItem-->
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/src</outputDirectory>
                         </configuration>
@@ -370,7 +370,7 @@
         </dependency>
 
         <!-- alternative modules -->
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
             <scope>compile</scope>
@@ -386,7 +386,7 @@
             <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
             <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
             <scope>compile</scope>
-        </dependency>
+        </dependency-->
 
     </dependencies>
 
