@@ -84,7 +84,7 @@
         var links = document.getElementsByTagName("a");
         for (var i = 0; i < links.length; i++) {
             if (!links[i].onclick) {
-                links[i].setAttribute('onclick', 'storeWindowTree(); return true;');
+                links[i].onclick = function() {storeWindowTree(); return true;};
             }
             else {
                 //the function wrapper is important
