@@ -31,6 +31,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewCo
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.LifecycleAwarePageBeanDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecycleCallbackEntry;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
+import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextManagerObserver;
 
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseListener;
@@ -87,6 +88,16 @@ public final class PhasesLifecycleCallbackPhaseListener implements PhaseListener
     private void processInitView(PhaseEvent event)
     {
         if(event.getPhaseId().equals(PhaseId.RESTORE_VIEW) && !isRedirectRequest(event.getFacesContext()))
+        {
+            return;
+        }
+
+        //TODO check if we have to restrict the other callbacks as well
+        //leads to a call of @BeforePhase but not the corresponding @AfterPhase call of the corresponding callbacks
+
+        //don't call the callbacks in case of an initial redirct
+        if(Boolean.TRUE.equals(event.getFacesContext().getExternalContext().getRequestMap()
+                .get(WindowContextManagerObserver.INITIAL_REDIRCT_PERFORMED_KEY)))
         {
             return;
         }

@@ -58,6 +58,10 @@ import static org.apache.myfaces.extensions.cdi.core.impl.scope.conversation.spi
 @ApplicationScoped
 public class WindowContextManagerObserver
 {
+    //don't use an event
+    public static final String INITIAL_REDIRCT_PERFORMED_KEY =
+            WindowContextManagerObserver.class.getName() + ":redirct";
+
     /**
      * tries to restore the window-id and the window-context as early as possible
      * @param phaseEvent the current jsf phase-event
@@ -196,6 +200,8 @@ public class WindowContextManagerObserver
         {
             return;
         }
+
+        facesContext.getExternalContext().getRequestMap().put(INITIAL_REDIRCT_PERFORMED_KEY, Boolean.TRUE);
 
         try
         {
