@@ -60,7 +60,7 @@ public class WindowContextManagerObserver
 {
     //don't use an event
     public static final String INITIAL_REDIRCT_PERFORMED_KEY =
-            WindowContextManagerObserver.class.getName() + ":redirct";
+            WindowContextManagerObserver.class.getName() + ":initial_redirect";
 
     /**
      * tries to restore the window-id and the window-context as early as possible
