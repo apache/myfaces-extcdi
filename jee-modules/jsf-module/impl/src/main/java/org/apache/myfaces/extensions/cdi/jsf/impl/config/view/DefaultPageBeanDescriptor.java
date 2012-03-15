@@ -29,6 +29,7 @@ import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.RequestLifecyc
 
 import javax.faces.event.PhaseId;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
@@ -124,35 +125,53 @@ class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
         PhasesLifecycleCallbackEntryHelper beforeCallbackEntryHelper = new PhasesLifecycleCallbackEntryHelper();
         PhasesLifecycleCallbackEntryHelper afterCallbackEntryHelper = new PhasesLifecycleCallbackEntryHelper();
 
+        boolean callbackAdded;
         while(!(currentClass.getName().equals(Object.class.getName())))
         {
             for(Method currentMethod : currentClass.getDeclaredMethods())
             {
+                callbackAdded = false;
+
                 if(currentMethod.isAnnotationPresent(BeforePhase.class))
                 {
+                    callbackAdded = true;
                     beforeCallbackEntryHelper.add(
                             currentMethod.getAnnotation(BeforePhase.class).value(), currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(AfterPhase.class))
                 {
+                    callbackAdded = true;
                     afterCallbackEntryHelper.add(
                             currentMethod.getAnnotation(AfterPhase.class).value(), currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(InitView.class))
                 {
+                    callbackAdded = true;
                     this.initViewMethods.add(currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(PrePageAction.class))
                 {
+                    callbackAdded = true;
                     this.prePageActionMethods.add(currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(PreRenderView.class))
                 {
+                    callbackAdded = true;
                     this.preRenderViewMethods.add(currentMethod);
                 }
                 else if(currentMethod.isAnnotationPresent(PostRenderView.class))
                 {
+                    callbackAdded = true;
                     this.postRenderViewMethods.add(currentMethod);
+                }
+
+                if (callbackAdded && Modifier.isPrivate(currentMethod.getModifiers()))
+                {
+                    throw new IllegalStateException("Callback-Implementation not supported: " +
+                            currentMethod.getDeclaringClass().getName() +
+                            "#" + currentMethod.getName() + " is private." +
+                            "That isn't allowed to avoid side-effects with normal-scoped CDI beans, " +
+                            "because private methods aren't proxied. Please use e.g. protected or public instead.");
                 }
             }
 
