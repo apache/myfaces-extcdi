@@ -194,8 +194,7 @@ class DefaultViewConfigExtractor implements ViewConfigExtractor
                         scannedViewConfig
                                 .setSimpleClassNameToPathMapping(currentClass.getSimpleName(), currentBasePath);
                     }
-
-                    if (rootPath.equals(scannedViewConfig.getBasePath()))
+                    else if (rootPath.equals(scannedViewConfig.getBasePath()))
                     {
                         scannedViewConfig.setBasePath(currentBasePath);
                     }

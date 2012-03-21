@@ -35,4 +35,31 @@ abstract class SimpleNestedViewConfig implements ViewConfig
     public class Page2 extends SimpleNestedViewConfig
     {
     }
+
+    public class SubFolder extends SimpleNestedViewConfig
+    {
+        @Page(name = "customPage3")
+        public class Page3 extends SimpleNestedViewConfig
+        {
+        }
+
+        @Page(basePath = "my", name = "customPage4")
+        public class Page4 extends SimpleNestedViewConfig
+        {
+        }
+    }
+
+    @Page(basePath = "subFolder") //overridden
+    public class SubFolder2 extends SimpleNestedViewConfig
+    {
+        @Page(basePath = "/", name = "customPage5")
+        public class Page5 extends SimpleNestedViewConfig
+        {
+        }
+
+        @Page(basePath = "my", name = "customPage6")
+        public class Page6 extends SimpleNestedViewConfig
+        {
+        }
+    }
 }

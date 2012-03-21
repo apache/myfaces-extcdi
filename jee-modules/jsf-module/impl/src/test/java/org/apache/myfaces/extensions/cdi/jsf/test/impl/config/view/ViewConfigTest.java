@@ -77,10 +77,26 @@ public class ViewConfigTest
         viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.Page1.class);
         viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.Page2.class);
 
+        viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.SubFolder.Page3.class);
+        viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.SubFolder.Page4.class);
+
+        viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.SubFolder2.Page5.class);
+        viewConfigExtension.addPageDefinition(SimpleNestedViewConfig.SubFolder2.Page6.class);
+
         assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.Page1.class).getViewId(),
                                                        "/simpleNestedViewConfig/page1.xhtml");
         assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.Page2.class).getViewId(),
                                                        "/simpleNestedViewConfig/page2.xhtml");
+
+        assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.SubFolder.Page3.class).getViewId(),
+                                                       "/simpleNestedViewConfig/subFolder/customPage3.xhtml");
+        assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.SubFolder.Page4.class).getViewId(),
+                "/my/customPage4.xhtml");
+
+        assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.SubFolder2.Page5.class).getViewId(),
+                                                       "/customPage5.xhtml");
+        assertEquals(ViewConfigCache.getViewConfigDescriptor(SimpleNestedViewConfig.SubFolder2.Page6.class).getViewId(),
+                "/my/customPage6.xhtml");
     }
 
     @Test

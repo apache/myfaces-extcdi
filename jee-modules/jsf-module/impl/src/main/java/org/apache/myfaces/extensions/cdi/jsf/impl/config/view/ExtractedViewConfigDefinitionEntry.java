@@ -238,23 +238,7 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         StringBuilder viewId = new StringBuilder(this.basePath);
         if(this.pageName.equals(""))
         {
-            String className = this.viewDefinitionClass.getName();
-
-            //MyClass$MyInnerClass will be converted to /MyClass/MyInnerClass
-            if(className.contains("$") && ".".equals(this.basePath))
-            {
-                this.basePath = "";
-                className = className.substring(className.lastIndexOf('.') + 1);
-                className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
-            }
-            else if(className.contains("$"))
-            {
-                className = className.substring(className.lastIndexOf('$') + 1);
-            }
-            else
-            {
-                className = className.substring(className.lastIndexOf('.') + 1);
-            }
+            String className = getNestedConfigAsPath();
             className = createPageName(className);
             viewId.append(className);
         }
@@ -263,13 +247,26 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
         {
             String className = this.viewDefinitionClass.getName();
 
-            this.basePath = "";
-            className = className.substring(className.lastIndexOf('.') + 1);
-            className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
-            className = createPageName(className);
-            className = className.substring(0, className.lastIndexOf('/') + 1);
+            //custom base-name for a config (overrides inherited base-path)
+            if ("/".endsWith(this.basePath) && this.simpleClassNameToPathMapping.size() == 1)
+            {
+                className = "/" + this.simpleClassNameToPathMapping.get(this.viewDefinitionClass.getSimpleName()) + "/";
+            }
+            else
+            {
+                className = className.substring(className.lastIndexOf('.') + 1);
+                className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
+                className = createPageName(className);
+                className = className.substring(0, className.lastIndexOf('/') + 1);
+            }
             className += this.pageName;
             viewId.append(className);
+        }
+        //only a custom name for a nested config
+        else if(!this.pageName.equals("") && this.viewDefinitionClass.getName().contains("$"))
+        {
+            String className = getNestedConfigAsPath();
+            viewId.append(className.substring(0, className.lastIndexOf("/") + 1)).append(this.pageName);
         }
         else
         {
@@ -293,6 +290,27 @@ class ExtractedViewConfigDefinitionEntry implements EditableViewConfigDescriptor
 
         result = ensureValidViewIds(result);
         return result;
+    }
+
+    private String getNestedConfigAsPath()
+    {
+        String className = this.viewDefinitionClass.getName();
+
+        //MyClass$MyInnerClass will be converted to /MyClass/MyInnerClass
+        if(className.contains("$") && ".".equals(this.basePath))
+        {
+            className = className.substring(className.lastIndexOf('.') + 1);
+            className = convertToPathSyntax(className, this.simpleClassNameToPathMapping);
+        }
+        else if(className.contains("$"))
+        {
+            className = className.substring(className.lastIndexOf('$') + 1);
+        }
+        else
+        {
+            className = className.substring(className.lastIndexOf('.') + 1);
+        }
+        return className;
     }
 
     protected String createPageName(String className)
