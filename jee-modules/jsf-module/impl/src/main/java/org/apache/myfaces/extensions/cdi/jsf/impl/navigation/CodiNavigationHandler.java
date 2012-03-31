@@ -60,7 +60,18 @@ public class CodiNavigationHandler extends NavigationHandler implements Deactiva
     {
         if(context.getResponseComplete() /*see EXTCDI-92*/)
         {
-            this.originalNavigationHandler.handleNavigation(context, fromAction, outcome);
+            if (isActivated())
+            {
+                //allow multiple redirects via view-configs.
+                //in addition some component libs use a different order (which isn't spec. conform),
+                //but it might be useful to use the ViewConfigAwareNavigationHandler
+                new ViewConfigAwareNavigationHandler(this.originalNavigationHandler, false)
+                        .handleNavigation(context, fromAction, outcome);
+            }
+            else
+            {
+                this.originalNavigationHandler.handleNavigation(context, fromAction, outcome);
+            }
         }
         else
         {

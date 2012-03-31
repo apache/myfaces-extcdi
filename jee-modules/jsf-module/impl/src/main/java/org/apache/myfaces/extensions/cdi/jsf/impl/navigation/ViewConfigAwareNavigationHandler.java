@@ -82,7 +82,6 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
         if(outcome != null && outcome.contains("."))
         {
             String originalOutcome = outcome;
-            String oldViewId = facesContext.getViewRoot().getViewId();
 
             if(!this.otherOutcomes.contains(outcome))
             {
@@ -132,6 +131,13 @@ public class ViewConfigAwareNavigationHandler extends NavigationHandler
                     {
                         this.viewConfigs.put(outcome, entry);
                         addConfiguredViewParameters(entry.getViewConfig()); //in case of false it has been added already
+                    }
+
+                    String oldViewId = null;
+
+                    if (facesContext.getViewRoot() != null)
+                    {
+                        oldViewId = facesContext.getViewRoot().getViewId();
                     }
 
                     PreViewConfigNavigateEvent navigateEvent = firePreViewConfigNavigateEvent(oldViewId, entry);

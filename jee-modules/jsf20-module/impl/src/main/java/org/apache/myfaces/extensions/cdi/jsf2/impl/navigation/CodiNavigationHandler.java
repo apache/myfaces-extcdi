@@ -75,10 +75,17 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
      */
     public void handleNavigation(FacesContext context, String fromAction, String outcome)
     {
-        if(this.deactivated || isUnhandledExceptionQueued(context)
-                || context.getRenderResponse() /*see EXTCDI-92*/ || context.getViewRoot() == null)
+        if(this.deactivated || isUnhandledExceptionQueued(context))
         {
             this.wrapped.handleNavigation(context, fromAction, outcome);
+        }
+
+        //allow multiple redirects via view-configs.
+        //in addition some component libs use a different order (which isn't spec. conform),
+        //but it might be useful to use the ViewConfigAwareNavigationHandler
+        else if (context.getRenderResponse() /*see EXTCDI-92*/ || context.getViewRoot() == null)
+        {
+            new ViewConfigAwareNavigationHandler(this.wrapped, true).handleNavigation(context, fromAction, outcome);
         }
         else
         {
