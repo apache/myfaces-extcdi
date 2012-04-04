@@ -125,11 +125,19 @@ class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
         PhasesLifecycleCallbackEntryHelper beforeCallbackEntryHelper = new PhasesLifecycleCallbackEntryHelper();
         PhasesLifecycleCallbackEntryHelper afterCallbackEntryHelper = new PhasesLifecycleCallbackEntryHelper();
 
+        List<String> processedMethodNames = new ArrayList<String>();
+        
         boolean callbackAdded;
         while(!(currentClass.getName().equals(Object.class.getName())))
         {
             for(Method currentMethod : currentClass.getDeclaredMethods())
             {
+                //don't process overridden methods
+                if (processedMethodNames.contains(currentMethod.getName()))
+                {
+                    continue;
+                }
+                
                 callbackAdded = false;
 
                 if(currentMethod.isAnnotationPresent(BeforePhase.class))
@@ -165,13 +173,30 @@ class DefaultPageBeanDescriptor implements LifecycleAwarePageBeanDescriptor
                     this.postRenderViewMethods.add(currentMethod);
                 }
 
-                if (callbackAdded && Modifier.isPrivate(currentMethod.getModifiers()))
+                if (callbackAdded)
                 {
-                    throw new IllegalStateException("Callback-Implementation not supported: " +
-                            currentMethod.getDeclaringClass().getName() +
-                            "#" + currentMethod.getName() + " is private." +
-                            "That isn't allowed to avoid side-effects with normal-scoped CDI beans, " +
-                            "because private methods aren't proxied. Please use e.g. protected or public instead.");
+                    processedMethodNames.add(currentMethod.getName());
+                    
+                    String errorMessage = "";
+                    
+                    if (currentMethod.getParameterTypes().length != 0)
+                    {
+                        errorMessage += "Parameters aren't supported. ";
+                    }
+                    
+                    if (Modifier.isPrivate(currentMethod.getModifiers()))
+                    {
+                        errorMessage +=
+                            "Private methods aren't supported to avoid side-effects with normal-scoped CDI beans. " +
+                            "Please use e.g. protected or public instead. ";
+                    }
+                            
+                    if (!"".equals(errorMessage))
+                    {
+                        throw new IllegalStateException("Callback-Implementation not supported: " +
+                            currentMethod.getDeclaringClass().getName() + "#" + currentMethod.getName() + ". " +
+                            errorMessage);
+                    }
                 }
             }
 
