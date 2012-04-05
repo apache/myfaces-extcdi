@@ -326,25 +326,6 @@
                 <version>1.0.5-SNAPSHOT</version>
             </dependency>
 
-            <!-- optional configuration modules -->
-            <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
-                <version>1.0.5-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
-                <version>1.0.5-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
-                <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
-                <version>1.0.5-SNAPSHOT</version>
-            </dependency>
-
             <!--
                 We currently need this for the CDI test container to emulate the @SessionScoped.
                 TODO: Finally this should not be necessary anymore.
@@ -648,6 +629,29 @@
             <modules>
                 <module>alternative-modules</module>
             </modules>
+
+            <dependencyManagement>
+                <dependencies>
+                    <!-- optional configuration modules -->
+                    <dependency>
+                        <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
+                        <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
+                        <version>1.0.5-SNAPSHOT</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
+                        <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
+                        <version>1.0.5-SNAPSHOT</version>
+                    </dependency>
+
+                    <dependency>
+                        <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
+                        <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
+                        <version>1.0.5-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
         </profile>
 
         <profile>
