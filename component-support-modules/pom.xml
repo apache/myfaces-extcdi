@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi</groupId>
         <artifactId>myfaces-extcdi-parent</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.component-support</groupId>
@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <name>MyFaces Extensions-CDI Component-Support-Modules</name>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
 
     <modules>
         <module>trinidad-support</module>

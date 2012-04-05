@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.component-support</groupId>
         <artifactId>component-support-modules-project</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.component-support</groupId>
     <artifactId>myfaces-extcdi-trinidad20-support</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
 
     <name>MyFaces Extensions-CDI Trinidad 2 Support Module</name>
 

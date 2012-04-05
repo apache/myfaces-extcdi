@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jee-modules-project</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.5</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
     <artifactId>jsf12-module-project</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
 
     <name>MyFaces Extensions-CDI JSF 1.2 Module</name>
