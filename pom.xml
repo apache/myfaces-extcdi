@@ -28,16 +28,16 @@
 
     <groupId>org.apache.myfaces.extensions.cdi</groupId>
     <artifactId>myfaces-extcdi-parent</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Apache MyFaces CODI</name>
     <url>http://myfaces.apache.org/extensions/cdi/</url>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/tags/extcdi-1.0.5</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/tags/extcdi-1.0.5</developerConnection>
-        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/tags/extcdi-1.0.5</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/myfaces/extensions/cdi/trunk/</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/myfaces/extensions/cdi/trunk/</developerConnection>
+        <url>http://svn.apache.org/viewvc/myfaces/extensions/cdi/trunk/</url>
     </scm>
 
     <repositories>
@@ -173,14 +173,14 @@
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
                 <artifactId>myfaces-extcdi-bundle-jsf12</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
                 <artifactId>myfaces-extcdi-bundle-jsf20</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -195,135 +195,135 @@
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
                 <artifactId>myfaces-extcdi-core-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.core</groupId>
                 <artifactId>myfaces-extcdi-core-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- the JSF-1.2 specific library -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jsf12-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jsf12-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- the JSF-2.0 specific library, which includes the JSF-1.2 parts -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jsf20-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jsf20-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- the BV-1.0 specific library -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-bv1-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-bv1-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- CODI JPA-1.0 Module -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jpa1-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-jpa1-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- CODI-I18N Message Module -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-message-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-message-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- CODI-Scripting Module -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-scripting-module-api</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
                 <artifactId>myfaces-extcdi-scripting-module-impl</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- CODI-Component Support Modules -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules.component-support</groupId>
                 <artifactId>myfaces-extcdi-trinidad12-support</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- java-ee support modules -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
                 <artifactId>myfaces-extcdi-jee5-openwebbeans-support</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.modules.jee5-support</groupId>
                 <artifactId>myfaces-extcdi-jee5-weld-support</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!-- Base test infrastructure modules -->
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-base-test-infrastructure</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-junit-support-module</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-cargo-support-module</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-owb-support-module</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.test</groupId>
                 <artifactId>myfaces-extcdi-jsf-support-module</artifactId>
-                <version>1.0.5</version>
+                <version>1.0.6-SNAPSHOT</version>
             </dependency>
 
             <!--
