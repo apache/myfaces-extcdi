@@ -35,39 +35,21 @@
 
     <modules>
         <module>jsf-examples</module>
+        <module>jsf-playground</module>
     </modules>
 
-    <profiles>
-        <profile>
-            <id>playground</id>
-            <modules>
-                <module>jsf-playground</module>
-            </modules>
-        </profile>
-        
-        <!-- This profile is invoked by -DprepareRelease=true.  This allows mvn release:prepare to
-            run successfully on the assembly projects. -->
-        <profile>
-            <id>prepare-release</id>
-            <activation>
-                <property>
-                    <name>prepareRelease</name>
-                </property>
-            </activation>
-            <modules>
-                <module>assembly</module>
-            </modules>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-release-plugin</artifactId>
-                        <configuration>
-                            <arguments>-DprepareRelease</arguments>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <!-- we do _not_ deploy those packages! -->
+                    <skip>true</skip>
+                </configuration>
+
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
