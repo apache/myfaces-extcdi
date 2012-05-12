@@ -52,19 +52,11 @@
                 }
             }
         }
-
         localStorage.setItem(window.name + '_css', stringify(oldSS));
         var body = document.getElementsByTagName("body")[0];
-
         localStorage.setItem(window.name + '_body', body.innerHTML);
-
         //X TODO: store ALL attributes of the body tag
         localStorage.setItem(window.name + '_bodyAttrs', body.getAttribute("class"));
-
-        // store x and y scroll positions
-        localStorage.setItem(window.name + '_x', window.pageXOffset);
-        localStorage.setItem(window.name + '_y', window.pageYOffset);
-
         return true;
     }
 
@@ -85,8 +77,7 @@
         for (var i = 0; i < links.length; i++) {
             if (!links[i].onclick) {
                 links[i].onclick = function() {storeWindowTree(); return true;};
-            }
-            else {
+            } else {
                 //the function wrapper is important
                 //otherwise the last onclick handler would be assigned
                 //to oldonclick
