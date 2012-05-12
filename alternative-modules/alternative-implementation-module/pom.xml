@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
         <artifactId>alternative-project</artifactId>
-        <version>1.0.5-SNAPSHOT</version>
+        <version>1.0.6-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
     <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
-    <version>1.0.5-SNAPSHOT</version>
+    <version>1.0.6-SNAPSHOT</version>
 
     <name>MyFaces Extensions-CDI Alternative-Impl Module</name>
 

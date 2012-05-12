@@ -187,7 +187,7 @@
             <dependency>
                 <groupId>org.apache.myfaces.extensions.cdi.bundles</groupId>
                 <artifactId>myfaces-extcdi-bundle-alternative-configuration</artifactId>
-                <version>1.0.5-SNAPSHOT</version>
+                <version>1.0.6-SNAPSHOT</version>
                 <scope>provided</scope>
             </dependency>
 
@@ -636,19 +636,19 @@
                     <dependency>
                         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                         <artifactId>myfaces-extcdi-core-alternative-configuration</artifactId>
-                        <version>1.0.5-SNAPSHOT</version>
+                        <version>1.0.6-SNAPSHOT</version>
                     </dependency>
 
                     <dependency>
                         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                         <artifactId>myfaces-extcdi-jsf-alternative-configuration</artifactId>
-                        <version>1.0.5-SNAPSHOT</version>
+                        <version>1.0.6-SNAPSHOT</version>
                     </dependency>
 
                     <dependency>
                         <groupId>org.apache.myfaces.extensions.cdi.modules.alternative</groupId>
                         <artifactId>myfaces-extcdi-alternative-implementation-module</artifactId>
-                        <version>1.0.5-SNAPSHOT</version>
+                        <version>1.0.6-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
