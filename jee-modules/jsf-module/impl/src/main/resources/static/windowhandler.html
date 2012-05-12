@@ -21,16 +21,11 @@
 -->
 <html>
 
-<head>
-    <title>Loading...</title>
-</head>
-<body>
-<div id="message" style="position:absolute;left:40%;top:40%">
+<head><title>Loading...</title></head>
+<body><div id="message" style="position:absolute;left:40%;top:40%">
     Your browser does not support JavaScript.
     Click <a href="$$noscriptUrl$$">here</a> to continue without JavaScript.
-</div>
-</body>
-
+</div></body>
 
 <script type="text/javascript" >
 function isHtml5() {
@@ -64,28 +59,21 @@ function getOldCss() {
 
 function addCss(url) {
     var newSS = document.createElement("style");
-
     newSS.setAttribute("rel", "stylesheet");
     newSS.setAttribute("type", "text/css");
     newSS.appendChild(document.createTextNode("@import url(" +url + ");"));
     document.getElementsByTagName("head")[0].appendChild(newSS);
 }
 
-function loadCss(clean)
-{
-    if (!isHtml5()) {
-        // only do this stuff on html browsers
+function loadCss(clean) {
+    if (!isHtml5()) { // only do this stuff on html browsers
         return;
     }
-
     var oldCss  = getOldCss();
-
-    if (window.name && oldCss)
-    {
+    if (window.name && oldCss) {
         for (i=0; oldCss && i< oldCss.length; i++) {
             addCss(oldCss[i]);
         }
-
         if (clean) {
             localStorage.removeItem(window.name + '_css');
         }
@@ -94,8 +82,7 @@ function loadCss(clean)
 }
 
 function replaceContent() {
-    if (!isHtml5()) {
-        // only do this stuff on html browsers
+    if (!isHtml5()) { // only do this stuff on html browsers
         document.getElementById('message').textContent = "Loading...";
         return;
     }
@@ -118,8 +105,7 @@ function replaceContent() {
         newDiv.setAttribute("style", "position:absolute; z-index:1000; background-color:transparent; top:0; left:0; width:100%; height: 100%");
         newDiv.setAttribute("class", "fulldiv");
         document.body.appendChild(newDiv);
-    }
-    else {
+    } else {
         document.getElementById('message').textContent = "Loading...";
     }
 }
@@ -139,8 +125,7 @@ function setUrlParam(baseUrl, paramName, paramValue) {
             if (pair[0] != paramName) {
                 var amp = iParam++ > 0 ? "&" : "?";
                 newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
-            }
-            else {
+            } else {
                 paramFound = true;
                 var amp = iParam++ > 0 ? "&" : "?";
                 newQuery =  newQuery + amp + paramName + "=" + paramValue;
@@ -155,35 +140,16 @@ function setUrlParam(baseUrl, paramName, paramValue) {
     return newQuery;
 }
 
-function scrollToOldPosition() {
-    if (isHtml5()) {
-        var x = localStorage.getItem(window.name + '_x');
-        var y = localStorage.getItem(window.name + '_y');
-        window.scrollTo(x, y);
-
-        var x = localStorage.removeItem(window.name + '_x');
-        var y = localStorage.removeItem(window.name + '_y');
-    }
-}
-
 replaceContent();
 
-
 window.onload = function() {
-
     loadCss(true);
-    //X scrollToOldPosition();
-
     // this will be replaced in the phase listener
     var windowId = '$$windowIdValue$$';
-
-    if (windowId == 'uninitializedWindowId')
-    {
+    if (windowId == 'uninitializedWindowId') {
         windowId = window.name
     }
-
-    if (!windowId || windowId.length < 3)
-    {
+    if (!windowId || windowId.length < 3) {
         // request a new windowId
         windowId = 'automatedEntryPoint';
     }
@@ -191,9 +157,7 @@ window.onload = function() {
     window.name = windowId;
 
     /* used to debug the intermediate page
-    if (!confirm('reload?')) {
-        return true;
-    }
+    if (!confirm('reload?')) { return true; }
     */
 
     // 2 seconds expiry time
