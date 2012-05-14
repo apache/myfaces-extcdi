@@ -80,13 +80,11 @@ public class ClientConfig implements Serializable
                     FacesContext facesContext = FacesContext.getCurrentInstance();
                     if (facesContext != null)
                     {
-                        Map<String, Object> cookies = facesContext.getExternalContext().getRequestCookieMap();
-                        for(Map.Entry<String, Object> cookie : cookies.entrySet())
+                        Cookie cookie = (Cookie) facesContext.getExternalContext().
+                                getRequestCookieMap().get(COOKIE_NAME_NOSCRIPT_ENABLED);
+                        if (cookie!= null)
                         {
-                            if (cookie.getKey().equalsIgnoreCase(COOKIE_NAME_NOSCRIPT_ENABLED))
-                            {
-                                javaScriptEnabled = Boolean.parseBoolean((String) cookie.getValue());
-                            }
+                            javaScriptEnabled = Boolean.parseBoolean((String) cookie.getValue());
                         }
                     }
                 }
