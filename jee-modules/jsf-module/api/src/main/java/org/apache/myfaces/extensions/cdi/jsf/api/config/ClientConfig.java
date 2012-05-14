@@ -42,6 +42,7 @@ import java.util.Map;
 public class ClientConfig implements Serializable
 {
     private static final long serialVersionUID = 581351549574404793L;
+    public static final String BODY_ATTRIBUTES_PLACEHOLDER = "$$bodyAttributes$$";
 
     private boolean javaScriptEnabled = true;
 
@@ -76,15 +77,35 @@ public class ClientConfig implements Serializable
     }
 
     /**
-     * For branding the windowhandler page - e.g. change the backgroundcolour
+     * For branding the whole windowhandler page - e.g. not only change the
+     * background color, add some images and empty menu structure
      * or the language of the message text - you can just copy the content of the
      * {@link #DEFAULT_WINDOW_HANDLER_HTML_FILE} and adopt it to your needs.
+     *
+     * The reason for this is to minimize visual side effects on browsers who do
+     * not properly support html5 localstorage.
+     *
+     * If you just like to change the default background color, then use
+     * {@link #getBodyAttributes()} instead. This will replace the
+     * {@link #BODY_ATTRIBUTES_PLACEHOLDER} on the windowhandler.html page.
+     *
      * @return the location of the <i>windowhandler.html</i> resource
      *         which should be sent to the users browser.
      */
     public String getWindowHandlerResourceLocation()
     {
         return DEFAULT_WINDOW_HANDLER_HTML_FILE;
+    }
+
+    /**
+     * Overwrite this method to set custom specific body attributes on the
+     * intermediate windowhandler.html page.
+     *
+     * @return
+     */
+    public String getBodyAttributes()
+    {
+        return "";
     }
 
     /**
@@ -119,6 +140,7 @@ public class ClientConfig implements Serializable
         }
 
         windowHandlerHtml = sb.toString();
+
         return windowHandlerHtml;
     }
 
