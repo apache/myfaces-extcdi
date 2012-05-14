@@ -27,6 +27,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -44,7 +47,10 @@ public class ClientConfig implements Serializable
     private static final long serialVersionUID = 581351549574404793L;
     public static final String BODY_ATTRIBUTES_PLACEHOLDER = "$$bodyAttributes$$";
 
-    private boolean javaScriptEnabled = true;
+    /** We will set a cookie with this very name if a noscript link got clicked by the user */
+    public static final String COOKIE_NAME_NOSCRIPT_ENABLED = "mfNoScriptEnabled";
+
+    private volatile Boolean javaScriptEnabled = null;
 
     protected String windowHandlerHtml;
 
@@ -62,7 +68,42 @@ public class ClientConfig implements Serializable
      */
     public boolean isJavaScriptEnabled()
     {
-        return this.javaScriptEnabled;
+        if (javaScriptEnabled == null)
+        {
+            synchronized(this)
+            {
+                // double lock checking idiom on volatile variable works since java5
+                if (javaScriptEnabled == null)
+                {
+                    // no info means that it is default -> true
+                    javaScriptEnabled = Boolean.TRUE;
+
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    if (facesContext != null)
+                    {
+                        Object r = facesContext.getExternalContext().getRequest();
+                        if (r instanceof HttpServletRequest)
+                        {
+                            HttpServletRequest request = (HttpServletRequest) r;
+                            Cookie[] cookies = request.getCookies();
+
+                            if (cookies != null && cookies.length > 0)
+                            {
+                                for(Cookie cookie : cookies)
+                                {
+                                    if (cookie.getName().equalsIgnoreCase(COOKIE_NAME_NOSCRIPT_ENABLED))
+                                    {
+                                        javaScriptEnabled = Boolean.parseBoolean(cookie.getValue());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+        return javaScriptEnabled;
     }
 
     /**
@@ -74,6 +115,20 @@ public class ClientConfig implements Serializable
     public void setJavaScriptEnabled(boolean javaScriptEnabled)
     {
         this.javaScriptEnabled = javaScriptEnabled;
+
+        // and now also store this information inside a cookie!
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        if (facesContext != null)
+        {
+            Object r = facesContext.getExternalContext().getResponse();
+            if (r instanceof HttpServletResponse)
+            {
+                Cookie cookie = new Cookie(COOKIE_NAME_NOSCRIPT_ENABLED, "" + javaScriptEnabled);
+                cookie.setPath("/"); // for all the server
+                HttpServletResponse response = (HttpServletResponse) r;
+                response.addCookie(cookie);
+            }
+        }
     }
 
     /**
