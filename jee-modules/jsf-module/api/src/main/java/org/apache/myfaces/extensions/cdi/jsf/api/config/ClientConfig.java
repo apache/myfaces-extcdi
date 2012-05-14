@@ -126,11 +126,11 @@ public class ClientConfig implements Serializable
         StringBuffer sb = new StringBuffer();
         try
         {
-            byte[] buf = new byte[32 * 1024];
+            byte[] buf = new byte[16 * 1024];
             int bytesRead;
             while ((bytesRead = is.read(buf)) != -1)
             {
-                String sbuf = new String(buf);
+                String sbuf = new String(buf, 0, bytesRead);
                 sb.append(sbuf);
             }
         }
