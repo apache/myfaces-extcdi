@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
@@ -81,27 +80,17 @@ public class ClientConfig implements Serializable
                     FacesContext facesContext = FacesContext.getCurrentInstance();
                     if (facesContext != null)
                     {
-                        Object r = facesContext.getExternalContext().getRequest();
-                        if (r instanceof HttpServletRequest)
+                        Map<String, Object> cookies = facesContext.getExternalContext().getRequestCookieMap();
+                        for(Map.Entry<String, Object> cookie : cookies.entrySet())
                         {
-                            HttpServletRequest request = (HttpServletRequest) r;
-                            Cookie[] cookies = request.getCookies();
-
-                            if (cookies != null && cookies.length > 0)
+                            if (cookie.getKey().equalsIgnoreCase(COOKIE_NAME_NOSCRIPT_ENABLED))
                             {
-                                for(Cookie cookie : cookies)
-                                {
-                                    if (cookie.getName().equalsIgnoreCase(COOKIE_NAME_NOSCRIPT_ENABLED))
-                                    {
-                                        javaScriptEnabled = Boolean.parseBoolean(cookie.getValue());
-                                    }
-                                }
+                                javaScriptEnabled = Boolean.parseBoolean((String) cookie.getValue());
                             }
                         }
                     }
                 }
             }
-
         }
         return javaScriptEnabled;
     }
