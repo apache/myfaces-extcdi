@@ -47,7 +47,7 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 {
     private static final long serialVersionUID = 5293942986187078113L;
 
-    private static final String WINDOW_ID_COOKIE_SUFFIX = "-codiWindowId";
+    private static final String WINDOW_ID_COOKIE_PREFIX = "codiWindowId-";
     private static final String CODI_REQUEST_TOKEN = "mfRid";
 
     private static final String UNINITIALIZED_WINDOW_ID_VALUE = "uninitializedWindowId";
@@ -242,11 +242,16 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
     private String getWindowIdFromCookie(ExternalContext externalContext)
     {
-        String cookieName = getRequestToken(externalContext) + WINDOW_ID_COOKIE_SUFFIX;
+        String cookieName = WINDOW_ID_COOKIE_PREFIX + getRequestToken(externalContext);
         Cookie cookie = (Cookie) externalContext.getRequestCookieMap().get(cookieName);
 
         if (cookie != null)
         {
+            // manually blast the cookie away, otherwise it pollutes the
+            // cookie storage in some browsers. E.g. Firefox doesn't
+            // cleanup properly, even if the max-age is reached.
+            cookie.setMaxAge(0);
+
             return cookie.getValue();
         }
 

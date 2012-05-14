@@ -148,20 +148,19 @@ window.onload = function() {
 
     window.name = windowId;
 
-    /* used to debug the intermediate page
-    if (!confirm('reload?')) { return true; }
-    */
+    // uncomment the following line to debug the intermediate page
+    // if (!confirm('reload?')) { return true; }
 
     // 2 seconds expiry time
     var expdt = new Date();
     expdt.setTime(expdt.getTime()+(2*1000));
     var expires = "; expires="+expdt.toGMTString();
 
-    var requestToken = Math.floor(Math.random()*10001);
+    var requestToken = Math.floor(Math.random()*1001);
     var newUrl = setUrlParam(window.location.href, "mfRid", requestToken);
     newUrl = setUrlParam(newUrl, "windowId", windowId);
 
-    document.cookie = requestToken + '-codiWindowId=' + windowId + expires;
+    document.cookie = 'codiWindowId-' + requestToken + '=' + windowId + expires;
 
     window.location = newUrl;
 }
