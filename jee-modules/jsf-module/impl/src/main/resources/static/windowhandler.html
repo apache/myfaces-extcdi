@@ -29,16 +29,11 @@
 
 <script type="text/javascript" >
 function isHtml5() {
-    try {
-        return !!localStorage.getItem;
-    } catch(e) {
-        return false;
-    }
+    try { return !!localStorage.getItem;
+    } catch(e) { return false; }
 }
 function unstringify(serialized) {
-    if (JSON) {
-        return JSON.parse(serialized);
-    }
+    if (JSON) { return JSON.parse(serialized); }
     return serialized.split("|||");
 }
 function getOldBody() {
@@ -78,7 +73,6 @@ function loadCss(clean) {
             localStorage.removeItem(window.name + '_css');
         }
     }
-
 }
 
 function replaceContent() {
@@ -120,8 +114,7 @@ function setUrlParam(baseUrl, paramName, paramValue) {
         var pair = vars[i].split("=");
         if (pair.length == 1) {
             newQuery = pair[0];
-        }
-        else {
+        } else {
             if (pair[0] != paramName) {
                 var amp = iParam++ > 0 ? "&" : "?";
                 newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
@@ -132,7 +125,6 @@ function setUrlParam(baseUrl, paramName, paramValue) {
             }
         }
     }
-
     if (!paramFound) {
         var amp = iParam++ > 0 ? "&" : "?";
         newQuery =  newQuery + amp + paramName + "=" + paramValue;
@@ -149,7 +141,7 @@ window.onload = function() {
     if (windowId == 'uninitializedWindowId') {
         windowId = window.name
     }
-    if (!windowId || windowId.length < 3) {
+    if (!windowId || windowId.length < 1) {
         // request a new windowId
         windowId = 'automatedEntryPoint';
     }

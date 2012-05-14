@@ -179,8 +179,8 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
             windowHandlerHtml = windowHandlerHtml.replace(WINDOW_ID_REPLACE_PATTERN, windowId);
 
             // set the noscript-URL for users with no JavaScript
-            windowHandlerHtml = windowHandlerHtml.replace(
-                    NOSCRIPT_URL_REPLACE_PATTERN, getNoscriptUrl(externalContext));
+            windowHandlerHtml =
+                    windowHandlerHtml.replace(NOSCRIPT_URL_REPLACE_PATTERN, getNoscriptUrl(externalContext));
 
             OutputStream os = httpResponse.getOutputStream();
             try

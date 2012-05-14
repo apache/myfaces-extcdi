@@ -78,9 +78,8 @@ function applyOnClick() {
         if (!links[i].onclick) {
             links[i].onclick = function() {storeWindowTree(); return true;};
         } else {
-            //the function wrapper is important
-            //otherwise the last onclick handler would be assigned
-            //to oldonclick
+            //the function wrapper is important otherwise the
+            //last onclick handler would be assigned to oldonclick
             (function storeEvent() {
                 var oldonclick = links[i].onclick;
                 links[i].onclick = function(evt) {
@@ -95,11 +94,26 @@ function applyOnClick() {
 }
 
 function assertWindowId() {
-    var freshWindow = window.name.length < 1;
-    if (freshWindow) {
-        var url = urlWithoutWindowId(window.location.href);
-        window.name = "window";
-        window.location = url;
+    var url = window.location.href;
+    var vars = url.split(/&|\?/g);
+    var newUrl = "";
+    var iParam = 0;
+    for (var i=0; vars != null && i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair.length == 1) {
+            newUrl = pair[0];
+        } else {
+            if (pair[0] == "windowId") { //
+                pair[1] = window.name ? window.name : "";
+            }
+            var amp = iParam++ > 0 ? "&" : "?";
+            newUrl =  newUrl + amp + pair[0] + "=" + pair[1];
+        }
+    }
+
+    if (newUrl != window.location.href) {
+        window.name = "tempWindowId";
+        window.location = newUrl;
     }
 }
 
@@ -112,7 +126,7 @@ window.onload = function(evt) {
         if (isHtml5()) {
             applyOnClick();
         }
-        // this ensures that even without the ClientSideWindowHandler
+        // this ensures that even without the ClientSideWindowHandler a new windowId gets issued on a new tab
         assertWindowId();
     }
 }
