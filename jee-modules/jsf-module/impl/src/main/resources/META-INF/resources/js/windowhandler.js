@@ -93,27 +93,63 @@ function applyOnClick() {
     }
 }
 
-function assertWindowId() {
+function getUrlParameter(name) {
     var url = window.location.href;
     var vars = url.split(/&|\?/g);
-    var newUrl = "";
+    for (var i=0; vars != null && i < vars.length; i++) {
+        var pair = vars[i].split("=");
+        if (pair[0]==name) {
+            return pair[1];
+        }
+    }
+    return null;
+}
+function setUrlParam(baseUrl, paramName, paramValue) {
+    var query = baseUrl;
+    var vars = query.split(/&|\?/g);
+    var newQuery = "";
     var iParam = 0;
+    var paramFound = false;
     for (var i=0; vars != null && i < vars.length; i++) {
         var pair = vars[i].split("=");
         if (pair.length == 1) {
-            newUrl = pair[0];
+            newQuery = pair[0];
         } else {
-            if (pair[0] == "windowId") { //
-                pair[1] = window.name ? window.name : "";
+            if (pair[0] != paramName) {
+                var amp = iParam++ > 0 ? "&" : "?";
+                newQuery =  newQuery + amp + pair[0] + "=" + pair[1];
+            } else {
+                paramFound = true;
+                if (paramValue) {
+                    var amp = iParam++ > 0 ? "&" : "?";
+                    newQuery =  newQuery + amp + paramName + "=" + paramValue;
+                }
             }
-            var amp = iParam++ > 0 ? "&" : "?";
-            newUrl =  newUrl + amp + pair[0] + "=" + pair[1];
         }
     }
+    if (!paramFound && paramValue) {
+        var amp = iParam++ > 0 ? "&" : "?";
+        newQuery =  newQuery + amp + paramName + "=" + paramValue;
+    }
+    return newQuery;
+}
+// this method runs to ensure that windowIds get checked even if no windowhandler.html is used
+function assertWindowId() {
+    if (!window.name || window.name.length < 1) {
+        url = setUrlParam(window.location.href, 'windowId', null);
+        window.name = 'tempWindowId';
+        window.location = url;
+    }
+}
 
-    if (newUrl != window.location.href) {
-        window.name = "tempWindowId";
-        window.location = newUrl;
+function eraseRequestCookie() {
+    var requestToken = getUrlParameter('mfRid'); // random request param
+    if (requestToken) {
+        var cookieName = 'codiWindowId-' + requestToken;
+        var date = new Date();
+        date.setTime(date.getTime()-(10*24*60*60*1000)); // - 10 day
+        var expires = "; expires="+date.toGMTString();
+        document.cookie = cookieName+"="+expires+"; path=/";
     }
 }
 
@@ -123,11 +159,11 @@ window.onload = function(evt) {
     try {
         (oldWindowOnLoad)? oldWindowOnLoad(evt): null;
     } finally {
+        eraseRequestCookie(); // manually erase the old mfRid cookie because Firefox doesn't do it properly
+        assertWindowId();
         if (isHtml5()) {
             applyOnClick();
         }
-        // this ensures that even without the ClientSideWindowHandler a new windowId gets issued on a new tab
-        assertWindowId();
     }
 }
 })();
