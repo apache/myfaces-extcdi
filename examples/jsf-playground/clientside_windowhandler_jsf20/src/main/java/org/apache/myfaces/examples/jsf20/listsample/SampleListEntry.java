@@ -53,9 +53,11 @@ public class SampleListEntry implements Serializable
         return id;
     }
 
-    public void setId(Integer id)
+    public void setId(Integer id) throws Exception
     {
         this.id = id;
+        // just to demonstrate the effect on pages which take a bit longer to load
+        Thread.sleep(1000L);
     }
 
     public String getValue()
