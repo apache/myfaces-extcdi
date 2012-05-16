@@ -47,7 +47,6 @@ import java.util.Map;
 public class ClientConfig implements Serializable
 {
     private static final long serialVersionUID = 581351549574404793L;
-    public static final String BODY_ATTRIBUTES_PLACEHOLDER = "$$bodyAttributes$$";
 
     /** We will set a cookie with this very name if a noscript link got clicked by the user */
     public static final String COOKIE_NAME_NOSCRIPT_ENABLED = "mfNoScriptEnabled";
@@ -133,27 +132,12 @@ public class ClientConfig implements Serializable
      * The reason for this is to minimize visual side effects on browsers who do
      * not properly support html5 localstorage.
      *
-     * If you just like to change the default background color, then use
-     * {@link #getBodyAttributes()} instead. This will replace the
-     * {@link #BODY_ATTRIBUTES_PLACEHOLDER} on the windowhandler.html page.
-     *
      * @return the location of the <i>windowhandler.html</i> resource
      *         which should be sent to the users browser.
      */
     public String getWindowHandlerResourceLocation()
     {
         return DEFAULT_WINDOW_HANDLER_HTML_FILE;
-    }
-
-    /**
-     * Overwrite this method to set custom specific body attributes on the
-     * intermediate windowhandler.html page.
-     *
-     * @return
-     */
-    public String getBodyAttributes()
-    {
-        return "";
     }
 
     /**

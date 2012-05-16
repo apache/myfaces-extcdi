@@ -170,10 +170,6 @@ public class ClientSideWindowHandler extends DefaultWindowHandler implements Lif
 
             String windowHandlerHtml = this.clientConfig.getWindowHandlerHtml();
 
-            // replace any background color or other body attribute setting
-            windowHandlerHtml = windowHandlerHtml.replace(ClientConfig.BODY_ATTRIBUTES_PLACEHOLDER,
-                                                          clientConfig.getBodyAttributes());
-
             if (windowId == null)
             {
                 windowId = UNINITIALIZED_WINDOW_ID_VALUE;

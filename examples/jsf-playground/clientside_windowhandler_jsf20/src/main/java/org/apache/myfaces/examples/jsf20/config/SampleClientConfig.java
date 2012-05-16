@@ -20,6 +20,7 @@ package org.apache.myfaces.examples.jsf20.config;
 
 import javax.enterprise.inject.Specializes;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 
 import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientConfig;
 
@@ -32,8 +33,10 @@ import org.apache.myfaces.extensions.cdi.jsf.api.config.ClientConfig;
 public class SampleClientConfig extends ClientConfig
 {
     @Override
-    public String getBodyAttributes()
+    public boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
     {
-        return "bgcolor=\"#cccccc\"";
+        // in our sample we only serve the intermediate page
+        // to mozilla 5 compatible browsers
+        return getUserAgent(facesContext).startsWith("Mozilla/5.0");
     }
 }
