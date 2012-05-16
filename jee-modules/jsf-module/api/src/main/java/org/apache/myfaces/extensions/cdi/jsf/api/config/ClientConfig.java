@@ -39,6 +39,9 @@ import java.util.Map;
  *
  * This allows the 'customisation' of this html file to e.g.
  * adopt the background colour to avoid screen flickering.
+ *
+ * Please note that all subclasses of ClientConfig should also
+ * be &#064;SessionScoped as well!
  */
 @SessionScoped
 public class ClientConfig implements Serializable
@@ -52,6 +55,9 @@ public class ClientConfig implements Serializable
     private volatile Boolean javaScriptEnabled = null;
 
     protected String windowHandlerHtml;
+
+    /** lazily initiated via {@link #getUserAgent(javax.faces.context.FacesContext)} */
+    private volatile String userAgent = null;
 
     @Inject
     private ProjectStage projectStage;
@@ -186,6 +192,36 @@ public class ClientConfig implements Serializable
         return windowHandlerHtml;
     }
 
+
+    /**
+     * This information will get stored as it cannot
+     * change during the session anyway.
+     * @return the UserAgent of the request.
+     */
+    public String getUserAgent(FacesContext facesContext)
+    {
+        if (userAgent == null)
+        {
+            synchronized (this)
+            {
+                if (userAgent == null)
+                {
+                    Map<String, String[]> requestHeaders =
+                            facesContext.getExternalContext().getRequestHeaderValuesMap();
+
+                    if (requestHeaders != null &&
+                            requestHeaders.containsKey("User-Agent"))
+                    {
+                        String[] userAgents = requestHeaders.get("User-Agent");
+                        userAgent = userAgents.length > 0 ? userAgents[0] : null;
+                    }
+                }
+            }
+        }
+
+        return userAgent;
+    }
+
     /**
      * Users can overload this method to define in which scenarios a request should result
      * in an 'intercepted' page with proper windowId detection. This can e.g. contain
@@ -200,6 +236,7 @@ public class ClientConfig implements Serializable
      * @return <code>true</code> if the Request should get 'intercepted' and the intermediate
      *        windowhandler.html page should get rendered first. By returning <code>false</code>
      *        the requested page will get rendered intermediately.
+     * @see #getUserAgent(javax.faces.context.FacesContext) for determining the UserAgent
      */
     public boolean isClientSideWindowHandlerRequest(FacesContext facesContext)
     {
@@ -208,22 +245,16 @@ public class ClientConfig implements Serializable
             return false;
         }
 
-        Map<String, String[]> requestHeaders = facesContext.getExternalContext().getRequestHeaderValuesMap();
+        String userAgent = getUserAgent(facesContext);
 
-        if (requestHeaders != null &&
-            requestHeaders.containsKey("User-Agent"))
+        if (userAgent != null &&
+            ( userAgent.indexOf("bot")     >= 0 || // Googlebot, etc
+              userAgent.indexOf("Bot")     >= 0 || // BingBot, etc
+              userAgent.indexOf("Slurp")   >= 0 || // Yahoo Slurp
+              userAgent.indexOf("Crawler") >= 0    // various other Crawlers
+            ) )
         {
-            String[] userAgents = requestHeaders.get("User-Agent");
-            String userAgent = userAgents.length > 0 ? userAgents[0] : null;
-
-            if (userAgent.indexOf("bot")     >= 0 || // Googlebot, etc
-                userAgent.indexOf("Bot")     >= 0 || // BingBot, etc
-                userAgent.indexOf("Slurp")   >= 0 || // Yahoo Slurp
-                userAgent.indexOf("Crawler") >= 0    // various other Crawlers
-               )
-            {
-                return false;
-            }
+            return false;
         }
 
         return true;
