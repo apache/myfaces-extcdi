@@ -72,23 +72,27 @@ function equalsIgnoreCase(source, destination) {
     return source.toLowerCase() === destination.toLowerCase();
 }
 
+/** This method will be called onWindowLoad and after AJAX success */
 function applyOnClick() {
     var links = document.getElementsByTagName("a");
     for (var i = 0; i < links.length; i++) {
         if (!links[i].onclick) {
             links[i].onclick = function() {storeWindowTree(); return true;};
         } else {
-            //the function wrapper is important otherwise the
-            //last onclick handler would be assigned to oldonclick
-            (function storeEvent() {
-                var oldonclick = links[i].onclick;
-                links[i].onclick = function(evt) {
-                    //ie handling added
-                    evt = evt || window.event;
+            // prevent double decoration
+            if (!("" + links[i].onclick).match(".*storeWindowTree().*")) {
+                //the function wrapper is important otherwise the
+                //last onclick handler would be assigned to oldonclick
+                (function storeEvent() {
+                    var oldonclick = links[i].onclick;
+                    links[i].onclick = function(evt) {
+                        //ie handling added
+                        evt = evt || window.event;
 
-                    return storeWindowTree() && oldonclick(evt);
-                };
-            })();
+                        return storeWindowTree() && oldonclick(evt);
+                    };
+                })();
+            }
         }
     }
 }
@@ -153,6 +157,12 @@ function eraseRequestCookie() {
     }
 }
 
+var ajaxOnClick = function ajaxDecorateClick(event) {
+    if (event.status=="success") {
+        applyOnClick();
+    }
+}
+
 var oldWindowOnLoad = window.onload;
 
 window.onload = function(evt) {
@@ -163,6 +173,7 @@ window.onload = function(evt) {
         assertWindowId();
         if (isHtml5()) {
             applyOnClick();
+            jsf.ajax.addOnEvent(ajaxOnClick);
         }
     }
 }

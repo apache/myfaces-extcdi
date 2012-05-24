@@ -21,6 +21,7 @@ package org.apache.myfaces.examples.jsf20.listsample;
 import org.apache.myfaces.extensions.cdi.core.api.scope.conversation.ViewAccessScoped;
 
 import javax.annotation.PostConstruct;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.logging.Logger;
@@ -38,6 +39,8 @@ public class SampleListEntry implements Serializable
 
     private Integer id;
     private String value;
+    private String ajaxVal;
+    private String storedAjaxVal;
 
     /**
      * This just logs a INFO for each bean creation
@@ -46,6 +49,11 @@ public class SampleListEntry implements Serializable
     public void init()
     {
         log.info("SampleListEntry bean got created");
+    }
+
+    public void storeAjaxVal(AjaxBehaviorEvent event)
+    {
+        this.storedAjaxVal = this.ajaxVal;
     }
 
     public Integer getId()
@@ -78,5 +86,25 @@ public class SampleListEntry implements Serializable
     public String reload()
     {
         return "sampleListEntry";
+    }
+
+    public String getAjaxVal()
+    {
+        return ajaxVal;
+    }
+
+    public void setAjaxVal(String ajaxVal)
+    {
+        this.ajaxVal = ajaxVal;
+    }
+
+    public String getStoredAjaxVal()
+    {
+        return storedAjaxVal;
+    }
+
+    public void setStoredAjaxVal(String storedAjaxVal)
+    {
+        this.storedAjaxVal = storedAjaxVal;
     }
 }

@@ -40,6 +40,11 @@
 
         <h:form>
             <h3>A sample List Entry</h3>
+            <h:link outcome="sampleListEntry">
+                <h:outputText value="first Id (just to have a link outside the ajax area)"/>
+                <f:param name="entryId" value="1"/>
+            </h:link>
+
             <h:panelGrid columns="2">
                 <h:outputLabel value="id"/>
                 <h:outputText value="#{sampleListEntry.id}"/>
@@ -50,6 +55,21 @@
 
             <h:commandButton action="#{sampleListEntry.back}" value="back"/>
             <h:commandButton action="#{sampleListEntry.reload}" value="reload"/>
+
+            <p>
+                <h:panelGrid id="ajaxified" columns="2">
+                    <h:outputLabel value="ajaxVal"/>
+                    <h:inputText value="#{sampleListEntry.ajaxVal}">
+                        <f:ajax event="change" render="ajaxified" listener="#{sampleListEntry.storeAjaxVal}"/>
+                    </h:inputText>
+                    <h:outputLabel value="ajaxStored"/>
+                    <h:outputText value="#{sampleListEntry.storedAjaxVal}"/>
+                    <h:link outcome="sampleListEntry">
+                        <h:outputText value="next Id"/>
+                        <f:param name="entryId" value="#{(sampleListEntry.id + 1 ) % 3}"/>
+                    </h:link>
+                </h:panelGrid>
+            </p>
         </h:form>
 
         <h:messages globalOnly="true"/>
