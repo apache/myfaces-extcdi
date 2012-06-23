@@ -25,6 +25,8 @@ import org.apache.myfaces.extensions.cdi.core.api.security.AccessDecisionVoterCo
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ClassDeactivation;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.JsfModuleConfig;
+import org.apache.myfaces.extensions.cdi.jsf.api.config.view.Page;
 import org.apache.myfaces.extensions.cdi.jsf.api.config.view.ViewConfigDescriptor;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.ViewConfigCache;
 import org.apache.myfaces.extensions.cdi.jsf.impl.config.view.spi.EditableViewConfigDescriptor;
@@ -109,8 +111,23 @@ public class SecurityAwareViewHandler extends ViewHandlerWrapper implements Deac
         }
         catch (AccessDeniedException accessDeniedException)
         {
-            Class<? extends ViewConfig> errorView =
-                    SecurityUtils.handleSecurityViolationWithoutNavigation(accessDeniedException);
+            Class<? extends ViewConfig> errorView;
+
+            ViewConfigDescriptor errorViewDescriptor =
+                ViewConfigCache.getViewConfigDescriptor(accessDeniedException.getErrorView());
+
+            if (errorViewDescriptor != null &&
+                errorViewDescriptor.getNavigationMode() == Page.NavigationMode.REDIRECT &&
+                CodiUtils.getContextualReferenceByClass(this.beanManager, JsfModuleConfig.class)
+                    .isAlwaysUseNavigationHandlerOnSecurityViolation())
+            {
+                SecurityUtils.tryToHandleSecurityViolation(accessDeniedException);
+                errorView = errorViewDescriptor.getViewConfig();
+            }
+            else
+            {
+                errorView = SecurityUtils.handleSecurityViolationWithoutNavigation(accessDeniedException);
+            }
 
             return this.wrapped.createView(context, ViewConfigCache.getViewConfigDescriptor(errorView).getViewId());
         }

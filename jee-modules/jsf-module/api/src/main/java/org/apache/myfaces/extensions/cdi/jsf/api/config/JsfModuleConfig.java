@@ -78,4 +78,16 @@ public class JsfModuleConfig extends AbstractAttributeAware implements CodiConfi
     {
         return true;
     }
+
+    /**
+     * Per default the current view gets replaced with the error-view (in case of a security-violation).
+     * For using a redirect it's needed to return true and using Page.NavigationMode.REDIRECT for @Page of the
+     * error-view-config.
+     * @return true if the navigation-handler should be used in case of a security-violation, false otherwise
+     */
+    @ConfigEntry
+    public boolean isAlwaysUseNavigationHandlerOnSecurityViolation()
+    {
+        return false;
+    }
 }
