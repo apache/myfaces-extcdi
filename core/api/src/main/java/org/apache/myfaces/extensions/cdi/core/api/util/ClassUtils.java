@@ -45,7 +45,7 @@ public abstract class ClassUtils
      * <ol>
      * <li>ContextClassLoader of the current Thread</li>
      * <li>ClassLoader of the given Object 'o'</li>
-     * <li>ClassLoader of this very CodiUtils class</li>
+     * <li>ClassLoader of this very ClassUtils class</li>
      * </ol>
      *
      * @param o if not <code>null</code> it may get used to detect the classloader.
@@ -53,24 +53,41 @@ public abstract class ClassUtils
      */
     public static ClassLoader getClassLoader(Object o)
     {
-        ClassLoader loader = AccessController.doPrivileged(new PrivilegedAction<ClassLoader>()
+        if (System.getSecurityManager() != null)
         {
-            /**
-             * {@inheritDoc}
-             */
-            public ClassLoader run()
+            return AccessController.doPrivileged(new GetClassLoaderAction(o));
+        }
+        else
+        {
+            return getClassLoaderInternal(o);
+        }
+    }
+
+    static class GetClassLoaderAction implements PrivilegedAction<ClassLoader>
+    {
+        private Object object;
+        GetClassLoaderAction(Object object)
+        {
+            this.object = object;
+        }
+
+        @Override
+        public ClassLoader run()
+        {
+            try
             {
-                try
-                {
-                    return Thread.currentThread().getContextClassLoader();
-                }
-                catch (Exception e)
-                {
-                    return null;
-                }
+                return getClassLoaderInternal(object);
+            }
+            catch (Exception e)
+            {
+                return null;
             }
         }
-        );
+    }
+
+    private static ClassLoader getClassLoaderInternal(Object o)
+    {
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
         if (loader == null && o != null)
         {
