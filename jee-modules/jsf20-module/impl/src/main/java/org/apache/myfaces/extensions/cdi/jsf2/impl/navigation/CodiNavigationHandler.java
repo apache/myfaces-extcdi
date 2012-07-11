@@ -36,6 +36,7 @@ import javax.faces.context.FacesContext;
 import java.util.Set;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLoadClassForName;
@@ -46,6 +47,9 @@ import static org.apache.myfaces.extensions.cdi.core.api.util.ClassUtils.tryToLo
 public class CodiNavigationHandler extends ConfigurableNavigationHandler implements Deactivatable
 {
     private Set<String> otherOutcomes = new CopyOnWriteArraySet<String>();
+
+    private Map<String, NavigationCase> viewConfigBasedNavigationCaseCache
+        = new ConcurrentHashMap<String, NavigationCase>();
 
     private final NavigationHandler wrapped;
     private final boolean deactivated;
@@ -120,6 +124,13 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
             {
                 String originalOutcome = outcome;
 
+                NavigationCase navigationCase = this.viewConfigBasedNavigationCaseCache.get(originalOutcome);
+
+                if (navigationCase != null)
+                {
+                    return navigationCase;
+                }
+
                 outcome = outcome.substring(6);
 
                 ViewConfigDescriptor entry = null;
@@ -146,14 +157,16 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
 
                 if(entry != null)
                 {
-                    return new NavigationCase("*",
-                                              null,
-                                              null,
-                                              null,
-                                              entry.getViewId(),
-                                              null,
-                                              Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
-                                              false);
+                    navigationCase = new NavigationCase("*",
+                                                        null,
+                                                        null,
+                                                        null,
+                                                        entry.getViewId(),
+                                                        null,
+                                                        Page.NavigationMode.REDIRECT.equals(entry.getNavigationMode()),
+                                                        false);
+                    this.viewConfigBasedNavigationCaseCache.put(originalOutcome, navigationCase);
+                    return navigationCase;
                 }
             }
             return ((ConfigurableNavigationHandler) this.wrapped).getNavigationCase(context, action, outcome);
