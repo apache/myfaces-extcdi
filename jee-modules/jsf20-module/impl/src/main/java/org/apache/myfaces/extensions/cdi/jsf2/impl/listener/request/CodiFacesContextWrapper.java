@@ -28,12 +28,15 @@ import org.apache.myfaces.extensions.cdi.jsf2.impl.scope.conversation.Redirected
 import org.apache.myfaces.extensions.cdi.jsf2.impl.security.SecurityAwareViewHandler;
 import org.apache.myfaces.extensions.cdi.message.api.Message;
 
+import javax.faces.FactoryFinder;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.Application;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.context.FacesContextWrapper;
+import javax.faces.context.PartialViewContext;
+import javax.faces.context.PartialViewContextFactory;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -54,6 +57,8 @@ class CodiFacesContextWrapper extends FacesContextWrapper
     private boolean temporaryViewRootAwareApplicationWrapperActivated;
 
     private boolean defaultErrorViewExceptionHandlerActivated;
+
+    private PartialViewContext partialViewContext;
 
     CodiFacesContextWrapper(FacesContext wrappedFacesContext)
     {
@@ -151,6 +156,18 @@ class CodiFacesContextWrapper extends FacesContextWrapper
                     ViewConfigCache.getDefaultErrorViewConfigDescriptor() != null &&
                             ClassDeactivation.isClassActivated(ExceptionHandler.class);
         }
+    }
+
+    @Override
+    public PartialViewContext getPartialViewContext()
+    {
+        if (this.partialViewContext == null)
+        {
+            PartialViewContextFactory partialViewContextFactory = (PartialViewContextFactory)
+                    FactoryFinder.getFactory(FactoryFinder.PARTIAL_VIEW_CONTEXT_FACTORY);
+            this.partialViewContext = partialViewContextFactory.getPartialViewContext(this);
+        }
+        return this.partialViewContext;
     }
 
     /**
