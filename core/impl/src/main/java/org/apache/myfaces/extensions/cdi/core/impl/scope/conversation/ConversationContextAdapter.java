@@ -93,6 +93,12 @@ public class ConversationContextAdapter implements Context
      */
     public <T> T get(Contextual<T> component)
     {
+        //workaround for openejb - see EXTCDI-304
+        if (component == null)
+        {
+            return null;
+        }
+
         if (component instanceof Bean)
         {
             return this.conversationContext.resolve((Bean<T>)component);
