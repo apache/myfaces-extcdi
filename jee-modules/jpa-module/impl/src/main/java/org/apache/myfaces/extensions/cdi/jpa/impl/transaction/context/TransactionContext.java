@@ -27,6 +27,7 @@ import javax.enterprise.context.spi.Context;
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.Typed;
+import javax.persistence.EntityManager;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
@@ -88,6 +89,14 @@ public class TransactionContext implements Context
 
     private void checkTransactionBeanEntry(TransactionBeanEntry<?> transactionBeanEntry)
     {
+        if (! (transactionBeanEntry.getContextualInstance() instanceof EntityManager))
+        {
+            return;
+        }
+
+        // we only do this special check for EntityManagers
+        // this detects the problem when someone uses a @Transactional(SomeQualifier.class)
+        // while using an @Inject @AnotherQualifier EntityManager em; ...
         String activeTransactionKey = TransactionBeanStorage.getStorage().getActiveTransactionKey();
 
         for(Annotation qualifier : transactionBeanEntry.getQualifiers())
