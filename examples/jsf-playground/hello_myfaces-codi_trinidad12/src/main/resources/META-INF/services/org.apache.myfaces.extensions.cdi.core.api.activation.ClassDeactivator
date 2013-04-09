@@ -21,14 +21,14 @@
 ### Description and sample implementation
 #####################################################################################
 
-##Some parts of Trinidad are only compatible with DefaultWindowHandler
-##and it's needed to deactivate CodiRenderKitFactory which is needed by the other implementations of WindowHandler.
+##Some parts of Trinidad aren't compatible with the DefaultWindowHandler
 ##-> implement a custom ClassDeactivator - e.g.:
 
 #package org.apache.myfaces.examples.codi.trinidad.config;
 #
 #import org.apache.myfaces.extensions.cdi.core.api.activation.ClassDeactivator;
 #import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.CodiRenderKitFactory;
+#import org.apache.myfaces.extensions.cdi.jsf.impl.scope.conversation.WindowContextAwareViewHandler;
 #
 #import java.util.HashSet;
 #import java.util.Set;
@@ -40,6 +40,7 @@
 #    static
 #    {
 #        deactivatedClasses.add(CodiRenderKitFactory.class);
+#        deactivatedClasses.add(WindowContextAwareViewHandler.class);
 #    }
 #
 #    public Set<Class> getDeactivatedClasses()
