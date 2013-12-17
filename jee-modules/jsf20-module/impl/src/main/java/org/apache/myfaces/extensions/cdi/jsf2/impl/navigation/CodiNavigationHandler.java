@@ -197,7 +197,7 @@ public class CodiNavigationHandler extends ConfigurableNavigationHandler impleme
             return result;
         }
 
-        return new NavigationCaseMapWrapper(result);
+        return new NavigationCaseMapWrapper(result, this.wrapped);
     }
 
     /**
