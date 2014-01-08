@@ -18,9 +18,12 @@
  */
 package org.apache.myfaces.extensions.cdi.jpa.impl.transaction.context;
 
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
+
 import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.PassivationCapable;
 import java.lang.annotation.Annotation;
 import java.util.Collections;
 import java.util.Set;
@@ -37,6 +40,12 @@ public class TransactionBeanEntry<T>
 
     public TransactionBeanEntry(Contextual<T> bean, T contextualInstance, CreationalContext<T> creationalContext)
     {
+        if (bean instanceof PassivationCapable && !(bean instanceof Bean))
+        {
+            bean = (Contextual<T>) BeanManagerProvider.getInstance().getBeanManager()
+                .getPassivationCapableBean(((PassivationCapable) bean).getId());
+        }
+
         this.bean = bean;
 
         this.contextualInstance = contextualInstance;

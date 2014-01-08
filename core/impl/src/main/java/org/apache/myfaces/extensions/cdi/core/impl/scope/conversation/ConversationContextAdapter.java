@@ -20,6 +20,7 @@ package org.apache.myfaces.extensions.cdi.core.impl.scope.conversation;
 
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.view.DefaultErrorView;
+import org.apache.myfaces.extensions.cdi.core.api.provider.BeanManagerProvider;
 import org.apache.myfaces.extensions.cdi.core.api.security.AccessDeniedException;
 import org.apache.myfaces.extensions.cdi.core.api.security.event.InvalidBeanCreationEvent;
 import org.apache.myfaces.extensions.cdi.core.api.security.SecurityViolation;
@@ -29,6 +30,7 @@ import javax.enterprise.context.spi.Contextual;
 import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.PassivationCapable;
 import java.lang.annotation.Annotation;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,6 +73,12 @@ public class ConversationContextAdapter implements Context
      */
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
+        if (component instanceof PassivationCapable && !(component instanceof Bean))
+        {
+            component = (Contextual<T>) BeanManagerProvider.getInstance().getBeanManager()
+                .getPassivationCapableBean(((PassivationCapable) component).getId());
+        }
+
         if (component instanceof Bean)
         {
             //since the basic use-case is related to topics like security,
@@ -97,6 +105,12 @@ public class ConversationContextAdapter implements Context
         if (component == null)
         {
             return null;
+        }
+
+        if (component instanceof PassivationCapable && !(component instanceof Bean))
+        {
+            component = (Contextual<T>) BeanManagerProvider.getInstance().getBeanManager()
+                .getPassivationCapableBean(((PassivationCapable) component).getId());
         }
 
         if (component instanceof Bean)
