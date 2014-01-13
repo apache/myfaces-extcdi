@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
+import javax.enterprise.inject.Typed;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import javax.validation.metadata.BeanDescriptor;
@@ -27,6 +28,7 @@ import java.util.Set;
 /**
  * {@link Validator} which can be serialized
  */
+@Typed()
 class InjectableValidator implements Validator, Serializable
 {
     private static final long serialVersionUID = 7925077169313672595L;

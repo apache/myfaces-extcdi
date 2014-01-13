@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
+import javax.enterprise.inject.Typed;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorFactory;
 import java.io.Serializable;
@@ -28,6 +29,7 @@ import static org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils.injectF
  * {@link ConstraintValidatorFactory} which can be serialized and adds support for dependency injection in
  * {@link ConstraintValidator} instances.
  */
+@Typed()
 class InjectableConstraintValidatorFactory implements ConstraintValidatorFactory, Serializable
 {
     private static final long serialVersionUID = -4851853797257005554L;

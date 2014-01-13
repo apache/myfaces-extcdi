@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
+import javax.enterprise.inject.Typed;
 import javax.validation.MessageInterpolator;
 import java.io.Serializable;
 import java.util.Locale;
@@ -25,6 +26,7 @@ import java.util.Locale;
 /**
  * {@link MessageInterpolator} which can be serialized
  */
+@Typed()
 class InjectableMessageInterpolator implements MessageInterpolator, Serializable
 {
     private static final long serialVersionUID = -68329117991255147L;

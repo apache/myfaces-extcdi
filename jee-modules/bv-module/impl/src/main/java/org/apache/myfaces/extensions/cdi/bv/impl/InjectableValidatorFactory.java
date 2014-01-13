@@ -18,6 +18,7 @@
  */
 package org.apache.myfaces.extensions.cdi.bv.impl;
 
+import javax.enterprise.inject.Typed;
 import javax.validation.ValidatorFactory;
 import javax.validation.Validator;
 import javax.validation.ValidatorContext;
@@ -29,6 +30,7 @@ import java.io.Serializable;
 /**
  * {@link ValidatorFactory} which can be serialized
  */
+@Typed()
 class InjectableValidatorFactory implements ValidatorFactory, Serializable
 {
     private static final long serialVersionUID = 2200415478496396632L;

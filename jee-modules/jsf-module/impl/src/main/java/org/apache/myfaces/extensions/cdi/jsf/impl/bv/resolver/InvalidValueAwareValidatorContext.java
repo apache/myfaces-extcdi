@@ -21,6 +21,7 @@ package org.apache.myfaces.extensions.cdi.jsf.impl.bv.resolver;
 import org.apache.myfaces.extensions.cdi.core.impl.util.CodiUtils;
 import org.apache.myfaces.extensions.cdi.jsf.impl.bv.InvalidValueAwareMessageInterpolator;
 
+import javax.enterprise.inject.Typed;
 import javax.validation.MessageInterpolator;
 import javax.validation.ValidatorContext;
 import javax.validation.TraversableResolver;
@@ -32,6 +33,7 @@ import javax.validation.Validator;
  * {@link ValidatorContext} which allows to use 'invalidValue' as placeholder in violation messages
  */
 //TODO move to a different package
+@Typed()
 class InvalidValueAwareValidatorContext implements ValidatorContext
 {
     private ValidatorContext wrapped;

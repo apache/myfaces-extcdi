@@ -18,7 +18,6 @@
  */
 package org.apache.myfaces.extensions.cdi.jsf.impl.bv;
 
-import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import org.apache.myfaces.extensions.cdi.jsf.api.Jsf;
 import org.apache.myfaces.extensions.cdi.message.api.MessageContext;
 import org.apache.myfaces.extensions.cdi.message.api.MessageResolver;
@@ -32,6 +31,7 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Allows to use 'invalidValue' as placeholder in violation messages
@@ -41,14 +41,13 @@ public class InvalidValueAwareMessageInterpolator implements MessageInterpolator
 {
     private static final String INVALID_VALUE_KEY = "invalidValue";
 
+    private static final Logger LOGGER = Logger.getLogger(InvalidValueAwareMessageInterpolator.class.getName());
+
     private MessageInterpolator wrapped;
 
     @Inject
     @Jsf
     private MessageContext messageContext;
-
-    @Inject
-    private Logger logger;
 
     protected InvalidValueAwareMessageInterpolator()
     {
@@ -134,7 +133,7 @@ public class InvalidValueAwareMessageInterpolator implements MessageInterpolator
         String warnMessage = constraintName + " uses 'invalidValue' as custom constraint attribute." +
                 "So it isn't possible to use it as implicit key in the violation message.";
 
-        this.logger.warning(warnMessage);
+        LOGGER.warning(warnMessage);
     }
 
     private Map<String, Serializable> getCustomAttributesOfConstraint(Map<String, Object> attributesOfConstraint)

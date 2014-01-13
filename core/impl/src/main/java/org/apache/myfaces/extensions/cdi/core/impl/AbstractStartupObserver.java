@@ -22,7 +22,6 @@ import org.apache.myfaces.extensions.cdi.core.api.config.AbstractAttributeAware;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.CodiCoreConfig;
 import org.apache.myfaces.extensions.cdi.core.api.config.ConfigEntry;
-import org.apache.myfaces.extensions.cdi.core.api.logging.Logger;
 import org.apache.myfaces.extensions.cdi.core.impl.util.ProxyUtils;
 
 import javax.inject.Inject;
@@ -30,14 +29,14 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Base implementation for startup observers
  */
 public abstract class AbstractStartupObserver
 {
-    @Inject
-    protected Logger logger;
+    protected Logger logger = Logger.getLogger(getClass().getName());
 
     @Inject
     protected CodiCoreConfig codiCoreConfig;
