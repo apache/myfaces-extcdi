@@ -52,9 +52,7 @@ public abstract class ProxyUtils
      */
     public static boolean isProxiedClass(Class currentClass)
     {
-        return currentClass.getName().contains("$$EnhancerByCGLIB$$") ||
-            currentClass.getName().contains("$$FastClassByCGLIB$$") ||
-            currentClass.getName().contains("_$$_javassist") ||
-            (currentClass.getName().contains("_$$_") && currentClass.getName().contains("-class_"));
+        return currentClass.getName().startsWith(currentClass.getSuperclass().getName()) &&
+            currentClass.getName().contains("$$");
     }
 }

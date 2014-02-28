@@ -61,10 +61,10 @@ public class CodiActionListener implements ActionListener, Deactivatable
 
     private ActionListener getWrappedActionListener()
     {
-        SecurityViolationAwareActionListener viewConfigAwareNavigationHandler =
+        SecurityViolationAwareActionListener securityViolationAwareActionListener =
                 new SecurityViolationAwareActionListener(this.wrapped);
 
-        return new ViewControllerActionListener(viewConfigAwareNavigationHandler);
+        return new ViewControllerActionListener(securityViolationAwareActionListener);
     }
 
     /**

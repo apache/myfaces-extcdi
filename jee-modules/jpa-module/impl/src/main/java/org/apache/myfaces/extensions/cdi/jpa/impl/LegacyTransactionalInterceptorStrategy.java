@@ -140,6 +140,11 @@ public class LegacyTransactionalInterceptorStrategy implements PersistenceStrate
         {
             transactionalAnnotation = context.getTarget().getClass().getAnnotation(Transactional.class);
         }
+        //needed by weld
+        if (transactionalAnnotation == null)
+        {
+            transactionalAnnotation = context.getTarget().getClass().getSuperclass().getAnnotation(Transactional.class);
+        }
         return transactionalAnnotation;
     }
 
