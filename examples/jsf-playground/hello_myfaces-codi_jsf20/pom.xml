@@ -23,12 +23,12 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
         <artifactId>jsf-playground-project</artifactId>
-        <version>1.0.6</version>
+        <version>1.0.7-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.examples</groupId>
     <artifactId>playground-jsf20</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>Internal MyFaces Extensions-CDI JSF 2.0-Examples Hello MyFaces CODI</name>
