@@ -58,7 +58,7 @@ public class ActivationExtension implements Extension, Deactivatable
      * Check if the {@link javax.enterprise.inject.spi.AnnotatedType} is an @Alternative and
      * is not disabled for the current {@link ProjectStage}.
      */
-    protected void vetoAlternativeTypes(@Observes ProcessAnnotatedType<Object> processAnnotatedType)
+    protected void vetoAlternativeTypes(@Observes ProcessAnnotatedType processAnnotatedType)
     {
         if(!isActivated())
         {
@@ -86,7 +86,7 @@ public class ActivationExtension implements Extension, Deactivatable
         //TODO validateCodiImplementationRules(processAnnotatedType);
     }
 
-    private void checkProjectStageActivated(ProcessAnnotatedType<Object> processAnnotatedType,
+    private void checkProjectStageActivated(ProcessAnnotatedType<?> processAnnotatedType,
                                             ProjectStage currentlyConfiguredProjectStage)
     {
         if (processAnnotatedType.getAnnotatedType().getJavaClass().isAnnotationPresent(ProjectStageActivated.class))
@@ -105,7 +105,7 @@ public class ActivationExtension implements Extension, Deactivatable
         }
     }
 
-    private void checkExpressionActivated(ProcessAnnotatedType<Object> processAnnotatedType)
+    private void checkExpressionActivated(ProcessAnnotatedType<?> processAnnotatedType)
     {
         Class<?> annotatedClass = processAnnotatedType.getAnnotatedType().getJavaClass();
 
