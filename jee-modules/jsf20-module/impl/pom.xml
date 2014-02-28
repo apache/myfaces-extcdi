@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
         <artifactId>jsf20-module-project</artifactId>
-        <version>1.0.6-SNAPSHOT</version>
+        <version>1.0.6</version>
     </parent>
 
     <groupId>org.apache.myfaces.extensions.cdi.modules</groupId>
