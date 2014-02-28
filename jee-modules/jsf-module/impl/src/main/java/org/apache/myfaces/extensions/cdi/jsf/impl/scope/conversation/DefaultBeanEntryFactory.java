@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * {@inheritDoc}
  */
 @ApplicationScoped
-class DefaultBeanEntryFactory implements BeanEntryFactory
+public class DefaultBeanEntryFactory implements BeanEntryFactory
 {
     @Inject
     private BeanManager beanManager;

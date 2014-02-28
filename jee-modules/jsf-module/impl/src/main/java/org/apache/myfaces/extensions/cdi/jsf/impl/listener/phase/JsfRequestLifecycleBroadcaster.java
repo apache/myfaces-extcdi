@@ -51,7 +51,7 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
     @AfterPhase(JsfPhaseId.ANY_PHASE)
     private Event<PhaseEvent> afterAnyPhaseEvent;
 
-    void broadcastBeforeEvent(PhaseEvent phaseEvent)
+    public void broadcastBeforeEvent(PhaseEvent phaseEvent)
     {
         this.facesPhaseId = phaseEvent.getPhaseId();
 
@@ -59,7 +59,7 @@ public class JsfRequestLifecycleBroadcaster implements JsfLifecyclePhaseInformat
         this.beforeAnyPhaseEvent.fire(phaseEvent);
     }
 
-    void broadcastAfterEvent(PhaseEvent phaseEvent)
+    public void broadcastAfterEvent(PhaseEvent phaseEvent)
     {
         this.phaseEvent.select(createAnnotationLiteral(phaseEvent.getPhaseId(), false)).fire(phaseEvent);
         this.afterAnyPhaseEvent.fire(phaseEvent);
