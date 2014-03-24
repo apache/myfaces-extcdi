@@ -73,6 +73,11 @@ public class ConversationContextAdapter implements Context
      */
     public <T> T get(Contextual<T> component, CreationalContext<T> creationalContext)
     {
+        if (creationalContext == null)
+        {
+            return null;
+        }
+
         if (component instanceof PassivationCapable && !(component instanceof Bean))
         {
             component = (Contextual<T>) BeanManagerProvider.getInstance().getBeanManager()
