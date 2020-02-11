@@ -42,7 +42,7 @@
         <repository>
             <id>repo1.maven.org</id>
             <name>Maven repository (for cdi-api)</name>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
     </repositories>
 

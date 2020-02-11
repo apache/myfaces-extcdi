@@ -748,7 +748,7 @@
                 <repository>
                     <id>maven2-repository.dev.java.net</id>
                     <name>Java.net Repository for Maven</name>
-                    <url>http://download.java.net/maven/1/</url>
+                    <url>https://download.java.net/maven/1/</url>
                     <layout>legacy</layout>
                 </repository>
             </repositories>
